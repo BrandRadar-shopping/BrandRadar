@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Tilbud – BrandRadar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>Ukens tilbud – BrandRadar</header>
+
+<div class="container">
+  <input type="text" id="search" placeholder="Søk etter produkt..." style="width:100%; padding:10px; margin-bottom:20px; font-size:1em; border:1px solid #ccc; border-radius:5px;">
+
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-category="all">Alle</button>
+    <button class="filter-btn" data-category="klær">Klær</button>
+    <button class="filter-btn" data-category="kosttilskudd">Kosttilskudd</button>
+    <button class="filter-btn" data-category="utstyr">Utstyr</button>
+  </div>
+
+  <div class="products">
+    <div class="product" data-category="klær">
+      <img src="images/nike-shoe.jpg" alt="Nike Air Max">
+      <h3>Nike Air Max 270</h3>
+      <p><del>1899 kr</del> <strong>1299 kr</strong></p>
+      <a href="https://www.nike.com/affiliate-link" target="_blank"><button class="buy">Kjøp nå</button></a>
+    </div>
+
+    <div class="product" data-category="kosttilskudd">
+      <img src="images/protein.jpg" alt="Proteinpulver">
+      <h3>Whey Protein 1kg</h3>
+      <p><del>399 kr</del> <strong>249 kr</strong></p>
+      <a href="https://www.gymgrossisten.no/affiliate-link" target="_blank"><button class="buy">Kjøp nå</button></a>
+    </div>
+
+    <div class="product" data-category="utstyr">
+      <img src="images/backpack.jpg" alt="North Face sekk">
+      <h3>North Face Backpack</h3>
+      <p><del>1099 kr</del> <strong>799 kr</strong></p>
+      <a href="https://www.thenorthface.com/affiliate-link" target="_blank"><button class="buy">Kjøp nå</button></a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const products = document.querySelectorAll('.product');
+  const searchInput = document.getElementById('search');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      products.forEach(product => {
+        const matchCategory = category === 'all' || product.dataset.category === category;
+        product.style.display = matchCategory ? 'block' : 'none';
+      });
+    });
+  });
+
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+
+    products.forEach(product => {
+      const text = product.innerText.toLowerCase();
+      product.style.display = text.includes(searchTerm) ? 'block' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
