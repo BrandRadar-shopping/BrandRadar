@@ -35,3 +35,51 @@ main {
 .product img {
   max-width: 100%;
 }
+
+nav {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 30px;
+}
+
+.main-nav li {
+  position: relative;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 30px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  list-style: none;
+  padding: 10px;
+  z-index: 999;
+}
+
+.main-nav li:hover .submenu {
+  display: block;
+}
+
+.submenu.gender {
+  left: -80px;
+}
+
+.submenu.category {
+  left: 80px;
+}
+
+
