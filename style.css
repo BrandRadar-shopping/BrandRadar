@@ -87,4 +87,9 @@ nav a:contains("Admin") {
   display: none;
 }
 
+.admin-only {
+  display: none;
+}
+
+
 
