@@ -22,3 +22,18 @@ async function loadProducts() {
 }
 
 window.onload = loadProducts;
+
+// Skjul "Admin"-knappen fra navigasjonen
+document.addEventListener("DOMContentLoaded", function () {
+  const links = document.querySelectorAll("nav a");
+  links.forEach(link => {
+    if (link.textContent.trim().toLowerCase() === "admin") {
+      link.style.display = "none";
+    }
+  });
+});
+
+
+
+
+
