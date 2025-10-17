@@ -82,14 +82,8 @@ nav {
   left: 80px;
 }
 
-/* Skjul admin-link i menyen basert på tekstinnhold */
-nav a:contains("Admin") {
-  display: none;
-}
-
+/* Skjul admin-meny visuelt */
 .admin-only {
   display: none;
 }
-
-
 
