@@ -87,3 +87,42 @@ nav {
   display: none;
 }
 
+/* ---------------- MOBILE STYLING ---------------- */
+@media (max-width: 768px) {
+  header {
+    text-align: center;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .submenu {
+    position: static;
+    display: none;
+  }
+
+  .dropdown:hover .submenu {
+    display: block;
+  }
+
+  #products-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product {
+    width: 90%;
+  }
+
+  nav {
+    padding: 10px;
+  }
+
+  nav a {
+    font-size: 16px;
+  }
+}
+
