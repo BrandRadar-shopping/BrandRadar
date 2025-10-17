@@ -82,4 +82,9 @@ nav {
   left: 80px;
 }
 
+/* Skjul admin-knappen midlertidig */
+nav a[href*="admin"] {
+  display: none;
+}
+
 
