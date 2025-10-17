@@ -10,14 +10,28 @@
   <header>
     <h1>BrandRadar</h1>
     <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Clothing</a></li>
-        <li><a href="#">Supplements</a></li>
-        <li><a href="#">Equipment</a></li>
-        <li><a href="admin.html">Admin</a></li>
+  <ul class="main-nav">
+    <li><a href="#">Home</a></li>
+    <li class="dropdown">
+      <a href="#">Clothing</a>
+      <ul class="submenu gender">
+        <li><a href="#">Men</a></li>
+        <li><a href="#">Women</a></li>
+        <li><a href="#">Children</a></li>
       </ul>
-    </nav>
+      <ul class="submenu category">
+        <li><a href="#">Jackets</a></li>
+        <li><a href="#">Pants</a></li>
+        <li><a href="#">Sweaters</a></li>
+        <li><a href="#">T-shirts</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Supplements</a></li>
+    <li><a href="#">Equipment</a></li>
+    <li><a href="#">Popular</a></li>
+    <li><a href="#">Admin</a></li>
+  </ul>
+</nav>
   </header>
 
   <main id="product-list">
@@ -32,3 +46,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
