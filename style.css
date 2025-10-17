@@ -126,3 +126,38 @@ nav {
   }
 }
 
+/* Mobilvennlig meny */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .main-nav {
+    display: none;
+    flex-direction: column;
+    background-color: #222;
+    padding: 10px;
+  }
+
+  .main-nav.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  nav ul li a {
+    color: white;
+    padding: 10px 0;
+  }
+}
+
+
+
