@@ -21,17 +21,16 @@ async function loadProducts() {
   });
 }
 
-window.onload = loadProducts;
+window.addEventListener("DOMContentLoaded", () => {
+  loadProducts();
 
-// Skjul "Admin"-knappen fra navigasjonen
-document.addEventListener("DOMContentLoaded", function () {
-  const links = document.querySelectorAll("nav a");
+  // Sikkerhetskopi: Skjul Admin-lenke om den fortsatt vises
+  const links = document.querySelectorAll("nav .admin-only");
   links.forEach(link => {
-    if (link.textContent.trim().toLowerCase() === "admin") {
-      link.style.display = "none";
-    }
+    link.style.display = "none";
   });
 });
+
 
 
 
