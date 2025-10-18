@@ -24,151 +24,157 @@
     </nav>
   </header>
 
- <nav class="category-menu desktop-only">
-    <ul>
-      <!-- Clothing -->
-      <li class="dropdown">
-        <a href="#">Clothing</a>
-        <ul class="dropdown-menu">
-          <li><span>Men</span>
-            <ul>
-              <li><a href="#">Jackets</a></li>
-              <li><a href="#">Sweaters</a></li>
-              <li><a href="#">T-Shirts</a></li>
-              <li><a href="#">Pants</a></li>
-              <li><a href="#">Gymwear</a></li>
-            </ul>
-          </li>
-          <li><span>Women</span>
-            <ul>
-              <li><a href="#">Jackets</a></li>
-              <li><a href="#">Sweaters</a></li>
-              <li><a href="#">T-Shirts</a></li>
-              <li><a href="#">Pants</a></li>
-              <li><a href="#">Gymwear</a></li>
-            </ul>
-          </li>
-          <li><span>Children</span>
-            <ul>
-              <li><a href="#">Jackets</a></li>
-              <li><a href="#">Sweaters</a></li>
-              <li><a href="#">T-Shirts</a></li>
-              <li><a href="#">Pants</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+<!-- Kombinert navigasjonsmeny -->
+<nav class="category-wrapper">
+  <ul class="category-menu desktop-only">
+    <li class="dropdown">
+      <a href="#">Clothing</a>
+      <ul class="dropdown-menu">
+        <li class="submenu-category">
+          <span>Men</span>
+          <ul>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Sweaters</a></li>
+            <li><a href="#">T-Shirts</a></li>
+            <li><a href="#">Pants</a></li>
+            <li><a href="#">Gymwear</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Women</span>
+          <ul>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Sweaters</a></li>
+            <li><a href="#">T-Shirts</a></li>
+            <li><a href="#">Pants</a></li>
+            <li><a href="#">Gymwear</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Children</span>
+          <ul>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Sweaters</a></li>
+            <li><a href="#">T-Shirts</a></li>
+            <li><a href="#">Pants</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
 
-      <!-- Supplements -->
-      <li class="dropdown">
-        <a href="#">Supplements</a>
-        <ul class="dropdown-menu">
-          <li><span>Protein</span>
-            <ul>
-              <li><a href="#">Protein Bars</a></li>
-              <li><a href="#">Protein Powder</a></li>
-            </ul>
-          </li>
-          <li><span>Creatine</span>
-            <ul>
-              <li><a href="#">Creatine</a></li>
-            </ul>
-          </li>
-          <li><span>Vitamins</span>
-            <ul>
-              <li><a href="#">Vitamins</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+    <li class="dropdown">
+      <a href="#">Supplements</a>
+      <ul class="dropdown-menu">
+        <li class="submenu-category">
+          <span>Protein</span>
+          <ul>
+            <li><a href="#">Protein Bars</a></li>
+            <li><a href="#">Protein Powder</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Creatine</span>
+          <ul>
+            <li><a href="#">Creatine</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Vitamins</span>
+          <ul>
+            <li><a href="#">Vitamins</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
 
-      <!-- Shoes -->
-      <li class="dropdown">
-        <a href="#">Shoes</a>
-        <ul class="dropdown-menu">
-          <li><span>Men</span>
-            <ul>
-              <li><a href="#">Sneakers</a></li>
-              <li><a href="#">Running</a></li>
-            </ul>
-          </li>
-          <li><span>Women</span>
-            <ul>
-              <li><a href="#">Sneakers</a></li>
-              <li><a href="#">Casual</a></li>
-            </ul>
-          </li>
-          <li><span>Children</span>
-            <ul>
-              <li><a href="#">Everyday</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+    <li class="dropdown">
+      <a href="#">Shoes</a>
+      <ul class="dropdown-menu">
+        <li class="submenu-category">
+          <span>Men</span>
+          <ul>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Running</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Women</span>
+          <ul>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Casual</a></li>
+          </ul>
+        </li>
+        <li class="submenu-category">
+          <span>Children</span>
+          <ul>
+            <li><a href="#">Everyday</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
 
-      <!-- Trends -->
-      <li><a href="#">Trends</a></li>
-    </ul>
-  </nav>
-<!-- Mobilversjon av meny -->
-<nav class="category-menu mobile-only">
-  <div class="mobile-dropdown">
-    <h3 onclick="toggleMobileMenu(this)">Clothing</h3>
-    <div class="mobile-submenu">
-      <strong>Men</strong>
-      <a href="#">Jackets</a>
-      <a href="#">Sweaters</a>
-      <a href="#">T-Shirts</a>
-      <a href="#">Pants</a>
-      <a href="#">Gymwear</a>
-      <strong>Women</strong>
-      <a href="#">Jackets</a>
-      <a href="#">Sweaters</a>
-      <a href="#">T-Shirts</a>
-      <a href="#">Pants</a>
-      <a href="#">Gymwear</a>
-      <strong>Children</strong>
-      <a href="#">Jackets</a>
-      <a href="#">Sweaters</a>
-      <a href="#">T-Shirts</a>
-      <a href="#">Pants</a>
+    <li><a href="#">Trends</a></li>
+  </ul>
+
+  <!-- Mobilmeny -->
+  <div class="mobile-menu mobile-only">
+    <div class="mobile-dropdown">
+      <h3 onclick="toggleMobileMenu(this)">Clothing</h3>
+      <div class="mobile-submenu">
+        <strong>Men</strong>
+        <a href="#">Jackets</a>
+        <a href="#">Sweaters</a>
+        <a href="#">T-Shirts</a>
+        <a href="#">Pants</a>
+        <a href="#">Gymwear</a>
+        <strong>Women</strong>
+        <a href="#">Jackets</a>
+        <a href="#">Sweaters</a>
+        <a href="#">T-Shirts</a>
+        <a href="#">Pants</a>
+        <a href="#">Gymwear</a>
+        <strong>Children</strong>
+        <a href="#">Jackets</a>
+        <a href="#">Sweaters</a>
+        <a href="#">T-Shirts</a>
+        <a href="#">Pants</a>
+      </div>
     </div>
-  </div>
 
-  <div class="mobile-dropdown">
-    <h3 onclick="toggleMobileMenu(this)">Supplements</h3>
-    <div class="mobile-submenu">
-      <strong>Protein</strong>
-      <a href="#">Protein Bars</a>
-      <a href="#">Protein Powder</a>
-      <strong>Creatine</strong>
-      <a href="#">Creatine</a>
-      <strong>Vitamins</strong>
-      <a href="#">Vitamins</a>
+    <div class="mobile-dropdown">
+      <h3 onclick="toggleMobileMenu(this)">Supplements</h3>
+      <div class="mobile-submenu">
+        <strong>Protein</strong>
+        <a href="#">Protein Bars</a>
+        <a href="#">Protein Powder</a>
+        <strong>Creatine</strong>
+        <a href="#">Creatine</a>
+        <strong>Vitamins</strong>
+        <a href="#">Vitamins</a>
+      </div>
     </div>
-  </div>
 
-  <div class="mobile-dropdown">
-    <h3 onclick="toggleMobileMenu(this)">Shoes</h3>
-    <div class="mobile-submenu">
-      <strong>Men</strong>
-      <a href="#">Sneakers</a>
-      <a href="#">Running</a>
-      <strong>Women</strong>
-      <a href="#">Sneakers</a>
-      <a href="#">Casual</a>
-      <strong>Children</strong>
-      <a href="#">Everyday</a>
+    <div class="mobile-dropdown">
+      <h3 onclick="toggleMobileMenu(this)">Shoes</h3>
+      <div class="mobile-submenu">
+        <strong>Men</strong>
+        <a href="#">Sneakers</a>
+        <a href="#">Running</a>
+        <strong>Women</strong>
+        <a href="#">Sneakers</a>
+        <a href="#">Casual</a>
+        <strong>Children</strong>
+        <a href="#">Everyday</a>
+      </div>
     </div>
-  </div>
 
-  <div class="mobile-dropdown">
-    <h3><a href="#">Trends</a></h3>
+    <div class="mobile-dropdown">
+      <h3><a href="#">Trends</a></h3>
+    </div>
   </div>
 </nav>
 
-  
-
+ 
   <main>
     <h2>Populært nå</h2>
     <div id="products-container"></div>
@@ -204,6 +210,7 @@
 
 </body>
 </html>
+
 
 
 
