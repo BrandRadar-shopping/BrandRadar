@@ -1,3 +1,4 @@
+// URL til offentlig Google Sheets i CSV-format
 const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnVz.../pub?output=csv';
 
 async function loadProducts() {
@@ -11,11 +12,11 @@ async function loadProducts() {
     const product = document.createElement('div');
     product.className = 'product';
     product.innerHTML = `
-      <h3>${name}</h3>
       <img src="${image}" alt="${name}" />
-      <p>Price: ${price}</p>
-      <p>Category: ${category}</p>
-      <a href="${link}" target="_blank">Buy</a>
+      <h3>${name}</h3>
+      <p><strong>${price}</strong></p>
+      <p>${category}</p>
+      <a href="${link}" target="_blank"><button class="buy">Kjøp nå</button></a>
     `;
     container.appendChild(product);
   });
@@ -23,18 +24,8 @@ async function loadProducts() {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadProducts();
-
-  // Sikkerhetskopi: Skjul Admin-lenke om den fortsatt vises
-  const links = document.querySelectorAll("nav .admin-only");
-  links.forEach(link => {
-    link.style.display = "none";
-  });
 });
 
-function toggleMenu() {
-  const nav = document.querySelector('.main-nav');
-  nav.classList.toggle('show');
-}
 
 
 
