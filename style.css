@@ -200,5 +200,85 @@ footer {
   }
 }
 
+/* -------------------
+    MOBILE DROPDOWN
+------------------- */
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.dropdown-menu.visible {
+  display: flex;
+}
+
+/* -------------------
+    DESKTOP DROPDOWN
+------------------- */
+@media (min-width: 769px) {
+  .category-menu > ul {
+    display: flex;
+    gap: 40px;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    min-width: 600px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: flex;
+  }
+}
+
+/* -------------------
+    TOGGLE-MOBIL
+------------------- */
+.category-menu {
+  display: none;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+.category-menu.open {
+  display: flex;
+}
+
+@media (min-width: 769px) {
+  .category-menu {
+    display: block;
+  }
+}
+
+/* Stil for hamburgerknapp */
+.hamburger {
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+  margin-right: 10px;
+  display: block;
+}
+
+@media (min-width: 769px) {
+  .hamburger {
+    display: none;
+  }
+}
+
 
 
