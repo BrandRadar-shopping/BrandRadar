@@ -24,3 +24,21 @@ async function loadProducts() {
 window.addEventListener("DOMContentLoaded", () => {
   loadProducts();
 });
+
+function toggleMobileMenu(headerElement) {
+  const submenu = headerElement.nextElementSibling;
+  const isOpen = submenu.style.display === "block";
+
+  // Lukk alle andre åpne menyer først
+  document.querySelectorAll('.mobile-submenu').forEach(menu => {
+    menu.style.display = "none";
+  });
+
+  // Vis denne hvis den ikke allerede var åpen
+  if (!isOpen) {
+    submenu.style.display = "block";
+  }
+}
+
+
+
