@@ -24,7 +24,7 @@
     </nav>
   </header>
 
-  <nav class="category-menu">
+ <nav class="category-menu desktop-only">
     <ul>
       <!-- Clothing -->
       <li class="dropdown">
@@ -110,6 +110,64 @@
       <li><a href="#">Trends</a></li>
     </ul>
   </nav>
+<!-- Mobilversjon av meny -->
+<nav class="category-menu mobile-only">
+  <div class="mobile-dropdown">
+    <h3 onclick="toggleMobileMenu(this)">Clothing</h3>
+    <div class="mobile-submenu">
+      <strong>Men</strong>
+      <a href="#">Jackets</a>
+      <a href="#">Sweaters</a>
+      <a href="#">T-Shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Gymwear</a>
+      <strong>Women</strong>
+      <a href="#">Jackets</a>
+      <a href="#">Sweaters</a>
+      <a href="#">T-Shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Gymwear</a>
+      <strong>Children</strong>
+      <a href="#">Jackets</a>
+      <a href="#">Sweaters</a>
+      <a href="#">T-Shirts</a>
+      <a href="#">Pants</a>
+    </div>
+  </div>
+
+  <div class="mobile-dropdown">
+    <h3 onclick="toggleMobileMenu(this)">Supplements</h3>
+    <div class="mobile-submenu">
+      <strong>Protein</strong>
+      <a href="#">Protein Bars</a>
+      <a href="#">Protein Powder</a>
+      <strong>Creatine</strong>
+      <a href="#">Creatine</a>
+      <strong>Vitamins</strong>
+      <a href="#">Vitamins</a>
+    </div>
+  </div>
+
+  <div class="mobile-dropdown">
+    <h3 onclick="toggleMobileMenu(this)">Shoes</h3>
+    <div class="mobile-submenu">
+      <strong>Men</strong>
+      <a href="#">Sneakers</a>
+      <a href="#">Running</a>
+      <strong>Women</strong>
+      <a href="#">Sneakers</a>
+      <a href="#">Casual</a>
+      <strong>Children</strong>
+      <a href="#">Everyday</a>
+    </div>
+  </div>
+
+  <div class="mobile-dropdown">
+    <h3><a href="#">Trends</a></h3>
+  </div>
+</nav>
+
+  
 
   <main>
     <h2>Populært nå</h2>
@@ -127,5 +185,6 @@
   </script>
 </body>
 </html>
+
 
 
