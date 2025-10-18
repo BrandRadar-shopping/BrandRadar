@@ -211,6 +211,27 @@ button.buy:hover {
   }
 }
 
+form#product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+form#product-form input,
+form#product-form button {
+  padding: 10px;
+  font-size: 1em;
+}
+
+#output {
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+  font-family: monospace;
+}
+
 
 
 
