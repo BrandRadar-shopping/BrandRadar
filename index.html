@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BrandRadar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="main-header">
+    <h1>BrandRadar</h1>
+    <input type="text" class="search-bar" placeholder="Søk etter produkter eller merker..." />
+    <nav class="top-nav">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">News</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Popular</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <nav class="category-menu desktop-only">
+    <ul>
+      <!-- Clothing -->
+      <li class="dropdown">
+        <a href="#">Clothing</a>
+        <ul class="dropdown-menu">
+          <li><span>Men</span>
+            <ul>
+              <li><a href="#">Jackets</a></li>
+              <li><a href="#">Sweaters</a></li>
+              <li><a href="#">T-Shirts</a></li>
+              <li><a href="#">Pants</a></li>
+              <li><a href="#">Gymwear</a></li>
+            </ul>
+          </li>
+          <li><span>Women</span>
+            <ul>
+              <li><a href="#">Jackets</a></li>
+              <li><a href="#">Sweaters</a></li>
+              <li><a href="#">T-Shirts</a></li>
+              <li><a href="#">Pants</a></li>
+              <li><a href="#">Gymwear</a></li>
+            </ul>
+          </li>
+          <li><span>Children</span>
+            <ul>
+              <li><a href="#">Jackets</a></li>
+              <li><a href="#">Sweaters</a></li>
+              <li><a href="#">T-Shirts</a></li>
+              <li><a href="#">Pants</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Supplements -->
+      <li class="dropdown">
+        <a href="#">Supplements</a>
+        <ul class="dropdown-menu">
+          <li><span>Protein</span>
+            <ul>
+              <li><a href="#">Protein Bars</a></li>
+              <li><a href="#">Protein Powder</a></li>
+            </ul>
+          </li>
+          <li><span>Creatine</span>
+            <ul>
+              <li><a href="#">Creatine</a></li>
+            </ul>
+          </li>
+          <li><span>Vitamins</span>
+            <ul>
+              <li><a href="#">Vitamins</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Shoes -->
+      <li class="dropdown">
+        <a href="#">Shoes</a>
+        <ul class="dropdown-menu">
+          <li><span>Men</span>
+            <ul>
+              <li><a href="#">Sneakers</a></li>
+              <li><a href="#">Running</a></li>
+            </ul>
+          </li>
+          <li><span>Women</span>
+            <ul>
+              <li><a href="#">Sneakers</a></li>
+              <li><a href="#">Casual</a></li>
+            </ul>
+          </li>
+          <li><span>Children</span>
+            <ul>
+              <li><a href="#">Everyday</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Trends -->
+      <li><a href="#">Trends</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Populært nå</h2>
+    <div id="products-container"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 BrandRadar</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
