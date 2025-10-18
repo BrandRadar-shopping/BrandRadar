@@ -40,5 +40,29 @@ function toggleMobileMenu(headerElement) {
   }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const hamburger = document.querySelector('.hamburger');
+  const categoryMenu = document.querySelector('.category-menu');
+  const dropdownToggles = document.querySelectorAll('.dropdown > a');
+
+  // Toggle mobilmeny
+  if (hamburger && categoryMenu) {
+    hamburger.addEventListener('click', function () {
+      categoryMenu.classList.toggle('open');
+    });
+  }
+
+  // Toggle undermenyer i mobilvisning
+  dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', function (e) {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        const dropdownMenu = this.nextElementSibling;
+        dropdownMenu.classList.toggle('visible');
+      }
+    });
+  });
+});
+
 
 
