@@ -75,8 +75,14 @@ body {
   font-weight: 500;
 }
 
+/* ========== DROPDOWN-MENY DESKTOP ========== */
+
+.dropdown {
+  position: relative;
+}
+
 .dropdown-menu {
-  display: none; /* Holder menyen skjult som standard */
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
@@ -86,21 +92,48 @@ body {
   gap: 40px;
   min-width: 600px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  z-index: 999;
+  z-index: 1000;
+  flex-direction: row;
 }
 
 .dropdown:hover .dropdown-menu {
-  display: flex; /* ✅ Vis menyen kun ved hover */
+  display: flex;
 }
 
-.dropdown-menu ul {
+.submenu-category {
+  flex: 1;
+}
+
+.submenu-category span {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: inline-block;
+  color: #000;
+}
+
+.submenu-category ul {
   list-style: none;
-  padding: 5px 0 0 15px;
+  padding-left: 0;
 }
 
-.dropdown-menu li {
+.submenu-category ul li {
   margin-bottom: 6px;
 }
+
+.submenu-category ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.submenu-category ul li a:hover {
+  color: #0070f3;
+}
+
+
+
+
+
 
 /* =============== MOBIL-MENY =============== */
 
@@ -282,6 +315,7 @@ form#product-form button {
 .submenu-category ul li a:hover {
   color: #0070f3;
 }
+
 
 
 
