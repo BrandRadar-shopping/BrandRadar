@@ -1,177 +1,68 @@
+/* =============== BASE =============== */
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background: #f9f9f9;
-}
-header {
-  background-color: #222;
-  color: #fff;
-  padding: 1rem;
-}
-nav ul {
-  display: flex;
-  gap: 1rem;
-  list-style: none;
-}
-nav a {
-  color: #fff;
-  text-decoration: none;
-}
-main {
-  padding: 2rem;
-}
-#products-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.product {
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  width: 250px;
-}
-.product img {
-  max-width: 100%;
-}
-
-nav {
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0;
-}
-
-.main-nav {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  gap: 30px;
-}
-
-.main-nav li {
-  position: relative;
-}
-
-.main-nav a {
-  text-decoration: none;
+  background: #f8f9fa;
   color: #333;
+}
+
+/* =============== HEADER =============== */
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c;
+  color: white;
+  padding: 15px 20px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.5em;
   font-weight: bold;
 }
 
-.submenu {
-  display: none;
-  position: absolute;
-  top: 30px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  list-style: none;
-  padding: 10px;
-  z-index: 999;
+.search-container input {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  width: 250px;
+  max-width: 100%;
+  font-size: 1em;
 }
 
-.main-nav li:hover .submenu {
-  display: block;
+.desktop-nav a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.submenu.gender {
-  left: -80px;
-}
-
-.submenu.category {
-  left: 80px;
-}
-
-/* Skjul admin-meny visuelt */
-.admin-only {
-  display: none;
-}
-
-/* ---------------- MOBILE STYLING ---------------- */
-@media (max-width: 768px) {
-  header {
-    text-align: center;
-  }
-
-  .main-nav {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .submenu {
-    position: static;
-    display: none;
-  }
-
-  .dropdown:hover .submenu {
-    display: block;
-  }
-
-  #products-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .product {
-    width: 90%;
-  }
-
-  nav {
-    padding: 10px;
-  }
-
-  nav a {
-    font-size: 16px;
-  }
-}
-
-/* Mobilvennlig meny */
 .hamburger {
   display: none;
-  font-size: 28px;
-  background: none;
-  border: none;
-  color: #fff;
+  font-size: 1.8em;
   cursor: pointer;
-  padding: 10px;
+  margin-left: 20px;
 }
 
-@media (max-width: 768px) {
-  .main-nav {
-    display: none;
-    flex-direction: column;
-    background-color: #222;
-    padding: 10px;
-  }
+/* =============== KATEGORI-MENY (DESKTOP) =============== */
 
-  .main-nav.show {
-    display: flex;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
-  nav ul li a {
-    color: white;
-    padding: 10px 0;
-  }
-}
-
-/* KATEGORI-MENY (DESKTOP) */
 .category-menu {
   background: #fff;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
+  padding: 0 20px;
 }
 
 .category-menu ul {
   list-style: none;
-  margin: 0;
-  padding: 10px 20px;
   display: flex;
-  gap: 20px;
+  gap: 30px;
+  margin: 0;
+  padding: 10px 0;
 }
 
 .category-menu li {
@@ -184,17 +75,17 @@ nav {
   font-weight: 500;
 }
 
-/* DROPDOWN */
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background: #fff;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px;
   min-width: 180px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  padding: 10px;
-  z-index: 10;
+  z-index: 99;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -203,14 +94,15 @@ nav {
 
 .dropdown-menu ul {
   list-style: none;
-  padding-left: 10px;
+  padding: 5px 0 0 15px;
 }
 
 .dropdown-menu li {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
-/* MOBIL-NAV */
+/* =============== MOBIL-MENY =============== */
+
 .mobile-nav {
   display: none;
   background: #0070f3;
@@ -251,7 +143,58 @@ nav {
   display: block;
 }
 
-/* RESPONSIVITET */
+/* =============== PRODUKTER =============== */
+
+.popular-section {
+  padding: 40px 20px;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.popular-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  padding: 15px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.product img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+button.buy {
+  margin-top: 10px;
+  background: #0070f3;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+button.buy:hover {
+  background: #005bb5;
+}
+
+/* =============== RESPONSIVT =============== */
+
 @media (max-width: 768px) {
   .desktop-nav,
   .desktop-only {
@@ -261,8 +204,12 @@ nav {
   .hamburger {
     display: block;
   }
-}
 
+  .search-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
 
 
 
