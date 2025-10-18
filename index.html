@@ -10,6 +10,10 @@
   <header class="main-header">
     <h1>BrandRadar</h1>
     <input type="text" class="search-bar" placeholder="Søk etter produkter eller merker..." />
+
+    <!-- Hamburger icon for mobile -->
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+
     <nav class="top-nav">
       <ul>
         <li><a href="#">Home</a></li>
@@ -20,7 +24,7 @@
     </nav>
   </header>
 
-  <nav class="category-menu desktop-only">
+  <nav class="category-menu">
     <ul>
       <!-- Clothing -->
       <li class="dropdown">
@@ -116,6 +120,12 @@
     <p>&copy; 2025 BrandRadar</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    function toggleMenu() {
+      document.querySelector(".category-menu").classList.toggle("show");
+    }
+  </script>
 </body>
 </html>
+
+
