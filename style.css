@@ -159,5 +159,114 @@ nav {
   }
 }
 
+/* KATEGORI-MENY (DESKTOP) */
+.category-menu {
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.category-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.category-menu li {
+  position: relative;
+}
+
+.category-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+/* DROPDOWN */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 180px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  padding: 10px;
+  z-index: 10;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.dropdown-menu li {
+  margin-bottom: 5px;
+}
+
+/* MOBIL-NAV */
+.mobile-nav {
+  display: none;
+  background: #0070f3;
+  color: white;
+  padding: 10px;
+}
+
+.mobile-nav.open {
+  display: block;
+}
+
+.mobile-nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mobile-nav li {
+  margin: 5px 0;
+}
+
+.mobile-nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 5px 0;
+  width: 100%;
+  text-align: left;
+}
+
+.sub-menu {
+  display: none;
+  padding-left: 15px;
+}
+
+.sub-menu.open {
+  display: block;
+}
+
+/* RESPONSIVITET */
+@media (max-width: 768px) {
+  .desktop-nav,
+  .desktop-only {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+
+
+
+
+
 
 
