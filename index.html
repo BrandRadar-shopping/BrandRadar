@@ -1,182 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BrandRadar</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BrandRadar – Finn de beste kjøpene</title>
+  <meta name="description" content="Affiliate-plattform for klær, sko og kosttilskudd. Sammenlign og finn produktene fra kjente merker." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="main-header" role="banner">
-    <div class="brand">
-      <a href="/" class="logo" aria-label="BrandRadar Home">BrandRadar</a>
-    </div>
+  <header class="site-header">
+    <a href="index.html" class="logo" aria-label="BrandRadar">BrandRadar</a>
 
-    <form class="search" role="search" aria-label="Site">
-      <input class="search-bar" type="search" placeholder="Search…" />
+    <form class="site-search" role="search">
+      <input type="search" id="q" placeholder="Søk produkter…" aria-label="Søk" />
+      <button type="submit">Søk</button>
     </form>
 
-    <!-- Hamburger (mobil) -->
-    <button class="hamburger" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">☰</button>
+    <button class="hamburger" aria-controls="mobileNav" aria-expanded="false" aria-label="Åpne meny">☰</button>
 
-    <!-- Toppmeny (kun desktop) -->
-    <nav class="top-nav desktop-only" role="navigation" aria-label="Primary">
+    <!-- Desktop nav -->
+    <nav class="main-nav desktop-only" aria-label="Hovedmeny">
       <ul>
         <li class="dropdown">
-          <a href="#" class="nav-root">Women</a>
-          <div class="dropdown-menu mega three-col" role="menu">
+          <a href="#" class="nav-root">Clothing</a>
+          <div class="dropdown-menu three-col" role="menu">
             <ul>
               <li><span>Women</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">T-shirts & Tops</a></li>
-              <li><a href="#">Dresses</a></li>
-              <li><a href="#">Jeans</a></li>
-              <li><a href="#">Pants</a></li>
-              <li><a href="#">Jackets & Blazers</a></li>
-              <li><a href="#">Gymwear</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="T-shirts & Tops">T-shirts & Tops</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Dresses">Dresses</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Jeans">Jeans</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Pants">Pants</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Jackets & Blazers">Jackets & Blazers</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Gymwear">Gymwear</a></li>
             </ul>
             <ul>
               <li><span>Men</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">Tshirts & Polo</a></li>
-              <li><a href="#">Sweats & Hoodies</a></li>
-              <li><a href="#">Pants & Shorts</a></li>
-              <li><a href="#">Jeans</a></li>
-              <li><a href="#">Jackets</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Tshirts & Polo">Tshirts & Polo</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Sweats & Hoodies">Sweats & Hoodies</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Pants & Shorts">Pants & Shorts</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Jeans">Jeans</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Jackets">Jackets</a></li>
             </ul>
             <ul>
               <li><span>Children</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">T shirts</a></li>
-              <li><a href="#">Dresses</a></li>
-              <li><a href="#">Pants</a></li>
-              <li><a href="#">Sweaters</a></li>
-              <li><a href="#">Jackets</a></li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a href="#" class="nav-root">Supplements</a>
-          <div class="dropdown-menu mega one-col" role="menu">
-            <ul>
-              <li><span>Shop</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">Protein</a></li>
-              <li><a href="#">Creatine</a></li>
-              <li><a href="#">Pre-workout</a></li>
-              <li><a href="#">Vitamins</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="T shirts">T shirts</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Dresses">Dresses</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Pants">Pants</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Sweaters">Sweaters</a></li>
+              <li><a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Jackets">Jackets</a></li>
             </ul>
           </div>
         </li>
 
         <li class="dropdown">
           <a href="#" class="nav-root">Shoes</a>
-          <div class="dropdown-menu mega two-col" role="menu">
+          <div class="dropdown-menu two-col" role="menu">
             <ul>
               <li><span>Women</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">Sneakers</a></li>
-              <li><a href="#">Sandals</a></li>
-              <li><a href="#">Boots</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Sneakers">Sneakers</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Sandals">Sandals</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Boots">Boots</a></li>
             </ul>
             <ul>
               <li><span>Men</span></li>
-              <li><a href="#">Explore all products</a></li>
-              <li><a href="#">Sneakers</a></li>
-              <li><a href="#">Running</a></li>
-              <li><a href="#">Boots</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Sneakers">Sneakers</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Running">Running</a></li>
+              <li><a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Boots">Boots</a></li>
             </ul>
           </div>
         </li>
+
+        <li class="dropdown">
+          <a href="#" class="nav-root">Supplements</a>
+          <div class="dropdown-menu one-col" role="menu">
+            <ul>
+              <li><span>Shop</span></li>
+              <li><a data-link href="#" data-category="Supplements" data-sub="Explore all products">Explore all products</a></li>
+              <li><a data-link href="#" data-category="Supplements" data-sub="Proteiner">Proteiner</a></li>
+              <li><a data-link href="#" data-category="Supplements" data-sub="Kreatin">Kreatin</a></li>
+              <li><a data-link href="#" data-category="Supplements" data-sub="Vitaminer og mineraler">Vitaminer og mineraler</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <li><a href="news.html">News</a></li>
+        <li><a href="brands.html">Brands</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- MOBILMENY -->
-  <nav id="mobileNav" class="mobile-only" role="navigation" aria-label="Mobile">
-    <ul class="mobile-menu">
-      <!-- Øverste seksjon: generelle sider -->
-      <li><a href="#">Home</a></li>
-      <li><a href="#">News</a></li>
-      <li><a href="#">Brands</a></li>
-      <li><a href="#">Popular</a></li>
-
-      <!-- Produktgrupper m/ dropdowns -->
-      <li class="mobile-dropdown">
-        <button class="mobile-toggle" aria-expanded="false">Clothing</button>
-        <div class="mobile-submenu" hidden>
+  <!-- Mobilmeny -->
+  <nav id="mobileNav" class="mobile-nav" hidden aria-label="Mobilmeny">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="brands.html">Brands</a></li>
+      <li><button class="mobile-accordion">Clothing</button>
+        <div class="panel" hidden>
           <strong>Women</strong>
-          <a href="#">Explore all products</a>
-          <a href="#">T-shirts & Tops</a>
-          <a href="#">Dresses</a>
-          <a href="#">Jeans</a>
-          <a href="#">Pants</a>
-          <a href="#">Jackets & Blazers</a>
-          <a href="#">Gymwear</a>
-
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="T-shirts & Tops">T-shirts & Tops</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Dresses">Dresses</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Jeans">Jeans</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Pants">Pants</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Jackets & Blazers">Jackets & Blazers</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Women" data-sub="Gymwear">Gymwear</a>
           <strong>Men</strong>
-          <a href="#">Explore all products</a>
-          <a href="#">Tshirts & Polo</a>
-          <a href="#">Sweats & Hoodies</a>
-          <a href="#">Pants & Shorts</a>
-          <a href="#">Jeans</a>
-          <a href="#">Jackets</a>
-
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Tshirts & Polo">Tshirts & Polo</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Sweats & Hoodies">Sweats & Hoodies</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Pants & Shorts">Pants & Shorts</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Jeans">Jeans</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Men" data-sub="Jackets">Jackets</a>
           <strong>Children</strong>
-          <a href="#">Explore all products</a>
-          <a href="#">T shirts</a>
-          <a href="#">Dresses</a>
-          <a href="#">Pants</a>
-          <a href="#">Sweaters</a>
-          <a href="#">Jackets</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="T shirts">T shirts</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Dresses">Dresses</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Pants">Pants</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Sweaters">Sweaters</a>
+          <a data-link href="#" data-category="Clothing" data-gender="Children" data-sub="Jackets">Jackets</a>
         </div>
       </li>
-
-      <li class="mobile-dropdown">
-        <button class="mobile-toggle" aria-expanded="false">Supplements</button>
-        <div class="mobile-submenu" hidden>
-          <a href="#">Explore all products</a>
-          <a href="#">Protein</a>
-          <a href="#">Creatine</a>
-          <a href="#">Pre-workout</a>
-          <a href="#">Vitamins</a>
-        </div>
-      </li>
-
-      <li class="mobile-dropdown">
-        <button class="mobile-toggle" aria-expanded="false">Shoes</button>
-        <div class="mobile-submenu" hidden>
+      <li><button class="mobile-accordion">Shoes</button>
+        <div class="panel" hidden>
           <strong>Women</strong>
-          <a href="#">Explore all products</a>
-          <a href="#">Sneakers</a>
-          <a href="#">Sandals</a>
-          <a href="#">Boots</a>
-
+          <a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Sneakers">Sneakers</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Sandals">Sandals</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Women" data-sub="Boots">Boots</a>
           <strong>Men</strong>
-          <a href="#">Explore all products</a>
-          <a href="#">Sneakers</a>
-          <a href="#">Running</a>
-          <a href="#">Boots</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Sneakers">Sneakers</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Running">Running</a>
+          <a data-link href="#" data-category="Shoes" data-gender="Men" data-sub="Boots">Boots</a>
+        </div>
+      </li>
+      <li><button class="mobile-accordion">Supplements</button>
+        <div class="panel" hidden>
+          <a data-link href="#" data-category="Supplements" data-sub="Explore all products">Explore all products</a>
+          <a data-link href="#" data-category="Supplements" data-sub="Proteiner">Proteiner</a>
+          <a data-link href="#" data-category="Supplements" data-sub="Kreatin">Kreatin</a>
+          <a data-link href="#" data-category="Supplements" data-sub="Vitaminer og mineraler">Vitaminer og mineraler</a>
         </div>
       </li>
     </ul>
   </nav>
 
-  <!-- MAIN -->
-  <main>
-    <h2>Latest Products</h2>
-    <div id="products-container" class="products-grid"></div>
+  <main class="container">
+    <h1>Utvalgte produkter</h1>
+
+    <div class="filters">
+      <select id="filterCategory" aria-label="Kategori">
+        <option value="">Alle kategorier</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Shoes">Shoes</option>
+        <option value="Supplements">Supplements</option>
+      </select>
+      <select id="filterGender" aria-label="Kjønn">
+        <option value="">Alle</option>
+        <option value="Women">Women</option>
+        <option value="Men">Men</option>
+        <option value="Children">Children</option>
+      </select>
+      <input type="search" id="filterQuery" placeholder="Søk i navn/merke…" aria-label="Søk i produkter" />
+    </div>
+
+    <div id="products" class="grid"></div>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <p>© BrandRadar</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
