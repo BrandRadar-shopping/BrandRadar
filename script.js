@@ -1,4 +1,4 @@
-const PRODUCTS_CSV='https://docs.google.com/spreadsheets/d/e/XXXXXX/pub?output=csv';
+const PRODUCTS_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv';
 const BRANDS_CSV='https://docs.google.com/spreadsheets/d/e/YYYYYY/pub?output=csv';
 
 function csvToRows(txt){
@@ -78,6 +78,7 @@ function setupMenu(){
 window.addEventListener('DOMContentLoaded',()=>{
   loadHeader();setupMenu();renderProducts();renderNews();renderBrands();
 });
+
 
 
 
