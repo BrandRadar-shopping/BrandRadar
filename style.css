@@ -132,6 +132,14 @@ a{text-decoration:none;color:inherit}
 .site-footer{text-align:center;padding:20px;color:#666;margin-top:40px}
 
 
+.mega-menu {
+  align-items: start; /* alle kolonner starter øverst */
+}
+
+.mega-menu ul {
+  min-height: 100%;   /* sikrer jevn baseline */
+}
+
 
 
 
