@@ -48,6 +48,7 @@ a{text-decoration:none;color:inherit}
 }
 
 /* Start: skjult */
+/* --- ZALANDO-STYLE MEGA MENY – JUSTERT ALIGNMENT --- */
 .mega-menu {
   display: none;
   position: absolute;
@@ -59,7 +60,8 @@ a{text-decoration:none;color:inherit}
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
   padding: 32px 80px 40px 80px;
   z-index: 999;
-  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;     /* jevn plass mellom kolonner */
+  align-items: flex-start;             /* alle starter på samme linje */
   gap: 60px;
   opacity: 0;
   transform: translateY(10px);
@@ -67,14 +69,15 @@ a{text-decoration:none;color:inherit}
   transition: opacity .25s ease, transform .25s ease;
 }
 
-/* Når man hovrer */
+/* Hover-effekt: vis menyen */
 .dropdown:hover .mega-menu {
-  display: grid;
+  display: flex;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
+/* Kolonnene i menyen */
 .mega-menu ul {
   list-style: none;
   padding: 0;
@@ -84,6 +87,8 @@ a{text-decoration:none;color:inherit}
   border-right: 1px solid #eee;
   padding-right: 40px;
 }
+
+/* Fjern siste skillelinje */
 .mega-menu ul:last-child { border-right: none; }
 
 .mega-menu span {
@@ -203,6 +208,7 @@ a{text-decoration:none;color:inherit}
     font-weight:600;
   }
 }
+
 
 
 
