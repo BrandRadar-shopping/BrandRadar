@@ -120,31 +120,102 @@
     </ul>
   </nav>
 
-  <!-- MOBIL: Shop by category -->
-  <section class="mobile-shop mobile-only">
-    <h2>Shop by category</h2>
+ <!-- SHOP BY CATEGORY – MOBIL -->
+<section class="mobile-shop mobile-only">
+  <h2>Shop by category</h2>
 
-    <button class="mobile-toggle" data-target="m-clothing">Clothing</button>
-    <div class="mobile-submenu" id="m-clothing">
-      <a href="#">Women</a>
-      <a href="#">Men</a>
-      <a href="#">Children</a>
+  <!-- CLOTHING -->
+  <button class="mobile-toggle" data-target="m-clothing">Clothing</button>
+  <div class="mobile-submenu" id="m-clothing">
+    <button class="mobile-subtoggle" data-target="m-women">Women</button>
+    <div class="mobile-sub-submenu" id="m-women">
+      <a href="#">Explore all products</a>
+      <a href="#">T-shirts & Tops</a>
+      <a href="#">Dresses</a>
+      <a href="#">Jeans</a>
+      <a href="#">Pants</a>
+      <a href="#">Jackets & Blazers</a>
+      <a href="#">Gymwear</a>
     </div>
 
-    <button class="mobile-toggle" data-target="m-shoes">Shoes</button>
-    <div class="mobile-submenu" id="m-shoes">
-      <a href="#">Women</a>
-      <a href="#">Men</a>
-      <a href="#">Children</a>
+    <button class="mobile-subtoggle" data-target="m-men">Men</button>
+    <div class="mobile-sub-submenu" id="m-men">
+      <a href="#">Explore all products</a>
+      <a href="#">T-shirts & Polo</a>
+      <a href="#">Sweats & Hoodies</a>
+      <a href="#">Pants & Shorts</a>
+      <a href="#">Jeans</a>
+      <a href="#">Jackets</a>
     </div>
 
-    <button class="mobile-toggle" data-target="m-supplements">Supplements</button>
-    <div class="mobile-submenu" id="m-supplements">
-      <a href="#">Categories</a>
-      <a href="#">Brands</a>
-      <a href="#">Goals</a>
+    <button class="mobile-subtoggle" data-target="m-children">Children</button>
+    <div class="mobile-sub-submenu" id="m-children">
+      <a href="#">Explore all products</a>
+      <a href="#">T-shirts</a>
+      <a href="#">Dresses</a>
+      <a href="#">Pants</a>
+      <a href="#">Sweaters</a>
+      <a href="#">Jackets</a>
     </div>
-  </section>
+  </div>
+
+  <!-- SHOES -->
+  <button class="mobile-toggle" data-target="m-shoes">Shoes</button>
+  <div class="mobile-submenu" id="m-shoes">
+    <button class="mobile-subtoggle" data-target="m-shoes-women">Women</button>
+    <div class="mobile-sub-submenu" id="m-shoes-women">
+      <a href="#">Explore all products</a>
+      <a href="#">Sneakers</a>
+      <a href="#">Boots</a>
+      <a href="#">Heels</a>
+      <a href="#">Sandals</a>
+    </div>
+
+    <button class="mobile-subtoggle" data-target="m-shoes-men">Men</button>
+    <div class="mobile-sub-submenu" id="m-shoes-men">
+      <a href="#">Explore all products</a>
+      <a href="#">Sneakers</a>
+      <a href="#">Running Shoes</a>
+      <a href="#">Boots</a>
+      <a href="#">Formal Shoes</a>
+    </div>
+
+    <button class="mobile-subtoggle" data-target="m-shoes-children">Children</button>
+    <div class="mobile-sub-submenu" id="m-shoes-children">
+      <a href="#">Explore all products</a>
+      <a href="#">Sneakers</a>
+      <a href="#">Sandals</a>
+      <a href="#">Boots</a>
+    </div>
+  </div>
+
+  <!-- SUPPLEMENTS -->
+  <button class="mobile-toggle" data-target="m-supplements">Supplements</button>
+  <div class="mobile-submenu" id="m-supplements">
+    <button class="mobile-subtoggle" data-target="m-sup-cat">Categories</button>
+    <div class="mobile-sub-submenu" id="m-sup-cat">
+      <a href="#">Proteiner</a>
+      <a href="#">Proteinbarer</a>
+      <a href="#">Kreatin</a>
+      <a href="#">Vitaminer & Mineraler</a>
+    </div>
+
+    <button class="mobile-subtoggle" data-target="m-sup-brands">Brands</button>
+    <div class="mobile-sub-submenu" id="m-sup-brands">
+      <a href="#">MyProtein</a>
+      <a href="#">Optimum Nutrition</a>
+      <a href="#">Gymshark Nutrition</a>
+    </div>
+
+    <button class="mobile-subtoggle" data-target="m-sup-goals">Goals</button>
+    <div class="mobile-sub-submenu" id="m-sup-goals">
+      <a href="#">Build Muscle</a>
+      <a href="#">Weight Loss</a>
+      <a href="#">Recovery</a>
+    </div>
+  </div>
+</section>
+
 
   <main class="container">
     <h1>Utvalgte produkter</h1>
@@ -155,6 +226,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
