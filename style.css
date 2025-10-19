@@ -1,192 +1,114 @@
-/* RESET */
+/* ===== RESET ===== */
+* { box-sizing: border-box; }
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f7f7f7;
+  color: #111;
 }
 
-/* HEADER */
-header.main-header {
-  background-color: #1c1c1c;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
+/* ===== HEADER / BRAND / SEARCH ===== */
+.main-header {
+  background: #1c1c1c;
+  color: #fff;
+  padding: 12px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 12px;
 }
-
+.logo { color: #fff; text-decoration: none; font-weight: 800; letter-spacing: 0.3px; }
 .search-bar {
-  padding: 6px;
-  border-radius: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
   border: none;
+  width: 260px;
 }
 
-/* NAVIGATION */
-.top-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-}
+/* ===== TOP NAV (DESKTOP) ===== */
+.desktop-only { display: none; }
 
-.top-nav a {
-  color: white;
-  text-decoration: none;
-}
-
-
-/* FOOTER */
-main {
-  padding: 30px;
-  text-align: center;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #f2f2f2;
-  margin-top: 40px;
-}
-
-/* 📱 MOBIL & 💻 DESKTOP MENY CSS */
-.category-wrapper {
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Felles styling for begge */
-.category-menu,
-.mobile-menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* 💻 DESKTOP-MENY */
-.desktop-only {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .desktop-only {
-    display: flex;
-    gap: 40px;
-    padding: 15px 25px;
+@media (min-width: 992px) {
+  .desktop-only { display: block; }
+  .top-nav ul {
+    list-style: none; margin: 0; padding: 0; display: flex; gap: 36px;
   }
-
-  .dropdown {
-    position: relative;
+  .top-nav a.nav-root {
+    color: #fff; text-decoration: none; font-weight: 700;
   }
-
-  .dropdown a {
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-  }
-
+  .dropdown { position: relative; }
   .dropdown-menu {
+    position: absolute; top: calc(100% + 12px); left: 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+    padding: 20px 22px;
     display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 20px;
-    gap: 40px;
     z-index: 1000;
-    min-width: 600px;
-    display: none;
+    min-width: 680px;
   }
+  .dropdown:hover .dropdown-menu { display: grid; }
 
-  .dropdown:hover .dropdown-menu {
-    display: flex;
-  }
+  /* Mega layout helpers */
+  .dropdown-menu.mega { gap: 42px; }
+  .dropdown-menu.one-col { grid-template-columns: 1fr; min-width: 360px; }
+  .dropdown-menu.two-col { grid-template-columns: 1fr 1fr; }
+  .dropdown-menu.three-col { grid-template-columns: 1fr 1fr 1fr; }
 
-  .dropdown-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .dropdown-menu li {
-    margin-bottom: 6px;
-  }
-
-  .dropdown-menu span {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 8px;
-  }
+  .dropdown-menu ul { list-style: none; margin: 0; padding: 0; }
+  .dropdown-menu li { margin: 8px 0; }
+  .dropdown-menu span { display: block; font-weight: 800; margin-bottom: 8px; color: #111; }
+  .dropdown-menu a { color: #222; text-decoration: none; }
+  .dropdown-menu a:hover { text-decoration: underline; }
 }
 
-/* 📱 MOBIL-MENY */
-.mobile-only {
-  display: block;
+/* ===== HAMBURGER / MOBILE NAV ===== */
+.hamburger {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 24px; background: none; border: 1px solid #3a3a3a; color: #fff;
+  padding: 6px 10px; border-radius: 8px; cursor: pointer;
 }
+@media (min-width: 992px) { .hamburger { display: none; } }
 
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-}
+/* Mobile nav wrapper */
+.mobile-only { display: none; }
+@media (max-width: 991px) { .mobile-only { display: block; } }
 
 .mobile-menu {
-  padding: 10px 20px;
-  background: white;
-  border-top: 1px solid #eee;
+  margin: 0; padding: 8px 14px 14px; list-style: none; background: #fff; border-top: 1px solid #eee;
 }
+.mobile-menu > li { border-bottom: 1px solid #eee; }
+.mobile-menu a { display: block; padding: 12px 4px; text-decoration: none; color: #222; }
 
-.mobile-dropdown h3 {
-  margin: 0;
-  padding: 10px 0;
-  font-size: 16px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
+.mobile-dropdown .mobile-toggle {
+  width: 100%; text-align: left; background: none; border: none; padding: 12px 4px;
+  font-size: 16px; font-weight: 700; cursor: pointer;
 }
+.mobile-submenu { padding: 0 0 12px 12px; }
+.mobile-submenu a { padding: 7px 0; }
+.mobile-submenu strong { display: block; margin: 12px 0 6px; }
 
-.mobile-submenu {
-  display: none;
-  padding: 10px 0 10px 15px;
+/* Hidden helper for a11y control via [hidden] attribute */
+[hidden] { display: none !important; }
+
+/* ===== MAIN / PRODUCTS ===== */
+main { padding: 28px 20px; }
+.products-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
-
-.mobile-submenu a {
-  display: block;
-  text-decoration: none;
-  color: #333;
-  padding: 5px 0;
+.product {
+  background: #fff; border: 1px solid #e8e8e8; border-radius: 10px;
+  padding: 14px; text-align: left;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
 }
+.product img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.product h3 { margin: 6px 0 8px; font-size: 16px; }
+.product p { margin: 4px 0; color: #333; }
+.product a { display: inline-block; margin-top: 8px; }
 
-.mobile-submenu strong {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-/* Hamburger-knapp */
-.hamburger {
-  display: none;
-  font-size: 26px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-@media (max-width: 767px) {
-  .hamburger {
-    display: block;
-  }
-
-  .top-nav {
-    display: none;
-  }
-
-  .category-wrapper.show .mobile-only {
-    display: block;
-  }
-}
+/* ===== FOOTER ===== */
+footer { text-align: center; padding: 24px; background: #f2f2f2; margin-top: 32px; }
 
 
 
