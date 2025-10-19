@@ -112,6 +112,48 @@ a{color:inherit;text-decoration:none}
   cursor: pointer;
 }
 
+/* --- FIX 1: keep mega-menu open while hovering down --- */
+.dropdown {
+  position: relative;
+}
+.dropdown:hover .mega-menu,
+.dropdown .mega-menu:hover {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* --- FIX 2: keep Home / News / Brands side by side on mobile --- */
+@media (max-width: 768px) {
+  .main-header {
+    flex-wrap: wrap;
+  }
+
+  .top-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+    order: 2;
+    margin-top: 8px;
+  }
+
+  .top-nav a {
+    flex: 0 0 auto;
+    padding: 6px 8px;
+  }
+
+  .search-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .search-container input {
+    width: 100%;
+    max-width: none;
+  }
+}
 
 
 
