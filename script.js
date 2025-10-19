@@ -40,3 +40,13 @@ function renderPlaceholderCards() {
 }
 renderPlaceholderCards();
 
+// ----- Mobil: tredje nivå (sub-submeny) -----
+document.querySelectorAll(".mobile-subtoggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = document.getElementById(btn.dataset.target);
+    const isOpen = target.style.display === "flex";
+    document.querySelectorAll(".mobile-sub-submenu").forEach(el => (el.style.display = "none"));
+    target.style.display = isOpen ? "none" : "flex";
+  });
+});
+
