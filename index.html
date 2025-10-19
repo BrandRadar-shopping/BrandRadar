@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrandRadar</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BrandRadar – Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER (konstant på alle sider) -->
   <header class="main-header">
-    <div class="logo">BrandRadar</div>
+    <a class="logo" href="index.html">BrandRadar</a>
 
     <nav class="top-nav">
-      <a href="#" class="active">Home</a>
-      <a href="#">News</a>
-      <a href="#">Brands</a>
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="news.html">News</a>
+      <a href="brands.html">Brands</a>
     </nav>
 
-    <div class="search-container">
-      <input type="text" placeholder="Søk produkter…" id="searchInput">
-    </div>
+    <form class="search-container" role="search">
+      <input type="search" id="searchInput" placeholder="Søk produkter…" aria-label="Søk">
+    </form>
   </header>
 
-  <!-- SHOP NAV DESKTOP -->
+  <!-- SHOP NAV (desktop) -->
   <nav class="shop-nav desktop-only">
     <ul>
       <!-- CLOTHING -->
@@ -77,7 +77,7 @@
             <li><span>Men</span></li>
             <li><a href="#">Explore all products</a></li>
             <li><a href="#">Sneakers</a></li>
-            <li><a href="#">Loafers</a></li>
+            <li><a href="#">Running</a></li>
             <li><a href="#">Boots</a></li>
             <li><a href="#">Dress shoes</a></li>
           </ul>
@@ -120,45 +120,42 @@
     </ul>
   </nav>
 
-  <!-- SHOP BY CATEGORY – MOBIL -->
+  <!-- MOBIL: Shop by category -->
   <section class="mobile-shop mobile-only">
     <h2>Shop by category</h2>
 
-    <button class="mobile-toggle" data-target="clothing">Clothing</button>
-    <div class="mobile-submenu" id="clothing">
+    <button class="mobile-toggle" data-target="m-clothing">Clothing</button>
+    <div class="mobile-submenu" id="m-clothing">
       <a href="#">Women</a>
       <a href="#">Men</a>
       <a href="#">Children</a>
     </div>
 
-    <button class="mobile-toggle" data-target="shoes">Shoes</button>
-    <div class="mobile-submenu" id="shoes">
+    <button class="mobile-toggle" data-target="m-shoes">Shoes</button>
+    <div class="mobile-submenu" id="m-shoes">
       <a href="#">Women</a>
       <a href="#">Men</a>
       <a href="#">Children</a>
     </div>
 
-    <button class="mobile-toggle" data-target="supplements">Supplements</button>
-    <div class="mobile-submenu" id="supplements">
+    <button class="mobile-toggle" data-target="m-supplements">Supplements</button>
+    <div class="mobile-submenu" id="m-supplements">
       <a href="#">Categories</a>
       <a href="#">Brands</a>
       <a href="#">Goals</a>
     </div>
   </section>
 
-  <!-- MAIN CONTENT -->
-  <main>
+  <main class="container">
     <h1>Utvalgte produkter</h1>
-    <div id="products-container"></div>
+    <div id="products" class="grid"></div>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    © BrandRadar
-  </footer>
-
+  <footer class="site-footer">© BrandRadar</footer>
   <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
