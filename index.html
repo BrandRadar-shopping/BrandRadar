@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BrandRadar – Klær, sko & kosttilskudd</title>
-  <meta name="description" content="Finn de beste produktene fra kjente merker. Sammenlign klær, sko og kosttilskudd fra våre partnere." />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Øverste linje -->
+  <!-- ØVRE HEADER -->
   <header class="top-header">
     <a href="index.html" class="logo">BrandRadar</a>
 
-    <form class="site-search" role="search">
-      <input type="search" id="q" placeholder="Søk produkter…" aria-label="Søk" />
-      <button type="submit">Søk</button>
-    </form>
-
-    <nav class="top-links">
+    <nav class="main-links">
+      <a href="index.html" aria-current="page">Home</a>
       <a href="news.html">News</a>
       <a href="brands.html">Brands</a>
     </nav>
 
-    <button class="hamburger" aria-controls="mobileNav" aria-expanded="false" aria-label="Åpne meny">☰</button>
+    <form class="site-search" role="search">
+      <input type="search" id="searchBox" placeholder="Søk produkter…" aria-label="Søk">
+    </form>
+
+    <button class="hamburger" aria-controls="mobileNav" aria-expanded="false">☰</button>
   </header>
 
-  <!-- Nedre linje: produktmeny -->
+  <!-- SHOP NAV (lys rad) -->
   <nav class="shop-nav desktop-only">
     <ul>
       <li class="dropdown">
         <a href="#">Clothing</a>
-        <div class="dropdown-menu three-col">
+        <div class="mega-menu three-col">
           <ul>
             <li><span>Women</span></li>
             <li><a data-cat="Clothing" data-gen="Women" data-sub="Explore all products">Explore all products</a></li>
@@ -45,7 +43,7 @@
           <ul>
             <li><span>Men</span></li>
             <li><a data-cat="Clothing" data-gen="Men" data-sub="Explore all products">Explore all products</a></li>
-            <li><a data-cat="Clothing" data-gen="Men" data-sub="Tshirts & Polo">T-shirts & Polo</a></li>
+            <li><a data-cat="Clothing" data-gen="Men" data-sub="Tshirts & Polo">Tshirts & Polo</a></li>
             <li><a data-cat="Clothing" data-gen="Men" data-sub="Sweats & Hoodies">Sweats & Hoodies</a></li>
             <li><a data-cat="Clothing" data-gen="Men" data-sub="Pants & Shorts">Pants & Shorts</a></li>
             <li><a data-cat="Clothing" data-gen="Men" data-sub="Jeans">Jeans</a></li>
@@ -54,7 +52,7 @@
           <ul>
             <li><span>Children</span></li>
             <li><a data-cat="Clothing" data-gen="Children" data-sub="Explore all products">Explore all products</a></li>
-            <li><a data-cat="Clothing" data-gen="Children" data-sub="T shirts">T-shirts</a></li>
+            <li><a data-cat="Clothing" data-gen="Children" data-sub="T shirts">T shirts</a></li>
             <li><a data-cat="Clothing" data-gen="Children" data-sub="Dresses">Dresses</a></li>
             <li><a data-cat="Clothing" data-gen="Children" data-sub="Pants">Pants</a></li>
             <li><a data-cat="Clothing" data-gen="Children" data-sub="Sweaters">Sweaters</a></li>
@@ -65,7 +63,7 @@
 
       <li class="dropdown">
         <a href="#">Shoes</a>
-        <div class="dropdown-menu two-col">
+        <div class="mega-menu two-col">
           <ul>
             <li><span>Women</span></li>
             <li><a data-cat="Shoes" data-gen="Women" data-sub="Explore all products">Explore all products</a></li>
@@ -85,7 +83,7 @@
 
       <li class="dropdown">
         <a href="#">Supplements</a>
-        <div class="dropdown-menu one-col">
+        <div class="mega-menu one-col">
           <ul>
             <li><a data-cat="Supplements" data-sub="Explore all products">Explore all products</a></li>
             <li><a data-cat="Supplements" data-sub="Proteiner">Proteiner</a></li>
@@ -97,7 +95,7 @@
     </ul>
   </nav>
 
-  <!-- Hovedinnhold -->
+  <!-- HOVEDINNHOLD -->
   <main class="container">
     <h1>Utvalgte produkter</h1>
     <div id="products" class="grid"></div>
@@ -107,6 +105,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
