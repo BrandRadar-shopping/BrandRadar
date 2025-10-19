@@ -4,44 +4,55 @@
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8f8f8;color:var(--text)}
+a{text-decoration:none;color:inherit}
 
-/* Header */
+/* HEADER */
 .top-header{
   background:var(--dark);color:#fff;
   display:flex;align-items:center;justify-content:space-between;
   padding:12px 24px;position:sticky;top:0;z-index:1000;
 }
-.logo{color:#fff;text-decoration:none;font-weight:800;font-size:18px}
-.main-links a{color:#fff;text-decoration:none;margin:0 10px;font-weight:600}
+.logo{color:#fff;font-weight:800;font-size:18px}
+.main-links a{color:#fff;margin:0 10px;font-weight:600}
 .main-links a[aria-current="page"]{text-decoration:underline}
 .site-search input{
-  padding:8px 12px;border-radius:8px;border:none;width:200px;
+  padding:8px 12px;border-radius:8px;border:none;width:220px;
 }
 .hamburger{display:none;background:none;color:#fff;border:1px solid #333;padding:6px 10px;border-radius:6px;font-size:20px}
 @media(max-width:992px){.hamburger{display:block}.main-links,.site-search{display:none}}
 
-/* Shop-nav */
+/* SHOP NAV */
 .shop-nav{
-  background:var(--light);border-bottom:1px solid var(--border);
-  box-shadow:0 2px 5px rgba(0,0,0,.08);
+  background:#fff;border-bottom:1px solid var(--border);
+  box-shadow:0 2px 5px rgba(0,0,0,.05);position:relative;
 }
 .shop-nav ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:40px}
-.shop-nav a{color:#000;text-decoration:none;font-weight:600}
-.dropdown{position:relative}
-.mega-menu{
-  display:none;position:absolute;left:0;top:100%;background:#fff;border:1px solid var(--border);
-  border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12);
-  padding:20px;gap:40px;min-width:700px;z-index:500;
-}
-.dropdown:hover .mega-menu{display:grid}
-.mega-menu.one-col{grid-template-columns:1fr}
-.mega-menu.two-col{grid-template-columns:1fr 1fr}
-.mega-menu.three-col{grid-template-columns:1fr 1fr 1fr}
-.mega-menu ul{list-style:none;margin:0;padding:0}
-.mega-menu li{margin:6px 0}
-.mega-menu span{font-weight:700;margin-bottom:6px;display:block}
+.shop-nav a{color:#000;font-weight:600;display:block;padding:14px 0}
+.dropdown{position:static}
 
-/* Layout */
+/* --- MEGA MENU (Zalando style) --- */
+.mega-menu{
+  display:none;
+  position:absolute;left:0;top:100%;width:100%;
+  background:#fff;border-top:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  padding:40px 80px;
+  z-index:999;
+  grid-template-columns:repeat(3,1fr);
+  gap:60px;
+}
+.dropdown:hover>.mega-menu{display:grid}
+.mega-menu ul{list-style:none;padding:0;margin:0}
+.mega-menu span{
+  display:block;font-weight:800;font-size:16px;
+  color:#111;margin-bottom:14px;letter-spacing:0.4px;
+}
+.mega-menu li{margin:6px 0}
+.mega-menu a{color:#333;font-size:15px}
+.mega-menu a:hover{color:#000}
+.shop-nav:hover{padding-bottom:40px}
+
+/* PRODUKTER */
 .container{max-width:1200px;margin:0 auto;padding:24px 18px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 .card{
@@ -52,15 +63,16 @@ body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8f8f8;color:var(--
 .card h3{font-size:15px;margin:6px 0}
 .card .meta{color:var(--muted);font-size:12px}
 .card .price{font-weight:700;margin-top:4px}
-.card a{margin-top:auto;text-decoration:none;color:#fff;background:#000;border-radius:8px;padding:8px;text-align:center}
+.card a{margin-top:auto;color:#fff;background:#000;border-radius:8px;padding:8px;text-align:center}
 
-/* Brand grid */
+/* BRANDS */
 .brand-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 .brand-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
 .brand-card img{max-width:120px;max-height:60px;object-fit:contain;margin-bottom:8px}
 
-/* Footer */
+/* FOOTER */
 .site-footer{text-align:center;padding:20px;color:#666;margin-top:40px}
+
 
 
 
