@@ -30,27 +30,103 @@ a{text-decoration:none;color:inherit}
 .shop-nav a{color:#000;font-weight:600;display:block;padding:14px 0}
 .dropdown{position:static}
 
-/* --- MEGA MENU (Zalando style) --- */
-.mega-menu{
-  display:none;
-  position:absolute;left:0;top:100%;width:100%;
-  background:#fff;border-top:1px solid var(--border);
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
-  padding:40px 80px;
-  z-index:999;
-  grid-template-columns:repeat(3,1fr);
-  gap:60px;
+/* --- ZALANDO-STYLE MEGA MENY (perfekt vertikal struktur) --- */
+.shop-nav {
+  position: relative;
+  z-index: 100;
 }
-.dropdown:hover>.mega-menu{display:grid}
-.mega-menu ul{list-style:none;padding:0;margin:0}
-.mega-menu span{
-  display:block;font-weight:800;font-size:16px;
-  color:#111;margin-bottom:14px;letter-spacing:0.4px;
+
+.dropdown {
+  position: static;
 }
-.mega-menu li{margin:6px 0}
-.mega-menu a{color:#333;font-size:15px}
-.mega-menu a:hover{color:#000}
-.shop-nav:hover{padding-bottom:40px}
+
+.dropdown > a {
+  display: block;
+  padding: 16px 0;
+  font-weight: 600;
+  color: #000;
+}
+
+.mega-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  padding: 32px 80px 40px 80px;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+}
+
+/* Når du hovrer over dropdown */
+.dropdown:hover .mega-menu {
+  display: grid;
+}
+
+/* Kolonneinnhold */
+.mega-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;   /* <— Tvinger lenkene nedover */
+  border-right: 1px solid #eee; /* vertikal skillelinje */
+  padding-right: 40px;
+}
+
+.mega-menu ul:last-child {
+  border-right: none;
+}
+
+.mega-menu span {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.mega-menu li {
+  margin: 5px 0;
+}
+
+.mega-menu a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  padding: 3px 0;
+  display: block;
+}
+
+.mega-menu a:hover {
+  color: #000;
+}
+
+/* Sørg for at hover holder seg aktiv når man beveger musen ned */
+.shop-nav li.dropdown:hover {
+  background: #fff;
+}
+
+.shop-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* Fjerner gap mellom nav og mega-menu */
+.shop-nav {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 
 /* PRODUKTER */
 .container{max-width:1200px;margin:0 auto;padding:24px 18px}
@@ -72,6 +148,7 @@ a{text-decoration:none;color:inherit}
 
 /* FOOTER */
 .site-footer{text-align:center;padding:20px;color:#666;margin-top:40px}
+
 
 
 
