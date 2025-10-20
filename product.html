@@ -247,7 +247,23 @@
   transform: scale(1.15);
 }
 
-    
+  /* --- MOBILFIX: forhindrer horisontal scrolling --- */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.product-gallery, .product-details {
+  width: 100%;
+  max-width: 100%;
+}
+
+.product-gallery img#product-image {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+}
+  
   </style>
 </head>
 <body>
