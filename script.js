@@ -22,7 +22,7 @@ async function loadProducts() {
       // Badge for "Nyhet" eller "Rabatt"
       const badge =
         tag && tag.trim() !== ""
-          ? `<span class="badge">Discount: ${tag.trim()}</span>`
+          ? `<span class="badge">Discount:${tag.trim()}</span>`
           : "";
 
       productCard.innerHTML = `
@@ -56,4 +56,5 @@ async function loadProducts() {
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
