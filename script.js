@@ -51,10 +51,22 @@ async function loadProducts() {
         </div>
       `;
 
-      // Klikk åpner produktsiden i ny fane
-      productCard.addEventListener("click", () => {
-        window.open(link, "_blank");
-      });
+     productCard.addEventListener("click", () => {
+  const productData = {
+    brand,
+    title,
+    price,
+    discount,
+    image,
+    link,
+    category,
+    gender,
+    subcategory
+  };
+  localStorage.setItem("selectedProduct", JSON.stringify(productData));
+  window.location.href = "product.html";
+});
+
 
       container.appendChild(productCard);
     });
@@ -70,5 +82,6 @@ async function loadProducts() {
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
 
