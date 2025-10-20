@@ -419,6 +419,47 @@ a{color:inherit;text-decoration:none}
   margin-top: 4px;
 }
 
+/* --- BADGES (Nyhet! / Discount) --- */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.badge.new {
+  background: #00b894; /* frisk grønn tone for Nyhet */
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+/* Finjusteringer for produktkort */
+.product-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
 
 
 
