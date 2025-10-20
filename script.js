@@ -1,52 +1,46 @@
-// ----- Enter-søk (ingen knapp nødvendig)
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      // TODO: koble til filtrering senere
-      console.log('Søk:', searchInput.value);
+// --- BrandRadar Product Loader --- //
+const sheetURL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
+
+async function loadProducts() {
+  try {
+    const response = await fetch(sheetURL);
+    if (!response.ok) throw new Error("Kunne ikke hente data fra Google Sheet");
+
+    const csvData = await response.text();
+    const rows = csvData.split("\n").slice(1);
+    const container = document.getElementById("products-container");
+    container.innerHTML = ""; // rydder først
+
+    rows.forEach((row, index) => {
+      const [name, image, price, category, link] = row.split(",");
+
+      // hopp over tomme rader
+      if (!name || !link) return;
+
+      const productCard = document.createElement("div");
+      productCard.className = "card";
+
+      productCard.innerHTML = `
+        <img src="${image || "https://via.placeholder.com/300x300?text=No+Image"}" alt="${name}">
+        <h3>${name}</h3>
+        <p class="price">${price ? price.trim() : "Pris ikke oppgitt"}</p>
+        <p class="meta">${category ? category.trim() : ""}</p>
+        <a class="btn" href="${link}" target="_blank">Kjøp nå</a>
+      `;
+
+      container.appendChild(productCard);
+    });
+
+    if (container.innerHTML.trim() === "") {
+      container.innerHTML = `<p>Ingen produkter funnet akkurat nå.</p>`;
     }
-  });
-}
-
-// ----- Mobil: toggles for Shop by category
-document.querySelectorAll('.mobile-toggle').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const target = document.getElementById(btn.dataset.target);
-    const isOpen = target.style.display === 'flex';
-    document.querySelectorAll('.mobile-submenu').forEach((m) => (m.style.display = 'none'));
-    target.style.display = isOpen ? 'none' : 'flex';
-  });
-});
-
-// ----- Demo-render (tom til vi kobler Sheets)
-function renderPlaceholderCards() {
-  const root = document.getElementById('products');
-  if (!root) return;
-  root.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    const el = document.createElement('div');
-    el.className = 'card';
-    el.innerHTML = `
-      <img src="https://via.placeholder.com/400x280?text=Produkt" alt="Produkt" loading="lazy">
-      <h3>Produktnavn</h3>
-      <div class="meta">Brand · Category</div>
-      <div class="price">—</div>
-      <a class="btn" href="#" rel="nofollow noopener" target="_blank">Se hos butikk</a>
-    `;
-    root.appendChild(el);
+  } catch (error) {
+    console.error("Feil ved lasting av produkter:", error);
+    document.getElementById("products-container").innerHTML =
+      "<p>Kunne ikke laste produkter. Prøv igjen senere.</p>";
   }
 }
-renderPlaceholderCards();
 
-// ----- Mobil: tredje nivå (sub-submeny) -----
-document.querySelectorAll(".mobile-subtoggle").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const target = document.getElementById(btn.dataset.target);
-    const isOpen = target.style.display === "flex";
-    document.querySelectorAll(".mobile-sub-submenu").forEach(el => (el.style.display = "none"));
-    target.style.display = isOpen ? "none" : "flex";
-  });
-});
-
+// --- Kjør når siden lastes --- //
+document.addEventListener("DOMContentLoaded", loadProducts);
