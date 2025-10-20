@@ -180,4 +180,78 @@ a{color:inherit;text-decoration:none}
   }
 }
 
+/* --- DESKTOP PATCH: full visible Zalando-style mega menu --- */
+@media (min-width: 769px) {
+  .shop-nav {
+    position: relative;
+    overflow: visible; /* lar menyen bre seg fritt nedover */
+    z-index: 1000;
+  }
+
+  .dropdown {
+    position: static;
+  }
+
+  .dropdown > a {
+    position: relative;
+    padding: 14px 22px;
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  .dropdown:hover .mega-menu,
+  .mega-menu:hover {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mega-menu {
+    position: absolute;
+    top: 100%; /* ligger flush rett under header */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #eee;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    padding: 40px 80px;
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 2000;
+  }
+
+  /* layout for kolonner */
+  .mega-menu ul {
+    flex: 1;
+    list-style: none;
+    padding: 0 40px;
+    margin: 0;
+    border-right: 1px solid #eee;
+  }
+
+  .mega-menu ul:last-child {
+    border-right: none;
+  }
+
+  .mega-menu span {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .mega-menu li a {
+    display: block;
+    color: #222;
+    text-decoration: none;
+    padding: 4px 0;
+  }
+
+  .mega-menu li a:hover {
+    text-decoration: underline;
+  }
+}
+
 
