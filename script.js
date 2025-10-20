@@ -16,14 +16,16 @@ async function loadProducts() {
       // Split kolonner og hopp over "visuelt bilde"
       const cols = row.split(",");
 
-      const brand = cols[0]?.trim();
-      const title = cols[1]?.trim();
-      const price = cols[2]?.trim();
-      const discount = cols[3]?.replace(/"/g, "").trim();
-      const image = cols[5]?.trim(); // kolonne 5 = faktisk bilde-URL (hopper over visuelt bilde)
-      const link = cols[6]?.trim();
-      const category = cols[7]?.trim();
-      const subcategory = cols[8]?.trim();
+    const brand = cols[0]?.trim();
+const title = cols[1]?.trim();
+const price = cols[2]?.trim();
+const discount = cols[3]?.replace(/"/g, "").trim();
+const image = cols[5]?.trim();
+const link = cols[6]?.trim();
+const category = cols[7]?.trim();
+const gender = cols[8]?.trim();
+const subcategory = cols[9]?.trim();
+
 
       if (!title || !image || !link) return;
 
@@ -82,6 +84,7 @@ async function loadProducts() {
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
 
 
