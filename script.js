@@ -55,20 +55,20 @@ const subcategory = cols[8]?.trim();
       `;
 
      productCard.addEventListener("click", () => {
-  const productData = {
-    brand,
-    title,
-    price,
-    discount,
-    image,
-    link,
-    category,
-    gender,
-    subcategory
-  };
-  localStorage.setItem("selectedProduct", JSON.stringify(productData));
-  window.location.href = "product.html";
-});
+ const productData = {
+  brand,
+  title,
+  price,
+  discount,
+  image,       // Hovedbilde (fra "Image URL")
+  image2: cols[9]?.trim(),  // ← Legg til
+  image3: cols[10]?.trim(), // ← Legg til
+  image4: cols[11]?.trim(), // ← Legg til
+  link,
+  category,
+  gender,
+  subcategory
+};
 
 
       container.appendChild(productCard);
@@ -85,6 +85,7 @@ const subcategory = cols[8]?.trim();
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
 
 
