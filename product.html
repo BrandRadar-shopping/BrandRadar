@@ -52,9 +52,6 @@
       background: #f6f6f6;
       transition: transform 0.3s ease;
     }
-    .product-gallery img#product-image:hover {
-      transform: scale(1.03);
-    }
 
     .badge {
       position: absolute;
@@ -98,14 +95,16 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      font-size: 24px;
+      font-size: 28px;
       background: none;
       border: none;
       cursor: pointer;
       color: #ccc;
-      transition: color 0.2s ease;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
-
+    .favorite-btn:hover {
+      transform: scale(1.1);
+    }
     .favorite-btn.active {
       color: #e63946;
     }
@@ -152,6 +151,19 @@
       transition: background 0.3s;
     }
     .buy-button:hover { background: #333; }
+
+    .product-description {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .rating {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #f1c40f;
+    }
 
     .back-link {
       display: inline-block;
@@ -205,7 +217,9 @@
       <div id="product-brand" class="product-meta"></div>
       <div id="product-category" class="product-meta"></div>
       <div id="product-price" class="product-price"></div>
+      <div id="product-rating" class="rating"></div>
       <a id="buy-button" class="buy-button" href="#" target="_blank">Kjøp nå</a>
+      <div id="product-description" class="product-description"></div>
       <a href="index.html" class="back-link">← Tilbake</a>
     </div>
   </main>
@@ -215,6 +229,8 @@
 
     if (data) {
       const p = JSON.parse(data);
+
+      // sett hovedinfo
       document.getElementById("product-image").src = p.image;
       document.getElementById("product-title").textContent = p.title;
       document.getElementById("product-brand").textContent = "Brand: " + p.brand;
@@ -222,7 +238,15 @@
       document.getElementById("product-price").textContent = "Pris: " + p.price;
       document.getElementById("buy-button").href = p.link;
 
-      // Badge
+      // beskrivelse og rating
+      if (p.description) {
+        document.getElementById("product-description").textContent = p.description;
+      }
+      if (p.rating) {
+        document.getElementById("product-rating").textContent = "⭐ " + p.rating;
+      }
+
+      // badge
       const badge = document.getElementById("product-badge");
       if (p.discount) {
         const cleanText = p.discount.replace(/["%]/g, "").trim();
@@ -233,7 +257,7 @@
         badge.style.display = "none";
       }
 
-      // FAVORITTKNAPP
+      // favorittknapp
       const favBtn = document.getElementById("favorite-btn");
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
       const isFavorite = favorites.some(f => f.title === p.title);
@@ -244,27 +268,31 @@
         if (favBtn.classList.contains("active")) {
           updated = updated.filter(f => f.title !== p.title);
           favBtn.classList.remove("active");
+          favBtn.title = "Legg til i favoritter";
         } else {
           updated.push(p);
           favBtn.classList.add("active");
+          favBtn.title = "Fjern fra favoritter";
         }
         localStorage.setItem("favorites", JSON.stringify(updated));
       });
 
-      // THUMBNAILS
+      // thumbnails (inkluder hovedbilde først)
       const thumbs = document.getElementById("thumbnail-container");
-      const extraImages = [p.image2, p.image3, p.image4].filter(Boolean);
-      if (extraImages.length > 0) {
-        extraImages.forEach(img => {
-          const thumb = document.createElement("img");
-          thumb.src = img;
-          thumb.alt = "Produktbilde";
-          thumb.addEventListener("click", () => {
-            document.getElementById("product-image").src = img;
-          });
-          thumbs.appendChild(thumb);
+      const allImages = [p.image, p.image2, p.image3, p.image4].filter(Boolean);
+      allImages.forEach((img, index) => {
+        const thumb = document.createElement("img");
+        thumb.src = img;
+        thumb.alt = "Produktbilde";
+        if (index === 0) thumb.style.borderColor = "#000";
+        thumb.addEventListener("click", () => {
+          document.getElementById("product-image").src = img;
+          document.querySelectorAll(".thumbnail-container img").forEach(t => t.style.borderColor = "transparent");
+          thumb.style.borderColor = "#000";
         });
-      }
+        thumbs.appendChild(thumb);
+      });
+
     } else {
       document.querySelector("main").innerHTML =
         "<p>Fant ikke produktdata. Gå tilbake til forsiden.</p>";
