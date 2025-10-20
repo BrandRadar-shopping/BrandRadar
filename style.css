@@ -301,7 +301,7 @@ a{color:inherit;text-decoration:none}
 @media (min-width: 769px) {
   .mega-menu {
     position: fixed;
-    top: 65px; /* juster etter høyden på headeren */
+    top: 60px; /* juster etter høyden på headeren */
     left: 0;
     width: 100%;
     background: #fff;
@@ -347,5 +347,6 @@ a{color:inherit;text-decoration:none}
     border-right: none;
   }
 }
+
 
 
