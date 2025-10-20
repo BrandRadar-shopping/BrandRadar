@@ -1,4 +1,4 @@
-// --- BrandRadar Product Loader v2 --- //
+// --- BrandRadar Product Loader v4 (tilpasset Google Sheet med "visuelt bilde") --- //
 const sheetURL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
 
@@ -8,36 +8,50 @@ async function loadProducts() {
     if (!response.ok) throw new Error("Kunne ikke hente data fra Google Sheet");
 
     const csvData = await response.text();
-    const rows = csvData.split("\n").slice(1);
+    const rows = csvData.trim().split("\n").slice(1);
     const container = document.getElementById("products-container");
-    container.innerHTML = ""; // rydder først
+    container.innerHTML = "";
 
     rows.forEach((row) => {
-      const [name, image, price, category, link, tag] = row.split(",");
-      if (!name || !link) return;
+      // Split kolonner og hopp over "visuelt bilde"
+      const cols = row.split(",");
+
+      const brand = cols[0]?.trim();
+      const title = cols[1]?.trim();
+      const price = cols[2]?.trim();
+      const discount = cols[3]?.replace(/"/g, "").trim();
+      const image = cols[5]?.trim(); // kolonne 5 = faktisk bilde-URL (hopper over visuelt bilde)
+      const link = cols[6]?.trim();
+      const category = cols[7]?.trim();
+      const subcategory = cols[8]?.trim();
+
+      if (!title || !image || !link) return;
+
+      // Badge – f.eks. "Discount: 20%" eller "Nyhet!"
+      let badge = "";
+      if (discount && discount !== "") {
+        const isNew = /nyhet|new/i.test(discount);
+        badge = `<span class="badge ${isNew ? "new" : ""}">${
+          isNew ? "Nyhet!" : "Discount: " + discount
+        }</span>`;
+      }
 
       const productCard = document.createElement("div");
       productCard.className = "product-card";
 
-      // Badge for "Nyhet" eller "Rabatt"
-      const badge =
-        tag && tag.trim() !== ""
-          ? `<span class="badge">Discount:${tag.trim()}</span>`
-          : "";
-
       productCard.innerHTML = `
         <div class="product-image">
           ${badge}
-          <img src="${image || "https://via.placeholder.com/400x400?text=No+Image"}" alt="${name.trim()}">
+          <img src="${image}" alt="${title}">
         </div>
         <div class="product-info">
-          <h3 class="product-name">${name.trim()}</h3>
-          <p class="product-price">${price ? price.trim() + " kr" : ""}</p>
-          <p class="product-category">${category ? category.trim() : ""}</p>
+          <h3 class="product-name">${brand} ${title}</h3>
+          <p class="product-price">${price}</p>
+          <p class="product-category">${category} • ${subcategory}</p>
         </div>
       `;
 
-      // Klikk fører til produktside (for fremtidig oppgradering)
+      // Klikk åpner produktsiden i ny fane
       productCard.addEventListener("click", () => {
         window.open(link, "_blank");
       });
