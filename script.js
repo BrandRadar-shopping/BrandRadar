@@ -152,4 +152,18 @@ async function loadProducts() {
 
 document.addEventListener("DOMContentLoaded", loadProducts);
 
+// --- Favoritt-teller på alle sider ---
+(function(){
+  function readFavs(){
+    try { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
+    catch { return []; }
+  }
+  function updateFavCount(){
+    const count = readFavs().length;
+    document.querySelectorAll('[data-fav-count]').forEach(el => el.textContent = count);
+  }
+  document.addEventListener('DOMContentLoaded', updateFavCount);
+  window.addEventListener('storage', e => { if (e.key === 'favorites') updateFavCount(); });
+})();
+
 
