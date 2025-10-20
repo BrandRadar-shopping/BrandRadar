@@ -348,6 +348,77 @@ a{color:inherit;text-decoration:none}
   }
 }
 
+/* --- PRODUCT CARD (BrandRadar style upgrade) --- */
+.product-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.product-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.product-info {
+  padding: 14px 18px 18px 18px;
+  text-align: center;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+.product-price {
+  font-size: 15px;
+  color: #222;
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.product-category {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+
 
 
 
