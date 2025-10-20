@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produktdetaljer | BrandRadar</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    main {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .product-gallery {
+      flex: 1 1 45%;
+      background: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .product-gallery img {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+    .product-details {
+      flex: 1 1 45%;
+      background: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .product-details h1 {
+      margin-top: 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .product-details p {
+      margin: 6px 0;
+    }
+    .badge {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .badge.new { background: #00b894; }
+    .buy-button {
+      display: inline-block;
+      margin-top: 20px;
+      background: #000;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .buy-button:hover { background: #333; }
+    .back-link {
+      display: inline-block;
+      margin-top: 40px;
+      color: #000;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo">BrandRadar</div>
+  </header>
+
+  <main>
+    <div class="product-gallery">
+      <img id="product-image" src="" alt="">
+    </div>
+    <div class="product-details">
+      <span id="product-badge" class="badge"></span>
+      <h1 id="product-title"></h1>
+      <p id="product-brand"></p>
+      <p id="product-category"></p>
+      <p id="product-price"></p>
+      <a id="buy-button" class="buy-button" href="#" target="_blank">Kjøp nå</a>
+      <a href="index.html" class="back-link">← Tilbake</a>
+    </div>
+  </main>
+
+  <script>
+    const data = localStorage.getItem("selectedProduct");
+    if (data) {
+      const p = JSON.parse(data);
+      document.getElementById("product-image").src = p.image;
+      document.getElementById("product-title").textContent = p.title;
+      document.getElementById("product-brand").textContent = "Brand: " + p.brand;
+      document.getElementById("product-category").textContent = p.category + " • " + p.gender + " • " + p.subcategory;
+      document.getElementById("product-price").textContent = "Pris: " + p.price;
+      document.getElementById("buy-button").href = p.link;
+
+      const badge = document.getElementById("product-badge");
+      if (p.discount) {
+        const isNew = /nyhet|new/i.test(p.discount);
+        badge.textContent = isNew ? "Nyhet!" : "Discount: " + p.discount;
+        if (isNew) badge.classList.add("new");
+      } else {
+        badge.style.display = "none";
+      }
+    } else {
+      document.querySelector("main").innerHTML = "<p>Fant ikke produktdata. Gå tilbake til forsiden.</p>";
+    }
+  </script>
+
+</body>
+</html>
