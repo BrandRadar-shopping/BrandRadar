@@ -20,11 +20,12 @@ async function loadProducts() {
 const title = cols[1]?.trim();
 const price = cols[2]?.trim();
 const discount = cols[3]?.replace(/"/g, "").trim();
-const image = cols[5]?.trim();
-const link = cols[6]?.trim();
-const category = cols[7]?.trim();
-const gender = cols[8]?.trim();
-const subcategory = cols[9]?.trim();
+const image = cols[4]?.trim(); // <-- riktig kolonne
+const link = cols[5]?.trim();
+const category = cols[6]?.trim();
+const gender = cols[7]?.trim();
+const subcategory = cols[8]?.trim();
+
 
 
       if (!title || !image || !link) return;
@@ -84,6 +85,7 @@ const subcategory = cols[9]?.trim();
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
 
 
