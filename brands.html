@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- HEADER -->
   <header class="main-header">
     <a class="logo" href="index.html">BrandRadar</a>
     <nav class="top-nav">
@@ -15,13 +16,13 @@
       <a href="news.html">News</a>
       <a href="brands.html" aria-current="page">Brands</a>
       <a href="favoritter.html">Favoritter (<span data-fav-count>0</span>)</a>
-
     </nav>
     <form class="search-container" role="search">
       <input type="search" id="searchInput" placeholder="Søk produkter…" aria-label="Søk">
     </form>
   </header>
 
+  <!-- SHOP MENU -->
   <nav class="shop-nav desktop-only">
     <ul>
       <li class="dropdown">
@@ -113,117 +114,26 @@
     </ul>
   </nav>
 
-  <section class="mobile-shop mobile-only">
-    <h2>Shop by category</h2>
-    <button class="mobile-toggle" data-target="m-clothing">Clothing</button>
-    <div class="mobile-submenu" id="m-clothing">
-      <a href="#">Women</a><a href="#">Men</a><a href="#">Children</a>
-    </div>
-    <button class="mobile-toggle" data-target="m-shoes">Shoes</button>
-    <div class="mobile-submenu" id="m-shoes">
-      <a href="#">Women</a><a href="#">Men</a><a href="#">Children</a>
-    </div>
-    <button class="mobile-toggle" data-target="m-supplements">Supplements</button>
-    <div class="mobile-submenu" id="m-supplements">
-      <a href="#">Categories</a><a href="#">Brands</a><a href="#">Goals</a>
-    </div>
-  </section>
+  <!-- BRAND CONTENT -->
+  <main class="container">
+    <h1>Våre Brands</h1>
+    <p>Utforsk alle merkene vi samarbeider med</p>
 
-   <main class="container">
-    <h1>Alle Brands</h1>
-    <div id="brands" class="brand-grid"></div>
+    <section id="highlighted-brands">
+      <h2>Utvalgte Brands</h2>
+      <div class="brand-grid" id="highlight-grid"></div>
+    </section>
+
+    <section>
+      <h2>Alle Brands</h2>
+      <div class="brand-grid" id="brands"></div>
+    </section>
   </main>
 
   <footer class="site-footer">© BrandRadar</footer>
 
-  <script>
-    // --- URL til ditt Google Sheet med BrandRadar_Brands ---
-    const sheetURL = https://docs.google.com/spreadsheets/d/e/2PACX-1vQllg-SFti-NWDq1EkYCQ5MenTpetINSfrLZuJ7vIjzF3xwClmJAeI8Ha6Lmj0xgGmo4dv5qOpEDCgh/pub?output=csv; // ← lim inn din CSV-lenke her
-
-    // --- CSV Parser ---
-    function parseCSVLine(line) {
-      const out = [];
-      let cur = "";
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') {
-          if (inQuotes && line[i + 1] === '"') {
-            cur += '"'; i++;
-          } else {
-            inQuotes = !inQuotes;
-          }
-        } else if (ch === "," && !inQuotes) {
-          out.push(cur.trim());
-          cur = "";
-        } else {
-          cur += ch;
-        }
-      }
-      out.push(cur.trim());
-      return out;
-    }
-
-    // --- Last inn Brands ---
-    async function loadBrands() {
-      try {
-        const res = await fetch(sheetURL);
-        if (!res.ok) throw new Error("Kunne ikke hente Brand-data");
-        const csv = (await res.text()).trim();
-        const lines = csv.split("\n");
-        const headers = parseCSVLine(lines[0]);
-        const rows = lines.slice(1).map(parseCSVLine);
-        const grid = document.getElementById("brands");
-        grid.innerHTML = "";
-
-        const iBrand = headers.findIndex(h => h.toLowerCase().includes("brand"));
-        const iLogo = headers.findIndex(h => h.toLowerCase().includes("logo"));
-        const iDesc = headers.findIndex(h => h.toLowerCase().includes("desc"));
-        const iLink = headers.findIndex(h => h.toLowerCase().includes("link"));
-
-        const seen = new Set();
-        rows.forEach(r => {
-          const brand = r[iBrand]?.trim();
-          if (!brand || seen.has(brand)) return;
-          seen.add(brand);
-          const logo = r[iLogo]?.trim();
-          const desc = r[iDesc]?.trim();
-          const link = r[iLink]?.trim();
-
-          const card = document.createElement("div");
-          card.className = "brand-card";
-          card.innerHTML = `
-            ${logo ? `<img src="${logo}" alt="${brand} logo">` : ""}
-            <h3>${brand}</h3>
-            ${desc ? `<p>${desc}</p>` : ""}
-          `;
-
-          card.addEventListener("click", () => {
-            if (link) {
-              window.open(link, "_blank");
-            } else {
-              window.location.href = "index.html?brand=" + encodeURIComponent(brand);
-            }
-          });
-
-          grid.appendChild(card);
-        });
-
-        if (!grid.children.length)
-          grid.innerHTML = "<p>Ingen brands funnet.</p>";
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById("brands").innerHTML = "<p>Kunne ikke laste brands nå.</p>";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", loadBrands);
-  </script>
-
+  <!-- KUN denne scriptfila — alt annet forblir urørt -->
   <script src="brands.js"></script>
 </body>
 </html>
 
-</body>
-</html>
