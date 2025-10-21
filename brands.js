@@ -55,29 +55,28 @@ function setCache(data) {
 }
 
 async function loadBrands() {
-  const brandsGrid = document.getElementById("brands");
-  if (brandsGrid) brandsGrid.innerHTML = "<p>Laster brands …</p>";
-
-  // 1) Prøv cache først (øyeblikkelig visning)
-  const cached = getCache();
-  if (cached) renderBrands(cached);
-
-  // 2) Hent fersk data i bakgrunnen
   try {
-    const res = await fetch(BRANDS_JSON_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("Nettverksfeil");
-    const data = await res.json();
-    // Sikre at keys er i lavere-case hvis noen har endret headere
-    const normalized = data.map(row => {
-      const o = {};
-      Object.keys(row || {}).forEach(k => o[String(k).trim().toLowerCase()] = row[k]);
-      return o;
+    const res = await fetch(BRANDS_JSON_URL);
+    if (!res.ok) throw new Error("Kunne ikke hente data");
+    const brands = await res.json();
+
+    const container = document.getElementById("brands");
+    container.innerHTML = "";
+
+    brands.forEach(b => {
+      const card = document.createElement("div");
+      card.className = "brand-card";
+      card.innerHTML = `
+        <img src="${b.brandlogo}" alt="${b.brand}">
+        <h3>${b.brand}</h3>
+        <p>${b.description || ""}</p>
+        <a href="${b.link}" target="_blank" class="btn primary">Besøk</a>
+      `;
+      container.appendChild(card);
     });
-    setCache(normalized);
-    renderBrands(normalized);
   } catch (err) {
-    console.error("Kunne ikke hente brands:", err);
-    if (!cached && brandsGrid) brandsGrid.innerHTML = "<p>Kunne ikke laste brands nå 😢</p>";
+    console.error(err);
+    document.getElementById("brands").innerHTML = "<p>Kunne ikke laste brands.</p>";
   }
 }
 
