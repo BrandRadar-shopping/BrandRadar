@@ -1,53 +1,28 @@
-// --- BrandRadar Brands Loader (v3 FINAL) --- //
-const brandsSheet =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQllg-SFti-NWDq1EkYCQ5MenTpetINSfrLZuJ7vIjzF3xwClmJAeI8Ha6Lmj0xgGmo4dv5qOpEDCgh/pub?output=csv";
+// --- BrandRadar Brands Loader (JSON + cache) --- //
+// 1) Lim inn Apps Script-URL her:
+const BRANDS_JSON_URL = "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE";
 
-// Enkel CSV-parser
-function parseCSVLine(line) {
-  const out = [];
-  let cur = "";
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (ch === "," && !inQuotes) {
-      out.push(cur.trim());
-      cur = "";
-    } else cur += ch;
-  }
-  out.push(cur.trim());
-  return out;
-}
+// 2) Konfig: cache-levetid (i ms). 6 timer = 6 * 60 * 60 * 1000
+const CACHE_TTL = 6 * 60 * 60 * 1000;
+const CACHE_KEY = "brands_json_cache_v1";
 
-async function loadBrands() {
-  try {
-    const res = await fetch(brandsSheet);
-    if (!res.ok) throw new Error("Kunne ikke hente data fra Google Sheets");
-    const csv = (await res.text()).trim().split("\n");
-    const headers = parseCSVLine(csv[0]);
-    const rows = csv.slice(1).map(parseCSVLine);
+function renderBrands(data) {
+  const highlightGrid = document.getElementById("highlight-grid");
+  const grid = document.getElementById("brands");
+  if (!highlightGrid || !grid) return;
 
-    // Finn kolonneindekser
-    const iBrand = headers.findIndex(h => h.toLowerCase().includes("brand"));
-    const iLogo = headers.findIndex(h => h.toLowerCase().includes("logo"));
-    const iDesc = headers.findIndex(h => h.toLowerCase().includes("description"));
-    const iLink = headers.findIndex(h => h.toLowerCase().includes("link"));
-    const iHighlight = headers.findIndex(h => h.toLowerCase().includes("highlight"));
+  highlightGrid.innerHTML = "";
+  grid.innerHTML = "";
 
-    const grid = document.getElementById("brands");
-    const highlightGrid = document.getElementById("highlight-grid");
-    grid.innerHTML = "";
-    highlightGrid.innerHTML = "";
-
-    rows.forEach(row => {
-      const name = row[iBrand] || "";
-      const logo = row[iLogo] || "";
-      const desc = row[iDesc] || "";
-      const link = row[iLink] || "";
-      const highlight = (row[iHighlight] || "").toLowerCase().trim() === "yes";
-      if (!name) return;
+  // Forventer felter: brand, brandlogo, description, link, highlight
+  data
+    .filter(r => r && r.brand) // dropp tomme rader
+    .forEach(row => {
+      const name = row.brand;
+      const logo = row.brandlogo || "";
+      const desc = row.description || "";
+      const link = row.link || "";
+      const highlight = String(row.highlight || "").toLowerCase().trim() === "yes";
 
       const card = document.createElement("div");
       card.className = "brand-card" + (highlight ? " highlight" : "");
@@ -57,16 +32,65 @@ async function loadBrands() {
         <p>${desc}</p>
       `;
       if (link) card.addEventListener("click", () => window.open(link, "_blank"));
+
       (highlight ? highlightGrid : grid).appendChild(card);
     });
+}
+
+function getCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { t, data } = JSON.parse(raw);
+    if (!t || !data) return null;
+    if (Date.now() - t > CACHE_TTL) return null;
+    return data;
+  } catch { return null; }
+}
+
+function setCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
+  } catch {}
+}
+
+async function loadBrands() {
+  const brandsGrid = document.getElementById("brands");
+  if (brandsGrid) brandsGrid.innerHTML = "<p>Laster brands …</p>";
+
+  // 1) Prøv cache først (øyeblikkelig visning)
+  const cached = getCache();
+  if (cached) renderBrands(cached);
+
+  // 2) Hent fersk data i bakgrunnen
+  try {
+    const res = await fetch(BRANDS_JSON_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("Nettverksfeil");
+    const data = await res.json();
+    // Sikre at keys er i lavere-case hvis noen har endret headere
+    const normalized = data.map(row => {
+      const o = {};
+      Object.keys(row || {}).forEach(k => o[String(k).trim().toLowerCase()] = row[k]);
+      return o;
+    });
+    setCache(normalized);
+    renderBrands(normalized);
   } catch (err) {
-    console.error("Feil under lasting:", err);
-    document.getElementById("brands").innerHTML =
-      "<p>Kunne ikke laste brands-data akkurat nå 😢</p>";
+    console.error("Kunne ikke hente brands:", err);
+    if (!cached && brandsGrid) brandsGrid.innerHTML = "<p>Kunne ikke laste brands nå 😢</p>";
   }
 }
 
-// Last brands når siden åpnes
 document.addEventListener("DOMContentLoaded", loadBrands);
 
+// --- Favoritt-teller (så den er riktig på brands-siden også) ---
+(function(){
+  function readFavs(){ try { return JSON.parse(localStorage.getItem("favorites")||"[]"); } catch { return []; } }
+  function updateFavCount(){
+    const count = readFavs().length;
+    document.querySelectorAll("[data-fav-count]").forEach(el => el.textContent = count);
+  }
+  document.addEventListener("DOMContentLoaded", updateFavCount);
+  window.addEventListener("storage", e => { if (e.key === "favorites") updateFavCount(); });
+})();
 
