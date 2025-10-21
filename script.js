@@ -1,5 +1,5 @@
 // --- BrandRadar Product Loader v6 (header-basert + ekstra bilder/fields) --- //
-const sheetURL = "https://script.google.com/macros/s/AKfycbyAzMqPF84o66lUP5OujNfebfQiatAD1RbrPTFSSpuzkbEFi_pxV0Jdo1nRm8_lvdxV/exec";
+const sheetURL = "https://script.google.com/macros/s/AKfycbxcCM-svNb4NpLi-lQO_smLgD79C8ZxLaEcWZpMD6jq19kBVu1odbwO_KjiYOzFmfxQ/exec";
 // --- Cache-hjelpere (lagrer JSON lokalt i 30 minutter) ---
 const CACHE_KEY = "products_cache";
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutter
@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", loadProducts);
   // Init
   document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
+
 
 
 
