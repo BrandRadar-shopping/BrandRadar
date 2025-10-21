@@ -630,6 +630,13 @@ html, body {
 
 #brands { display: block !important; }
 
+.loader {
+  text-align: center;
+  padding: 40px;
+  color: #555;
+  font-weight: 600;
+}
+
 
 
 
