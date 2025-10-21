@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", loadBrands);
     const count = readFavs().length;
     document.querySelectorAll("[data-fav-count]").forEach(el => el.textContent = count);
   }
-  document.addEventListener("DOMContentLoaded", updateFavCount);
+ window.addEventListener("load", loadBrands);
   window.addEventListener("storage", e => { if (e.key === "favorites") updateFavCount(); });
 })();
 
