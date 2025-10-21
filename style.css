@@ -628,6 +628,8 @@ html, body {
   box-shadow: 0 0 14px rgba(0,184,148,0.4);
 }
 
+#brands { display: block !important; }
+
 
 
 
