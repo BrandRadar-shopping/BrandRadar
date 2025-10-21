@@ -33,9 +33,13 @@ function renderBrands(data) {
   data.forEach(b => {
     const card = document.createElement("div");
     card.className = "brand-card";
-    if (b.highlight && b.highlight.toString().toLowerCase() === "true") {
-      card.classList.add("highlight");
-    }
+    const highlightValue = (b.highlight || "").toString().trim().toLowerCase();
+const isHighlight = ["true", "yes", "ja", "1", "highlight"].includes(highlightValue);
+
+if (isHighlight) {
+  card.classList.add("highlight");
+}
+
 
     card.innerHTML = `
       <img src="${b.brandlogo || ""}" alt="${b.brand || "Brand"}">
