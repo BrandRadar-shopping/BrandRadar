@@ -429,49 +429,95 @@ favBtn.addEventListener("click", () => {
     }
   </script>
 
-  <!-- Popup-elementet -->
-<div id="fav-popup" class="fav-popup"></div>
-
-<script>
-  // --- Popup-funksjon ---
-  function showFavPopup(message) {
-    const popup = document.getElementById("fav-popup");
-    popup.textContent = message;
-    popup.classList.add("show");
-    setTimeout(() => popup.classList.remove("show"), 1500);
-  }
-
-  // Finn favorittknappen og utvid eksisterende kode
-  const favBtn = document.getElementById("favorite-btn");
-  if (favBtn) {
-    favBtn.addEventListener("click", () => {
-      const data = localStorage.getItem("selectedProduct");
-      if (!data) return;
-      const p = JSON.parse(data);
-      let updated = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const isActive = favBtn.classList.contains("active");
-
-      if (isActive) {
-        // Fjern produktet
-        updated = updated.filter(f => f.title !== p.title);
-        favBtn.classList.remove("active");
-        favBtn.title = "Legg til i favoritter";
-        showFavPopup("Fjernet fra favoritter ❌");
-      } else {
-        // Legg til produktet
-        updated.push(p);
-        favBtn.classList.add("active");
-        favBtn.title = "Fjern fra favoritter";
-        showFavPopup("Lagt til i favoritter ❤️");
-      }
-
-      localStorage.setItem("favorites", JSON.stringify(updated));
-    });
-  }
-</script>
-</body>
-  
+    <!-- Popup-elementet -->
   <div id="fav-popup" class="fav-popup"></div>
 
-</html>
+  <script>
+    const data = localStorage.getItem("selectedProduct");
+    const favoritesKey = "favorites";
 
+    // --- POPUP ---
+    function showFavPopup(message) {
+      const popup = document.getElementById("fav-popup");
+      popup.textContent = message;
+      popup.classList.add("show");
+      setTimeout(() => popup.classList.remove("show"), 1500);
+    }
+
+    // --- TELLER ---
+    function updateFavCount() {
+      const count = JSON.parse(localStorage.getItem(favoritesKey) || "[]").length;
+      document.querySelectorAll("[data-fav-count]").forEach(el => el.textContent = count);
+    }
+
+    if (data) {
+      const p = JSON.parse(data);
+
+      // Fyll produktinfo
+      document.getElementById("product-image").src = p.image;
+      document.getElementById("product-title").textContent = p.title;
+      document.getElementById("product-brand").textContent = "Brand: " + p.brand;
+      document.getElementById("product-category").textContent = `${p.gender} • ${p.subcategory}`;
+      document.getElementById("product-price").textContent = "Pris: " + p.price;
+      document.getElementById("buy-button").href = p.link;
+      if (p.description) document.getElementById("product-description").textContent = p.description;
+      if (p.rating) document.getElementById("product-rating").textContent = "⭐ " + p.rating;
+
+      // Badge
+      const badge = document.getElementById("product-badge");
+      if (p.discount) {
+        const clean = p.discount.replace(/["%]/g, "").trim();
+        const isNew = /nyhet|new/i.test(clean);
+        badge.textContent = isNew ? "Nyhet!" : "Discount: " + clean + "%";
+        if (isNew) badge.classList.add("new");
+      } else {
+        badge.style.display = "none";
+      }
+
+      // --- FAVORITTKNAPP ---
+      const favBtn = document.getElementById("favorite-btn");
+      let favorites = JSON.parse(localStorage.getItem(favoritesKey) || "[]");
+      const isFavorite = favorites.some(f => f.title === p.title);
+      if (isFavorite) favBtn.classList.add("active");
+
+      favBtn.addEventListener("click", () => {
+        let favorites = JSON.parse(localStorage.getItem(favoritesKey) || "[]");
+        const alreadyFav = favorites.some(f => f.title === p.title);
+
+        if (alreadyFav) {
+          favorites = favorites.filter(f => f.title !== p.title);
+          favBtn.classList.remove("active");
+          favBtn.title = "Legg til i favoritter";
+          showFavPopup("Fjernet fra favoritter ❌");
+        } else {
+          favorites.push(p);
+          favBtn.classList.add("active");
+          favBtn.title = "Fjern fra favoritter";
+          showFavPopup("Lagt til i favoritter ❤️");
+        }
+
+        localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+        updateFavCount();
+      });
+
+      // Thumbnails
+      const thumbs = document.getElementById("thumbnail-container");
+      const allImages = [p.image, p.image2, p.image3, p.image4].filter(Boolean);
+      allImages.forEach((img, index) => {
+        const thumb = document.createElement("img");
+        thumb.src = img;
+        thumb.alt = "Produktbilde";
+        if (index === 0) thumb.style.borderColor = "#000";
+        thumb.addEventListener("click", () => {
+          document.getElementById("product-image").src = img;
+          document.querySelectorAll(".thumbnail-container img").forEach(t => t.style.borderColor = "transparent");
+          thumb.style.borderColor = "#000";
+        });
+        thumbs.appendChild(thumb);
+      });
+    }
+
+    updateFavCount();
+  </script>
+</body>
+</html>
