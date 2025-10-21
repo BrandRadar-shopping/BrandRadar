@@ -359,25 +359,43 @@ html, body {
         badge.style.display = "none";
       }
 
-      // favorittknapp
-      const favBtn = document.getElementById("favorite-btn");
-      const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const isFavorite = favorites.some(f => f.title === p.title);
-      if (isFavorite) favBtn.classList.add("active");
+     // --- FAVORITTKNAPP + POPUP ---
+const favBtn = document.getElementById("favorite-btn");
+const favoritesKey = "favorites";
 
-      favBtn.addEventListener("click", () => {
-        let updated = JSON.parse(localStorage.getItem("favorites") || "[]");
-        if (favBtn.classList.contains("active")) {
-          updated = updated.filter(f => f.title !== p.title);
-          favBtn.classList.remove("active");
-          favBtn.title = "Legg til i favoritter";
-        } else {
-          updated.push(p);
-          favBtn.classList.add("active");
-          favBtn.title = "Fjern fra favoritter";
-        }
-        localStorage.setItem("favorites", JSON.stringify(updated));
-      });
+// popup-element
+function showFavPopup(message) {
+  const popup = document.getElementById("fav-popup");
+  popup.textContent = message;
+  popup.classList.add("show");
+  setTimeout(() => popup.classList.remove("show"), 1500);
+}
+
+// last eksisterende favoritter
+let favorites = JSON.parse(localStorage.getItem(favoritesKey) || "[]");
+const isFavorite = favorites.some(f => f.title === p.title);
+if (isFavorite) favBtn.classList.add("active");
+
+// klikklogikk
+favBtn.addEventListener("click", () => {
+  let favorites = JSON.parse(localStorage.getItem(favoritesKey) || "[]");
+  const alreadyFav = favorites.some(f => f.title === p.title);
+
+  if (alreadyFav) {
+    favorites = favorites.filter(f => f.title !== p.title);
+    favBtn.classList.remove("active");
+    favBtn.title = "Legg til i favoritter";
+    showFavPopup("Fjernet fra favoritter ❌");
+  } else {
+    favorites.push(p);
+    favBtn.classList.add("active");
+    favBtn.title = "Fjern fra favoritter";
+    showFavPopup("Lagt til i favoritter ❤️");
+  }
+
+  localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+});
+
 
       // thumbnails (inkluder hovedbilde først)
       const thumbs = document.getElementById("thumbnail-container");
