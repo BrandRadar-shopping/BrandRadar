@@ -263,7 +263,29 @@ html, body {
   height: auto;
   max-height: 420px;
 }
-  
+  /* --- FAVORITT POPUP --- */
+.fav-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 9999;
+}
+.fav-popup.show {
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
@@ -378,6 +400,47 @@ html, body {
         "<p>Fant ikke produktdata. Gå tilbake til forsiden.</p>";
     }
   </script>
+
+  <!-- Popup-elementet -->
+<div id="fav-popup" class="fav-popup"></div>
+
+<script>
+  // --- Popup-funksjon ---
+  function showFavPopup(message) {
+    const popup = document.getElementById("fav-popup");
+    popup.textContent = message;
+    popup.classList.add("show");
+    setTimeout(() => popup.classList.remove("show"), 1500);
+  }
+
+  // Finn favorittknappen og utvid eksisterende kode
+  const favBtn = document.getElementById("favorite-btn");
+  if (favBtn) {
+    favBtn.addEventListener("click", () => {
+      const data = localStorage.getItem("selectedProduct");
+      if (!data) return;
+      const p = JSON.parse(data);
+      let updated = JSON.parse(localStorage.getItem("favorites") || "[]");
+      const isActive = favBtn.classList.contains("active");
+
+      if (isActive) {
+        // Fjern produktet
+        updated = updated.filter(f => f.title !== p.title);
+        favBtn.classList.remove("active");
+        favBtn.title = "Legg til i favoritter";
+        showFavPopup("Fjernet fra favoritter ❌");
+      } else {
+        // Legg til produktet
+        updated.push(p);
+        favBtn.classList.add("active");
+        favBtn.title = "Fjern fra favoritter";
+        showFavPopup("Lagt til i favoritter ❤️");
+      }
+
+      localStorage.setItem("favorites", JSON.stringify(updated));
+    });
+  }
+</script>
 
 </body>
 </html>
