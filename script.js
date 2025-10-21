@@ -1,5 +1,27 @@
 // --- BrandRadar Product Loader v6 (header-basert + ekstra bilder/fields) --- //
 const sheetURL = "https://script.google.com/macros/s/AKfycbyAzMqPF84o66lUP5OujNfebfQiatAD1RbrPTFSSpuzkbEFi_pxV0Jdo1nRm8_lvdxV/exec";
+// --- Cache-hjelpere (lagrer JSON lokalt i 30 minutter) ---
+const CACHE_KEY = "products_cache";
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutter
+
+function getCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { timestamp, data } = JSON.parse(raw);
+    if (Date.now() - timestamp > CACHE_TTL) return null; // utløpt
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCache(data) {
+  localStorage.setItem(CACHE_KEY, JSON.stringify({
+    timestamp: Date.now(),
+    data
+  }));
+}
 
 // CSV-linjeparser som håndterer hermetegn og komma
 function parseCSVLine(line) {
@@ -40,60 +62,73 @@ function idx(headers, candidates) {
 
 async function loadProducts() {
   const container = document.getElementById("products-container");
-  if (container) container.innerHTML = "<p>Laster produkter …</p>";
+  if (container) container.innerHTML = "<p class='loader'>Laster produkter …</p>";
 
+  // 1️⃣ Prøv cache først (vises umiddelbart)
+  const cached = getCache();
+  if (cached) renderProducts(cached);
+
+  // 2️⃣ Hent fersk data i bakgrunnen
   try {
     const res = await fetch(sheetURL, { cache: "no-store" });
     if (!res.ok) throw new Error("Nettverksfeil");
     const data = await res.json();
 
     if (!Array.isArray(data) || !data.length) {
-      container.innerHTML = "<p>Ingen produkter funnet.</p>";
+      if (!cached) container.innerHTML = "<p>Ingen produkter funnet.</p>";
       return;
     }
 
-    container.innerHTML = "";
-
-    data.forEach(p => {
-      if (!p.title || !p.image || !p.link) return;
-
-      const isNew = /nyhet|new/i.test(p.discount || "");
-      const badge = p.discount
-        ? `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + p.discount}</span>`
-        : "";
-
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <div class="product-image">
-          ${badge}
-          <img src="${p.image}" alt="${p.title}">
-        </div>
-        <div class="product-info">
-          <h3 class="product-name">${p.brand ? p.brand + " " : ""}${p.title}</h3>
-          <p class="product-price">${p.price || ""}</p>
-          <p class="product-category">${p.category || ""}${p.gender ? " • " + p.gender : ""}${p.subcategory ? " • " + p.subcategory : ""}</p>
-        </div>
-      `;
-
-      card.addEventListener("click", () => {
-        localStorage.setItem("selectedProduct", JSON.stringify(p));
-        window.location.href = "product.html";
-      });
-
-      container.appendChild(card);
-    });
-
-    if (!container.children.length) {
-      container.innerHTML = "<p>Ingen produkter å vise.</p>";
-    }
+    setCache(data); // lagre i cache
+    renderProducts(data); // oppdater visning
   } catch (err) {
     console.error("Feil ved lasting av produkter:", err);
-    container.innerHTML = "<p>Kunne ikke laste produkter nå 😢</p>";
+    if (!cached) container.innerHTML = "<p>Kunne ikke laste produkter nå 😢</p>";
+  }
+}
+
+function renderProducts(data) {
+  const container = document.getElementById("products-container");
+  if (!container) return;
+  container.innerHTML = "";
+
+  data.forEach(p => {
+    if (!p.title || !p.image || !p.link) return;
+
+    const isNew = /nyhet|new/i.test(p.discount || "");
+    const badge = p.discount
+      ? `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + p.discount}</span>`
+      : "";
+
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <div class="product-image">
+        ${badge}
+        <img src="${p.image}" alt="${p.title}">
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">${p.brand ? p.brand + " " : ""}${p.title}</h3>
+        <p class="product-price">${p.price || ""}</p>
+        <p class="product-category">${p.category || ""}${p.gender ? " • " + p.gender : ""}${p.subcategory ? " • " + p.subcategory : ""}</p>
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      localStorage.setItem("selectedProduct", JSON.stringify(p));
+      window.location.href = "product.html";
+    });
+
+    container.appendChild(card);
+  });
+
+  if (!container.children.length) {
+    container.innerHTML = "<p>Ingen produkter å vise.</p>";
   }
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
 
 // --- Favoritt-teller på alle sider (live oppdatering + sanntid) ---
@@ -124,6 +159,7 @@ document.addEventListener("DOMContentLoaded", loadProducts);
   // Init
   document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
+
 
 
 
