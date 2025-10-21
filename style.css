@@ -463,6 +463,39 @@ html, body {
 }
 
 
+/* --- MOBILE PATCH: Behold shop-meny og header stabil --- */
+@media (max-width: 768px) {
+  .main-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  .shop-nav {
+    position: relative !important;
+    background: #fff !important;
+    z-index: 100 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  .mega-menu {
+    position: static !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    display: none !important;
+  }
+
+  /* Skjul mega-menu kun på mobil, vis vanlig knapp-navigasjon */
+  .mobile-shop {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
 
 
 
