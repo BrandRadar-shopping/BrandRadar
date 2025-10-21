@@ -1,354 +1,181 @@
-:root{
-  --dark:#101011;--light:#fff;--border:#eaeaea;
-  --text:#111;--muted:#666;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8f8f8;color:var(--text)}
-a{color:inherit;text-decoration:none}
-
-/* HEADER (fast, identisk) */
-.main-header{
-  position:sticky;top:0;z-index:1000;
-  background:var(--dark);color:#fff;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 24px;border-bottom:1px solid #000;
-}
-.logo{font-weight:800;font-size:18px;color:#fff}
-.top-nav a{color:#fff;margin:0 10px;font-weight:600}
-.top-nav a[aria-current="page"]{text-decoration:underline}
-.search-container input{
-  padding:8px 12px;border-radius:8px;border:none;width:220px;
+:root {
+  --dark: #101011;
+  --light: #fff;
+  --border: #eaeaea;
+  --text: #111;
+  --muted: #666;
 }
 
-/* SHOP NAV (desktop) */
-.shop-nav{background:#fff;border-bottom:1px solid var(--border);position:relative;box-shadow:0 2px 5px rgba(0,0,0,.05)}
-.shop-nav ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:40px}
-.shop-nav a{display:block;padding:14px 0;color:#000;font-weight:600}
-.dropdown{position:static}
-
-/* MEGA MENU – Zalando style */
-.mega-menu{
-  display:none;position:absolute;left:0;top:100%;width:100%;
-  background:#fff;border-top:1px solid var(--border);
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
-  padding:40px 80px;z-index:999;
-  justify-content:space-between;align-items:flex-start;gap:60px;
-  opacity:0;transform:translateY(10px);pointer-events:none;
-  transition:opacity .25s ease, transform .25s ease;
+* {
+  box-sizing: border-box;
 }
-.dropdown:hover .mega-menu{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
-.mega-menu ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-right:1px solid #eee;padding-right:40px}
-.mega-menu ul:last-child{border-right:none}
-.mega-menu span{display:block;font-weight:800;font-size:16px;margin-bottom:12px}
-.mega-menu li{margin:5px 0}
-.mega-menu a{color:#333}
-.mega-menu a:hover{color:#000}
 
-
-/* LAYOUT / CARDS */
-.container{max-width:1200px;margin:0 auto;padding:24px 18px}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-.card{
-  background:#fff;border:1px solid var(--border);border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);padding:10px;display:flex;flex-direction:column;
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f8f8f8;
+  color: var(--text);
 }
-.card img{width:100%;border-radius:8px}
-.card h3{font-size:15px;margin:6px 0}
-.card .meta{color:var(--muted);font-size:12px}
-.card .price{font-weight:700;margin-top:4px}
-.card a.btn{margin-top:auto;color:#fff;background:#000;border-radius:8px;padding:8px;text-align:center}
 
-/* BRANDS */
-.brand-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-.brand-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
-.brand-card img{max-width:120px;max-height:60px;object-fit:contain;margin-bottom:8px}
-
-/* MOBIL: Shop by category */
-.mobile-only{display:none}
-.mobile-shop{display:none;padding:20px;background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.mobile-shop h2{margin:0 0 10px 0}
-.mobile-toggle{
-  display:block;width:100%;background:#000;color:#fff;padding:12px;margin-top:10px;
-  border:none;border-radius:6px;font-weight:600;cursor:pointer
-}
-.mobile-submenu{display:none;flex-direction:column;background:#f7f7f7;padding:10px;margin-bottom:10px;border-radius:6px}
-.mobile-submenu a{padding:6px 0}
-
-/* RESPONSIVE */
-@media (max-width:768px){
-  .desktop-only{display:none}
-  .mobile-only{display:block}
-  .search-container input{width:100%;margin-top:10px}
-}
-.site-footer{text-align:center;padding:20px;color:#666;margin-top:40px}
-
-/* --- MOBILE THIRD LEVEL MENU --- */
-.mobile-sub-submenu {
-  display: none;
-  flex-direction: column;
-  background: #fff;
-  margin: 5px 0 10px 10px;
-  padding: 8px 12px;
-  border-left: 3px solid #000;
-  border-radius: 6px;
-}
-.mobile-sub-submenu a {
-  color: #111;
-  padding: 4px 0;
+a {
+  color: inherit;
   text-decoration: none;
 }
-.mobile-sub-submenu a:hover {
-  text-decoration: underline;
-}
-.mobile-subtoggle {
-  width: 100%;
-  text-align: left;
-  background: #eaeaea;
-  border: none;
-  padding: 8px 10px;
-  border-radius: 5px;
-  margin-top: 8px;
-  font-weight: 600;
-  cursor: pointer;
+
+/* === HEADER === */
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid #000;
 }
 
-/* --- FIX 1: keep mega-menu open while hovering down --- */
+.logo {
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+}
+
+.top-nav a {
+  color: #fff;
+  margin: 0 10px;
+  font-weight: 600;
+}
+
+.top-nav a[aria-current="page"] {
+  text-decoration: underline;
+}
+
+.search-container input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  width: 220px;
+}
+
+/* === SHOP NAV (desktop) === */
+.shop-nav {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .05);
+}
+
+.shop-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.shop-nav a {
+  display: block;
+  padding: 14px 0;
+  color: #000;
+  font-weight: 600;
+}
+
+/* === MEGA MENU === */
 .dropdown {
   position: relative;
 }
+
+.mega-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+  padding: 40px 80px;
+  z-index: 2000;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 60px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
 .dropdown:hover .mega-menu,
-.dropdown .mega-menu:hover {
+.mega-menu:hover {
   display: flex;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
-/* --- FIX 2: keep Home / News / Brands side by side on mobile --- */
-@media (max-width: 768px) {
-  .main-header {
-    flex-wrap: wrap;
-  }
-
-  .top-nav {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    width: 100%;
-    order: 2;
-    margin-top: 8px;
-  }
-
-  .top-nav a {
-    flex: 0 0 auto;
-    padding: 6px 8px;
-  }
-
-  .search-container {
-    order: 3;
-    width: 100%;
-  }
-
-  .search-container input {
-    width: 100%;
-    max-width: none;
-  }
+.mega-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 40px;
+  flex: 1;
+  border-right: 1px solid #eee;
 }
 
-
-/* --- FIX: allow full mega-menu height on desktop --- */
-@media (min-width: 769px) {
-  .shop-nav {
-    overflow: visible; /* lar menyen bre seg ut over andre elementer */
-  }
-
-  .mega-menu {
-    max-height: none;
-    overflow: visible;
-    z-index: 9999;
-  }
-
-  /* liten visuell finpuss for ren kant */
-  .mega-menu::before {
-    content: "";
-    position: absolute;
-    top: -1px;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: transparent;
-  }
+.mega-menu ul:last-child {
+  border-right: none;
 }
 
-/* --- DESKTOP PATCH: full visible Zalando-style mega menu --- */
-@media (min-width: 769px) {
-  .shop-nav {
-    position: relative;
-    overflow: visible; /* lar menyen bre seg fritt nedover */
-    z-index: 1000;
-  }
-
-  .dropdown {
-    position: static;
-  }
-
-  .dropdown > a {
-    position: relative;
-    padding: 14px 22px;
-    display: inline-block;
-    font-weight: 600;
-  }
-
-  .dropdown:hover .mega-menu,
-  .mega-menu:hover {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .mega-menu {
-    position: absolute;
-    top: 100%; /* ligger flush rett under header */
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #eee;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    padding: 40px 80px;
-    display: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .25s ease, transform .25s ease;
-    z-index: 2000;
-  }
-
-  /* layout for kolonner */
-  .mega-menu ul {
-    flex: 1;
-    list-style: none;
-    padding: 0 40px;
-    margin: 0;
-    border-right: 1px solid #eee;
-  }
-
-  .mega-menu ul:last-child {
-    border-right: none;
-  }
-
-  .mega-menu span {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  .mega-menu li a {
-    display: block;
-    color: #222;
-    text-decoration: none;
-    padding: 4px 0;
-  }
-
-  .mega-menu li a:hover {
-    text-decoration: underline;
-  }
+.mega-menu span {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 12px;
 }
 
-/* --- FINAL FIX: stable mega-menu hover behaviour --- */
-@media (min-width: 769px) {
-  .dropdown {
-    position: relative;
-  }
-
-  /* Bruk visibility i stedet for display for å unngå flicker */
-  .mega-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #eee;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    padding: 40px 80px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-    z-index: 2000;
-  }
-
-  /* Når man hovrer over dropdown ELLER menyen selv */
-  .dropdown:hover .mega-menu,
-  .mega-menu:hover {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  /* Legg til et lite bufferområde mellom dropdown og menyen */
-  .dropdown::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 12px; /* buffer */
-    background: transparent;
-  }
+.mega-menu li {
+  margin: 5px 0;
 }
 
-/* --- FINAL PATCH: full white background + stable hover --- */
-@media (min-width: 769px) {
-  .mega-menu {
-    position: fixed;
-    top: 95px; /* juster etter høyden på headeren */
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #eee;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    padding: 40px 80px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-    z-index: 5000;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .dropdown:hover .mega-menu,
-  .mega-menu:hover {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .dropdown::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 12px; /* hover-buffer */
-    background: transparent;
-  }
-
-  /* Justering av kolonner */
-  .mega-menu ul {
-    flex: 1;
-    list-style: none;
-    padding: 0 40px;
-    margin: 0;
-    border-right: 1px solid #eee;
-  }
-
-  .mega-menu ul:last-child {
-    border-right: none;
-  }
+.mega-menu a {
+  color: #333;
 }
 
-/* --- PRODUCT CARD (BrandRadar style upgrade) --- */
+.mega-menu a:hover {
+  color: #000;
+}
+
+/* === LAYOUT / CARDS === */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 18px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* === PRODUCT CARD (Home / Favoritter) === */
 .product-card {
   background: #fff;
   border: 1px solid #eaeaea;
@@ -389,10 +216,21 @@ a{color:inherit;text-decoration:none}
   left: 10px;
   background: #000;
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.badge.new {
+  background: #00b894;
+}
+
+.badge:hover {
+  transform: scale(1.05);
 }
 
 .product-info {
@@ -419,128 +257,7 @@ a{color:inherit;text-decoration:none}
   margin-top: 4px;
 }
 
-/* --- BADGES (Nyhet! / Discount) --- */
-.badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #000;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.badge.new {
-  background: #00b894; /* frisk grønn tone for Nyhet */
-}
-
-.badge:hover {
-  transform: scale(1.05);
-}
-
-/* Finjusteringer for produktkort */
-.product-image {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #f9f9f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-image img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-}
-
-
-/* --- MOBILFIX: header-meny som alltid passer skjermen --- */
-@media (max-width: 768px) {
-  .main-header {
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .top-nav {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 6px;
-  }
-
-  .top-nav a {
-    flex: 0 0 auto;
-    padding: 6px 10px;
-    font-size: 15px;
-  }
-
-  .search-container {
-    width: 100%;
-    order: 3;
-    margin-top: 8px;
-  }
-
-  .search-container input {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-/* --- MOBILFIX: unngå at menyen flyter utenfor skjermen --- */
-@media (max-width: 768px) {
-  .main-header {
-    flex-wrap: wrap;
-    padding: 10px 16px;
-  }
-
-  .top-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .top-nav a {
-    flex: 0 1 auto;
-    font-size: 14px;
-    word-break: keep-all;
-    white-space: nowrap;
-  }
-
-  .search-container {
-    order: 3;
-    width: 100%;
-    margin-top: 6px;
-  }
-
-  .search-container input {
-    width: 100%;
-  }
-}
-
-/* --- FIX: unngå at eldre regler overstyrer SVG-fyll --- */
-.favorite-btn.active {
-  color: inherit !important;
-}
-
-.favorite-btn.active svg {
-  fill: #e63946 !important;
-  stroke: #e63946 !important;
-}
-
-
+/* === BRAND CARDS === */
 .brand-grid {
   display: grid;
   gap: 20px;
@@ -553,14 +270,14 @@ a{color:inherit;text-decoration:none}
   border-radius: 14px;
   padding: 18px;
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
 .brand-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .brand-card img {
@@ -583,9 +300,67 @@ a{color:inherit;text-decoration:none}
   min-height: 36px;
 }
 
-@media(max-width:768px){
-  .brand-card img{max-width:80px;}
+@media (max-width: 768px) {
+  .brand-card img {
+    max-width: 80px;
+  }
 }
+
+/* === FAVORITT IKON FIX === */
+.favorite-btn.active {
+  color: inherit !important;
+}
+
+.favorite-btn.active svg {
+  fill: #e63946 !important;
+  stroke: #e63946 !important;
+}
+
+/* === MOBILFIX === */
+@media (max-width: 768px) {
+  .main-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .top-nav a {
+    flex: 0 1 auto;
+    padding: 6px 10px;
+    font-size: 14px;
+    word-break: keep-all;
+    white-space: nowrap;
+  }
+
+  .search-container {
+    order: 3;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .search-container input {
+    width: 100%;
+  }
+}
+
+/* === FOOTER === */
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  margin-top: 40px;
+}
+
 
 
 
