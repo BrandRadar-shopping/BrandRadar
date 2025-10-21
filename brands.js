@@ -20,7 +20,6 @@ function setCache(data) {
   localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
 }
 
-// --- RENDER ---
 function renderBrands(data) {
   const grid = document.getElementById("brands");
   grid.innerHTML = "";
@@ -30,26 +29,66 @@ function renderBrands(data) {
     return;
   }
 
+  // Filtrer utvalgte og vanlige brands
+  const featured = [];
+  const regular = [];
+
   data.forEach(b => {
+    const val = (b.highlight || "").toString().trim().toLowerCase();
+    if (["true", "yes", "ja", "1", "highlight"].includes(val)) {
+      featured.push(b);
+    } else {
+      regular.push(b);
+    }
+  });
+
+  // --- RENDER UTVALGTE ---
+  if (featured.length) {
+    const featuredTitle = document.createElement("h2");
+    featuredTitle.textContent = "Utvalgte Brands";
+    featuredTitle.className = "brand-section-title";
+    grid.appendChild(featuredTitle);
+
+    const featuredGrid = document.createElement("div");
+    featuredGrid.className = "brand-grid highlight-grid";
+
+    featured.forEach(b => {
+      const card = document.createElement("div");
+      card.className = "brand-card highlight";
+      card.innerHTML = `
+        <img src="${b.brandlogo || ""}" alt="${b.brand || "Brand"}">
+        <h3>${b.brand || "Ukjent merke"}</h3>
+        <p>${b.description || ""}</p>
+        ${b.link ? `<a href="${b.link}" target="_blank" class="btn primary">Besøk</a>` : ""}
+      `;
+      featuredGrid.appendChild(card);
+    });
+
+    grid.appendChild(featuredGrid);
+  }
+
+  // --- RENDER ALLE ANDRE ---
+  const allTitle = document.createElement("h2");
+  allTitle.textContent = "Alle Brands";
+  allTitle.className = "brand-section-title";
+  grid.appendChild(allTitle);
+
+  const allGrid = document.createElement("div");
+  allGrid.className = "brand-grid";
+
+  regular.forEach(b => {
     const card = document.createElement("div");
     card.className = "brand-card";
-    const highlightValue = (b.highlight || "").toString().trim().toLowerCase();
-const isHighlight = ["true", "yes", "ja", "1", "highlight"].includes(highlightValue);
-
-if (isHighlight) {
-  card.classList.add("highlight");
-}
-
-
     card.innerHTML = `
       <img src="${b.brandlogo || ""}" alt="${b.brand || "Brand"}">
       <h3>${b.brand || "Ukjent merke"}</h3>
       <p>${b.description || ""}</p>
       ${b.link ? `<a href="${b.link}" target="_blank" class="btn primary">Besøk</a>` : ""}
     `;
-
-    grid.appendChild(card);
+    allGrid.appendChild(card);
   });
+
+  grid.appendChild(allGrid);
 }
 
 // --- LOAD ---
