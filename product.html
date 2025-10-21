@@ -388,23 +388,24 @@ favBtn.addEventListener("click", () => {
   const alreadyFav = favorites.some(f => f.title === p.title);
 
   if (alreadyFav) {
-    // Fjern produkt
-    favorites = favorites.filter(f => f.title !== p.title);
-    favBtn.classList.remove("active");
-    favBtn.title = "Legg til i favoritter";
-    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
-    showFavPopup("Fjernet fra favoritter ❌");
-  } else {
-    // Legg til produkt
-    favorites.push(p);
-    favBtn.classList.add("active");
-    favBtn.title = "Fjern fra favoritter";
-    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
-    showFavPopup("Lagt til i favoritter ❤️");
-  }
-
+  // Fjern produkt
+  favorites = favorites.filter(f => f.title !== p.title);
+  favBtn.classList.remove("active");
+  favBtn.title = "Legg til i favoritter";
+  localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+  window.dispatchEvent(new Event("favoritesChanged"));
   updateFavCount();
-});
+  showFavPopup("Fjernet fra favoritter ❌");
+} else {
+  // Legg til produkt
+  favorites.push(p);
+  favBtn.classList.add("active");
+  favBtn.title = "Fjern fra favoritter";
+  localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+  window.dispatchEvent(new Event("favoritesChanged"));
+  updateFavCount();
+  showFavPopup("Lagt til i favoritter ❤️");
+}
 
 
       // thumbnails (inkluder hovedbilde først)
