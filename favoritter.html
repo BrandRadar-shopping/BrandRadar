@@ -35,6 +35,31 @@
       color: #666;
       text-align: center;
     }
+
+/* --- FAVORITT POPUP --- */
+.fav-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 9999;
+}
+.fav-popup.show {
+  opacity: 1;
+}
+
+    
   </style>
 </head>
 <body>
@@ -148,6 +173,35 @@
       updateFavCount();
     });
   </script>
+
+<!-- Popup-element -->
+<div id="fav-popup" class="fav-popup"></div>
+
+<script>
+  // --- Popup-funksjon ---
+  function showFavPopup(message) {
+    const popup = document.getElementById("fav-popup");
+    popup.textContent = message;
+    popup.classList.add("show");
+    setTimeout(() => popup.classList.remove("show"), 1500);
+  }
+
+  // Når brukeren klikker "Fjern"
+  document.addEventListener("click", e => {
+    const btn = e.target.closest("[data-action='remove']");
+    if (btn) showFavPopup("Fjernet fra favoritter ❌");
+  });
+
+  // Når brukeren tømmer alt
+  const clearAllBtn = document.getElementById("clearAll");
+  if (clearAllBtn) {
+    clearAllBtn.addEventListener("click", () => {
+      showFavPopup("Alle favoritter slettet 🗑️");
+    });
+  }
+</script>
+
+  
 </body>
 </html>
 
