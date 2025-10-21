@@ -93,29 +93,50 @@ function renderProducts(data) {
   container.innerHTML = "";
 
   data.forEach(p => {
-    if (!p.title || !p.image || !p.link) return;
+    // Tilpass felt-navn (Google Sheet bruker store bokstaver og mellomrom)
+    const brand = p["Brand"] || "";
+    const title = p["Title"] || "";
+    const price = p["Price"] || "";
+    const discount = p["Discount"] || "";
+    const image = p["Image URL"] || "";
+    const link = p["Product URL"] || "";
+    const category = p["Category"] || "";
+    const gender = p["gender"] || "";
+    const subcategory = p["Subcategory"] || "";
+    const description = p["Description"] || "";
+    const rating = p["Rating"] || "";
 
-    const isNew = /nyhet|new/i.test(p.discount || "");
-    const badge = p.discount
-      ? `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + p.discount}</span>`
+    // hopp over rader uten minimumsfelt
+    if (!title || !image || !link) return;
+
+    // badge
+    const isNew = /nyhet|new/i.test(discount);
+    const badge = discount
+      ? `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + discount}</span>`
       : "";
 
+    // kort
     const card = document.createElement("div");
     card.className = "product-card";
     card.innerHTML = `
       <div class="product-image">
         ${badge}
-        <img src="${p.image}" alt="${p.title}">
+        <img src="${image}" alt="${title}">
       </div>
       <div class="product-info">
-        <h3 class="product-name">${p.brand ? p.brand + " " : ""}${p.title}</h3>
-        <p class="product-price">${p.price || ""}</p>
-        <p class="product-category">${p.category || ""}${p.gender ? " • " + p.gender : ""}${p.subcategory ? " • " + p.subcategory : ""}</p>
+        <h3 class="product-name">${brand ? brand + " " : ""}${title}</h3>
+        <p class="product-price">${price}</p>
+        <p class="product-category">${category}${gender ? " • " + gender : ""}${subcategory ? " • " + subcategory : ""}</p>
       </div>
     `;
 
+    // klikk → send til product.html
     card.addEventListener("click", () => {
-      localStorage.setItem("selectedProduct", JSON.stringify(p));
+      const productData = {
+        brand, title, price, discount, image, link,
+        category, gender, subcategory, description, rating
+      };
+      localStorage.setItem("selectedProduct", JSON.stringify(productData));
       window.location.href = "product.html";
     });
 
@@ -126,6 +147,7 @@ function renderProducts(data) {
     container.innerHTML = "<p>Ingen produkter å vise.</p>";
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", loadProducts);
 
@@ -159,6 +181,7 @@ document.addEventListener("DOMContentLoaded", loadProducts);
   // Init
   document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
+
 
 
 
