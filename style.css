@@ -497,6 +497,86 @@ html, body {
 }
 
 
+/* --- BRAND CARD STYLES --- */
+.brand-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.brand-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.brand-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.brand-card img {
+  max-width: 100px;
+  max-height: 60px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.brand-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 4px 0 8px 0;
+}
+
+.brand-card p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  min-height: 36px;
+}
+
+.brand-card.highlight {
+  border: 2px solid #00b894;
+  box-shadow: 0 0 12px rgba(0,184,148,0.4);
+}
+
+/* --- MOBILE PATCH: restore visibility --- */
+@media (max-width: 768px) {
+  .main-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  .shop-nav {
+    position: relative !important;
+    background: #fff !important;
+    z-index: 100 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  .mega-menu {
+    position: static !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    display: none !important;
+  }
+
+  .mobile-shop {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
 
 
 
