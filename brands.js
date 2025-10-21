@@ -51,7 +51,12 @@ function renderBrands(data) {
 // --- LOAD ---
 async function loadBrands() {
   const grid = document.getElementById("brands");
-  grid.innerHTML = "<p>Laster brands …</p>";
+ grid.innerHTML = `
+  <div class="brand-loader">
+    <div class="spinner"></div>
+    <p>Laster inn brands...</p>
+  </div>
+`;
 
   const cached = getCache();
   if (cached) renderBrands(cached);
