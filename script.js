@@ -93,7 +93,7 @@ function renderProducts(data) {
   container.innerHTML = "";
 
   data.forEach(p => {
-    // Tilpass felt-navn (Google Sheet bruker store bokstaver og mellomrom)
+    // Tilpasset feltnavn fra Google Sheet
     const brand = p["Brand"] || "";
     const title = p["Title"] || "";
     const price = p["Price"] || "";
@@ -105,22 +105,38 @@ function renderProducts(data) {
     const subcategory = p["Subcategory"] || "";
     const description = p["Description"] || "";
     const rating = p["Rating"] || "";
+    const image2 = p["image2"] || "";
+    const image3 = p["image3"] || "";
+    const image4 = p["image4"] || "";
 
     // hopp over rader uten minimumsfelt
     if (!title || !image || !link) return;
 
-    // badge
-    const isNew = /nyhet|new/i.test(discount);
-    const badge = discount
-      ? `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + discount}</span>`
-      : "";
+    // rabatt / badge
+    let badgeHTML = "";
+    if (discount) {
+      const clean = String(discount).replace(/[%"]/g, "").trim();
+      const isNew = /nyhet|new/i.test(clean);
+      badgeHTML = `<span class="badge ${isNew ? "new" : ""}">
+        ${isNew ? "Nyhet!" : "Discount: " + clean}
+      </span>`;
+    }
 
-    // kort
+    // favorittstatus
+    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const isFavorite = favorites.some(f => f.title === title);
+
+    // hovedkort
     const card = document.createElement("div");
     card.className = "product-card";
     card.innerHTML = `
       <div class="product-image">
-        ${badge}
+        ${badgeHTML}
+        <button class="favorite-btn ${isFavorite ? "active" : ""}" title="Legg til i favoritter">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21s-7-4.35-10-8.87C-1.33 8.24 1.42 3 6.6 3 9.07 3 12 5.09 12 5.09S14.93 3 17.4 3c5.18 0 7.93 5.24 4.6 9.13C19 16.65 12 21 12 21z"/>
+          </svg>
+        </button>
         <img src="${image}" alt="${title}">
       </div>
       <div class="product-info">
@@ -130,14 +146,40 @@ function renderProducts(data) {
       </div>
     `;
 
-    // klikk → send til product.html
-    card.addEventListener("click", () => {
+    // klikk på kort -> gå til produkt
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".favorite-btn")) return; // unngå at hjerte klikker åpner produkt
       const productData = {
-        brand, title, price, discount, image, link,
-        category, gender, subcategory, description, rating
+        brand, title, price, discount, image, image2, image3, image4,
+        link, category, gender, subcategory, description, rating
       };
       localStorage.setItem("selectedProduct", JSON.stringify(productData));
       window.location.href = "product.html";
+    });
+
+    // favorittknapp
+    const favBtn = card.querySelector(".favorite-btn");
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+      const exists = favorites.some(f => f.title === title);
+
+      if (exists) {
+        favorites = favorites.filter(f => f.title !== title);
+        favBtn.classList.remove("active");
+        showFavPopup("Fjernet fra favoritter ❌");
+      } else {
+        favorites.push({
+          brand, title, price, discount, image, image2, image3, image4,
+          link, category, gender, subcategory, description, rating
+        });
+        favBtn.classList.add("active");
+        showFavPopup("Lagt til i favoritter ❤️");
+      }
+
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      updateFavCount();
+      window.dispatchEvent(new Event("favoritesChanged"));
     });
 
     container.appendChild(card);
@@ -146,6 +188,20 @@ function renderProducts(data) {
   if (!container.children.length) {
     container.innerHTML = "<p>Ingen produkter å vise.</p>";
   }
+}
+
+// popup for favorittbekreftelse
+function showFavPopup(message) {
+  let popup = document.getElementById("fav-popup");
+  if (!popup) {
+    popup = document.createElement("div");
+    popup.id = "fav-popup";
+    popup.className = "fav-popup";
+    document.body.appendChild(popup);
+  }
+  popup.textContent = message;
+  popup.classList.add("show");
+  setTimeout(() => popup.classList.remove("show"), 1500);
 }
 
 
@@ -181,6 +237,7 @@ document.addEventListener("DOMContentLoaded", loadProducts);
   // Init
   document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
+
 
 
 
