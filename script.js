@@ -152,18 +152,33 @@ async function loadProducts() {
 
 document.addEventListener("DOMContentLoaded", loadProducts);
 
-// --- Favoritt-teller på alle sider ---
-(function(){
-  function readFavs(){
-    try { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
-    catch { return []; }
+// --- Favoritt-teller på alle sider (live oppdatering + sanntid) ---
+(function () {
+  const favoritesKey = "favorites";
+
+  function readFavs() {
+    try {
+      return JSON.parse(localStorage.getItem(favoritesKey) || "[]");
+    } catch {
+      return [];
+    }
   }
-  function updateFavCount(){
+
+  function updateFavCount() {
     const count = readFavs().length;
-    document.querySelectorAll('[data-fav-count]').forEach(el => el.textContent = count);
+    document.querySelectorAll("[data-fav-count]").forEach(el => el.textContent = count);
   }
-  document.addEventListener('DOMContentLoaded', updateFavCount);
-  window.addEventListener('storage', e => { if (e.key === 'favorites') updateFavCount(); });
+
+  // Lytt på endringer i localStorage (andre faner / sider)
+  window.addEventListener("storage", e => {
+    if (e.key === favoritesKey) updateFavCount();
+  });
+
+  // Lytt på custom eventer lokalt (fra product.html og favoritter.html)
+  window.addEventListener("favoritesChanged", updateFavCount);
+
+  // Init
+  document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
 
 
