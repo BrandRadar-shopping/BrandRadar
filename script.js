@@ -1,6 +1,5 @@
 // --- BrandRadar Product Loader v6 (header-basert + ekstra bilder/fields) --- //
-const sheetURL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
+const sheetURL = "https://script.google.com/macros/s/AKfycbyAzMqPF84o66lUP5OujNfebfQiatAD1RbrPTFSSpuzkbEFi_pxV0Jdo1nRm8_lvdxV/exec";
 
 // CSV-linjeparser som håndterer hermetegn og komma
 function parseCSVLine(line) {
@@ -201,6 +200,7 @@ document.addEventListener("DOMContentLoaded", loadProducts);
   // Init
   document.addEventListener("DOMContentLoaded", updateFavCount);
 })();
+
 
 
 
