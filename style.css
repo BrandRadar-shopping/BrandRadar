@@ -530,6 +530,16 @@ a{color:inherit;text-decoration:none}
   }
 }
 
+/* --- FIX: unngå at eldre regler overstyrer SVG-fyll --- */
+.favorite-btn.active {
+  color: inherit !important;
+}
+
+.favorite-btn.active svg {
+  fill: #e63946 !important;
+  stroke: #e63946 !important;
+}
+
 
 
 
