@@ -1,8 +1,7 @@
-// --- BrandRadar Brands Loader (v2) --- //
+// --- BrandRadar Brands Loader (v3) --- //
 const brandsSheet =
-https://docs.google.com/spreadsheets/d/e/2PACX-1vQllg-SFti-NWDq1EkYCQ5MenTpetINSfrLZuJ7vIjzF3xwClmJAeI8Ha6Lmj0xgGmo4dv5qOpEDCgh/pub?output=csv;
+  https://docs.google.com/spreadsheets/d/e/2PACX-1vQllg-SFti-NWDq1EkYCQ5MenTpetINSfrLZuJ7vIjzF3xwClmJAeI8Ha6Lmj0xgGmo4dv5qOpEDCgh/pub?output=csv;
 
-// CSV parser
 function parseCSVLine(line) {
   const out = [];
   let cur = "";
@@ -35,23 +34,17 @@ async function loadBrands() {
     const iLink = headers.findIndex(h => h.toLowerCase().includes("link"));
     const iHighlight = headers.findIndex(h => h.toLowerCase().includes("highlight"));
 
-    const container = document.getElementById("brands");
-    container.innerHTML = "";
+    const grid = document.getElementById("brands");
+    const highlightGrid = document.getElementById("highlight-grid");
+    grid.innerHTML = "";
+    highlightGrid.innerHTML = "";
 
-    // Sorter slik at highlight=YES kommer øverst
-    const sortedRows = rows.sort((a, b) => {
-      const ha = (a[iHighlight] || "").toLowerCase().trim() === "yes";
-      const hb = (b[iHighlight] || "").toLowerCase().trim() === "yes";
-      return ha === hb ? 0 : ha ? -1 : 1;
-    });
-
-    sortedRows.forEach(row => {
+    rows.forEach(row => {
       const name = row[iBrand];
       const logo = row[iLogo];
       const desc = row[iDesc];
       const link = row[iLink];
       const highlight = (row[iHighlight] || "").toLowerCase().trim() === "yes";
-
       if (!name) return;
 
       const card = document.createElement("div");
@@ -61,9 +54,9 @@ async function loadBrands() {
         <h3>${name}</h3>
         <p>${desc || ""}</p>
       `;
-
       if (link) card.addEventListener("click", () => window.open(link, "_blank"));
-      container.appendChild(card);
+
+      (highlight ? highlightGrid : grid).appendChild(card);
     });
   } catch (err) {
     console.error(err);
@@ -72,3 +65,4 @@ async function loadBrands() {
 }
 
 document.addEventListener("DOMContentLoaded", loadBrands);
+
