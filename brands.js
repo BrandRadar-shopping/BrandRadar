@@ -22,6 +22,7 @@ function setCache(data) {
 
 function renderBrands(data) {
   const grid = document.getElementById("brands");
+  grid.classList.remove("brand-grid"); // i tilfelle gammel HTML
   grid.innerHTML = "";
 
   if (!data || !data.length) {
