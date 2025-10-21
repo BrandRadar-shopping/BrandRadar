@@ -1,6 +1,6 @@
 // --- BrandRadar Brands Loader (JSON + cache) --- //
 // 1) Lim inn Apps Script-URL her:
-const BRANDS_JSON_URL = https://script.google.com/macros/s/AKfycbww8jzK2SooI6Cs69IJGh3mqwzgH5xKZHStHAFlW335vS4pSjW72lVSDA96I-rBY8xV/exec;
+const BRANDS_JSON_URL = "https://script.google.com/macros/s/AKfycbww8jzK2SooI6Cs69IJGh3mqwzgH5xKZHStHAFlW335vS4pSjW72lVSDA96I-rBY8xV/exec";
 
 // 2) Konfig: cache-levetid (i ms). 6 timer = 6 * 60 * 60 * 1000
 const CACHE_TTL = 6 * 60 * 60 * 1000;
