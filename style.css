@@ -438,6 +438,30 @@ html, body {
 }
 
 
+/* --- MOBILE FIX: Mega-menu visning under header --- */
+@media (max-width: 768px) {
+  .mega-menu {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 10px 20px !important;
+    border: none !important;
+  }
+
+  .shop-nav {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  .main-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+  }
+}
+
 
 
 
