@@ -694,6 +694,10 @@ html, body {
 }
 .fav-popup.show { opacity: 1; }
 
+.product-card {
+  margin: 0 auto;
+}
+
 
 
 
