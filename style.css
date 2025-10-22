@@ -56,15 +56,21 @@ body {
   padding: 8px 12px;
 }
 
-/* SHOP NAV + MEGAMENY */
+/* ===========================
+   SHOP NAV + MEGA MENU
+=========================== */
 .shop-nav {
   background: #fff;
   border-bottom: 1px solid var(--border);
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: relative;            /* <- forankre megamenyen her */
+  z-index: 900;
 }
 
 .shop-nav ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,108 +80,87 @@ body {
 .shop-nav a {
   font-weight: 600;
   color: #000;
+  text-decoration: none;
   padding: 16px 0;
   display: block;
 }
 
-/* --- Dropdown --- */
-.dropdown {
-  position: relative;
+.dropdown { 
+  position: static;              /* <- IKKE relativ; unngå “hopping” ved hover */
 }
 
+/* --- Mega menu container (fast forankret under hele nav’en) --- */
 .mega-menu {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90vw;
-  max-width: 1100px;
-  background: #fff;
-  border: 1px solid #eee;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  padding: 40px 60px;
+  left: 0;
+  right: 0;                      /* full bredde under shop-nav */
   display: none;
-  justify-content: space-between;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  padding: 36px 48px;
   border-radius: 0 0 12px 12px;
-  z-index: 2000;
+  
+  /* ryddig kolonnelayout */
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 40px;
 }
 
-.dropdown:hover .mega-menu {
-  display: flex;
-  animation: fadeIn .25s ease forwards;
+.dropdown:hover > .mega-menu {
+  display: grid;
+  animation: megaFade 0.22s ease forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, 10px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+@keyframes megaFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* kolonner */
 .mega-menu ul {
   list-style: none;
-  padding: 0 40px 0 0;
+  padding: 0;
   margin: 0;
-  border-right: 1px solid #eee;
-  flex: 1 1 0;
+  min-width: 0;                  /* unngå bredde-dytt ved lange ord */
 }
-.mega-menu ul:last-child { border-right: none; }
+
+.mega-menu ul:not(:last-child) {
+  border-right: 1px solid #f0f0f0;
+  padding-right: 32px;
+}
 
 .mega-menu span {
   display: block;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 15px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #111;
+  letter-spacing: .2px;
 }
 
 .mega-menu a {
   color: #333;
   text-decoration: none;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.55;
   display: inline-block;
   padding: 3px 0;
 }
 
-/* --- Layout fix for structured dropdowns --- */
-.mega-menu {
-  flex-wrap: nowrap;
+.mega-menu a:hover {
+  color: #000;
+  text-decoration: underline;
 }
 
-.mega-menu ul {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-/* --- Fine-tune for smaller viewports --- */
-@media (max-width: 1100px) {
-  .mega-menu {
-    flex-wrap: wrap;
-    padding: 30px 40px;
-  }
-  .mega-menu ul {
-    flex: 1 1 45%;
-    margin-bottom: 20px;
-  }
-}
-
-.mega-menu a:hover { color: #000; text-decoration: underline; }
-
-/* Hide mega menu mobile */
+/* Skjul på mobil – vi bygger mobilversjon senere */
 @media (max-width: 900px) {
   .mega-menu { display: none !important; }
 }
 
-/* PRODUCT GRID */
-.container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
-
-.grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-}
 
 /* PRODUCT CARD */
 .product-card {
@@ -256,6 +241,7 @@ h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
   .top-nav { margin-top: 6px; }
   .grid { gap: 14px; }
 }
+
 
 
 
