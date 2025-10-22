@@ -2,21 +2,21 @@ const products = [
   {
     name: "Nike Air Max 270",
     price: 1399,
-    category: "Shoes - women - sneakers",
+    category: "Shoes • women • sneakers",
     discount: 0.2,
-    image: "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/d8d07b5c-6f33-4fd4-8d2f-6f31a2bfcadf/air-max-270-herresko-KkLcGR.png"
+    image: "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/7c4f0374-fad3-4202-bdf6-6929a3031dc7/air-max-270-herresko-KkLcGR.png"
   },
   {
     name: "Star Nutrition 12 x Soft Proteinbar 55 g Soft Choco Hazelnut",
     price: 278,
-    category: "supplements - proteinbarer",
+    category: "Supplements • Proteinbarer",
     discount: 0.2,
-    image: "https://cdn.star-nutrition.no/images/product/large/star_nutrition_soft_bar_choco_hazelnut.jpg"
+    image: "https://gymgrossisten.no/media/catalog/product/s/t/star_nutrition_soft_bar_choco_hazelnut_55g_12-pack.jpg"
   },
   {
     name: "Rhone Weekend Quilted Pullover",
     price: 1499,
-    category: "clothing - men - sweater",
+    category: "Clothing • men • sweater",
     discount: 0.1,
     image: "https://cdn.shopify.com/s/files/1/0500/8437/9520/products/Weekend_Quilted_Pullover_Black.png"
   }
@@ -73,10 +73,6 @@ products.forEach(product => {
 
   grid.appendChild(card);
 });
-
-
-
-
 
 
 
