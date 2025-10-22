@@ -45,19 +45,16 @@ async function loadProducts() {
   }
 }
 
-// --- Render product cards ---
 function renderProducts(data) {
   const container = document.getElementById("products-container");
   if (!container) return;
   container.innerHTML = "";
 
-  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-
   data.forEach(p => {
     const brand = p["Brand"] || "";
     const title = p["Title"] || "";
     const price = p["Price"] || "";
-    let discount = p["Discount"] || "";
+    const discount = p["Discount"] || "";
     const image = p["Image URL"] || "";
     const link = p["Product URL"] || "";
     const category = p["Category"] || "";
@@ -71,20 +68,17 @@ function renderProducts(data) {
 
     if (!title || !image || !link) return;
 
-    // --- Format discount properly ---
-    if (!isNaN(discount) && discount !== "") {
-      const num = parseFloat(discount);
-      if (num > 0 && num < 1) discount = Math.round(num * 100) + "%";
-    }
-
-    // --- Badge ---
+    // --- Rabattbadge ---
     let badgeHTML = "";
     if (discount) {
       const clean = String(discount).replace(/[%"]/g, "").trim();
       const isNew = /nyhet|new/i.test(clean);
-      badgeHTML = `<span class="badge ${isNew ? "new" : ""}">${isNew ? "Nyhet!" : "Discount: " + clean}</span>`;
+      const formatted = isNew ? "Nyhet!" : `Discount: ${clean}%`;
+      badgeHTML = `<span class="badge ${isNew ? "new" : ""}">${formatted}</span>`;
     }
 
+    // --- Favorittstatus ---
+    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
     const isFavorite = favorites.some(f => f.title === title);
 
     const card = document.createElement("div");
@@ -104,39 +98,37 @@ function renderProducts(data) {
       </div>
     `;
 
-    // --- Click: open product details ---
-    card.addEventListener("click", (e) => {
+    card.addEventListener("click", e => {
       if (e.target.closest(".favorite-btn")) return;
       const productData = { brand, title, price, discount, image, image2, image3, image4, link, category, gender, subcategory, description, rating };
       localStorage.setItem("selectedProduct", JSON.stringify(productData));
       window.location.href = "product.html";
     });
 
-    // --- Favorites ---
     const favBtn = card.querySelector(".favorite-btn");
-    favBtn.addEventListener("click", (e) => {
+    favBtn.addEventListener("click", e => {
       e.stopPropagation();
-      let favs = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const exists = favs.some(f => f.title === title);
+      let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+      const exists = favorites.some(f => f.title === title);
       if (exists) {
-        favs = favs.filter(f => f.title !== title);
+        favorites = favorites.filter(f => f.title !== title);
         favBtn.classList.remove("active");
         showFavPopup("Fjernet fra favoritter ❌");
       } else {
-        favs.push({ brand, title, price, discount, image, image2, image3, image4, link, category, gender, subcategory, description, rating });
+        favorites.push({ brand, title, price, discount, image, image2, image3, image4, link, category, gender, subcategory, description, rating });
         favBtn.classList.add("active");
         showFavPopup("Lagt til i favoritter ❤️");
       }
-      localStorage.setItem("favorites", JSON.stringify(favs));
+      localStorage.setItem("favorites", JSON.stringify(favorites));
       updateFavCount();
-      window.dispatchEvent(new Event("favoritesChanged"));
     });
 
     container.appendChild(card);
   });
 
-  if (!container.children.length)
+  if (!container.children.length) {
     container.innerHTML = "<p>Ingen produkter å vise.</p>";
+  }
 }
 
 // --- Popup ---
@@ -164,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   updateFavCount();
 });
+
 
 
 
