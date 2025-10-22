@@ -193,32 +193,3 @@ body {
   .grid { gap: 14px; }
 }
 
-/* --- MEGAMENY POLISH --- */
-.mega-menu {
-  padding: 50px 100px;
-  justify-content: flex-start;
-  gap: 80px;
-  font-family: "Inter", sans-serif;
-}
-.mega-menu ul {
-  min-width: 180px;
-  line-height: 1.7;
-}
-.mega-menu span {
-  font-size: 17px;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 12px;
-}
-.mega-menu a {
-  font-size: 15px;
-  color: #333;
-  transition: color 0.2s;
-}
-.mega-menu a:hover {
-  color: #000;
-  text-decoration: underline;
-}
-
-
-
