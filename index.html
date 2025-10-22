@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BrandRadar – Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <!-- HEADER -->
   <header class="main-header">
-    <a class="logo" href="index.html">BrandRadar</a>
+    <div class="logo">BrandRadar</div>
     <nav class="top-nav">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="news.html">News</a>
+      <a href="index.html">Home</a>
+      <a href="#">News</a>
       <a href="brands.html">Brands</a>
-      <a href="favoritter.html">Favoritter (<span data-fav-count>0</span>)</a>
+      <a href="favorites.html">Favoritter (<span id="favCount">0</span>)</a>
     </nav>
-    <form class="search-container" role="search">
-      <input type="search" id="searchInput" placeholder="Søk produkter…" aria-label="Søk" />
-    </form>
+    <div class="search-container">
+      <input type="text" placeholder="Søk produkter…" />
+    </div>
   </header>
 
-  <!-- SHOP NAV -->
-  <nav class="shop-nav desktop-only">
+  <!-- SHOP NAV + MEGA MENU -->
+  <nav class="shop-nav">
     <ul>
-      <li class="dropdown"><a href="#">Clothing</a>
+      <!-- CLOTHING -->
+      <li class="dropdown">
+        <a href="#">Clothing</a>
         <div class="mega-menu">
           <ul>
-            <li><span>Women</span></li>
+            <span>Women</span>
+            <li><a href="#">Explore all products</a></li>
             <li><a href="#">T-shirts & Tops</a></li>
             <li><a href="#">Dresses</a></li>
             <li><a href="#">Jeans</a></li>
@@ -35,31 +39,105 @@
             <li><a href="#">Jackets & Blazers</a></li>
             <li><a href="#">Gymwear</a></li>
           </ul>
+
           <ul>
-            <li><span>Men</span></li>
+            <span>Men</span>
+            <li><a href="#">Explore all products</a></li>
             <li><a href="#">T-shirts & Polo</a></li>
             <li><a href="#">Sweats & Hoodies</a></li>
-            <li><a href="#">Pants & Shorts</a></li>
             <li><a href="#">Jeans</a></li>
+            <li><a href="#">Pants & Shorts</a></li>
             <li><a href="#">Jackets</a></li>
+          </ul>
+
+          <ul>
+            <span>Brands</span>
+            <li><a href="#">Nike</a></li>
+            <li><a href="#">Adidas</a></li>
+            <li><a href="#">Gymshark</a></li>
+            <li><a href="#">Under Armour</a></li>
+            <li><a href="#">H&M</a></li>
           </ul>
         </div>
       </li>
-      <li class="dropdown"><a href="#">Shoes</a></li>
-      <li class="dropdown"><a href="#">Supplements</a></li>
+
+      <!-- SHOES -->
+      <li class="dropdown">
+        <a href="#">Shoes</a>
+        <div class="mega-menu">
+          <ul>
+            <span>Women</span>
+            <li><a href="#">Explore all products</a></li>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Sandals</a></li>
+            <li><a href="#">Boots</a></li>
+          </ul>
+
+          <ul>
+            <span>Men</span>
+            <li><a href="#">Explore all products</a></li>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Formal Shoes</a></li>
+            <li><a href="#">Running Shoes</a></li>
+          </ul>
+
+          <ul>
+            <span>Brands</span>
+            <li><a href="#">Nike</a></li>
+            <li><a href="#">Adidas</a></li>
+            <li><a href="#">Puma</a></li>
+            <li><a href="#">New Balance</a></li>
+            <li><a href="#">Asics</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- SUPPLEMENTS -->
+      <li class="dropdown">
+        <a href="#">Supplements</a>
+        <div class="mega-menu">
+          <ul>
+            <span>Categories</span>
+            <li><a href="#">Explore all products</a></li>
+            <li><a href="#">Proteiner</a></li>
+            <li><a href="#">Proteinbarer</a></li>
+            <li><a href="#">Kreatin</a></li>
+            <li><a href="#">Vitaminer & Mineraler</a></li>
+          </ul>
+
+          <ul>
+            <span>Brands</span>
+            <li><a href="#">MyProtein</a></li>
+            <li><a href="#">Optimum Nutrition</a></li>
+            <li><a href="#">Gymshark Nutrition</a></li>
+            <li><a href="#">Star Nutrition</a></li>
+            <li><a href="#">Proteinfabrikken</a></li>
+          </ul>
+
+          <ul>
+            <span>Goals</span>
+            <li><a href="#">Build Muscle</a></li>
+            <li><a href="#">Weight Loss</a></li>
+            <li><a href="#">Recovery</a></li>
+          </ul>
+        </div>
+      </li>
     </ul>
   </nav>
 
-  <!-- MAIN -->
+  <!-- PRODUKTER -->
   <main class="container">
     <h2>Utvalgte produkter</h2>
-    <div id="products-container" class="grid"></div>
+    <div class="grid" id="productGrid"></div>
   </main>
 
-  <footer class="site-footer">© BrandRadar</footer>
+  <div class="fav-popup" id="favPopup">Lagt til i favoritter ❤️</div>
+
   <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
