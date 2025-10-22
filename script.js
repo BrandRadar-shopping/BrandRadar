@@ -73,7 +73,11 @@ function renderProducts(data) {
     if (discount) {
       const clean = String(discount).replace(/[%"]/g, "").trim();
       const isNew = /nyhet|new/i.test(clean);
-      const formatted = isNew ? "Nyhet!" : `Discount: ${clean}%`;
+      const discountValue = parseFloat(clean);
+const formatted = isNew
+  ? "Nyhet!"
+  : `Discount: ${discountValue < 1 ? discountValue * 100 : discountValue}%`;
+
       badgeHTML = `<span class="badge ${isNew ? "new" : ""}">${formatted}</span>`;
     }
 
@@ -156,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   updateFavCount();
 });
+
 
 
 
