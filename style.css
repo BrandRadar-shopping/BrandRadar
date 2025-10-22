@@ -4,173 +4,194 @@
   --border: #eaeaea;
   --text: #111;
   --muted: #666;
-  --accent: #00b894;
 }
 
+* { box-sizing: border-box; }
 body {
   margin: 0;
   font-family: "Inter", Arial, sans-serif;
-  background: #f8f8f8;
+  background: #f7f7f7;
   color: var(--text);
 }
-
-a { color: inherit; text-decoration: none; }
 
 /* HEADER */
 .main-header {
   background: var(--dark);
   color: #fff;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  align-items: center;
+  padding: 14px 28px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-.logo { font-weight: 800; font-size: 18px; color: #fff; }
-.top-nav a { margin: 0 10px; font-weight: 600; color: #fff; }
+.logo {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 0.3px;
+  color: #fff;
+}
+.top-nav a {
+  margin: 0 12px;
+  font-weight: 600;
+  color: #fff;
+  transition: opacity .2s;
+}
+.top-nav a:hover { opacity: .7; }
+.search-container input {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
 
-/* GRID */
-.container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 18px;
+/* SHOP NAV */
+.shop-nav {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
+.shop-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+.shop-nav a {
+  font-weight: 600;
+  color: #000;
+  padding: 14px 0;
+}
+
+/* MEGA MENU */
+.dropdown { position: relative; }
+.mega-menu {
+  position: fixed;
+  top: 90px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  padding: 40px 80px;
+  opacity: 0;
+  transform: translateY(8px);
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+.dropdown:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.mega-menu ul {
+  list-style: none;
+  padding: 0 40px;
+  margin: 0;
+  border-right: 1px solid #eee;
+}
+.mega-menu ul:last-child { border: none; }
+.mega-menu span {
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+  font-size: 16px;
+}
+.mega-menu a { color: #333; text-decoration: none; }
+.mega-menu a:hover { text-decoration: underline; }
+
+/* GRID + CARDS */
+.container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 .grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
-
-/* PRODUKTKORT */
 .product-card {
   background: #fff;
+  border-radius: 16px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform .25s ease, box-shadow .25s ease;
+  transition: transform .2s, box-shadow .2s;
   cursor: pointer;
   position: relative;
 }
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 .product-image {
   position: relative;
   background: #fafafa;
   aspect-ratio: 1/1;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 .product-image img {
   width: 90%;
   height: 90%;
   object-fit: contain;
-  z-index: 1;
 }
 .badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 3;
+  top: 10px; left: 10px;
   background: #000;
   color: #fff;
-  padding: 6px 12px;
-  border-radius: 10px;
+  font-weight: 700;
   font-size: 13px;
-  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  z-index: 3;
 }
-.badge.new { background: var(--accent); }
-
 .favorite-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 4;
-  background: none;
-  border: none;
+  top: 10px; right: 10px;
+  background: none; border: none;
   cursor: pointer;
-  width: 26px;
-  height: 26px;
+  width: 26px; height: 26px;
+  z-index: 3;
 }
 .favorite-btn svg {
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke: #aaa;
-  stroke-width: 2;
-  transition: fill 0.2s ease, stroke 0.2s ease;
+  width: 100%; height: 100%;
+  fill: none; stroke: #aaa; stroke-width: 2;
+  transition: .2s;
 }
-.favorite-btn.active svg { fill: #e63946; stroke: #e63946; }
 .favorite-btn:hover svg { stroke: #e63946; }
-
-.product-info {
-  text-align: center;
-  padding: 12px 16px 18px;
+.favorite-btn.active svg {
+  fill: #e63946; stroke: #e63946;
 }
-.product-name { font-weight: 700; font-size: 16px; margin: 6px 0; }
-.product-price { font-weight: 600; font-size: 15px; color: #222; margin: 2px 0; }
-.product-category { font-size: 13px; color: #888; }
+.product-info { padding: 16px; text-align: center; }
+.product-name { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+.product-price { font-weight: 600; color: #111; margin-bottom: 4px; }
+.product-category { font-size: 13px; color: #777; }
 
-/* POPUP */
+/* FAVORITT POPUP */
 .fav-popup {
   position: fixed;
-  top: 20px;
-  left: 50%;
+  top: 20px; left: 50%;
   transform: translateX(-50%);
-  background: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 15px;
+  background: #000; color: #fff;
+  padding: 10px 18px; border-radius: 8px;
   font-weight: 600;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .4s ease;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s;
   z-index: 9999;
 }
 .fav-popup.show { opacity: 1; }
 
-/* BRANDS */
-.brand-card.highlight {
-  border: 2px solid var(--accent);
-  box-shadow: 0 0 12px rgba(0,184,148,0.4);
-}
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .main-header { flex-wrap: wrap; justify-content: center; }
-  .shop-nav.desktop-only { display: none; }
+  .main-header { flex-wrap: wrap; justify-content: center; text-align: center; }
+  .top-nav { margin-top: 6px; }
+  .grid { gap: 14px; }
 }
 
-/* --- FIX: Badge always visible --- */
-.product-image .badge {
-  z-index: 3;
-}
-
-/* --- Hover effect (Zalando style) --- */
-.product-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.product-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-/* --- Thumbnail fixes --- */
-.thumbnail-container img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-.thumbnail-container img:hover {
-  transform: scale(1.05);
-  border-color: #000;
-}
 
 
