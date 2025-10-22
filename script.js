@@ -1,14 +1,15 @@
 // ===============================
-// BRANDRADAR PRODUCT SYSTEM v7
-// (Google Sheets + Caching + Favorites + Thumbnails)
+// BRANDRADAR PRODUCT SYSTEM v8
+// (Google Sheets + Caching + Favorites + Popup + % Fix)
 // ===============================
 
 // 1️⃣ Google Sheets JSON-endepunkt
-const sheetURL = "https://script.google.com/macros/s/AKfycbx71nm6tf7gmgq-cfw-Z-xa1MWT1PGZJ0PPATfugadqwf6DOFgOoGYtNEKVwykI5C0Q/exec";
+const sheetURL =
+  "https://script.google.com/macros/s/AKfycbx71nm6tf7gmgq-cfw-Z-xa1MWT1PGZJ0PPATfugadqwf6DOFgOoGYtNEKVwykI5C0Q/exec";
 
 // 2️⃣ Cache (30 minutter)
 const CACHE_KEY = "products_cache";
-const CACHE_TTL = 30 * 60 * 1000; // 30 min
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutter
 
 function getCache() {
   try {
@@ -23,23 +24,25 @@ function getCache() {
 }
 
 function setCache(data) {
-  localStorage.setItem(CACHE_KEY, JSON.stringify({
-    timestamp: Date.now(),
-    data
-  }));
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({ timestamp: Date.now(), data })
+  );
 }
 
-// 3️⃣ Last produkter
+// 3️⃣ Hent produkter
 async function loadProducts() {
   const container = document.getElementById("products-container");
   if (!container) return;
 
-  container.innerHTML = `<div class="brand-loader">
-    <div class="spinner"></div>
-    <p>Laster produkter …</p>
-  </div>`;
+  container.innerHTML = `
+    <div class="brand-loader">
+      <div class="spinner"></div>
+      <p>Laster produkter …</p>
+    </div>
+  `;
 
-  // Vis cache først
+  // Vis cache først hvis tilgjengelig
   const cached = getCache();
   if (cached) renderProducts(cached);
 
@@ -47,8 +50,8 @@ async function loadProducts() {
     const res = await fetch(sheetURL, { cache: "no-store" });
     if (!res.ok) throw new Error("Nettverksfeil");
     const data = await res.json();
-    if (!Array.isArray(data) || !data.length) throw new Error("Tom data");
-
+    if (!Array.isArray(data) || !data.length)
+      throw new Error("Tom eller ugyldig data");
     setCache(data);
     renderProducts(data);
   } catch (err) {
@@ -58,18 +61,19 @@ async function loadProducts() {
   }
 }
 
-// 4️⃣ Vis produktene
+// 4️⃣ Gjengi produktene
 function renderProducts(data) {
   const container = document.getElementById("products-container");
   if (!container) return;
   container.innerHTML = "";
 
-  data.forEach(p => {
-    // Tilpass feltnavn fra Google Sheet
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+  data.forEach((p) => {
     const brand = p["Brand"] || "";
     const title = p["Title"] || "";
     const price = p["Price"] || "";
-    const discount = p["Discount"] || "";
+    let discount = p["Discount"] || "";
     const image = p["Image URL"] || "";
     const link = p["Product URL"] || "";
     const category = p["Category"] || "";
@@ -83,19 +87,25 @@ function renderProducts(data) {
 
     if (!title || !image || !link) return;
 
+    // Rabattvisning: støtt både 0.2 og 20
+    if (discount !== "") {
+      let num = parseFloat(discount);
+      if (num > 0 && num < 1) num = num * 100;
+      discount = `${Math.round(num)}%`;
+    }
+
     // Rabatt-badge
     let badgeHTML = "";
     if (discount) {
       const clean = String(discount).replace(/[%"]/g, "").trim();
       const isNew = /nyhet|new/i.test(clean);
       badgeHTML = `<span class="badge ${isNew ? "new" : ""}">
-        ${isNew ? "Nyhet!" : "Discount: " + clean}
+        ${isNew ? "Nyhet!" : "Discount: ${clean}%"}
       </span>`;
     }
 
     // Favorittstatus
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const isFavorite = favorites.some(f => f.title === title);
+    const isFavorite = favorites.some((f) => f.title === title);
 
     // Produktkort
     const card = document.createElement("div");
@@ -104,8 +114,10 @@ function renderProducts(data) {
       <div class="product-image">
         ${badgeHTML}
         <button class="favorite-btn ${isFavorite ? "active" : ""}" title="Legg til i favoritter">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 21s-7-4.35-10-8.87C-1.33 8.24 1.42 3 6.6 3 9.07 3 12 5.09 12 5.09S14.93 3 17.4 3c5.18 0 7.93 5.24 4.6 9.13C19 16.65 12 21 12 21z"/>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-7-4.35-10-8.87C-1.33 8.24 1.42 3 6.6 3
+            9.07 3 12 5.09 12 5.09S14.93 3 17.4 3
+            c5.18 0 7.93 5.24 4.6 9.13C19 16.65 12 21 12 21z"/>
           </svg>
         </button>
         <img src="${image}" alt="${title}">
@@ -113,16 +125,30 @@ function renderProducts(data) {
       <div class="product-info">
         <h3 class="product-name">${brand ? brand + " " : ""}${title}</h3>
         <p class="product-price">${price}</p>
-        <p class="product-category">${category}${gender ? " • " + gender : ""}${subcategory ? " • " + subcategory : ""}</p>
+        <p class="product-category">
+          ${category}${gender ? " • " + gender : ""}${subcategory ? " • " + subcategory : ""}
+        </p>
       </div>
     `;
 
-    // Klikk → gå til product.html
+    // Klikk → gå til produktdetaljer
     card.addEventListener("click", (e) => {
       if (e.target.closest(".favorite-btn")) return;
       const productData = {
-        brand, title, price, discount, image, image2, image3, image4,
-        link, category, gender, subcategory, description, rating
+        brand,
+        title,
+        price,
+        discount,
+        image,
+        image2,
+        image3,
+        image4,
+        link,
+        category,
+        gender,
+        subcategory,
+        description,
+        rating,
       };
       localStorage.setItem("selectedProduct", JSON.stringify(productData));
       window.location.href = "product.html";
@@ -133,16 +159,28 @@ function renderProducts(data) {
     favBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const exists = favorites.some(f => f.title === title);
+      const exists = favorites.some((f) => f.title === title);
 
       if (exists) {
-        favorites = favorites.filter(f => f.title !== title);
+        favorites = favorites.filter((f) => f.title !== title);
         favBtn.classList.remove("active");
         showFavPopup("Fjernet fra favoritter ❌");
       } else {
         favorites.push({
-          brand, title, price, discount, image, image2, image3, image4,
-          link, category, gender, subcategory, description, rating
+          brand,
+          title,
+          price,
+          discount,
+          image,
+          image2,
+          image3,
+          image4,
+          link,
+          category,
+          gender,
+          subcategory,
+          description,
+          rating,
         });
         favBtn.classList.add("active");
         showFavPopup("Lagt til i favoritter ❤️");
@@ -156,9 +194,8 @@ function renderProducts(data) {
     container.appendChild(card);
   });
 
-  if (!container.children.length) {
+  if (!container.children.length)
     container.innerHTML = "<p>Ingen produkter å vise.</p>";
-  }
 }
 
 // 5️⃣ Popup for favoritt
@@ -178,7 +215,9 @@ function showFavPopup(message) {
 // 6️⃣ Oppdater favoritt-teller
 function updateFavCount() {
   const count = JSON.parse(localStorage.getItem("favorites") || "[]").length;
-  document.querySelectorAll("[data-fav-count]").forEach(el => el.textContent = count);
+  document
+    .querySelectorAll("[data-fav-count]")
+    .forEach((el) => (el.textContent = count));
 }
 
 // Init
@@ -186,6 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   updateFavCount();
 });
+
 
 
 
