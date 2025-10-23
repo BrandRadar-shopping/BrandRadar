@@ -1,56 +1,68 @@
-// Mega Menu Hover System
-const categoryItems = document.querySelectorAll('.category-item');
-const megaMenu = document.querySelector('.mega-menu');
-const megaContents = document.querySelectorAll('.mega-content');
+// ======================================================
+// BrandRadar.shop – Clean Mega Menu System (final version)
+// ======================================================
 
-let activeCategory = null;
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ Mega menu script running...");
 
-categoryItems.forEach(item => {
-  item.addEventListener('mouseenter', () => {
-    const category = item.dataset.category;
-    activeCategory = category;
+  const navItems = document.querySelectorAll(".nav-item");
+  const megaMenu = document.getElementById("mega-menu");
+  const megaContents = document.querySelectorAll(".mega-content");
 
-    megaMenu.classList.add('active');
-    megaContents.forEach(content => {
-      content.classList.remove('active');
-      if (content.id === category) {
-        content.classList.add('active');
-      }
+  if (!navItems.length || !megaMenu) {
+    console.warn("⚠️ Mega menu elements not found in DOM");
+    return;
+  }
+
+  let hideTimer = null;
+
+  // ------------------------------------------------------
+  // Når du holder musen over et element i kategorilinja
+  // ------------------------------------------------------
+  navItems.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      clearTimeout(hideTimer);
+      const target = item.dataset.target;
+
+      // Vis menyen
+      megaMenu.classList.add("active");
+
+      // Vis kun riktig innhold
+      megaContents.forEach((content) => {
+        content.classList.toggle("active", content.id === target);
+      });
+
+      // Marker aktiv knapp
+      navItems.forEach((n) => n.classList.remove("active"));
+      item.classList.add("active");
     });
+
+    // Når musen forlater knappen, start "skjul-timer"
+    item.addEventListener("mouseleave", () => {
+      hideTimer = setTimeout(() => {
+        megaMenu.classList.remove("active");
+        navItems.forEach((n) => n.classList.remove("active"));
+        megaContents.forEach((c) => c.classList.remove("active"));
+      }, 200); // 0.2 sek forsinkelse
+    });
+  });
+
+  // ------------------------------------------------------
+  // Når musen beveger seg over selve menyen
+  // ------------------------------------------------------
+  megaMenu.addEventListener("mouseenter", () => {
+    clearTimeout(hideTimer);
+  });
+
+  // Når musen forlater menyen helt
+  megaMenu.addEventListener("mouseleave", () => {
+    hideTimer = setTimeout(() => {
+      megaMenu.classList.remove("active");
+      navItems.forEach((n) => n.classList.remove("active"));
+      megaContents.forEach((c) => c.classList.remove("active"));
+    }, 200);
   });
 });
 
-// Hide menu when leaving the area
-megaMenu.addEventListener('mouseleave', () => {
-  megaMenu.classList.remove('active');
-});
-
-// --- Clean Mega Menu ---
-const navItems = document.querySelectorAll('.nav-item');
-const megaMenu = document.getElementById('mega-menu');
-const megaContents = document.querySelectorAll('.mega-content');
-
-let currentCategory = null;
-
-navItems.forEach(item => {
-  item.addEventListener('mouseenter', () => {
-    const target = item.dataset.target;
-    currentCategory = target;
-    megaMenu.classList.add('active');
-
-    megaContents.forEach(content => {
-      content.classList.remove('active');
-      if (content.id === target) content.classList.add('active');
-    });
-
-    navItems.forEach(n => n.classList.remove('active'));
-    item.classList.add('active');
-  });
-});
-
-megaMenu.addEventListener('mouseleave', () => {
-  megaMenu.classList.remove('active');
-  navItems.forEach(n => n.classList.remove('active'));
-});
 
 
