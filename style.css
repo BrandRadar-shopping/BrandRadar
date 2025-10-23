@@ -837,6 +837,101 @@ body {
   transform: translateX(-3px);
 }
 
+/* ============================
+   BRAND PAGE STYLING
+   ============================ */
+
+.brand-search {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1rem;
+}
+
+#brandSearch {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 320px;
+  font-size: 1rem;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.brand-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.brand-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.brand-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+.brand-card p {
+  color: #666;
+  font-size: 0.9rem;
+  min-height: 40px;
+}
+
+.brand-card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #0070f3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.brand-card a:hover {
+  background: #0059c1;
+}
+
+/* Fremhevede brands */
+.highlighted-brands {
+  background: #f7f9fc;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.highlighted-brands .brand-card {
+  border: 2px solid #0070f3;
+  box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
+}
+
+.highlighted-brands h2,
+.all-brands h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
 
 
 
