@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running...");
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "Ark1"; // endre om du har gitt arket et annet navn
+  const SHEET_NAME = "BrandRadar-produkter"; // endre om du har gitt arket et annet navn
   const productGrid = document.querySelector(".product-grid");
 
   if (!productGrid) {
