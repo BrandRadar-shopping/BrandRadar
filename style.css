@@ -538,6 +538,14 @@ body {
   border-radius: 2px;
 }
 
+.logo {
+  color: #fff;          /* gjør logoen hvit */
+  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
 
 
 
