@@ -268,6 +268,162 @@ body {
   color: #0070f3;
 }
 
+/* =========================
+   HEADER + MEGA MENU
+   ========================= */
+
+.main-header {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1.5rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.search-box input {
+  border: none;
+  padding: 0.45rem 0.75rem;
+  outline: none;
+  width: 200px;
+}
+
+.search-box button {
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+
+.main-nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.main-nav a:hover {
+  opacity: 0.7;
+}
+
+/* CATEGORY BAR */
+.nav-categories {
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.nav-links {
+  display: inline-flex;
+  gap: 3rem;
+  list-style: none;
+  padding: 0.9rem 0;
+  margin: 0;
+}
+
+.nav-item {
+  cursor: pointer;
+  font-weight: 600;
+  color: #111;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: #0070f3;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -0.4rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0070f3;
+}
+
+/* MEGA MENU */
+.mega-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  padding: 2rem 4rem;
+  justify-content: center;
+  border-top: 1px solid #eee;
+  z-index: 999;
+}
+
+.mega-menu.active {
+  display: flex;
+}
+
+.mega-content {
+  display: none;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: space-around;
+  gap: 4rem;
+}
+
+.mega-content.active {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.column h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+.column a {
+  text-decoration: none;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.column a:hover {
+  text-decoration: underline;
+  color: #0070f3;
+}
+
 
 
 
