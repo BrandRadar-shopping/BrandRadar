@@ -176,6 +176,98 @@ body {
   margin-top: 0.25rem;
 }
 
+/* --- NEW CLEAN ZALANDO-STYLE MEGA MENU --- */
+.nav-categories {
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.nav-links {
+  display: inline-flex;
+  gap: 3rem;
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.nav-item {
+  cursor: pointer;
+  font-weight: 600;
+  color: #111;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: #0070f3;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -0.4rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0070f3;
+}
+
+/* Mega menu layout */
+.mega-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  padding: 2rem 4rem;
+  justify-content: center;
+  border-top: 1px solid #eee;
+  z-index: 50;
+}
+
+.mega-menu.active {
+  display: flex;
+}
+
+.mega-content {
+  display: none;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: space-around;
+  gap: 4rem;
+}
+
+.mega-content.active {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.column h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+.column a {
+  text-decoration: none;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.column a:hover {
+  text-decoration: underline;
+  color: #0070f3;
+}
+
 
 
 
