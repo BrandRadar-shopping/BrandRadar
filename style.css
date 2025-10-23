@@ -359,6 +359,58 @@ body {
   background: #005dc1;
 }
 
+/* Wrapper som forankrer mega-menyen */
+.nav-wrap {
+  position: relative;
+  z-index: 1001; /* foran sidens innhold */
+}
+
+/* Knapperaden */
+.nav-categories {
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+/* Mega-menyen legges rett under knapperaden */
+.mega-menu {
+  position: absolute;
+  top: 100%;           /* rett under nav-categories i samme wrapper */
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  padding: 2rem 4rem;
+  justify-content: center;
+
+  /* visibility/animation */
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 5000;       /* sikkert foran alt */
+}
+
+.mega-menu.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Innholdet i menyen */
+.mega-content {
+  display: none;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: space-around;
+  gap: 4rem;
+}
+
+.mega-content.active { display: flex; }
+
 
 
 
