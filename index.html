@@ -7,38 +7,104 @@
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="main-header">
+ <!-- HEADER -->
+<header class="main-header">
+  <div class="header-inner">
     <div class="logo">BrandRadar</div>
-    <div class="search-container">
-      <input type="text" placeholder="Søk etter produkter eller merker..." />
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
       <button>🔍</button>
     </div>
+
     <nav class="main-nav">
-      <a href="index.html" class="active">Home</a>
+      <a href="index.html">Home</a>
       <a href="news.html">News</a>
       <a href="brands.html">Brands</a>
       <a href="favoritter.html">Favoritter</a>
     </nav>
-  </header>
-
-  <!-- SECONDARY NAV WITH MEGA MENU -->
-  <div class="category-bar">
-    <div class="category-item" data-category="clothing">Clothing</div>
-    <div class="category-item" data-category="shoes">Shoes</div>
-    <div class="category-item" data-category="supplements">Supplements</div>
   </div>
 
- <!-- NAV-CATEGORIES + MEGA MENU -->
-<div class="nav-categories">
-  <ul class="nav-links">
-    <li class="nav-item" data-target="clothing">Clothing</li>
-    <li class="nav-item" data-target="shoes">Shoes</li>
-    <li class="nav-item" data-target="supplements">Supplements</li>
-  </ul>
+  <!-- CATEGORY BAR -->
+  <div class="nav-categories">
+    <ul class="nav-links">
+      <li class="nav-item" data-target="clothing">Clothing</li>
+      <li class="nav-item" data-target="shoes">Shoes</li>
+      <li class="nav-item" data-target="supplements">Supplements</li>
+    </ul>
+  </div>
+</header>
+
+<!-- MEGA MENU -->
+<div class="mega-menu" id="mega-menu">
+  <!-- CLOTHING -->
+  <div class="mega-content" id="clothing">
+    <div class="column">
+      <h4>Men</h4>
+      <a href="#">Sweaters & Hoodies</a>
+      <a href="#">T-shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Jeans</a>
+      <a href="#">Jackets</a>
+      <a href="#">Gymwear</a>
+    </div>
+    <div class="column">
+      <h4>Women</h4>
+      <a href="#">Sweaters & Hoodies</a>
+      <a href="#">T-shirts</a>
+      <a href="#">Jackets</a>
+      <a href="#">Dresses</a>
+      <a href="#">Cardigans</a>
+      <a href="#">Gymwear</a>
+    </div>
+    <div class="column">
+      <h4>Children</h4>
+      <a href="#">T-shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Sneakers</a>
+    </div>
+  </div>
+
+  <!-- SHOES -->
+  <div class="mega-content" id="shoes">
+    <div class="column">
+      <h4>Men</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Boots</a>
+      <a href="#">Sports</a>
+    </div>
+    <div class="column">
+      <h4>Women</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Boots</a>
+      <a href="#">Heels</a>
+    </div>
+    <div class="column">
+      <h4>Children</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Sandals</a>
+    </div>
+  </div>
+
+  <!-- SUPPLEMENTS -->
+  <div class="mega-content" id="supplements">
+    <div class="column">
+      <h4>Equipment</h4>
+      <a href="#">Electronics</a>
+      <a href="#">Sports</a>
+      <a href="#">Bags</a>
+      <a href="#">Home Workouts</a>
+    </div>
+    <div class="column">
+      <h4>Supplements</h4>
+      <a href="#">Proteinpowder</a>
+      <a href="#">Creatine</a>
+      <a href="#">PWO</a>
+      <a href="#">Vitamins</a>
+    </div>
+  </div>
 </div>
 
-<div class="mega-menu" id="mega-menu">
   <!-- CLOTHING -->
   <div class="mega-content" id="clothing">
     <div class="column">
@@ -139,6 +205,7 @@
   <script src="assets/js/script.js"></script>
 </body>
 </html>
+
 
 
 
