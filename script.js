@@ -2,6 +2,14 @@
 // BrandRadar.shop – Clean Mega Menu System (final version)
 // ======================================================
 
+console.log("✅ script.js loaded");
+document.addEventListener("DOMContentLoaded", initMegaMenu);
+
+function initMegaMenu() {
+  // --- alt det du allerede har i script.js her ---
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Mega menu script running...");
 
@@ -63,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 200);
   });
 });
+
 
 
 
