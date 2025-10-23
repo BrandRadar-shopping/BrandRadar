@@ -665,6 +665,40 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+.image-gallery img#main-image {
+  width: 100%;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.thumbnails .thumb {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border 0.2s ease, transform 0.15s ease;
+}
+
+.thumbnails .thumb:hover {
+  border-color: #0070f3;
+  transform: translateY(-2px);
+}
+
+.rating {
+  color: #111;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
 
 
 
