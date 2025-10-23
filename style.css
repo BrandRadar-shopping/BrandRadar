@@ -338,6 +338,22 @@ body {
   color: #0070f3;
 }
 
+.buy-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #0070f3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.buy-btn:hover {
+  background: #005dc1;
+}
+
 
 
 
