@@ -58,3 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
     mainImg.src = product.image;
   }
 });
+
+// Tilbake-knapp
+document.getElementById("back-btn")?.addEventListener("click", () => {
+  window.history.back();
+});
+
