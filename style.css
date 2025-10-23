@@ -126,20 +126,25 @@ body {
 }
 
 /* =========================================
-   MEGA MENU (Zalando-style)
+   MEGA MENU (Zalando-style, fixed position)
    ========================================= */
+.nav-categories {
+  position: relative;
+  z-index: 1001; /* Sørger for at mega-menyen legger seg over innholdet */
+}
+
 .mega-menu {
   display: none;
   position: absolute;
+  top: 100%; /* rett under nav-categories */
   left: 0;
-  top: 125px;
   width: 100%;
   background: #fff;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   padding: 2rem 4rem;
   justify-content: center;
   border-top: 1px solid #eee;
-  z-index: 9999;
+  z-index: 5000; /* høyere enn alt annet på siden */
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -353,6 +358,7 @@ body {
 .buy-btn:hover {
   background: #005dc1;
 }
+
 
 
 
