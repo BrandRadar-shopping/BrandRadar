@@ -807,6 +807,36 @@ body {
   margin-bottom: 1rem;
 }
 
+/* Tilbake-knapp (modernisert) */
+#back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: #0070f3;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+#back-btn:hover {
+  color: #005ad4;
+  transform: translateX(-2px);
+}
+
+#back-btn::before {
+  content: "←";
+  font-size: 1rem;
+  transition: transform 0.15s ease;
+}
+
+#back-btn:hover::before {
+  transform: translateX(-3px);
+}
+
 
 
 
