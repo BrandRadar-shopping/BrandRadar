@@ -1,12 +1,12 @@
 // ======================================================
-// BrandRadar.shop – Google Sheets Product Loader (with thumbs + details)
+// BrandRadar.shop – Google Sheets Product Loader (with thumbs, favorites + details)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ Product script running...");
+  console.log("✅ Product script running with favorites...");
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "BrandRadar-produkter"; // navnet på fanen i arket
+  const SHEET_NAME = "BrandRadar-produkter";
   const productGrid = document.querySelector(".product-grid");
 
   if (!productGrid) {
@@ -14,58 +14,66 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(
-    SHEET_NAME
-  )}`;
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
   fetch(url)
-    .then((res) => res.text())
-    .then((data) => {
-      // Fjern Google "gviz" wrapper
+    .then(res => res.text())
+    .then(data => {
       const json = JSON.parse(data.substr(47).slice(0, -2));
       const rows = json.table.rows;
+      productGrid.innerHTML = "";
 
-      productGrid.innerHTML = ""; // tøm eksisterende
-
-      rows.forEach((row) => {
-        if (!row.c) return; // hopp over tomme rader
+      rows.forEach(row => {
+        if (!row.c) return;
 
         // Kolonner (A–O)
         const brand = row.c[0]?.v || "";
         const title = row.c[1]?.v || "";
         const price = row.c[2]?.v || "";
         const discount = row.c[3]?.v || "";
-        const image = row.c[4]?.v || ""; // E: Image URL (hovedbilde)
-        const productUrl = row.c[5]?.v || "#"; // F: Product URL (affiliate)
+        const image = row.c[4]?.v || "";
+        const productUrl = row.c[5]?.v || "#";
         const category = row.c[6]?.v || "";
         const gender = row.c[7]?.v || "";
         const subcategory = row.c[8]?.v || "";
-        // J (visuelt bilde) hoppes over
-        const image2 = row.c[10]?.v || ""; // K: image2 (thumbnail)
-        const image3 = row.c[11]?.v || ""; // L: image3 (thumbnail)
-        const image4 = row.c[12]?.v || ""; // M: image4 (thumbnail)
-        const description = row.c[13]?.v || ""; // N: Description
-        const rating = row.c[14]?.v || ""; // O: Rating (for eksempel 4.3)
+        const image2 = row.c[10]?.v || "";
+        const image3 = row.c[11]?.v || "";
+        const image4 = row.c[12]?.v || "";
+        const description = row.c[13]?.v || "";
+        const rating = row.c[14]?.v || "";
 
-        // Hopp over rader uten tittel/bilde
         if (!title || !image) return;
 
-        // Bygg produktkort
+        const favorites = getFavorites();
+        const isFav = favorites.some(fav => fav.title === title);
+
+        // Konverter rabattverdi (0.2 → 20%)
+        const discountDisplay =
+          discount && !isNaN(discount)
+            ? `${Math.round(discount * 100)}% OFF`
+            : discount || "";
+
+        // Lag produktkort
         const card = document.createElement("div");
         card.classList.add("product-card");
+
         card.innerHTML = `
-          ${discount ? `<div class="discount-badge">${discount}</div>` : ""}
+          ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
+          <div class="fav-icon ${isFav ? "active" : ""}">❤️</div>
           <img src="${image}" alt="${title}" />
           <div class="product-info">
             <h3>${title}</h3>
+            ${brand ? `<p class="brand">${brand}</p>` : ""}
             ${price ? `<p class="price">${price}</p>` : ""}
+            ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
             <p class="gender">${gender || ""}</p>
             <a href="${productUrl}" target="_blank" class="buy-btn">Se produkt</a>
           </div>
         `;
 
-        // Klikk på kortet -> product.html med alle data
-        card.addEventListener("click", () => {
+        // Klikk → product.html med data
+        card.addEventListener("click", (e) => {
+          if (e.target.classList.contains("fav-icon")) return; // unngå konflikt
           const params = new URLSearchParams({
             brand,
             title,
@@ -85,13 +93,34 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // Viktig: når man klikker selve "Se produkt"-knappen (affiliate),
-        // skal det IKKE trigge navigasjon til product.html
+        // ❤️ ikon – legg til/fjern favoritt
+        const heart = card.querySelector(".fav-icon");
+        heart.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const product = {
+            brand,
+            title,
+            price,
+            discount,
+            image,
+            image2,
+            image3,
+            image4,
+            url: productUrl,
+            gender,
+            category,
+            subcategory,
+            description,
+            rating
+          };
+          toggleFavorite(product);
+          heart.classList.toggle("active");
+        });
+
+        // "Se produkt" knapp – stopp klikk-bobling
         const buyBtn = card.querySelector(".buy-btn");
         if (buyBtn) {
-          buyBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-          });
+          buyBtn.addEventListener("click", (e) => e.stopPropagation());
         }
 
         productGrid.appendChild(card);
