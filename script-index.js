@@ -152,7 +152,7 @@ fetch(url)
   }
 
   productGrid.appendChild(card);
-});
+})
 
     .catch((err) => {
       console.error("❌ Feil ved lasting av produkter:", err);
