@@ -93,29 +93,51 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // ❤️ ikon – legg til/fjern favoritt
-        const heart = card.querySelector(".fav-icon");
-        heart.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const product = {
-            brand,
-            title,
-            price,
-            discount,
-            image,
-            image2,
-            image3,
-            image4,
-            url: productUrl,
-            gender,
-            category,
-            subcategory,
-            description,
-            rating
-          };
-          toggleFavorite(product);
-          heart.classList.toggle("active");
-        });
+       // ❤️ ikon – legg til/fjern favoritt (med live sync + animasjon)
+const heart = card.querySelector(".fav-icon");
+heart.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  const product = {
+    brand,
+    title,
+    price,
+    discount,
+    image,
+    image2,
+    image3,
+    image4,
+    url: productUrl,
+    gender,
+    category,
+    subcategory,
+    description,
+    rating
+  };
+
+  const favorites = getFavorites();
+  const isAlreadyFav = favorites.some((f) => f.title === title);
+
+  if (isAlreadyFav) {
+    // Fjern fra favoritter
+    const updated = favorites.filter((f) => f.title !== title);
+    saveFavorites(updated);
+    heart.classList.remove("active");
+    heart.classList.remove("pop");
+    void heart.offsetWidth; // restart animasjon
+    heart.classList.add("unfav");
+  } else {
+    // Legg til favoritt
+    favorites.push(product);
+    saveFavorites(favorites);
+    heart.classList.remove("unfav");
+    void heart.offsetWidth;
+    heart.classList.add("active", "pop");
+  }
+
+  updateFavoriteCount();
+});
+
 
         // "Se produkt" knapp – stopp klikk-bobling
         const buyBtn = card.querySelector(".buy-btn");
