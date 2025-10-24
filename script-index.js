@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = `product.html?${params.toString()}`;
         });
 
-       // ❤️ ikon – legg til/fjern favoritt (med live sync + animasjon)
+     // ❤️ ikon – legg til/fjern favoritt (med farge, animasjon og popup)
 const heart = card.querySelector(".fav-icon");
 heart.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -126,6 +126,7 @@ heart.addEventListener("click", (e) => {
     heart.classList.remove("pop");
     void heart.offsetWidth; // restart animasjon
     heart.classList.add("unfav");
+    showToast("❌ Fjernet fra favoritter", false);
   } else {
     // Legg til favoritt
     favorites.push(product);
@@ -133,10 +134,12 @@ heart.addEventListener("click", (e) => {
     heart.classList.remove("unfav");
     void heart.offsetWidth;
     heart.classList.add("active", "pop");
+    showToast("❤️ Lagt til som favoritt", true);
   }
 
   updateFavoriteCount();
 });
+
 
 
         // "Se produkt" knapp – stopp klikk-bobling
