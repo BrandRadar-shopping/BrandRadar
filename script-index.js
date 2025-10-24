@@ -16,12 +16,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
-  fetch(url)
-    .then(res => res.text())
-    .then(data => {
-      const json = JSON.parse(data.substr(47).slice(0, -2));
-      const rows = json.table.rows;
-      productGrid.innerHTML = "";
+ fetch(url)
+  .then(res => res.text())
+  .then(data => {
+    // --- SIKKERHETSSJEKK FOR GOOGLE SHEETS RESPONS ---
+    if (!data.startsWith("google.visualization")) {
+      throw new Error("Google Sheets ga ikke forventet respons – kanskje caching eller tilgang?");
+    }
+
+    // Fjern Google sin JSON-wrapper
+    const json = JSON.parse(data.substr(47).slice(0, -2));
+    const rows = json.table?.rows || [];
+
+    if (!rows.length) {
+      throw new Error("Ingen rader funnet i Google Sheet.");
+    }
+
+    productGrid.innerHTML = "";
+
 
       rows.forEach(row => {
         if (!row.c) return;
