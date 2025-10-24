@@ -19,6 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   grid.innerHTML = "";
+  
+function formatDiscount(value) {
+  if (!value) return "";
+  // Fjern mellomrom og prosenttegn
+  let num = String(value).replace("%", "").trim();
+  // Gjør om til tall
+  num = parseFloat(num);
+  // Hvis under 1 (eks. 0.2 → 20%)
+  if (num > 0 && num < 1) num = num * 100;
+  // Rund av og legg til %
+  return `${Math.round(num)}%`;
+}
 
   favorites.forEach((fav) => {
     const card = document.createElement("div");
