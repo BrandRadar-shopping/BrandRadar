@@ -1090,47 +1090,46 @@ body {
 }
 
 /* ===============================
-   FAVORITT IKON – FIKSET FARGE
+   SVG FAVORITT IKON (PROFF VERSJON)
    =============================== */
 .fav-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 1.5rem;
-  color: #bbb !important; /* grå – inaktiv */
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
   z-index: 5;
+  transition: transform 0.2s ease;
 }
 
-.fav-icon:hover {
-  transform: scale(1.2);
+.heart-icon {
+  width: 26px;
+  height: 26px;
+  fill: #ccc;
+  transition: fill 0.3s ease, transform 0.2s ease;
 }
 
-.fav-icon.active {
-  color: #ff3b3b !important; /* fylt rødt hjerte */
-  transform: scale(1.3);
+.fav-icon.active .heart-icon {
+  fill: #ff3b3b; /* fylt rødt */
+  transform: scale(1.1);
 }
 
-.fav-icon.unfav {
-  color: #bbb !important;
+.fav-icon.unfav .heart-icon {
+  fill: #ccc; /* grå – fjernet */
   transform: scale(0.9);
 }
 
-.fav-icon.pop {
-  animation: pop 0.3s ease;
+.fav-icon:hover .heart-icon {
+  transform: scale(1.15);
 }
 
-@keyframes pop {
-  50% {
-    transform: scale(1.4);
-  }
-  100% {
-    transform: scale(1);
-  }
+.fav-icon.pop .heart-icon {
+  animation: heartPop 0.3s ease;
 }
 
-
+@keyframes heartPop {
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
 
 
 
