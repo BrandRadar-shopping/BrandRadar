@@ -157,3 +157,24 @@ heart.addEventListener("click", (e) => {
         "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
     });
 });
+
+// =====================
+// Toast Notification
+// =====================
+function showToast(message, success = true) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${success ? "success" : "error"}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("visible");
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    setTimeout(() => toast.remove(), 400);
+  }, 2000);
+}
+
+
