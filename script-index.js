@@ -16,19 +16,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
- fetch(url)
-  .then(res => res.text())
+fetch(url)
+  .then(res => {
+    console.log("🟢 Response status:", res.status);
+    return res.text();
+  })
   .then(data => {
-    // --- SIKKERHETSSJEKK FOR GOOGLE SHEETS RESPONS ---
-    if (!data.startsWith("google.visualization")) {
-      throw new Error("Google Sheets ga ikke forventet respons – kanskje caching eller tilgang?");
+    console.log("🟢 RAW RESPONSE START:", data.slice(0, 200));
+
+    let rows;
+    try {
+      rows = JSON.parse(data);
+      console.log("✅ Parsed rows:", rows);
+    } catch (err) {
+      console.error("❌ JSON parsing feilet:", err, data);
+      throw new Error("Ugyldig JSON-data mottatt fra Sheets");
     }
 
-   const rows = JSON.parse(data);
-
-
-    if (!rows.length) {
-      throw new Error("Ingen rader funnet i Google Sheet.");
+    if (!rows || !rows.length) {
+      throw new Error("Ingen rader funnet i Google Sheet");
     }
 
     productGrid.innerHTML = "";
