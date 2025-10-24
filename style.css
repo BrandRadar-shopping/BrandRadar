@@ -1016,25 +1016,48 @@ body {
   text-decoration: none;
 }
 
-/* Favorite heart icon on product cards */
+/* ===========================
+   FAVORITE HEART ICON
+   =========================== */
 .fav-icon {
   position: absolute;
   top: 10px;
   right: 12px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
   color: #bbb;
+  transition: transform 0.2s ease, color 0.2s ease;
   user-select: none;
 }
 
 .fav-icon:hover {
   transform: scale(1.2);
-  color: #ff4b4b;
+  color: #ff6666;
 }
 
+/* Når aktiv (favoritt lagt til) */
 .fav-icon.active {
   color: #ff4b4b;
+  text-shadow: 0 0 8px rgba(255, 75, 75, 0.5);
+}
+
+/* Liten pop-animasjon ved klikk */
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+.fav-icon.pop {
+  animation: pop 0.25s ease;
+}
+
+/* Når fjernet – en subtil “fade out” */
+@keyframes unfav {
+  0% { color: #ff4b4b; transform: scale(1); opacity: 1; }
+  100% { color: #bbb; transform: scale(0.9); opacity: 0.8; }
+}
+.fav-icon.unfav {
+  animation: unfav 0.3s ease;
 }
 
 
