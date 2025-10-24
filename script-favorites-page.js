@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const card = document.createElement("div");
     card.classList.add("product-card");
     card.innerHTML = `
-      ${fav.discount ? `<div class="discount-badge">${fav.discount}</div>` : ""}
+     ${fav.discount ? `<div class="discount-badge">-${formatDiscount(fav.discount)}</div>` : ""}
       <img src="${fav.image}" alt="${fav.title}" />
       <div class="product-info">
         <h3>${fav.title}</h3>
