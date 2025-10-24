@@ -992,6 +992,50 @@ body {
   background: #005dc1;
 }
 
+/* ============================================
+   FAVORITTER-SIDE – juster spacing og layout
+   ============================================ */
+.favorites-section {
+  max-width: 1300px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.favorites-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.fav-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.remove-btn {
+  background: #ff4b4b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #e03d3d;
+}
+
 
 
 
