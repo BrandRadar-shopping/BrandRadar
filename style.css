@@ -984,7 +984,7 @@ body {
 .favorites-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
-  gap: 0.8rem !important;
+  gap: 0.9rem !important;
   padding: 0.5rem 0 !important;
   justify-items: center;
   max-width: 1200px;
@@ -994,6 +994,7 @@ body {
 .favorites-grid .product-card {
   max-width: 260px;
 }
+
 
 
 
