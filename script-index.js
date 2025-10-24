@@ -24,9 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
       throw new Error("Google Sheets ga ikke forventet respons – kanskje caching eller tilgang?");
     }
 
-    // Fjern Google sin JSON-wrapper
-    const json = JSON.parse(data.substr(47).slice(0, -2));
-    const rows = json.table?.rows || [];
+   const rows = JSON.parse(data);
+
 
     if (!rows.length) {
       throw new Error("Ingen rader funnet i Google Sheet.");
