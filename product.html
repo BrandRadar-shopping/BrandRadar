@@ -56,6 +56,19 @@
 
   <script src="script.js"></script>
   <script src="product.js"></script>
+  <script src="script-favorites.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("favorite-btn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const params = new URLSearchParams(window.location.search);
+        const product = Object.fromEntries(params.entries());
+        toggleFavorite(product);
+      });
+    }
+  });
+</script>
 </body>
 </html>
 
