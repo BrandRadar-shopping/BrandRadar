@@ -146,19 +146,21 @@ fetch(url)
     updateFavoriteCount();
   });
 
-  const buyBtn = card.querySelector(".buy-btn");
-  if (buyBtn) {
-    buyBtn.addEventListener("click", e => e.stopPropagation());
-  }
+const buyBtn = card.querySelector(".buy-btn");
+if (buyBtn) {
+  buyBtn.addEventListener("click", e => e.stopPropagation());
+}
 
-  productGrid.appendChild(card);
+productGrid.appendChild(card);
+}); // lukk forEach
+}) // ← FJERN det punktumet her
+
+.catch((err) => {
+  console.error("❌ Feil ved lasting av produkter:", err);
+  productGrid.innerHTML =
+    "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
 });
 
-    .catch((err) => {
-      console.error("❌ Feil ved lasting av produkter:", err);
-      productGrid.innerHTML =
-        "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
-    });
 });
 
 
