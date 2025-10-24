@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "BrandRadar-produkter";
+  const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
 
   if (!productGrid) {
