@@ -56,19 +56,30 @@
 
   <script src="script.js"></script>
   <script src="product.js"></script>
-  <script src="script-favorites.js"></script>
+ <script src="script-favorites.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("favorite-btn");
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const params = new URLSearchParams(window.location.search);
-        const product = Object.fromEntries(params.entries());
-        toggleFavorite(product);
-      });
-    }
+    const params = new URLSearchParams(window.location.search);
+    const product = Object.fromEntries(params.entries());
+
+    if (!btn) return;
+
+    const updateButtonState = () => {
+      const favorites = getFavorites();
+      const isFav = favorites.some(fav => fav.title === product.title);
+      btn.textContent = isFav ? "💔 Fjern fra favoritter" : "❤️ Legg til favoritt";
+    };
+
+    btn.addEventListener("click", () => {
+      toggleFavorite(product);
+      updateButtonState(); // oppdater teksten direkte
+    });
+
+    updateButtonState(); // vis korrekt tekst når siden lastes
   });
 </script>
+
 </body>
 </html>
 
