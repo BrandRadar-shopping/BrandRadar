@@ -933,52 +933,6 @@ body {
   100% { transform: scale(1); }
 }
 
-/* ===============================
-   FAVORITTER-SIDE
-   =============================== */
-
-.fav-actions {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-
-.remove-btn {
-  background: #ff5252;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-  background: #e03030;
-}
-
-.empty-favorites {
-  text-align: center;
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
-}
-
-.back-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  background: #0070f3;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.back-btn:hover {
-  background: #005dc1;
-}
 
 /* ============================================
    FAVORITTER-SIDE – juster spacing og layout
@@ -1023,6 +977,7 @@ body {
 .remove-btn:hover {
   background: #e03d3d;
 }
+
 
 
 
