@@ -210,7 +210,7 @@ body {
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  gap: 0.9rem;
 }
 
 .product-card {
@@ -1090,6 +1090,7 @@ body {
   50% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
+
 
 
 
