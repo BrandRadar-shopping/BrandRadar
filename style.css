@@ -1017,6 +1017,266 @@ body {
   background: #005dc1;
 }
 
+/* ============================================
+   BRANDRADAR NEWS PAGE – MODERN DESIGN
+   ============================================ */
+
+/* HERO / UKENS TREND */
+.news-hero {
+  position: relative;
+  max-width: 1300px;
+  margin: 2rem auto 3rem;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.news-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 16 / 7;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  padding: 1rem;
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.cta-btn {
+  display: inline-block;
+  background: #0070f3;
+  color: #fff;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.25s ease;
+}
+
+.cta-btn:hover {
+  background: #005dc1;
+}
+
+/* NYHETER / ARTIKLER */
+.news-grid {
+  max-width: 1300px;
+  margin: 0 auto 3rem;
+  padding: 0 1rem;
+}
+
+.news-grid h2 {
+  text-align: center;
+  font-size: 1.9rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.news-grid .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.news-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.news-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.news-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1rem 1rem 0.5rem;
+}
+
+.news-card p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 1rem 1rem;
+}
+
+.news-card a {
+  display: inline-block;
+  margin: 0 1rem 1rem;
+  color: #0070f3;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.news-card a:hover {
+  color: #005dc1;
+  text-decoration: underline;
+}
+
+/* UKENS DEALS */
+.weekly-deals {
+  background: #f7f9fc;
+  padding: 3rem 1rem;
+  margin-bottom: 3rem;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.weekly-deals h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.deal-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.deal-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.deal-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.deal-item h4 {
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+}
+
+.deal-item a {
+  background: #0070f3;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.25s ease;
+}
+
+.deal-item a:hover {
+  background: #005dc1;
+}
+
+/* RADAR PICKS */
+.radar-picks {
+  max-width: 1300px;
+  margin: 0 auto 4rem;
+  padding: 0 1rem;
+}
+
+.radar-picks h2 {
+  text-align: center;
+  font-size: 1.9rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.radar-picks .product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+/* BRAND SPOTLIGHT */
+.brand-spotlight {
+  max-width: 1100px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.brand-spotlight h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
+}
+
+.brand-feature {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.brand-feature img {
+  width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.brand-info {
+  max-width: 500px;
+  text-align: left;
+}
+
+.brand-info h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.brand-info p {
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* FOOTER */
+.footer {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
 
 
 
