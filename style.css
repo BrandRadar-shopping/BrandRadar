@@ -957,8 +957,6 @@ body {
   justify-items: center;
 }
 
-}
-
 .favorites-grid .product-card {
   background: #fff;
   border-radius: 14px;
@@ -1018,6 +1016,7 @@ body {
 .empty-favorites .back-btn:hover {
   background: #005dc1;
 }
+
 
 
 
