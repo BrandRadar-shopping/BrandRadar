@@ -951,9 +951,12 @@ body {
 
 .favorites-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 0.8rem;
+  justify-content: center; /* sentrerer gridet når det ikke fyller hele raden */
   justify-items: center;
+}
+
 }
 
 .favorites-grid .product-card {
@@ -1015,6 +1018,7 @@ body {
 .empty-favorites .back-btn:hover {
   background: #005dc1;
 }
+
 
 
 
