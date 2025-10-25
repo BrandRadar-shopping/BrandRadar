@@ -1481,6 +1481,51 @@ body {
   background: #005dc1;
 }
 
+/* =====================================
+   WEEKLY DEALS – FARGETONER OG FINPUSS
+   ===================================== */
+.deal-card[data-type="discount"] {
+  background: linear-gradient(to bottom right, #fff6f6, #ffffff);
+  border-left: 4px solid #ff4b4b;
+}
+
+.deal-card[data-type="shipping"] {
+  background: linear-gradient(to bottom right, #f6f9ff, #ffffff);
+  border-left: 4px solid #0070f3;
+}
+
+.deal-card[data-type="outlet"] {
+  background: linear-gradient(to bottom right, #f7fff6, #ffffff);
+  border-left: 4px solid #34c759;
+}
+
+/* Generell tekstkontrast og spacing */
+.deal-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.deal-card p {
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.deal-btn {
+  display: inline-block;
+  background: #0070f3;
+  color: #fff;
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.deal-btn:hover {
+  background: #005dc1;
+}
+
 
 
 
