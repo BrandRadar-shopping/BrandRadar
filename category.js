@@ -1,109 +1,71 @@
-/* ===========================================================
-   BrandRadar – Dynamic Category Page
-   Henter produkter fra Google Sheet og filtrerer basert på
-   ?category=clothing&gender=men&subcategory=jeans
-   =========================================================== */
+/* ===================================================
+   CATEGORY PAGE – Dynamic Filter + Google Sheets Fetch
+   =================================================== */
 
-const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv"; 
-// ⬆️ bytt ut med din publiserte CSV-lenke til BrandRadarProdukter
+const CATEGORY_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTaqDWMlCoMetnsCJ_x09Yhnj1m_o0bhQX18gCgGLs9MH6huFR5DQkE5fNiLTZ8g-Z3B6JeYT5cj7B/pub?output=csv"; // 👈 bytt til riktig BrandRadarProdukter-URL
 
-document.addEventListener("DOMContentLoaded", initCategoryPage);
-
-async function initCategoryPage() {
+document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
-  const category = (params.get("category") || "").toLowerCase();
-  const gender = (params.get("gender") || "").toLowerCase();
-  const subcategory = (params.get("subcategory") || "").toLowerCase();
+  const category = params.get("category")?.toLowerCase() || "";
+  const gender = params.get("gender")?.toLowerCase() || "";
+  const subcategory = params.get("subcategory")?.toLowerCase() || "";
 
   const titleEl = document.getElementById("category-title");
-  const gridEl = document.getElementById("product-grid");
-  const noResultsEl = document.getElementById("no-results");
+  const descEl = document.getElementById("category-desc");
+  const grid = document.getElementById("category-products");
 
   // Sett dynamisk tittel
-  const prettyGender = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : "";
-  const prettyCategory = subcategory
-    ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1)
-    : category.charAt(0).toUpperCase() + category.slice(1);
-
-  titleEl.textContent = `${prettyGender ? prettyGender + " " : ""}${prettyCategory}`;
+  titleEl.textContent = `${capitalize(gender)} ${capitalize(category)} – ${capitalize(subcategory)}`;
+  descEl.textContent = `Utforsk populære ${subcategory} innen ${category} for ${gender}.`;
 
   try {
-    const response = await fetch(SHEET_URL);
-    const csvText = await response.text();
-    const rows = parseCSV(csvText);
-    const headers = rows[0].map(h => clean(h));
+    const res = await fetch(CATEGORY_SHEET_URL);
+    const csv = await res.text();
+    const rows = csv.split("\n").map(r => r.split(","));
+    const headers = rows[0].map(h => h.trim().toLowerCase());
     const items = rows.slice(1).map(r => {
       const obj = {};
-      headers.forEach((h, i) => (obj[h] = clean(r[i])));
+      headers.forEach((h, i) => (obj[h] = r[i]?.trim() || ""));
       return obj;
     });
 
+    // Filtrer basert på URL-parametere
     const filtered = items.filter(p =>
       (!category || p.category?.toLowerCase() === category) &&
       (!gender || p.gender?.toLowerCase() === gender) &&
       (!subcategory || p.subcategory?.toLowerCase() === subcategory)
     );
 
-    if (!filtered.length) {
-      noResultsEl.style.display = "block";
-      gridEl.innerHTML = "";
+    if (filtered.length === 0) {
+      grid.innerHTML = `<p>Ingen produkter funnet for denne kategorien.</p>`;
       return;
     }
 
-    renderProducts(filtered, gridEl);
+    // Render produkter
+    grid.innerHTML = filtered
+      .map(
+        p => `
+        <div class="product-card fade-in">
+          <img src="${p.image_url}" alt="${p.product_name}">
+          <div class="product-info">
+            <h3>${p.brand}</h3>
+            <p class="product-name">${p.product_name}</p>
+            ${p.price ? `<p class="price">${p.price} kr</p>` : ""}
+            <a href="${p.link}" target="_blank" class="buy-btn">Se produkt</a>
+          </div>
+        </div>`
+      )
+      .join("");
   } catch (err) {
     console.error("Feil ved lasting av produkter:", err);
-    noResultsEl.style.display = "block";
+    grid.innerHTML = `<p>Kunne ikke laste produkter akkurat nå.</p>`;
   }
+});
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/* =============================
-   CSV HJELPEFUNKSJONER
-   ============================= */
-function parseCSV(text) {
-  const rows = [];
-  let row = [], cell = "", inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], next = text[i + 1];
-    if (c === '"') {
-      if (inQuotes && next === '"') { cell += '"'; i++; }
-      else { inQuotes = !inQuotes; }
-    } else if (c === "," && !inQuotes) {
-      row.push(cell); cell = "";
-    } else if ((c === "\n" || c === "\r") && !inQuotes) {
-      if (cell.length || row.length) { row.push(cell); rows.push(row); }
-      row = []; cell = "";
-      if (c === "\r" && next === "\n") i++;
-    } else {
-      cell += c;
-    }
-  }
-  if (cell.length || row.length) { row.push(cell); rows.push(row); }
-  return rows;
-}
-
-const clean = s => (s ?? "").trim();
-
-/* =============================
-   RENDER PRODUKTER
-   ============================= */
-function renderProducts(products, container) {
-  container.innerHTML = products.map(p => `
-    <div class="product-card fade-in">
-      <img src="${p.image_url}" alt="${p.title}" class="product-image" />
-      <div class="product-info">
-        <h3>${p.brand}</h3>
-        <p class="product-title">${p.title}</p>
-        <p class="price">${p.price ? p.price + " kr" : ""} ${
-          p.discount ? `<span class="discount">(${p.discount})</span>` : ""
-        }</p>
-        <a href="product.html?brand=${encodeURIComponent(p.brand)}&title=${encodeURIComponent(p.title)}" 
-           class="view-btn">Se produkt</a>
-      </div>
-    </div>
-  `).join("");
-}
 
 
