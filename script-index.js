@@ -82,22 +82,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Hjelpefunksjoner for favoritter
-function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites") || "[]");
-}
-function saveFavorites(list) {
-  localStorage.setItem("favorites", JSON.stringify(list));
-}
-function isFavorite(title) {
-  return getFavorites().some((f) => f.title === title);
-}
-function toggleFavorite(title, item) {
-  const favs = getFavorites();
-  const exists = favs.some((f) => f.title === title);
-  const updated = exists
-    ? favs.filter((f) => f.title !== title)
-    : [...favs, item];
-  saveFavorites(updated);
-}
-
