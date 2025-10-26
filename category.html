@@ -3,23 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Produkter | BrandRadar</title>
+  <title>Kategori | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <!-- ================================
-       HEADER (samme som index)
+       HEADER (samme som på index)
        ================================ -->
   <header class="main-header">
     <div class="header-inner">
       <div class="logo">BrandRadar</div>
-
-      <div class="search-box">
-        <input type="text" placeholder="Søk produkter eller merker..." />
-        <button>🔍</button>
-      </div>
-
       <nav class="main-nav">
         <a href="index.html">Home</a>
         <a href="news.html">News</a>
@@ -30,21 +24,21 @@
   </header>
 
   <!-- ================================
-       KATEGORISIDE
+       CATEGORY HERO (dynamisk tekst)
        ================================ -->
-  <main class="category-page">
-    <div class="container">
+  <section class="category-hero">
+    <div class="category-hero-content">
       <h1 id="category-title">Produkter</h1>
-      <p id="category-description" class="category-description"></p>
-
-      <div id="product-grid" class="product-grid"></div>
-
-      <!-- Fallback melding -->
-      <p id="no-results" class="no-results" style="display:none;">
-        Ingen produkter funnet i denne kategorien.
-      </p>
+      <p id="category-desc">Utforsk de beste valgene innen din valgte kategori.</p>
     </div>
-  </main>
+  </section>
+
+  <!-- ================================
+       PRODUCT GRID
+       ================================ -->
+  <section class="product-grid-section">
+    <div class="product-grid" id="category-products"></div>
+  </section>
 
   <!-- ================================
        FOOTER
@@ -54,11 +48,13 @@
   </footer>
 
   <!-- ================================
-       SCRIPT IMPORTS
+       SCRIPTS
        ================================ -->
+  <script src="script-favorites.js"></script>
   <script src="category.js"></script>
 </body>
 </html>
+
 
 
 
