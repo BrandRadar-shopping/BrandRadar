@@ -1939,7 +1939,125 @@ body {
   background-color: #005dc1;
 }
 
+.category-hero {
+  background: linear-gradient(90deg, #f7faff, #ffffff);
+  padding: 3rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
 
+/* ============================================
+   CATEGORY PAGE – HERO HEADER
+   (Vises øverst på category.html)
+   ============================================ */
+.category-hero {
+  background: linear-gradient(90deg, #f7faff, #ffffff);
+  padding: 3rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #f0f0f0;
+  margin-bottom: 2rem;
+}
+
+.category-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.category-hero h1 {
+  color: #111;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.3px;
+}
+
+.category-hero p {
+  color: #555;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* ============================================
+   CATEGORY PAGE – PRODUCT GRID
+   (Lister alle produkter i valgt kategori)
+   ============================================ */
+.product-grid-section {
+  max-width: 1300px;
+  margin: 0 auto 4rem;
+  padding: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+/* ============================================
+   CATEGORY PAGE – PRODUCT CARD
+   (Individuelle produktkort)
+   ============================================ */
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  max-width: 280px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #fafafa;
+}
+
+/* ============================================
+   CATEGORY PAGE – PRODUCT INFO BLOCK
+   ============================================ */
+.product-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.product-info h3 {
+  font-size: 1rem;
+  color: #111;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.product-info .product-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.product-info .price {
+  color: #0070f3;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+/* ============================================
+   CATEGORY PAGE – BUTTON STYLING
+   (Knapper på produktkort)
+   ============================================ */
+.buy-btn {
+  display: inline-block;
+  background: #0070f3;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8
 
 
 
