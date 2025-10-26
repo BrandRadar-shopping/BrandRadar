@@ -1,5 +1,5 @@
 /* ================================
-   NEWS SECTION (news.html)
+   BRANDRADAR FEED – PRODUCT MODE
    ================================ */
 
 const NEWS_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9bBCAqzJwCcyOfw5R5mAPtqkx8ISp_U_yaXaZU89J7G8V656GKvU0NzUK0UdGmEPk8m-vCm2rIXeI/pub?output=csv";
@@ -20,45 +20,45 @@ async function fetchNews() {
       return obj;
     });
 
-    renderNews(items);
+    renderProducts(items);
   } catch (error) {
-    console.error("Feil ved henting av nyhetsdata:", error);
+    console.error("Feil ved henting av produktdata:", error);
   }
 }
 
-function renderNews(newsItems) {
+function renderProducts(products) {
   if (!featuredContainer || !newsGrid) return;
 
-  // Sorter nyheter (nyeste først)
-  newsItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const featured = products.filter(p => p.featured?.toLowerCase() === "true");
+  const regular = products.filter(p => p.featured?.toLowerCase() !== "true");
 
-  const featured = newsItems.filter(n => n.featured?.toLowerCase() === "true");
-  const regular = newsItems.filter(n => n.featured?.toLowerCase() !== "true");
-
-  // Siste nytt (featured)
+  // 🌟 Ukens Spotlight
   featuredContainer.innerHTML = `
-    <h2>Siste nytt 🗞️</h2>
+    <h2>Ukens Spotlight ✨</h2>
     ${featured.map(item => `
       <article class="featured-card fade-in">
-        <img src="${item.image_url}" alt="${item.title}">
+        <img src="${item.image_url}" alt="${item.product_name}">
         <div class="featured-content">
-          <h3>${item.title}</h3>
-          <p>${item.excerpt}</p>
-          <a href="${item.link}" target="_blank">Les mer →</a>
+          <h3>${item.brand} – ${item.product_name}</h3>
+          <p>${item.tagline}</p>
+          <p class="price">${item.price ? `${item.price} kr` : ""}</p>
+          <a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>
         </div>
       </article>
     `).join("")}
   `;
 
-  // Flere artikler
+  // 🛍️ Flere produkter
   newsGrid.innerHTML = `
     ${regular.map(item => `
       <article class="news-card fade-in">
-        <img src="${item.image_url}" alt="${item.title}">
+        <img src="${item.image_url}" alt="${item.product_name}">
         <div class="news-info">
-          <h3>${item.title}</h3>
-          <p>${item.excerpt}</p>
-          <a href="${item.link}" target="_blank" class="read-more">Les mer</a>
+          <h3>${item.brand}</h3>
+          <p class="product">${item.product_name}</p>
+          <p class="price">${item.price ? `${item.price} kr` : ""}</p>
+          <p class="tagline">${item.tagline}</p>
+          <a href="${item.link}" target="_blank" class="read-more">Se produkt</a>
         </div>
       </article>
     `).join("")}
@@ -66,4 +66,5 @@ function renderNews(newsItems) {
 }
 
 fetchNews();
+
 
