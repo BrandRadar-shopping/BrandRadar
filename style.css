@@ -2004,6 +2004,33 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 0.4rem;
+}
+
+.new-price {
+  color: #e63946;
+  font-weight: 600;
+}
+
+.discount-badge {
+  background: #e63946;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  margin-left: 0.4rem;
+}
+
+.valid-until {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
 
 
 
