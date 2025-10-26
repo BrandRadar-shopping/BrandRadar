@@ -6,29 +6,59 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
   const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
-  const SHEET_NAME = "BrandRadarProdukter";
-  const productGrid = document.querySelector(".product-grid");
+const SHEET_NAME = "BrandRadarProdukter";
+const productGrid = document.querySelector(".product-grid");
 
-  if (!productGrid) {
-    console.error("⚠️ Ingen .product-grid funnet på siden!");
-    return;
-  }
+if (!productGrid) {
+  console.error("⚠️ Ingen .product-grid funnet på siden!");
+  return;
+}
 
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
-  fetch(url)
-    .then((res) => {
-      console.log("🟢 Response status:", res.status);
-      return res.json();
-    })
-    .then((rows) => {
-      console.log("✅ Parsed rows:", rows);
+fetch(url)
+  .then((res) => {
+    console.log("🟢 Response status:", res.status);
+    return res.json();
+  })
+  .then((rows) => {
+    console.log("✅ Parsed rows:", rows);
 
-      if (!rows || !rows.length) {
-        throw new Error("Ingen rader funnet i Google Sheet");
+    if (!rows || !rows.length) {
+      throw new Error("Ingen rader funnet i Google Sheet");
+    }
+
+    productGrid.innerHTML = "";
+
+    rows.forEach((item) => {
+      // Sjekk at nødvendige felter finnes
+      if (!item.title || !item.image_url) {
+        console.warn("⚠️ Hopper over rad uten tittel/bilde:", item);
+        return;
       }
 
-      productGrid.innerHTML = "";
+      // Opprett produktkort
+      const card = document.createElement("div");
+      card.classList.add("product-card");
+
+      card.innerHTML = `
+        <img src="${item.image_url}" alt="${item.title}">
+        <div class="product-info">
+          <h3>${item.title}</h3>
+          <p class="brand">${item.brand || ""}</p>
+          <p class="price">${item.price ? item.price + " kr" : ""}</p>
+          ${item.discount ? `<p class="discount">-${item.discount}</p>` : ""}
+        </div>
+      `;
+
+      productGrid.appendChild(card);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Fetch-feil:", err);
+    productGrid.innerHTML = `<p class="error">Kunne ikke laste produkter 😞</p>`;
+  });
+
 
       rows.forEach((row) => {
         // Tilpasset faktiske kolonnenavn fra Google Sheets
