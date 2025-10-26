@@ -1577,6 +1577,31 @@ body {
   }
 }
 
+/* ================================
+   PRODUCT FEED MODE – (news.html)
+   ================================ */
+.featured-content .price,
+.news-info .price {
+  font-weight: 600;
+  color: #0070f3;
+  margin: 0.3rem 0 0.8rem;
+}
+
+.product-btn, .read-more {
+  background: #0070f3;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.product-btn:hover, .read-more:hover {
+  background: #005dc1;
+}
+
+
 
 /* ================================
    PARTNER BANNER (news.html)
@@ -1813,6 +1838,7 @@ body {
   border: 2px solid #0070f3;
   box-shadow: 0 4px 14px rgba(0, 112, 243, 0.2);
 }
+
 
 
 
