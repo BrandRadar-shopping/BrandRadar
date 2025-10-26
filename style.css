@@ -1410,6 +1410,26 @@ body {
 .read-more:hover {
   color: #005dc1;
 }
+/* ============================
+   PRODUCT CARD BUTTONS (Flere artikler)
+   ============================ */
+.news-card .read-more {
+  display: inline-block;
+  background-color: #0070f3 !important;
+  color: #fff !important;
+  font-size: 0.95rem !important;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: background 0.2s ease;
+}
+
+.news-card .read-more:hover {
+  background-color: #005dc1 !important;
+}
 
 /* ============================
    WEEKLY DEALS SECTION
@@ -2030,6 +2050,7 @@ body {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
+
 
 
 
