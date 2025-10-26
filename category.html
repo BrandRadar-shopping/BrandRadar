@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kategori | BrandRadar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ================================
+       HEADER (samme som de andre sidene)
+       ================================ -->
+  <header class="main-header">
+    <div class="header-inner">
+      <div class="logo">BrandRadar</div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="news.html">News</a>
+        <a href="brands.html">Brands</a>
+        <a href="favoritter.html">Favoritter (<span id="favorite-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================================
+       CATEGORY HEADER (dynamisk)
+       ================================ -->
+  <section class="category-hero">
+    <div class="category-hero-content">
+      <h1 id="category-title">Produkter</h1>
+      <p id="category-subtitle">Utforsk utvalget fra våre partnere</p>
+    </div>
+  </section>
+
+  <!-- ================================
+       PRODUKTGRID (fra Google Sheet)
+       ================================ -->
+  <section id="category-products" class="product-grid-section">
+    <div class="product-grid" id="category-grid"></div>
+  </section>
+
+  <!-- ================================
+       FOOTER
+       ================================ -->
+  <footer class="footer">
+    <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
+  </footer>
+
+  <!-- ================================
+       SCRIPTS
+       ================================ -->
+  <script src="script-favorites.js"></script>
+  <script src="category.js"></script>
+</body>
+</html>
 
