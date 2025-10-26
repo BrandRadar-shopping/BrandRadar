@@ -42,7 +42,7 @@ function renderProducts(products) {
           <h3>${item.brand} – ${item.product_name}</h3>
           <p>${item.tagline}</p>
           <p class="price">${item.price ? `${item.price} kr` : ""}</p>
-          <a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>
+          <a href="${item.link}" target="_blank" class="read-more">Se produkt</a>
         </div>
       </article>
     `).join("")}
