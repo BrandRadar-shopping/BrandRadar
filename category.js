@@ -1,11 +1,14 @@
 // ======================================================
-// BrandRadar.shop – Category Page Loader (Google Sheets via gviz)
+// BrandRadar.shop – Category Page Loader (OpenSheet stable version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Category script running...");
 
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnWQyI7NUrnyXgIHlQp8-jw";
+  // -----------------------------
+  // KONFIG
+  // -----------------------------
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQyI7NUrnyXgIHlQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
   const categoryTitle = document.querySelector(".category-title");
@@ -15,41 +18,28 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Les parametere fra URL
+  // -----------------------------
+  // URL-parametere
+  // -----------------------------
   const urlParams = new URLSearchParams(window.location.search);
   const selectedCategory = urlParams.get("category");
   const selectedSub = urlParams.get("subcategory");
   const selectedGender = urlParams.get("gender");
 
   if (categoryTitle && selectedCategory) {
-    categoryTitle.textContent = selectedCategory;
+    categoryTitle.textContent =
+      selectedCategory.charAt(0).toUpperCase() +
+      selectedCategory.slice(1);
   }
 
+  // -----------------------------
+  // Hent data fra Google Sheet via OpenSheet
+  // -----------------------------
   const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
   fetch(url)
-    .then((res) => res.text())
-    .then((text) => {
-      const json = JSON.parse(text.substring(47, text.length - 2));
-
-      // Mapp kolonner til objekter
-      const rows = json.table.rows.map((r) => ({
-        brand: r.c[0]?.v || "",
-        title: r.c[1]?.v || "",
-        price: r.c[2]?.v || "",
-        discount: r.c[3]?.v || "",
-        image_url: r.c[4]?.v || "",
-        product_url: r.c[5]?.v || "",
-        category: r.c[6]?.v || "",
-        gender: r.c[7]?.v || "",
-        subcategory: r.c[8]?.v || "",
-        description: r.c[9]?.v || "",
-        rating: r.c[10]?.v || "",
-        image2: r.c[11]?.v || "",
-        image3: r.c[12]?.v || "",
-        image4: r.c[13]?.v || "",
-      }));
-
+    .then((res) => res.json())
+    .then((rows) => {
       console.log("✅ Alle produkter:", rows.length);
 
       // --------------------------
@@ -125,14 +115,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const favorites = getFavorites();
         const isFav = favorites.some((fav) => fav.title === title);
 
-        // Riktig rabatt-format
+        // Riktig rabatt-format (20 → 20%, 0.2 → 20%)
         let discountDisplay = "";
         if (discount) {
           const cleanValue = parseFloat(
             discount.toString().replace("%", "").trim()
           );
           if (!isNaN(cleanValue)) {
-            discountDisplay = `${cleanValue}% OFF`;
+            const displayValue = cleanValue < 1 ? cleanValue * 100 : cleanValue;
+            discountDisplay = `${displayValue}% OFF`;
           }
         }
 
@@ -154,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="product-info">
             <h3>${title}</h3>
             ${brand ? `<p class="brand">${brand}</p>` : ""}
-            ${price ? `<p class="price">${price}</p>` : ""}
+            ${price ? `<p class="price">${price} kr</p>` : ""}
             ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
             ${gender ? `<p class="gender">${gender}</p>` : ""}
             <a href="${product_url}" target="_blank" class="buy-btn">Se produkt</a>
