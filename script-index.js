@@ -22,21 +22,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const json = JSON.parse(text.substring(47, text.length - 2));
 
       const rows = json.table.rows.map((r) => ({
-        brand: r.c[0]?.v ?? "",
-        title: r.c[1]?.v ?? "",
-        price: r.c[2]?.v ?? "",
-        discount: r.c[3]?.v ?? "",
-        image_url: r.c[4]?.v ?? "",
-        product_url: r.c[5]?.v ?? "",
-        category: r.c[6]?.v ?? "",
-        gender: r.c[7]?.v ?? "",
-        subcategory: r.c[8]?.v ?? "",
-        description: r.c[9]?.v ?? "",
-        rating: r.c[10]?.v ?? "",
-        image2: r.c[11]?.v ?? "",
-        image3: r.c[12]?.v ?? "",
-        image4: r.c[13]?.v ?? "",
-      }));
+  brand: r.c[0]?.v ?? "",
+  title: r.c[1]?.v ?? "",
+  price: r.c[2]?.v ?? "",
+  discount: r.c[3]?.v ?? "",
+  image_url: r.c[4]?.v ?? "",     // 🟢 riktig kolonne for bilde
+  product_url: r.c[5]?.v ?? "",   // 🟢 lenke til butikk
+  category: r.c[6]?.v ?? "",
+  gender: r.c[7]?.v ?? "",
+  subcategory: r.c[8]?.v ?? "",
+  image2: r.c[9]?.v ?? "",
+  image3: r.c[10]?.v ?? "",
+  image4: r.c[11]?.v ?? "",
+  description: r.c[12]?.v ?? "",
+  rating: r.c[13]?.v ?? "",
+}));
+
 
       console.log("✅ Data hentet:", rows.length, "produkter");
 
