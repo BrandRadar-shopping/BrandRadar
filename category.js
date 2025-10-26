@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Category script running...");
 
-  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
   const categoryTitle = document.querySelector(".category-title");
