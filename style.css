@@ -1141,62 +1141,6 @@ body {
   text-decoration: underline;
 }
 
-/* UKENS DEALS */
-.weekly-deals {
-  background: #f7f9fc;
-  padding: 3rem 1rem;
-  margin-bottom: 3rem;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-
-.weekly-deals h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.deal-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.deal-item {
-  background: #fff;
-  border-radius: 10px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.deal-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-}
-
-.deal-item h4 {
-  font-size: 1.05rem;
-  margin-bottom: 0.8rem;
-}
-
-.deal-item a {
-  background: #0070f3;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.25s ease;
-}
-
-.deal-item a:hover {
-  background: #005dc1;
-}
 
 /* RADAR PICKS */
 .radar-picks {
@@ -2100,6 +2044,7 @@ body {
 .news-card .read-more:hover {
   background-color: #005dc1;
 }
+
 
 
 
