@@ -1410,6 +1410,83 @@ body {
 .read-more:hover {
   color: #005dc1;
 }
+
+/* ============================
+   FLERE ARTIKLER (Produktfeed)
+   ============================ */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.news-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.news-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.news-info {
+  padding: 1rem;
+}
+
+.news-info h3 {
+  font-size: 1rem;
+  color: #111;
+  margin-bottom: 0.25rem;
+}
+
+.news-info .product-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.news-info .price {
+  color: #0070f3;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.news-info .excerpt {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.news-card .read-more {
+  display: inline-block;
+  background-color: #0070f3;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.news-card .read-more:hover {
+  background-color: #005dc1;
+}
+
+
 /* ============================
    PRODUCT CARD BUTTONS (Flere artikler)
    ============================ */
@@ -2050,6 +2127,7 @@ body {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
+
 
 
 
