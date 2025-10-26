@@ -1946,59 +1946,48 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* ============================================
-   CATEGORY PAGE – HERO HEADER
-   (Vises øverst på category.html)
-   ============================================ */
-.category-hero {
-  background: linear-gradient(90deg, #f7faff, #ffffff);
-  padding: 3rem 1rem;
-  text-align: center;
-  border-bottom: 1px solid #eee;
-  border-top: 1px solid #f0f0f0;
-  margin-bottom: 2rem;
-}
+/* ============================================================
+   CATEGORY PAGE – BRANDRADAR
+   Kombinert og optimalisert styling for category.html
+   ============================================================ */
 
-.category-hero-content {
-  max-width: 900px;
+/* --------------------------------------------
+   HOVEDSTRUKTUR
+   -------------------------------------------- */
+.category-page {
+  padding: 3rem 1rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.category-hero h1 {
-  color: #111;
+.category-page h1 {
   font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.3px;
+  color: #111;
 }
 
-.category-hero p {
-  color: #555;
-  font-size: 1.05rem;
-  line-height: 1.5;
+.category-description {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
 }
 
-/* ============================================
-   CATEGORY PAGE – PRODUCT GRID
-   (Lister alle produkter i valgt kategori)
-   ============================================ */
-.product-grid-section {
-  max-width: 1300px;
-  margin: 0 auto 4rem;
-  padding: 1rem;
-}
-
+/* --------------------------------------------
+   PRODUKTGRID
+   -------------------------------------------- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   justify-items: center;
+  margin-bottom: 3rem;
 }
 
-/* ============================================
-   CATEGORY PAGE – PRODUCT CARD
-   (Individuelle produktkort)
-   ============================================ */
+/* --------------------------------------------
+   PRODUKTKORT
+   -------------------------------------------- */
 .product-card {
   background: #fff;
   border-radius: 14px;
@@ -2007,6 +1996,7 @@ body {
   max-width: 280px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  text-align: center;
 }
 
 .product-card:hover {
@@ -2021,9 +2011,9 @@ body {
   background: #fafafa;
 }
 
-/* ============================================
-   CATEGORY PAGE – PRODUCT INFO BLOCK
-   ============================================ */
+/* --------------------------------------------
+   PRODUKTINFORMASJON
+   -------------------------------------------- */
 .product-info {
   padding: 1rem;
   text-align: center;
@@ -2036,6 +2026,7 @@ body {
   margin-bottom: 0.2rem;
 }
 
+.product-info .product-title,
 .product-info .product-name {
   font-weight: 600;
   color: #333;
@@ -2048,97 +2039,61 @@ body {
   margin-bottom: 0.6rem;
 }
 
-/* ============================================
-   CATEGORY PAGE – BUTTON STYLING
-   (Knapper på produktkort)
-   ============================================ */
-.buy-btn {
+.product-info .discount {
+  color: #e63946;
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+/* --------------------------------------------
+   KNAPPER
+   -------------------------------------------- */
+.buy-btn,
+.view-btn {
   display: inline-block;
   background: #0070f3;
   color: #fff;
   padding: 0.6rem 1.2rem;
-  border-radius: 8
-
-/* ================================
-   CATEGORY PAGE STYLING
-   ================================ */
-
-.category-page {
-  padding: 3rem 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.category-page h1 {
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.category-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-
-.product-card {
-  background: #fff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  text-align: center;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-}
-
-.product-card img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-
-.product-info {
-  padding: 1rem;
-}
-
-.price {
-  font-weight: bold;
-  color: #0070f3;
-}
-
-.discount {
-  color: #e63946;
-  font-weight: 600;
-}
-
-.view-btn {
-  display: inline-block;
-  background: #0070f3;
-  color: white;
-  padding: 0.5rem 1rem;
   border-radius: 8px;
   text-decoration: none;
+  font-weight: 600;
+  transition: background 0.25s ease;
   margin-top: 0.5rem;
 }
 
+.buy-btn:hover,
 .view-btn:hover {
   background: #005dc1;
 }
 
+/* --------------------------------------------
+   FALLBACK-MELDING
+   -------------------------------------------- */
 .no-results {
   text-align: center;
   color: #888;
   margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+/* --------------------------------------------
+   ANIMASJON (fade-in ved lasting)
+   -------------------------------------------- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
