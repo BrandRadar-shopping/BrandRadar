@@ -1,70 +1,197 @@
-/* ===================================================
-   CATEGORY PAGE – Dynamic Filter + Google Sheets Fetch
-   =================================================== */
+// ======================================================
+// BrandRadar.shop – Category Page Loader (direct Google API version)
+// ======================================================
 
-const CATEGORY_SHEET_URL = "https://opensheet.elk.sh/2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-/BrandRadarProdukter"; // 👈 bytt til riktig BrandRadarProdukter-URL
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ Category script running...");
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const category = params.get("category")?.toLowerCase() || "";
-  const gender = params.get("gender")?.toLowerCase() || "";
-  const subcategory = params.get("subcategory")?.toLowerCase() || "";
+  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
+  const SHEET_NAME = "BrandRadarProdukter";
+  const productGrid = document.querySelector(".product-grid");
+  const categoryTitle = document.querySelector(".category-title");
 
-  const titleEl = document.getElementById("category-title");
-  const descEl = document.getElementById("category-desc");
-  const grid = document.getElementById("category-products");
-
-  // Sett dynamisk tittel
-  titleEl.textContent = `${capitalize(gender)} ${capitalize(category)} – ${capitalize(subcategory)}`;
-  descEl.textContent = `Utforsk populære ${subcategory} innen ${category} for ${gender}.`;
-
-  try {
-    const res = await fetch(CATEGORY_SHEET_URL);
-    const csv = await res.text();
-    const rows = csv.split("\n").map(r => r.split(","));
-    const headers = rows[0].map(h => h.trim().toLowerCase());
-    const items = rows.slice(1).map(r => {
-      const obj = {};
-      headers.forEach((h, i) => (obj[h] = r[i]?.trim() || ""));
-      return obj;
-    });
-
-    // Filtrer basert på URL-parametere
-    const filtered = items.filter(p =>
-      (!category || p.category?.toLowerCase() === category) &&
-      (!gender || p.gender?.toLowerCase() === gender) &&
-      (!subcategory || p.subcategory?.toLowerCase() === subcategory)
-    );
-
-    if (filtered.length === 0) {
-      grid.innerHTML = `<p>Ingen produkter funnet for denne kategorien.</p>`;
-      return;
-    }
-
-    // Render produkter
-    grid.innerHTML = filtered
-      .map(
-        p => `
-        <div class="product-card fade-in">
-          <img src="${p.image_url}" alt="${p.product_name}">
-          <div class="product-info">
-            <h3>${p.brand}</h3>
-            <p class="product-name">${p.product_name}</p>
-            ${p.price ? `<p class="price">${p.price} kr</p>` : ""}
-            <a href="${p.link}" target="_blank" class="buy-btn">Se produkt</a>
-          </div>
-        </div>`
-      )
-      .join("");
-  } catch (err) {
-    console.error("Feil ved lasting av produkter:", err);
-    grid.innerHTML = `<p>Kunne ikke laste produkter akkurat nå.</p>`;
+  if (!productGrid) {
+    console.error("⚠️ Ingen .product-grid funnet på siden!");
+    return;
   }
+
+  // Les ?category= fra URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedCategory = urlParams.get("category");
+  if (categoryTitle && selectedCategory) {
+    categoryTitle.textContent = selectedCategory;
+  }
+
+  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+  fetch(url)
+    .then((res) => res.text())
+    .then((text) => {
+      const json = JSON.parse(text.substring(47, text.length - 2));
+
+      const rows = json.table.rows.map((r) => ({
+        brand: r.c[0]?.v || "",
+        title: r.c[1]?.v || "",
+        price: r.c[2]?.v || "",
+        discount: r.c[3]?.v || "",
+        image_url: r.c[4]?.v || "",
+        product_url: r.c[5]?.v || "",
+        category: r.c[6]?.v || "",
+        gender: r.c[7]?.v || "",
+        subcategory: r.c[8]?.v || "",
+        description: r.c[9]?.v || "",
+        rating: r.c[10]?.v || "",
+        image2: r.c[11]?.v || "",
+        image3: r.c[12]?.v || "",
+        image4: r.c[13]?.v || "",
+      }));
+
+      console.log("✅ Alle produkter:", rows.length);
+
+      // 🔹 Filtrer etter valgt kategori
+      const filtered = selectedCategory
+        ? rows.filter(
+            (r) =>
+              r.category?.toLowerCase().trim() ===
+              selectedCategory.toLowerCase().trim()
+          )
+        : rows;
+
+      console.log("✅ Filtrert:", filtered.length, "produkter");
+
+      productGrid.innerHTML = "";
+
+      if (!filtered.length) {
+        productGrid.innerHTML =
+          "<p>Ingen produkter funnet i denne kategorien.</p>";
+        return;
+      }
+
+      filtered.forEach((row) => {
+        const {
+          brand,
+          title,
+          price,
+          discount,
+          image_url,
+          product_url,
+          category,
+          gender,
+          subcategory,
+          description,
+          rating,
+          image2,
+          image3,
+          image4,
+        } = row;
+
+        if (!title || !image_url) return;
+
+        const favorites = getFavorites();
+        const isFav = favorites.some((fav) => fav.title === title);
+
+        const discountDisplay =
+          discount && !isNaN(parseFloat(discount))
+            ? `${discount}% OFF`
+            : discount || "";
+
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+
+        card.innerHTML = `
+          ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
+          <div class="fav-icon ${isFav ? "active" : ""}">
+            <svg viewBox="0 0 24 24" class="heart-icon">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+              2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 
+              14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+              6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+
+          <img src="${image_url}" alt="${title}" />
+          <div class="product-info">
+            <h3>${title}</h3>
+            ${brand ? `<p class="brand">${brand}</p>` : ""}
+            ${price ? `<p class="price">${price}</p>` : ""}
+            ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
+            ${gender ? `<p class="gender">${gender}</p>` : ""}
+            <a href="${product_url}" target="_blank" class="buy-btn">Se produkt</a>
+          </div>
+        `;
+
+        // Klikk på kort → product.html
+        card.addEventListener("click", (e) => {
+          if (e.target.classList.contains("fav-icon")) return;
+          const params = new URLSearchParams({
+            brand,
+            title,
+            price,
+            discount,
+            image_url,
+            image2,
+            image3,
+            image4,
+            url: product_url,
+            gender,
+            category,
+            subcategory,
+            description,
+            rating,
+          });
+          window.location.href = `product.html?${params.toString()}`;
+        });
+
+        // ❤️ Favoritt-knapp
+        const heart = card.querySelector(".fav-icon");
+        heart.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const product = {
+            brand,
+            title,
+            price,
+            discount,
+            image_url,
+            image2,
+            image3,
+            image4,
+            url: product_url,
+            gender,
+            category,
+            subcategory,
+            description,
+            rating,
+          };
+          const favorites = getFavorites();
+          const isAlreadyFav = favorites.some((f) => f.title === title);
+
+          if (isAlreadyFav) {
+            const updated = favorites.filter((f) => f.title !== title);
+            saveFavorites(updated);
+            heart.classList.remove("active", "pop");
+            heart.classList.add("unfav");
+            showToast("❌ Fjernet fra favoritter", false);
+          } else {
+            favorites.push(product);
+            saveFavorites(favorites);
+            heart.classList.remove("unfav");
+            heart.classList.add("active", "pop");
+            showToast("❤️ Lagt til som favoritt", true);
+          }
+
+          updateFavoriteCount();
+        });
+
+        const buyBtn = card.querySelector(".buy-btn");
+        if (buyBtn) buyBtn.addEventListener("click", (e) => e.stopPropagation());
+
+        productGrid.appendChild(card);
+      });
+    })
+    .catch((err) => {
+      console.error("❌ Feil ved lasting av produkter:", err);
+      productGrid.innerHTML =
+        "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
+    });
 });
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-
 
