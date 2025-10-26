@@ -1,5 +1,5 @@
 // ======================================================
-// BrandRadar.shop – Google Sheets Product Loader (robust version)
+// BrandRadar.shop – Google Sheets Product Loader (OpenSheet stable version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,34 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
   fetch(url)
-    .then((res) => res.text())
-    .then((text) => {
-      const json = JSON.parse(text.substring(47, text.length - 2));
+    .then((res) => res.json())
+    .then((rows) => {
+      console.log("✅ Data hentet:", rows);
 
-      const rows = json.table.rows.map((r) => ({
-  brand: r.c[0]?.v ?? "",
-  title: r.c[1]?.v ?? "",
-  price: r.c[2]?.v ?? "",
-  discount: r.c[3]?.v ?? "",
-  image_url: r.c[4]?.v ?? "",     // 🟢 riktig kolonne for bilde
-  product_url: r.c[5]?.v ?? "",   // 🟢 lenke til butikk
-  category: r.c[6]?.v ?? "",
-  gender: r.c[7]?.v ?? "",
-  subcategory: r.c[8]?.v ?? "",
-  image2: r.c[9]?.v ?? "",
-  image3: r.c[10]?.v ?? "",
-  image4: r.c[11]?.v ?? "",
-  description: r.c[12]?.v ?? "",
-  rating: r.c[13]?.v ?? "",
-}));
-
-
-      console.log("✅ Data hentet:", rows.length, "produkter");
-
-      if (!rows.length) {
+      if (!rows || !rows.length) {
         productGrid.innerHTML = "<p>Ingen produkter funnet.</p>";
         return;
       }
@@ -49,38 +29,35 @@ document.addEventListener("DOMContentLoaded", () => {
       productGrid.innerHTML = "";
 
       rows.forEach((row) => {
-        const {
-          brand,
-          title,
-          price,
-          discount,
-          image_url,
-          product_url,
-          category,
-          gender,
-          subcategory,
-          description,
-          rating,
-          image2,
-          image3,
-          image4,
-        } = row;
+        const brand = row.brand || "";
+        const title = row.title || "";
+        const price = row.price || "";
+        const discount = row.discount || "";
+        const image_url = row.image_url || "";
+        const product_url = row.product_url || "";
+        const category = row.category || "";
+        const gender = row.gender || "";
+        const subcategory = row.subcategory || "";
+        const image2 = row.image2 || "";
+        const image3 = row.image3 || "";
+        const image4 = row.image4 || "";
+        const description = row.description || "";
+        const rating = row.rating || "";
 
         if (!title || !image_url) return;
 
         const favorites = getFavorites();
         const isFav = favorites.some((fav) => fav.title === title);
 
-        // ✅ Bedre rabattlogikk
+        // ✅ Rabattformat – håndterer både "20" og "0.2"
         let discountDisplay = "";
-if (discount) {
-  const cleanValue = parseFloat(discount.toString().replace("%", "").trim());
-  if (!isNaN(cleanValue)) {
-    const displayValue = cleanValue < 1 ? cleanValue * 100 : cleanValue;
-    discountDisplay = `${displayValue}% OFF`;
-  }
-}
-
+        if (discount) {
+          const clean = parseFloat(discount.toString().replace("%", "").trim());
+          if (!isNaN(clean)) {
+            const displayValue = clean < 1 ? clean * 100 : clean;
+            discountDisplay = `${displayValue}% OFF`;
+          }
+        }
 
         const card = document.createElement("div");
         card.classList.add("product-card");
@@ -100,7 +77,7 @@ if (discount) {
           <div class="product-info">
             <h3>${title}</h3>
             ${brand ? `<p class="brand">${brand}</p>` : ""}
-            ${price ? `<p class="price">${price}</p>` : ""}
+            ${price ? `<p class="price">${price} kr</p>` : ""}
             ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
             ${gender ? `<p class="gender">${gender}</p>` : ""}
             <a href="${product_url}" target="_blank" class="buy-btn">Se produkt</a>
