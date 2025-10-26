@@ -57,7 +57,6 @@ async function fetchDeals() {
     const items = rows.slice(1).map(r => {
       const obj = {};
       headers.forEach((h, i) => obj[h] = clean(r[i]));
-      // Normaliser priser (både tekst og tall)
       obj.old_price_raw = cleanNumber(obj.old_price);
       obj.new_price_raw = cleanNumber(obj.new_price);
       return obj;
@@ -83,7 +82,6 @@ function renderDeals(deals) {
         const hasOld = deal.old_price_raw != null;
         const hasNew = deal.new_price_raw != null;
 
-        // Kalkuler rabattprosent
         const discount = (hasOld && hasNew && deal.old_price_raw > 0)
           ? Math.round((1 - (deal.new_price_raw / deal.old_price_raw)) * 100)
           : null;
@@ -97,8 +95,8 @@ function renderDeals(deals) {
 
               ${(hasOld || hasNew) ? `
                 <p class="price">
-                  ${hasOld ? `<span class="old-price">${deal.old_price} kr</span>` : ``}
-                  ${hasNew ? `<span class="new-price">${deal.new_price} kr</span>` : ``}
+                  ${hasOld ? `<span class="old-price">${deal.old_price}</span>` : ``}
+                  ${hasNew ? `<span class="new-price">${deal.new_price}</span>` : ``}
                   ${discount != null ? `<span class="discount-badge">−${discount}%</span>` : ``}
                 </p>
               ` : ``}
@@ -110,3 +108,11 @@ function renderDeals(deals) {
           </div>
         `;
       }).join("")}
+    </div>
+  `;
+}
+
+/* ---------------------------------------------------
+   KJØR
+   --------------------------------------------------- */
+fetchDeals();
