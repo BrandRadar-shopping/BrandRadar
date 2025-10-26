@@ -1980,6 +1980,29 @@ body {
 }
 
 
+/* DEAL PRICES */
+.price {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.old-price {
+  color: #888;
+  text-decoration: line-through;
+  margin-right: 0.4rem;
+}
+
+.new-price {
+  color: #e63946;
+  font-weight: 600;
+}
+
+/* DATE / VALIDITY */
+.valid-until {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
 
 
 
