@@ -57,8 +57,7 @@ function renderDeals(deals) {
   `;
 }
 
-    </div>
-  `;
-}
+fetchDeals();
+
 
 fetchDeals();
