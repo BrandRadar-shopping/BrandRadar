@@ -73,13 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ✅ Bedre rabattlogikk
         let discountDisplay = "";
-        if (discount) {
-          const cleanValue = parseFloat(discount.toString().replace("%", "").trim());
-          if (!isNaN(cleanValue)) {
-            const displayValue = cleanValue < 1 ? cleanValue * 100 : cleanValue;
-            discountDisplay = `${displayValue}% OFF`;
-          }
-        }
+if (discount) {
+  const cleanValue = parseFloat(discount.toString().replace("%", "").trim());
+  if (!isNaN(cleanValue)) {
+    const displayValue = cleanValue < 1 ? cleanValue * 100 : cleanValue;
+    discountDisplay = `${displayValue}% OFF`;
+  }
+}
+
 
         const card = document.createElement("div");
         card.classList.add("product-card");
