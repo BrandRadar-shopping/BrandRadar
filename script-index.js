@@ -5,8 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  const SHEET_ID =
-    "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
+  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
 
@@ -15,7 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+ const url = `https://opensheet.best/${SHEET_ID}/${SHEET_NAME}`;
+
 
   fetch(url)
     .then((res) => {
