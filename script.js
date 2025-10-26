@@ -1,18 +1,16 @@
 // ======================================================
-// BrandRadar.shop – Clean Mega Menu System (final version)
+// BRANDRADAR.SHOP – FINAL MEGA MENU SCRIPT
 // ======================================================
-
-console.log("✅ script.js loaded");
-document.addEventListener("DOMContentLoaded", initMegaMenu);
-
-function initMegaMenu() {
-  // --- alt det du allerede har i script.js her ---
-}
-
+// Formål: Håndterer hover, aktivering og deaktivering
+//         av mega-menyen på tvers av alle kategorier.
+// ------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ Mega menu script running...");
+  console.log("✅ Mega menu script loaded and ready");
 
+  // ==========================
+  // 1. HENT ELEMENTER
+  // ==========================
   const navItems = document.querySelectorAll(".nav-item");
   const megaMenu = document.getElementById("mega-menu");
   const megaContents = document.querySelectorAll(".mega-content");
@@ -24,52 +22,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let hideTimer = null;
 
-  // ------------------------------------------------------
-  // Når du holder musen over et element i kategorilinja
-  // ------------------------------------------------------
+  // ==========================
+  // 2. VIS / SKJUL MEGA-MENY
+  // ==========================
+
+  // Når bruker holder musen over kategori-knappen
   navItems.forEach((item) => {
     item.addEventListener("mouseenter", () => {
       clearTimeout(hideTimer);
       const target = item.dataset.target;
 
-      // Vis menyen
+      // Vis selve menyboksen
       megaMenu.classList.add("active");
 
-      // Vis kun riktig innhold
+      // Vis riktig innhold for valgt kategori
       megaContents.forEach((content) => {
         content.classList.toggle("active", content.id === target);
       });
 
-      // Marker aktiv knapp
+      // Marker aktiv kategori i topp-linja
       navItems.forEach((n) => n.classList.remove("active"));
       item.classList.add("active");
     });
 
-    // Når musen forlater knappen, start "skjul-timer"
+    // Når musen forlater knapp – start liten timer før menyen forsvinner
     item.addEventListener("mouseleave", () => {
-      hideTimer = setTimeout(() => {
-        megaMenu.classList.remove("active");
-        navItems.forEach((n) => n.classList.remove("active"));
-        megaContents.forEach((c) => c.classList.remove("active"));
-      }, 200); // 0.2 sek forsinkelse
+      hideTimer = setTimeout(() => closeMegaMenu(), 200);
     });
   });
 
-  // ------------------------------------------------------
-  // Når musen beveger seg over selve menyen
-  // ------------------------------------------------------
-  megaMenu.addEventListener("mouseenter", () => {
-    clearTimeout(hideTimer);
+  // ==========================
+  // 3. INTERAKSJON INNE I MENYEN
+  // ==========================
+  megaMenu.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+  megaMenu.addEventListener("mouseleave", () => {
+    hideTimer = setTimeout(() => closeMegaMenu(), 200);
   });
 
-  // Når musen forlater menyen helt
-  megaMenu.addEventListener("mouseleave", () => {
-    hideTimer = setTimeout(() => {
-      megaMenu.classList.remove("active");
-      navItems.forEach((n) => n.classList.remove("active"));
-      megaContents.forEach((c) => c.classList.remove("active"));
-    }, 200);
-  });
+  // ==========================
+  // 4. LUKKEFUNKSJON
+  // ==========================
+  function closeMegaMenu() {
+    megaMenu.classList.remove("active");
+    navItems.forEach((n) => n.classList.remove("active"));
+    megaContents.forEach((c) => c.classList.remove("active"));
+  }
 });
 
 
