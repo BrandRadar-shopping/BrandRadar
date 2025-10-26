@@ -16,12 +16,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------------------------------
-  // Favoritt-hjelpefunksjoner
+  // ❤️ Favoritt-funksjoner
   // -------------------------------
-  const getFavorites = () => JSON.parse(localStorage.getItem("favorites") || "[]");
-  const saveFavorites = (favs) => localStorage.setItem("favorites", JSON.stringify(favs));
-  const isFavorite = (title) => getFavorites().some((f) => f.title === title);
-  const toggleFavorite = (title, product) => {
+  function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+  }
+
+  function saveFavorites(favs) {
+    localStorage.setItem("favorites", JSON.stringify(favs));
+  }
+
+  function isFavorite(title) {
+    return getFavorites().some((f) => f.title === title);
+  }
+
+  function toggleFavorite(title, product) {
     let favs = getFavorites();
     if (isFavorite(title)) {
       favs = favs.filter((f) => f.title !== title);
@@ -29,19 +38,20 @@ document.addEventListener("DOMContentLoaded", () => {
       favs.push(product);
     }
     saveFavorites(favs);
-  };
+  }
 
   // -------------------------------
-  // CSV-henting
+  // 📦 Hent CSV-data
   // -------------------------------
   fetch(CSV_URL)
     .then((res) => res.text())
     .then((csvText) => {
-      // Rens linjer og håndter kommaer i felt med anførselstegn
       const rows = csvText
         .trim()
         .split(/\r?\n/)
-        .map((line) => line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map((v) => v.replace(/^"|"$/g, "")) || []);
+        .map((line) =>
+          line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map((v) => v.replace(/^"|"$/g, "")) || []
+        );
 
       const headers = rows.shift().map((h) => h.trim().toLowerCase());
       const products = rows
@@ -60,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // -------------------------------
-      // Bygg produktkort
+      // 🧱 Bygg produktkort
       // -------------------------------
       products.forEach((item) => {
         const discountDisplay = item.discount
@@ -92,14 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-        // Klikk på kort → product.html
+        // Klikk → product.html
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           const params = new URLSearchParams(item);
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // ❤️ Favoritt-knapp
+        // ❤️ Favorittknapp
         const heart = card.querySelector(".fav-icon");
         heart.addEventListener("click", (e) => {
           e.stopPropagation();
