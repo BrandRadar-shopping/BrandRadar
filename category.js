@@ -1,14 +1,13 @@
 // ======================================================
-// BrandRadar.shop – Category Page Loader (GVIZ stable version)
+// BrandRadar.shop – Category Page Loader (CSV stable version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Category script running...");
 
-  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-";
-const SHEET_NAME = "BrandRadarProdukter";
-const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
-
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQyI7NUrnyXgIHlQp8-jw";
+  const SHEET_NAME = "BrandRadarProdukter";
+  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
   const productGrid = document.querySelector(".product-grid");
   const categoryTitle = document.querySelector(".category-title");
 
@@ -17,60 +16,47 @@ const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=ou
     return;
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const selectedCategory = urlParams.get("category");
-  const selectedSub = urlParams.get("subcategory");
-  const selectedGender = urlParams.get("gender");
+  const params = new URLSearchParams(window.location.search);
+  const selectedCategory = params.get("category");
+  const selectedSub = params.get("subcategory");
+  const selectedGender = params.get("gender");
 
   if (categoryTitle && selectedCategory) {
     categoryTitle.textContent =
       selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
   }
 
-// ==  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`; //==
-
-  fetch(url)
+  fetch(CSV_URL)
     .then((res) => res.text())
-    .then((text) => {
-      const json = JSON.parse(text.substring(47, text.length - 2));
-      const rows = json.table.rows.map((r) => ({
-        brand: r.c[0]?.v || "",
-        title: r.c[1]?.v || "",
-        price: r.c[2]?.v || "",
-        discount: r.c[3]?.v || "",
-        image_url: r.c[4]?.v || "",
-        product_url: r.c[5]?.v || "",
-        category: r.c[6]?.v || "",
-        gender: r.c[7]?.v || "",
-        subcategory: r.c[8]?.v || "",
-        description: r.c[9]?.v || "",
-        rating: r.c[10]?.v || "",
-        image2: r.c[11]?.v || "",
-        image3: r.c[12]?.v || "",
-        image4: r.c[13]?.v || "",
-      }));
+    .then((csvText) => {
+      const rows = csvText.split("\n").map((r) => r.split(","));
+      const headers = rows.shift().map((h) => h.trim());
+      const all = rows.map((r) =>
+        Object.fromEntries(headers.map((h, i) => [h, r[i]?.trim() || ""]))
+      );
 
-      let filtered = rows;
+      // Filtrering
+      let filtered = all;
       if (selectedCategory)
         filtered = filtered.filter(
-          (r) =>
-            r.category?.toLowerCase().trim() ===
+          (p) =>
+            p.category?.toLowerCase().trim() ===
             selectedCategory.toLowerCase().trim()
         );
       if (selectedSub)
         filtered = filtered.filter(
-          (r) =>
-            r.subcategory?.toLowerCase().trim() ===
+          (p) =>
+            p.subcategory?.toLowerCase().trim() ===
             selectedSub.toLowerCase().trim()
         );
       if (selectedGender)
         filtered = filtered.filter(
-          (r) =>
-            r.gender?.toLowerCase().trim() ===
+          (p) =>
+            p.gender?.toLowerCase().trim() ===
             selectedGender.toLowerCase().trim()
         );
 
-      console.log("✅ Filtrert:", filtered.length);
+      console.log(`✅ Filtrert: ${filtered.length} produkter`);
 
       productGrid.innerHTML = "";
       if (!filtered.length) {
@@ -78,40 +64,23 @@ const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=ou
         return;
       }
 
-      filtered.forEach((row) => {
-        const {
-          brand,
-          title,
-          price,
-          discount,
-          image_url,
-          product_url,
-          rating,
-          gender,
-        } = row;
-        if (!title || !image_url) return;
-
-        let discountDisplay = "";
-        if (discount) {
-          const clean = parseFloat(discount.toString().replace("%", "").trim());
-          if (!isNaN(clean)) {
-            const displayValue = clean < 1 ? clean * 100 : clean;
-            discountDisplay = `${displayValue}% OFF`;
-          }
-        }
+      filtered.forEach((item) => {
+        const discountDisplay = item.discount
+          ? `${item.discount.replace("%", "").trim()}% OFF`
+          : "";
 
         const card = document.createElement("div");
         card.classList.add("product-card");
         card.innerHTML = `
           ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
-          <img src="${image_url}" alt="${title}">
+          <img src="${item.image_url}" alt="${item.title}">
           <div class="product-info">
-            <h3>${title}</h3>
-            ${brand ? `<p class="brand">${brand}</p>` : ""}
-            ${price ? `<p class="price">${price} kr</p>` : ""}
-            ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
-            ${gender ? `<p class="gender">${gender}</p>` : ""}
-            <a href="${product_url}" target="_blank" class="buy-btn">Se produkt</a>
+            <h3>${item.title}</h3>
+            ${item.brand ? `<p class="brand">${item.brand}</p>` : ""}
+            ${item.price ? `<p class="price">${item.price} kr</p>` : ""}
+            ${item.rating ? `<p class="rating">⭐ ${item.rating}</p>` : ""}
+            ${item.gender ? `<p class="gender">${item.gender}</p>` : ""}
+            <a href="${item.product_url}" target="_blank" class="buy-btn">Se produkt</a>
           </div>
         `;
         productGrid.appendChild(card);
@@ -119,7 +88,7 @@ const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=ou
     })
     .catch((err) => {
       console.error("❌ Feil ved lasting av produkter:", err);
-      productGrid.innerHTML = `<p>Kunne ikke laste produkter akkurat nå.</p>`;
+      productGrid.innerHTML = "<p>Kunne ikke laste produkter akkurat nå 😞</p>";
     });
 });
 
