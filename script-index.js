@@ -5,9 +5,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQyI7NUrnyXgIHlQp8-jw";
-  const SHEET_NAME = "BrandRadarProdukter";
-  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
+
   const productGrid = document.querySelector(".product-grid");
 
   if (!productGrid) {
