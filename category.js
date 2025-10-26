@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Category script running...");
 
   const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-";
-  const SHEET_NAME = "BrandRadarProdukter";
+const SHEET_NAME = "BrandRadarProdukter";
+const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
   const productGrid = document.querySelector(".product-grid");
   const categoryTitle = document.querySelector(".category-title");
 
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+// ==  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`; //==
 
   fetch(url)
     .then((res) => res.text())
