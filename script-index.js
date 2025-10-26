@@ -1,11 +1,11 @@
 // ======================================================
-// BrandRadar.shop – Google Sheets Product Loader (OpenSheet stable version)
+// BrandRadar.shop – Google Sheets Product Loader (GVIZ stable version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQyI7NUrnyXgIHlQp8-jw";
+  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
 
@@ -14,54 +14,67 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
   fetch(url)
-    .then((res) => res.json())
-    .then((rows) => {
-      console.log("✅ Data hentet:", rows);
+    .then((res) => res.text())
+    .then((text) => {
+      const json = JSON.parse(text.substring(47, text.length - 2));
+      const rows = json.table.rows.map((r) => ({
+        brand: r.c[0]?.v || "",
+        title: r.c[1]?.v || "",
+        price: r.c[2]?.v || "",
+        discount: r.c[3]?.v || "",
+        image_url: r.c[4]?.v || "",
+        product_url: r.c[5]?.v || "",
+        category: r.c[6]?.v || "",
+        gender: r.c[7]?.v || "",
+        subcategory: r.c[8]?.v || "",
+        description: r.c[9]?.v || "",
+        rating: r.c[10]?.v || "",
+        image2: r.c[11]?.v || "",
+        image3: r.c[12]?.v || "",
+        image4: r.c[13]?.v || "",
+      }));
 
-      if (!rows || !rows.length) {
-        productGrid.innerHTML = "<p>Ingen produkter funnet.</p>";
-        return;
-      }
+      console.log("✅ Produkter hentet:", rows.length);
 
       productGrid.innerHTML = "";
 
       rows.forEach((row) => {
-        const brand = row.brand || "";
-        const title = row.title || "";
-        const price = row.price || "";
-        const discount = row.discount || "";
-        const image_url = row.image_url || "";
-        const product_url = row.product_url || "";
-        const category = row.category || "";
-        const gender = row.gender || "";
-        const subcategory = row.subcategory || "";
-        const image2 = row.image2 || "";
-        const image3 = row.image3 || "";
-        const image4 = row.image4 || "";
-        const description = row.description || "";
-        const rating = row.rating || "";
+        const {
+          brand,
+          title,
+          price,
+          discount,
+          image_url,
+          product_url,
+          gender,
+          rating,
+          category,
+          subcategory,
+          image2,
+          image3,
+          image4,
+          description,
+        } = row;
 
         if (!title || !image_url) return;
 
         const favorites = getFavorites();
         const isFav = favorites.some((fav) => fav.title === title);
 
-        // ✅ Rabattformat – håndterer både "20" og "0.2"
         let discountDisplay = "";
         if (discount) {
-          const clean = parseFloat(discount.toString().replace("%", "").trim());
-          if (!isNaN(clean)) {
-            const displayValue = clean < 1 ? clean * 100 : clean;
+          const cleanValue = parseFloat(discount.toString().replace("%", "").trim());
+          if (!isNaN(cleanValue)) {
+            const displayValue = cleanValue < 1 ? cleanValue * 100 : cleanValue;
             discountDisplay = `${displayValue}% OFF`;
           }
         }
 
         const card = document.createElement("div");
         card.classList.add("product-card");
-
         card.innerHTML = `
           ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
           <div class="fav-icon ${isFav ? "active" : ""}">
@@ -72,8 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
               6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
-
-          <img src="${image_url}" alt="${title}" />
+          <img src="${image_url}" alt="${title}">
           <div class="product-info">
             <h3>${title}</h3>
             ${brand ? `<p class="brand">${brand}</p>` : ""}
@@ -106,25 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // ❤️ Favoritt-knapp
+        // ❤️ Favorittknapp
         const heart = card.querySelector(".fav-icon");
         heart.addEventListener("click", (e) => {
           e.stopPropagation();
           const product = {
-            brand,
-            title,
-            price,
-            discount,
-            image_url,
-            image2,
-            image3,
-            image4,
-            url: product_url,
-            gender,
-            category,
-            subcategory,
-            description,
-            rating,
+            brand, title, price, discount, image_url,
+            image2, image3, image4, url: product_url,
+            gender, category, subcategory, description, rating,
           };
           const favorites = getFavorites();
           const isAlreadyFav = favorites.some((f) => f.title === title);
@@ -154,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((err) => {
       console.error("❌ Feil ved lasting av produkter:", err);
-      productGrid.innerHTML =
-        "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
+      productGrid.innerHTML = `<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>`;
     });
 });
+
 
