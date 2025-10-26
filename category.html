@@ -3,43 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kategori | BrandRadar</title>
+  <title>Produkter | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
   <!-- ================================
-       HEADER (samme som de andre sidene)
+       HEADER (samme som index)
        ================================ -->
   <header class="main-header">
     <div class="header-inner">
       <div class="logo">BrandRadar</div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Søk produkter eller merker..." />
+        <button>🔍</button>
+      </div>
+
       <nav class="main-nav">
         <a href="index.html">Home</a>
         <a href="news.html">News</a>
         <a href="brands.html">Brands</a>
-        <a href="favoritter.html">Favoritter (<span id="favorite-count">0</span>)</a>
+        <a href="favoritter.html">Favoritter</a>
       </nav>
     </div>
   </header>
 
   <!-- ================================
-       CATEGORY HEADER (dynamisk)
+       KATEGORISIDE
        ================================ -->
-  <section class="category-hero">
-    <div class="category-hero-content">
+  <main class="category-page">
+    <div class="container">
       <h1 id="category-title">Produkter</h1>
-      <p id="category-subtitle">Utforsk utvalget fra våre partnere</p>
-    </div>
-  </section>
+      <p id="category-description" class="category-description"></p>
 
-  <!-- ================================
-       PRODUKTGRID (fra Google Sheet)
-       ================================ -->
-  <section id="category-products" class="product-grid-section">
-    <div class="product-grid" id="category-grid"></div>
-  </section>
+      <div id="product-grid" class="product-grid"></div>
+
+      <!-- Fallback melding -->
+      <p id="no-results" class="no-results" style="display:none;">
+        Ingen produkter funnet i denne kategorien.
+      </p>
+    </div>
+  </main>
 
   <!-- ================================
        FOOTER
@@ -49,10 +54,11 @@
   </footer>
 
   <!-- ================================
-       SCRIPTS
+       SCRIPT IMPORTS
        ================================ -->
-  <script src="script-favorites.js"></script>
   <script src="category.js"></script>
 </body>
 </html>
+
+
 
