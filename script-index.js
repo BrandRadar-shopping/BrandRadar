@@ -1,11 +1,12 @@
 // ======================================================
-// BrandRadar.shop – Google Sheets Product Loader (clean + stable)
+// BrandRadar.shop – Google Sheets Product Loader (direct Google API version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  const SHEET_ID = "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
+  const SHEET_ID =
+    "2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
 
@@ -14,41 +15,61 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
- const url = `https://opensheet.best/${SHEET_ID}/${SHEET_NAME}`;
-
+  // Bruk Google Sheets direkte via gviz API
+  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
   fetch(url)
-    .then((res) => {
-      console.log("🟢 Response status:", res.status);
-      return res.json();
-    })
-    .then((rows) => {
-      console.log("✅ Parsed rows:", rows);
+    .then((res) => res.text())
+    .then((text) => {
+      // Fjern "Google-sikkerhetswrapper" rundt JSON-dataen
+      const json = JSON.parse(text.substring(47, text.length - 2));
 
-      if (!rows || !rows.length) {
-        throw new Error("Ingen rader funnet i Google Sheet");
+      // Gjør om tabell til objektliste
+      const rows = json.table.rows.map((r) => ({
+        brand: r.c[0]?.v || "",
+        title: r.c[1]?.v || "",
+        price: r.c[2]?.v || "",
+        discount: r.c[3]?.v || "",
+        image_url: r.c[4]?.v || "",
+        product_url: r.c[5]?.v || "",
+        category: r.c[6]?.v || "",
+        gender: r.c[7]?.v || "",
+        subcategory: r.c[8]?.v || "",
+        description: r.c[9]?.v || "",
+        rating: r.c[10]?.v || "",
+        image2: r.c[11]?.v || "",
+        image3: r.c[12]?.v || "",
+        image4: r.c[13]?.v || "",
+      }));
+
+      console.log("✅ Data hentet:", rows);
+
+      if (!rows.length) {
+        productGrid.innerHTML = "<p>Ingen produkter funnet.</p>";
+        return;
       }
 
       productGrid.innerHTML = "";
 
       rows.forEach((row) => {
-        // Tilpasset faktiske kolonnenavn fra Google Sheets
-        const brand = row.brand || row.Brand || "";
-        const title = row.title || row.Title || "";
-        const price = row.price || row.Price || "";
-        const discount = row.discount || row.Discount || "";
-        const image = row.image_url || row["Image URL"] || "";
-        const productUrl = row.product_url || row["Product URL"] || "#";
-        const category = row.category || row.Category || "";
-        const gender = row.gender || row.Gender || "";
-        const subcategory = row.subcategory || row.Subcategory || "";
-        const image2 = row.image2 || "";
-        const image3 = row.image3 || "";
-        const image4 = row.image4 || "";
-        const description = row.description || row.Description || "";
-        const rating = row.rating || row.Rating || "";
+        const {
+          brand,
+          title,
+          price,
+          discount,
+          image_url,
+          product_url,
+          category,
+          gender,
+          subcategory,
+          description,
+          rating,
+          image2,
+          image3,
+          image4,
+        } = row;
 
-        if (!title || !image) return;
+        if (!title || !image_url) return;
 
         const favorites = getFavorites();
         const isFav = favorites.some((fav) => fav.title === title);
@@ -72,14 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
             </svg>
           </div>
 
-          <img src="${image}" alt="${title}" />
+          <img src="${image_url}" alt="${title}" />
           <div class="product-info">
             <h3>${title}</h3>
             ${brand ? `<p class="brand">${brand}</p>` : ""}
             ${price ? `<p class="price">${price}</p>` : ""}
             ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
             ${gender ? `<p class="gender">${gender}</p>` : ""}
-            <a href="${productUrl}" target="_blank" class="buy-btn">Se produkt</a>
+            <a href="${product_url}" target="_blank" class="buy-btn">Se produkt</a>
           </div>
         `;
 
@@ -91,11 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
             title,
             price,
             discount,
-            image,
+            image_url,
             image2,
             image3,
             image4,
-            url: productUrl,
+            url: product_url,
             gender,
             category,
             subcategory,
@@ -114,11 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
             title,
             price,
             discount,
-            image,
+            image_url,
             image2,
             image3,
             image4,
-            url: productUrl,
+            url: product_url,
             gender,
             category,
             subcategory,
@@ -146,9 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const buyBtn = card.querySelector(".buy-btn");
-        if (buyBtn) {
-          buyBtn.addEventListener("click", (e) => e.stopPropagation());
-        }
+        if (buyBtn) buyBtn.addEventListener("click", (e) => e.stopPropagation());
 
         productGrid.appendChild(card);
       });
@@ -159,4 +178,3 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
     });
 });
-
