@@ -1,24 +1,49 @@
 // ======================================================
-// BrandRadar.shop – Product Loader (Google Sheets CSV version)
+// BrandRadar.shop – Product Loader (final CSV version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
+  // ✅ Direkte CSV-lenke fra publisering
+  const CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
 
   const productGrid = document.querySelector(".product-grid");
-
   if (!productGrid) {
     console.error("⚠️ Ingen .product-grid funnet på siden!");
     return;
   }
 
+  // -------------------------------
+  // Favoritt-hjelpefunksjoner
+  // -------------------------------
+  const getFavorites = () => JSON.parse(localStorage.getItem("favorites") || "[]");
+  const saveFavorites = (favs) => localStorage.setItem("favorites", JSON.stringify(favs));
+  const isFavorite = (title) => getFavorites().some((f) => f.title === title);
+  const toggleFavorite = (title, product) => {
+    let favs = getFavorites();
+    if (isFavorite(title)) {
+      favs = favs.filter((f) => f.title !== title);
+    } else {
+      favs.push(product);
+    }
+    saveFavorites(favs);
+  };
+
+  // -------------------------------
+  // CSV-henting
+  // -------------------------------
   fetch(CSV_URL)
     .then((res) => res.text())
     .then((csvText) => {
-      const rows = csvText.split("\n").map((r) => r.split(","));
-      const headers = rows.shift().map((h) => h.trim());
+      // Rens linjer og håndter kommaer i felt med anførselstegn
+      const rows = csvText
+        .trim()
+        .split(/\r?\n/)
+        .map((line) => line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map((v) => v.replace(/^"|"$/g, "")) || []);
+
+      const headers = rows.shift().map((h) => h.trim().toLowerCase());
       const products = rows
         .map((r) =>
           Object.fromEntries(headers.map((h, i) => [h, r[i]?.trim() || ""]))
@@ -29,6 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       productGrid.innerHTML = "";
 
+      if (!products.length) {
+        productGrid.innerHTML = "<p>Ingen produkter funnet.</p>";
+        return;
+      }
+
+      // -------------------------------
+      // Bygg produktkort
+      // -------------------------------
       products.forEach((item) => {
         const discountDisplay = item.discount
           ? `${item.discount.replace("%", "").trim()}% OFF`
@@ -36,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const card = document.createElement("div");
         card.classList.add("product-card");
+
         card.innerHTML = `
           ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
           <div class="fav-icon ${isFavorite(item.title) ? "active" : ""}">
@@ -46,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
               6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
+
           <img src="${item.image_url}" alt="${item.title}">
           <div class="product-info">
             <h3>${item.title}</h3>
@@ -57,14 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-        // Klikk → product.html
+        // Klikk på kort → product.html
         card.addEventListener("click", (e) => {
-          if (e.target.classList.contains("fav-icon")) return;
+          if (e.target.closest(".fav-icon")) return;
           const params = new URLSearchParams(item);
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // ❤️ Favorittknapp
+        // ❤️ Favoritt-knapp
         const heart = card.querySelector(".fav-icon");
         heart.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -80,4 +115,5 @@ document.addEventListener("DOMContentLoaded", () => {
       productGrid.innerHTML = "<p>Kunne ikke laste produkter 😞</p>";
     });
 });
+
 
