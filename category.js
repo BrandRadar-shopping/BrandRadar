@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryTitle.textContent = selectedCategory;
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
   fetch(url)
     .then((res) => res.text())
