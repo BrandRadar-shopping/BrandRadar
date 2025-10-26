@@ -1,11 +1,11 @@
 // ======================================================
-// BrandRadar.shop – Category Page Loader (direct Google API version)
+// BrandRadar.shop – Category Page Loader (Google Sheets via gviz)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Category script running...");
 
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnWQyI7NUrnyXgIHlQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const productGrid = document.querySelector(".product-grid");
   const categoryTitle = document.querySelector(".category-title");
@@ -15,9 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Les ?category= fra URL
+  // Les parametere fra URL
   const urlParams = new URLSearchParams(window.location.search);
   const selectedCategory = urlParams.get("category");
+  const selectedSub = urlParams.get("subcategory");
+  const selectedGender = urlParams.get("gender");
+
   if (categoryTitle && selectedCategory) {
     categoryTitle.textContent = selectedCategory;
   }
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((text) => {
       const json = JSON.parse(text.substring(47, text.length - 2));
 
+      // Mapp kolonner til objekter
       const rows = json.table.rows.map((r) => ({
         brand: r.c[0]?.v || "",
         title: r.c[1]?.v || "",
@@ -48,25 +52,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.log("✅ Alle produkter:", rows.length);
 
-      // 🔹 Filtrer etter valgt kategori
-      const filtered = selectedCategory
-        ? rows.filter(
-            (r) =>
-              r.category?.toLowerCase().trim() ===
-              selectedCategory.toLowerCase().trim()
-          )
-        : rows;
+      // --------------------------
+      // Filtrering
+      // --------------------------
+      let filtered = rows;
 
-      console.log("✅ Filtrert:", filtered.length, "produkter");
+      if (selectedCategory) {
+        filtered = filtered.filter(
+          (r) =>
+            r.category?.toLowerCase().trim() ===
+            selectedCategory.toLowerCase().trim()
+        );
+      }
 
+      if (selectedSub) {
+        filtered = filtered.filter(
+          (r) =>
+            r.subcategory?.toLowerCase().trim() ===
+            selectedSub.toLowerCase().trim()
+        );
+      }
+
+      if (selectedGender) {
+        filtered = filtered.filter(
+          (r) =>
+            r.gender?.toLowerCase().trim() ===
+            selectedGender.toLowerCase().trim()
+        );
+      }
+
+      console.log(
+        `✅ Filtrert: ${filtered.length} produkter (${selectedCategory || ""} ${
+          selectedSub || ""
+        } ${selectedGender || ""})`
+      );
+
+      // --------------------------
+      // Ingen produkter
+      // --------------------------
       productGrid.innerHTML = "";
-
       if (!filtered.length) {
-        productGrid.innerHTML =
-          "<p>Ingen produkter funnet i denne kategorien.</p>";
+        productGrid.innerHTML = `
+          <div class="no-results">
+            <p>Ingen produkter funnet i denne kategorien.</p>
+          </div>`;
         return;
       }
 
+      // --------------------------
+      // Render produkter
+      // --------------------------
       filtered.forEach((row) => {
         const {
           brand,
@@ -90,10 +125,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const favorites = getFavorites();
         const isFav = favorites.some((fav) => fav.title === title);
 
-        const discountDisplay =
-          discount && !isNaN(parseFloat(discount))
-            ? `${discount}% OFF`
-            : discount || "";
+        // Riktig rabatt-format
+        let discountDisplay = "";
+        if (discount) {
+          const cleanValue = parseFloat(
+            discount.toString().replace("%", "").trim()
+          );
+          if (!isNaN(cleanValue)) {
+            discountDisplay = `${cleanValue}% OFF`;
+          }
+        }
 
         const card = document.createElement("div");
         card.classList.add("product-card");
