@@ -3,184 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrandRadar News</title>
+  <title>Nyheter og trender | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- HEADER -->
+  <!-- ================================
+       HEADER
+       ================================ -->
   <header class="main-header">
     <div class="header-inner">
       <div class="logo">BrandRadar</div>
       <nav class="main-nav">
-  <a href="index.html">Home</a>
-  <a href="news.html" class="active">News</a>
-  <a href="brands.html">Brands</a>
-  <a href="favoritter.html">Favoritter (<span id="favorite-count">0</span>)</a>
-</nav>
-  </div>
+        <a href="index.html">Home</a>
+        <a href="news.html" class="active">News</a>
+        <a href="brands.html">Brands</a>
+        <a href="favoritter.html">Favoritter (<span id="favorite-count">0</span>)</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- PARTNER BANNER -->
+
+  <!-- ================================
+       PARTNER BANNER (dynamisk)
+       ================================ -->
   <section class="partner-banner">
-    <div class="partner-inner">
-      <img src="https://images.unsplash.com/photo-1606813902788-8d84f9488c12?w=400" alt="Partner-logo" />
-      <div class="partner-text">
-        <h3>Ukens Partner 💎</h3>
-        <p><strong>Boozt</strong> – 15% ekstra rabatt på høstkolleksjonen! Kun frem til søndag.</p>
-        <a href="#" class="partner-btn">Shop kampanjen</a>
-      </div>
-    </div>
+    <!-- Dynamisk innhold lastes inn fra partnerBanner.js -->
   </section>
+
 
   <!-- ================================
-     UKENS DEALS
-     ================================ -->
-<section id="deals-section" class="deals-section"></section>
+       UKENS DEALS (dynamisk)
+       ================================ -->
+  <section id="deals-section" class="deals-section"></section>
+
 
   <!-- ================================
-     RADAR PICKS
-     ================================ -->
-<section id="picks-section" class="picks-section"></section>
+       RADAR PICKS (dynamisk)
+       ================================ -->
+  <section id="picks-section" class="picks-section"></section>
 
 
-  <!-- 🗞️ NYHETSSEKSJON  -->
+  <!-- ================================
+       NYHETER OG TRENDER (dynamisk)
+       ================================ -->
   <section class="news-section">
-  <h1>Nyheter og trender</h1>
+    <h1>Nyheter og trender</h1>
 
-  <div id="featured-news" class="featured-wrapper"></div>
+    <!-- Siste nytt -->
+    <div id="featured-news" class="featured-wrapper"></div>
 
-  <h2>Flere artikler</h2>
-  <div id="news-grid" class="news-grid"></div>
-</section>
-
-<script src="news.js"></script>
-
-
-  <!-- HERO -->
-  <section class="news-hero">
-    <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=1600" alt="Høsttrender" />
-    <div class="hero-content">
-      <h1>🔥 Høsttrender 2025</h1>
-      <p>Fra streetwear til premium comfort — dette er stilene som dominerer høsten.</p>
-      <a href="#" class="cta-btn">Se tilbudene</a>
-    </div>
+    <!-- Flere artikler -->
+    <h2>Flere artikler</h2>
+    <div id="news-grid" class="news-grid"></div>
   </section>
 
-  <!-- NYHETER -->
-  <section class="news-section">
-    <h2>Siste nytt 📰</h2>
-    <p class="news-intro">Hold deg oppdatert på nye kolleksjoner, trender og eksklusive kampanjer.</p>
 
-    <div class="news-grid">
-      <article class="news-card">
-        <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2" alt="Nyhet 1" />
-        <div class="news-info">
-          <h3>Nike lanserer ny Air Max-serie</h3>
-          <p>Nikes nye kolleksjon blander retro-design med moderne teknologi – perfekt for høsten 2025.</p>
-          <a href="#" class="read-more">Les mer</a>
-        </div>
-      </article>
-
-      <article class="news-card">
-        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt="Nyhet 2" />
-        <div class="news-info">
-          <h3>Adidas satser bærekraftig 🌿</h3>
-          <p>Adidas lanserer sko laget av 100% resirkulerte materialer. Sjekk hele linjen her!</p>
-          <a href="#" class="read-more">Les mer</a>
-        </div>
-      </article>
-
-      <article class="news-card">
-        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322" alt="Nyhet 3" />
-        <div class="news-info">
-          <h3>H&M x North Face – uventet samarbeid</h3>
-          <p>To verdener møtes i et eksklusivt samarbeid som tar moteverdenen med storm.</p>
-          <a href="#" class="read-more">Les mer</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- UKENS DEALS -->
-  <section class="weekly-deals">
-  <h2>Ukens Deals 💸</h2>
-  <p class="deals-intro">Hent de beste tilbudene fra våre partnere — oppdatert daglig.</p>
-
-  <div class="deals-grid">
-    <article class="deal-card" data-type="discount">
-      <h3>🔥 25% på Nike hos Zalando</h3>
-      <p>Gjelder ut uka – rabatten aktiveres automatisk i kassen.</p>
-      <a href="#" class="deal-btn">Se tilbud</a>
-    </article>
-
-    <article class="deal-card" data-type="shipping">
-      <h3>💥 Boozt: Fri frakt + 15% ekstra rabatt</h3>
-      <p>Gjelder på utvalgte merker i høstkolleksjonen.</p>
-      <a href="#" class="deal-btn">Shop nå</a>
-    </article>
-
-    <article class="deal-card" data-type="outlet">
-      <h3>👟 Adidas Outlet opptil 60% rabatt</h3>
-      <p>Oppgrader garderoben – prisene gjelder så langt lageret rekker.</p>
-      <a href="#" class="deal-btn">Utforsk</a>
-    </article>
-  </div>
-</section>
-
-
-  <!-- RADAR PICKS -->
-  <section class="radar-picks">
-    <h2>Radar Picks 🔥</h2>
-    <div class="product-grid">
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1606813902788-8d84f9488c12?w=600" alt="Air Max" />
-        <h3>Nike Air Max 270</h3>
-        <a href="#" class="buy-btn">Se produkt</a>
-      </div>
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1606813902709-90b0a1f3af0b?w=600" alt="Asics" />
-        <h3>Asics Gel-Kayano</h3>
-        <a href="#" class="buy-btn">Se produkt</a>
-      </div>
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1593032465174-8b0426e6265d?w=600" alt="Samba OG" />
-        <h3>Adidas Samba OG</h3>
-        <a href="#" class="buy-btn">Se produkt</a>
-      </div>
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1632714933813-25f7dfcb7f1a?w=600" alt="New Balance 550" />
-        <h3>New Balance 550</h3>
-        <a href="#" class="buy-btn">Se produkt</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- BRAND SPOTLIGHT -->
-  <section class="brand-spotlight">
-    <h2>Ukens Brand 👕</h2>
-    <div class="brand-feature">
-      <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=800" alt="ASICS" />
-      <div class="brand-info">
-        <h3>ASICS</h3>
-        <p>Fra løp til lifestyle – ASICS viser hvorfor japansk presisjon og design har tatt over gatemoten i 2025.</p>
-        <a href="#" class="cta-btn">Utforsk ASICS</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
+  <!-- ================================
+       FOOTER
+       ================================ -->
   <footer class="footer">
     <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
   </footer>
-  
+
+
+  <!-- ================================
+       SCRIPT IMPORTS
+       ================================ -->
   <script src="script-favorites.js"></script>
   <script src="partnerBanner.js"></script>
-<script src="deals.js"></script>
-<script src="picks.js"></script>
-<script src="news.js"></script>
-
+  <script src="deals.js"></script>
+  <script src="picks.js"></script>
+  <script src="news.js"></script>
 
 </body>
 </html>
+
 
