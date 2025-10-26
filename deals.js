@@ -31,21 +31,32 @@ function renderDeals(deals) {
   container.innerHTML = `
     <h2>Ukens Deals 🔥</h2>
     <div class="deals-grid">
-      ${deals.map(item => `
-        <div class="deal-card fade-in ${item.highlight?.toLowerCase() === "true" ? "highlight" : ""}">
-          <img src="${item.image_url}" alt="${item.product_name}">
+      ${deals.map(deal => `
+        <div class="deal-card fade-in ${deal.highlight?.toLowerCase() === "true" ? "highlight" : ""}">
+          ${deal.image_url ? `<img src="${deal.image_url}" alt="${deal.product_name}">` : ""}
           <div class="deal-info">
-            <h3>${item.brand}</h3>
-            <p class="product">${item.product_name}</p>
-            <p class="price">
-              ${item.old_price ? `<span class="old">${item.old_price} kr</span>` : ""}
-              <span class="new">${item.new_price} kr</span>
-            </p>
-            <p class="valid">Gyldig til ${item.valid_until}</p>
-            <a href="${item.link}" target="_blank" class="deal-btn">Se tilbud</a>
+            <h3>${deal.brand}</h3>
+            <p class="product">${deal.product_name}</p>
+            
+            ${deal.old_price && deal.new_price ? `
+              <p class="price">
+                <span class="old-price">${deal.old_price} kr</span>
+                <span class="new-price">${deal.new_price} kr</span>
+              </p>
+            ` : deal.new_price ? `
+              <p class="price"><span class="new-price">${deal.new_price} kr</span></p>
+            ` : ""}
+            
+            ${deal.valid_until ? `<p class="valid-until">Gyldig til ${deal.valid_until}</p>` : ""}
+            
+            <a href="${deal.link}" target="_blank" class="deal-btn">Se tilbud</a>
           </div>
         </div>
       `).join("")}
+    </div>
+  `;
+}
+
     </div>
   `;
 }
