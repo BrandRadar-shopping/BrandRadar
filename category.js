@@ -2,8 +2,7 @@
    CATEGORY PAGE – Dynamic Filter + Google Sheets Fetch
    =================================================== */
 
-const CATEGORY_SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTaqDWMlCoMetnsCJ_x09Yhnj1m_o0bhQX18gCgGLs9MH6huFR5DQkE5fNiLTZ8g-Z3B6JeYT5cj7B/pub?output=csv"; // 👈 bytt til riktig BrandRadarProdukter-URL
+const CATEGORY_SHEET_URL = "https://opensheet.elk.sh/2PACX-1vQWnu8IsFKWjitEI3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUUs_oF1737lGxAtAa2NGlRq0ThN-/BrandRadarProdukter"; // 👈 bytt til riktig BrandRadarProdukter-URL
 
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
