@@ -1,59 +1,22 @@
 // ======================================================
-// BrandRadar.shop – Product Loader (final CSV version)
+// BRANDRADAR.SHOP – PRODUCT LOADER (CSV VERSION, STABIL)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Product script running with favorites...");
 
-  // ✅ Direkte CSV-lenke fra publisering
+  // 📦 Bruk CSV fra Google Sheets (offentlig publisert)
   const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWnu8IsFKWjitEl3Jv-ZjwnFHF63q_3YTYNNoJRWEoCWNOjlpUCUs_oF1737lGxAtAa2NGlRq0ThN-/pub?output=csv";
 
   const productGrid = document.querySelector(".product-grid");
-  if (!productGrid) {
-    console.error("⚠️ Ingen .product-grid funnet på siden!");
-    return;
-  }
+  if (!productGrid) return console.error("⚠️ Ingen .product-grid funnet!");
 
-  // -------------------------------
-  // ❤️ Favoritt-funksjoner
-  // -------------------------------
-  function getFavorites() {
-    return JSON.parse(localStorage.getItem("favorites") || "[]");
-  }
-
-  function saveFavorites(favs) {
-    localStorage.setItem("favorites", JSON.stringify(favs));
-  }
-
-  function isFavorite(title) {
-    return getFavorites().some((f) => f.title === title);
-  }
-
-  function toggleFavorite(title, product) {
-    let favs = getFavorites();
-    if (isFavorite(title)) {
-      favs = favs.filter((f) => f.title !== title);
-    } else {
-      favs.push(product);
-    }
-    saveFavorites(favs);
-  }
-
-  // -------------------------------
-  // 📦 Hent CSV-data
-  // -------------------------------
   fetch(CSV_URL)
     .then((res) => res.text())
     .then((csvText) => {
-      const rows = csvText
-        .trim()
-        .split(/\r?\n/)
-        .map((line) =>
-          line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map((v) => v.replace(/^"|"$/g, "")) || []
-        );
-
-      const headers = rows.shift().map((h) => h.trim().toLowerCase());
+      const rows = csvText.split("\n").map((r) => r.split(","));
+      const headers = rows.shift().map((h) => h.trim());
       const products = rows
         .map((r) =>
           Object.fromEntries(headers.map((h, i) => [h, r[i]?.trim() || ""]))
@@ -64,37 +27,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       productGrid.innerHTML = "";
 
-      if (!products.length) {
-        productGrid.innerHTML = "<p>Ingen produkter funnet.</p>";
-        return;
-      }
-
-      // -------------------------------
-      // 🧱 Bygg produktkort
-      // -------------------------------
       products.forEach((item) => {
+        // --- Rabatt ---
         let discountDisplay = "";
-if (item.discount && !isNaN(parseFloat(item.discount))) {
-  const cleanValue = parseFloat(item.discount);
-  const percent = cleanValue < 1 ? cleanValue * 100 : cleanValue; // støtter både 0.2 og 20
-  discountDisplay = `${percent}% OFF`;
-}
+        if (item.discount) {
+          const clean = parseFloat(item.discount.toString().replace("%", "").trim());
+          if (!isNaN(clean)) {
+            const displayValue = clean < 1 ? clean * 100 : clean;
+            discountDisplay = `${displayValue}% OFF`;
+          }
+        }
 
+        const isFav = getFavorites().some((f) => f.title === item.title);
+
+        // --- Kortoppsett ---
         const card = document.createElement("div");
         card.classList.add("product-card");
-
         card.innerHTML = `
           ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
-          <div class="fav-icon ${isFavorite(item.title) ? "active" : ""}">
+          <div class="fav-icon ${isFav ? "active" : ""}">
             <svg viewBox="0 0 24 24" class="heart-icon">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
-              2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 
-              14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+              2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+              14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
               6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
 
-          <img src="${item.image_url}" alt="${item.title}">
+          <img src="${item.image_url}" alt="${item.title}" />
           <div class="product-info">
             <h3>${item.title}</h3>
             ${item.brand ? `<p class="brand">${item.brand}</p>` : ""}
@@ -105,18 +65,18 @@ if (item.discount && !isNaN(parseFloat(item.discount))) {
           </div>
         `;
 
-        // Klikk → product.html
+        // --- Klikk på kort: åpne product.html ---
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           const params = new URLSearchParams(item);
           window.location.href = `product.html?${params.toString()}`;
         });
 
-        // ❤️ Favorittknapp
+        // --- Klikk på hjerte ---
         const heart = card.querySelector(".fav-icon");
         heart.addEventListener("click", (e) => {
           e.stopPropagation();
-          toggleFavorite(item.title, item);
+          toggleFavorite(item);
           heart.classList.toggle("active");
         });
 
@@ -128,5 +88,6 @@ if (item.discount && !isNaN(parseFloat(item.discount))) {
       productGrid.innerHTML = "<p>Kunne ikke laste produkter 😞</p>";
     });
 });
+
 
 
