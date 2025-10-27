@@ -7,55 +7,94 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 🌐 NAVBAR -->
+  <!-- 🔝 HEADER + MEGA-MENY (identisk med index.html) -->
   <header>
     <nav class="navbar">
-      <a href="index.html" class="logo">BrandRadar</a>
-      <ul class="nav-links">
-        <li><a href="brands.html">Merker</a></li>
-        <li><a href="news.html" class="active">Nyheter</a></li>
-        <li><a href="favoritter.html">Favoritter</a></li>
-      </ul>
+      <div class="nav-left">
+        <a href="index.html" class="logo">BrandRadar</a>
+      </div>
+      <div class="nav-center">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="brands.html">Merker</a></li>
+          <li class="nav-item"><a href="news.html" class="active">Nyheter</a></li>
+          <li class="nav-item"><a href="favoritter.html">Favoritter</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+      </div>
     </nav>
+
+    <!-- 🧭 Mega-meny -->
+    <div class="mega-menu" id="mega-menu">
+      <div class="mega-column">
+        <h4>Clothing</h4>
+        <ul>
+          <li><a href="category.html?category=T-Shirts">T-Shirts</a></li>
+          <li><a href="category.html?category=Hoodies">Hoodies</a></li>
+          <li><a href="category.html?category=Jackets">Jackets</a></li>
+        </ul>
+      </div>
+
+      <div class="mega-column">
+        <h4>Shoes</h4>
+        <ul>
+          <li><a href="category.html?category=Sneakers">Sneakers</a></li>
+          <li><a href="category.html?category=Boots">Boots</a></li>
+          <li><a href="category.html?category=Running">Running</a></li>
+        </ul>
+      </div>
+
+      <div class="mega-column">
+        <h4>Supplements</h4>
+        <ul>
+          <li><a href="category.html?category=Protein">Protein</a></li>
+          <li><a href="category.html?category=Pre-Workout">Pre-Workout</a></li>
+          <li><a href="category.html?category=Proteinbars">Proteinbars</a></li>
+        </ul>
+      </div>
+    </div>
   </header>
 
+  <!-- 🔽 MAIN INNHOLD -->
   <main class="news-page">
-    <!-- 🧩 Partnerbanner -->
-    <section class="partner-banner"></section>
+    <!-- 🧩 1. Partner Banner -->
+    <section class="partner-banner section-padding"></section>
 
-    <!-- 🔥 Ukens Deals -->
+    <!-- 🔥 2. Ukens Deals -->
     <section id="deals-section" class="section-padding">
       <h2>Ukens Deals 🔥</h2>
       <div class="deals-grid loading">Laster deals...</div>
     </section>
 
-    <!-- 🛰️ Radar Picks -->
+    <!-- 🛰️ 3. Radar Picks -->
     <section id="picks-section" class="section-padding">
       <h2>Radar Picks 🛰️</h2>
       <div class="picks-grid loading">Laster picks...</div>
     </section>
 
-    <!-- ✨ Ukens Spotlight -->
+    <!-- ✨ 4. Ukens Spotlight -->
     <section id="featured-news" class="section-padding">
       <h2>Ukens Spotlight ✨</h2>
       <div class="featured-wrapper loading">Laster spotlight...</div>
     </section>
 
-    <!-- 📰 Nyhetsfeed -->
+    <!-- 🆕 5. Nye Produkter / Trender -->
     <section id="news-feed" class="section-padding">
-      <h2>Flere Produkter & Trender</h2>
-      <div id="news-grid" class="news-grid loading">Laster nyheter...</div>
+      <h2>Nye Produkter & Trender</h2>
+      <div id="news-grid" class="news-grid loading">Laster produkter...</div>
     </section>
   </main>
 
-  <!-- 🔗 Felles JS (meny, etc.) -->
-  <script src="../script JS/script.js"></script>
+  <!-- 📜 FOOTER (valgfritt) -->
 
-  <!-- 📡 Dynamiske seksjoner -->
-  <script src="../script JS/partnerBanner.js"></script>
-  <script src="../script JS/deals.js"></script>
-  <script src="../script JS/picks.js"></script>
-  <script src="../script JS/news.js"></script>
+  <!-- 🧠 Scripts -->
+  <script src="script.js"></script>
+  <script src="partnerBanner.js"></script>
+  <script src="deals.js"></script>
+  <script src="picks.js"></script>
+  <script src="news.js"></script>
 </body>
 </html>
+
 
