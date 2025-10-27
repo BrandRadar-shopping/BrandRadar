@@ -31,31 +31,34 @@
   <script src="news.js"></script>
 
   <!-- Dynamisk header -->
-  <script>
+<script>
+  // Laster felles header, så script.js (mega-meny), så script-favorites.js (teller)
   fetch("header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("header-placeholder").innerHTML = html;
 
-      const loadSequential = async () => {
-        const loadScript = (src) =>
-          new Promise((resolve) => {
-            const s = document.createElement("script");
-            s.src = src;
-            s.onload = resolve;
-            document.body.appendChild(s);
-          });
+      const loadScript = (src) =>
+        new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.body.appendChild(s);
+        });
 
-        await loadScript("script.js");
-        await loadScript("script-favorites.js");
+      (async () => {
+        // Viktig: rekkefølge
+        await loadScript("script.js");            // init mega-meny (krever at header er i DOM)
+        await loadScript("script-favorites.js");  // init favoritt-teller (krever #favorite-count)
+
+        // Oppdater teller hvis funksjon finnes
         if (typeof updateFavoriteCount === "function") updateFavoriteCount();
-        console.log("✅ Header, meny og teller aktivert");
-      };
-
-      loadSequential();
+        console.log("✅ Header, mega-meny og favoritt-teller aktivert på denne siden");
+      })().catch(e => console.error("❌ Script-load-feil:", e));
     })
-    .catch((err) => console.error("❌ Kunne ikke laste header:", err));
-  </script>
+    .catch(err => console.error("❌ Kunne ikke laste header:", err));
+</script>
 </body>
 </html>
 
