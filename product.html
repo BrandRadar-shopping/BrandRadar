@@ -8,90 +8,59 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
-  <!-- PRODUKTDETALJER -->
- <section class="product-detail">
-  <div class="product-container">
+  <section class="product-detail">
+    <div class="product-container">
+      <div class="product-gallery">
+        <img id="main-image" class="main-image" src="" alt="Produktbilde" />
+        <div class="thumbnails" id="thumbnails"></div>
+      </div>
 
-    <!-- Venstre: Bildegalleri -->
-    <div class="product-gallery">
-      <img id="main-image" class="main-image" src="" alt="Produktbilde" />
-      <div class="thumbnails" id="thumbnails"></div>
+      <div class="product-info">
+        <a href="#" id="back-btn" class="back-link">← Tilbake</a>
+        <h1 id="product-title"></h1>
+        <p id="product-brand" class="brand"></p>
+        <p id="product-price" class="price"></p>
+        <p id="product-discount" class="discount"></p>
+        <p id="product-rating" class="rating"></p>
+        <p id="product-desc" class="description"></p>
+        <button id="favorite-btn" class="fav-btn">❤️ Legg til favoritt</button>
+        <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
+      </div>
     </div>
+  </section>
 
-    <!-- Høyre: Produktinfo -->
-    <div class="product-info">
-      <a href="#" id="back-btn" class="back-link">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-  </svg>
-  Tilbake
-</a>
-      <h1 id="product-title"></h1>
-      <p id="product-brand" class="brand"></p>
-      <p id="product-price" class="price"></p>
-      <p id="product-discount" class="discount"></p>
-      <p id="product-rating" class="rating"></p>
-      <p id="product-desc" class="description"></p>
-
-      <button id="favorite-btn" class="fav-btn">❤️ Legg til favoritt</button>
-      <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
-    </div>
-
-  </div>
-</section>
-
-
-  <!-- SCRIPTS -->
-   <!-- Dynamisk lasting av header + mega-meny -->
-  <script>
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-placeholder").innerHTML = html;
-
-        // Kjør script.js etter at headeren faktisk er lagt til i DOM
-        setTimeout(() => {
-          const script = document.createElement("script");
-          script.src = "script.js"; // mega-meny-scriptet
-          script.onload = () => console.log("✅ Mega-meny aktivert på category.html");
-          document.body.appendChild(script);
-        }, 100);
-      })
-      .catch(err => console.error("❌ Kunne ikke laste header:", err));
-  </script>
-  <script src="script.js"></script>
   <script src="product.js"></script>
-  <script src="script-favorites.js"></script>
 
+  <!-- Dynamisk header -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("favorite-btn");
-      const params = new URLSearchParams(window.location.search);
-      const product = Object.fromEntries(params.entries());
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
 
-      if (!btn) return;
+      const loadSequential = async () => {
+        const loadScript = (src) =>
+          new Promise((resolve) => {
+            const s = document.createElement("script");
+            s.src = src;
+            s.onload = resolve;
+            document.body.appendChild(s);
+          });
 
-      const updateButtonState = () => {
-        const favorites = getFavorites();
-        const isFav = favorites.some(fav => fav.title === product.title);
-        btn.textContent = isFav ? "💔 Fjern fra favoritter" : "❤️ Legg til favoritt";
+        await loadScript("script.js");
+        await loadScript("script-favorites.js");
+        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+        console.log("✅ Header, meny og teller aktivert");
       };
 
-      btn.addEventListener("click", () => {
-        toggleFavorite(product);
-        updateButtonState();
-      });
-
-      updateButtonState();
-    });
+      loadSequential();
+    })
+    .catch((err) => console.error("❌ Kunne ikke laste header:", err));
   </script>
-
- 
- 
 </body>
 </html>
+
 
 
