@@ -156,7 +156,8 @@ fetch(url)
   productGrid.appendChild(card);
 }); // slutt på forEach
 
-
+});
+  
 .catch((err) => {
   console.error("❌ Feil ved lasting av produkter:", err);
   productGrid.innerHTML =
