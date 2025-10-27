@@ -33,45 +33,48 @@ fetch(url)
 
 
       rows.forEach(row => {
-  // direkte feltnavn fra JSON
-  const brand = row.Brand || "";
-  const title = row.Title || "";
-  const price = row.Price || "";
-  const discount = row.Discount || "";
-  const image = row["Image URL"] || "";
-  const productUrl = row["Product URL"] || "#";
-  const category = row.Category || "";
-  const gender = row.Gender || "";
-  const subcategory = row.Subcategory || "";
+  // Direkte feltnavn fra sheet (alle i lowercase + underscores)
+  const brand = row.brand || "";
+  const title = row.title || "";
+  const price = row.price || "";
+  const discount = row.discount || "";
+  const image = row.image_url || "";
+  const productUrl = row.product_url || "#";
+  const category = row.category || "";
+  const gender = row.gender || "";
+  const subcategory = row.subcategory || "";
   const image2 = row.image2 || "";
   const image3 = row.image3 || "";
   const image4 = row.image4 || "";
-  const description = row.Description || "";
-  const rating = row.Rating || "";
+  const description = row.description || "";
+  const rating = row.rating || "";
 
+  // Ikke tegn kort hvis det mangler nødvendig data
   if (!title || !image) return;
 
   const favorites = getFavorites();
   const isFav = favorites.some(fav => fav.title === title);
 
+  // Rabattvisning
   const discountDisplay =
-    discount && !isNaN(discount)
-      ? `${Math.round(discount * 100)}% OFF`
+    discount && !isNaN(parseFloat(discount))
+      ? `${Math.round(parseFloat(discount) * 100)}% OFF`
       : discount || "";
 
+  // Produktkort
   const card = document.createElement("div");
   card.classList.add("product-card");
 
   card.innerHTML = `
     ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
-   <div class="fav-icon ${isFav ? "active" : ""}">
-  <svg viewBox="0 0 24 24" class="heart-icon">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 
-    7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
-    16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 
-    11.54L12 21.35z"/>
-  </svg>
-</div>
+    <div class="fav-icon ${isFav ? "active" : ""}">
+      <svg viewBox="0 0 24 24" class="heart-icon">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+        2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 
+        14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+        6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
 
     <img src="${image}" alt="${title}" />
     <div class="product-info">
@@ -79,14 +82,15 @@ fetch(url)
       ${brand ? `<p class="brand">${brand}</p>` : ""}
       ${price ? `<p class="price">${price}</p>` : ""}
       ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
-      <p class="gender">${gender}</p>
+      ${gender ? `<p class="gender">${gender}</p>` : ""}
       <a href="${productUrl}" target="_blank" class="buy-btn">Se produkt</a>
     </div>
   `;
 
-  // klikk på kort → product.html
+  // Klikk på kort → produktvisning
   card.addEventListener("click", e => {
-    if (e.target.classList.contains("fav-icon")) return;
+    if (e.target.classList.contains("fav-icon") || e.target.closest(".buy-btn")) return;
+
     const params = new URLSearchParams({
       brand,
       title,
@@ -103,6 +107,7 @@ fetch(url)
       description,
       rating
     });
+
     window.location.href = `product.html?${params.toString()}`;
   });
 
@@ -133,12 +138,10 @@ fetch(url)
       const updated = favorites.filter(f => f.title !== title);
       saveFavorites(updated);
       heart.classList.remove("active", "pop");
-      heart.classList.add("unfav");
       showToast("❌ Fjernet fra favoritter", false);
     } else {
       favorites.push(product);
       saveFavorites(favorites);
-      heart.classList.remove("unfav");
       heart.classList.add("active", "pop");
       showToast("❤️ Lagt til som favoritt", true);
     }
@@ -146,14 +149,13 @@ fetch(url)
     updateFavoriteCount();
   });
 
-const buyBtn = card.querySelector(".buy-btn");
-if (buyBtn) {
-  buyBtn.addEventListener("click", e => e.stopPropagation());
-}
+  // Hindre at "Se produkt"-knappen triggrer kortklikk
+  const buyBtn = card.querySelector(".buy-btn");
+  if (buyBtn) buyBtn.addEventListener("click", e => e.stopPropagation());
 
-productGrid.appendChild(card);
-}); // lukk forEach
-}) // ← FJERN det punktumet her
+  productGrid.appendChild(card);
+}); // slutt på forEach
+
 
 .catch((err) => {
   console.error("❌ Feil ved lasting av produkter:", err);
