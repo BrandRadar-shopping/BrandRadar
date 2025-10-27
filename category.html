@@ -11,17 +11,8 @@
   <!-- ================================
        HEADER (samme som på index)
        ================================ -->
-  <header class="main-header">
-    <div class="header-inner">
-      <div class="logo">BrandRadar</div>
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="news.html">News</a>
-        <a href="brands.html">Brands</a>
-        <a href="favoritter.html">Favoritter</a>
-      </nav>
-    </div>
-  </header>
+<div id="header-placeholder"></div>
+
 
   <!-- ================================
        CATEGORY HERO (dynamisk tekst)
@@ -50,8 +41,22 @@
   <!-- ================================
        SCRIPTS
        ================================ -->
+  
+
+
+  <script>
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
+      const script = document.createElement("script");
+      script.src = "script.js"; // mega-meny
+      document.body.appendChild(script);
+    });
+</script>
   <script src="script-favorites.js"></script>
   <script src="category.js"></script>
+
 </body>
 </html>
 
