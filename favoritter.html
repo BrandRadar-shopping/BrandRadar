@@ -8,25 +8,26 @@
 </head>
 <body>
 
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
+  <!-- FAVORITTER -->
   <section class="favorites-section">
     <h2>Dine favoritter ❤️</h2>
     <div id="favorites-grid" class="favorites-grid"></div>
   </section>
 
+  <!-- SIDE-SPESIFIKT SCRIPT -->
   <script src="script-favorites-page.js"></script>
 
-  <!-- Dynamisk header -->
+  <!-- DYNAMISK HEADER + MEGA-MENY + FAVORITT-TELLER -->
   <script>
-  // Laster felles header, så script.js (mega-meny), så script-favorites.js (teller)
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
 
-      const loadScript = (src) =>
-        new Promise((resolve, reject) => {
+        const loadScript = (src) => new Promise((resolve, reject) => {
           const s = document.createElement("script");
           s.src = src;
           s.onload = resolve;
@@ -34,18 +35,20 @@
           document.body.appendChild(s);
         });
 
-      (async () => {
-        // Viktig: rekkefølge
-        await loadScript("script.js");            // init mega-meny (krever at header er i DOM)
-        await loadScript("script-favorites.js");  // init favoritt-teller (krever #favorite-count)
+        (async () => {
+          await loadScript("script.js");            // Mega-meny
+          await loadScript("script-favorites.js");  // Favoritt-teller og logikk
+          
+          // Nå som logikken er klar, kjør oppdatering av visning
+          if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+          if (typeof renderFavoritesPage === "function") renderFavoritesPage();
 
-        // Oppdater teller hvis funksjon finnes
-        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
-        console.log("✅ Header, mega-meny og favoritt-teller aktivert på denne siden");
-      })().catch(e => console.error("❌ Script-load-feil:", e));
-    })
-    .catch(err => console.error("❌ Kunne ikke laste header:", err));
-</script>
+          console.log("✅ Header, mega-meny og favoritt-teller aktivert på favoritter.html");
+        })().catch(e => console.error("❌ Script-load-feil:", e));
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
+
 </body>
 </html>
 
