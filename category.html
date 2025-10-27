@@ -6,22 +6,16 @@
   <title>Kategori | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <!-- ================================
-       HEADER (samme som på index)
-       ================================ -->
-<div id="header-placeholder"></div>
 
+  <!-- HEADER-PLASSHOLDER (dynamisk import av header.html) -->
+  <div id="header-placeholder"></div>
 
   <!-- ================================
-       CATEGORY HERO (dynamisk tekst)
+       CATEGORY TITLE
        ================================ -->
-  <section class="category-hero">
-    <div class="category-hero-content">
-      <h1 id="category-title">Produkter</h1>
-      <p id="category-desc">Utforsk de beste valgene innen din valgte kategori.</p>
-    </div>
+  <section class="category-header">
+    <h1 class="category-title"></h1>
   </section>
 
   <!-- ================================
@@ -32,33 +26,32 @@
   </section>
 
   <!-- ================================
-       FOOTER
-       ================================ -->
-  <footer class="footer">
-    <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
-  </footer>
-
-  <!-- ================================
        SCRIPTS
        ================================ -->
-  
-
-
-  <script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
-      const script = document.createElement("script");
-      script.src = "script.js"; // mega-meny
-      document.body.appendChild(script);
-    });
-</script>
-  <script src="script-favorites.js"></script>
   <script src="category.js"></script>
+  <script src="script-favorites.js"></script>
+
+  <!-- Dynamisk lasting av header + mega-meny -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
+
+        // Kjør script.js etter at headeren faktisk er lagt til i DOM
+        setTimeout(() => {
+          const script = document.createElement("script");
+          script.src = "script.js"; // mega-meny-scriptet
+          script.onload = () => console.log("✅ Mega-meny aktivert på category.html");
+          document.body.appendChild(script);
+        }, 100);
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
 
 </body>
 </html>
+
 
 
 
