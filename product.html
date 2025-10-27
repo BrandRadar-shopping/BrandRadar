@@ -45,6 +45,16 @@
 
 
   <!-- SCRIPTS -->
+   <script>
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
+      const script = document.createElement("script");
+      script.src = "script.js";
+      document.body.appendChild(script);
+    });
+</script>
   <script src="script.js"></script>
   <script src="product.js"></script>
   <script src="script-favorites.js"></script>
@@ -72,16 +82,7 @@
     });
   </script>
 
-  <script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
-      const script = document.createElement("script");
-      script.src = "script.js";
-      document.body.appendChild(script);
-    });
-</script>
+ 
  
 </body>
 </html>
