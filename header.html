@@ -1,63 +1,36 @@
-<!-- =======================================================
-     BrandRadar – Felles Header + Mega-meny
-     ======================================================= -->
 <header class="main-header">
   <div class="header-inner">
+    <div class="logo">BrandRadar</div>
 
-    <!-- LOGO -->
-    <div class="logo">
-      <a href="index.html">BrandRadar</a>
-    </div>
-
-    <!-- SØKEFELT -->
     <div class="search-box">
       <input type="text" placeholder="Søk produkter eller merker..." />
       <button>🔍</button>
     </div>
 
-    <!-- NAVIGASJON -->
     <nav class="main-nav">
       <a href="index.html">Home</a>
       <a href="news.html">News</a>
       <a href="brands.html">Brands</a>
-      <a href="favoritter.html">
-        ❤️ Favoritter <span id="favorite-count">0</span>
-      </a>
+      <a href="favoritter.html">Favoritter (<span id="favorite-count">0</span>)</a>
     </nav>
   </div>
 
-  <!-- MEGA-MENY -->
-  <div id="mega-menu" class="mega-menu">
-    <div class="mega-menu-inner">
-      <div class="nav-categories">
-
-        <div class="nav-item" data-target="clothing">Clothing</div>
-        <div class="nav-item" data-target="shoes">Shoes</div>
-        <div class="nav-item" data-target="supplements">Supplements</div>
-      </div>
-
-      <!-- INNHOLD: CLOTHING -->
-      <div id="clothing" class="mega-content">
-        <a href="category.html?category=Clothing&gender=Men">Men</a>
-        <a href="category.html?category=Clothing&gender=Women">Women</a>
-        <a href="category.html?category=Clothing&subcategory=T-Shirts">T-Shirts</a>
-        <a href="category.html?category=Clothing&subcategory=Jackets">Jackets</a>
-      </div>
-
-      <!-- INNHOLD: SHOES -->
-      <div id="shoes" class="mega-content">
-        <a href="category.html?category=Shoes&gender=Men">Men</a>
-        <a href="category.html?category=Shoes&gender=Women">Women</a>
-        <a href="category.html?category=Shoes&subcategory=Sneakers">Sneakers</a>
-        <a href="category.html?category=Shoes&subcategory=Boots">Boots</a>
-      </div>
-
-      <!-- INNHOLD: SUPPLEMENTS -->
-      <div id="supplements" class="mega-content">
-        <a href="category.html?category=Supplements&subcategory=Protein">Protein</a>
-        <a href="category.html?category=Supplements&subcategory=Creatine">Creatine</a>
-        <a href="category.html?category=Supplements&subcategory=Proteinbars">Proteinbars</a>
-      </div>
+  <!-- MEGA MENY -->
+  <div id="mega-menu">
+    <div id="Clothing" class="mega-content">
+      <a href="category.html?category=Clothing&subcategory=Men">Men</a>
+      <a href="category.html?category=Clothing&subcategory=Women">Women</a>
+      <a href="category.html?category=Clothing&subcategory=Accessories">Accessories</a>
+    </div>
+    <div id="Shoes" class="mega-content">
+      <a href="category.html?category=Shoes&subcategory=Men">Men</a>
+      <a href="category.html?category=Shoes&subcategory=Women">Women</a>
+      <a href="category.html?category=Shoes&subcategory=Sneakers">Sneakers</a>
+    </div>
+    <div id="Supplements" class="mega-content">
+      <a href="category.html?category=Supplements&subcategory=Protein">Protein</a>
+      <a href="category.html?category=Supplements&subcategory=Proteinbars">Proteinbars</a>
+      <a href="category.html?category=Supplements&subcategory=Vitamins">Vitamins</a>
     </div>
   </div>
 </header>
