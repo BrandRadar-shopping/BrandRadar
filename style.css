@@ -1018,41 +1018,39 @@ body {
 }
 
 
-/* ================================
-   BRANDRADAR – NEWS PAGE STYLES
-   ================================ */
+/* ==========================================
+   BRANDRADAR – NEWS PAGE SECTIONS
+   ========================================== */
 
-/* Grunnoppsett */
+/* --- Grunnoppsett --- */
 .news-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 6rem 1rem;
 }
 
 .section-padding {
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   border-bottom: 1px solid #eee;
 }
 
-h2 {
+.section-padding h2 {
   font-size: 1.8rem;
+  font-weight: 700;
   color: #111;
   margin-bottom: 1.5rem;
-  text-align: left;
 }
 
-/* ================================
-   PARTNER BANNER
-   ================================ */
+/* --- 1. PARTNER BANNER --- */
 .partner-banner {
+  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
+  border-radius: 24px;
+  padding: 2.5rem;
+  margin: 2rem 0 4rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #f7f9fb;
-  padding: 2.5rem 1.5rem;
-  border-radius: 20px;
-  margin-bottom: 3rem;
-  overflow: hidden;
+  justify-content: center;
 }
 
 .partner-inner {
@@ -1060,51 +1058,48 @@ h2 {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  max-width: 1000px;
   gap: 2rem;
-  max-width: 1100px;
 }
 
 .partner-inner img {
-  width: 350px;
+  width: 320px;
   border-radius: 20px;
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 .partner-text {
   flex: 1;
-  min-width: 250px;
+  min-width: 260px;
 }
 
 .partner-text h3 {
-  font-size: 1.6rem;
   color: #0070f3;
+  font-size: 1.6rem;
   margin-bottom: 0.5rem;
 }
 
 .partner-text p {
   color: #444;
+  margin-bottom: 0.8rem;
   line-height: 1.5;
-  margin-bottom: 1rem;
 }
 
 .partner-btn {
-  background-color: #0070f3;
+  background: #0070f3;
   color: white;
+  text-decoration: none;
   padding: 0.8rem 1.4rem;
   border-radius: 10px;
-  text-decoration: none;
+  transition: background 0.2s;
   font-weight: 500;
-  transition: 0.2s;
 }
 
 .partner-btn:hover {
-  background-color: #005ac1;
+  background: #005ac1;
 }
 
-/* ================================
-   DEALS SECTION
-   ================================ */
+/* --- 2. UKENS DEALS --- */
 .deals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1112,15 +1107,15 @@ h2 {
 }
 
 .deal-card {
-  background: white;
+  background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   overflow: hidden;
   transition: transform 0.25s ease;
 }
 
 .deal-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
 }
 
 .deal-card img {
@@ -1134,18 +1129,19 @@ h2 {
 }
 
 .deal-info h3 {
-  font-size: 1rem;
   color: #0070f3;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .deal-info .product {
   font-weight: 600;
-  margin: 0.3rem 0;
+  margin-bottom: 0.4rem;
 }
 
 .deal-info .price {
+  margin: 0.4rem 0;
   font-size: 1rem;
-  margin: 0.3rem 0;
 }
 
 .deal-info .old {
@@ -1156,45 +1152,43 @@ h2 {
 
 .deal-info .new {
   color: #e60023;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .deal-btn {
   display: inline-block;
-  background-color: #0070f3;
-  color: white;
+  margin-top: 0.4rem;
+  background: #0070f3;
+  color: #fff;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   text-decoration: none;
-  margin-top: 0.5rem;
-  transition: 0.2s;
+  transition: background 0.2s;
 }
 
 .deal-btn:hover {
-  background-color: #005ac1;
+  background: #005ac1;
 }
 
 /* Fremhevde deals */
 .deal-card.highlight {
   border: 2px solid #0070f3;
-  box-shadow: 0 4px 12px rgba(0, 112, 243, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 112, 243, 0.15);
 }
 
-/* ================================
-   RADAR PICKS
-   ================================ */
+/* --- 3. RADAR PICKS --- */
 .picks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
 }
 
 .pick-card {
-  background: white;
+  background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   overflow: hidden;
-  transition: 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .pick-card:hover {
@@ -1213,12 +1207,18 @@ h2 {
 
 .pick-info h3 {
   color: #0070f3;
-  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.pick-info .product {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
 }
 
 .pick-btn {
   display: inline-block;
-  background-color: #0070f3;
+  background: #0070f3;
   color: white;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -1231,81 +1231,88 @@ h2 {
   background-color: #005ac1;
 }
 
-.featured-pick {
-  border: 2px solid #0070f3;
+/* --- 4. UKENS SPOTLIGHT (større kort) --- */
+.featured-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* ================================
-   NEWS & SPOTLIGHT
-   ================================ */
 .featured-card {
   display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 24px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.07);
   overflow: hidden;
-  margin-bottom: 2rem;
+  transition: transform 0.25s ease;
+}
+
+.featured-card:hover {
+  transform: translateY(-6px);
 }
 
 .featured-card img {
-  width: 350px;
-  height: 250px;
+  width: 45%;
+  min-width: 320px;
+  height: auto;
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 .featured-content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .featured-content h3 {
   color: #0070f3;
-  margin-bottom: 0.5rem;
-}
-
-.featured-content p {
-  color: #444;
+  font-size: 1.6rem;
   margin-bottom: 0.5rem;
 }
 
 .featured-content .price {
-  font-weight: 600;
-  color: #222;
+  color: #111;
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .product-btn {
   display: inline-block;
+  margin-top: 1rem;
   background-color: #0070f3;
   color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
   text-decoration: none;
-  margin-top: 0.5rem;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
 .product-btn:hover {
   background-color: #005ac1;
 }
 
+/* --- 5. NYE PRODUKTER / TRENDER --- */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.5rem;
+  gap: 1.6rem;
 }
 
 .news-card {
-  background: white;
+  background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   overflow: hidden;
-  transition: 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .news-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
 }
 
 .news-card img {
@@ -1325,10 +1332,8 @@ h2 {
 }
 
 .read-more {
-  display: inline-block;
-  margin-top: 0.5rem;
-  text-decoration: none;
   color: #0070f3;
+  text-decoration: none;
   font-weight: 500;
 }
 
@@ -1336,9 +1341,7 @@ h2 {
   text-decoration: underline;
 }
 
-/* ================================
-   ANIMASJON
-   ================================ */
+/* --- Fade-in animasjon --- */
 .fade-in {
   opacity: 0;
   transform: translateY(10px);
@@ -1352,9 +1355,7 @@ h2 {
   }
 }
 
-/* ================================
-   RESPONSIVT
-   ================================ */
+/* --- Responsivt --- */
 @media (max-width: 768px) {
   .partner-inner {
     flex-direction: column;
@@ -1363,7 +1364,7 @@ h2 {
 
   .partner-inner img {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
   }
 
   .featured-card {
@@ -1374,6 +1375,7 @@ h2 {
     width: 100%;
   }
 }
+
 
 
 
