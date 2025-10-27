@@ -158,7 +158,7 @@ fetch(url)
 
 });
   
-.catch((err) => {
+catch((err) => {
   console.error("❌ Feil ved lasting av produkter:", err);
   productGrid.innerHTML =
     "<p>Kunne ikke laste produkter akkurat nå. Prøv igjen senere.</p>";
