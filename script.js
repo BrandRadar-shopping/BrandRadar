@@ -1,16 +1,10 @@
 // ======================================================
-// BRANDRADAR.SHOP – FINAL MEGA MENU SCRIPT
+// BRANDRADAR.SHOP – FINAL MEGA MENU SCRIPT (STABIL)
 // ======================================================
-// Formål: Håndterer hover, aktivering og deaktivering
-//         av mega-menyen på tvers av alle kategorier.
-// ------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Mega menu script loaded and ready");
 
-  // ==========================
-  // 1. HENT ELEMENTER
-  // ==========================
   const navItems = document.querySelectorAll(".nav-item");
   const megaMenu = document.getElementById("mega-menu");
   const megaContents = document.querySelectorAll(".mega-content");
@@ -22,52 +16,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let hideTimer = null;
 
-  // ==========================
-  // 2. VIS / SKJUL MEGA-MENY
-  // ==========================
-
-  // Når bruker holder musen over kategori-knappen
+  // Når musen går over kategori
   navItems.forEach((item) => {
     item.addEventListener("mouseenter", () => {
       clearTimeout(hideTimer);
       const target = item.dataset.target;
 
-      // Vis selve menyboksen
       megaMenu.classList.add("active");
-
-      // Vis riktig innhold for valgt kategori
       megaContents.forEach((content) => {
         content.classList.toggle("active", content.id === target);
       });
 
-      // Marker aktiv kategori i topp-linja
       navItems.forEach((n) => n.classList.remove("active"));
       item.classList.add("active");
     });
 
-    // Når musen forlater knapp – start liten timer før menyen forsvinner
+    // Når musen forlater kategori
     item.addEventListener("mouseleave", () => {
-      hideTimer = setTimeout(() => closeMegaMenu(), 200);
+      hideTimer = setTimeout(closeMegaMenu, 250);
     });
   });
 
-  // ==========================
-  // 3. INTERAKSJON INNE I MENYEN
-  // ==========================
+  // Når musen er inne i menyen
   megaMenu.addEventListener("mouseenter", () => clearTimeout(hideTimer));
   megaMenu.addEventListener("mouseleave", () => {
-    hideTimer = setTimeout(() => closeMegaMenu(), 200);
+    hideTimer = setTimeout(closeMegaMenu, 250);
   });
 
-  // ==========================
-  // 4. LUKKEFUNKSJON
-  // ==========================
+  // Lukker menyen
   function closeMegaMenu() {
     megaMenu.classList.remove("active");
     navItems.forEach((n) => n.classList.remove("active"));
     megaContents.forEach((c) => c.classList.remove("active"));
   }
 });
+
+
 
 
 
