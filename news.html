@@ -3,43 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nyheter | BrandRadar</title>
+  <title>Nyheter og trender | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
+  <!-- PARTNER BANNER -->
   <section class="partner-banner"></section>
+
+  <!-- UKENS DEALS -->
   <section id="deals-section" class="deals-section"></section>
+
+  <!-- RADAR PICKS -->
   <section id="picks-section" class="picks-section"></section>
 
+  <!-- NYHETER -->
   <section class="news-section">
     <h1>Nyheter og trender</h1>
-    <div id="featured-news"></div>
+    <div id="featured-news" class="featured-wrapper"></div>
+
     <h2>Flere artikler</h2>
-    <div id="news-grid"></div>
+    <div id="news-grid" class="news-grid"></div>
   </section>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
   </footer>
 
+  <!-- SIDE-SPESIFIKKE SCRIPTS -->
   <script src="partnerBanner.js"></script>
   <script src="deals.js"></script>
   <script src="picks.js"></script>
   <script src="news.js"></script>
 
-  <!-- Dynamisk header -->
-<script>
-  // Laster felles header, så script.js (mega-meny), så script-favorites.js (teller)
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
+  <!-- DYNAMISK HEADER + MEGA-MENY + FAVORITT-TELLER -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
 
-      const loadScript = (src) =>
-        new Promise((resolve, reject) => {
+        const loadScript = (src) => new Promise((resolve, reject) => {
           const s = document.createElement("script");
           s.src = src;
           s.onload = resolve;
@@ -47,19 +55,18 @@
           document.body.appendChild(s);
         });
 
-      (async () => {
-        // Viktig: rekkefølge
-        await loadScript("script.js");            // init mega-meny (krever at header er i DOM)
-        await loadScript("script-favorites.js");  // init favoritt-teller (krever #favorite-count)
+        (async () => {
+          await loadScript("script.js");            // Mega-meny
+          await loadScript("script-favorites.js");  // Favoritt-teller
+          if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+          console.log("✅ Header, mega-meny og favoritt-teller aktivert på news.html");
+        })().catch(e => console.error("❌ Script-load-feil:", e));
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
 
-        // Oppdater teller hvis funksjon finnes
-        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
-        console.log("✅ Header, mega-meny og favoritt-teller aktivert på denne siden");
-      })().catch(e => console.error("❌ Script-load-feil:", e));
-    })
-    .catch(err => console.error("❌ Kunne ikke laste header:", err));
-</script>
 </body>
 </html>
+
 
 
