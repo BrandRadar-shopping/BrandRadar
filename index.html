@@ -8,45 +8,51 @@
 </head>
 <body>
 
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
+  <!-- FEATURED PRODUCTS -->
   <section class="product-grid-section">
     <div class="product-grid"></div>
   </section>
 
+  <!-- PRODUKTLOADER -->
   <script src="script-index.js"></script>
 
-  <!-- Dynamisk header lasting -->
+  <!-- DYNAMISK HEADER + MEGA-MENY + FAVORITT-TELLER -->
   <script>
-  // Laster felles header, så script.js (mega-meny), så script-favorites.js (teller)
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
 
-      const loadScript = (src) =>
-        new Promise((resolve, reject) => {
+        // Funksjon for trygg dynamisk lasting
+        const loadScript = (src) => new Promise((resolve, reject) => {
           const s = document.createElement("script");
           s.src = src;
+          s.async = true;
           s.onload = resolve;
           s.onerror = reject;
           document.body.appendChild(s);
         });
 
-      (async () => {
-        // Viktig: rekkefølge
-        await loadScript("script.js");            // init mega-meny (krever at header er i DOM)
-        await loadScript("script-favorites.js");  // init favoritt-teller (krever #favorite-count)
+        (async () => {
+          // 1️⃣ Mega-meny
+          await loadScript("script.js");
+          // 2️⃣ Favorittsystem og teller
+          await loadScript("script-favorites.js");
 
-        // Oppdater teller hvis funksjon finnes
-        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
-        console.log("✅ Header, mega-meny og favoritt-teller aktivert på denne siden");
-      })().catch(e => console.error("❌ Script-load-feil:", e));
-    })
-    .catch(err => console.error("❌ Kunne ikke laste header:", err));
-</script>
+          // 3️⃣ Oppdater teller etter lasting
+          if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+          console.log("✅ Header, mega-meny og favoritt-teller aktivert på index.html");
+        })().catch(e => console.error("❌ Script-load-feil:", e));
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
+
 </body>
 </html>
+
 
 
 
