@@ -28,8 +28,10 @@
     <div class="brand-grid" id="brand-grid"></div>
   </section>
 
+  <script src="script-brands.js"></script>
+  <script src="script-favorites.js"></script>
 
-    <!-- Dynamisk lasting av header + mega-meny -->
+   <!-- Dynamisk lasting av header + mega-meny -->
   <script>
     fetch("header.html")
       .then(res => res.text())
@@ -46,13 +48,6 @@
       })
       .catch(err => console.error("❌ Kunne ikke laste header:", err));
   </script>
-</script>
-  <script src="script-brands.js"></script>
-  <script src="script-favorites.js"></script>
-
-
- 
-
 </body>
 </html>
 
