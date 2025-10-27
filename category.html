@@ -8,49 +8,47 @@
 </head>
 <body>
 
-  <!-- HEADER-PLASSHOLDER (dynamisk import av header.html) -->
   <div id="header-placeholder"></div>
 
-  <!-- ================================
-       CATEGORY TITLE
-       ================================ -->
   <section class="category-header">
     <h1 class="category-title"></h1>
   </section>
 
-  <!-- ================================
-       PRODUCT GRID
-       ================================ -->
   <section class="product-grid-section">
     <div class="product-grid" id="category-products"></div>
   </section>
 
-  <!-- ================================
-       SCRIPTS
-       ================================ -->
   <script src="category.js"></script>
-  <script src="script-favorites.js"></script>
 
-  <!-- Dynamisk lasting av header + mega-meny -->
+  <!-- Dynamisk header -->
   <script>
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-placeholder").innerHTML = html;
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
 
-        // Kjør script.js etter at headeren faktisk er lagt til i DOM
-        setTimeout(() => {
-          const script = document.createElement("script");
-          script.src = "script.js"; // mega-meny-scriptet
-          script.onload = () => console.log("✅ Mega-meny aktivert på category.html");
-          document.body.appendChild(script);
-        }, 100);
-      })
-      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+      const loadSequential = async () => {
+        const loadScript = (src) =>
+          new Promise((resolve) => {
+            const s = document.createElement("script");
+            s.src = src;
+            s.onload = resolve;
+            document.body.appendChild(s);
+          });
+
+        await loadScript("script.js");
+        await loadScript("script-favorites.js");
+        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+        console.log("✅ Header, meny og teller aktivert");
+      };
+
+      loadSequential();
+    })
+    .catch((err) => console.error("❌ Kunne ikke laste header:", err));
   </script>
-
 </body>
 </html>
+
 
 
 
