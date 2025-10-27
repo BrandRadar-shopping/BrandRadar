@@ -24,7 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
   title.textContent = product.title || "";
   brand.textContent = product.brand || "";
   price.textContent = product.price ? `${product.price} kr` : "";
-  discount.textContent = product.discount ? `${product.discount}% OFF` : "";
+  discount.textContent = product.discount
+  ? `${parseFloat(product.discount)}% OFF`
+  : "";
+
   desc.textContent = product.description || "";
   rating.textContent = product.rating ? `⭐ ${product.rating}` : "";
   buyLink.href = product.url || "#";
