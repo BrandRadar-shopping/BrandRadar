@@ -3,92 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nyheter og trender | BrandRadar</title>
+  <title>Nyheter | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <!-- ================================
-       HEADER
-       ================================ -->
- <div id="header-placeholder"></div>
 
+  <div id="header-placeholder"></div>
 
-
-  <!-- ================================
-       PARTNER BANNER (dynamisk)
-       ================================ -->
-  <section class="partner-banner">
-    <!-- Dynamisk innhold lastes inn fra partnerBanner.js -->
-  </section>
-
-
-  <!-- ================================
-       UKENS DEALS (dynamisk)
-       ================================ -->
+  <section class="partner-banner"></section>
   <section id="deals-section" class="deals-section"></section>
-
-
-  <!-- ================================
-       RADAR PICKS (dynamisk)
-       ================================ -->
   <section id="picks-section" class="picks-section"></section>
 
-
-  <!-- ================================
-       NYHETER OG TRENDER (dynamisk)
-       ================================ -->
   <section class="news-section">
     <h1>Nyheter og trender</h1>
-
-    <!-- Siste nytt -->
-    <div id="featured-news" class="featured-wrapper"></div>
-
-    <!-- Flere artikler -->
+    <div id="featured-news"></div>
     <h2>Flere artikler</h2>
-    <div id="news-grid" class="news-grid"></div>
+    <div id="news-grid"></div>
   </section>
 
-
-  <!-- ================================
-       FOOTER
-       ================================ -->
   <footer class="footer">
     <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
   </footer>
 
-
-  <!-- ================================
-       SCRIPT IMPORTS
-       ================================ -->
-    
-
-  <script src="script-favorites.js"></script>
   <script src="partnerBanner.js"></script>
   <script src="deals.js"></script>
   <script src="picks.js"></script>
   <script src="news.js"></script>
 
-   <!-- Dynamisk lasting av header + mega-meny -->
+  <!-- Dynamisk header -->
   <script>
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-placeholder").innerHTML = html;
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
 
-        // Kjør script.js etter at headeren faktisk er lagt til i DOM
-        setTimeout(() => {
-          const script = document.createElement("script");
-          script.src = "script.js"; // mega-meny-scriptet
-          script.onload = () => console.log("✅ Mega-meny aktivert på category.html");
-          document.body.appendChild(script);
-        }, 100);
-      })
-      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+      const loadSequential = async () => {
+        const loadScript = (src) =>
+          new Promise((resolve) => {
+            const s = document.createElement("script");
+            s.src = src;
+            s.onload = resolve;
+            document.body.appendChild(s);
+          });
+
+        await loadScript("script.js");
+        await loadScript("script-favorites.js");
+        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+        console.log("✅ Header, meny og teller aktivert");
+      };
+
+      loadSequential();
+    })
+    .catch((err) => console.error("❌ Kunne ikke laste header:", err));
   </script>
-
-
-
 </body>
 </html>
 
