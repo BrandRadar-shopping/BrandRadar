@@ -19,19 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
 fetch(url)
   .then(res => {
     console.log("🟢 Response status:", res.status);
-    return res.text();
+    return res.json(); // <-- endret fra .text() til .json()
   })
-  .then(data => {
-    console.log("🟢 RAW RESPONSE START:", data.slice(0, 200));
+  .then(rows => {
+    console.log("✅ Parsed rows:", rows);
 
-    let rows;
-    try {
-      rows = JSON.parse(data);
-      console.log("✅ Parsed rows:", rows);
-    } catch (err) {
-      console.error("❌ JSON parsing feilet:", err, data);
-      throw new Error("Ugyldig JSON-data mottatt fra Sheets");
-    }
 
     if (!rows || !rows.length) {
       throw new Error("Ingen rader funnet i Google Sheet");
