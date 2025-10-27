@@ -18,17 +18,23 @@
   </section>
 
   
-
-
+   <!-- Dynamisk lasting av header + mega-meny -->
   <script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
-      const script = document.createElement("script");
-      script.src = "script.js";
-      document.body.appendChild(script);
-    });
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
+
+        // Kjør script.js etter at headeren faktisk er lagt til i DOM
+        setTimeout(() => {
+          const script = document.createElement("script");
+          script.src = "script.js"; // mega-meny-scriptet
+          script.onload = () => console.log("✅ Mega-meny aktivert på category.html");
+          document.body.appendChild(script);
+        }, 100);
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
 </script>
   <script src="script-favorites.js"></script>
   <script src="script-favorites-page.js"></script>
