@@ -61,7 +61,15 @@
   <!-- ================================
        SCRIPT IMPORTS
        ================================ -->
-     <!-- Dynamisk lasting av header + mega-meny -->
+    
+
+  <script src="script-favorites.js"></script>
+  <script src="partnerBanner.js"></script>
+  <script src="deals.js"></script>
+  <script src="picks.js"></script>
+  <script src="news.js"></script>
+
+   <!-- Dynamisk lasting av header + mega-meny -->
   <script>
     fetch("header.html")
       .then(res => res.text())
@@ -78,12 +86,6 @@
       })
       .catch(err => console.error("❌ Kunne ikke laste header:", err));
   </script>
-
-  <script src="script-favorites.js"></script>
-  <script src="partnerBanner.js"></script>
-  <script src="deals.js"></script>
-  <script src="picks.js"></script>
-  <script src="news.js"></script>
 
 
 
