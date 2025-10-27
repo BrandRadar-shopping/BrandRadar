@@ -2284,6 +2284,24 @@ body {
   }
 }
 
+/* === Tilbake-knapp === */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #0070f3;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #005ec2;
+  text-decoration: underline;
+}
+
 
 
 
