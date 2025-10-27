@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandRadar | Nyheter & Ukens Picks</title>
+  <link rel="stylesheet" href="../style css/style (1).css">
+</head>
+<body>
+  <!-- 🌐 NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BrandRadar</a>
+      <ul class="nav-links">
+        <li><a href="brands.html">Merker</a></li>
+        <li><a href="news.html" class="active">Nyheter</a></li>
+        <li><a href="favoritter.html">Favoritter</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="news-page">
+    <!-- 🧩 Partnerbanner -->
+    <section class="partner-banner"></section>
+
+    <!-- 🔥 Ukens Deals -->
+    <section id="deals-section" class="section-padding">
+      <h2>Ukens Deals 🔥</h2>
+      <div class="deals-grid loading">Laster deals...</div>
+    </section>
+
+    <!-- 🛰️ Radar Picks -->
+    <section id="picks-section" class="section-padding">
+      <h2>Radar Picks 🛰️</h2>
+      <div class="picks-grid loading">Laster picks...</div>
+    </section>
+
+    <!-- ✨ Ukens Spotlight -->
+    <section id="featured-news" class="section-padding">
+      <h2>Ukens Spotlight ✨</h2>
+      <div class="featured-wrapper loading">Laster spotlight...</div>
+    </section>
+
+    <!-- 📰 Nyhetsfeed -->
+    <section id="news-feed" class="section-padding">
+      <h2>Flere Produkter & Trender</h2>
+      <div id="news-grid" class="news-grid loading">Laster nyheter...</div>
+    </section>
+  </main>
+
+  <!-- 🔗 Felles JS (meny, etc.) -->
+  <script src="../script JS/script.js"></script>
+
+  <!-- 📡 Dynamiske seksjoner -->
+  <script src="../script JS/partnerBanner.js"></script>
+  <script src="../script JS/deals.js"></script>
+  <script src="../script JS/picks.js"></script>
+  <script src="../script JS/news.js"></script>
+</body>
+</html>
 
