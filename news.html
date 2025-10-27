@@ -7,54 +7,107 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 🔝 HEADER + MEGA-MENY (identisk med index.html) -->
-  <header>
-    <nav class="navbar">
-      <div class="nav-left">
-        <a href="index.html" class="logo">BrandRadar</a>
-      </div>
-      <div class="nav-center">
-        <ul class="nav-links">
-          <li class="nav-item"><a href="brands.html">Merker</a></li>
-          <li class="nav-item"><a href="news.html" class="active">Nyheter</a></li>
-          <li class="nav-item"><a href="favoritter.html">Favoritter</a></li>
-        </ul>
-      </div>
-      <div class="nav-right">
-        <div class="menu-toggle" id="menu-toggle">☰</div>
-      </div>
-    </nav>
+  <!-- HEADER -->
+<header class="main-header">
+  <div class="header-inner">
+    <div class="logo">BrandRadar</div>
 
-    <!-- 🧭 Mega-meny -->
-    <div class="mega-menu" id="mega-menu">
-      <div class="mega-column">
-        <h4>Clothing</h4>
-        <ul>
-          <li><a href="category.html?category=T-Shirts">T-Shirts</a></li>
-          <li><a href="category.html?category=Hoodies">Hoodies</a></li>
-          <li><a href="category.html?category=Jackets">Jackets</a></li>
-        </ul>
-      </div>
-
-      <div class="mega-column">
-        <h4>Shoes</h4>
-        <ul>
-          <li><a href="category.html?category=Sneakers">Sneakers</a></li>
-          <li><a href="category.html?category=Boots">Boots</a></li>
-          <li><a href="category.html?category=Running">Running</a></li>
-        </ul>
-      </div>
-
-      <div class="mega-column">
-        <h4>Supplements</h4>
-        <ul>
-          <li><a href="category.html?category=Protein">Protein</a></li>
-          <li><a href="category.html?category=Pre-Workout">Pre-Workout</a></li>
-          <li><a href="category.html?category=Proteinbars">Proteinbars</a></li>
-        </ul>
-      </div>
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
+      <button>🔍</button>
     </div>
-  </header>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="news.html">News</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter</a>
+    </nav>
+  </div>
+</header>
+
+ <!-- NAV WRAP (ny container) -->
+<div class="nav-wrap">
+  
+  <!-- CATEGORY BAR -->
+  <div class="nav-categories">
+    <ul class="nav-links">
+      <li class="nav-item" data-target="clothing">Clothing</li>
+      <li class="nav-item" data-target="shoes">Shoes</li>
+      <li class="nav-item" data-target="supplements">Supplements</li>
+    </ul>
+  </div>
+
+<!-- MEGA MENU -->
+<div class="mega-menu" id="mega-menu">
+  <!-- CLOTHING -->
+  <div class="mega-content" id="clothing">
+    <div class="column">
+      <h4>Men</h4>
+      <a href="#">Sweaters & Hoodies</a>
+      <a href="#">T-shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Jeans</a>
+      <a href="#">Jackets</a>
+      <a href="#">Gymwear</a>
+    </div>
+    <div class="column">
+      <h4>Women</h4>
+      <a href="#">Sweaters & Hoodies</a>
+      <a href="#">T-shirts</a>
+      <a href="#">Jackets</a>
+      <a href="#">Dresses</a>
+      <a href="#">Cardigans</a>
+      <a href="#">Gymwear</a>
+    </div>
+    <div class="column">
+      <h4>Children</h4>
+      <a href="#">T-shirts</a>
+      <a href="#">Pants</a>
+      <a href="#">Sneakers</a>
+    </div>
+  </div>
+
+  <!-- SHOES -->
+  <div class="mega-content" id="shoes">
+    <div class="column">
+      <h4>Men</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Boots</a>
+      <a href="#">Sports</a>
+    </div>
+    <div class="column">
+      <h4>Women</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Boots</a>
+      <a href="#">Heels</a>
+    </div>
+    <div class="column">
+      <h4>Children</h4>
+      <a href="#">Sneakers</a>
+      <a href="#">Sandals</a>
+    </div>
+  </div>
+
+  <!-- SUPPLEMENTS -->
+  <div class="mega-content" id="supplements">
+    <div class="column">
+      <h4>Equipment</h4>
+      <a href="#">Electronics</a>
+      <a href="#">Sports</a>
+      <a href="#">Bags</a>
+      <a href="#">Home Workouts</a>
+    </div>
+    <div class="column">
+      <h4>Supplements</h4>
+      <a href="#">Proteinpowder</a>
+      <a href="#">Creatine</a>
+      <a href="#">PWO</a>
+      <a href="#">Vitamins</a>
+    </div>
+  </div>
+</div>
+</div>
 
   <!-- 🔽 MAIN INNHOLD -->
   <main class="news-page">
