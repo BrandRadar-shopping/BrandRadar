@@ -64,9 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       filtered.forEach((item) => {
-        const discountDisplay = item.discount
-          ? `${item.discount.replace("%", "").trim()}% OFF`
-          : "";
+        let discountDisplay = "";
+if (discount && !isNaN(parseFloat(discount))) {
+  discountDisplay = `${parseFloat(discount)}% OFF`;
+}
+
 
         const card = document.createElement("div");
         card.classList.add("product-card");
