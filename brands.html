@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrandRadar – Brands</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-inner">
+      <div class="logo">BrandRadar</div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Søk produkter eller merker..." />
+        <button>🔍</button>
+      </div>
+
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="news.html">News</a>
+        <a href="brands.html" class="active">Brands</a>
+        <a href="favoritter.html">Favoritter</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- BRAND SEARCH -->
+  <section class="brand-search">
+    <input type="text" id="brandSearch" placeholder="Søk etter brand..." />
+  </section>
+
+  <!-- HIGHLIGHTED BRANDS -->
+  <section class="highlighted-brands">
+    <h2>Fremhevede brands</h2>
+    <div class="brand-grid" id="highlight-grid"></div>
+  </section>
+
+  <!-- ALL BRANDS -->
+  <section class="all-brands">
+    <h2>Alle brands</h2>
+    <div class="brand-grid" id="brand-grid"></div>
+  </section>
+
+  <script src="script-brands.js"></script>
+  <script src="script-favorites.js"></script>
+
+</body>
+</html>
+
+  
