@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produktdetaljer | BrandRadar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER (uten mega-meny) -->
+<header class="main-header">
+  <div class="header-inner">
+    <div class="logo">BrandRadar</div>
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
+      <button>🔍</button>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="news.html">News</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter</a>
+    </nav>
+  </div>
+</header>
+
+
+  <!-- HEADER -->
+  <!-- (kopier nøyaktig header + nav-wrap fra index.html) -->
+
+ <section class="product-detail">
+  <div class="product-container">
+    <div class="image-gallery">
+      <img id="main-image" src="" alt="Produktbilde" />
+      <div class="thumbnails" id="thumbnails"></div>
+    </div>
+
+    <div class="info">
+      <button id="back-btn">← Tilbake</button>
+      <h1 id="product-title"></h1>
+      <p id="product-brand" class="brand"></p>
+      <p id="product-price" class="price"></p>
+      <p id="product-discount" class="discount"></p>
+      <p id="product-rating" class="rating"></p>
+      <p id="product-desc" class="description"></p>
+
+      <button id="favorite-btn">❤️ Legg til favoritt</button>
+      <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
+    </div>
+  </div>
+</section>
+
+
+  <script src="script.js"></script>
+  <script src="product.js"></script>
+ <script src="script-favorites.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("favorite-btn");
+    const params = new URLSearchParams(window.location.search);
+    const product = Object.fromEntries(params.entries());
+
+    if (!btn) return;
+
+    const updateButtonState = () => {
+      const favorites = getFavorites();
+      const isFav = favorites.some(fav => fav.title === product.title);
+      btn.textContent = isFav ? "💔 Fjern fra favoritter" : "❤️ Legg til favoritt";
+    };
+
+    btn.addEventListener("click", () => {
+      toggleFavorite(product);
+      updateButtonState(); // oppdater teksten direkte
+    });
+
+    updateButtonState(); // vis korrekt tekst når siden lastes
+  });
+</script>
+
+</body>
+</html>
+
