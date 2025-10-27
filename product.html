@@ -8,12 +8,13 @@
 </head>
 <body>
 
-  <!-- HEADER PLASSHOLDER -->
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
   <!-- PRODUKTDETALJER -->
   <section class="product-detail">
     <div class="product-container">
+
       <!-- Venstre: bilder -->
       <div class="product-gallery">
         <img id="main-image" class="main-image" src="" alt="Produktbilde" />
@@ -29,45 +30,16 @@
         <p id="product-discount" class="discount"></p>
         <p id="product-rating" class="rating"></p>
         <p id="product-desc" class="description"></p>
+
         <button id="favorite-btn" class="fav-btn">❤️ Legg til favoritt</button>
         <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
       </div>
+
     </div>
   </section>
 
-  <!-- PRODUKT-SCRIPT -->
+  <!-- PRODUKTLOGIKK -->
   <script src="product.js"></script>
-
-  <!-- FAVORITT-FUNKSJONALITET -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("favorite-btn");
-      const params = new URLSearchParams(window.location.search);
-      const product = Object.fromEntries(params.entries());
-
-      if (!btn) return;
-
-      const updateButtonState = () => {
-        const favorites = getFavorites();
-        const isFav = favorites.some(fav => fav.title === product.title);
-        btn.textContent = isFav ? "💔 Fjern fra favoritter" : "❤️ Legg til favoritt";
-      };
-
-      btn.addEventListener("click", () => {
-        toggleFavorite(product);
-        updateButtonState();
-      });
-
-      updateButtonState();
-
-      // Tilbake-knapp
-      const backBtn = document.getElementById("back-btn");
-      if (backBtn) backBtn.addEventListener("click", e => {
-        e.preventDefault();
-        window.history.back();
-      });
-    });
-  </script>
 
   <!-- DYNAMISK HEADER + MEGA-MENY + FAVORITT-TELLER -->
   <script>
@@ -85,14 +57,51 @@
         });
 
         (async () => {
+          // Riktig lasterekkefølge
           await loadScript("script.js");            // mega-meny
-          await loadScript("script-favorites.js");  // favoritt-teller
+          await loadScript("script-favorites.js");  // favoritt-teller + logikk
+
+          // Nå kan vi trygt initialisere produktfunksjonene
+          document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("favorite-btn");
+            const backBtn = document.getElementById("back-btn");
+            const params = new URLSearchParams(window.location.search);
+            const product = Object.fromEntries(params.entries());
+
+            if (!btn) return;
+
+            const updateButtonState = () => {
+              const favorites = getFavorites();
+              const isFav = favorites.some(fav => fav.title === product.title);
+              btn.textContent = isFav
+                ? "💔 Fjern fra favoritter"
+                : "❤️ Legg til favoritt";
+            };
+
+            btn.addEventListener("click", () => {
+              toggleFavorite(product);
+              updateButtonState();
+              if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+            });
+
+            updateButtonState();
+
+            // Tilbake-knapp
+            if (backBtn) {
+              backBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                window.history.back();
+              });
+            }
+          });
+
           if (typeof updateFavoriteCount === "function") updateFavoriteCount();
           console.log("✅ Header, mega-meny og favoritt-teller aktivert på product.html");
         })().catch(e => console.error("❌ Script-load-feil:", e));
       })
       .catch(err => console.error("❌ Kunne ikke laste header:", err));
   </script>
+
 </body>
 </html>
 
