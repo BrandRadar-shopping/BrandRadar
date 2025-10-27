@@ -41,26 +41,52 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Bildegalleri
-  const mainImg = document.getElementById("main-image");
-  const thumbs = document.getElementById("thumbnails");
+const mainImg = document.getElementById("main-image");
+const thumbs = document.getElementById("thumbnails");
 
-  if (product.images.length) {
-    mainImg.src = product.images[0];
-    product.images.forEach((src, idx) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = `Thumbnail ${idx + 1}`;
-      img.classList.add("thumb");
-      img.addEventListener("click", () => (mainImg.src = src));
-      thumbs.appendChild(img);
+// Samle alle bilder i riktig rekkefølge
+// (hovedbilde først, deretter image2–image4)
+const images = [
+  product.image_url || product.image, // hovedbildet
+  product.image2,
+  product.image3,
+  product.image4,
+].filter((src) => src && src.trim() !== ""); // fjern tomme / undefined
+
+if (images.length > 0) {
+  // Sett hovedbildet først
+  mainImg.src = images[0];
+
+  // Tøm tidligere thumbnails (hvis eksisterer)
+  thumbs.innerHTML = "";
+
+  // Lag thumbnails
+  images.forEach((src, idx) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `Thumbnail ${idx + 1}`;
+    img.classList.add("thumb");
+
+    // Marker første bilde som aktivt
+    if (idx === 0) img.classList.add("active");
+
+    // Klikk for å endre hovedbilde
+    img.addEventListener("click", () => {
+      mainImg.src = src;
+      document.querySelectorAll(".thumb").forEach((t) => t.classList.remove("active"));
+      img.classList.add("active");
     });
-  } else if (product.image) {
-    mainImg.src = product.image;
-  }
-});
+
+    thumbs.appendChild(img);
+  });
+} else {
+  // Fallback hvis ingen bilder
+  mainImg.src = "placeholder.jpg";
+}
 
 // Tilbake-knapp
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
+
 
