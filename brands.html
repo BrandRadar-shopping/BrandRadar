@@ -8,34 +8,37 @@
 </head>
 <body>
 
+  <!-- HEADER -->
   <div id="header-placeholder"></div>
 
+  <!-- BRAND SEARCH -->
   <section class="brand-search">
     <input type="text" id="brandSearch" placeholder="Søk etter brand..." />
   </section>
 
+  <!-- HIGHLIGHTED BRANDS -->
   <section class="highlighted-brands">
     <h2>Fremhevede brands</h2>
     <div class="brand-grid" id="highlight-grid"></div>
   </section>
 
+  <!-- ALL BRANDS -->
   <section class="all-brands">
     <h2>Alle brands</h2>
     <div class="brand-grid" id="brand-grid"></div>
   </section>
 
+  <!-- SIDE-SPESIFIKT SCRIPT -->
   <script src="script-brands.js"></script>
 
-  <!-- Dynamisk header -->
- <script>
-  // Laster felles header, så script.js (mega-meny), så script-favorites.js (teller)
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-placeholder").innerHTML = html;
+  <!-- DYNAMISK HEADER + MEGA-MENY + FAVORITT-TELLER -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-placeholder").innerHTML = html;
 
-      const loadScript = (src) =>
-        new Promise((resolve, reject) => {
+        const loadScript = (src) => new Promise((resolve, reject) => {
           const s = document.createElement("script");
           s.src = src;
           s.onload = resolve;
@@ -43,21 +46,19 @@
           document.body.appendChild(s);
         });
 
-      (async () => {
-        // Viktig: rekkefølge
-        await loadScript("script.js");            // init mega-meny (krever at header er i DOM)
-        await loadScript("script-favorites.js");  // init favoritt-teller (krever #favorite-count)
-
-        // Oppdater teller hvis funksjon finnes
-        if (typeof updateFavoriteCount === "function") updateFavoriteCount();
-        console.log("✅ Header, mega-meny og favoritt-teller aktivert på denne siden");
-      })().catch(e => console.error("❌ Script-load-feil:", e));
-    })
-    .catch(err => console.error("❌ Kunne ikke laste header:", err));
-</script>
+        (async () => {
+          await loadScript("script.js");            // Mega-meny
+          await loadScript("script-favorites.js");  // Favoritt-teller
+          if (typeof updateFavoriteCount === "function") updateFavoriteCount();
+          console.log("✅ Header, mega-meny og favoritt-teller aktivert på brands.html");
+        })().catch(e => console.error("❌ Script-load-feil:", e));
+      })
+      .catch(err => console.error("❌ Kunne ikke laste header:", err));
+  </script>
 
 </body>
 </html>
+
 
 
   
