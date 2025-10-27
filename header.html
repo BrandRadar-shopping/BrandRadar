@@ -1,124 +1,70 @@
-<!-- =========================================
-     HEADER.HTML – Gjenbrukbar toppnavigasjon
-     ========================================= -->
-
+<!-- =====================================================
+     HEADER.HTML — Felles toppseksjon for hele BrandRadar
+     ===================================================== -->
 <header class="main-header">
   <div class="header-inner">
-    <div class="logo">BrandRadar</div>
+    <!-- LOGO -->
+    <a href="index.html" class="logo">BrandRadar</a>
 
+    <!-- SØK -->
     <div class="search-box">
       <input type="text" placeholder="Søk produkter eller merker..." />
       <button>🔍</button>
     </div>
 
+    <!-- NAV -->
     <nav class="main-nav">
-      <a href="index.html">Home</a>
-      <a href="news.html">News</a>
+      <div class="nav-item" data-target="clothing">Clothing</div>
+      <div class="nav-item" data-target="shoes">Shoes</div>
+      <div class="nav-item" data-target="supplements">Supplements</div>
       <a href="brands.html">Brands</a>
-      <a href="favoritter.html">Favoritter</a>
+      <a href="news.html">News</a>
+      <a href="favoritter.html" class="favorites-link">
+        ❤️ <span id="favorite-count">0</span>
+      </a>
     </nav>
   </div>
-</header>
 
-<!-- ==========================
-     MEGA-MENY
-     ========================== -->
-<div class="nav-wrap">
-
-  <div class="nav-categories">
-    <ul class="nav-links">
-      <li class="nav-item" data-target="clothing">Clothing</li>
-      <li class="nav-item" data-target="shoes">Shoes</li>
-      <li class="nav-item" data-target="supplements">Supplements</li>
-    </ul>
-  </div>
-
-  <div class="mega-menu" id="mega-menu">
-
-    <!-- CLOTHING -->
+  <!-- MEGA-MENY -->
+  <div id="mega-menu" class="mega-menu">
+    <!-- Clothing -->
     <div class="mega-content" id="clothing">
-      <div class="column">
-        <h4>Men</h4>
-        <a href="category.html?category=clothing&gender=men&subcategory=sweaters-hoodies">Sweaters & Hoodies</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=t-shirts">T-shirts</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=pants">Pants</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=jeans">Jeans</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=shorts">Shorts</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=jackets">Jackets</a>
-        <a href="category.html?category=clothing&gender=men&subcategory=gymwear">Gymwear</a>
+      <div class="mega-column">
+        <h3>Men</h3>
+        <a href="category.html?category=Clothing&gender=Men&subcategory=T-Shirts">T-Shirts</a>
+        <a href="category.html?category=Clothing&gender=Men&subcategory=Hoodies">Hoodies</a>
+        <a href="category.html?category=Clothing&gender=Men&subcategory=Jackets">Jackets</a>
       </div>
-
-      <div class="column">
-        <h4>Women</h4>
-        <a href="category.html?category=clothing&gender=women&subcategory=sweaters-hoodies">Sweaters & Hoodies</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=t-shirts">T-shirts</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=jackets">Jackets</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=dresses">Dresses</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=cardigans">Cardigans</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=pants">Pants</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=jeans">Jeans</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=shorts">Shorts</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=gymwear">Gymwear</a>
-        <a href="category.html?category=clothing&gender=women&subcategory=accessories-beauty">Accessories / Beauty</a>
-      </div>
-
-      <div class="column">
-        <h4>Children</h4>
-        <a href="category.html?category=clothing&gender=children&subcategory=t-shirts">T-shirts</a>
-        <a href="category.html?category=clothing&gender=children&subcategory=pants">Pants</a>
-        <a href="category.html?category=clothing&gender=children&subcategory=sneakers">Sneakers</a>
+      <div class="mega-column">
+        <h3>Women</h3>
+        <a href="category.html?category=Clothing&gender=Women&subcategory=T-Shirts">T-Shirts</a>
+        <a href="category.html?category=Clothing&gender=Women&subcategory=Dresses">Dresses</a>
+        <a href="category.html?category=Clothing&gender=Women&subcategory=Jackets">Jackets</a>
       </div>
     </div>
 
-    <!-- SHOES -->
+    <!-- Shoes -->
     <div class="mega-content" id="shoes">
-      <div class="column">
-        <h4>Men</h4>
-        <a href="category.html?category=shoes&gender=men&subcategory=sneakers">Sneakers</a>
-        <a href="category.html?category=shoes&gender=men&subcategory=boots">Boots</a>
-        <a href="category.html?category=shoes&gender=men&subcategory=sports">Sports</a>
-        <a href="category.html?category=shoes&gender=men&subcategory=casual">Casual</a>
-        <a href="category.html?category=shoes&gender=men&subcategory=business">Business</a>
+      <div class="mega-column">
+        <h3>Men</h3>
+        <a href="category.html?category=Shoes&gender=Men&subcategory=Sneakers">Sneakers</a>
+        <a href="category.html?category=Shoes&gender=Men&subcategory=Boots">Boots</a>
       </div>
-
-      <div class="column">
-        <h4>Women</h4>
-        <a href="category.html?category=shoes&gender=women&subcategory=sneakers">Sneakers</a>
-        <a href="category.html?category=shoes&gender=women&subcategory=boots">Boots</a>
-        <a href="category.html?category=shoes&gender=women&subcategory=heels">Heels</a>
-        <a href="category.html?category=shoes&gender=women&subcategory=casual">Casual</a>
-        <a href="category.html?category=shoes&gender=women&subcategory=sports">Sports</a>
-      </div>
-
-      <div class="column">
-        <h4>Children</h4>
-        <a href="category.html?category=shoes&gender=children&subcategory=sneakers">Sneakers</a>
-        <a href="category.html?category=shoes&gender=children&subcategory=boots">Boots</a>
-        <a href="category.html?category=shoes&gender=children&subcategory=sandals">Sandals</a>
-        <a href="category.html?category=shoes&gender=children&subcategory=sports">Sports</a>
+      <div class="mega-column">
+        <h3>Women</h3>
+        <a href="category.html?category=Shoes&gender=Women&subcategory=Sneakers">Sneakers</a>
+        <a href="category.html?category=Shoes&gender=Women&subcategory=Heels">Heels</a>
       </div>
     </div>
 
-    <!-- SUPPLEMENTS -->
+    <!-- Supplements -->
     <div class="mega-content" id="supplements">
-      <div class="column">
-        <h4>Equipment</h4>
-        <a href="category.html?category=supplements&subcategory=electronics">Electronics</a>
-        <a href="category.html?category=supplements&subcategory=sports">Sports</a>
-        <a href="category.html?category=supplements&subcategory=gym">Gym</a>
-        <a href="category.html?category=supplements&subcategory=bags">Bags</a>
-        <a href="category.html?category=supplements&subcategory=home-workout">Home-Workout</a>
-      </div>
-
-      <div class="column">
-        <h4>Supplements</h4>
-        <a href="category.html?category=supplements&subcategory=proteinpowder">Proteinpowder</a>
-        <a href="category.html?category=supplements&subcategory=creatine">Creatine</a>
-        <a href="category.html?category=supplements&subcategory=pwo">PWO</a>
-        <a href="category.html?category=supplements&subcategory=vitamins-minerals">Vitamins / Minerals</a>
-        <a href="category.html?category=supplements&subcategory=proteinbars">Proteinbars</a>
+      <div class="mega-column">
+        <h3>Supplements</h3>
+        <a href="category.html?category=Supplements&subcategory=Proteinpowder">Protein Powder</a>
+        <a href="category.html?category=Supplements&subcategory=Proteinbars">Protein Bars</a>
+        <a href="category.html?category=Supplements&subcategory=Creatine">Creatine</a>
       </div>
     </div>
-
-  </div> <!-- END MEGA-MENU -->
-</div> <!-- END NAV WRAP -->
+  </div>
+</header>
