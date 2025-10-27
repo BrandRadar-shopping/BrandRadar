@@ -28,32 +28,32 @@
   </header>
 
   <!-- PRODUKTDETALJER -->
-  <section class="product-detail">
-    <div class="product-container">
+ <section class="product-detail">
+  <div class="product-container">
 
-      <!-- 🖼️ Bildegalleri -->
-      <div class="product-images">
-        <div class="main-image">
-          <img id="main-image" src="" alt="Produktbilde">
-        </div>
-        <div class="thumbnail-container" id="thumbnails"></div>
-      </div>
-
-      <!-- ℹ️ Produktinfo -->
-      <div class="info">
-        <button id="back-btn">← Tilbake</button>
-        <h1 id="product-title"></h1>
-        <p id="product-brand" class="brand"></p>
-        <p id="product-price" class="price"></p>
-        <p id="product-discount" class="discount"></p>
-        <p id="product-rating" class="rating"></p>
-        <p id="product-desc" class="description"></p>
-
-        <button id="favorite-btn">❤️ Legg til favoritt</button>
-        <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
-      </div>
+    <!-- Venstre: Bildegalleri -->
+    <div class="product-gallery">
+      <img id="main-image" class="main-image" src="" alt="Produktbilde" />
+      <div class="thumbnails" id="thumbnails"></div>
     </div>
-  </section>
+
+    <!-- Høyre: Produktinfo -->
+    <div class="product-info">
+      <button id="back-btn" class="back-btn">← Tilbake</button>
+      <h1 id="product-title"></h1>
+      <p id="product-brand" class="brand"></p>
+      <p id="product-price" class="price"></p>
+      <p id="product-discount" class="discount"></p>
+      <p id="product-rating" class="rating"></p>
+      <p id="product-desc" class="description"></p>
+
+      <button id="favorite-btn" class="fav-btn">❤️ Legg til favoritt</button>
+      <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
+    </div>
+
+  </div>
+</section>
+
 
   <!-- SCRIPTS -->
   <script src="script.js"></script>
