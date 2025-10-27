@@ -8,23 +8,8 @@
 </head>
 <body>
   <!-- HEADER -->
-  <header class="main-header">
-    <div class="header-inner">
-      <div class="logo">BrandRadar</div>
+ <div id="header-placeholder"></div>
 
-      <div class="search-box">
-        <input type="text" placeholder="Søk produkter eller merker..." />
-        <button>🔍</button>
-      </div>
-
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="news.html">News</a>
-        <a href="brands.html" class="active">Brands</a>
-        <a href="favoritter.html">Favoritter</a>
-      </nav>
-    </div>
-  </header>
 
   <!-- BRAND SEARCH -->
   <section class="brand-search">
@@ -45,6 +30,18 @@
 
   <script src="script-brands.js"></script>
   <script src="script-favorites.js"></script>
+
+
+  <script>
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-placeholder").innerHTML = html;
+      const script = document.createElement("script");
+      script.src = "script.js";
+      document.body.appendChild(script);
+    });
+</script>
 
 </body>
 </html>
