@@ -73,9 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // 🧱 Bygg produktkort
       // -------------------------------
       products.forEach((item) => {
-        const discountDisplay = item.discount
-          ? `${item.discount.replace("%", "").trim()}% OFF`
-          : "";
+        let discountDisplay = "";
+if (item.discount && !isNaN(parseFloat(item.discount))) {
+  const cleanValue = parseFloat(item.discount);
+  const percent = cleanValue < 1 ? cleanValue * 100 : cleanValue; // støtter både 0.2 og 20
+  discountDisplay = `${percent}% OFF`;
+}
 
         const card = document.createElement("div");
         card.classList.add("product-card");
