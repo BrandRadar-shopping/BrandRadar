@@ -1,57 +1,41 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kategori | BrandRadar</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kategori – BrandRadar</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- ================================
-       HEADER (samme som på index)
-       ================================ -->
-  <header class="main-header">
-    <div class="header-inner">
-      <div class="logo">BrandRadar</div>
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="news.html">News</a>
-        <a href="brands.html">Brands</a>
-        <a href="favoritter.html">Favoritter</a>
-      </nav>
-    </div>
-  </header>
 
-  <!-- ================================
-       CATEGORY HERO (dynamisk tekst)
-       ================================ -->
-  <section class="category-hero">
-    <div class="category-hero-content">
-      <h1 id="category-title">Produkter</h1>
-      <p id="category-desc">Utforsk de beste valgene innen din valgte kategori.</p>
-    </div>
-  </section>
+<!-- ✅ Header + Mega-meny -->
+<header>
+  <div class="nav-container">
+    <a href="index.html" class="logo">BrandRadar</a>
+    <nav class="mega-menu">
+      <!-- Mega-meny beholdes fra script.js -->
+    </nav>
+    <div class="mobile-menu-toggle">☰</div>
+  </div>
+</header>
 
-  <!-- ================================
-       PRODUCT GRID
-       ================================ -->
-  <section class="product-grid-section">
-    <div class="product-grid" id="category-products"></div>
-  </section>
+<!-- ✅ Dynamisk kategori-tittel -->
+<section class="category-header">
+  <h1 id="category-title">Laster kategori...</h1>
+</section>
 
-  <!-- ================================
-       FOOTER
-       ================================ -->
-  <footer class="footer">
-    <p>© 2025 BrandRadar – Oppdag trender før alle andre.</p>
-  </footer>
+<!-- ✅ Produktgrid -->
+<section class="category-products">
+  <div class="product-grid"></div>
+  <p class="empty-message" style="display:none;">
+    Ingen produkter funnet i denne kategorien
+  </p>
+</section>
 
-  <!-- ================================
-       SCRIPTS
-       ================================ -->
-  <script src="script-favorites.js"></script>
-  <script src="category.js"></script>
+<script src="script.js"></script>
+<script src="category.js"></script>
+
 </body>
 </html>
 
