@@ -53,11 +53,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const favorites = getFavorites();
         const isFav = favorites.some(fav => fav.title === title);
 
-        // Rabattvisning
-        const discountDisplay =
-          discount && !isNaN(parseFloat(discount))
-            ? `${Math.round(parseFloat(discount) * 100)}% OFF`
-            : discount || "";
+        // Rabatt
+let discountDisplay = "";
+const discountValue = parseFloat(discount);
+
+if (!isNaN(discountValue)) {
+  if (discountValue <= 1) {
+    discountDisplay = `${Math.round(discountValue * 100)}% OFF`; // 0.20 -> 20%
+  } else {
+    discountDisplay = `${Math.round(discountValue)}% OFF`; // 20 -> 20%
+  }
+}
+
 
         // Produktkort
         const card = document.createElement("div");
