@@ -26,8 +26,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-price").textContent =
     product.price ? `Pris: ${product.price}` : "";
-  document.getElementById("product-discount").textContent =
-    product.discount ? `Rabatt: ${product.discount}` : "";
+  // Rabattvisning (samme logikk som index.html)
+const discountEl = document.getElementById("product-discount");
+let discountText = "";
+const discountValue = parseFloat(product.discount);
+
+if (!isNaN(discountValue)) {
+  // Hvis tallet er 0–1 → behandle som 0.20 = 20%
+  if (discountValue <= 1) {
+    discountText = `${Math.round(discountValue * 100)}%`;
+  } else {
+    // F.eks. 20 → 20%
+    discountText = `${Math.round(discountValue)}%`;
+  }
+}
+
+discountEl.textContent = discountText ? `Rabatt: ${discountText}` : "";
+
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("buy-link").href = product.url;
 
