@@ -1376,6 +1376,14 @@ body {
   }
 }
 
+/* Midlertidig skjul gammel mega-meny */
+.mega-menu .column,
+.mega-menu .mega-content,
+.nav-wrap,
+.nav-categories {
+  display: none !important;
+}
+
 
 
 
