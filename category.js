@@ -1,71 +1,87 @@
-/* ===================================================
-   CATEGORY PAGE – Dynamic Filter + Google Sheets Fetch
-   =================================================== */
+// ======================================================
+// BrandRadar.shop – CATEGORY FILTER SYSTEM
+// ======================================================
 
-const CATEGORY_SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTaqDWMlCoMetnsCJ_x09Yhnj1m_o0bhQX18gCgGLs9MH6huFR5DQkE5fNiLTZ8g-Z3B6JeYT5cj7B/pub?output=csv"; // 👈 bytt til riktig BrandRadarProdukter-URL
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ Category.js initialized");
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const category = params.get("category")?.toLowerCase() || "";
-  const gender = params.get("gender")?.toLowerCase() || "";
-  const subcategory = params.get("subcategory")?.toLowerCase() || "";
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_NAME = "BrandRadarProdukter";
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
   const titleEl = document.getElementById("category-title");
-  const descEl = document.getElementById("category-desc");
-  const grid = document.getElementById("category-products");
+  const productGrid = document.querySelector(".product-grid");
+  const emptyMessage = document.querySelector(".empty-message");
 
-  // Sett dynamisk tittel
-  titleEl.textContent = `${capitalize(gender)} ${capitalize(category)} – ${capitalize(subcategory)}`;
-  descEl.textContent = `Utforsk populære ${subcategory} innen ${category} for ${gender}.`;
+  const params = new URLSearchParams(window.location.search);
 
-  try {
-    const res = await fetch(CATEGORY_SHEET_URL);
-    const csv = await res.text();
-    const rows = csv.split("\n").map(r => r.split(","));
-    const headers = rows[0].map(h => h.trim().toLowerCase());
-    const items = rows.slice(1).map(r => {
-      const obj = {};
-      headers.forEach((h, i) => (obj[h] = r[i]?.trim() || ""));
-      return obj;
-    });
+  const filterMain = params.get("main_category");
+  const filterGender = params.get("gender");
+  const filterSub = params.get("subcategory");
+  const filterKidtype = params.get("kidtype");
 
-    // Filtrer basert på URL-parametere
-    const filtered = items.filter(p =>
-      (!category || p.category?.toLowerCase() === category) &&
-      (!gender || p.gender?.toLowerCase() === gender) &&
-      (!subcategory || p.subcategory?.toLowerCase() === subcategory)
-    );
-
-    if (filtered.length === 0) {
-      grid.innerHTML = `<p>Ingen produkter funnet for denne kategorien.</p>`;
-      return;
-    }
-
-    // Render produkter
-    grid.innerHTML = filtered
-      .map(
-        p => `
-        <div class="product-card fade-in">
-          <img src="${p.image_url}" alt="${p.product_name}">
-          <div class="product-info">
-            <h3>${p.brand}</h3>
-            <p class="product-name">${p.product_name}</p>
-            ${p.price ? `<p class="price">${p.price} kr</p>` : ""}
-            <a href="${p.link}" target="_blank" class="buy-btn">Se produkt</a>
-          </div>
-        </div>`
-      )
-      .join("");
-  } catch (err) {
-    console.error("Feil ved lasting av produkter:", err);
-    grid.innerHTML = `<p>Kunne ikke laste produkter akkurat nå.</p>`;
+  if (!filterMain) {
+    titleEl.textContent = "Ugyldig kategori";
+    emptyMessage.style.display = "block";
+    return;
   }
+
+  // ✅ Sett tittel (kun kategori, ikke kjønn – ditt valg B ✅)
+  if (filterSub) {
+    titleEl.textContent = filterSub.replace(/_/g, " ");
+  } else {
+    titleEl.textContent = filterMain;
+  }
+
+  fetch(url)
+    .then(res => res.json())
+    .then(rows => {
+      console.log("✅ Products fetched:", rows.length);
+
+      const filtered = rows.filter(item => {
+        if (!item.main_category) return false;
+
+        const byMain = item.main_category === filterMain;
+        const byGender = filterGender ? item.gender === filterGender : true;
+        const bySub = filterSub ? item.subcategory === filterSub : true;
+        const byKid = filterKidtype ? item.kidtype === filterKidtype : true;
+
+        return byMain && byGender && bySub && byKid;
+      });
+
+      console.log("🎯 Filtered products:", filtered.length);
+
+      if (!filtered.length) {
+        emptyMessage.style.display = "block";
+        return;
+      }
+
+      productGrid.innerHTML = "";
+      emptyMessage.style.display = "none";
+
+      filtered.forEach(product => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+
+        card.innerHTML = `
+          ${product.discount ? `<div class="discount-badge">${Math.round(product.discount * 100)}% OFF</div>` : ""}
+          <img src="${product.image_url}" alt="${product.title}">
+          <div class="product-info">
+            <h3>${product.title}</h3>
+            <p class="brand">${product.brand || ""}</p>
+            <p class="price">${product.price || ""}</p>
+            <a href="${product.product_url}" target="_blank" class="buy-btn">Se produkt</a>
+          </div>
+        `;
+
+        productGrid.appendChild(card);
+      });
+    })
+    .catch(err =>
+      console.error("❌ Feil ved lasting av kategori-produkter:", err)
+    );
 });
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 
 
