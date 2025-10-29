@@ -8,88 +8,98 @@
 </head>
 <body>
 
-  <!-- HEADER (uten mega-meny) -->
+<!-- ✅ HEADER – samme struktur som index.html -->
 <header class="main-header">
   <div class="nav-container">
-    <a href="index.html" class="logo">BrandRadar</a>
+
+    <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box">
       <input type="text" placeholder="Søk produkter eller merker..." />
       <button>🔍</button>
     </div>
 
-    <nav class="mega-menu"></nav>
+    <!-- Toppmeny -->
+    <nav class="top-links">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter</a>
+    </nav>
+
   </div>
-</header>
 
-  <!-- ✅ Manglet – MEGA-MENYEN LASTES HER -->
-<nav class="mega-menu"></nav>
-
-<!-- CATEGORY BAR -->
-<div class="category-bar">
-  <ul class="category-list">
+  <ul class="category-bar">
     <li class="category-item" data-category="Clothing">Klær</li>
     <li class="category-item" data-category="Shoes">Sko</li>
     <li class="category-item" data-category="Gymcorner">Gymcorner</li>
     <li class="category-item" data-category="Accessories">Tilbehør</li>
     <li class="category-item" data-category="Selfcare">Selfcare</li>
   </ul>
-</div>
 
+</header>
 
-  <!-- HEADER -->
-  <!-- (kopier nøyaktig header + nav-wrap fra index.html) -->
+<!-- ✅ MEGA-MENY LASTES HER -->
+<nav class="mega-menu"></nav>
 
- <section class="product-detail">
-  <div class="product-container">
-    <div class="image-gallery">
-      <img id="main-image" src="" alt="Produktbilde" />
-      <div class="thumbnails" id="thumbnails"></div>
-    </div>
+<!-- ✅ MODERNE PRODUKTSIDE -->
+<section class="product-detail">
 
-    <div class="info">
-      <button id="back-btn">← Tilbake</button>
-      <h1 id="product-title"></h1>
-      <p id="product-brand" class="brand"></p>
-      <p id="product-price" class="price"></p>
-      <p id="product-discount" class="discount"></p>
-      <p id="product-rating" class="rating"></p>
-      <p id="product-desc" class="description"></p>
+  <!-- 📌 Venstre: Miniatyrbilder -->
+  <div class="thumbnails" id="thumbnails"></div>
 
-      <button id="favorite-btn">❤️ Legg til favoritt</button>
-      <a id="buy-link" href="#" target="_blank" class="buy-btn">Kjøp produkt</a>
-    </div>
+  <!-- 📌 Senter: Hovedbilde -->
+  <div class="image-gallery">
+    <img id="main-image" src="" alt="Produktbilde" />
   </div>
+
+  <!-- 📌 Høyre: Info & CTA -->
+  <div class="product-info">
+
+    <button id="back-btn">Tilbake</button>
+
+    <h1 id="product-title"></h1>
+    <div id="product-brand" class="product-brand"></div>
+    <div id="product-rating" class="rating"></div>
+
+    <div>
+      <span id="product-price" class="price"></span>
+      <span id="product-discount" class="discount-badge"></span>
+    </div>
+
+    <button id="favorite-btn">🤍 Legg til favoritter</button>
+    <a id="buy-link" href="#" target="_blank">Kjøp produkt</a>
+
+  </div>
+
 </section>
 
+<script src="script.js"></script>
+<script src="script-megamenu.js"></script>
+<script src="script-favorites.js"></script>
+<script src="product.js"></script>
 
-  <script src="script.js"></script>
-  <script src="script-megamenu.js"></script>
-  <script src="product.js"></script>
- <script src="script-favorites.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("favorite-btn");
-    const params = new URLSearchParams(window.location.search);
-    const product = Object.fromEntries(params.entries());
+document.addEventListener("DOMContentLoaded", () => {
 
-    if (!btn) return;
+  const btn = document.getElementById("favorite-btn");
+  const params = new URLSearchParams(window.location.search);
+  const product = Object.fromEntries(params.entries());
 
-    const updateButtonState = () => {
-      const favorites = getFavorites();
-      const isFav = favorites.some(fav => fav.title === product.title);
-      btn.textContent = isFav ? "💔 Fjern fra favoritter" : "❤️ Legg til favoritt";
-    };
+  const updateBtn = () => {
+    const favorites = getFavorites();
+    const isFav = favorites.some(f => f.title === product.title);
+    btn.textContent = isFav ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
+  };
 
-    btn.addEventListener("click", () => {
-      toggleFavorite(product);
-      updateButtonState(); // oppdater teksten direkte
-    });
-
-    updateButtonState(); // vis korrekt tekst når siden lastes
+  btn.addEventListener("click", () => {
+    toggleFavorite(product);
+    updateBtn();
   });
+
+  updateBtn();
+});
 </script>
 
 </body>
 </html>
-
