@@ -1364,6 +1364,48 @@ nav.mega-menu {
 }
 
 
+/* ✅ Mega-menu spacing fix */
+nav.mega-menu .menu-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+  z-index: 1000;
+
+  /* FIXES */
+  justify-content: flex-start; /* Ikke spre for langt */
+  gap: 3rem; /* Mindre avstand mellom kolonner */
+  max-width: 1300px;
+  margin: 0 auto; /* Sentres fint */
+}
+
+/* ✅ Spacing og breddejustering per seksjon */
+nav.mega-menu .menu-section {
+  min-width: 200px;
+}
+
+/* ✅ Topptekst spacing */
+nav.mega-menu .menu-section h4 {
+  margin-bottom: 0.6rem;
+}
+
+/* ✅ Subtitles spacing */
+nav.mega-menu .menu-section .menu-subtitle {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* ✅ Liste spacing */
+nav.mega-menu .menu-section li {
+  margin: 0.3rem 0;
+}
+
 
 
 
