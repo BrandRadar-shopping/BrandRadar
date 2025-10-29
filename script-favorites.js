@@ -32,8 +32,8 @@ const toggleFavorite = (product) => {
 // Teller-funksjon (oppdaterer antall i header)
 const updateFavoriteCount = () => {
   const count = getFavorites().length;
-  const favLink = document.querySelector('.main-nav a[href="favoritter.html"]');
-  if (favLink) favLink.textContent = count > 0 ? `Favoritter (${count})` : "Favoritter";
+  const counter = document.getElementById("favorites-count");
+  if (counter) counter.textContent = count;
 };
 
 // Toast (melding som vises kort)
