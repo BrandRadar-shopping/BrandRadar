@@ -1291,6 +1291,39 @@ nav.mega-menu {
   display: none !important;
 }
 
+/* GRID per seksjon */
+.menu-panel .menu-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding-right: 32px;
+  border-right: 1px solid #eee;
+}
+
+.menu-panel .menu-block:last-child {
+  border-right: none;
+}
+
+/* Kolonnetitler */
+.menu-section h4 {
+  color: #0070f3;
+  margin-bottom: 8px;
+}
+
+/* Lists */
+.menu-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-subtitle {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
 
 
 
