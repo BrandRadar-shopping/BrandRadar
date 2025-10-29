@@ -1434,6 +1434,59 @@ nav.mega-menu .menu-section a:hover { color: #0070f3; text-decoration: underline
 .nav-wrap, .nav-categories, .mega-content, .mega-menu .column { display: none !important; }
 
 
+/* ===== Category Bar (øverst, horisontal) ===== */
+.category-bar {
+  background: #000;       /* matcher headeren din */
+  padding: 8px 0;
+}
+.category-bar .category-list {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+}
+.category-bar .category-item {
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+.category-bar .category-item:hover {
+  color: #0070f3;
+}
+
+/* ===== Mega-meny paneler (drop-panel under header) ===== */
+nav.mega-menu { position: relative; }
+nav.mega-menu .menu-panel {
+  display: none;          /* JS setter display:flex når aktiv */
+  position: absolute;
+  top: 100%;              /* legg panelet rett under nav */
+  left: 0;
+  right: 0;
+  padding: 18px 22px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 1000;
+  gap: 32px;
+}
+
+nav.mega-menu .menu-section { min-width: 200px; }
+nav.mega-menu .menu-section h4 { margin: 6px 0 8px; font-size: 15px; color: #111; }
+nav.mega-menu .menu-section .menu-subtitle { margin: 12px 0 6px; font-size: 13px; color: #666; }
+nav.mega-menu .menu-section ul { list-style: none; padding: 0; margin: 0; }
+nav.mega-menu .menu-section li { margin: 6px 0; }
+nav.mega-menu .menu-section a { color: #222; text-decoration: none; }
+nav.mega-menu .menu-section a:hover { color: #0070f3; text-decoration: underline; }
+
+/* Skjul den innebygde topplisten fra mega-menu.html (vi bruker category-bar i stedet) */
+nav.mega-menu .menu-top { display: none !important; }
+
+/* Hvis gammel struktur fortsatt finnes, deaktiver den midlertidig */
+.nav-wrap, .nav-categories, .mega-content, .mega-menu .column { display: none !important; }
+
 
 
 
