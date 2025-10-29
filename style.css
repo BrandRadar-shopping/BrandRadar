@@ -1364,62 +1364,97 @@ nav.mega-menu {
 }
 
 
-/* ✅ Mega-menu spacing fix */
+/* ✅ Mega-menu – full width background + centered content */
 nav.mega-menu .menu-panel {
-  display: none;
+  display: none; /* JS aktiverer */
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
-  padding: 1.5rem 2rem;
+  width: 100vw; /* Full skjermbredde */
   background: #fff;
   border-radius: 0 0 14px 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
-  z-index: 1000;
-
-  /* FIXES */
-  justify-content: flex-start; /* Ikke spre for langt */
-  gap: 3rem; /* Mindre avstand mellom kolonner */
-  max-width: 1300px;
-  margin: 0 auto; /* Sentres fint */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 2rem 0;
+  z-index: 2000;
+  justify-content: center; /* Sentrum */
+  gap: 3rem;
 }
 
-/* ✅ Spacing og breddejustering per seksjon */
+/* ✅ Holder innhold max 1300px og midtstilt */
+nav.mega-menu .menu-panel > .menu-section,
+nav.mega-menu .menu-panel > div {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* ✅ Layout inside panel */
+nav.mega-menu .menu-panel {
+  display: none;
+  flex-wrap: nowrap;
+}
+
+/* ✅ Seksjoner (kolonner) */
 nav.mega-menu .menu-section {
   min-width: 200px;
 }
 
-/* ✅ Topptekst spacing */
+/* ✅ Overskrifter */
 nav.mega-menu .menu-section h4 {
+  font-size: 1rem;
+  font-weight: 700;
   margin-bottom: 0.6rem;
+  color: #111;
 }
 
-/* ✅ Subtitles spacing */
+/* ✅ Undertekst (Jente / Gutt osv) */
 nav.mega-menu .menu-section .menu-subtitle {
   margin: 1rem 0 0.4rem;
   font-size: 0.85rem;
-  color: #666;
+  color: #555;
 }
 
 /* ✅ Liste spacing */
-nav.mega-menu .menu-section li {
-  margin: 0.3rem 0;
+nav.mega-menu .menu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* Category Bar unified w/ header */
+nav.mega-menu .menu-section li {
+  margin: 0.4rem 0;
+}
+
+nav.mega-menu .menu-section a {
+  color: #222;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: color 0.15s ease;
+}
+
+nav.mega-menu .menu-section a:hover {
+  color: #0070f3;
+}
+
+/* ✅ Category bar i samme stil som header */
 .category-bar {
   background: #111;
-  padding: 0.9rem 0;
+  padding: 0.95rem 0;
   border: none;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
 }
 
 .category-bar .category-item {
   color: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .category-bar .category-item:hover {
   color: #0070f3;
 }
+
 
 
 
