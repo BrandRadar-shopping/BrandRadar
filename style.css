@@ -1406,6 +1406,21 @@ nav.mega-menu .menu-section li {
   margin: 0.3rem 0;
 }
 
+/* Category Bar unified w/ header */
+.category-bar {
+  background: #111;
+  padding: 0.9rem 0;
+  border: none;
+}
+
+.category-bar .category-item {
+  color: #fff;
+}
+
+.category-bar .category-item:hover {
+  color: #0070f3;
+}
+
 
 
 
