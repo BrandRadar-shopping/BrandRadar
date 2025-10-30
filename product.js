@@ -73,6 +73,74 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ======================================================
+// Related Products Loader
+// ======================================================
+
+(async function loadRelated() {
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_NAME = "BrandRadarProdukter";
+  const relatedGrid = document.getElementById("related-grid");
+
+  if (!relatedGrid) return;
+
+  const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
+  const products = await res.json();
+
+  const matches = products
+    .filter(p =>
+      (p.category === params.get("category") ||
+      p.brand === params.get("brand")) &&
+      p.title !== params.get("title") // Ikke vis samme produkt
+    )
+    .slice(0, 8); // Maks 8 stk
+
+  if (matches.length === 0) {
+    relatedGrid.innerHTML = "<p>Ingen lignende produkter funnet.</p>";
+    return;
+  }
+
+  relatedGrid.innerHTML = "";
+
+  matches.forEach(p => {
+    const paramsObj = new URLSearchParams({
+      title: p.title,
+      brand: p.brand,
+      price: p.price,
+      discount: p.discount,
+      image: p.image_url,
+      image2: p.image2,
+      image3: p.image3,
+      image4: p.image4,
+      url: p.product_url,
+      category: p.category,
+      gender: p.gender,
+      subcategory: p.subcategory,
+      description: p.description,
+      rating: p.rating
+    });
+
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.innerHTML = `
+      ${p.discount ? `<div class="discount-badge">${p.discount}% OFF</div>` : ""}
+      <img src="${p.image_url}" alt="${p.title}" />
+      <div class="product-info">
+        <h3>${p.title}</h3>
+        <p class="price">${p.price} kr</p>
+        <a class="buy-btn">Se produkt</a>
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      window.location.href = `product.html?${paramsObj.toString()}`;
+    });
+
+    relatedGrid.appendChild(card);
+  });
+})();
+
+
 // ✅ Tilbake-knapp
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
