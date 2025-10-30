@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- ✅ HEADER – samme struktur som index.html -->
 <header class="main-header">
   <div class="nav-container">
 
@@ -19,7 +18,6 @@
       <button>🔍</button>
     </div>
 
-    <!-- Toppmeny -->
     <nav class="top-links">
       <a href="index.html">Hjem</a>
       <a href="news.html">Nyheter</a>
@@ -36,36 +34,32 @@
     <li class="category-item" data-category="Accessories">Tilbehør</li>
     <li class="category-item" data-category="Selfcare">Selfcare</li>
   </ul>
-
 </header>
 
-<!-- ✅ MEGA-MENY LASTES HER -->
 <nav class="mega-menu"></nav>
 
-<!-- ✅ MODERNE PRODUKTSIDE -->
 <section class="product-detail">
 
-  <!-- 📌 Venstre: Miniatyrbilder -->
   <div class="thumbnails" id="thumbnails"></div>
 
-  <!-- 📌 Senter: Hovedbilde -->
   <div class="image-gallery">
     <img id="main-image" src="" alt="Produktbilde" />
   </div>
 
-  <!-- 📌 Høyre: Info & CTA -->
   <div class="product-info">
 
-    <button id="back-btn">Tilbake</button>
+    <button id="back-btn">← Tilbake</button>
 
     <h1 id="product-title"></h1>
     <div id="product-brand" class="product-brand"></div>
     <div id="product-rating" class="rating"></div>
 
-    <div>
+    <div class="price-block">
       <span id="product-price" class="price"></span>
       <span id="product-discount" class="discount-badge"></span>
     </div>
+
+    <p id="product-desc" class="description"></p>
 
     <button id="favorite-btn">🤍 Legg til favoritter</button>
     <a id="buy-link" href="#" target="_blank">Kjøp produkt</a>
@@ -78,28 +72,6 @@
 <script src="script-megamenu.js"></script>
 <script src="script-favorites.js"></script>
 <script src="product.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const btn = document.getElementById("favorite-btn");
-  const params = new URLSearchParams(window.location.search);
-  const product = Object.fromEntries(params.entries());
-
-  const updateBtn = () => {
-    const favorites = getFavorites();
-    const isFav = favorites.some(f => f.title === product.title);
-    btn.textContent = isFav ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
-  };
-
-  btn.addEventListener("click", () => {
-    toggleFavorite(product);
-    updateBtn();
-  });
-
-  updateBtn();
-});
-</script>
 
 </body>
 </html>
