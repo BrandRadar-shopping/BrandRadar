@@ -50,6 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (product.images.length > 0) {
     mainImg.src = product.images[0];
+// Plasser main image som thumbnail igjen dersom > 1 bilde
+if (product.images.length > 1) {
+  const firstThumb = document.createElement("img");
+  firstThumb.src = product.images[0];
+  firstThumb.classList.add("thumb", "active");
+  thumbs.insertBefore(firstThumb, thumbs.firstChild);
+}
 
     product.images.forEach((src, index) => {
       const t = document.createElement("img");
