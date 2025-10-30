@@ -6,25 +6,31 @@ document.addEventListener("DOMContentLoaded", () => {
     brand: params.get("brand") || "",
     price: params.get("price") || "",
     discount: params.get("discount") || "",
+    image: params.get("image_url") || "",
+    image2: params.get("image2") || "",
+    image3: params.get("image3") || "",
+    image4: params.get("image4") || "",
     url: params.get("product_url") || "#",
     category: params.get("category") || "",
     gender: params.get("gender") || "",
     subcategory: params.get("subcategory") || "",
     description: params.get("description") || "",
-    rating: params.get("rating") || "",
+    rating: params.get("rating") || ""
+  };
 
-   images: [
-  product.image,  // ✅ ALLTID først
-  product.image2,
-  product.image3,
-  product.image4
-].filter(Boolean),
+  // ✅ Bilder i riktig rekkefølge uten duplikater
+  const uniqueImages = [...new Set([
+    product.image,
+    product.image2,
+    product.image3,
+    product.image4
+  ].filter(Boolean))];
 
-
-  // Sett tekstdata
+  // ✅ Sett hoveddata i UI
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
-  document.getElementById("product-price").textContent = product.price ? `Pris: ${product.price} kr` : "";
+  document.getElementById("product-price").textContent =
+    product.price ? `Pris: ${product.price} kr` : "";
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("buy-link").href = product.url;
 
@@ -33,59 +39,42 @@ document.addEventListener("DOMContentLoaded", () => {
     ratingEl.textContent = `⭐ ${product.rating}/5`;
   }
 
-  // Rabatt
+  // ✅ Rabatt
   const discountEl = document.getElementById("product-discount");
   const discountValue = parseFloat(product.discount);
   if (!isNaN(discountValue) && discountValue > 0) {
     const pct = discountValue <= 1 ? Math.round(discountValue * 100) : discountValue;
-    discountEl.textContent = `${pct}%`;
-  } else {
-    discountEl.textContent = "";
+    discountEl.textContent = `-${pct}%`;
   }
 
-  // Bildegalleri
+  // ✅ Bildegalleri
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
-  const container = document.querySelector(".product-detail");
 
-  if (product.images.length > 0) {
-    mainImg.src = product.images[0];
-// Plasser main image som thumbnail igjen dersom > 1 bilde
-if (product.images.length > 1) {
-  const firstThumb = document.createElement("img");
-  firstThumb.src = product.images[0];
-  firstThumb.classList.add("thumb", "active");
-  thumbs.insertBefore(firstThumb, thumbs.firstChild);
-}
+  if (uniqueImages.length) {
+    mainImg.src = uniqueImages[0];
 
-    product.images.forEach((src, index) => {
-      const t = document.createElement("img");
-      t.src = src;
-      t.classList.add("thumb");
-      if (idx === 0) img.classList.add("active");
+    uniqueImages.forEach((src, index) => {
+      const thumb = document.createElement("img");
+      thumb.src = src;
+      thumb.classList.add("thumb");
+      if (index === 0) thumb.classList.add("active");
 
-
-      img.addEventListener("click", () => {
+      thumb.addEventListener("click", () => {
         mainImg.src = src;
         document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-        t.classList.add("active");
-        document.querySelectorAll(".thumb").forEach(t => t.classList.remove("active"));
-img.classList.add("active");
-
+        thumb.classList.add("active");
       });
 
-      thumbs.appendChild(t);
+      thumbs.appendChild(thumb);
     });
-
-    container.classList.add("has-thumbnails");
 
   } else {
     mainImg.src = "https://via.placeholder.com/600x700?text=No+Image";
-    container.classList.add("no-thumbnails");
   }
 });
 
-// Tilbake-knapp
+// ✅ Tilbake-knapp
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
