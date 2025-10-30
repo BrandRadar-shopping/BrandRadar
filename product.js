@@ -6,71 +6,71 @@ document.addEventListener("DOMContentLoaded", () => {
     brand: params.get("brand") || "",
     price: params.get("price") || "",
     discount: params.get("discount") || "",
-    image: params.get("image") || "",
-    images: [
-      params.get("image") || "",
-      params.get("image2") || "",
-      params.get("image3") || "",
-      params.get("image4") || ""
-    ].filter(Boolean),
-    url: params.get("url") || "#",
-    gender: params.get("gender") || "",
+    url: params.get("product_url") || "#",
     category: params.get("category") || "",
+    gender: params.get("gender") || "",
     subcategory: params.get("subcategory") || "",
     description: params.get("description") || "",
-    rating: params.get("rating") || ""
+    rating: params.get("rating") || "",
+
+    images: [
+      params.get("image_url"),
+      params.get("image2"),
+      params.get("image3"),
+      params.get("image4")
+    ].filter(Boolean)
   };
 
-  // Fyll inn felt
+  // Sett tekstdata
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
-  document.getElementById("product-price").textContent =
-    product.price ? `Pris: ${product.price}` : "";
-  // Rabattvisning (samme logikk som index.html)
-const discountEl = document.getElementById("product-discount");
-let discountText = "";
-const discountValue = parseFloat(product.discount);
-
-if (!isNaN(discountValue)) {
-  // Hvis tallet er 0–1 → behandle som 0.20 = 20%
-  if (discountValue <= 1) {
-    discountText = `${Math.round(discountValue * 100)}%`;
-  } else {
-    // F.eks. 20 → 20%
-    discountText = `${Math.round(discountValue)}%`;
-  }
-}
-
-discountEl.textContent = discountText ? `Rabatt: ${discountText}` : "";
-
+  document.getElementById("product-price").textContent = product.price ? `Pris: ${product.price} kr` : "";
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("buy-link").href = product.url;
 
-  // Rating (enkel visning, f.eks. "⭐ 4.3/5")
   const ratingEl = document.getElementById("product-rating");
   if (product.rating) {
-    const value = Number(product.rating);
-    ratingEl.textContent = isNaN(value) ? product.rating : `⭐ ${value}/5`;
+    ratingEl.textContent = `⭐ ${product.rating}/5`;
+  }
+
+  // Rabatt
+  const discountEl = document.getElementById("product-discount");
+  const discountValue = parseFloat(product.discount);
+  if (!isNaN(discountValue) && discountValue > 0) {
+    const pct = discountValue <= 1 ? Math.round(discountValue * 100) : discountValue;
+    discountEl.textContent = `${pct}%`;
   } else {
-    ratingEl.textContent = "";
+    discountEl.textContent = "";
   }
 
   // Bildegalleri
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
+  const container = document.querySelector(".product-detail");
 
-  if (product.images.length) {
+  if (product.images.length > 0) {
     mainImg.src = product.images[0];
-    product.images.forEach((src, idx) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = `Thumbnail ${idx + 1}`;
-      img.classList.add("thumb");
-      img.addEventListener("click", () => (mainImg.src = src));
-      thumbs.appendChild(img);
+
+    product.images.forEach((src, index) => {
+      const t = document.createElement("img");
+      t.src = src;
+      t.classList.add("thumb");
+      if (index === 0) t.classList.add("active");
+
+      t.addEventListener("click", () => {
+        mainImg.src = src;
+        document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
+        t.classList.add("active");
+      });
+
+      thumbs.appendChild(t);
     });
-  } else if (product.image) {
-    mainImg.src = product.image;
+
+    container.classList.add("has-thumbnails");
+
+  } else {
+    mainImg.src = "https://via.placeholder.com/600x700?text=No+Image";
+    container.classList.add("no-thumbnails");
   }
 });
 
@@ -78,4 +78,5 @@ discountEl.textContent = discountText ? `Rabatt: ${discountText}` : "";
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
+
 
