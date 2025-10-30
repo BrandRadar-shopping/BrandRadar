@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
     description: params.get("description") || "",
     rating: params.get("rating") || "",
 
-    images: [
-      params.get("image_url"),
-      params.get("image2"),
-      params.get("image3"),
-      params.get("image4")
-    ].filter(Boolean)
-  };
+   images: [
+  product.image,  // ✅ ALLTID først
+  product.image2,
+  product.image3,
+  product.image4
+].filter(Boolean),
+
 
   // Sett tekstdata
   document.getElementById("product-title").textContent = product.title;
