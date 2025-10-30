@@ -62,12 +62,16 @@ if (product.images.length > 1) {
       const t = document.createElement("img");
       t.src = src;
       t.classList.add("thumb");
-      if (index === 0) t.classList.add("active");
+      if (idx === 0) img.classList.add("active");
 
-      t.addEventListener("click", () => {
+
+      img.addEventListener("click", () => {
         mainImg.src = src;
         document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
         t.classList.add("active");
+        document.querySelectorAll(".thumb").forEach(t => t.classList.remove("active"));
+img.classList.add("active");
+
       });
 
       thumbs.appendChild(t);
