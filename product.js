@@ -167,6 +167,14 @@ document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
 
+// Slider buttons
+const slider = document.getElementById("related-slider");
+document.querySelector(".slider-btn.prev")?.addEventListener("click", () => {
+  slider.scrollBy({ left: -300, behavior: "smooth" });
+});
+document.querySelector(".slider-btn.next")?.addEventListener("click", () => {
+  slider.scrollBy({ left: 300, behavior: "smooth" });
+});
 
 
 
