@@ -1959,11 +1959,11 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
 }
 
 .slider-btn.prev {
-  left: -22px;
+  left: -35px;
 }
 
 .slider-btn.next {
-  right: -22px;
+  right: -35px;
 }
 
 /* Fade på sidene */
@@ -1987,6 +1987,16 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   background: linear-gradient(to left, #fff, transparent);
 }
 
+
+.slider-wrapper {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.slider-btn {
+  z-index: 10; /* ✅ sørger for at hele knappen alltid vises */
+}
 
 
 
