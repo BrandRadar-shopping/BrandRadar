@@ -1736,6 +1736,17 @@ STICKY MEGAMENY
   z-index: 999;
 }
 
+================================
+STØRRE HOVEDBILDE PRODUCT.HTML
+================================
+
+#main-image {
+  width: 100%;
+  max-width: 550px; /* øker størrelse */
+  border-radius: 10px;
+  border: 2px solid #000; /* svart ramme */
+  object-fit: contain;
+}
 
 
 
