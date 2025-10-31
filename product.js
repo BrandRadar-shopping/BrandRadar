@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
-  const relatedGrid = document.getElementById("related-grid");
+  const relatedGrid = document.getElementById("related-slider");
   if (!relatedGrid) return;
 
   const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
