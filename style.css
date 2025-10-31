@@ -1764,6 +1764,88 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   margin-right: 10px;
 }
 
+/* =====================================
+   PREMIUM RELATED PRODUCT SLIDER – C style
+======================================*/
+.related-section {
+  padding: 3rem 0;
+  border-top: 1px solid #222;
+  margin-top: 3rem;
+}
+
+.related-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  text-align: left;
+  max-width: 1300px;
+  margin: 0 auto 1rem auto;
+}
+
+/* Wrapper for slider */
+.slider-wrapper {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Selve sliderlinjen */
+.related-slider {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 12px;
+}
+
+/* Produktkort i slider */
+.related-slider .product-card {
+  background: #fff;
+  min-width: 260px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.related-slider .product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Bilder */
+.related-slider .product-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Navigation arrows */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  z-index: 20;
+  transition: background 0.2s ease;
+}
+
+.slider-btn:hover { background: #000; }
+.prev { left: -50px; }
+.next { right: -50px; }
+
+@media (max-width: 768px) {
+  .slider-btn { display: none; } /* Swipe på mobil */
+}
+
 
 
 
