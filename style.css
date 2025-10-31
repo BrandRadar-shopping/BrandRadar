@@ -1772,6 +1772,20 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   z-index: 5000;
 }
 
+/* ✅ REMOVE OLD FLOATING MEGA MENU TRIGGERS */
+.menu-top {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* ✅ Align dropdown perfectly under category-bar */
+nav.mega-menu .menu-panel {
+  top: 100%; /* EXACTLY under category bar */
+  margin-top: 0;
+}
 
 
 
