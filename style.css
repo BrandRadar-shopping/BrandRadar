@@ -1846,6 +1846,71 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   .slider-btn { display: none; } /* Swipe på mobil */
 }
 
+/* ✅ Slider container */
+.related-slider-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Venstre og høyre knapp */
+.slider-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: 2px solid #111;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: 0.2s ease;
+}
+
+.slider-btn:hover {
+  background: #f4f4f4;
+}
+
+.slider-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #111;
+}
+
+.slider-btn.left {
+  left: -20px;
+}
+
+.slider-btn.right {
+  right: -20px;
+}
+
+/* Fade indikasjon */
+.related-slider-wrapper::before,
+.related-slider-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  z-index: 49;
+  pointer-events: none;
+}
+
+.related-slider-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #fff 40%, transparent);
+}
+
+.related-slider-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #fff 40%, transparent);
+}
+
 
 
 
