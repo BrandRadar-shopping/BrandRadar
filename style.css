@@ -1594,17 +1594,6 @@ nav.mega-menu .menu-section a:hover {
   font-weight: 700;
 }
 
-
-/* =================================================
-STICKY MEGAMENY
-================================================= */
-
-.mega-menu {
-  position: sticky;
-  top: 72px; /* akkurat under headeren */
-  z-index: 999;
-}
-
 /* ================================
 STØRRE HOVEDBILDE PRODUCT.HTML
 ================================ */
@@ -1775,6 +1764,7 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
 .slider-wrapper::after {
   z-index: 50 !important;
 }
+
 
 
 
