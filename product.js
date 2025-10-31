@@ -140,6 +140,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
+// ✅ Favoritt-knapp
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("favorite-btn");
+  if (!btn) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const product = Object.fromEntries(params.entries());
+
+  const updateBtn = () => {
+    const isFav = getFavorites().some(f => f.title === product.title);
+    btn.textContent = isFav ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
+  };
+
+  btn.addEventListener("click", () => {
+    toggleFavorite(product);
+    updateBtn();
+  });
+
+  updateBtn();
+});
+
+
 // ✅ Tilbake-knapp
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
