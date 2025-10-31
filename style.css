@@ -1222,9 +1222,14 @@ body {
 
 /* ✅ MEGA MENU */
 nav.mega-menu {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw; /* sikrer full width */
+  margin-top: 0 !important;
+  z-index: 2000;
 }
+
 
 /* Panels (content) */
 .menu-panel {
@@ -1906,6 +1911,7 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
 .slider-wrapper::after {
   z-index: 50 !important;
 }
+
 
 
 
