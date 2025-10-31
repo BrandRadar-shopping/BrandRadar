@@ -1239,12 +1239,12 @@ nav.mega-menu .menu-panel {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 100vw;
   background: #fff;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
   padding: 2rem 0;
-  z-index: 5000;
+  z-index: 6000;
   justify-content: center;
   gap: 3rem;
 }
@@ -1765,21 +1765,13 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   z-index: 50 !important;
 }
 
-nav.mega-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100vw;
-  margin: 0;
-  padding: 0;
-  z-index: 4000;
-}
 
 .main-header {
   position: sticky;
   top: 0;
   z-index: 5000;
 }
+
 
 
 
