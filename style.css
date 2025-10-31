@@ -1788,52 +1788,44 @@ nav.mega-menu .menu-panel {
 }
 
 
-/* ✅ Mega-meny: 3 seksjoner side-om-side */
+/* ✅ Mega-meny — 3 blokker side-om-side */
 nav.mega-menu .menu-panel {
   display: flex !important;
   justify-content: center;
-  align-items: flex-start;
   gap: 4rem;
+  padding: 2rem 0;
 }
 
-/* ✅ Hver seksjon (Herre / Dame / Barn) */
+/* ✅ Hver blokk: 1 kolonne produkt-kategorier + 1 kolonne toppmerker */
 nav.mega-menu .menu-block {
-  display: grid !important;
-  grid-template-columns: 1fr 0.9fr; /* venstre produkter, høyre toppmerker */
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
   gap: 2rem;
   padding-right: 2.5rem;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #e5e5e5;
 }
 
-/* ✅ Siste blokk: ingen strek */
+/* ✅ Siste blokk trenger ikke strek */
 nav.mega-menu .menu-block:last-child {
   border-right: none;
 }
 
-/* ✅ Toppmerker skal stå i høyre kolonne */
-nav.mega-menu .menu-section.toppmerker {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* ✅ Overskrifter */
+/* ✅ Typografi */
 nav.mega-menu .menu-section h4 {
-  font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: #111;
 }
 
-/* ✅ Underseksjoner */
 nav.mega-menu .menu-subtitle {
-  margin: 0.6rem 0 0.35rem;
+  margin-top: 0.7rem;
+  margin-bottom: 0.25rem;
   font-size: 0.85rem;
   font-weight: 600;
   color: #444;
 }
 
-/* ✅ Lenker */
+/* ✅ List styling */
 nav.mega-menu .menu-section ul {
   list-style: none;
   margin: 0;
@@ -1850,9 +1842,23 @@ nav.mega-menu .menu-section a {
   font-size: 0.9rem;
   transition: 0.15s ease;
 }
+
 nav.mega-menu .menu-section a:hover {
   color: #0070f3;
 }
+
+/* ✅ Toppmerker får riktig layout */
+nav.mega-menu .menu-section.brands {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ✅ Padding justering for perfekt linjehøyde */
+nav.mega-menu .menu-section {
+  line-height: 1.35rem;
+}
+
 
 
 
