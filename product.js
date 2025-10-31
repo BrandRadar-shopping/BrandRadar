@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("buy-link").href = product.url;
 
   const ratingEl = document.getElementById("product-rating");
-  ratingEl.textContent = product.rating ? `⭐ ${product.rating}/5` : "";
+  ratingEl.textContent = product.rating ? `⭐ ${product.rating}: "";
 
   // Rabatt
   const discountEl = document.getElementById("product-discount");
