@@ -1738,14 +1738,6 @@ nav.mega-menu .menu-panel {
 }
 
 
-/* ✅ Mega-meny — 3 blokker side-om-side */
-nav.mega-menu .menu-panel {
-  display: flex !important;
-  justify-content: center;
-  gap: 4rem;
-  padding: 2rem 0;
-}
-
 /* ✅ Hver blokk: 1 kolonne produkt-kategorier + 1 kolonne toppmerker */
 nav.mega-menu .menu-block {
   display: grid;
@@ -1808,6 +1800,7 @@ nav.mega-menu .menu-section.brands {
 nav.mega-menu .menu-section {
   line-height: 1.35rem;
 }
+
 
 
 
