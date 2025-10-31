@@ -1220,68 +1220,67 @@ body {
   color: #0070f3;
 }
 
-/* ✅ MEGA MENU (RYDDET OG FIXET) */
+/* ✅ MEGA MENU FIX */
 nav.mega-menu {
   position: relative;
   width: 100%;
   z-index: 2000;
 }
 
-/* ✅ Fjern unødvendig gap under header */
+/* ✅ Sørger for at den ligger rett under headeren uten mellomrom */
 .main-header {
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
 
-/* ✅ Mega menu panel full width + plassert helt inntil */
+/* ✅ Panel: ligger over content, ikke skubber ned */
 nav.mega-menu .menu-panel {
-  display: none; /* JS aktiverer */
+  display: none; /* styres med JS */
   position: absolute;
-  top: calc(100% - 1px); /* Fjerner mellomrom */
+  top: 100%;
   left: 0;
-  width: 100vw;
+  width: 100%;
   background: #fff;
-  border-radius: 0 0 14px 14px;
+  border-radius: 0 0 12px 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   padding: 2rem 0;
-  z-index: 3000;
+  z-index: 5000;
   justify-content: center;
   gap: 3rem;
-  flex-wrap: nowrap;
 }
 
-/* ✅ Max innehaverbredde */
+/* ✅ Innhold max 1300px */
 nav.mega-menu .menu-panel > .menu-section,
 nav.mega-menu .menu-panel > div {
   max-width: 1300px;
+  width: 100%;
   margin: 0 auto;
 }
 
-/* ✅ Seksjoner (kolonner) */
+/* ✅ Seksjoner i panel */
 nav.mega-menu .menu-section {
   min-width: 200px;
 }
 
-/* ✅ Overskrifter */
+/* ✅ Typografi i panel */
 nav.mega-menu .menu-section h4 {
   font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
+  font-weight: 600;
+  margin-bottom: 8px;
   color: #111;
 }
 
-/* ✅ Undertekst */
 nav.mega-menu .menu-section .menu-subtitle {
-  margin: 1rem 0 0.4rem;
+  margin-top: 10px;
   font-size: 0.85rem;
+  font-weight: 600;
   color: #555;
 }
 
-/* ✅ Lenker & lister */
 nav.mega-menu .menu-section ul {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 nav.mega-menu .menu-section li {
@@ -1298,6 +1297,7 @@ nav.mega-menu .menu-section a {
 nav.mega-menu .menu-section a:hover {
   color: #0070f3;
 }
+
 
 /* ✅ Vises når script aktiverer flex */
 .menu-panel[style*="flex"] {
@@ -1775,6 +1775,7 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
 .slider-wrapper::after {
   z-index: 50 !important;
 }
+
 
 
 
