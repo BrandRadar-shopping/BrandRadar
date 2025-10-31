@@ -1748,6 +1748,21 @@ STØRRE HOVEDBILDE PRODUCT.HTML
   object-fit: contain;
 }
 
+==================================
+SORT RAMME RUNDT HOVEDBILDET
+==================================
+
+.thumb.active {
+  border-color: #000 !important;
+}
+
+==================================
+MELLOMROM THUMBNAILS -> HOVEDBILDE
+==================================
+
+.thumbnails {
+  margin-right: 10px;
+}
 
 
 
