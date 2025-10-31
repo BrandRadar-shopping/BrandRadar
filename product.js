@@ -176,5 +176,31 @@ document.querySelector(".slider-btn.next")?.addEventListener("click", () => {
   slider.scrollBy({ left: 300, behavior: "smooth" });
 });
 
+// SLIDER SCROLL
+const slider = document.getElementById("related-slider");
+const btnPrev = document.querySelector(".slider-btn.prev");
+const btnNext = document.querySelector(".slider-btn.next");
+
+function updateSliderNav() {
+  btnPrev.style.opacity = slider.scrollLeft > 5 ? "1" : "0";
+  btnNext.style.opacity =
+    slider.scrollWidth - slider.clientWidth - slider.scrollLeft > 5 ? "1" : "0";
+}
+
+// Klikk beveger 350px per gang
+btnPrev?.addEventListener("click", () => {
+  slider.scrollBy({ left: -350, behavior: "smooth" });
+  setTimeout(updateSliderNav, 200);
+});
+
+btnNext?.addEventListener("click", () => {
+  slider.scrollBy({ left: 350, behavior: "smooth" });
+  setTimeout(updateSliderNav, 200);
+});
+
+// Auto oppdater ved scroll
+slider?.addEventListener("scroll", updateSliderNav);
+
+updateSliderNav();
 
 
