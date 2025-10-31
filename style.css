@@ -1890,6 +1890,23 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
 }
 
 
+/* ✅ Sørg for at slider-knapper alltid ligger OVER kortene */
+.slider-btn {
+  z-index: 200 !important;
+}
+
+/* ✅ Sørg for at kanten ikke kutter knappene */
+.slider-wrapper {
+  overflow: visible !important;
+  z-index: 1;
+}
+
+/* ✅ Fade gradient må ikke ligge over knappene */
+.slider-wrapper::before,
+.slider-wrapper::after {
+  z-index: 50 !important;
+}
+
 
 
 
