@@ -74,50 +74,55 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ======================================================
-// Related Products Loader
+// Related Products Loader (robust matching)
 // ======================================================
-
 (async function loadRelated() {
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const relatedGrid = document.getElementById("related-grid");
-
   if (!relatedGrid) return;
 
   const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
   const products = await res.json();
 
-  const matches = products
-    .filter(p =>
-      (p.category === params.get("category") ||
-      p.brand === params.get("brand")) &&
-      p.title !== params.get("title") // Ikke vis samme produkt
-    )
-    .slice(0, 8); // Maks 8 stk
+  const currentTitle = (params.get("title") || "").trim();
+  const currentCategory = (params.get("category") || "").trim().toLowerCase();
+  const currentBrand = (params.get("brand") || "").trim().toLowerCase();
 
-  if (matches.length === 0) {
-    relatedGrid.innerHTML = "<p>Ingen lignende produkter funnet.</p>";
+  // Først: match kategori
+  let matches = products.filter(p =>
+    p.image_url &&
+    p.title !== currentTitle &&
+    (p.category || "").trim().toLowerCase() === currentCategory
+  );
+
+  // Hvis < 4 treff → fallback til brand
+  if (matches.length < 4) {
+    const brandMatches = products.filter(p =>
+      p.image_url &&
+      p.title !== currentTitle &&
+      (p.brand || "").trim().toLowerCase() === currentBrand
+    );
+    matches = [...matches, ...brandMatches];
+  }
+
+  // Fjern duplikater og begrens til 8
+  matches = [...new Map(matches.map(p => [p.title, p])).values()].slice(0, 8);
+
+  if (!matches.length) {
+    relatedGrid.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
     return;
   }
 
   relatedGrid.innerHTML = "";
 
+  // Tegn produktkort
   matches.forEach(p => {
     const paramsObj = new URLSearchParams({
-      title: p.title,
-      brand: p.brand,
-      price: p.price,
-      discount: p.discount,
-      image: p.image_url,
-      image2: p.image2,
-      image3: p.image3,
-      image4: p.image4,
-      url: p.product_url,
-      category: p.category,
-      gender: p.gender,
-      subcategory: p.subcategory,
-      description: p.description,
-      rating: p.rating
+      title: p.title, brand: p.brand, price: p.price, discount: p.discount,
+      image: p.image_url, image2: p.image2, image3: p.image3, image4: p.image4,
+      url: p.product_url, category: p.category, gender: p.gender,
+      subcategory: p.subcategory, description: p.description, rating: p.rating
     });
 
     const card = document.createElement("div");
@@ -128,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="product-info">
         <h3>${p.title}</h3>
         <p class="price">${p.price} kr</p>
-        <a class="buy-btn">Se produkt</a>
+        <button class="buy-btn">Se produkt</button>
       </div>
     `;
 
@@ -139,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     relatedGrid.appendChild(card);
   });
 })();
+
 
 
 // ✅ Tilbake-knapp
