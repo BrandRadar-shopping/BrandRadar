@@ -2,6 +2,7 @@
 // BrandRadar.shop – Produktvisning (Complete + FIXED)
 // ======================================================
 
+// ✅ Produktinfo
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
 
@@ -26,23 +27,22 @@ document.addEventListener("DOMContentLoaded", () => {
     product.image, product.image2, product.image3, product.image4
   ].filter(Boolean);
 
-  // ✅ Fyll inn produktinfo
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.url;
 
-  // ✅ Rating – rens tall
+  // ✅ Rating – tallrens
   const ratingEl = document.getElementById("product-rating");
-  const n = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
-  ratingEl.textContent = !isNaN(n) ? `⭐ ${n} / 5` : "";
+  const ratingNumber = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
+  ratingEl.textContent = !isNaN(ratingNumber) ? `⭐ ${ratingNumber} / 5` : "";
 
   // ✅ Rabatt
   const discountEl = document.getElementById("product-discount");
-  const v = parseFloat(product.discount);
-  discountEl.textContent = (!isNaN(v) && v > 0)
-    ? `-${(v <= 1 ? v * 100 : v).toFixed(0)}%`
+  const discountValue = parseFloat(product.discount);
+  discountEl.textContent = (!isNaN(discountValue) && discountValue > 0)
+    ? `-${(discountValue <= 1 ? discountValue * 100 : discountValue).toFixed(0)}%`
     : "";
 
   // ✅ Bildegalleri
@@ -54,19 +54,19 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     mainImg.src = images[0];
 
-    images.forEach((src, index) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.classList.add("thumb");
-      if (index === 0) img.classList.add("active");
+    images.forEach((src, i) => {
+      const t = document.createElement("img");
+      t.src = src;
+      t.classList.add("thumb");
+      if (i === 0) t.classList.add("active");
 
-      img.addEventListener("click", () => {
+      t.addEventListener("click", () => {
         document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-        img.classList.add("active");
+        t.classList.add("active");
         mainImg.src = src;
       });
 
-      thumbs.appendChild(img);
+      thumbs.appendChild(t);
     });
   }
 });
@@ -76,13 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
+  const relatedSlider = document.getElementById("related-slider");
+  if (!relatedSlider) return;
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
-  const relatedGrid = document.getElementById("related-slider");
-  if (!relatedGrid) return;
 
-  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
+    .then(r => r.json());
 
   const currentTitle = params.get("title") || "";
   const currentCategory = (params.get("category") || "").toLowerCase();
@@ -105,11 +106,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   matches = [...new Map(matches.map(p => [p.title, p])).values()].slice(0, 8);
 
   if (!matches.length) {
-    relatedGrid.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
+    relatedSlider.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
     return;
   }
 
-  relatedGrid.innerHTML = "";
+  relatedSlider.innerHTML = "";
   matches.forEach(p => {
     const paramsObj = new URLSearchParams({
       title: p.title, brand: p.brand, price: p.price,
@@ -136,11 +137,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = `product.html?${paramsObj.toString()}`;
     });
 
-    relatedGrid.appendChild(card);
+    relatedSlider.appendChild(card);
   });
 });
 
+// ======================================================
 // ✅ Favoritt-knapp
+// ======================================================
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("favorite-btn");
   if (!btn) return;
@@ -149,8 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const product = Object.fromEntries(params.entries());
 
   const updateBtn = () => {
-    const isFav = getFavorites().some(f => f.title === product.title);
-    btn.textContent = isFav ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
+    const exists = getFavorites().some(f => f.title === product.title);
+    btn.textContent = exists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
   };
 
   btn.addEventListener("click", () => {
@@ -161,33 +164,24 @@ document.addEventListener("DOMContentLoaded", () => {
   updateBtn();
 });
 
-
-// ✅ Tilbake-knapp
+// ✅ Tilbake
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
 
-// Slider buttons
-const slider = document.getElementById("related-slider");
-document.querySelector(".slider-btn.prev")?.addEventListener("click", () => {
-  slider.scrollBy({ left: -300, behavior: "smooth" });
-});
-document.querySelector(".slider-btn.next")?.addEventListener("click", () => {
-  slider.scrollBy({ left: 300, behavior: "smooth" });
-});
-
-// SLIDER SCROLL
+// ======================================================
+// ✅ Slider Scroll Buttons (⚠️ eneste aktive nå)
+// ======================================================
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
 const btnNext = document.querySelector(".slider-btn.next");
 
 function updateSliderNav() {
   btnPrev.style.opacity = slider.scrollLeft > 5 ? "1" : "0";
-  btnNext.style.opacity =
+  btnNext.style.opacity = 
     slider.scrollWidth - slider.clientWidth - slider.scrollLeft > 5 ? "1" : "0";
 }
 
-// Klikk beveger 350px per gang
 btnPrev?.addEventListener("click", () => {
   slider.scrollBy({ left: -350, behavior: "smooth" });
   setTimeout(updateSliderNav, 200);
@@ -198,9 +192,7 @@ btnNext?.addEventListener("click", () => {
   setTimeout(updateSliderNav, 200);
 });
 
-// Auto oppdater ved scroll
 slider?.addEventListener("scroll", updateSliderNav);
-
 updateSliderNav();
 
 
