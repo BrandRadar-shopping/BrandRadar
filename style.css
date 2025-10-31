@@ -1788,6 +1788,72 @@ nav.mega-menu .menu-panel {
 }
 
 
+/* ✅ Mega-meny: 3 seksjoner side-om-side */
+nav.mega-menu .menu-panel {
+  display: flex !important;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4rem;
+}
+
+/* ✅ Hver seksjon (Herre / Dame / Barn) */
+nav.mega-menu .menu-block {
+  display: grid !important;
+  grid-template-columns: 1fr 0.9fr; /* venstre produkter, høyre toppmerker */
+  gap: 2rem;
+  padding-right: 2.5rem;
+  border-right: 1px solid #ddd;
+}
+
+/* ✅ Siste blokk: ingen strek */
+nav.mega-menu .menu-block:last-child {
+  border-right: none;
+}
+
+/* ✅ Toppmerker skal stå i høyre kolonne */
+nav.mega-menu .menu-section.toppmerker {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ✅ Overskrifter */
+nav.mega-menu .menu-section h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #111;
+}
+
+/* ✅ Underseksjoner */
+nav.mega-menu .menu-subtitle {
+  margin: 0.6rem 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ✅ Lenker */
+nav.mega-menu .menu-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav.mega-menu .menu-section li {
+  margin: 0.35rem 0;
+}
+
+nav.mega-menu .menu-section a {
+  color: #222;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: 0.15s ease;
+}
+nav.mega-menu .menu-section a:hover {
+  color: #0070f3;
+}
+
 
 
 
