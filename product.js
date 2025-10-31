@@ -1,5 +1,5 @@
 // ======================================================
-// BrandRadar.shop – Produktvisning (FIXED + Thumbnails Correct)
+// BrandRadar.shop – Produktvisning (Complete + FIXED)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -26,97 +26,82 @@ document.addEventListener("DOMContentLoaded", () => {
     product.image, product.image2, product.image3, product.image4
   ].filter(Boolean);
 
-  // Sett inn tekstdata
+  // ✅ Fyll inn produktinfo
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
-  document.getElementById("product-price").textContent =
-    product.price ? `${product.price} kr` : "";
   document.getElementById("product-desc").textContent = product.description || "";
+  document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.url;
 
-  // Rating – ryddig og konsekvent visning
-const ratingEl = document.getElementById("product-rating");
-let ratingValue = product.rating
-  ? parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""))
-  : NaN;
+  // ✅ Rating – rens tall
+  const ratingEl = document.getElementById("product-rating");
+  const n = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
+  ratingEl.textContent = !isNaN(n) ? `⭐ ${n} / 5` : "";
 
-if (!isNaN(ratingValue)) {
-  ratingEl.textContent = `⭐ ${ratingValue} / 5`;
-} else {
-  ratingEl.textContent = "";
-}
-
-
-  // Rabatt
+  // ✅ Rabatt
   const discountEl = document.getElementById("product-discount");
   const v = parseFloat(product.discount);
-  if (!isNaN(v) && v > 0) {
-    const pct = v <= 1 ? Math.round(v * 100) : Math.round(v);
-    discountEl.textContent = `-${pct}%`;
-  }
+  discountEl.textContent = (!isNaN(v) && v > 0)
+    ? `-${(v <= 1 ? v * 100 : v).toFixed(0)}%`
+    : "";
 
-  // Bildegalleri
+  // ✅ Bildegalleri
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
 
-  // ✅ fallback
   if (!images.length) {
     mainImg.src = "https://via.placeholder.com/600x700?text=No+Image";
-    return;
-  }
+  } else {
+    mainImg.src = images[0];
 
-  mainImg.src = images[0];
+    images.forEach((src, index) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.classList.add("thumb");
+      if (index === 0) img.classList.add("active");
 
-  images.forEach((src, index) => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.classList.add("thumb");
-    if (index === 0) img.classList.add("active");
+      img.addEventListener("click", () => {
+        document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
+        img.classList.add("active");
+        mainImg.src = src;
+      });
 
-    img.addEventListener("click", () => {
-      document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-      img.classList.add("active");
-      mainImg.src = src;
+      thumbs.appendChild(img);
     });
-
-    thumbs.appendChild(img);
-  });
+  }
 });
 
 // ======================================================
-// Related Products Loader (robust matching)
+// Related Products Loader ✅
 // ======================================================
-(async function loadRelated() {
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const relatedGrid = document.getElementById("related-grid");
   if (!relatedGrid) return;
 
-  const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
-  const products = await res.json();
+  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
 
-  const currentTitle = (params.get("title") || "").trim();
-  const currentCategory = (params.get("category") || "").trim().toLowerCase();
-  const currentBrand = (params.get("brand") || "").trim().toLowerCase();
+  const currentTitle = params.get("title") || "";
+  const currentCategory = (params.get("category") || "").toLowerCase();
+  const currentBrand = (params.get("brand") || "").toLowerCase();
 
-  // Først: match kategori
   let matches = products.filter(p =>
     p.image_url &&
     p.title !== currentTitle &&
     (p.category || "").trim().toLowerCase() === currentCategory
   );
 
-  // Hvis < 4 treff → fallback til brand
   if (matches.length < 4) {
-    const brandMatches = products.filter(p =>
+    matches = matches.concat(products.filter(p =>
       p.image_url &&
       p.title !== currentTitle &&
       (p.brand || "").trim().toLowerCase() === currentBrand
-    );
-    matches = [...matches, ...brandMatches];
+    ));
   }
 
-  // Fjern duplikater og begrens til 8
   matches = [...new Map(matches.map(p => [p.title, p])).values()].slice(0, 8);
 
   if (!matches.length) {
@@ -125,14 +110,14 @@ if (!isNaN(ratingValue)) {
   }
 
   relatedGrid.innerHTML = "";
-
-  // Tegn produktkort
   matches.forEach(p => {
     const paramsObj = new URLSearchParams({
-      title: p.title, brand: p.brand, price: p.price, discount: p.discount,
-      image: p.image_url, image2: p.image2, image3: p.image3, image4: p.image4,
-      url: p.product_url, category: p.category, gender: p.gender,
-      subcategory: p.subcategory, description: p.description, rating: p.rating
+      title: p.title, brand: p.brand, price: p.price,
+      discount: p.discount, image: p.image_url,
+      image2: p.image2, image3: p.image3, image4: p.image4,
+      url: p.product_url, category: p.category,
+      gender: p.gender, subcategory: p.subcategory,
+      description: p.description, rating: p.rating
     });
 
     const card = document.createElement("div");
@@ -153,14 +138,13 @@ if (!isNaN(ratingValue)) {
 
     relatedGrid.appendChild(card);
   });
-})();
-
-
+});
 
 // ✅ Tilbake-knapp
 document.getElementById("back-btn")?.addEventListener("click", () => {
   window.history.back();
 });
+
 
 
 
