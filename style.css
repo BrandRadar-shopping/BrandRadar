@@ -1726,6 +1726,16 @@ nav.mega-menu .menu-section a:hover {
 }
 
 
+=================================================
+STICKY MEGAMENY
+=================================================
+
+.mega-menu {
+  position: sticky;
+  top: 72px; /* akkurat under headeren */
+  z-index: 999;
+}
+
 
 
 
