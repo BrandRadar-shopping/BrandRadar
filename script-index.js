@@ -70,6 +70,8 @@ if (!isNaN(discountValue)) {
         const card = document.createElement("div");
         card.classList.add("product-card");
 
+         ${rating ? `<p class="rating">⭐ ${parseFloat(String(rating).replace(",", ".").replace(/[^0-9.]/g, ""))}</p>` : ""}
+
         card.innerHTML = `
           ${discountDisplay ? `<div class="discount-badge">${discountDisplay}</div>` : ""}
           <div class="fav-icon ${isFav ? "active" : ""}">
@@ -91,6 +93,9 @@ if (!isNaN(discountValue)) {
             <a href="${productUrl}" target="_blank" class="buy-btn">Se produkt</a>
           </div>
         `;
+
+      
+
 
         // Klikk på kort → produktvisning
         card.addEventListener("click", e => {
