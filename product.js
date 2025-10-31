@@ -34,8 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("buy-link").href = product.url;
 
-  const ratingEl = document.getElementById("product-rating");
-  ratingEl.textContent = product.rating ? `⭐ ${product.rating}/5` : "";
+  // Rating – ryddig og konsekvent visning
+const ratingEl = document.getElementById("product-rating");
+let ratingValue = product.rating
+  ? parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""))
+  : NaN;
+
+if (!isNaN(ratingValue)) {
+  ratingEl.textContent = `⭐ ${ratingValue} / 5`;
+} else {
+  ratingEl.textContent = "";
+}
 
 
   // Rabatt
