@@ -197,4 +197,18 @@ btnNext?.addEventListener("click", () => {
 
 slider?.addEventListener("scroll", updateSliderNav);
 
+// ======================================================
+// ✅ Tilbake-knapp – fungerer alltid
+// ======================================================
+const backBtn = document.getElementById("back-btn");
+
+backBtn?.addEventListener("click", () => {
+  const ref = document.referrer;
+
+  if (ref && !ref.includes("product.html")) {
+    window.history.back(); // Gå tilbake til forrige side
+  } else {
+    window.location.href = "index.html"; // Fallback
+  }
+});
 
