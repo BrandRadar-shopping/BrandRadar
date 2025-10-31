@@ -1,5 +1,5 @@
 // ======================================================
-// BrandRadar.shop – Produktvisning (Complete + FIXED)
+// BrandRadar.shop – Produktvisning (Stable Release)
 // ======================================================
 
 // ✅ Produktinfo
@@ -33,19 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.url;
 
-  // ✅ Rating – tallrens
   const ratingEl = document.getElementById("product-rating");
   const ratingNumber = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
   ratingEl.textContent = !isNaN(ratingNumber) ? `⭐ ${ratingNumber} / 5` : "";
 
-  // ✅ Rabatt
   const discountEl = document.getElementById("product-discount");
   const discountValue = parseFloat(product.discount);
   discountEl.textContent = (!isNaN(discountValue) && discountValue > 0)
     ? `-${(discountValue <= 1 ? discountValue * 100 : discountValue).toFixed(0)}%`
     : "";
 
-  // ✅ Bildegalleri
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
 
@@ -55,18 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
     mainImg.src = images[0];
 
     images.forEach((src, i) => {
-      const t = document.createElement("img");
-      t.src = src;
-      t.classList.add("thumb");
-      if (i === 0) t.classList.add("active");
+      const img = document.createElement("img");
+      img.src = src;
+      img.classList.add("thumb");
+      if (i === 0) img.classList.add("active");
 
-      t.addEventListener("click", () => {
+      img.addEventListener("click", () => {
         document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-        t.classList.add("active");
+        img.classList.add("active");
         mainImg.src = src;
       });
 
-      thumbs.appendChild(t);
+      thumbs.appendChild(img);
     });
   }
 });
@@ -76,8 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
-  const relatedSlider = document.getElementById("related-slider");
-  if (!relatedSlider) return;
+  const slider = document.getElementById("related-slider");
+  if (!slider) return;
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
@@ -106,11 +103,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   matches = [...new Map(matches.map(p => [p.title, p])).values()].slice(0, 8);
 
   if (!matches.length) {
-    relatedSlider.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
+    slider.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
     return;
   }
 
-  relatedSlider.innerHTML = "";
+  slider.innerHTML = "";
   matches.forEach(p => {
     const paramsObj = new URLSearchParams({
       title: p.title, brand: p.brand, price: p.price,
@@ -137,8 +134,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = `product.html?${paramsObj.toString()}`;
     });
 
-    relatedSlider.appendChild(card);
+    slider.appendChild(card);
   });
+
+  updateSliderNav();
 });
 
 // ======================================================
@@ -164,22 +163,26 @@ document.addEventListener("DOMContentLoaded", () => {
   updateBtn();
 });
 
-// ✅ Tilbake
-document.getElementById("back-btn")?.addEventListener("click", () => {
-  window.history.back();
-});
-
 // ======================================================
-// ✅ Slider Scroll Buttons (⚠️ eneste aktive nå)
+// ✅ Slider Buttons (final, no duplicates)
 // ======================================================
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
 const btnNext = document.querySelector(".slider-btn.next");
 
 function updateSliderNav() {
-  btnPrev.style.opacity = slider.scrollLeft > 5 ? "1" : "0";
-  btnNext.style.opacity = 
-    slider.scrollWidth - slider.clientWidth - slider.scrollLeft > 5 ? "1" : "0";
+  if (!slider) return;
+
+  const canScrollMore = slider.scrollWidth > slider.clientWidth + 10;
+
+  if (canScrollMore) {
+    btnPrev.style.opacity = slider.scrollLeft > 5 ? "1" : "1";
+    btnNext.style.opacity =
+      slider.scrollLeft + slider.clientWidth < slider.scrollWidth - 5 ? "1" : "1";
+  } else {
+    btnPrev.style.opacity = "0";
+    btnNext.style.opacity = "0";
+  }
 }
 
 btnPrev?.addEventListener("click", () => {
@@ -193,6 +196,5 @@ btnNext?.addEventListener("click", () => {
 });
 
 slider?.addEventListener("scroll", updateSliderNav);
-updateSliderNav();
 
 
