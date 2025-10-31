@@ -1765,6 +1765,22 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   z-index: 50 !important;
 }
 
+nav.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  z-index: 4000;
+}
+
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+}
+
 
 
 
