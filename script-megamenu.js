@@ -52,39 +52,38 @@
       .trim();
   }
 
-  function initRoutingSlugs() {
-    document.querySelectorAll(".menu-panel").forEach(panel => {
+ function initRoutingSlugs() {
+  document.querySelectorAll(".menu-panel").forEach(panel => {
+    const panelId = panel.id;
+    const categorySlug = slugify(panelId);
 
-      const panelId = panel.id;
-      const categorySlug = slugify(panelId);
+    panel.querySelectorAll("li a").forEach(link => {
+      const sub = link.textContent.trim();
+      const subSlug = slugify(sub);
 
-      const genderHeader = [...panel.querySelectorAll("h4")]
-        .map(h => h.textContent.trim())
-        .find(text => ["Herre", "Dame", "Barn"].includes(text));
+      // 🔥 HENT RIKTIG KJØNN FOR DENNE LENKEN (lokal kolonne-overskrift)
+      const section = link.closest(".menu-section");
+      const headerText = section?.querySelector("h4")?.textContent.trim() || "";
+      const lower = headerText.toLowerCase();
 
-      // ✅ Oversett norsk gender → english slug ✅
-      let genderSlug =
-        genderHeader === "Herre" ? "Men" :
-        genderHeader === "Dame" ? "Women" :
-        genderHeader === "Barn" ? "Kids" : null;
+      // Norsk -> engelsk for URL
+      let genderSlug = null;
+      if (lower === "herre") genderSlug = "Men";
+      else if (lower === "dame") genderSlug = "Women";
+      else if (lower === "barn") genderSlug = "Kids";
+      // (Hvis ingen av disse: ingen gender-parameter i URL)
 
-      panel.querySelectorAll("li a").forEach(link => {
-        const sub = link.textContent.trim();
-        const subSlug = slugify(sub);
+      let url = `category.html?category=${categorySlug}`;
+      if (genderSlug) url += `&gender=${genderSlug}`;
+      if (subSlug !== categorySlug) url += `&subcategory=${subSlug}`;
 
-        let url = `category.html?category=${categorySlug}`;
-        
-        // ✅ Bruk english gender slug istedenfor norsk ✅
-        if (genderSlug) url += `&gender=${genderSlug}`;
-
-        if (subSlug !== categorySlug) url += `&subcategory=${subSlug}`;
-
-        link.href = url;
-      });
+      link.href = url;
     });
+  });
 
-    console.log("✅ Norsk slug routing aktivert (med riktig gender!)");
-  }
+  console.log("✅ Norsk slug routing aktivert (per-kolonne kjønn)");
+}
+
 
   document.addEventListener("DOMContentLoaded", () => {
     onMenuReady(() => {
