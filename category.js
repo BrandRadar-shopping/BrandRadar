@@ -1,11 +1,17 @@
 // ======================================================
-// ✅ BrandRadar.shop — CATEGORY SYSTEM 2.0
+// ✅ Category System 3.0 – Dynamisk med Google Sheets
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "BrandRadarProdukter";
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+
+  const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
+
+  const PRODUCTS_NAME = "BrandRadarProdukter";
+  const MAPPING_NAME = "CategoryMapping";
+
+  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/${PRODUCTS_NAME}`;
+  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/${MAPPING_NAME}`;
 
   const titleEl = document.getElementById("category-title");
   const productGrid = document.querySelector(".product-grid");
@@ -14,82 +20,85 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const params = new URLSearchParams(window.location.search);
   const gender = params.get("gender");
-  const category = params.get("category");
-  const subcategory = params.get("subcategory");
+  const categorySlug = params.get("category");
+  const subSlug = params.get("subcategory");
 
-  // ✅ Oversettelser
-  const translateGender = {
-    Men: "Herre",
-    Women: "Dame",
-    Kids: "Barn"
-  };
-
-  const translateCategory = {
-    Clothing: "Klær",
-    Shoes: "Sko",
-    Gymcorner: "Gymcorner",
-    Accessories: "Tilbehør",
-    Selfcare: "Selfcare"
-  };
-
-  // ✅ Oversett subkategori — fallback: vis engelsk
-  const translateSub = str =>
-    (str || "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-
-  if (!gender || !category) {
+  if (!gender || !categorySlug) {
     titleEl.textContent = "Ugyldig kategori";
     emptyMessage.style.display = "block";
     return;
   }
 
-  const genderN = translateGender[gender] || gender;
-  const categoryN = translateCategory[category] || category;
-  const subN = subcategory ? translateSub(subcategory) : null;
+  let mappingData = [];
 
-  // ✅ Sett side-tittel
-  if (subN) {
-    titleEl.textContent = `${subN} – ${genderN}`;
-    document.title = `${subN} – ${genderN} | BrandRadar`;
-  } else {
-    titleEl.textContent = `${categoryN} – ${genderN}`;
-    document.title = `${categoryN} – ${genderN} | BrandRadar`;
-  }
-
-  // ✅ Breadcrumbs
-  breadcrumbEl.innerHTML = `
-    <a href="index.html">Hjem</a> ›
-    <a href="category.html?gender=${gender}&category=${category}">
-      ${genderN}
-    </a> ›
-    ${subcategory ? `<a>${subN}</a>` : `<a>${categoryN}</a>`}
-  `;
-
-  // ✅ Hent og filtrer produkter
-  fetch(url)
+  // ======================================================
+  // ✅ Last CategoryMapping først
+  // ======================================================
+  fetch(mappingUrl)
     .then(res => res.json())
-    .then(rows => {
-      const filtered = rows.filter(item => {
-        const byGender = item.gender === gender;
-        const byCategory = item.category === category;
-        const bySub = subcategory ? item.subcategory === subcategory : true;
-        return byGender && byCategory && bySub;
-      });
+    .then(mapRows => {
+      mappingData = mapRows;
+
+      const category = mapRows.find(r => r.url_slug === categorySlug);
+      if (!category) {
+        titleEl.textContent = "Kategori ikke funnet";
+        emptyMessage.style.display = "block";
+        return;
+      }
+
+      const categoryNameNo = category.display_name || categorySlug;
+
+      let subNameNo = null;
+      if (subSlug) {
+        const sub = mapRows.find(r => r.url_slug === subSlug);
+        subNameNo = sub ? sub.display_name : subSlug;
+      }
+
+      // ✅ Sett sidetittel
+      const norskGender = gender === "Men" ? "Herre" :
+                          gender === "Women" ? "Dame" :
+                          gender === "Kids" ? "Barn" : gender;
+
+      titleEl.textContent = subNameNo ? `${subNameNo} – ${norskGender}` : `${categoryNameNo} – ${norskGender}`;
+      document.title = `${titleEl.textContent} | BrandRadar`;
+
+      // ✅ Breadcrumbs
+      breadcrumbEl.innerHTML = `
+        <a href="index.html">Hjem</a> ›
+        <a href="category.html?gender=${gender}&category=${categorySlug}">
+          ${norskGender}
+        </a> ›
+        ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
+      `;
+
+      // ======================================================
+      // ✅ Last produkter etter mapping er lastet ✅
+      // ======================================================
+      return fetch(productUrl);
+    })
+    .then(res => res.json())
+    .then(products => {
+
+      const filtered = products.filter(p =>
+        p.gender === gender &&
+        p.category.toLowerCase() === categorySlug.toLowerCase() &&
+        (!subSlug || p.subcategory.toLowerCase() === subSlug.toLowerCase())
+      );
 
       if (!filtered.length) {
         emptyMessage.style.display = "block";
         return;
       }
 
-      productGrid.innerHTML = "";
       emptyMessage.style.display = "none";
+      productGrid.innerHTML = "";
 
       filtered.forEach(product => {
         const card = document.createElement("div");
         card.classList.add("product-card");
 
         card.innerHTML = `
-          ${product.discount ? 
-            `<div class="discount-badge">${product.discount}% SALG</div>` : ""}
+          ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
           <img src="${product.image_url}" alt="${product.title}">
           <div class="product-info">
             <h3>${product.title}</h3>
@@ -104,8 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         productGrid.appendChild(card);
       });
+
     })
-    .catch(err => console.error("❌ Category error:", err));
+    .catch(err =>
+      console.error("❌ Error i Category system:", err)
+    );
 });
 
 
