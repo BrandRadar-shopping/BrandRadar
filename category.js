@@ -39,7 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .replace(/^-|-$/g, "");
 
   const categorySlug = normalize(categoryParam);
-  const genderSlug = normalize(genderParam);
+  let genderSlug = normalize(genderParam);
+if (genderSlug === "herre") genderSlug = "men";
+if (genderSlug === "dame")  genderSlug = "women";
+if (genderSlug === "barn")  genderSlug = "kids";
+
   const subSlug = normalize(subParam);
 
   Promise.all([
