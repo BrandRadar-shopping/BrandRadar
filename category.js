@@ -1,10 +1,8 @@
 // ======================================================
-// BrandRadar.shop – CATEGORY FILTER SYSTEM
+// ✅ BrandRadar.shop — CATEGORY SYSTEM 2.0
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ Category.js initialized");
-
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_NAME = "BrandRadarProdukter";
   const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
@@ -12,44 +10,70 @@ document.addEventListener("DOMContentLoaded", () => {
   const titleEl = document.getElementById("category-title");
   const productGrid = document.querySelector(".product-grid");
   const emptyMessage = document.querySelector(".empty-message");
+  const breadcrumbEl = document.querySelector(".breadcrumb");
 
   const params = new URLSearchParams(window.location.search);
+  const gender = params.get("gender");
+  const category = params.get("category");
+  const subcategory = params.get("subcategory");
 
-  const filterMain = params.get("main_category");
-  const filterGender = params.get("gender");
-  const filterSub = params.get("subcategory");
-  const filterKidtype = params.get("kidtype");
+  // ✅ Oversettelser
+  const translateGender = {
+    Men: "Herre",
+    Women: "Dame",
+    Kids: "Barn"
+  };
 
-  if (!filterMain) {
+  const translateCategory = {
+    Clothing: "Klær",
+    Shoes: "Sko",
+    Gymcorner: "Gymcorner",
+    Accessories: "Tilbehør",
+    Selfcare: "Selfcare"
+  };
+
+  // ✅ Oversett subkategori — fallback: vis engelsk
+  const translateSub = str =>
+    (str || "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+  if (!gender || !category) {
     titleEl.textContent = "Ugyldig kategori";
     emptyMessage.style.display = "block";
     return;
   }
 
-  // ✅ Sett tittel (kun kategori, ikke kjønn – ditt valg B ✅)
-  if (filterSub) {
-    titleEl.textContent = filterSub.replace(/_/g, " ");
+  const genderN = translateGender[gender] || gender;
+  const categoryN = translateCategory[category] || category;
+  const subN = subcategory ? translateSub(subcategory) : null;
+
+  // ✅ Sett side-tittel
+  if (subN) {
+    titleEl.textContent = `${subN} – ${genderN}`;
+    document.title = `${subN} – ${genderN} | BrandRadar`;
   } else {
-    titleEl.textContent = filterMain;
+    titleEl.textContent = `${categoryN} – ${genderN}`;
+    document.title = `${categoryN} – ${genderN} | BrandRadar`;
   }
 
+  // ✅ Breadcrumbs
+  breadcrumbEl.innerHTML = `
+    <a href="index.html">Hjem</a> ›
+    <a href="category.html?gender=${gender}&category=${category}">
+      ${genderN}
+    </a> ›
+    ${subcategory ? `<a>${subN}</a>` : `<a>${categoryN}</a>`}
+  `;
+
+  // ✅ Hent og filtrer produkter
   fetch(url)
     .then(res => res.json())
     .then(rows => {
-      console.log("✅ Products fetched:", rows.length);
-
       const filtered = rows.filter(item => {
-        if (!item.main_category) return false;
-
-        const byMain = item.main_category === filterMain;
-        const byGender = filterGender ? item.gender === filterGender : true;
-        const bySub = filterSub ? item.subcategory === filterSub : true;
-        const byKid = filterKidtype ? item.kidtype === filterKidtype : true;
-
-        return byMain && byGender && bySub && byKid;
+        const byGender = item.gender === gender;
+        const byCategory = item.category === category;
+        const bySub = subcategory ? item.subcategory === subcategory : true;
+        return byGender && byCategory && bySub;
       });
-
-      console.log("🎯 Filtered products:", filtered.length);
 
       if (!filtered.length) {
         emptyMessage.style.display = "block";
@@ -64,24 +88,25 @@ document.addEventListener("DOMContentLoaded", () => {
         card.classList.add("product-card");
 
         card.innerHTML = `
-          ${product.discount ? `<div class="discount-badge">${Math.round(product.discount * 100)}% OFF</div>` : ""}
+          ${product.discount ? 
+            `<div class="discount-badge">${product.discount}% SALG</div>` : ""}
           <img src="${product.image_url}" alt="${product.title}">
           <div class="product-info">
             <h3>${product.title}</h3>
             <p class="brand">${product.brand || ""}</p>
-            <p class="price">${product.price || ""}</p>
-            <a href="${product.product_url}" target="_blank" class="buy-btn">Se produkt</a>
+            <p class="price">${product.price || ""} kr</p>
           </div>
         `;
+
+        card.addEventListener("click", () => {
+          window.location.href = `product.html?id=${product.id}`;
+        });
 
         productGrid.appendChild(card);
       });
     })
-    .catch(err =>
-      console.error("❌ Feil ved lasting av kategori-produkter:", err)
-    );
+    .catch(err => console.error("❌ Category error:", err));
 });
-
 
 
 
