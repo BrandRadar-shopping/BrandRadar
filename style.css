@@ -1835,6 +1835,37 @@ nav.mega-menu .menu-section {
 }
 
 
+/* ✅ Sikrer at mega-menyen kan åpne seg */
+.mega-menu {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  background: #fff;
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  border-top: 1px solid #eee;
+}
+
+/* Når aktiv kategori hovres */
+.category-item:hover + .mega-menu,
+.mega-menu:hover {
+  display: block;
+  opacity: 1;
+}
+
+/* Paneler inne i menyen */
+.mega-menu .menu-panel {
+  display: none;
+  padding: 20px;
+}
+
+.mega-menu .menu-panel.active {
+  display: flex;
+}
+
+
 
 
 
