@@ -1,6 +1,6 @@
 // ======================================================
-// ✅ Category System ULTRA-STABLE – BrandRadar
-// Dynamisk fra Google Sheets + tolerant matching
+// BrandRadar – Category System ✅
+// Norsk slug matching + kjønn/kidtype logikk
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,158 +8,117 @@ document.addEventListener("DOMContentLoaded", () => {
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
 
-  const PRODUCTS_NAME = "BrandRadarProdukter";
-  const MAPPING_NAME = "CategoryMapping";
-
-  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/${PRODUCTS_NAME}`;
-  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/${MAPPING_NAME}`;
-
-  const titleEl = document.getElementById("category-title");
-  const productGrid = document.querySelector(".product-grid");
-  const emptyMessage = document.querySelector(".empty-message");
-  const breadcrumbEl = document.querySelector(".breadcrumb");
+  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/BrandRadarProdukter`;
+  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
 
   const params = new URLSearchParams(window.location.search);
-  const gender = params.get("gender");
+
   const categorySlug = params.get("category");
   const subSlug = params.get("subcategory");
+  const genderSlug = params.get("gender");
 
-  if (!gender || !categorySlug) {
+  const titleEl = document.getElementById("category-title");
+  const grid = document.querySelector(".product-grid");
+  const emptyMsg = document.querySelector(".empty-message");
+
+  const slugify = (txt) =>
+    (txt || "")
+      .toLowerCase()
+      .replace(/æ/g, "a")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .replace(/&/g, "og")
+      .replace(/[^\w\d]+/g, "-")
+      .replace(/-+/g, "-");
+
+  if (!categorySlug) {
     titleEl.textContent = "Ugyldig kategori";
-    emptyMessage.style.display = "block";
+    emptyMsg.style.display = "block";
     return;
   }
 
-  // ✅ Super normalize (slugify everything!)
-  const normalize = txt => (txt || "")
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^\w\d]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-
-  // ✅ Load sheets in parallel
   Promise.all([
     fetch(mappingUrl).then(r => r.json()),
     fetch(productUrl).then(r => r.json())
   ])
-  .then(([mapRows, products]) => {
+    .then(([mapping, products]) => {
 
-    console.log("✅ Mapping rows:", mapRows.length);
-    console.log("✅ Products loaded:", products.length);
-
-    // ✅ Normalize lookup targets
-    const normalizedGender = normalize(gender);
-    const normalizedCategorySlug = normalize(categorySlug);
-    const normalizedSubSlug = normalize(subSlug);
-
-    // ✅ Find category mapping rows for gender + category
-    const categoryMaps = mapRows.filter(r =>
-      normalize(r.main_category) === normalizedCategorySlug &&
-      normalize(r.gender) === normalizedGender
-    );
-
-    if (!categoryMaps.length) {
-      console.warn("⚠️ Ingen matching category i mapping:", categorySlug);
-      emptyMessage.style.display = "block";
-      return;
-    }
-
-    const mainCategoryEntry = categoryMaps[0];
-    const categoryNameNo = mainCategoryEntry.display_name;
-
-    let subSlugResolved = null;
-    let subNameNo = null;
-
-    if (subSlug) {
-      const matchedSub = categoryMaps.find(r =>
-        normalize(r.url_slug) === normalizedSubSlug ||
-        normalize(r.display_name) === normalizedSubSlug
+      const mainCat = mapping.find(r =>
+        slugify(r.url_slug) === slugify(categorySlug)
       );
 
-      if (matchedSub) {
-        subSlugResolved = normalize(matchedSub.url_slug);
-        subNameNo = matchedSub.display_name;
+      if (!mainCat) {
+        titleEl.textContent = "Kategori ikke funnet";
+        emptyMsg.style.display = "block";
+        return;
       }
-    }
 
-    // ✅ Page Title & Breadcrumbs
-    const norskGender =
-      gender === "Men" ? "Herre" :
-      gender === "Women" ? "Dame" :
-      gender === "Kids" ? "Barn" : gender;
+      let subCat = null;
+      if (subSlug) {
+        subCat = mapping.find(r => slugify(r.url_slug) === slugify(subSlug));
+      }
 
-    titleEl.textContent = subNameNo ?
-      `${subNameNo} – ${norskGender}` :
-      `${categoryNameNo} – ${norskGender}`;
+      const norskGender =
+        genderSlug === "herre" ? "Herre" :
+        genderSlug === "dame" ? "Dame" :
+        genderSlug === "barn" ? "Barn" : "";
 
-    document.title = `${titleEl.textContent} | BrandRadar`;
+      const norskTitle = subCat
+        ? `${subCat.display_name} – ${norskGender}`
+        : `${mainCat.display_name} – ${norskGender}`;
 
-    breadcrumbEl.innerHTML = `
-      <a href="index.html">Hjem</a> ›
-      <a href="category.html?gender=${gender}&category=${categorySlug}">
-        ${norskGender}
-      </a> ›
-      ${subNameNo || categoryNameNo}
-    `;
+      titleEl.textContent = norskTitle;
 
-    // ✅ ULTRA-robust produktmatching ✅
-    const filtered = products.filter(p => {
-      const pGender = normalize(p.gender);
-      const pCategory = normalize(p.category);
-      const pSub = normalize(p.subcategory);
-      const pTitle = normalize(p.title);
+      const filtered = products.filter(item => {
 
-      const matchGender = pGender === normalizedGender;
-      const matchCategory =
-        pCategory.includes(normalizedCategorySlug) ||
-        normalizedCategorySlug.includes(pCategory);
+        if (!item.category) return false;
+        if (slugify(item.category) !== slugify(categorySlug)) return false;
 
-      const matchSub = !subSlugResolved ||
-        pSub === subSlugResolved ||
-        pTitle.includes(subSlugResolved);
+        if (genderSlug && slugify(item.gender) !== slugify(genderSlug)) return false;
 
-      return matchGender && matchCategory && matchSub;
-    });
+        if (genderSlug === "barn") {
+          const kidtype = subCat?.kidtype;
+          if (kidtype && slugify(item.kidtype) !== slugify(kidtype)) return false;
+        }
 
-    console.log("🎯 Filtered products:", filtered.length);
+        if (subSlug && slugify(item.subcategory) !== slugify(subSlug)) return false;
 
-    if (!filtered.length) {
-      emptyMessage.style.display = "block";
-      return;
-    }
-
-    // ✅ Render
-    emptyMessage.style.display = "none";
-    productGrid.innerHTML = "";
-
-    filtered.forEach(product => {
-      const card = document.createElement("div");
-      card.classList.add("product-card");
-
-      card.innerHTML = `
-        ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
-        <img src="${product.image_url}" alt="${product.title}">
-        <div class="product-info">
-          <h3>${product.title}</h3>
-          <p class="brand">${product.brand || ""}</p>
-          <p class="price">${product.price || ""} kr</p>
-        </div>
-      `;
-
-      card.addEventListener("click", () => {
-        window.location.href = `product.html?id=${product.id}`;
+        return true;
       });
 
-      productGrid.appendChild(card);
-    });
+      console.log("🎯 Filtered:", filtered.length);
 
-  })
-  .catch(err => console.error("❌ Category error:", err));
+      if (!filtered.length) {
+        emptyMsg.style.display = "block";
+        return;
+      }
+
+      emptyMsg.style.display = "none";
+      grid.innerHTML = "";
+
+      filtered.forEach(p => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+        card.innerHTML = `
+          ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
+          <img src="${p.image_url}" alt="${p.title}">
+          <div class="product-info">
+            <h3>${p.title}</h3>
+            <p class="brand">${p.brand || ""}</p>
+            <p class="price">${p.price} kr</p>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          window.location.href = `product.html?id=${p.id}`;
+        });
+        grid.appendChild(card);
+      });
+
+    })
+    .catch(err => console.error("❌ Category error:", err));
 
 });
+
 
 
 
