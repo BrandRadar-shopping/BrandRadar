@@ -76,10 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (subEntry) subNameNo = subEntry.display_name;
     }
 
-    const norskGender =
-      genderParam === "Men" ? "Herre" :
-      genderParam === "Women" ? "Dame" :
-      genderParam === "Kids" ? "Barn" : genderParam;
+    const g = genderParam.toLowerCase();
+
+const norskGender =
+  g === "men" || g === "herre" ? "Herre" :
+  g === "women" || g === "dame" ? "Dame" :
+  g === "kids" || g === "barn" ? "Barn" : genderParam;
+
 
     // ✅ Title
     titleEl.textContent =
