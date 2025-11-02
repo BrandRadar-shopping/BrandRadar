@@ -1,6 +1,6 @@
 // ======================================================
-// ✅ Category System FINAL – BrandRadar
-// Dynamisk fra Google Sheets + robust matching
+// ✅ Category System ULTRA-STABLE – BrandRadar
+// Dynamisk fra Google Sheets + tolerant matching
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,15 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // ✅ Normalize-funksjon (gjør matching vanvittig robust)
+  // ✅ Super normalize (slugify everything!)
   const normalize = txt => (txt || "")
+    .toString()
+    .trim()
     .toLowerCase()
     .replace(/&/g, "and")
-    .replace(/[^\w\d-]/g, "-")
-    .replace(/\s+/g, "-")
-    .trim();
+    .replace(/[^\w\d]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 
-  // ✅ Last begge ark samtidig
+  // ✅ Load sheets in parallel
   Promise.all([
     fetch(mappingUrl).then(r => r.json()),
     fetch(productUrl).then(r => r.json())
@@ -48,21 +50,42 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Mapping rows:", mapRows.length);
     console.log("✅ Products loaded:", products.length);
 
-    const category = mapRows.find(r => normalize(r.url_slug) === normalize(categorySlug));
-    if (!category) {
-      console.warn("⚠️ Kategori ikke funnet i mapping:", categorySlug);
+    // ✅ Normalize lookup targets
+    const normalizedGender = normalize(gender);
+    const normalizedCategorySlug = normalize(categorySlug);
+    const normalizedSubSlug = normalize(subSlug);
+
+    // ✅ Find category mapping rows for gender + category
+    const categoryMaps = mapRows.filter(r =>
+      normalize(r.main_category) === normalizedCategorySlug &&
+      normalize(r.gender) === normalizedGender
+    );
+
+    if (!categoryMaps.length) {
+      console.warn("⚠️ Ingen matching category i mapping:", categorySlug);
       emptyMessage.style.display = "block";
       return;
     }
 
-    const categoryNameNo = category.display_name;
+    const mainCategoryEntry = categoryMaps[0];
+    const categoryNameNo = mainCategoryEntry.display_name;
 
+    let subSlugResolved = null;
     let subNameNo = null;
+
     if (subSlug) {
-      const subEntry = mapRows.find(r => normalize(r.url_slug) === normalize(subSlug));
-      subNameNo = subEntry ? subEntry.display_name : subSlug;
+      const matchedSub = categoryMaps.find(r =>
+        normalize(r.url_slug) === normalizedSubSlug ||
+        normalize(r.display_name) === normalizedSubSlug
+      );
+
+      if (matchedSub) {
+        subSlugResolved = normalize(matchedSub.url_slug);
+        subNameNo = matchedSub.display_name;
+      }
     }
 
+    // ✅ Page Title & Breadcrumbs
     const norskGender =
       gender === "Men" ? "Herre" :
       gender === "Women" ? "Dame" :
@@ -79,14 +102,27 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="category.html?gender=${gender}&category=${categorySlug}">
         ${norskGender}
       </a> ›
-      ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
+      ${subNameNo || categoryNameNo}
     `;
 
-    const filtered = products.filter(p =>
-      normalize(p.gender) === normalize(gender) &&
-      normalize(p.category) === normalize(categorySlug) &&
-      (!subSlug || normalize(p.subcategory) === normalize(subSlug))
-    );
+    // ✅ ULTRA-robust produktmatching ✅
+    const filtered = products.filter(p => {
+      const pGender = normalize(p.gender);
+      const pCategory = normalize(p.category);
+      const pSub = normalize(p.subcategory);
+      const pTitle = normalize(p.title);
+
+      const matchGender = pGender === normalizedGender;
+      const matchCategory =
+        pCategory.includes(normalizedCategorySlug) ||
+        normalizedCategorySlug.includes(pCategory);
+
+      const matchSub = !subSlugResolved ||
+        pSub === subSlugResolved ||
+        pTitle.includes(subSlugResolved);
+
+      return matchGender && matchCategory && matchSub;
+    });
 
     console.log("🎯 Filtered products:", filtered.length);
 
@@ -95,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // ✅ Render
     emptyMessage.style.display = "none";
     productGrid.innerHTML = "";
 
@@ -123,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
   .catch(err => console.error("❌ Category error:", err));
 
 });
+
 
 
 
