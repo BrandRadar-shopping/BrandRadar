@@ -1,121 +1,155 @@
 // ======================================================
-// BrandRadar – Category System ✅
-// Norsk slug matching + kjønn/kidtype logikk
+// ✅ Category System FINAL — BrandRadar
+// Full støtte for Gender + Kidtype + Unisex
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
 
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
+  const SHEET_MAPPING  = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
 
-  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/BrandRadarProdukter`;
-  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
+  const PRODUCTS_NAME = "BrandRadarProdukter";
+  const MAPPING_NAME  = "CategoryMapping";
 
-  const params = new URLSearchParams(window.location.search);
-
-  const categorySlug = params.get("category");
-  const subSlug = params.get("subcategory");
-  const genderSlug = params.get("gender");
+  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/${PRODUCTS_NAME}`;
+  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/${MAPPING_NAME}`;
 
   const titleEl = document.getElementById("category-title");
-  const grid = document.querySelector(".product-grid");
-  const emptyMsg = document.querySelector(".empty-message");
+  const productGrid = document.querySelector(".product-grid");
+  const emptyMessage = document.querySelector(".empty-message");
+  const breadcrumbEl = document.querySelector(".breadcrumb");
 
-  const slugify = (txt) =>
-    (txt || "")
-      .toLowerCase()
-      .replace(/æ/g, "a")
-      .replace(/ø/g, "o")
-      .replace(/å/g, "a")
-      .replace(/&/g, "og")
-      .replace(/[^\w\d]+/g, "-")
-      .replace(/-+/g, "-");
+  const params = new URLSearchParams(window.location.search);
+  const genderParam = params.get("gender");
+  const categoryParam = params.get("category");
+  const subParam = params.get("subcategory");
 
-  if (!categorySlug) {
+  if (!genderParam || !categoryParam) {
     titleEl.textContent = "Ugyldig kategori";
-    emptyMsg.style.display = "block";
+    emptyMessage.style.display = "block";
     return;
   }
+
+  const normalize = txt => (txt || "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, "and")
+    .replace(/[^\w\d]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  const categorySlug = normalize(categoryParam);
+  const genderSlug = normalize(genderParam);
+  const subSlug = normalize(subParam);
 
   Promise.all([
     fetch(mappingUrl).then(r => r.json()),
     fetch(productUrl).then(r => r.json())
   ])
-    .then(([mapping, products]) => {
+  .then(([mapRows, products]) => {
 
-      const mainCat = mapping.find(r =>
-        slugify(r.url_slug) === slugify(categorySlug)
+    console.log("✅ Mapping rows:", mapRows.length);
+    console.log("✅ Products loaded:", products.length);
+
+    // ✅ Filter Marketplace
+    const categoryMatches = mapRows.filter(row =>
+      normalize(row.main_category) === categorySlug &&
+      (!row.gender || normalize(row.gender) === genderSlug)
+    );
+
+    if (!categoryMatches.length) {
+      console.warn("⚠️ Ingen mapping funnet for:", categorySlug, genderSlug);
+      emptyMessage.style.display = "block";
+      return;
+    }
+
+    const mainCategory = categoryMatches[0];
+    const categoryNameNo = mainCategory.display_name;
+
+    // ✅ Subcategory lookup
+    let subNameNo = null;
+    if (subSlug) {
+      const subEntry = mapRows.find(row =>
+        normalize(row.url_slug) === subSlug &&
+        normalize(row.main_category) === categorySlug
       );
+      if (subEntry) subNameNo = subEntry.display_name;
+    }
 
-      if (!mainCat) {
-        titleEl.textContent = "Kategori ikke funnet";
-        emptyMsg.style.display = "block";
-        return;
-      }
+    const norskGender =
+      genderParam === "Men" ? "Herre" :
+      genderParam === "Women" ? "Dame" :
+      genderParam === "Kids" ? "Barn" : genderParam;
 
-      let subCat = null;
-      if (subSlug) {
-        subCat = mapping.find(r => slugify(r.url_slug) === slugify(subSlug));
-      }
+    // ✅ Title
+    titleEl.textContent =
+      subNameNo ? `${subNameNo} – ${norskGender}` :
+                  `${categoryNameNo} – ${norskGender}`;
 
-      const norskGender =
-        genderSlug === "herre" ? "Herre" :
-        genderSlug === "dame" ? "Dame" :
-        genderSlug === "barn" ? "Barn" : "";
+    document.title = `${titleEl.textContent} | BrandRadar`;
 
-      const norskTitle = subCat
-        ? `${subCat.display_name} – ${norskGender}`
-        : `${mainCat.display_name} – ${norskGender}`;
+    // ✅ Breadcrumb
+    breadcrumbEl.innerHTML = `
+      <a href="index.html">Hjem</a> ›
+      <a href="category.html?gender=${genderParam}&category=${categoryParam}">
+        ${norskGender}
+      </a> ›
+      ${subNameNo || categoryNameNo}
+    `;
 
-      titleEl.textContent = norskTitle;
+    // ✅ Product filter — FINAL RULESET
+    const filtered = products.filter(p => {
 
-      const filtered = products.filter(item => {
+      const pGender = normalize(p.gender);
+      const pCat = normalize(p.category);
+      const pSub = normalize(p.subcategory);
 
-        if (!item.category) return false;
-        if (slugify(item.category) !== slugify(categorySlug)) return false;
+      const matchGender =
+        pGender === genderSlug ||   // Main gender match
+        pGender === "";             // ✅ Unisex allowed
 
-        if (genderSlug && slugify(item.gender) !== slugify(genderSlug)) return false;
+      const matchCategory =
+        pCat === categorySlug;
 
-        if (genderSlug === "barn") {
-          const kidtype = subCat?.kidtype;
-          if (kidtype && slugify(item.kidtype) !== slugify(kidtype)) return false;
-        }
+      const matchSub =
+        !subSlug || pSub === subSlug;
 
-        if (subSlug && slugify(item.subcategory) !== slugify(subSlug)) return false;
+      return matchGender && matchCategory && matchSub;
+    });
 
-        return true;
+    console.log("🎯 Filtered products:", filtered.length);
+
+    if (!filtered.length) {
+      emptyMessage.style.display = "block";
+      return;
+    }
+
+    emptyMessage.style.display = "none";
+    productGrid.innerHTML = "";
+
+    filtered.forEach(product => {
+      const card = document.createElement("div");
+      card.classList.add("product-card");
+
+      card.innerHTML = `
+        ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+        <img src="${product.image_url}" alt="${product.title}">
+        <div class="product-info">
+          <h3>${product.title}</h3>
+          <p class="brand">${product.brand || ""}</p>
+          <p class="price">${product.price || ""} kr</p>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        window.location.href = `product.html?id=${product.id}`;
       });
 
-      console.log("🎯 Filtered:", filtered.length);
+      productGrid.appendChild(card);
+    });
 
-      if (!filtered.length) {
-        emptyMsg.style.display = "block";
-        return;
-      }
-
-      emptyMsg.style.display = "none";
-      grid.innerHTML = "";
-
-      filtered.forEach(p => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
-        card.innerHTML = `
-          ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
-          <img src="${p.image_url}" alt="${p.title}">
-          <div class="product-info">
-            <h3>${p.title}</h3>
-            <p class="brand">${p.brand || ""}</p>
-            <p class="price">${p.price} kr</p>
-          </div>
-        `;
-        card.addEventListener("click", () => {
-          window.location.href = `product.html?id=${p.id}`;
-        });
-        grid.appendChild(card);
-      });
-
-    })
-    .catch(err => console.error("❌ Category error:", err));
+  })
+  .catch(err => console.error("❌ Category FEIL:", err));
 
 });
 
