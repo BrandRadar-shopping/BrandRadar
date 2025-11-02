@@ -79,11 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(products => {
 
-      const filtered = products.filter(p =>
-        p.gender === gender &&
-        p.category.toLowerCase() === categorySlug.toLowerCase() &&
-        (!subSlug || p.subcategory.toLowerCase() === subSlug.toLowerCase())
-      );
+      const normalize = txt => (txt || "")
+  .toLowerCase()
+  .replace(/&/g, "and")
+  .replace(/\s+/g, "-")
+  .trim();
+
+const filtered = products.filter(p =>
+  normalize(p.gender) === normalize(gender) &&
+  normalize(p.category) === normalize(categorySlug) &&
+  (!subSlug || normalize(p.subcategory) === normalize(subSlug))
+);
+
 
       if (!filtered.length) {
         emptyMessage.style.display = "block";
