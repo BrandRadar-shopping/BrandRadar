@@ -1,5 +1,6 @@
 // ======================================================
-// ✅ Category System 3.0 – Dynamisk med Google Sheets
+// ✅ Category System FINAL – BrandRadar
+// Dynamisk fra Google Sheets + robust matching
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,7 +30,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Last begge ark samtidig ✅
+  // ✅ Normalize-funksjon (gjør matching vanvittig robust)
+  const normalize = txt => (txt || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^\w\d-]/g, "-")
+    .replace(/\s+/g, "-")
+    .trim();
+
+  // ✅ Last begge ark samtidig
   Promise.all([
     fetch(mappingUrl).then(r => r.json()),
     fetch(productUrl).then(r => r.json())
@@ -39,19 +48,19 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Mapping rows:", mapRows.length);
     console.log("✅ Products loaded:", products.length);
 
-    const category = mapRows.find(r => r.url_slug === categorySlug);
+    const category = mapRows.find(r => normalize(r.url_slug) === normalize(categorySlug));
     if (!category) {
-      console.warn("⚠️ Kategori ikke funnet i mapping");
+      console.warn("⚠️ Kategori ikke funnet i mapping:", categorySlug);
       emptyMessage.style.display = "block";
       return;
     }
 
     const categoryNameNo = category.display_name;
-    let subNameNo = null;
 
+    let subNameNo = null;
     if (subSlug) {
-      const sub = mapRows.find(r => r.url_slug === subSlug);
-      subNameNo = sub ? sub.display_name : subSlug;
+      const subEntry = mapRows.find(r => normalize(r.url_slug) === normalize(subSlug));
+      subNameNo = subEntry ? subEntry.display_name : subSlug;
     }
 
     const norskGender =
@@ -72,12 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </a> ›
       ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
     `;
-
-    const normalize = txt => (txt || "")
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/\s+/g, "-")
-      .trim();
 
     const filtered = products.filter(p =>
       normalize(p.gender) === normalize(gender) &&
