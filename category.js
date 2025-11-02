@@ -31,101 +31,93 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let mappingData = [];
 
-  // ======================================================
-  // ✅ Last CategoryMapping først
-  // ======================================================
-  fetch(mappingUrl)
-    .then(res => res.json())
-    .then(mapRows => {
-      mappingData = mapRows;
+ // Last mapping og produkter parallelt ✅
+Promise.all([
+  fetch(mappingUrl).then(r => r.json()),
+  fetch(productUrl).then(r => r.json())
+])
+.then(([mapRows, products]) => {
 
-      const category = mapRows.find(r => r.url_slug === categorySlug);
-      if (!category) {
-        titleEl.textContent = "Kategori ikke funnet";
-        emptyMessage.style.display = "block";
-        return;
-      }
+  console.log("✅ Mapping rows loaded:", mapRows.length);
+  console.log("✅ Products loaded:", products.length);
 
-      const categoryNameNo = category.display_name || categorySlug;
+  const category = mapRows.find(r => r.url_slug === categorySlug);
+  if (!category) {
+    emptyMessage.textContent = "Kategori ikke funnet";
+    emptyMessage.style.display = "block";
+    return;
+  }
 
-      let subNameNo = null;
-      if (subSlug) {
-        const sub = mapRows.find(r => r.url_slug === subSlug);
-        subNameNo = sub ? sub.display_name : subSlug;
-      }
+  const categoryNameNo = category.display_name || categorySlug;
 
-      // ✅ Sett sidetittel
-      const norskGender = gender === "Men" ? "Herre" :
-                          gender === "Women" ? "Dame" :
-                          gender === "Kids" ? "Barn" : gender;
+  let subNameNo = null;
+  if (subSlug) {
+    const sub = mapRows.find(r => r.url_slug === subSlug);
+    subNameNo = sub ? sub.display_name : subSlug;
+  }
 
-      titleEl.textContent = subNameNo ? `${subNameNo} – ${norskGender}` : `${categoryNameNo} – ${norskGender}`;
-      document.title = `${titleEl.textContent} | BrandRadar`;
+  const norskGender = gender === "Men" ? "Herre" :
+                      gender === "Women" ? "Dame" :
+                      gender === "Kids" ? "Barn" : gender;
 
-      // ✅ Breadcrumbs
-      breadcrumbEl.innerHTML = `
-        <a href="index.html">Hjem</a> ›
-        <a href="category.html?gender=${gender}&category=${categorySlug}">
-          ${norskGender}
-        </a> ›
-        ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
-      `;
+  titleEl.textContent = subNameNo ? `${subNameNo} – ${norskGender}` :
+                                    `${categoryNameNo} – ${norskGender}`;
 
-      // ======================================================
-      // ✅ Last produkter etter mapping er lastet ✅
-      // ======================================================
-      return fetch(productUrl);
-    })
-    .then(res => res.json())
-    .then(products => {
+  document.title = `${titleEl.textContent} | BrandRadar`;
 
-      const normalize = txt => (txt || "")
-  .toLowerCase()
-  .replace(/&/g, "and")
-  .replace(/\s+/g, "-")
-  .trim();
+  breadcrumbEl.innerHTML = `
+    <a href="index.html">Hjem</a> ›
+    <a href="category.html?gender=${gender}&category=${categorySlug}">
+      ${norskGender}
+    </a> ›
+    ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
+  `;
 
-const filtered = products.filter(p =>
-  normalize(p.gender) === normalize(gender) &&
-  normalize(p.category) === normalize(categorySlug) &&
-  (!subSlug || normalize(p.subcategory) === normalize(subSlug))
-);
+  const normalize = txt => (txt || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/\s+/g, "-")
+    .trim();
 
+  const filtered = products.filter(p =>
+    normalize(p.gender) === normalize(gender) &&
+    normalize(p.category) === normalize(categorySlug) &&
+    (!subSlug || normalize(p.subcategory) === normalize(subSlug))
+  );
 
-      if (!filtered.length) {
-        emptyMessage.style.display = "block";
-        return;
-      }
+  console.log("🎯 Filtered products:", filtered.length);
 
-      emptyMessage.style.display = "none";
-      productGrid.innerHTML = "";
+  if (!filtered.length) {
+    emptyMessage.style.display = "block";
+    return;
+  }
 
-      filtered.forEach(product => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
+  emptyMessage.style.display = "none";
+  productGrid.innerHTML = "";
 
-        card.innerHTML = `
-          ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
-          <img src="${product.image_url}" alt="${product.title}">
-          <div class="product-info">
-            <h3>${product.title}</h3>
-            <p class="brand">${product.brand || ""}</p>
-            <p class="price">${product.price || ""} kr</p>
-          </div>
-        `;
+  filtered.forEach(product => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
 
-        card.addEventListener("click", () => {
-          window.location.href = `product.html?id=${product.id}`;
-        });
+    card.innerHTML = `
+      ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+      <img src="${product.image_url}" alt="${product.title}">
+      <div class="product-info">
+        <h3>${product.title}</h3>
+        <p class="brand">${product.brand || ""}</p>
+        <p class="price">${product.price || ""} kr</p>
+      </div>
+    `;
 
-        productGrid.appendChild(card);
-      });
+    card.addEventListener("click", () => {
+      window.location.href = `product.html?id=${product.id}`;
+    });
 
-    })
-    .catch(err =>
-      console.error("❌ Error i Category system:", err)
-    );
-});
+    productGrid.appendChild(card);
+  });
+
+})
+.catch(err => console.error("❌ Category error:", err));
 
 
 
