@@ -29,95 +29,98 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  let mappingData = [];
+  // Last begge ark samtidig ✅
+  Promise.all([
+    fetch(mappingUrl).then(r => r.json()),
+    fetch(productUrl).then(r => r.json())
+  ])
+  .then(([mapRows, products]) => {
 
- // Last mapping og produkter parallelt ✅
-Promise.all([
-  fetch(mappingUrl).then(r => r.json()),
-  fetch(productUrl).then(r => r.json())
-])
-.then(([mapRows, products]) => {
+    console.log("✅ Mapping rows:", mapRows.length);
+    console.log("✅ Products loaded:", products.length);
 
-  console.log("✅ Mapping rows loaded:", mapRows.length);
-  console.log("✅ Products loaded:", products.length);
+    const category = mapRows.find(r => r.url_slug === categorySlug);
+    if (!category) {
+      console.warn("⚠️ Kategori ikke funnet i mapping");
+      emptyMessage.style.display = "block";
+      return;
+    }
 
-  const category = mapRows.find(r => r.url_slug === categorySlug);
-  if (!category) {
-    emptyMessage.textContent = "Kategori ikke funnet";
-    emptyMessage.style.display = "block";
-    return;
-  }
+    const categoryNameNo = category.display_name;
+    let subNameNo = null;
 
-  const categoryNameNo = category.display_name || categorySlug;
+    if (subSlug) {
+      const sub = mapRows.find(r => r.url_slug === subSlug);
+      subNameNo = sub ? sub.display_name : subSlug;
+    }
 
-  let subNameNo = null;
-  if (subSlug) {
-    const sub = mapRows.find(r => r.url_slug === subSlug);
-    subNameNo = sub ? sub.display_name : subSlug;
-  }
+    const norskGender =
+      gender === "Men" ? "Herre" :
+      gender === "Women" ? "Dame" :
+      gender === "Kids" ? "Barn" : gender;
 
-  const norskGender = gender === "Men" ? "Herre" :
-                      gender === "Women" ? "Dame" :
-                      gender === "Kids" ? "Barn" : gender;
+    titleEl.textContent = subNameNo ?
+      `${subNameNo} – ${norskGender}` :
+      `${categoryNameNo} – ${norskGender}`;
 
-  titleEl.textContent = subNameNo ? `${subNameNo} – ${norskGender}` :
-                                    `${categoryNameNo} – ${norskGender}`;
+    document.title = `${titleEl.textContent} | BrandRadar`;
 
-  document.title = `${titleEl.textContent} | BrandRadar`;
-
-  breadcrumbEl.innerHTML = `
-    <a href="index.html">Hjem</a> ›
-    <a href="category.html?gender=${gender}&category=${categorySlug}">
-      ${norskGender}
-    </a> ›
-    ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
-  `;
-
-  const normalize = txt => (txt || "")
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/\s+/g, "-")
-    .trim();
-
-  const filtered = products.filter(p =>
-    normalize(p.gender) === normalize(gender) &&
-    normalize(p.category) === normalize(categorySlug) &&
-    (!subSlug || normalize(p.subcategory) === normalize(subSlug))
-  );
-
-  console.log("🎯 Filtered products:", filtered.length);
-
-  if (!filtered.length) {
-    emptyMessage.style.display = "block";
-    return;
-  }
-
-  emptyMessage.style.display = "none";
-  productGrid.innerHTML = "";
-
-  filtered.forEach(product => {
-    const card = document.createElement("div");
-    card.classList.add("product-card");
-
-    card.innerHTML = `
-      ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
-      <img src="${product.image_url}" alt="${product.title}">
-      <div class="product-info">
-        <h3>${product.title}</h3>
-        <p class="brand">${product.brand || ""}</p>
-        <p class="price">${product.price || ""} kr</p>
-      </div>
+    breadcrumbEl.innerHTML = `
+      <a href="index.html">Hjem</a> ›
+      <a href="category.html?gender=${gender}&category=${categorySlug}">
+        ${norskGender}
+      </a> ›
+      ${subNameNo ? `<a>${subNameNo}</a>` : `<a>${categoryNameNo}</a>`}
     `;
 
-    card.addEventListener("click", () => {
-      window.location.href = `product.html?id=${product.id}`;
+    const normalize = txt => (txt || "")
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\s+/g, "-")
+      .trim();
+
+    const filtered = products.filter(p =>
+      normalize(p.gender) === normalize(gender) &&
+      normalize(p.category) === normalize(categorySlug) &&
+      (!subSlug || normalize(p.subcategory) === normalize(subSlug))
+    );
+
+    console.log("🎯 Filtered products:", filtered.length);
+
+    if (!filtered.length) {
+      emptyMessage.style.display = "block";
+      return;
+    }
+
+    emptyMessage.style.display = "none";
+    productGrid.innerHTML = "";
+
+    filtered.forEach(product => {
+      const card = document.createElement("div");
+      card.classList.add("product-card");
+
+      card.innerHTML = `
+        ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+        <img src="${product.image_url}" alt="${product.title}">
+        <div class="product-info">
+          <h3>${product.title}</h3>
+          <p class="brand">${product.brand || ""}</p>
+          <p class="price">${product.price || ""} kr</p>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        window.location.href = `product.html?id=${product.id}`;
+      });
+
+      productGrid.appendChild(card);
     });
 
-    productGrid.appendChild(card);
-  });
+  })
+  .catch(err => console.error("❌ Category error:", err));
 
-})
-.catch(err => console.error("❌ Category error:", err));
+});
+
 
 
 
