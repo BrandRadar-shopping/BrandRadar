@@ -107,9 +107,11 @@ const norskGender =
       const pCat = normalize(p.category);
       const pSub = normalize(p.subcategory);
 
-      const matchGender =
-        pGender === genderSlug ||   // Main gender match
-        pGender === "";             // ✅ Unisex allowed
+     const matchGender =
+  pGender === genderSlug ||
+  pGender === "unisex" ||
+  pGender === "";
+
 
       const matchCategory =
         pCat === categorySlug;
