@@ -4,7 +4,6 @@
 
 (function () {
 
-  // ✅ Vent til mega-meny HTML er lastet
   function onMenuReady(cb, tries = 0) {
     const nav = document.querySelector("nav.mega-menu");
     if (!nav) return;
@@ -13,7 +12,6 @@
     setTimeout(() => onMenuReady(cb, tries + 1), 100);
   }
 
-  // ✅ Mega-menu hover interaksjon (som du hadde før)
   function initMenuHover() {
     const barItems = document.querySelectorAll(".category-bar .category-item");
     const panels = document.querySelectorAll("nav.mega-menu .menu-panel");
@@ -41,7 +39,6 @@
     console.log("✅ Mega-menu hover ready");
   }
 
-  // ✅ Norsk slug-generering (æ ø å → a o a)
   function slugify(txt) {
     return (txt || "")
       .toLowerCase()
@@ -55,31 +52,38 @@
       .trim();
   }
 
-  // ✅ Routing fra meny til category.html med norske URL-verdier
   function initRoutingSlugs() {
     document.querySelectorAll(".menu-panel").forEach(panel => {
 
       const panelId = panel.id;
       const categorySlug = slugify(panelId);
 
-      // Finn kjønn: Herre / Dame / Barn
       const genderHeader = [...panel.querySelectorAll("h4")]
         .map(h => h.textContent.trim())
         .find(text => ["Herre", "Dame", "Barn"].includes(text));
+
+      // ✅ Oversett norsk gender → english slug ✅
+      let genderSlug =
+        genderHeader === "Herre" ? "Men" :
+        genderHeader === "Dame" ? "Women" :
+        genderHeader === "Barn" ? "Kids" : null;
 
       panel.querySelectorAll("li a").forEach(link => {
         const sub = link.textContent.trim();
         const subSlug = slugify(sub);
 
         let url = `category.html?category=${categorySlug}`;
-        if (genderHeader) url += `&gender=${slugify(genderHeader)}`;
+        
+        // ✅ Bruk english gender slug istedenfor norsk ✅
+        if (genderSlug) url += `&gender=${genderSlug}`;
+
         if (subSlug !== categorySlug) url += `&subcategory=${subSlug}`;
 
         link.href = url;
       });
     });
 
-    console.log("✅ Norsk slug routing aktivert");
+    console.log("✅ Norsk slug routing aktivert (med riktig gender!)");
   }
 
   document.addEventListener("DOMContentLoaded", () => {
