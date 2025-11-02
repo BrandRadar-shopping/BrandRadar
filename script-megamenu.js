@@ -128,6 +128,49 @@
   }
 
   onMenuReady(activateMenuLinks);
+  
+// ======================================================
+// ✅ Riktig routing med slug fra mapping-arket
+// (alt lower-case slug-format)
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  function normalizeSlug(slug) {
+    return slug
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/[^\w\d-]/g, "-")
+      .replace(/\s+/g, "-")
+      .trim();
+  }
+
+  document.querySelectorAll(".menu-panel").forEach(panel => {
+    const gender = panel.querySelector("h4")?.textContent.trim();
+    const panelId = panel.id; // clothing / shoes etc.
+
+    panel.querySelectorAll("li a").forEach(link => {
+      const text = link.textContent.trim();
+
+      const genderSlug =
+        gender === "Herre" ? "Men" :
+        gender === "Dame" ? "Women" :
+        gender === "Barn" ? "Kids" : gender;
+
+      const categorySlug = normalizeSlug(panelId);
+      const subSlug = normalizeSlug(text);
+
+      // KUN bruk subSlug hvis panelen har underkategori
+      const href = subSlug && subSlug !== categorySlug
+        ? `category.html?gender=${genderSlug}&category=${categorySlug}&subcategory=${subSlug}`
+        : `category.html?gender=${genderSlug}&category=${categorySlug}`;
+
+      link.href = href;
+    });
+  });
+
+  console.log("✅ Routing slugs now fully normalized");
+});
 
   
 })();
