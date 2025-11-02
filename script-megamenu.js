@@ -72,4 +72,62 @@
   document.addEventListener("DOMContentLoaded", () => {
     onMenuReady(initCategoryBar);
   });
+
+  // ======================================================
+  // ✅ Legg til routing (dynamiske lenker)
+  // ======================================================
+
+  function activateMenuLinks() {
+    console.log("✅ Mega-menu routing activated");
+
+    const mapGender = {
+      "Herre": "Men",
+      "Dame": "Women",
+      "Barn": "Kids"
+    };
+
+    const mapCategory = {
+      "Klær": "Clothing",
+      "Sko": "Shoes",
+      "Gymcorner": "Gymcorner",
+      "Tilbehør": "Accessories",
+      "Selfcare": "Selfcare"
+    };
+
+    const mapSub = {
+      "Gensere & hoodies": "Hoodies",
+      "T-skjorter": "Tshirts",
+      "Bukser": "Pants",
+      "Jakker": "Jackets",
+      "Jeans": "Jeans",
+      "Sneakers": "Sneakers",
+      "Proteinbarer": "Proteinbars"
+    };
+
+    document.querySelectorAll(".menu-panel").forEach(panel => {
+      const genderHeading = panel.querySelector("h4");
+      if (!genderHeading) return;
+
+      const genderNorsk = genderHeading.textContent.trim();
+      const gender = mapGender[genderNorsk];
+
+      // Finn kategorien via panel-ID
+      const categoryPanelID = panel.id;
+      const categoryEl = document.querySelector(`ul.menu-top li[data-menu="${categoryPanelID}"]`);
+      const categoryNorsk = categoryEl?.textContent.trim();
+      const category = mapCategory[categoryNorsk];
+
+      panel.querySelectorAll("li a").forEach(link => {
+        const textNorsk = link.textContent.trim();
+        const subcategory = mapSub[textNorsk] || null;
+
+        link.href = `category.html?gender=${gender}&category=${category}` +
+          (subcategory ? `&subcategory=${subcategory}` : "");
+      });
+    });
+  }
+
+  onMenuReady(activateMenuLinks);
+
+  
 })();
