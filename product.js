@@ -2,55 +2,67 @@
 // BrandRadar.shop – Produktvisning (Stable Release)
 // ======================================================
 
-// ✅ Produktinfo
-document.addEventListener("DOMContentLoaded", () => {
+// ======================================================
+// ✅ Produktinfo — Hentes fra Google Sheet via ID
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
+  const productId = Number(params.get("id"));
 
-  const product = {
-    title: params.get("title") || "",
-    brand: params.get("brand") || "",
-    price: params.get("price") || "",
-    discount: params.get("discount") || "",
-    url: params.get("url") || "#",
-    category: params.get("category") || "",
-    gender: params.get("gender") || "",
-    subcategory: params.get("subcategory") || "",
-    description: params.get("description") || "",
-    rating: params.get("rating") || "",
-    image: params.get("image") || "",
-    image2: params.get("image2") || "",
-    image3: params.get("image3") || "",
-    image4: params.get("image4") || ""
-  };
+  if (!productId) {
+    console.error("❌ Ingen produkt-ID i URL");
+    return;
+  }
 
-  const images = [
-    product.image, product.image2, product.image3, product.image4
-  ].filter(Boolean);
+  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_NAME = "BrandRadarProdukter";
 
+  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
+    .then(r => r.json())
+    .catch(err => console.error("❌ Klarte ikke hente produkter", err));
+
+  const product = products.find(p => Number(p.id) === productId);
+
+  if (!product) {
+    console.error("❌ Produkt ikke funnet for ID:", productId);
+    return;
+  }
+
+  // ✅ Sett inn produktdata
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent = product.description || "";
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
-  document.getElementById("buy-link").href = product.url;
+  document.getElementById("buy-link").href = product.product_url;
 
+  // ✅ Rating
   const ratingEl = document.getElementById("product-rating");
-  const ratingNumber = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
+  const ratingNumber = parseFloat(String(product.rating).replace(",", "."));
   ratingEl.textContent = !isNaN(ratingNumber) ? `⭐ ${ratingNumber} / 5` : "";
 
+  // ✅ Rabatt
   const discountEl = document.getElementById("product-discount");
   const discountValue = parseFloat(product.discount);
   discountEl.textContent = (!isNaN(discountValue) && discountValue > 0)
     ? `-${(discountValue <= 1 ? discountValue * 100 : discountValue).toFixed(0)}%`
     : "";
 
+  // ✅ Produktbilder
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
 
-  if (!images.length) {
+  const images = [
+    product.image_url,
+    product.image2,
+    product.image3,
+    product.image4
+  ].filter(Boolean);
+
+  if (images.length === 0) {
     mainImg.src = "https://via.placeholder.com/600x700?text=No+Image";
   } else {
     mainImg.src = images[0];
-
     images.forEach((src, i) => {
       const img = document.createElement("img");
       img.src = src;
@@ -67,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 // ======================================================
 // Related Products Loader ✅
