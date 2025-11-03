@@ -1,73 +1,58 @@
 // ======================================================
-// BrandRadar.shop – Favorittsystem (ID-basert og stabilt)
+// BrandRadar.shop – Favoritter Page Loader (ID-basert)
 // ======================================================
 
-// ✅ Hent favoritter fra localStorage
-const getFavorites = () => JSON.parse(localStorage.getItem("favorites") || "[]");
-
-// ✅ Lagre favoritter + oppdater teller
-const saveFavorites = (favorites) => {
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateFavoriteCount();
-};
-
-// ✅ Legg til / fjern favoritt (bruk ID for unik match)
-const toggleFavorite = (product) => {
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.getElementById("favorites-grid");
   const favorites = getFavorites();
-  const productId = Number(product.id || product.Id || product.ID);
 
-  const index = favorites.findIndex(fav => Number(fav.id) === productId);
+  if (!grid) return;
 
-  if (index >= 0) {
-    favorites.splice(index, 1);
-    showToast("❌ Fjernet fra favoritter");
-  } else {
-    const cleanProduct = {
-      id: productId,
-      title: product.title,
-      brand: product.brand,
-      price: product.price,
-      discount: product.discount,
-      image_url: product.image_url,
-      image2: product.image2,
-      image3: product.image3,
-      image4: product.image4,
-      product_url: product.product_url,
-      category: product.category,
-      subcategory: product.subcategory,
-      gender: product.gender,
-      description: product.description,
-      rating: product.rating
-    };
-
-    favorites.push(cleanProduct);
-    showToast("❤️ Lagt til i favoritter");
+  if (!favorites.length) {
+    grid.innerHTML = `<p>Ingen favoritter enda ❤️</p>`;
+    return;
   }
 
-  saveFavorites(favorites);
-};
+  grid.innerHTML = "";
 
-// ✅ Vis teller i header
-const updateFavoriteCount = () => {
-  const count = getFavorites().length;
-  const counter = document.getElementById("favorites-count");
-  if (counter) counter.textContent = count;
-};
+  favorites.forEach(product => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
 
-// ✅ Toast melding
-const showToast = (message) => {
-  let toast = document.querySelector(".toast-message");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.className = "toast-message";
-    document.body.appendChild(toast);
-  }
+    card.innerHTML = `
+      ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+      <img src="${product.image_url}" alt="${product.title}" />
+      <div class="product-info">
+        <h3>${product.title}</h3>
+        <p class="brand">${product.brand || ""}</p>
+        <p class="price">${product.price || ""} kr</p>
+      </div>
+      <button class="remove-fav-btn">Fjern</button>
+    `;
 
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2000);
-};
+    // ✅ Gå til produkten (ID-basert)
+    card.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-fav-btn")) return;
+      window.location.href = `product.html?id=${product.id}`;
+    });
 
-// ✅ Init
-document.addEventListener("DOMContentLoaded", updateFavoriteCount);
+    // ✅ Fjern fra favoritter-knapp
+    card.querySelector(".remove-fav-btn").addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const updated = getFavorites().filter(fav => Number(fav.id) !== Number(product.id));
+      saveFavorites(updated);
+
+      card.remove();
+      updateFavoriteCount();
+
+      if (!updated.length) {
+        grid.innerHTML = `<p>Ingen favoritter igjen ❤️</p>`;
+      }
+    });
+
+    grid.appendChild(card);
+  });
+});
+
 
