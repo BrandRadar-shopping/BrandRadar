@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const categorySlug = normalize(categoryParam);
   let genderSlug = normalize(genderParam);
-if (genderSlug === "herre") genderSlug = "men";
-if (genderSlug === "dame")  genderSlug = "women";
-if (genderSlug === "barn")  genderSlug = "kids";
+  if (genderSlug === "herre") genderSlug = "men";
+  if (genderSlug === "dame")  genderSlug = "women";
+  if (genderSlug === "barn")  genderSlug = "kids";
 
   const subSlug = normalize(subParam);
 
@@ -55,7 +55,6 @@ if (genderSlug === "barn")  genderSlug = "kids";
     console.log("✅ Mapping rows:", mapRows.length);
     console.log("✅ Products loaded:", products.length);
 
-    // ✅ Filter Marketplace
     const categoryMatches = mapRows.filter(row =>
       normalize(row.main_category) === categorySlug &&
       (!row.gender || normalize(row.gender) === genderSlug)
@@ -70,7 +69,6 @@ if (genderSlug === "barn")  genderSlug = "kids";
     const mainCategory = categoryMatches[0];
     const categoryNameNo = mainCategory.display_name;
 
-    // ✅ Subcategory lookup
     let subNameNo = null;
     if (subSlug) {
       const subEntry = mapRows.find(row =>
@@ -81,21 +79,17 @@ if (genderSlug === "barn")  genderSlug = "kids";
     }
 
     const g = genderParam.toLowerCase();
+    const norskGender =
+      g === "men" || g === "herre" ? "Herre" :
+      g === "women" || g === "dame" ? "Dame" :
+      g === "kids" || g === "barn" ? "Barn" : genderParam;
 
-const norskGender =
-  g === "men" || g === "herre" ? "Herre" :
-  g === "women" || g === "dame" ? "Dame" :
-  g === "kids" || g === "barn" ? "Barn" : genderParam;
-
-
-    // ✅ Title
     titleEl.textContent =
       subNameNo ? `${subNameNo} – ${norskGender}` :
                   `${categoryNameNo} – ${norskGender}`;
 
     document.title = `${titleEl.textContent} | BrandRadar`;
 
-    // ✅ Breadcrumb
     breadcrumbEl.innerHTML = `
       <a href="index.html">Hjem</a> ›
       <a href="category.html?gender=${genderParam}&category=${categoryParam}">
@@ -104,21 +98,21 @@ const norskGender =
       ${subNameNo || categoryNameNo}
     `;
 
-    // ✅ Product filter — FINAL RULESET
+    // ✅ Produktfilter — FINAL RULESET
     const filtered = products.filter(p => {
-
       const pGender = normalize(p.gender);
       const pCat = normalize(p.category);
       const pSub = normalize(p.subcategory);
 
-     const matchGender =
-  pGender === genderSlug ||
-  pGender === "unisex" ||
-  pGender === "";
-
+      const matchGender =
+        pGender === genderSlug ||
+        pGender === "unisex" ||
+        !pGender;
 
       const matchCategory =
-        pCat === categorySlug;
+        pCat === categorySlug ||
+        pCat.includes(categorySlug) ||
+        categorySlug.includes(pCat);
 
       const matchSub =
         !subSlug || pSub === subSlug;
@@ -151,7 +145,7 @@ const norskGender =
       `;
 
       card.addEventListener("click", () => {
-        window.location.href = `product.html?id=${product.id}`;
+        window.location.href = \`product.html?id=\${Number(product.id)}\`;
       });
 
       productGrid.appendChild(card);
@@ -161,6 +155,7 @@ const norskGender =
   .catch(err => console.error("❌ Category FEIL:", err));
 
 });
+
 
 
 
