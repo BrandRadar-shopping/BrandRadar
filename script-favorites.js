@@ -1,42 +1,60 @@
 // ======================================================
-// BrandRadar.shop – Favorittsystem (Dag 2)
+// BrandRadar.shop – Favorittsystem (ID-basert og stabilt)
 // ======================================================
 
-// Sjekk om localStorage har en "favorites"-liste fra før
+// ✅ Hent favoritter fra localStorage
 const getFavorites = () => JSON.parse(localStorage.getItem("favorites") || "[]");
 
-// Lagre ny favorittliste til localStorage
+// ✅ Lagre favoritter + oppdater teller
 const saveFavorites = (favorites) => {
   localStorage.setItem("favorites", JSON.stringify(favorites));
   updateFavoriteCount();
 };
 
-// Legg til eller fjern et produkt
+// ✅ Legg til / fjern favoritt (bruk ID for unik match)
 const toggleFavorite = (product) => {
   const favorites = getFavorites();
-  const index = favorites.findIndex(fav => fav.title === product.title);
+  const productId = Number(product.id || product.Id || product.ID);
+
+  const index = favorites.findIndex(fav => Number(fav.id) === productId);
 
   if (index >= 0) {
-    // Fjern
     favorites.splice(index, 1);
     showToast("❌ Fjernet fra favoritter");
   } else {
-    // Legg til
-    favorites.push(product);
+    const cleanProduct = {
+      id: productId,
+      title: product.title,
+      brand: product.brand,
+      price: product.price,
+      discount: product.discount,
+      image_url: product.image_url,
+      image2: product.image2,
+      image3: product.image3,
+      image4: product.image4,
+      product_url: product.product_url,
+      category: product.category,
+      subcategory: product.subcategory,
+      gender: product.gender,
+      description: product.description,
+      rating: product.rating
+    };
+
+    favorites.push(cleanProduct);
     showToast("❤️ Lagt til i favoritter");
   }
 
   saveFavorites(favorites);
 };
 
-// Teller-funksjon (oppdaterer antall i header)
+// ✅ Vis teller i header
 const updateFavoriteCount = () => {
   const count = getFavorites().length;
   const counter = document.getElementById("favorites-count");
   if (counter) counter.textContent = count;
 };
 
-// Toast (melding som vises kort)
+// ✅ Toast melding
 const showToast = (message) => {
   let toast = document.querySelector(".toast-message");
   if (!toast) {
@@ -50,5 +68,6 @@ const showToast = (message) => {
   setTimeout(() => toast.classList.remove("show"), 2000);
 };
 
-// Init ved lasting av side
+// ✅ Init
 document.addEventListener("DOMContentLoaded", updateFavoriteCount);
+
