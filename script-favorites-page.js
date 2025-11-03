@@ -6,25 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Favoritter-side lastet inn");
 
   const grid = document.getElementById("favorites-grid");
-  let favorites = getFavorites();
+  
+  // ✅ Fjern gamle favoritter uten ID
+  let favorites = getFavorites().filter(f => f.id);
 
-  updateFavoriteCount(); // ✅ Telleren i header
-
-  if (!favorites || favorites.length === 0) {
-    showEmptyState();
-    return;
-  }
-
-  grid.innerHTML = "";
-
-  // Format discount to correct %
-  function formatDiscount(value) {
-    if (!value) return "";
-    let num = String(value).replace("%", "").trim();
-    num = parseFloat(num);
-    if (num > 0 && num < 1) num = num * 100;
-    return `${Math.round(num)}%`;
-  }
+  updateFavoriteCount(); // Oppdater header-teller
 
   function showEmptyState() {
     grid.innerHTML = `
@@ -35,10 +21,27 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
+  if (!favorites.length) {
+    showEmptyState();
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  // ✅ Riktig rabatt-format
+  function formatDiscount(value) {
+    if (!value) return "";
+    let num = String(value).replace("%", "").trim();
+    num = parseFloat(num);
+    if (num > 0 && num < 1) num *= 100;
+    return `${Math.round(num)}%`;
+  }
+
   favorites.forEach((product) => {
     const productId = Number(product.id);
 
-    const image = product.image_url || product.image || "https://via.placeholder.com/600x700?text=No+Image";
+    const image = product.image_url || product.image ||
+      "https://via.placeholder.com/600x700?text=No+Image";
     const discount = formatDiscount(product.discount);
 
     const card = document.createElement("div");
@@ -54,29 +57,30 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="remove-btn">Fjern</button>
     `;
 
-    // ✅ Gå til product.html via ID
+    // ✅ Naviger korrekt til produkt via ID
     card.addEventListener("click", (e) => {
       if (e.target.classList.contains("remove-btn")) return;
       if (!productId) return console.error("❌ Produkt uten ID i favoritter");
       window.location.href = `product.html?id=${productId}`;
     });
 
-    // ✅ Fjern fra favoritter
+    // ✅ Fjern fra favoritter (både UI og localStorage)
     card.querySelector(".remove-btn").addEventListener("click", (e) => {
       e.stopPropagation();
-      favorites = favorites.filter((f) => Number(f.id) !== Number(productId));
+
+      favorites = favorites.filter(f => Number(f.id) !== Number(productId));
       saveFavorites(favorites);
-      updateFavoriteCount();
+      updateFavoriteCount(); // ✅ Teller ned med en gang
+
       card.remove();
       showToast("❌ Fjernet fra favoritter");
 
-      if (favorites.length === 0) {
-        showEmptyState();
-      }
+      if (!favorites.length) showEmptyState();
     });
 
     grid.appendChild(card);
   });
 });
+
 
 
