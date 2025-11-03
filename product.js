@@ -1,7 +1,6 @@
 // ======================================================
 // ✅ Product page — Single source of truth: Google Sheets
 // ======================================================
-
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const productId = Number(params.get("id"));
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .catch(err => console.error("❌ Klarte ikke hente produkter", err));
 
   const product = products.find(p => Number(p.id) === productId);
-  if (!product) return alert("Produkten ble ikke funnet!");
+  if (!product) return alert("Produktet ble ikke funnet!");
 
   // ✅ Sett produktinfo
   document.getElementById("product-title").textContent = product.title;
@@ -28,19 +27,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.product_url;
 
-  // ✅ Rating
+  const ratingEl = document.getElementById("product-rating");
   const ratingNum = parseFloat(String(product.rating).replace(",", "."));
-  document.getElementById("product-rating").textContent =
-    !isNaN(ratingNum) ? `⭐ ${ratingNum} / 5` : "";
+  ratingEl.textContent = !isNaN(ratingNum) ? `⭐ ${ratingNum} / 5` : "";
 
-  // ✅ Rabatt badge
+  const discountEl = document.getElementById("product-discount");
   const discountNum = parseFloat(product.discount);
-  document.getElementById("product-discount").textContent =
-    !isNaN(discountNum) && discountNum > 0
+  discountEl.textContent =
+    (!isNaN(discountNum) && discountNum > 0)
       ? `-${(discountNum <= 1 ? discountNum * 100 : discountNum).toFixed(0)}%`
       : "";
 
-  // ✅ Bilder (ALLTID høy kvalitet)
+  // ✅ Bilder – ALLTID høy kvalitet
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
   const images = [
@@ -65,31 +63,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     thumbs.appendChild(img);
   });
 
-  // ✅ Load recommended products
+  // ✅ Relaterte produkter
   loadRecommendations(products, product);
+
+  // ✅ Favorittknapp
+  setupFavoriteButton(product);
 });
 
 
 // ======================================================
-// ✅ Related Products Loader (Category → Brand fallback)
+// ✅ Related Products Loader
 // ======================================================
-
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
   if (!slider) return;
 
-  const curCat = (currentProduct.category || "").trim().toLowerCase();
-  const curBrand = (currentProduct.brand || "").trim().toLowerCase();
+  const curCat = (currentProduct.category || "").toLowerCase();
+  const curBrand = (currentProduct.brand || "").toLowerCase();
 
   let matches = products.filter(p =>
-    p.id !== currentProduct.id &&
+    Number(p.id) !== Number(currentProduct.id) &&
     p.image_url &&
     (p.category || "").toLowerCase() === curCat
   );
 
   if (matches.length < 4) {
     matches = matches.concat(products.filter(p =>
-      p.id !== currentProduct.id &&
+      Number(p.id) !== Number(currentProduct.id) &&
       p.image_url &&
       (p.brand || "").toLowerCase() === curBrand
     ));
@@ -106,18 +106,20 @@ async function loadRecommendations(products, currentProduct) {
   matches.forEach(p => {
     const card = document.createElement("div");
     card.classList.add("product-card");
+
     card.innerHTML = `
-      ${p.discount ? `<div class="discount-badge">${p.discount}% OFF</div>` : ""}
+      ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
       <img src="${p.image_url}" alt="${p.title}" />
       <div class="product-info">
         <h3>${p.title}</h3>
         <p class="price">${p.price} kr</p>
-        <button class="buy-btn">Se produkt</button>
       </div>
     `;
+
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}`;
     });
+
     slider.appendChild(card);
   });
 
@@ -126,30 +128,32 @@ async function loadRecommendations(products, currentProduct) {
 
 
 // ======================================================
-// ✅ Favoritt-knapp fungerer uansett navigasjon
+// ✅ Favoritt-knapp – ID-basert, stabil
 // ======================================================
-
-document.addEventListener("DOMContentLoaded", () => {
+function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
   if (!btn) return;
 
-  const id = Number(new URLSearchParams(window.location.search).get("id"));
-  const favorites = getFavorites();
-  const exists = favorites.some(f => Number(f.id) === id);
-  btn.textContent = exists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
+  const id = Number(product.id);
+  const exists = getFavorites().some(f => Number(f.id) === id);
+
+  btn.innerHTML = exists
+    ? `<span class="heart active"></span> Fjern fra favoritter`
+    : `<span class="heart"></span> Legg til favoritter`;
 
   btn.addEventListener("click", () => {
-    toggleFavorite({ id });
+    toggleFavorite(product);
     const nowExists = getFavorites().some(f => Number(f.id) === id);
-    btn.textContent = nowExists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
+    btn.innerHTML = nowExists
+      ? `<span class="heart active"></span> Fjern fra favoritter`
+      : `<span class="heart"></span> Legg til favoritter`;
   });
-});
+}
 
 
 // ======================================================
-// ✅ Slider arrows — unchanged
+// ✅ Slider arrows
 // ======================================================
-
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
 const btnNext = document.querySelector(".slider-btn.next");
@@ -159,6 +163,7 @@ function updateSliderNav() {
   const canScrollMore = slider.scrollWidth > slider.clientWidth + 10;
   btnPrev.style.opacity = btnNext.style.opacity = canScrollMore ? "1" : "0";
 }
+
 btnPrev?.addEventListener("click", () => {
   slider.scrollBy({ left: -350, behavior: "smooth" });
   setTimeout(updateSliderNav, 200);
@@ -171,12 +176,10 @@ slider?.addEventListener("scroll", updateSliderNav);
 
 
 // ======================================================
-// ✅ Tilbake-knapp — unchanged
+// ✅ Tilbake-knapp
 // ======================================================
-
 document.getElementById("back-btn")?.addEventListener("click", () => {
   const ref = document.referrer;
   if (ref && !ref.includes("product.html")) window.history.back();
   else window.location.href = "index.html";
 });
-
