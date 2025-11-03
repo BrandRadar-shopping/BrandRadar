@@ -41,17 +41,17 @@ const toggleFavorite = (product) => {
     };
 
     favorites.push(cleanProduct);
-    showToast("❤️ Lagt til i favoritter");
+    showToast("✅ Lagt til i favoritter");
   }
 
   saveFavorites(favorites);
 };
 
-// ✅ Vis teller i header
+// ✅ Oppdater teller i header
 const updateFavoriteCount = () => {
   const count = getFavorites().length;
-  const counter = document.getElementById("favorites-count");
-  if (counter) counter.textContent = count;
+  document.querySelectorAll("#favorites-count")
+    .forEach(el => el.textContent = count);
 };
 
 // ✅ Toast melding
@@ -65,7 +65,7 @@ const showToast = (message) => {
 
   toast.textContent = message;
   toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2000);
+  setTimeout(() => toast.classList.remove("show"), 1800);
 };
 
 // ✅ Init
