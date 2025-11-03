@@ -1,9 +1,5 @@
 // ======================================================
-// BrandRadar.shop – Produktvisning (Stable Release)
-// ======================================================
-
-// ======================================================
-// ✅ Produktinfo — Hentes fra Google Sheet via ID
+// ✅ Product page — Single source of truth: Google Sheets
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -23,13 +19,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     .catch(err => console.error("❌ Klarte ikke hente produkter", err));
 
   const product = products.find(p => Number(p.id) === productId);
+  if (!product) return alert("Produkten ble ikke funnet!");
 
-  if (!product) {
-    console.error("❌ Produkt ikke funnet for ID:", productId);
-    return;
-  }
-
-  // ✅ Sett inn produktdata
+  // ✅ Sett produktinfo
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent = product.description || "";
@@ -37,21 +29,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("buy-link").href = product.product_url;
 
   // ✅ Rating
-  const ratingEl = document.getElementById("product-rating");
-  const ratingNumber = parseFloat(String(product.rating).replace(",", "."));
-  ratingEl.textContent = !isNaN(ratingNumber) ? `⭐ ${ratingNumber} / 5` : "";
+  const ratingNum = parseFloat(String(product.rating).replace(",", "."));
+  document.getElementById("product-rating").textContent =
+    !isNaN(ratingNum) ? `⭐ ${ratingNum} / 5` : "";
 
-  // ✅ Rabatt
-  const discountEl = document.getElementById("product-discount");
-  const discountValue = parseFloat(product.discount);
-  discountEl.textContent = (!isNaN(discountValue) && discountValue > 0)
-    ? `-${(discountValue <= 1 ? discountValue * 100 : discountValue).toFixed(0)}%`
-    : "";
+  // ✅ Rabatt badge
+  const discountNum = parseFloat(product.discount);
+  document.getElementById("product-discount").textContent =
+    !isNaN(discountNum) && discountNum > 0
+      ? `-${(discountNum <= 1 ? discountNum * 100 : discountNum).toFixed(0)}%`
+      : "";
 
-  // ✅ Produktbilder
+  // ✅ Bilder (ALLTID høy kvalitet)
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
-
   const images = [
     product.image_url,
     product.image2,
@@ -59,61 +50,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     product.image4
   ].filter(Boolean);
 
-  if (images.length === 0) {
-    mainImg.src = "https://via.placeholder.com/600x700?text=No+Image";
-  } else {
-    mainImg.src = images[0];
-    images.forEach((src, i) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.classList.add("thumb");
-      if (i === 0) img.classList.add("active");
+  mainImg.src = images[0] || "https://via.placeholder.com/600x700?text=No+Image";
 
-      img.addEventListener("click", () => {
-        document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-        img.classList.add("active");
-        mainImg.src = src;
-      });
-
-      thumbs.appendChild(img);
+  images.forEach((src, i) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("thumb");
+    if (i === 0) img.classList.add("active");
+    img.addEventListener("click", () => {
+      document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
+      img.classList.add("active");
+      mainImg.src = src;
     });
-  }
+    thumbs.appendChild(img);
+  });
+
+  // ✅ Load recommended products
+  loadRecommendations(products, product);
 });
 
 
 // ======================================================
-// Related Products Loader ✅
+// ✅ Related Products Loader (Category → Brand fallback)
 // ======================================================
-document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
+
+async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
   if (!slider) return;
 
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "BrandRadarProdukter";
-
-  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
-    .then(r => r.json());
-
-  const currentTitle = params.get("title") || "";
-  const currentCategory = (params.get("category") || "").toLowerCase();
-  const currentBrand = (params.get("brand") || "").toLowerCase();
+  const curCat = (currentProduct.category || "").trim().toLowerCase();
+  const curBrand = (currentProduct.brand || "").trim().toLowerCase();
 
   let matches = products.filter(p =>
+    p.id !== currentProduct.id &&
     p.image_url &&
-    p.title !== currentTitle &&
-    (p.category || "").trim().toLowerCase() === currentCategory
+    (p.category || "").toLowerCase() === curCat
   );
 
   if (matches.length < 4) {
     matches = matches.concat(products.filter(p =>
+      p.id !== currentProduct.id &&
       p.image_url &&
-      p.title !== currentTitle &&
-      (p.brand || "").trim().toLowerCase() === currentBrand
+      (p.brand || "").toLowerCase() === curBrand
     ));
   }
 
-  matches = [...new Map(matches.map(p => [p.title, p])).values()].slice(0, 8);
+  matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
 
   if (!matches.length) {
     slider.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
@@ -122,15 +104,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   slider.innerHTML = "";
   matches.forEach(p => {
-    const paramsObj = new URLSearchParams({
-      title: p.title, brand: p.brand, price: p.price,
-      discount: p.discount, image: p.image_url,
-      image2: p.image2, image3: p.image3, image4: p.image4,
-      url: p.product_url, category: p.category,
-      gender: p.gender, subcategory: p.subcategory,
-      description: p.description, rating: p.rating
-    });
-
     const card = document.createElement("div");
     card.classList.add("product-card");
     card.innerHTML = `
@@ -142,86 +115,68 @@ document.addEventListener("DOMContentLoaded", async () => {
         <button class="buy-btn">Se produkt</button>
       </div>
     `;
-
     card.addEventListener("click", () => {
-      window.location.href = `product.html?${paramsObj.toString()}`;
+      window.location.href = `product.html?id=${p.id}`;
     });
-
     slider.appendChild(card);
   });
 
   updateSliderNav();
-});
+}
+
 
 // ======================================================
-// ✅ Favoritt-knapp
+// ✅ Favoritt-knapp fungerer uansett navigasjon
 // ======================================================
+
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("favorite-btn");
   if (!btn) return;
 
-  const params = new URLSearchParams(window.location.search);
-  const product = Object.fromEntries(params.entries());
-
-  const updateBtn = () => {
-    const exists = getFavorites().some(f => f.title === product.title);
-    btn.textContent = exists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
-  };
+  const id = Number(new URLSearchParams(window.location.search).get("id"));
+  const favorites = getFavorites();
+  const exists = favorites.some(f => Number(f.id) === id);
+  btn.textContent = exists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
 
   btn.addEventListener("click", () => {
-    toggleFavorite(product);
-    updateBtn();
+    toggleFavorite({ id });
+    const nowExists = getFavorites().some(f => Number(f.id) === id);
+    btn.textContent = nowExists ? "💔 Fjern fra favoritter" : "🤍 Legg til favoritter";
   });
-
-  updateBtn();
 });
 
+
 // ======================================================
-// ✅ Slider Buttons (final, no duplicates)
+// ✅ Slider arrows — unchanged
 // ======================================================
+
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
 const btnNext = document.querySelector(".slider-btn.next");
 
 function updateSliderNav() {
   if (!slider) return;
-
   const canScrollMore = slider.scrollWidth > slider.clientWidth + 10;
-
-  if (canScrollMore) {
-    btnPrev.style.opacity = slider.scrollLeft > 5 ? "1" : "1";
-    btnNext.style.opacity =
-      slider.scrollLeft + slider.clientWidth < slider.scrollWidth - 5 ? "1" : "1";
-  } else {
-    btnPrev.style.opacity = "0";
-    btnNext.style.opacity = "0";
-  }
+  btnPrev.style.opacity = btnNext.style.opacity = canScrollMore ? "1" : "0";
 }
-
 btnPrev?.addEventListener("click", () => {
   slider.scrollBy({ left: -350, behavior: "smooth" });
   setTimeout(updateSliderNav, 200);
 });
-
 btnNext?.addEventListener("click", () => {
   slider.scrollBy({ left: 350, behavior: "smooth" });
   setTimeout(updateSliderNav, 200);
 });
-
 slider?.addEventListener("scroll", updateSliderNav);
 
-// ======================================================
-// ✅ Tilbake-knapp – fungerer alltid
-// ======================================================
-const backBtn = document.getElementById("back-btn");
 
-backBtn?.addEventListener("click", () => {
+// ======================================================
+// ✅ Tilbake-knapp — unchanged
+// ======================================================
+
+document.getElementById("back-btn")?.addEventListener("click", () => {
   const ref = document.referrer;
-
-  if (ref && !ref.includes("product.html")) {
-    window.history.back(); // Gå tilbake til forrige side
-  } else {
-    window.location.href = "index.html"; // Fallback
-  }
+  if (ref && !ref.includes("product.html")) window.history.back();
+  else window.location.href = "index.html";
 });
 
