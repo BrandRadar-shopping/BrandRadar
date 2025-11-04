@@ -167,22 +167,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ✅ Sorting Logic
     const sortSelect = document.getElementById("sort-select");
-    sortSelect.addEventListener("change", () => {
-      let sorted = [...filtered];
+   sortSelect.addEventListener("change", () => {
+  let sorted = [...filtered];
 
-      if (sortSelect.value === "price-asc")
-        sorted.sort((a,b) => Number(a.price) - Number(b.price));
+  const cleanPrice = (v) =>
+    parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
 
-      if (sortSelect.value === "price-desc")
-        sorted.sort((a,b) => Number(b.price) - Number(a.price));
+  const cleanRating = (v) =>
+    parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-      if (sortSelect.value === "rating-desc") {
-        const r = p =>
-          parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-        sorted.sort((a,b) => r(b) - r(a));
-      }
+  const val = sortSelect.value;
 
-      renderProducts(sorted);
+  switch (val) {
+    case "price-asc":
+      sorted.sort((a, b) => cleanPrice(a.price) - cleanPrice(b.price));
+      break;
+
+    case "price-desc":
+      sorted.sort((a, b) => cleanPrice(b.price) - cleanPrice(a.price));
+      break;
+
+    case "rating-desc":
+      sorted.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
+      break;
+
+    default:
+      sorted = [...filtered];
+  }
+
+  renderProducts(sorted);
+
     });
 
     // ✅ Initial display
