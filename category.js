@@ -4,7 +4,6 @@
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING  = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
 
@@ -25,12 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const subParam = params.get("subcategory");
 
   if (!genderParam || !categoryParam) {
-    titleEl.textContent = "Ugyldig kategori";
-    emptyMessage.style.display = "block";
+    if (titleEl) titleEl.textContent = "Ugyldig kategori";
+    if (emptyMessage) emptyMessage.style.display = "block";
     return;
   }
 
-  const normalize = txt => (txt || "")
+  // Robust normalisering for matching og slugs
+  const normalize = (txt) => (txt || "")
+    .toString()
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/&/g, "and")
@@ -47,116 +48,128 @@ document.addEventListener("DOMContentLoaded", () => {
   const subSlug = normalize(subParam);
 
   Promise.all([
-    fetch(mappingUrl).then(r => r.json()),
-    fetch(productUrl).then(r => r.json())
+    fetch(mappingUrl).then((r) => r.json()),
+    fetch(productUrl).then((r) => r.json()),
   ])
-  .then(([mapRows, products]) => {
+    .then(([mapRows, products]) => {
+      console.log("✅ Mapping rows:", mapRows.length);
+      console.log("✅ Products loaded:", products.length);
 
-    console.log("✅ Mapping rows:", mapRows.length);
-    console.log("✅ Products loaded:", products.length);
-
-    const categoryMatches = mapRows.filter(row =>
-      normalize(row.main_category) === categorySlug &&
-      (!row.gender || normalize(row.gender) === genderSlug)
-    );
-
-    if (!categoryMatches.length) {
-      console.warn("⚠️ Ingen mapping funnet for:", categorySlug, genderSlug);
-      emptyMessage.style.display = "block";
-      return;
-    }
-
-    const mainCategory = categoryMatches[0];
-    const categoryNameNo = mainCategory.display_name;
-
-    let subNameNo = null;
-    if (subSlug) {
-      const subEntry = mapRows.find(row =>
-        normalize(row.url_slug) === subSlug &&
-        normalize(row.main_category) === categorySlug
+      // Finn mapping for valgt main category (+ evt. kjønn)
+      const categoryMatches = mapRows.filter((row) =>
+        normalize(row.main_category) === categorySlug &&
+        (!row.gender || normalize(row.gender) === genderSlug)
       );
-      if (subEntry) subNameNo = subEntry.display_name;
-    }
 
-    const g = genderParam.toLowerCase();
-    const norskGender =
-      g === "men" || g === "herre" ? "Herre" :
-      g === "women" || g === "dame" ? "Dame" :
-      g === "kids" || g === "barn" ? "Barn" : genderParam;
+      if (!categoryMatches.length) {
+        console.warn("⚠️ Ingen mapping funnet for:", categorySlug, genderSlug);
+        if (emptyMessage) emptyMessage.style.display = "block";
+        return;
+      }
 
-    titleEl.textContent =
-      subNameNo ? `${subNameNo} – ${norskGender}` :
-                  `${categoryNameNo} – ${norskGender}`;
+      const mainCategory = categoryMatches[0];
+      const categoryNameNo = mainCategory.display_name;
 
-    document.title = `${titleEl.textContent} | BrandRadar`;
+      // Subcategory (valgfritt)
+      let subNameNo = null;
+      if (subSlug) {
+        const subEntry = mapRows.find(
+          (row) =>
+            normalize(row.url_slug) === subSlug &&
+            normalize(row.main_category) === categorySlug
+        );
+        if (subEntry) subNameNo = subEntry.display_name;
+      }
 
-    breadcrumbEl.innerHTML = `
-      <a href="index.html">Hjem</a> ›
-      <a href="category.html?gender=${genderParam}&category=${categoryParam}">
-        ${norskGender}
-      </a> ›
-      ${subNameNo || categoryNameNo}
-    `;
+      // Norsk kjønn til tittel/breadcrumb
+      const g = (genderParam || "").toLowerCase();
+      const norskGender =
+        g === "men" || g === "herre"
+          ? "Herre"
+          : g === "women" || g === "dame"
+          ? "Dame"
+          : g === "kids" || g === "barn"
+          ? "Barn"
+          : genderParam;
 
-    // ✅ Produktfilter — FINAL RULESET
-    const filtered = products.filter(p => {
-      const pGender = normalize(p.gender);
-      const pCat = normalize(p.category);
-      const pSub = normalize(p.subcategory);
+      // Tittel
+      if (titleEl) {
+        titleEl.textContent = subNameNo
+          ? `${subNameNo} – ${norskGender}`
+          : `${categoryNameNo} – ${norskGender}`;
+      }
+      document.title = `${titleEl ? titleEl.textContent : "Kategori"} | BrandRadar`;
 
-      const matchGender =
-        pGender === genderSlug ||
-        pGender === "unisex" ||
-        !pGender;
+      // Breadcrumb
+      if (breadcrumbEl) {
+        breadcrumbEl.innerHTML = `
+          <a href="index.html">Hjem</a> ›
+          <a href="category.html?gender=${encodeURIComponent(genderParam)}&category=${encodeURIComponent(categoryParam)}">
+            ${norskGender}
+          </a> ›
+          ${subNameNo || categoryNameNo}
+        `;
+      }
 
-      const matchCategory =
-        pCat === categorySlug ||
-        pCat.includes(categorySlug) ||
-        categorySlug.includes(pCat);
+      // Produktfilter — inkluder Unisex og tom gender
+      const filtered = products.filter((p) => {
+        const pGender = normalize(p.gender);
+        const pCat = normalize(p.category);
+        const pSub = normalize(p.subcategory);
 
-      const matchSub =
-        !subSlug || pSub === subSlug;
+        const matchGender =
+          pGender === genderSlug || pGender === "unisex" || pGender === "";
 
-      return matchGender && matchCategory && matchSub;
-    });
+        const matchCategory = pCat === categorySlug;
 
-    console.log("🎯 Filtered products:", filtered.length);
+        const matchSub = !subSlug || pSub === subSlug;
 
-    if (!filtered.length) {
-      emptyMessage.style.display = "block";
-      return;
-    }
-
-    emptyMessage.style.display = "none";
-    productGrid.innerHTML = "";
-
-    filtered.forEach(product => {
-      const card = document.createElement("div");
-      card.classList.add("product-card");
-
-      card.innerHTML = `
-        ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
-        <img src="${product.image_url}" alt="${product.title}">
-        <div class="product-info">
-          <h3>${product.title}</h3>
-          <p class="brand">${product.brand || ""}</p>
-          <p class="price">${product.price || ""} kr</p>
-        </div>
-      `;
-
-      card.addEventListener("click", () => {
-        window.location.href = \`product.html?id=\${Number(product.id)}\`;
+        return matchGender && matchCategory && matchSub;
       });
 
-      productGrid.appendChild(card);
-    });
-    
-// ✅ Oppdater favoritt-teller etter render
-setTimeout(updateFavoriteCount, 50);
+      console.log("🎯 Filtered products:", filtered.length);
 
-  })
-  .catch(err => console.error("❌ Category FEIL:", err));
+      if (!filtered.length) {
+        if (emptyMessage) emptyMessage.style.display = "block";
+        if (productGrid) productGrid.innerHTML = "";
+        // Oppdater teller selv om tomt
+        if (typeof updateFavoriteCount === "function") {
+          setTimeout(updateFavoriteCount, 0);
+        }
+        return;
+      }
 
+      if (emptyMessage) emptyMessage.style.display = "none";
+      if (productGrid) productGrid.innerHTML = "";
+
+      // Render cards
+      filtered.forEach((product) => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+
+        card.innerHTML = `
+          ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+          <img src="${product.image_url}" alt="${product.title}">
+          <div class="product-info">
+            <h3>${product.title}</h3>
+            <p class="brand">${product.brand || ""}</p>
+            <p class="price">${product.price || ""} kr</p>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          window.location.href = `product.html?id=${product.id}`;
+        });
+
+        productGrid.appendChild(card);
+      });
+
+      // ✅ Oppdater favoritt-teller etter render
+      if (typeof updateFavoriteCount === "function") {
+        setTimeout(updateFavoriteCount, 0);
+      }
+    })
+    .catch((err) => console.error("❌ Category FEIL:", err));
 });
 
 
