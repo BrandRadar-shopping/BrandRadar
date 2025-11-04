@@ -27,9 +27,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.product_url;
 
-  const ratingEl = document.getElementById("product-rating");
-  const ratingNum = parseFloat(String(product.rating).replace(",", "."));
-  ratingEl.textContent = !isNaN(ratingNum) ? `⭐ ${ratingNum} / 5` : "";
+ // ✅ Rating — fra Google Sheet, alltid tilgjengelig
+const ratingNum = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
+document.getElementById("product-rating").textContent =
+  !isNaN(ratingNum) ? `⭐ ${ratingNum.toFixed(1)} / 5` : "⭐ Ingen rating";
+
 
   const discountEl = document.getElementById("product-discount");
   const discountNum = parseFloat(product.discount);
