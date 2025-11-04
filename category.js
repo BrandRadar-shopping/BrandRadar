@@ -150,6 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       productGrid.appendChild(card);
     });
+    
+// ✅ Oppdater favoritt-teller etter render
+setTimeout(updateFavoriteCount, 50);
 
   })
   .catch(err => console.error("❌ Category FEIL:", err));
