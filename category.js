@@ -198,6 +198,25 @@ sortSelect.addEventListener("change", () => {
 // ✅ Første visning (default sortering)
 renderProducts(filtered);
 
+      // ✅ Sorteringsfunksjon
+document.getElementById("sort-select")?.addEventListener("change", (e) => {
+  const val = e.target.value;
+  let sorted = [...filtered];
+
+  if (val === "price-asc") {
+    sorted.sort((a,b) => Number(a.price) - Number(b.price));
+  } else if (val === "price-desc") {
+    sorted.sort((a,b) => Number(b.price) - Number(a.price));
+  } else if (val === "rating-desc") {
+    const getRating = (p) =>
+      parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+    sorted.sort((a,b) => getRating(b) - getRating(a));
+  }
+
+  renderProducts(sorted);
+});
+
+
       // ✅ Oppdater favoritt-teller etter render
       if (typeof updateFavoriteCount === "function") {
         setTimeout(updateFavoriteCount, 0);
