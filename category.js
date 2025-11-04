@@ -142,27 +142,61 @@ document.addEventListener("DOMContentLoaded", () => {
       if (emptyMessage) emptyMessage.style.display = "none";
       if (productGrid) productGrid.innerHTML = "";
 
-      // Render cards
-      filtered.forEach((product) => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
+      // ✅ SORTERING + RESULTATTELLER
+const renderProducts = (items) => {
+  productGrid.innerHTML = "";
+  items.forEach((product) => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.innerHTML = `
+      ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
+      <img src="${product.image_url}" alt="${product.title}">
+      <div class="product-info">
+        <h3>${product.title}</h3>
+        <p class="brand">${product.brand || ""}</p>
+        <p class="price">${product.price || ""} kr</p>
+      </div>
+    `;
+    card.addEventListener("click", () => {
+      window.location.href = `product.html?id=${product.id}`;
+    });
+    productGrid.appendChild(card);
+  });
+};
 
-        card.innerHTML = `
-          ${product.discount ? `<div class="discount-badge">${product.discount}%</div>` : ""}
-          <img src="${product.image_url}" alt="${product.title}">
-          <div class="product-info">
-            <h3>${product.title}</h3>
-            <p class="brand">${product.brand || ""}</p>
-            <p class="price">${product.price || ""} kr</p>
-          </div>
-        `;
+// ✅ Sorteringsmeny UI
+const sortBar = document.createElement("div");
+sortBar.className = "sort-bar";
+sortBar.innerHTML = `
+  <span class="result-count">${filtered.length} produkter</span>
+  <select id="sort-select">
+    <option value="featured">Anbefalt</option>
+    <option value="price-asc">Pris: lav → høy</option>
+    <option value="price-desc">Pris: høy → lav</option>
+    <option value="rating-desc">Best vurdert</option>
+  </select>
+`;
+document.querySelector(".category-products").prepend(sortBar);
 
-        card.addEventListener("click", () => {
-          window.location.href = `product.html?id=${product.id}`;
-        });
+const sortSelect = document.getElementById("sort-select");
+sortSelect.addEventListener("change", () => {
+  let sorted = [...filtered];
+  const val = sortSelect.value;
 
-        productGrid.appendChild(card);
-      });
+  if (val === "price-asc")
+    sorted.sort((a, b) => Number(a.price) - Number(b.price));
+
+  if (val === "price-desc")
+    sorted.sort((a, b) => Number(b.price) - Number(a.price));
+
+  if (val === "rating-desc")
+    sorted.sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
+
+  renderProducts(sorted);
+});
+
+// ✅ Første visning (default sortering)
+renderProducts(filtered);
 
       // ✅ Oppdater favoritt-teller etter render
       if (typeof updateFavoriteCount === "function") {
