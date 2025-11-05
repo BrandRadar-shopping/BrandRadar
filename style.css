@@ -1875,6 +1875,61 @@ nav.mega-menu .menu-section {
   }
 }
 
+/* Category Filter Bar (Improved Responsive) */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0 20px;
+}
+
+.filter-bar label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.filter-bar select,
+.filter-bar input[type="checkbox"] {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Product count alignment */
+.result-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Checkbox better spacing */
+.discount-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ✅ Mobile */
+@media (max-width: 600px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .filter-bar select {
+    width: 100%;
+  }
+
+  .discount-wrapper {
+    margin-top: 4px;
+  }
+}
+
 
 
 
