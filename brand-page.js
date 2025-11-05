@@ -1,5 +1,5 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page (Final Enhanced)
+// ✅ BrandRadar – Brand Page (Kombinert & Fixet)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,8 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const brandInfoUrl = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
-  const productUrl   = "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
+  const brandInfoUrl =
+    "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+  const productUrl =
+    "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
 
   const titleEl = document.getElementById("brand-title");
   const descEl = document.getElementById("brand-description");
@@ -30,31 +32,35 @@ document.addEventListener("DOMContentLoaded", () => {
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
+
   function toggleFavBrand(name) {
     let favs = getFavBrands();
     if (favs.includes(name)) {
-      favs = favs.filter(b => b !== name);
+      favs = favs.filter((b) => b !== name);
     } else {
       favs.push(name);
     }
     localStorage.setItem("favoriteBrands", JSON.stringify(favs));
     updateFavUI();
+    updateFavoriteCount();
   }
+
   function updateFavUI() {
-    favBtn.classList.toggle("active", getFavBrands().includes(brandName));
-    favBtn.textContent = getFavBrands().includes(brandName)
-      ? "♥ I dine favoritt-brands"
-      : "♡ Favoritt-brand";
+    const isFav = getFavBrands().includes(brandName);
+    favBtn.classList.toggle("active", isFav);
+    favBtn.textContent = isFav ? "✓ Favoritt-brand" : "♡ Favoritt-brand";
   }
+
   favBtn.addEventListener("click", () => toggleFavBrand(brandName));
 
+  updateFavoriteCount?.();
 
-  // ✅ Hent brand-info
+  // ✅ Hent brand info
   fetch(brandInfoUrl)
-    .then(r => r.json())
-    .then(rows => {
+    .then((r) => r.json())
+    .then((rows) => {
       const brand = rows.find(
-        b => b.brand?.toLowerCase() === brandName.toLowerCase()
+        (b) => b.brand?.toLowerCase().trim() === brandName.toLowerCase().trim()
       );
       if (!brand) return;
 
@@ -62,28 +68,30 @@ document.addEventListener("DOMContentLoaded", () => {
       descEl.textContent = brand.about || "Ingen informasjon tilgjengelig.";
       logoEl.src = brand.logo;
       siteBtn.href = brand.homepage_url;
-      siteBtn.style.display = brand.homepage_url ? "inline-block" : "none";
 
-      // ✅ Sett brand-kategorier i filter
       if (brand.categories) {
-        brand.categories.split(",").map(c => c.trim()).forEach(cat => {
-          const opt = document.createElement("option");
-          opt.value = cat;
-          opt.textContent = cat;
-          categorySelect.appendChild(opt);
-        });
+        brand.categories.split(",")
+          .map((c) => c.trim())
+          .forEach((cat) => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.textContent = cat;
+            categorySelect.appendChild(opt);
+          });
       }
+      updateFavUI();
     });
-
 
   // ✅ Hent produkter
   let brandProducts = [];
 
   fetch(productUrl)
-    .then(r => r.json())
-    .then(products => {
+    .then((r) => r.json())
+    .then((products) => {
       brandProducts = products.filter(
-        p => p.brand?.toLowerCase() === brandName.toLowerCase()
+        (p) =>
+          p.brand &&
+          p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
       );
 
       if (!brandProducts.length) {
@@ -92,39 +100,38 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       applyFiltersAndSort();
+      updateFavoriteCount?.();
     });
-
 
   // ✅ Filtering & sorting
   function applyFiltersAndSort() {
-    let result = [...brandProducts];
+    let list = [...brandProducts];
 
-    const cleanPrice = v =>
+    const cleanPrice = (v) =>
       parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-    const cleanRating = v =>
+    const cleanRating = (v) =>
       parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-    // Filter kategorier
+    // ✅ Filter kategori
     if (categorySelect.value !== "all") {
-      result = result.filter(p => p.category === categorySelect.value);
+      list = list.filter((p) => p.category === categorySelect.value);
     }
 
-    // Sortering
+    // ✅ Sortering
     switch (sortSelect.value) {
       case "price-asc":
-        result.sort((a,b) => cleanPrice(a.price) - cleanPrice(b.price));
+        list.sort((a, b) => cleanPrice(a.price) - cleanPrice(b.price));
         break;
       case "price-desc":
-        result.sort((a,b) => cleanPrice(b.price) - cleanPrice(a.price));
+        list.sort((a, b) => cleanPrice(b.price) - cleanPrice(a.price));
         break;
       case "rating-desc":
-        result.sort((a,b) => cleanRating(b.rating) - cleanRating(a.rating));
+        list.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
         break;
     }
 
-    renderProducts(result);
+    renderProducts(list);
   }
-
 
   function renderProducts(list) {
     grid.innerHTML = "";
@@ -138,14 +145,15 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyMsg.style.display = "none";
     resultCount.textContent = `${list.length} produkter`;
 
-    list.forEach(p => {
-      const card = document.createElement("div");
-      card.classList.add("product-card");
-
+    list.forEach((p) => {
       const rating = p.rating
-        ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")).toFixed(1)
+        ? parseFloat(
+            String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")
+          ).toFixed(1)
         : null;
 
+      const card = document.createElement("div");
+      card.classList.add("product-card");
       card.innerHTML = `
         <img src="${p.image_url}" alt="${p.title}">
         <div class="product-info">
@@ -163,11 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   // ✅ Event listeners
   categorySelect.addEventListener("change", applyFiltersAndSort);
   sortSelect.addEventListener("change", applyFiltersAndSort);
-
-  updateFavUI();
-  setTimeout(() => updateFavoriteCount?.(), 50);
 });
+
