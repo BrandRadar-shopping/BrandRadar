@@ -102,4 +102,88 @@ const toggleBrandFavorite = (brandName) => {
 // ✅ Init
 document.addEventListener("DOMContentLoaded", updateFavoriteCount);
 
+// ===============================
+// ✅ FAVORITT-BRANDS SYSTEM
+// ===============================
+const getFavoriteBrands = () =>
+  JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
+
+const toggleBrandFavorite = (brand) => {
+  const list = getFavoriteBrands();
+  const index = list.indexOf(brand);
+  if (index >= 0) list.splice(index, 1);
+  else list.push(brand);
+  localStorage.setItem("favoriteBrands", JSON.stringify(list));
+  updateFavoriteTabsCount();
+};
+
+// ===============================
+// ✅ Tabs i favoritter.html
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const showTab = btn.dataset.tab;
+
+      tabBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      tabContents.forEach(c =>
+        c.classList.remove("active")
+      );
+      document.getElementById(`tab-${showTab}`).classList.add("active");
+    });
+  });
+
+  loadFavoriteBrands();
+  updateFavoriteTabsCount();
+});
+
+// ===============================
+// ✅ Last brand-favoritter
+// ===============================
+function loadFavoriteBrands() {
+  const favBrands = getFavoriteBrands();
+  const grid = document.getElementById("favorites-brand-grid");
+  const emptyMsg = document.getElementById("empty-brands");
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+  if (favBrands.length === 0) {
+    emptyMsg.style.display = "block";
+    return;
+  }
+  emptyMsg.style.display = "none";
+
+  favBrands.forEach(brand => {
+    const card = document.createElement("div");
+    card.classList.add("brand-card");
+
+    card.innerHTML = `
+      <img class="brand-logo" src="#" alt="${brand}">
+      <h3>${brand}</h3>
+    `;
+
+    card.addEventListener("click", () => {
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// ===============================
+// ✅ Oppdater tellere
+// ===============================
+function updateFavoriteTabsCount() {
+  document.getElementById("fav-products-count").textContent =
+    getFavorites().length;
+
+  document.getElementById("fav-brands-count").textContent =
+    getFavoriteBrands().length;
+}
 
