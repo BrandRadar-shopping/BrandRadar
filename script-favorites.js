@@ -2,16 +2,16 @@
 // BrandRadar.shop – Favorittsystem (ID-basert og stabilt)
 // ======================================================
 
-// ✅ Hent favoritter fra localStorage
+// ✅ Hent favoritter fra localStorage (produkter)
 const getFavorites = () => JSON.parse(localStorage.getItem("favorites") || "[]");
 
-// ✅ Lagre favoritter + oppdater teller
+// ✅ Lagre produktfavoritter + oppdater teller
 const saveFavorites = (favorites) => {
   localStorage.setItem("favorites", JSON.stringify(favorites));
   updateFavoriteCount();
 };
 
-// ✅ Legg til / fjern favoritt (bruk ID for unik match)
+// ✅ Legg til / fjern produktfavoritt
 const toggleFavorite = (product) => {
   const favorites = getFavorites();
   const productId = Number(product.id || product.Id || product.ID);
@@ -47,7 +47,7 @@ const toggleFavorite = (product) => {
   saveFavorites(favorites);
 };
 
-// ✅ Oppdater teller i header (støtter flere forekomster)
+// ✅ TELLER (kun produkter)
 const updateFavoriteCount = () => {
   const count = getFavorites().length;
   document.querySelectorAll("#favorites-count").forEach(el => (el.textContent = count));
@@ -67,6 +67,39 @@ const showToast = (message) => {
   setTimeout(() => toast.classList.remove("show"), 1800);
 };
 
+
+// ✅ BRAND FAVORITTER (NY DEL)
+// ------------------------------------------------------
+
+// ✅ Hent brand-favoritter (navn-liste)
+const getFavoriteBrands = () =>
+  JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
+
+// ✅ Lagre brand-favoritter
+const saveFavoriteBrands = (brands) => {
+  localStorage.setItem("favoriteBrands", JSON.stringify(brands));
+};
+
+// ✅ Legg til / fjern brand-favoritt
+const toggleBrandFavorite = (brandName) => {
+  let brands = getFavoriteBrands();
+  brandName = brandName.trim();
+
+  const index = brands.indexOf(brandName);
+
+  if (index >= 0) {
+    brands.splice(index, 1);
+    showToast("❌ Fjernet brand fra favoritter");
+  } else {
+    brands.push(brandName);
+    showToast("✅ Brand lagt til i favoritter");
+  }
+
+  saveFavoriteBrands(brands);
+};
+
+
 // ✅ Init
 document.addEventListener("DOMContentLoaded", updateFavoriteCount);
+
 
