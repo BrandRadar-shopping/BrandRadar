@@ -9,6 +9,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const highlightGrid = document.getElementById("highlight-grid");
   const brandGrid = document.getElementById("brand-grid");
   const searchInput = document.getElementById("brandSearch");
+  
+  // Tving favoritt-ikonet til å være synlig uansett tidligere CSS
+const forceHeartStyles = document.createElement("style");
+forceHeartStyles.textContent = `
+  .brand-card { position: relative; }
+  .brand-card .fav-icon.always-visible { 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+    pointer-events: auto !important; 
+  }
+  .brand-card:hover .fav-icon.always-visible { 
+    opacity: 1 !important; 
+  }
+  .brand-card .fav-icon.always-visible .heart-icon {
+    stroke: #222; fill: transparent; stroke-width: 1.4px; transition: .22s ease;
+  }
+  .brand-card .fav-icon.always-visible.active .heart-icon {
+    fill: #ff1f3d; stroke: #ff1f3d;
+  }
+`;
+document.head.appendChild(forceHeartStyles);
+
 
   const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
 
