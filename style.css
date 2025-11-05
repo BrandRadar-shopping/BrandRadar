@@ -1947,45 +1947,38 @@ nav.mega-menu .menu-section {
   }
 }
 
-/* Favorite icon styling — improved contrast */
+/* ✅ Favoritt-ikon (kun linje rundt hjertet, ikke sirkel) */
 .fav-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.9);
-  border-radius: 50%;
-  border: 1.5px solid #000; /* ✅ svart outline rundt sirkelen */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: 0.25s ease;
   z-index: 10;
+  transition: transform 0.25s ease;
 }
 
 .fav-icon:hover {
   transform: scale(1.12);
-  background: #fff;
 }
 
 .heart-icon {
-  width: 18px;
-  height: 18px;
-  stroke: #000; /* ✅ sort outline alltid */
+  width: 22px;
+  height: 22px;
+  stroke: #000;
   fill: transparent;
-  stroke-width: 2.2px;
+  stroke-width: 2.4px;
   transition: 0.25s ease;
 }
 
 .fav-icon.active .heart-icon {
   fill: #ff3b3b;
-  stroke: #000; /* ✅ fylt rød men med sort kant */
+  stroke: #000; /* behold outline */
 }
-
-
 
 
 
