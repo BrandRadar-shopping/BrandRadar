@@ -2039,6 +2039,32 @@ nav.mega-menu .menu-section {
   border-color: #0070f3;
 }
 
+/* ✅ Minimalistisk knapp for brand-kort */
+.brand-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: 1px solid #111;
+  background: transparent;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.brand-btn:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ✅ Når man klikker (touch) */
+.brand-btn:active {
+  transform: scale(0.96);
+}
+
 
 
 
