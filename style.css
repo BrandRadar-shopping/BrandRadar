@@ -1851,7 +1851,6 @@ nav.mega-menu .menu-section {
   gap: 16px;
 }
 
-/* ✅ Left + right section aligned together */
 .filters-left,
 .filters-right {
   display: flex;
@@ -1860,12 +1859,6 @@ nav.mega-menu .menu-section {
   align-items: center;
 }
 
-/* ✅ Remove auto push right */
-.filters-right {
-  margin-left: 0;
-}
-
-/* ✅ Text formatting */
 .filter-bar label {
   font-weight: 600;
 }
@@ -1893,6 +1886,7 @@ nav.mega-menu .menu-section {
     align-items: flex-start;
     gap: 10px;
   }
+
   .filters-left,
   .filters-right {
     width: 100%;
@@ -1900,7 +1894,10 @@ nav.mega-menu .menu-section {
   }
 }
 
-/* ✅ Active Filter Tags */
+/* ======================================================
+   ✅ Active Filter Tags (future use)
+====================================================== */
+
 .filter-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1940,14 +1937,10 @@ nav.mega-menu .menu-section {
   display: none;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .filter-tags {
-    margin-top: 5px;
-  }
-}
+/* ======================================================
+   ✅ Favoritt-ikon — syltynn outline
+====================================================== */
 
-/* ✅ Favoritt-ikon (kun linje rundt hjertet, premium style) */
 .fav-icon {
   position: absolute;
   top: 10px;
@@ -1971,101 +1964,58 @@ nav.mega-menu .menu-section {
   height: 22px;
   stroke: #111;
   fill: transparent;
-  stroke-width: 1.4px; /* ✅ Syltynn outline */
+  stroke-width: 1.4px; /* ✅ syltynn outline */
   transition: 0.22s ease;
 }
 
 .fav-icon.active .heart-icon {
-  fill: #ff1f3d; /* ✅ Liten touch varmere rødfarge */
-  stroke-width: 1.4px; /* ✅ behold tynn outline */
+  fill: #ff1f3d;
+  stroke-width: 1.4px;
 }
 
-/* ✅ Brand Alphabet Filter */
-.brand-alphabet {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 25px 0 10px;
-  padding: 10px 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #222;
-}
-
-.brand-alphabet span {
-  cursor: pointer;
-  transition: 0.2s ease;
-  opacity: 0.6;
-}
-
-.brand-alphabet span:hover {
-  opacity: 1;
-  color: #0070f3;
-}
-
-.brand-alphabet span.active {
-  opacity: 1;
-  color: #0070f3;
-  text-decoration: underline;
-}
+/* ======================================================
+   ✅ Brand Alphabet Filter — cleaned & unified
+====================================================== */
 
 .brand-alphabet {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin: 10px auto 20px;
-  max-width: 800px;
+  margin: 10px auto 25px;
+  padding: 5px 0;
+  max-width: 900px;
 }
 
 .brand-alphabet span {
   padding: 6px 10px;
+  border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  border: 1px solid transparent;
-  transition: 0.2s ease;
-}
-
-.brand-alphabet span:hover {
-  border-color: #0070f3;
-  color: #0070f3;
-}
-
-.brand-alphabet .active {
-  background: #0070f3;
-  color: white;
-  border-color: #0070f3;
-}
-
-.brand-alphabet {
-  text-align: center;
-  margin: 10px 0 15px;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.brand-alphabet span {
-  margin: 0 6px;
-  cursor: pointer;
-  padding: 3px 6px;
-  border-radius: 4px;
-  transition: 0.25s ease;
   color: #111;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.65;
+  transition: 0.22s ease;
 }
 
 .brand-alphabet span:hover {
+  opacity: 1;
   color: #0070f3;
+  border-color: #0070f3;
 }
 
 .brand-alphabet span.active {
-  background: #111;
+  opacity: 1;
+  background: #0070f3;
   color: #fff;
+  border-color: #0070f3;
 }
 
+/* ======================================================
+   ✅ Minimalist knapper til brand cards
+====================================================== */
 
-/* ✅ Minimalistisk knapp for brand-kort */
 .brand-btn {
   display: inline-block;
   padding: 8px 18px;
@@ -2086,10 +2036,10 @@ nav.mega-menu .menu-section {
   transform: translateY(-2px);
 }
 
-/* ✅ Når man klikker (touch) */
 .brand-btn:active {
   transform: scale(0.96);
 }
+
 
 
 
