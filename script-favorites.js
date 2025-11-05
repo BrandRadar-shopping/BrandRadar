@@ -147,6 +147,16 @@ function loadFavoriteBrands() {
   });
 }
 
+// ✅ Hent riktig logo fra BrandSheet
+function getBrandLogo(brandName) {
+  const allBrands = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
+  const match = allBrands.find(b =>
+    b.brand.toLowerCase() === brandName.toLowerCase()
+  );
+  return match?.logo || "https://via.placeholder.com/120?text=?"; // fallback logo
+}
+
+
 // ✅ Teller for begge tabs
 function updateFavoriteTabsCount() {
   const elProducts = document.getElementById("fav-products-count");
