@@ -2041,6 +2041,110 @@ nav.mega-menu .menu-section {
 }
 
 
+/* ================================
+   ✅ Brand Page Layout & Design
+================================= */
+
+/* 🔹 Hero seksjon: logo + detaljer */
+.brand-hero {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  max-width: 1300px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+}
+
+/* 🔹 Venstre side: logo + knapper */
+.brand-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 220px;
+}
+
+/* Logo style */
+#brand-logo {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+/* 🔹 Brand info (høyre del) */
+.brand-info {
+  flex: 1;
+}
+
+.brand-info h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.brand-info p {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* 🔹 Knapper */
+.brand-fav-btn,
+.brand-site-btn {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #111;
+  transition: 0.2s ease;
+}
+
+/* Favoritt-brand knapp */
+.brand-fav-btn {
+  background: transparent;
+  color: #111;
+}
+
+.brand-fav-btn.active,
+.brand-fav-btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* Besøk brand knapp */
+.brand-site-btn {
+  text-align: center;
+  background: #0070f3;
+  color: #fff;
+  border-color: #0070f3;
+  text-decoration: none;
+}
+
+.brand-site-btn:hover {
+  background: #0059c9;
+  transform: translateY(-2px);
+}
+
+/* 🔹 Mobil layout */
+@media (max-width: 800px) {
+  .brand-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .brand-details {
+    width: 100%;
+  }
+}
+
 
 
 
