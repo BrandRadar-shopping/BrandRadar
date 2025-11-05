@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(rows => {
       const brands = rows.map(r => ({
-        brand: r.brand || "",
-        logo: r.logo || "",
-        description: r.description || "",
-        homepage: r.homepage_url || "#",
-        about: r.about || "",
+       brand: (r.brand || "").trim(),
+       logo: (r.logo || "").trim(),
+       description: (r.description || "").trim(),
+       homepage: (r.homepage_url || "#").trim() || "#",
+       about: (r.about || "").trim(),
         highlight: (r.highlight || "").toLowerCase() === "yes",
         categories: r.categories ? r.categories.split(",").map(c => c.trim()) : []
       }));
