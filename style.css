@@ -2241,6 +2241,57 @@ nav.mega-menu .menu-section {
   transform: scale(1.14);
 }
 
+/* ✅ Favoritt-tabs */
+.fav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.8rem;
+}
+
+.tab-btn {
+  background: #eaeaea;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: #d5d5d5;
+}
+
+.tab-btn.active {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ✅ Brand favorites layout */
+#favorites-brand-grid .brand-card {
+  cursor: pointer;
+  position: relative;
+  padding: 1rem;
+}
+
+#favorites-brand-grid .brand-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin: 0 auto 0.7rem;
+}
+
 
 
 
