@@ -2042,120 +2042,109 @@ nav.mega-menu .menu-section {
 
 
 /* ================================
-   ✅ Brand Page Layout & Design
+   ✅ Brand Page Layout – Clean Final
 ================================= */
 
-/* 🔹 Hero seksjon: logo + detaljer */
-.brand-hero {
+/* 📌 Brand Info Card */
+.brand-info-card {
+  max-width: 1200px;
+  margin: 30px auto 20px;
+  padding: 35px;
   display: flex;
-  gap: 30px;
-  align-items: flex-start;
-  max-width: 1300px;
-  margin: 30px auto;
-  padding: 20px;
+  gap: 40px;
   background: #ffffff;
-  border-radius: 10px;
   border: 1px solid #e5e5e5;
-}
-
-/* 🔹 Venstre side: logo + knapper */
-.brand-details {
-  display: flex;
-  flex-direction: column;
+  border-radius: 12px;
   align-items: center;
-  gap: 12px;
+}
+
+/* 📌 Brand logo */
+.brand-info-left img#brand-logo {
   width: 220px;
-}
-
-/* Logo style */
-#brand-logo {
-  width: 160px;
-  height: auto;
+  max-height: 160px;
   object-fit: contain;
-  border-radius: 6px;
-  padding: 10px;
   background: #fff;
-  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #eee;
 }
 
-/* 🔹 Brand info (høyre del) */
-.brand-info {
-  flex: 1;
-}
-
-.brand-info h1 {
+/* 📌 Brand text section */
+.brand-info-right h1 {
+  margin-bottom: 12px;
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 10px;
+  color: #111;
 }
 
-.brand-info p {
+.brand-info-right p {
   font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  max-width: 650px;
   color: #444;
-  line-height: 1.5;
 }
 
-/* 🔹 Knapper */
-.brand-fav-btn,
-.brand-site-btn {
-  width: 100%;
-  padding: 10px 0;
+/* 📌 Buttons */
+.brand-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.brand-btn,
+.brand-btn-outline {
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
-  border: 1px solid #111;
   transition: 0.2s ease;
 }
 
-/* Favoritt-brand knapp */
-.brand-fav-btn {
-  background: transparent;
-  color: #111;
-}
-
-.brand-fav-btn.active,
-.brand-fav-btn:hover {
-  background: #111;
+/* Filled CTA */
+.brand-btn {
+  background: #000;
   color: #fff;
-}
-
-/* Besøk brand knapp */
-.brand-site-btn {
-  text-align: center;
-  background: #0070f3;
-  color: #fff;
-  border-color: #0070f3;
+  border: 1px solid #000;
   text-decoration: none;
 }
 
-.brand-site-btn:hover {
-  background: #0059c9;
+.brand-btn:hover {
+  background: #222;
   transform: translateY(-2px);
 }
 
-/* 🔹 Mobil layout */
-@media (max-width: 800px) {
-  .brand-hero {
-    flex-direction: column;
-    text-align: center;
-  }
-  .brand-details {
-    width: 100%;
-  }
+/* Outline button */
+.brand-btn-outline {
+  background: transparent;
+  border: 1px solid #111;
+  color: #111;
 }
 
+.brand-btn-outline:hover,
+.brand-btn-outline.active {
+  background: #000;
+  color: #fff;
+  transform: translateY(-2px);
+}
 
+/* 📌 Filter bar */
 .brand-filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  background: #fff;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding: 12px 16px;
+  background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 10px 14px;
-  margin: 15px 0 25px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.brand-filter-bar label {
+  font-weight: 600;
 }
 
 .brand-filter-bar select {
@@ -2165,106 +2154,34 @@ nav.mega-menu .menu-section {
   font-size: 14px;
 }
 
-.brand-filter-bar label {
-  font-weight: 600;
-}
-
 .result-count {
   margin-left: auto;
-  font-size: 14px;
   font-weight: 600;
-  opacity: 0.8;
+  color: #222;
+  opacity: 0.85;
 }
 
-.brand-info-card {
-  max-width: 1100px;
-  margin: 25px auto;
-  padding: 30px;
-  display: flex;
-  gap: 35px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  align-items: center;
-}
-
-.brand-info-left img {
-  width: 200px;
-  max-height: 150px;
-  object-fit: contain;
-  display: block;
-}
-
-.brand-info-right {
-  flex: 1;
-}
-
-.brand-info-right h1 {
-  margin-bottom: 10px;
-  font-size: 26px;
-  font-weight: 700;
-}
-
-.brand-info-right p {
-  margin-bottom: 18px;
-  font-size: 15px;
-  line-height: 1.45em;
-  max-width: 650px;
-  color: #444;
-}
-
-.brand-buttons {
-  display: flex;
-  gap: 12px;
-}
-
-/* ✅ Knappestiler */
-.brand-btn {
-  padding: 10px 20px;
-  border: 1px solid #111;
-  background: #111;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
-  text-decoration: none;
-}
-
-.brand-btn:hover {
-  background: #333;
-  transform: translateY(-2px);
-}
-
-.brand-btn-outline {
-  padding: 10px 20px;
-  border: 1px solid #111;
-  background: transparent;
-  color: #111;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s;
-}
-
-.brand-btn-outline:hover,
-.brand-btn-outline.active {
-  background: #111;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-/* ✅ Mobilversjon */
-@media (max-width: 700px) {
+/* 📌 Responsive adjustments */
+@media (max-width: 800px) {
   .brand-info-card {
     flex-direction: column;
     text-align: center;
+    padding: 25px;
   }
 
   .brand-buttons {
     justify-content: center;
   }
+
+  .brand-info-left img#brand-logo {
+    width: 180px;
+  }
+
+  .result-count {
+    margin-left: 0;
+  }
 }
+
 
 
 
