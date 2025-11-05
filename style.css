@@ -2176,6 +2176,96 @@ nav.mega-menu .menu-section {
   opacity: 0.8;
 }
 
+.brand-info-card {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 30px;
+  display: flex;
+  gap: 35px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.brand-info-left img {
+  width: 200px;
+  max-height: 150px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-info-right {
+  flex: 1;
+}
+
+.brand-info-right h1 {
+  margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.brand-info-right p {
+  margin-bottom: 18px;
+  font-size: 15px;
+  line-height: 1.45em;
+  max-width: 650px;
+  color: #444;
+}
+
+.brand-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* ✅ Knappestiler */
+.brand-btn {
+  padding: 10px 20px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+  text-decoration: none;
+}
+
+.brand-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.brand-btn-outline {
+  padding: 10px 20px;
+  border: 1px solid #111;
+  background: transparent;
+  color: #111;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.brand-btn-outline:hover,
+.brand-btn-outline.active {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ✅ Mobilversjon */
+@media (max-width: 700px) {
+  .brand-info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .brand-buttons {
+    justify-content: center;
+  }
+}
+
 
 
 
