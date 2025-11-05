@@ -146,7 +146,14 @@ function loadFavoriteBrands() {
   <h3>${brand}</h3>
 `;
 
+card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleBrandFavorite(brand);
+  loadFavoriteBrands();
+  updateFavoriteTabsCount();
+});
 
+    
     card.addEventListener("click", () => {
       window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
     });
