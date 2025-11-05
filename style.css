@@ -549,16 +549,19 @@ body {
   display: inline-block;
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #0070f3;
+  background: #000; /* <-- Ny farge */
   color: #fff;
   text-decoration: none;
   border-radius: 6px;
-  transition: background 0.2s ease;
+  transition: 0.25s ease; /* smoother hover */
 }
 
 .brand-card a:hover {
-  background: #0059c1;
+  background: #222; /* <-- Ny hover */
+  transform: translateY(-2px); /* liten løft-effekt */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
+
 
 /* Fremhevede brands */
 .highlighted-brands {
@@ -2181,6 +2184,7 @@ nav.mega-menu .menu-section {
     margin-left: 0;
   }
 }
+
 
 
 
