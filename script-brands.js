@@ -1,5 +1,5 @@
 // ======================================================
-// ✅ BrandRadar – Brands Page FINAL (with Favorites + Brand Detail Routing)
+// ✅ BrandRadar – Brands Page FINAL (Stable Version)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,13 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(rows => {
       const brands = rows.map(r => ({
-       brand: (r.brand || "").trim(),
-       logo: (r.logo || "").trim(),
-       description: (r.description || "").trim(),
-       homepage: (r.homepage_url || "#").trim() || "#",
-       about: (r.about || "").trim(),
+        brand: (r.brand || "").trim(),
+        logo: (r.logo || "").trim(),
+        description: (r.description || "").trim(),
+        homepage: (r.homepage_url || "").trim() || "#",
+        about: (r.about || "").trim(),
         highlight: (r.highlight || "").toLowerCase() === "yes",
-        categories: r.categories ? r.categories.split(",").map(c => c.trim()) : []
+        categories: r.categories
+          ? r.categories.split(",").map(c => c.trim())
+          : []
       }));
 
       initAlphabetFilter(brands);
@@ -38,11 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(err => console.error("❌ FEIL ved lasting av brands:", err));
 
+
   function renderBrands(brands) {
     highlightGrid.innerHTML = "";
     brandGrid.innerHTML = "";
 
-    const favList = getFavoriteBrands(); // ✅ Hent favoritter fra localStorage
+    const favList = getFavoriteBrands();
 
     brands.forEach(b => {
       const isFav = favList.includes(b.brand);
@@ -60,22 +63,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <img src="${b.logo}" alt="${b.brand}" class="brand-logo">
         <h3>${b.brand}</h3>
-        <p>${b.description}</p>
+        <p>${b.description || ""}</p>
 
         <a class="brand-btn" data-brand="${encodeURIComponent(b.brand)}">
           Se produkter →
         </a>
       `;
 
-      // ✅ Klikk sender til brand-page.html
       card.querySelector(".brand-btn").addEventListener("click", (e) => {
         e.stopPropagation();
         window.location.href = `brand-page.html?brand=${encodeURIComponent(b.brand)}`;
       });
 
-      // ✅ Håndter favoritt-brand klikk
       card.querySelector(".fav-icon").addEventListener("click", (e) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         toggleBrandFavorite(b.brand);
         card.querySelector(".fav-icon").classList.toggle("active");
         updateFavoritesCount();
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ✅ Alphabet filter
+
   function initAlphabetFilter(allBrands) {
     document.querySelectorAll(".brand-alphabet span").forEach(letterEl => {
       letterEl.addEventListener("click", () => {
@@ -99,11 +100,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const filtered =
           letter === "all"
             ? allBrands
-            : allBrands.filter(b => b.brand.toUpperCase().startsWith(letter.toUpperCase()));
+            : allBrands.filter(b =>
+                b.brand.toUpperCase().startsWith(letter.toUpperCase())
+              );
 
         renderBrands(filtered);
       });
     });
   }
 });
+
 
