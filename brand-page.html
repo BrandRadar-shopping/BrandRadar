@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brand – BrandRadar</title>
+  <title id="page-title">Brand – BrandRadar</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,9 +22,7 @@
       <a href="index.html">Hjem</a>
       <a href="news.html">Nyheter</a>
       <a href="brands.html" class="active">Brands</a>
-      <a href="favoritter.html">
-        Favoritter <span id="favorites-count">0</span>
-      </a>
+      <a href="favoritter.html">Favoritter <span id="favorites-count">0</span></a>
     </nav>
   </div>
 
@@ -39,16 +37,10 @@
 
 <nav class="mega-menu"></nav>
 
-<section class="brand-hero">
-  <div class="brand-details">
-    <img id="brand-logo" src="" alt="Brand logo">
-    <button id="favorite-brand-btn" class="brand-fav-btn">♡ Favoritt-brand</button>
-    <a id="brand-site-btn" class="brand-site-btn" href="#" target="_blank">Besøk brand</a>
-  </div>
-
-  <section class="brand-info-card">
+<!-- ✅ Brand Info – eneste hero seksjon som skal være her -->
+<section class="brand-info-card">
   <div class="brand-info-left">
-    <img id="brand-logo" alt="brand logo">
+    <img id="brand-logo" alt="Brand logo">
   </div>
 
   <div class="brand-info-right">
@@ -62,8 +54,7 @@
   </div>
 </section>
 
-
-  <!-- ✅ Filter + Sort Bar for brand products -->
+<!-- ✅ Filter + Sort Bar -->
 <div class="brand-filter-bar">
   <label>Kategori:</label>
   <select id="category-filter">
@@ -81,7 +72,7 @@
   <span class="result-count">0 produkter</span>
 </div>
 
-
+<!-- ✅ Produkt Grid -->
 <section class="category-products">
   <h2>Produkter</h2>
   <div class="product-grid"></div>
@@ -95,3 +86,4 @@
 
 </body>
 </html>
+
