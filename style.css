@@ -2039,6 +2039,32 @@ nav.mega-menu .menu-section {
   border-color: #0070f3;
 }
 
+.brand-alphabet {
+  text-align: center;
+  margin: 10px 0 15px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.brand-alphabet span {
+  margin: 0 6px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  color: #111;
+}
+
+.brand-alphabet span:hover {
+  color: #0070f3;
+}
+
+.brand-alphabet span.active {
+  background: #111;
+  color: #fff;
+}
+
+
 /* ✅ Minimalistisk knapp for brand-kort */
 .brand-btn {
   display: inline-block;
@@ -2064,6 +2090,7 @@ nav.mega-menu .menu-section {
 .brand-btn:active {
   transform: scale(0.96);
 }
+
 
 
 
