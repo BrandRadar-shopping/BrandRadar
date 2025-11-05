@@ -156,19 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector(".result-count").textContent = `${list.length} produkter`;
       }
 
-      const sortBar = document.createElement("div");
-      sortBar.className = "sort-bar";
-      sortBar.innerHTML = `
-        <span class="result-count">${filtered.length} produkter</span>
-        <select id="sort-select">
-          <option value="featured">Anbefalt</option>
-          <option value="price-asc">Pris: lav → høy</option>
-          <option value="price-desc">Pris: høy → lav</option>
-          <option value="rating-desc">Best vurdert</option>
-        </select>
-      `;
-      categoryProductsSection.prepend(sortBar);
-
+      
       const sortSelect = document.getElementById("sort-select");
 
       const cleanPrice = v =>
