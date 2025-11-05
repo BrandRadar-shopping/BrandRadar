@@ -2010,6 +2010,35 @@ nav.mega-menu .menu-section {
   text-decoration: underline;
 }
 
+.brand-alphabet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px auto 20px;
+  max-width: 800px;
+}
+
+.brand-alphabet span {
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: 0.2s ease;
+}
+
+.brand-alphabet span:hover {
+  border-color: #0070f3;
+  color: #0070f3;
+}
+
+.brand-alphabet .active {
+  background: #0070f3;
+  color: white;
+  border-color: #0070f3;
+}
+
 
 
 
