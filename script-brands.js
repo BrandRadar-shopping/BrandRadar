@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.innerHTML = `
         <img src="${brand.logo}" alt="${brand.brand}" />
         <h3>${brand.brand}</h3>
-        <a href="${brand.link}" target="_blank" class="brand-btn">Besøk</a>
+        <a href="${brand.link}" target="_blank" class="brand-btn">Se produkter</a>
       `;
 
       if (brand.highlight) highlightGrid.appendChild(card);
