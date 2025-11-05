@@ -12,7 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const productGrid = document.querySelector(".product-grid");
   const emptyMessage = document.querySelector(".empty-message");
   const breadcrumbEl = document.querySelector(".breadcrumb");
-  const categoryProductsSection = document.querySelector(".category-products");
+
+  const brandFilter = document.getElementById("brand-filter");
+  const priceFilter = document.getElementById("price-filter");
+  const discountFilter = document.getElementById("discount-filter");
+  const sortSelect = document.getElementById("sort-select");
 
   const params = new URLSearchParams(window.location.search);
   const genderParam = params.get("gender");
@@ -58,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const norskGender = genderSlug === "men" ? "Herre" :
-                          genderSlug === "women" ? "Dame" :
-                          genderSlug === "kids" ? "Barn" :
-                          genderParam;
+      const norskGender =
+        genderSlug === "men" ? "Herre" :
+        genderSlug === "women" ? "Dame" :
+        genderSlug === "kids" ? "Barn" : genderParam;
 
       let subNameNo = null;
       if (subSlug) {
@@ -99,8 +103,58 @@ document.addEventListener("DOMContentLoaded", () => {
         emptyMessage.style.display = "block";
         return;
       }
+      
+      // ✅ Populate brand dropdown
+      const brandSet = [...new Set(filtered.map(p => p.brand).filter(Boolean))].sort();
+      brandSet.forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b;
+        opt.textContent = b;
+        brandFilter.appendChild(opt);
+      });
 
-      emptyMessage.style.display = "none";
+      function applyFiltersAndSort() {
+        let result = [...filtered];
+
+        const getPrice = v =>
+          parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+        const getRating = v =>
+          parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+
+        // ✅ Filters
+        if (brandFilter.value !== "all")
+          result = result.filter(p => p.brand === brandFilter.value);
+
+        if (priceFilter.value !== "all") {
+          if (priceFilter.value === "1000+")
+            result = result.filter(p => getPrice(p.price) >= 1000);
+          else {
+            const [min, max] = priceFilter.value.split("-").map(Number);
+            result = result.filter(p => {
+              const price = getPrice(p.price);
+              return price >= min && price <= max;
+            });
+          }
+        }
+
+        if (discountFilter.checked)
+          result = result.filter(p => parseFloat(p.discount) > 0);
+
+        // ✅ Sortering
+        switch (sortSelect.value) {
+          case "price-asc":
+            result.sort((a,b) => getPrice(a.price) - getPrice(b.price));
+            break;
+          case "price-desc":
+            result.sort((a,b) => getPrice(b.price) - getPrice(a.price));
+            break;
+          case "rating-desc":
+            result.sort((a,b) => getRating(b.rating) - getRating(a.rating));
+            break;
+        }
+
+        renderProducts(result);
+      }
 
       function renderProducts(list) {
         productGrid.innerHTML = "";
@@ -108,8 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         list.forEach(p => {
           const id = Number(p.id);
           const rating = p.rating
-            ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, ""))
-            : null;
+            ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")) : null;
           const isFav = getFavorites().some(f => Number(f.id) === id);
 
           const card = document.createElement("div");
@@ -118,13 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
           card.innerHTML = `
             ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
             <div class="fav-icon ${isFav ? "active" : ""}">
-              <svg viewBox="0 0 24 24" class="heart-icon">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2
-                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
-                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3
-                16.5 3 19.58 3 22 5.42 22 8.5c0
-                3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
+              ❤️
             </div>
             <img src="${p.image_url}" alt="${p.title}">
             <div class="product-info">
@@ -136,17 +183,14 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
 
           card.addEventListener("click", e => {
-            if (e.target.closest(".fav-icon")) return;
-            window.location.href = `product.html?id=${id}`;
+            if (!e.target.closest(".fav-icon"))
+              window.location.href = `product.html?id=${id}`;
           });
 
           card.querySelector(".fav-icon").addEventListener("click", e => {
             e.stopPropagation();
-
             toggleFavorite(p);
-
-            const nowFav = getFavorites().some(f => Number(f.id) === id);
-            e.currentTarget.classList.toggle("active", nowFav);
+            e.currentTarget.classList.toggle("active");
             updateFavoriteCount();
           });
 
@@ -154,38 +198,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const resultEl = document.querySelector(".filter-bar .result-count");
-if (resultEl) resultEl.textContent = `${list.length} produkter`;
-
+        if (resultEl) resultEl.textContent = `${list.length} produkter`;
       }
 
-      
-      const sortSelect = document.getElementById("sort-select");
+      // ✅ Event listeners
+      brandFilter.addEventListener("change", applyFiltersAndSort);
+      priceFilter.addEventListener("change", applyFiltersAndSort);
+      discountFilter.addEventListener("change", applyFiltersAndSort);
+      sortSelect.addEventListener("change", applyFiltersAndSort);
 
-      const cleanPrice = v =>
-        parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-      const cleanRating = v =>
-        parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-
-      sortSelect.addEventListener("change", () => {
-        let sorted = [...filtered];
-
-        switch (sortSelect.value) {
-          case "price-asc":
-            sorted.sort((a,b) => cleanPrice(a.price) - cleanPrice(b.price));
-            break;
-          case "price-desc":
-            sorted.sort((a,b) => cleanPrice(b.price) - cleanPrice(a.price));
-            break;
-          case "rating-desc":
-            sorted.sort((a,b) => cleanRating(b.rating) - cleanRating(a.rating));
-            break;
-        }
-
-        renderProducts(sorted);
-      });
-
-      renderProducts(filtered);
-      const sortSelect = document.querySelector(".filter-bar #sort-select");
+      applyFiltersAndSort();
       setTimeout(() => updateFavoriteCount?.(), 50);
     })
     .catch(err => console.error("❌ Category error:", err));
