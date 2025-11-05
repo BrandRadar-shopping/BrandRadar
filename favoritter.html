@@ -46,9 +46,36 @@
 
   <!-- FAVORITTER -->
   <section class="favorites-section">
-    <h2>Dine favoritter ❤️</h2>
-    <div id="favorites-grid" class="favorites-grid"></div>
-  </section>
+  <h2>Favoritter</h2>
+
+
+    <!-- Favoritter -->
+  <!-- ✅ Tab selector -->
+  <div class="fav-tabs">
+    <button class="tab-btn active" data-tab="products">
+      ❤️ Produkter (<span id="fav-products-count">0</span>)
+    </button>
+    <button class="tab-btn" data-tab="brands">
+      ⭐ Brands (<span id="fav-brands-count">0</span>)
+    </button>
+  </div>
+
+  <!-- ✅ Produkter grid (vises som standard) -->
+  <div id="tab-products" class="tab-content active">
+    <div class="favorites-grid" id="favorites-grid"></div>
+    <p class="empty-message" id="empty-products" style="display:none;">
+      Du har ingen favoritt-produkter enda.
+    </p>
+  </div>
+
+  <!-- ✅ Brands grid (starter skjult) -->
+  <div id="tab-brands" class="tab-content">
+    <div class="brand-grid" id="favorites-brand-grid"></div>
+    <p class="empty-message" id="empty-brands" style="display:none;">
+      Du har ingen favoritt-brands enda.
+    </p>
+  </div>
+</section>
 
   <script src="script-favorites.js"></script>
   <script src="script-favorites-page.js"></script>
