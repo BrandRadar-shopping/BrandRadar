@@ -185,6 +185,7 @@ if (resultEl) resultEl.textContent = `${list.length} produkter`;
       });
 
       renderProducts(filtered);
+      const sortSelect = document.querySelector(".filter-bar #sort-select");
       setTimeout(() => updateFavoriteCount?.(), 50);
     })
     .catch(err => console.error("❌ Category error:", err));
