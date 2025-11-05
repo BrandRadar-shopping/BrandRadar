@@ -1980,6 +1980,36 @@ nav.mega-menu .menu-section {
   stroke-width: 1.4px; /* ✅ behold tynn outline */
 }
 
+/* ✅ Brand Alphabet Filter */
+.brand-alphabet {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px 0 10px;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+}
+
+.brand-alphabet span {
+  cursor: pointer;
+  transition: 0.2s ease;
+  opacity: 0.6;
+}
+
+.brand-alphabet span:hover {
+  opacity: 1;
+  color: #0070f3;
+}
+
+.brand-alphabet span.active {
+  opacity: 1;
+  color: #0070f3;
+  text-decoration: underline;
+}
+
 
 
 
