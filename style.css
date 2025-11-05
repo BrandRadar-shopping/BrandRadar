@@ -2185,6 +2185,29 @@ nav.mega-menu .menu-section {
   }
 }
 
+/* ✅ BRAND FAVORITT-IKON – Alltid synlig & riktig oppførsel */
+.brand-card .fav-icon {
+  opacity: 1 !important;        /* alltid synlig */
+  visibility: visible !important;
+}
+
+.brand-card:hover .fav-icon .heart-icon {
+  transform: scale(1.15);       /* liten hover-boost */
+}
+
+.brand-card .fav-icon .heart-icon {
+  stroke: #111;
+  fill: transparent;
+  stroke-width: 1.4px;
+  transition: 0.25s ease;
+}
+
+.brand-card .fav-icon.active .heart-icon {
+  fill: #ff1f3d;                /* fylt rødt ved favoritt */
+  stroke: #ff1f3d;
+  transform: scale(1.08);
+}
+
 
 
 
