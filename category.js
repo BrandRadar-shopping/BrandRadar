@@ -119,37 +119,83 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyMessage.style.display = "none";
 
     // ✅ Render products
-    function renderProducts(list) {
-      productGrid.innerHTML = "";
+   function renderProducts(list) {
+  productGrid.innerHTML = "";
 
-      list.forEach((p) => {
-        const rating = p.rating
-          ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, ""))
-          : null;
+  list.forEach((p) => {
+    const id = Number(p.id);
+    const rating = p.rating
+      ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, ""))
+      : null;
 
-        const card = document.createElement("div");
-        card.classList.add("product-card");
+    // ✅ Sjekk om produktet er i favoritter
+    const isFav = getFavorites().some(f => Number(f.id) === id);
 
-        card.innerHTML = `
-          ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
-          <img src="${p.image_url}" alt="${p.title}">
-          <div class="product-info">
-            <h3>${p.title}</h3>
-            <p class="brand">${p.brand || ""}</p>
-            ${rating ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>` : ""}
-            <p class="price">${p.price || ""} kr</p>
-          </div>
-        `;
+    const card = document.createElement("div");
+    card.classList.add("product-card");
 
-        card.addEventListener("click", () => {
-          window.location.href = `product.html?id=${p.id}`;
-        });
+    card.innerHTML = `
+      ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
+      <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
+        <svg viewBox="0 0 24 24" class="heart-icon">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+          2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 
+          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+          6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
 
-        productGrid.appendChild(card);
-      });
+      <img src="${p.image_url}" alt="${p.title}">
+      <div class="product-info">
+        <h3>${p.title}</h3>
+        <p class="brand">${p.brand || ""}</p>
+        ${rating ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>` : ""}
+        <p class="price">${p.price || ""} kr</p>
+      </div>
+    `;
 
-      document.querySelector(".result-count").textContent = `${list.length} produkter`;
-    }
+    // ✅ Navigering til produktside (ikke når man trykker på hjertet)
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".fav-icon")) return;
+      window.location.href = `product.html?id=${id}`;
+    });
+
+    // ✅ Favoritt-ikon logikk
+    const favIcon = card.querySelector(".fav-icon");
+    favIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const productObj = {
+        id,
+        title: p.title,
+        brand: p.brand,
+        price: p.price,
+        discount: p.discount,
+        image_url: p.image_url,
+        image2: p.image2,
+        image3: p.image3,
+        image4: p.image4,
+        product_url: p.product_url,
+        category: p.category,
+        subcategory: p.subcategory,
+        gender: p.gender,
+        description: p.description,
+        rating: p.rating
+      };
+
+      toggleFavorite(productObj);
+
+      const nowFav = getFavorites().some(f => Number(f.id) === id);
+      favIcon.classList.toggle("active", nowFav);
+      updateFavoriteCount();
+    });
+
+    productGrid.appendChild(card);
+  });
+
+  document.querySelector(".result-count").textContent = `${list.length} produkter`;
+}
+
 
     // ✅ Create sort bar
     const sortBar = document.createElement("div");
