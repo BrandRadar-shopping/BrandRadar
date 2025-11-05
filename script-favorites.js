@@ -141,9 +141,11 @@ function loadFavoriteBrands() {
     card.classList.add("brand-card");
 
     card.innerHTML = `
-      <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
-      <h3>${brand}</h3>
-    `;
+  <span class="remove-brand-tag" data-brand="${brand}">Fjern</span>
+  <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
+  <h3>${brand}</h3>
+`;
+
 
     card.addEventListener("click", () => {
       window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
