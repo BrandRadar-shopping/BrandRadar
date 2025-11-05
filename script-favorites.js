@@ -65,11 +65,9 @@ const showToast = (message) => {
 // ✅ FAVORITT-BRANDS
 // ======================================================
 
-// ✅ Hent brand-favoritter
 const getFavoriteBrands = () =>
   JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
 
-// ✅ Legg til / fjern brandfavoritt
 const toggleBrandFavorite = (brand) => {
   const brands = getFavoriteBrands();
   const index = brands.indexOf(brand);
@@ -90,7 +88,9 @@ const toggleBrandFavorite = (brand) => {
 // ✅ Favoritter.html: Tabs og lasting
 // ======================================================
 document.addEventListener("DOMContentLoaded", () => {
-  updateFavoriteCount(); // ✅ Oppdater global teller
+  updateFavoriteCount();
+
+  loadFavoriteProducts(); // ⭐ NYTT - last inn produkter
 
   const tabBtns = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -115,7 +115,58 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ✅ Last brandfavoritter inn i grid
+// ======================================================
+// ✅ Last produktfavoritter (Oppdatert til tag-style)
+// ======================================================
+function loadFavoriteProducts() {
+  const favs = getFavorites();
+  const grid = document.getElementById("favorites-product-grid");
+  const emptyMsg = document.getElementById("empty-products");
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+  if (favs.length === 0) {
+    emptyMsg.style.display = "block";
+    return;
+  }
+  emptyMsg.style.display = "none";
+
+  favs.forEach(product => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.style.position = "relative"; // ⭐ NYTT
+
+    card.innerHTML = `
+      ${product.discount ? `<span class="discount-badge">${product.discount}%</span>` : ""}
+      <img src="${product.image_url}" alt="${product.title}">
+      <h3>${product.title}</h3>
+      <p class="price">${product.price} kr</p>
+    `;
+
+    // ⭐ NYTT: fjern-tag i hjørnet
+    const removeTag = document.createElement("span");
+    removeTag.classList.add("remove-tag");
+    removeTag.textContent = "Fjern";
+    removeTag.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleFavorite(product);
+      loadFavoriteProducts();
+      updateFavoriteTabsCount();
+    });
+    card.appendChild(removeTag);
+
+    card.addEventListener("click", () => {
+      window.location.href = `product.html?id=${product.id}`;
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// ======================================================
+// ✅ Brands i favoritter
+// ======================================================
 function loadFavoriteBrands() {
   const favBrands = getFavoriteBrands();
   const allBrandsData = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
@@ -135,25 +186,24 @@ function loadFavoriteBrands() {
   favBrands.forEach(brand => {
     const brandData = allBrandsData.find(b => b.brand.trim() === brand.trim());
 
-    if (!brandData) return; // Sikkerhetsnett
+    if (!brandData) return;
 
     const card = document.createElement("div");
     card.classList.add("brand-card");
 
     card.innerHTML = `
-  <span class="remove-brand-tag" data-brand="${brand}">Fjern</span>
-  <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
-  <h3>${brand}</h3>
-`;
+      <span class="remove-brand-tag" data-brand="${brand}">Fjern</span>
+      <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
+      <h3>${brand}</h3>
+    `;
 
-card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleBrandFavorite(brand);
-  loadFavoriteBrands();
-  updateFavoriteTabsCount();
-});
+    card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleBrandFavorite(brand);
+      loadFavoriteBrands();
+      updateFavoriteTabsCount();
+    });
 
-    
     card.addEventListener("click", () => {
       window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
     });
@@ -162,17 +212,9 @@ card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
   });
 }
 
-// ✅ Hent riktig logo fra BrandSheet
-function getBrandLogo(brandName) {
-  const allBrands = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
-  const match = allBrands.find(b =>
-    b.brand.toLowerCase() === brandName.toLowerCase()
-  );
-  return match?.logo || "https://via.placeholder.com/120?text=?"; // fallback logo
-}
-
-
-// ✅ Teller for begge tabs
+// ======================================================
+// ✅ Teller
+// ======================================================
 function updateFavoriteTabsCount() {
   const elProducts = document.getElementById("fav-products-count");
   const elBrands = document.getElementById("fav-brands-count");
@@ -180,4 +222,5 @@ function updateFavoriteTabsCount() {
   if (elProducts) elProducts.textContent = getFavorites().length;
   if (elBrands) elBrands.textContent = getFavoriteBrands().length;
 }
+
 
