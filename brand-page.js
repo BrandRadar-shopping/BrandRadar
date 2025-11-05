@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
       card.addEventListener("click", () => {
-        window.location.href = \`product.html?id=\${p.id}\`;
+      window.location.href = \`product.html?id=\${p.id}\`;
       });
 
       grid.appendChild(card);
