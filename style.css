@@ -2209,6 +2209,38 @@ nav.mega-menu .menu-section {
 }
 
 
+/* ✅ Tving alltid synlig favorittikon på brands */
+.brand-card .fav-icon {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* ✅ Fjern gammel hover-avhengighet */
+.brand-card:hover .fav-icon,
+.brand-card .fav-icon:hover {
+  opacity: 1 !important;
+}
+
+/* ✅ Forbedret standard-ikon */
+.brand-card .fav-icon .heart-icon {
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.4px;
+  transition: 0.22s ease;
+}
+
+/* ✅ Aktivt favorite-ikon */
+.brand-card .fav-icon.active .heart-icon {
+  fill: #ff1f3d;
+  stroke: #ff1f3d;
+}
+
+/* ✅ Boost effekt kun på hover, ikke vis/skjul */
+.brand-card:hover .fav-icon .heart-icon {
+  transform: scale(1.14);
+}
+
 
 
 
