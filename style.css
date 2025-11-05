@@ -1836,57 +1836,38 @@ nav.mega-menu .menu-section {
 
 
 /* ======================================================
-   ✅ Sorteringsbar – Category Page
+   ✅ Unified Filter + Sort Bar — Category Page
 ====================================================== */
-.sort-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px auto 20px;
-  max-width: 1300px;
-  padding: 10px 0;
-  font-size: 14px;
-  border-bottom: 1px solid #e5e5e5;
-}
 
-.result-count {
-  font-weight: 500;
-  opacity: 0.8;
-}
-
-#sort-select {
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #d1d1d1;
-  background: white;
-  cursor: pointer;
-}
-
-/* Mobil-optimalisering */
-@media (max-width: 600px) {
-  .sort-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  #sort-select {
-    width: 100%;
-  }
-}
-
-/* Category Filter Bar (Improved Responsive) */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   align-items: center;
-  margin: 10px 0 20px;
+  background: #ffffff;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  gap: 16px;
 }
 
+/* ✅ Left + right section aligned together */
+.filters-left,
+.filters-right {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ✅ Remove auto push right */
+.filters-right {
+  margin-left: 0;
+}
+
+/* ✅ Text formatting */
 .filter-bar label {
   font-weight: 600;
-  margin-right: 5px;
 }
 
 .filter-bar select,
@@ -1899,79 +1880,26 @@ nav.mega-menu .menu-section {
   cursor: pointer;
 }
 
-/* Product count alignment */
 .result-count {
-  font-size: 14px;
   font-weight: 600;
   color: #333;
+  margin-left: 6px;
 }
 
-/* Checkbox better spacing */
-.discount-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ✅ Mobile */
-@media (max-width: 600px) {
+/* ✅ Mobile optimization */
+@media (max-width: 700px) {
   .filter-bar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
   }
-
-  .filter-bar select {
-    width: 100%;
-  }
-
-  .discount-wrapper {
-    margin-top: 4px;
-  }
-}
-
-/* Filter Bar */
-.filter-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.filters-left,
-.filters-right {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.filters-right {
-  margin-left: auto;
-}
-
-.result-count {
-  font-weight: 600;
-  margin-right: 10px;
-}
-
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  .filter-bar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  .filters-left,
   .filters-right {
     width: 100%;
     justify-content: space-between;
   }
 }
+
 
 
 
