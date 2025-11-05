@@ -49,6 +49,7 @@ document.head.appendChild(forceHeartStyles);
           : []
       }));
 
+      localStorage.setItem("allBrandsData", JSON.stringify(brands)); // ✅ Save brand list
       initAlphabetFilter(brands);
       renderBrands(brands);
 
