@@ -211,6 +211,59 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     categoryProductsSection.prepend(sortBar);
 
+// ✅ Filters — Brand + Price + Discount
+const brandFilter = document.getElementById("brand-filter");
+const priceFilter = document.getElementById("price-filter");
+const discountFilter = document.getElementById("discount-filter");
+
+// Fyll brand-filter automatisk basert på data
+const uniqueBrands = [...new Set(filtered.map(p => p.brand).filter(Boolean))];
+uniqueBrands.sort().forEach(b => {
+  const option = document.createElement("option");
+  option.value = b;
+  option.textContent = b;
+  brandFilter.appendChild(option);
+});
+
+function applyFilters() {
+  let result = [...filtered];
+
+  // Brand
+  const brandVal = brandFilter.value;
+  if (brandVal !== "all") {
+    result = result.filter(p => p.brand === brandVal);
+  }
+
+  // Price
+  const priceVal = priceFilter.value;
+  const getPrice = v => parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+
+  if (priceVal !== "all") {
+    if (priceVal === "1000+") {
+      result = result.filter(p => getPrice(p.price) >= 1000);
+    } else {
+      const [min, max] = priceVal.split("-").map(Number);
+      result = result.filter(p => {
+        const price = getPrice(p.price);
+        return price >= min && price <= max;
+      });
+    }
+  }
+
+  // Discount only
+  if (discountFilter.checked) {
+    result = result.filter(p => parseFloat(p.discount) > 0);
+  }
+
+  renderProducts(result);
+}
+
+// Koble event listeners
+brandFilter.addEventListener("change", applyFilters);
+priceFilter.addEventListener("change", applyFilters);
+discountFilter.addEventListener("change", applyFilters);
+
+    
     // ✅ Sorting Logic
     const sortSelect = document.getElementById("sort-select");
    sortSelect.addEventListener("change", () => {
