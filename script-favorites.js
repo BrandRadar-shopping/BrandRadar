@@ -136,7 +136,7 @@ function loadFavoriteBrands() {
     const card = document.createElement("div");
     card.classList.add("brand-card");
     card.innerHTML = `
-      <img class="brand-logo" src="#" alt="${brand}">
+      <img class="brand-logo" src="${getBrandLogo(brand)}" alt="${brand}">
       <h3>${brand}</h3>
     `;
     card.addEventListener("click", () => {
