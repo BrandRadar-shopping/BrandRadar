@@ -2146,6 +2146,36 @@ nav.mega-menu .menu-section {
 }
 
 
+.brand-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 15px 0 25px;
+}
+
+.brand-filter-bar select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  font-size: 14px;
+}
+
+.brand-filter-bar label {
+  font-weight: 600;
+}
+
+.result-count {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
 
 
 
