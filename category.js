@@ -153,7 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
           productGrid.appendChild(card);
         });
 
-        document.querySelector(".result-count").textContent = `${list.length} produkter`;
+        const resultEl = document.querySelector(".filter-bar .result-count");
+if (resultEl) resultEl.textContent = `${list.length} produkter`;
+
       }
 
       
