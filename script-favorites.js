@@ -118,31 +118,37 @@ document.addEventListener("DOMContentLoaded", () => {
 // ✅ Last brandfavoritter inn i grid
 function loadFavoriteBrands() {
   const favBrands = getFavoriteBrands();
+  const allBrandsData = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
+
   const grid = document.getElementById("favorites-brand-grid");
   const emptyMsg = document.getElementById("empty-brands");
 
   if (!grid) return;
 
   grid.innerHTML = "";
-
   if (favBrands.length === 0) {
     emptyMsg.style.display = "block";
     return;
   }
-
   emptyMsg.style.display = "none";
 
   favBrands.forEach(brand => {
+    const brandData = allBrandsData.find(b => b.brand.trim() === brand.trim());
+
+    if (!brandData) return; // Sikkerhetsnett
+
     const card = document.createElement("div");
     card.classList.add("brand-card");
+
     card.innerHTML = `
-      <img class="brand-logo" src="${getBrandLogo(brand)}" alt="${brand}">
+      <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
       <h3>${brand}</h3>
     `;
+
     card.addEventListener("click", () => {
-      window.location.href =
-        `brand-page.html?brand=${encodeURIComponent(brand)}`;
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
     });
+
     grid.appendChild(card);
   });
 }
