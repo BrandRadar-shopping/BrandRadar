@@ -4,7 +4,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const brandName = new URLSearchParams(window.location.search).get("brand");
-
   if (!brandName) return;
 
   const brandInfoUrl = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
@@ -16,25 +15,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const siteBtn = document.getElementById("brand-site-btn");
   const favBtn  = document.getElementById("favorite-brand-btn");
 
-  const grid       = document.querySelector(".product-grid");
-  const emptyMsg   = document.querySelector(".empty-message");
+  const grid = document.querySelector(".product-grid");
+  const emptyMsg = document.querySelector(".empty-message");
   const resultCount = document.querySelector(".result-count");
-  
   const categorySelect = document.getElementById("category-filter");
   const sortSelect = document.getElementById("sort-select");
 
-  // ✅ Favoritt-brand system
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
 
   function toggleFavBrand() {
     let favs = getFavBrands();
-    const index = favs.indexOf(brandName);
-
-    if (index >= 0) favs.splice(index, 1);
-    else favs.push(brandName);
-
+    if (favs.includes(brandName)) {
+      favs = favs.filter(b => b !== brandName);
+    } else {
+      favs.push(brandName);
+    }
     localStorage.setItem("favoriteBrands", JSON.stringify(favs));
     updateFavUI();
     updateFavoriteCount?.();
@@ -48,20 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   favBtn.addEventListener("click", toggleFavBrand);
 
-
-  // ✅ Hent brand info
   fetch(brandInfoUrl)
     .then(r => r.json())
     .then(rows => {
-      const brand = rows.find(b => b.brand?.toLowerCase().trim() === brandName.toLowerCase());
-
+      const brand = rows.find(
+        b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
+      );
       if (!brand) return;
 
       titleEl.textContent = brand.brand;
       descEl.textContent = brand.about || "Ingen informasjon tilgjengelig.";
-      logoEl.src = brand.logo;
-      siteBtn.href = brand.homepage_url;
-      
+      logoEl.src = brand.logo || "";
+      siteBtn.href = brand.homepage_url || "#";
+
       if (brand.categories) {
         brand.categories.split(",").map(c => c.trim()).forEach(cat => {
           const opt = document.createElement("option");
@@ -70,11 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
           categorySelect.appendChild(opt);
         });
       }
-
       updateFavUI();
     });
 
-  // ✅ Hent produkter fra brand
   let brandProducts = [];
 
   fetch(productUrl)
@@ -88,28 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
         emptyMsg.style.display = "block";
         return;
       }
-
-      emptyMsg.style.display = "none";
       applyFiltersAndSort();
       updateFavoriteCount?.();
     });
 
-
-  // ✅ Filtering & sorting
   function applyFiltersAndSort() {
     let list = [...brandProducts];
 
-    const cleanPrice = v =>
-      parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-    const cleanRating = v =>
-      parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+    const cleanPrice = v => parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+    const cleanRating = v => parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-    // Filter kategorier
     if (categorySelect.value !== "all") {
       list = list.filter(p => p.category === categorySelect.value);
     }
 
-    // Sortering
     switch (sortSelect.value) {
       case "price-asc":
         list.sort((a, b) => cleanPrice(a.price) - cleanPrice(b.price)); break;
@@ -122,8 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts(list);
   }
 
-
-  // ✅ Render produkt-grid
   function renderProducts(list) {
     grid.innerHTML = "";
 
@@ -137,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
     resultCount.textContent = `${list.length} produkter`;
 
     list.forEach(p => {
-      const card = document.createElement("div");
       const rating = p.rating ? parseFloat(p.rating).toFixed(1) : null;
-      
+
+      const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
         <img src="${p.image_url}" alt="${p.title}">
@@ -149,8 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="price">${p.price} kr</p>
         </div>
       `;
+
       card.addEventListener("click", () => {
-      window.location.href = \`product.html?id=\${p.id}\`;
+        window.location.href = \`product.html?id=\${p.id}\`;
       });
 
       grid.appendChild(card);
@@ -162,5 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateFavUI();
 });
+
 
 
