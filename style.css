@@ -2344,6 +2344,12 @@ nav.mega-menu .menu-section {
 }
 
 
+.favorite-card,
+.product-card,
+.card {
+  position: relative;
+}
+
 
 
 
