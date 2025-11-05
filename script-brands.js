@@ -1,5 +1,5 @@
 // ======================================================
-// ✅ BrandRadar – Brands Page FINAL (with Brand Detail Routing)
+// ✅ BrandRadar – Brands Page FINAL (with Favorites + Brand Detail Routing)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -42,15 +42,26 @@ document.addEventListener("DOMContentLoaded", () => {
     highlightGrid.innerHTML = "";
     brandGrid.innerHTML = "";
 
+    const favList = getFavoriteBrands(); // ✅ Hent favoritter fra localStorage
+
     brands.forEach(b => {
+      const isFav = favList.includes(b.brand);
+
       const card = document.createElement("div");
       card.classList.add("brand-card");
       if (b.highlight) card.classList.add("highlighted");
 
       card.innerHTML = `
+        <span class="fav-icon ${isFav ? "active" : ""}" data-brand="${b.brand}">
+          <svg class="heart-icon" viewBox="0 0 24 24">
+            <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
+          </svg>
+        </span>
+
         <img src="${b.logo}" alt="${b.brand}" class="brand-logo">
         <h3>${b.brand}</h3>
         <p>${b.description}</p>
+
         <a class="brand-btn" data-brand="${encodeURIComponent(b.brand)}">
           Se produkter →
         </a>
@@ -60,6 +71,14 @@ document.addEventListener("DOMContentLoaded", () => {
       card.querySelector(".brand-btn").addEventListener("click", (e) => {
         e.stopPropagation();
         window.location.href = `brand-page.html?brand=${encodeURIComponent(b.brand)}`;
+      });
+
+      // ✅ Håndter favoritt-brand klikk
+      card.querySelector(".fav-icon").addEventListener("click", (e) => {
+        e.stopPropagation(); 
+        toggleBrandFavorite(b.brand);
+        card.querySelector(".fav-icon").classList.toggle("active");
+        updateFavoritesCount();
       });
 
       if (b.highlight) highlightGrid.appendChild(card);
