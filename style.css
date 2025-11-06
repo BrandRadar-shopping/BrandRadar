@@ -2319,50 +2319,87 @@ nav.mega-menu .menu-section {
   background: #d63030;
 }
 
+
 /* ============================================
-   💎 Gold Picks – Riktig & Renset CSS
+   💎 Gold Picks – Endelig korrekt versjon
+   (matcher luxury.html og script-luxury.js)
 ============================================ */
 #luxuryGoldPickGrid {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   justify-items: center;
   align-items: start;
 }
 
-.luxury-hero-card,
-.luxury-product-card {
+/* ✅ Kortene bruker samme base som øvrige luxury cards */
+.luxury-product-card,
+.luxury-hero-card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  transition: all 0.28s ease;
+  transition: all 0.25s ease;
   width: 100%;
   max-width: 300px;
-  box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
-.luxury-hero-card:hover,
-.luxury-product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 22px rgba(212,175,55,0.35);
+.luxury-product-card:hover,
+.luxury-hero-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.35);
 }
 
-/* 👍 Konsistent bildestørrelse */
-.luxury-hero-card img,
-.luxury-product-card img {
+/* ✅ Bildehåndtering – jevn høyde og riktig skalering */
+.luxury-product-card img,
+.luxury-hero-card img {
   width: 100%;
   height: 260px;
   object-fit: contain;
   background: #fff;
   display: block;
+  margin: 0 auto;
+  border-radius: 14px 14px 0 0;
 }
 
-/* 👑 Gold pick badge høyre */
+/* ✅ Infoområde */
+.luxury-info {
+  text-align: center;
+  padding: 12px 14px;
+}
+
+.luxury-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.luxury-info .brand {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.luxury-info .rating {
+  color: #111;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.luxury-info .price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #d4af37;
+}
+
+/* 👑 Gold Pick badge – høyre hjørne */
 .gold-pick-badge {
   position: absolute;
   top: 10px;
@@ -2370,12 +2407,14 @@ nav.mega-menu .menu-section {
   background: linear-gradient(90deg, #ffd65b, #e6b200);
   color: #000;
   font-weight: 700;
-  font-size: .75rem;
-  padding: 3px 7px;
+  font-size: 0.75rem;
+  padding: 3px 8px;
   border-radius: 6px;
   z-index: 10;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
+
+
 
 
 
