@@ -10,6 +10,7 @@
 
 <header class="main-header">
   <div class="nav-container">
+
     <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box">
@@ -17,18 +18,20 @@
       <button>🔍</button>
     </div>
 
-     <!-- Toppmeny -->
-   <nav class="top-links">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html">Brands</a>
-  <a href="favoritter.html">
-    Favoritter <span id="favorites-count">0</span>
-  </a>
-     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
-</nav>
+    <!-- Toppmeny -->
+    <nav class="top-links">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">
+        Favoritter <span id="favorites-count">0</span>
+      </a>
+      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+    </nav>
+
   </div>
 
+  <!-- 🔽 Kategorimenylinje -->
   <ul class="category-bar">
     <li class="category-item" data-category="Clothing">Klær</li>
     <li class="category-item" data-category="Shoes">Sko</li>
@@ -40,27 +43,69 @@
 
 <nav class="mega-menu"></nav>
 
-<section class="luxury-header">
-  <h2>Luxury Corner</h2>
-  <p>Oppdag eksklusive merker og premium produkter</p>
-</section>
 
-<section class="luxury-brands">
-  <h3>Eksklusive Brands</h3>
-  <div class="brand-grid" id="luxuryBrandGrid"></div>
-</section>
+<!-- ============================= -->
+<!-- 🏆 HERO-SEKSJON -->
+<!-- ============================= -->
+<main class="luxury-page">
 
-<section class="luxury-hero-section">
-  <h2 class="gold-title">Gold Picks ✨</h2>
-  <div class="luxury-hero-grid" id="luxuryGoldGrid"></div>
-</section>
+  <section class="luxury-hero">
+    <h1>Luksus håndplukket for deg.</h1>
+    <p>Premium produkter fra verdens mest eksklusive merker</p>
+  </section>
 
-  
-  <!-- ✅ Luxury Products -->
-<section class="luxury-products">
-  <h3>Premium Produkter</h3>
-  <div class="luxury-grid" id="luxuryProductGrid"></div>
-</section>
+
+  <!-- ============================= -->
+  <!-- 🌟 Eksklusive Brands -->
+  <!-- ============================= -->
+  <section class="luxury-section">
+    <h2>Eksklusive Brands</h2>
+    <div class="brand-grid" id="luxuryBrandGrid"></div>
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- ✨ Gold Picks -->
+  <!-- ============================= -->
+  <section class="luxury-section" id="goldPickSection">
+    <h2>Gold Picks ✨</h2>
+    <div class="luxury-product-grid" id="luxuryGoldPickGrid"></div>
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- 🛍 Premium Produkter -->
+  <!-- ============================= -->
+  <section class="luxury-section">
+
+    <!-- ✅ Filterbar -->
+    <div class="luxury-filter-bar">
+      <select id="filterCategory">
+        <option value="all">Alle kategorier</option>
+        <option value="bag">Vesker</option>
+        <option value="watch">Klokker</option>
+        <option value="sneakers">Sko</option>
+        <option value="jewelry">Smykker</option>
+        <option value="accessories">Tilbehør</option>
+        <option value="other">Annet</option>
+      </select>
+
+      <select id="sortProducts">
+        <option value="popular">Populært</option>
+        <option value="highprice">Høy pris → Lav</option>
+        <option value="lowprice">Lav pris → Høy</option>
+        <option value="rating">Rating</option>
+      </select>
+    </div>
+
+    <div class="luxury-product-grid" id="luxuryProductGrid"></div>
+    <p id="luxury-empty" class="empty-message" style="display:none;">
+      Ingen produkter matcher valget ditt 🔍
+    </p>
+
+  </section>
+
+</main>
 
 
 <script src="script-favorites.js"></script>
