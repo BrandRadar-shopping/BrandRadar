@@ -2662,6 +2662,40 @@ nav.mega-menu .menu-section {
   z-index: 10;
 }
 
+/* ✅ Fix for Luxury card images after filtering */
+.luxury-hero-card img,
+.luxury-product-card img {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ✅ Behold ny grid layout selv etter filtrering */
+#luxuryGoldGrid,
+#luxuryProductGrid {
+  display: grid !important;
+  gap: 20px;
+}
+
+/* ✅ Sikrer 3 per rad på store skjermer */
+#luxuryGoldGrid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+#luxuryProductGrid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+/* ✅ Sentral handling på scroll */
+.luxury-products,
+.luxury-hero-section {
+  max-width: 1200px;
+  margin: auto;
+}
+
 
 
 
