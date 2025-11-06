@@ -2481,6 +2481,38 @@ nav.mega-menu .menu-section {
   cursor: pointer;
 }
 
+/* ============================================
+   ✅ Premium Produkter – korrekt sentrering
+============================================ */
+#luxuryProductGrid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  justify-items: center;
+  align-items: start;
+}
+
+/* ✅ Sørg for at kortene ikke "flyter" utenfor */
+#luxuryProductGrid .luxury-product-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+#luxuryProductGrid .luxury-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.35);
+}
+
 
 
 
