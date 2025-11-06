@@ -139,16 +139,19 @@ function loadFavoriteProducts() {
     const rating = parseFloat(product.rating) || null;
 
     card.innerHTML = `
-      <span class="remove-tag" data-id="${product.id}">Fjern</span>
+  <span class="remove-tag" data-id="${product.id}">Fjern</span>
 
-      <img src="${product.image_url}" alt="${product.title}">
-      <div class="product-info">
-        <h3>${product.title}</h3>
-        <p class="brand">${product.brand || ""}</p>
-        <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : ""}</p>
-        <p class="price">${product.price ? `${product.price} kr` : ""}</p>
-      </div>
-    `;
+  ${product.discount ? `<div class="discount-badge">-${product.discount}%</div>` : ""}
+
+  <img src="${product.image_url}" alt="${product.title}">
+  <div class="product-info">
+    <h3>${product.title}</h3>
+    <p class="brand">${product.brand || ""}</p>
+    <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : ""}</p>
+    <p class="price">${product.price ? `${product.price} kr` : ""}</p>
+  </div>
+`;
+
 
     // Klikk = gå til produkt
     card.addEventListener("click", () => {
