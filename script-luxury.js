@@ -1,5 +1,5 @@
 // ============================================
-// ✅ Luxury Corner - BrandRadar (Phase 2)
+// 💎 Luxury Corner - BrandRadar (Phase 2 + Rating)
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,13 +22,14 @@ function loadLuxuryBrands(sheetId, sheetName) {
     .then(res => res.json())
     .then(rows => {
       const brands = rows.map(r => ({
-        brand: r.brand || "",
-        logo: r.logo || "",
-        description: r.description || "",
-        homepage: r.homepage_url || "#"
+        brand: (r.brand || "").trim(),
+        logo: (r.logo || "").trim(),
+        description: (r.description || "").trim(),
+        homepage: (r.homepage_url || "#").trim()
       }));
 
       grid.innerHTML = "";
+
       brands.forEach(b => {
         const card = document.createElement("div");
         card.classList.add("brand-card");
@@ -49,7 +50,7 @@ function loadLuxuryBrands(sheetId, sheetName) {
 }
 
 // =======================================================
-// ✅ Load Luxury Products
+// ✅ Load Luxury Products (med rating-støtte)
 // =======================================================
 function loadLuxuryProducts(sheetId, sheetName) {
   const url = `https://opensheet.elk.sh/${sheetId}/${sheetName}`;
@@ -59,20 +60,28 @@ function loadLuxuryProducts(sheetId, sheetName) {
     .then(res => res.json())
     .then(rows => {
       const products = rows.map(r => ({
-        id: r.id || "",
-        title: r.title || "",
-        brand: r.brand || "",
-        price: r.price || "",
-        image_url: r.image_url || "",
-        discount: r.discount || "",
-        product_url: r.product_url || "#",
-        tag: r.tag || "",
+        id: (r.id || "").trim(),
+        title: (r.title || "").trim(),
+        brand: (r.brand || "").trim(),
+        price: (r.price || "").trim(),
+        image_url: (r.image_url || "").trim(),
+        discount: (r.discount || "").trim(),
+        product_url: (r.product_url || "#").trim(),
+        tag: (r.tag || "").trim(),
+        rating: (r.rating || "").trim()
       }));
 
       grid.innerHTML = "";
+
       products.forEach(p => {
         const card = document.createElement("div");
         card.classList.add("luxury-product-card");
+
+        // ✅ Rating parsing (støtter komma eller punktum)
+        const ratingNum = parseFloat(String(p.rating).replace(",", "."));
+        const ratingHtml = !isNaN(ratingNum)
+          ? `<p class="rating">⭐ ${ratingNum.toFixed(1)}</p>`
+          : "";
 
         card.innerHTML = `
           ${p.discount ? `<span class="discount-badge">${p.discount}%</span>` : ""}
@@ -80,6 +89,7 @@ function loadLuxuryProducts(sheetId, sheetName) {
           <div class="luxury-info">
             <h4>${p.title}</h4>
             <p class="brand">${p.brand}</p>
+            ${ratingHtml}
             <p class="price">${p.price} kr</p>
           </div>
         `;
@@ -97,4 +107,5 @@ function loadLuxuryProducts(sheetId, sheetName) {
     })
     .catch(err => console.error("🚨 FEIL LuxuryProducts:", err));
 }
+
 
