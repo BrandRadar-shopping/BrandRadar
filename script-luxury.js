@@ -150,6 +150,19 @@ function renderLuxuryProducts() {
   });
 }
 
+// Favoritt-knapp logikk
+const favBtn = card.querySelector(".fav-btn");
+const favId = p.id || p.title;
+
+if (isFavorite(favId)) favBtn.classList.add("active");
+
+favBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleFavorite(favId);
+  favBtn.classList.toggle("active");
+});
+
+
 function setFilterEvents() {
   document.getElementById("filterCategory")
     .addEventListener("change", renderLuxuryProducts);
