@@ -2507,6 +2507,99 @@ nav.mega-menu .menu-section {
   transition: all 0.25s ease;
 }
 
+/* 💎 Gold Picks Hero Section */
+.luxury-hero-section {
+  max-width: 1200px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.gold-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.luxury-hero-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.luxury-hero-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.28s ease;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+}
+
+.luxury-hero-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 22px rgba(212,175,55,0.35);
+}
+
+.luxury-hero-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+}
+
+.hero-info {
+  padding: 14px 18px;
+}
+
+.hero-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.hero-info .brand {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.hero-info .price {
+  color: #d4af37;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* 💎 Gold Pick Badge – flyttet til høyre */
+.gold-pick-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* flyttet fra left → right */
+  background: linear-gradient(90deg, #d4af37, #f8e08e);
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  animation: subtleShine 4s infinite linear;
+}
+
+/* spesifikt hvis vi vil merke høyre-badge */
+.gold-pick-badge.right {
+  right: 10px;
+  left: auto;
+}
+
+@keyframes subtleShine {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+  100% { filter: brightness(1); }
+}
 
 
 
