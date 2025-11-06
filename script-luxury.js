@@ -1,5 +1,5 @@
 // ============================================
-// 💎 Luxury Corner - Filtering + Gold Picks
+// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -51,7 +51,7 @@ function loadLuxuryBrands(sheetId, sheetName) {
 }
 
 // ============================================
-// ✅ Premium Products (with filters + GoldPicks)
+// ✅ Premium Products (with filters + GoldPicks + Favorites)
 // ============================================
 let allLuxury = [];
 
@@ -81,28 +81,6 @@ function renderLuxuryProducts() {
   const filterVal = document.getElementById("filterCategory").value;
   const sortVal = document.getElementById("sortProducts").value;
 
-  card.innerHTML = `
-  ${discount}
-  ${goldTag}
-  <button class="fav-btn" data-id="${p.id || p.title}" title="Legg til favoritt">
-    <svg class="fav-icon" viewBox="0 0 24 24">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
-               2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
-               C13.09 3.81 14.76 3 16.5 3
-               19.58 3 22 5.42 22 8.5
-               c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-    </svg>
-  </button>
-  <img src="${p.image_url}" alt="${p.title}">
-  <div class="luxury-info">
-    <h4>${p.title}</h4>
-    <p class="brand">${p.brand}</p>
-    <p class="rating">⭐ ${p.rating.toFixed(1)}</p>
-    <p class="price">${p.price} kr</p>
-  </div>
-`;
-
-
   let list = [...allLuxury];
 
   if (filterVal !== "all")
@@ -123,14 +101,26 @@ function renderLuxuryProducts() {
 
     const goldPick = (p.goldpick || "").toLowerCase() === "yes";
     const goldTag = goldPick
-      ? `<span class="gold-pick-badge">👑 Gold Pick</span>` : "";
+      ? `<span class="gold-pick-badge">👑 Gold Pick</span>`
+      : "";
 
     const discount = p.discount
-      ? `<span class="discount-badge">${p.discount}%</span>` : "";
+      ? `<span class="discount-badge">${p.discount}%</span>`
+      : "";
 
+    // 💛 Favorittikon inkludert her
     card.innerHTML = `
       ${discount}
       ${goldTag}
+      <button class="fav-btn" data-id="${p.id || p.title}" title="Legg til favoritt">
+        <svg class="fav-icon" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                   2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                   C13.09 3.81 14.76 3 16.5 3
+                   19.58 3 22 5.42 22 8.5
+                   c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </button>
       <img src="${p.image_url}" alt="${p.title}">
       <div class="luxury-info">
         <h4>${p.title}</h4>
@@ -140,9 +130,26 @@ function renderLuxuryProducts() {
       </div>
     `;
 
+    // Klikk på kort → produktdetalj
     card.addEventListener("click", () => {
       if (p.id) window.location.href = `product.html?id=${p.id}`;
       else window.open(p.product_url, "_blank");
+    });
+
+    // ❤️ Favorittknapp logikk
+    const favBtn = card.querySelector(".fav-btn");
+    const favId = p.id || p.title;
+
+    if (typeof isFavorite === "function" && isFavorite(favId)) {
+      favBtn.classList.add("active");
+    }
+
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (typeof toggleFavorite === "function") {
+        toggleFavorite(favId);
+      }
+      favBtn.classList.toggle("active");
     });
 
     if (goldPick) goldGrid.appendChild(card);
@@ -150,24 +157,12 @@ function renderLuxuryProducts() {
   });
 }
 
-// Favoritt-knapp logikk
-const favBtn = card.querySelector(".fav-btn");
-const favId = p.id || p.title;
-
-if (isFavorite(favId)) favBtn.classList.add("active");
-
-favBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleFavorite(favId);
-  favBtn.classList.toggle("active");
-});
-
-
 function setFilterEvents() {
   document.getElementById("filterCategory")
     .addEventListener("change", renderLuxuryProducts);
   document.getElementById("sortProducts")
     .addEventListener("change", renderLuxuryProducts);
 }
+
 
 
