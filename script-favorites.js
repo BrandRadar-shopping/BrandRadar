@@ -115,54 +115,58 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ======================================================
-// ✅ Last produktfavoritter (Oppdatert til tag-style)
-// ======================================================
+// ✅ Last inn produkt-favoritter
 function loadFavoriteProducts() {
-  const favs = getFavorites();
+  const favorites = getFavorites();
   const grid = document.getElementById("favorites-product-grid");
   const emptyMsg = document.getElementById("empty-products");
 
   if (!grid) return;
 
   grid.innerHTML = "";
-  if (favs.length === 0) {
+
+  if (favorites.length === 0) {
     emptyMsg.style.display = "block";
     return;
   }
+
   emptyMsg.style.display = "none";
 
-  favs.forEach(product => {
+  favorites.forEach(product => {
     const card = document.createElement("div");
     card.classList.add("product-card");
-    card.style.position = "relative"; // ⭐ NYTT
+
+    const rating = parseFloat(product.rating) || null;
 
     card.innerHTML = `
-      ${product.discount ? `<span class="discount-badge">${product.discount}%</span>` : ""}
+      <span class="remove-tag" data-id="${product.id}">Fjern</span>
+
       <img src="${product.image_url}" alt="${product.title}">
-      <h3>${product.title}</h3>
-      <p class="price">${product.price} kr</p>
+      <div class="product-info">
+        <h3>${product.title}</h3>
+        <p class="brand">${product.brand || ""}</p>
+        <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : ""}</p>
+        <p class="price">${product.price ? `${product.price} kr` : ""}</p>
+      </div>
     `;
 
-    // ⭐ NYTT: fjern-tag i hjørnet
-    const removeTag = document.createElement("span");
-    removeTag.classList.add("remove-tag");
-    removeTag.textContent = "Fjern";
-    removeTag.addEventListener("click", (e) => {
+    // Klikk = gå til produkt
+    card.addEventListener("click", () => {
+      window.location.href = `product.html?id=${product.id}`;
+    });
+
+    // Fjern favoritt tag
+    card.querySelector(".remove-tag").addEventListener("click", (e) => {
       e.stopPropagation();
       toggleFavorite(product);
       loadFavoriteProducts();
       updateFavoriteTabsCount();
     });
-    card.appendChild(removeTag);
-
-    card.addEventListener("click", () => {
-      window.location.href = `product.html?id=${product.id}`;
-    });
 
     grid.appendChild(card);
   });
 }
+
 
 // ======================================================
 // ✅ Brands i favoritter
