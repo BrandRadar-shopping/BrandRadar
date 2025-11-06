@@ -1,5 +1,5 @@
 // ============================================
-// 💎 Luxury Corner - BrandRadar (Phase 2 + Rating)
+// 💎 Luxury Corner - BrandRadar (Phase 3: Gold Picks)
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,7 +50,7 @@ function loadLuxuryBrands(sheetId, sheetName) {
 }
 
 // =======================================================
-// ✅ Load Luxury Products (med rating-støtte)
+// ✅ Load Luxury Products (med rating + GoldPick)
 // =======================================================
 function loadLuxuryProducts(sheetId, sheetName) {
   const url = `https://opensheet.elk.sh/${sheetId}/${sheetName}`;
@@ -68,7 +68,8 @@ function loadLuxuryProducts(sheetId, sheetName) {
         discount: (r.discount || "").trim(),
         product_url: (r.product_url || "#").trim(),
         tag: (r.tag || "").trim(),
-        rating: (r.rating || "").trim()
+        rating: (r.rating || "").trim(),
+        goldpick: (r.goldpick || "").trim().toLowerCase()
       }));
 
       grid.innerHTML = "";
@@ -77,13 +78,20 @@ function loadLuxuryProducts(sheetId, sheetName) {
         const card = document.createElement("div");
         card.classList.add("luxury-product-card");
 
-        // ✅ Rating parsing (støtter komma eller punktum)
+        // ✅ Rating parsing
         const ratingNum = parseFloat(String(p.rating).replace(",", "."));
         const ratingHtml = !isNaN(ratingNum)
           ? `<p class="rating">⭐ ${ratingNum.toFixed(1)}</p>`
           : "";
 
+        // ✅ Gold pick badge
+        const goldTag =
+          p.goldpick === "yes"
+            ? `<span class="gold-pick-badge">👑 Gold Pick</span>`
+            : "";
+
         card.innerHTML = `
+          ${goldTag}
           ${p.discount ? `<span class="discount-badge">${p.discount}%</span>` : ""}
           <img src="${p.image_url}" alt="${p.title}">
           <div class="luxury-info">
@@ -107,5 +115,3 @@ function loadLuxuryProducts(sheetId, sheetName) {
     })
     .catch(err => console.error("🚨 FEIL LuxuryProducts:", err));
 }
-
-
