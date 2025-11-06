@@ -2350,6 +2350,81 @@ nav.mega-menu .menu-section {
   position: relative;
 }
 
+/* ✅ Favorittside – produktkort forbedring */
+#tab-products .product-card {
+  position: relative;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+#tab-products .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+#tab-products .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+}
+
+#tab-products .product-info {
+  padding: 0.8rem 1rem 1rem;
+  text-align: center;
+}
+
+#tab-products .product-info h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+#tab-products .product-info .brand {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+#tab-products .product-info .rating {
+  color: #111;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+#tab-products .product-info .price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0070f3;
+}
+
+/* ✅ Fjern-tag oppe i hjørnet */
+#tab-products .remove-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s ease;
+}
+
+#tab-products .remove-tag:hover {
+  background: #d63030;
+}
+
 
 
 
