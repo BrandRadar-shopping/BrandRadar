@@ -2319,6 +2319,66 @@ nav.mega-menu .menu-section {
   background: #d63030;
 }
 
+/* ============================================
+   💎 Luxury Corner Styling
+============================================ */
+
+.luxury-link {
+  font-weight: 700;
+  background: linear-gradient(90deg, #d4af37, #f5d76e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.luxury-header {
+  text-align: center;
+  margin: 30px auto 15px;
+}
+
+.luxury-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111;
+}
+
+.luxury-header p {
+  color: #555;
+  font-size: 15px;
+}
+
+.luxury-brands h3 {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#luxuryBrandGrid .brand-card {
+  cursor: pointer;
+  text-align: center;
+  padding: 18px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  transition: .2s ease;
+}
+
+#luxuryBrandGrid .brand-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+#luxuryBrandGrid .brand-logo {
+  width: 120px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.lux-sub {
+  font-size: 14px;
+  color: #777;
+}
+
 
 
 
