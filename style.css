@@ -2467,6 +2467,46 @@ nav.mega-menu .menu-section {
   margin-bottom: 6px;
 }
 
+/* ==============================================
+   💎 Luxury Corner – Gold Pick Styling
+============================================== */
+
+.gold-pick-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(90deg, #d4af37, #f8e08e);
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  animation: subtleShine 4s infinite linear;
+}
+
+@keyframes subtleShine {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+  100% { filter: brightness(1); }
+}
+
+/* ✨ Gull-glød ved hover */
+.luxury-product-card:hover {
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+  transform: translateY(-4px);
+  transition: all 0.25s ease;
+}
+
+/* ✅ Stabil layout med badge */
+.luxury-product-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
 
 
 
