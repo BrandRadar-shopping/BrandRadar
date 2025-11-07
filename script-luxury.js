@@ -146,15 +146,28 @@ card.addEventListener("click", (e) => {
   }
 });
 
-    // ❤️ Favorittknapp logikk
-    const favBtn = card.querySelector(".fav-btn");
-    favBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (typeof toggleFavorite === "function") {
-        toggleFavorite(favId);
-      }
-      favBtn.classList.toggle("active");
-    });
+    // ❤️ Favorittknapp logikk (forhindrer kortklikk fullstendig)
+const favBtn = card.querySelector(".fav-btn");
+const favId = p.id || p.title;
+
+if (typeof isFavorite === "function" && isFavorite(favId)) {
+  favBtn.classList.add("active");
+}
+
+["click", "mousedown", "mouseup"].forEach(evt => {
+  favBtn.addEventListener(evt, e => {
+    e.stopImmediatePropagation(); // stopper all bubbling
+    e.preventDefault();
+  });
+});
+
+favBtn.addEventListener("click", () => {
+  if (typeof toggleFavorite === "function") {
+    toggleFavorite(favId);
+  }
+  favBtn.classList.toggle("active");
+});
+
 
     // --- Legg til i riktig grid ---
     if (goldPick) goldGrid.appendChild(card);
