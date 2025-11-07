@@ -2321,8 +2321,8 @@ nav.mega-menu .menu-section {
 
 
 /* ============================================
-   💎 Luxury Corner – Premium Cards & Layout
-   Renset og samkjørt (v3)
+   💎 Luxury Corner – Premium Cards & Layout (v3.2)
+   Justert for korrekt z-index, bildehøyde og ikonplassering
 ============================================ */
 
 /* ✅ Sentraliser hele Luxury-siden */
@@ -2405,7 +2405,7 @@ nav.mega-menu .menu-section {
 .luxury-hero-card {
   background: #fff;
   border-radius: 14px;
-  overflow: visible; /* gjør at ikoner kan stikke ut */
+  overflow: visible;
   cursor: pointer;
   position: relative;
   transition: all 0.25s ease;
@@ -2422,7 +2422,8 @@ nav.mega-menu .menu-section {
 
 /* ✅ Bildehåndtering */
 .luxury-product-card img,
-.luxury-hero-card img {
+.luxury-hero-card img,
+.luxury-img {
   width: 100%;
   height: 260px;
   object-fit: contain;
@@ -2470,7 +2471,7 @@ nav.mega-menu .menu-section {
 .gold-pick-badge {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 12px;
   background: linear-gradient(90deg, #d4af37, #f8e08e);
   color: #111;
   font-size: 0.8rem;
@@ -2478,7 +2479,7 @@ nav.mega-menu .menu-section {
   padding: 4px 10px;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  z-index: 5;
+  z-index: 10;
   animation: goldShine 4s infinite linear;
 }
 
@@ -2501,7 +2502,7 @@ nav.mega-menu .menu-section {
   font-weight: 700;
   font-size: 12px;
   border-radius: 8px;
-  z-index: 7;
+  z-index: 12;
 }
 
 /* ============================================
@@ -2509,14 +2510,15 @@ nav.mega-menu .menu-section {
 ============================================ */
 .fav-btn {
   position: absolute;
-  top: 10px;
-  right: 10px; /* ✅ flyttet fra venstre til høyre */
+  top: 42px;      /* ✅ flyttet ned for å unngå Gold Pick */
+  right: 14px;    /* ✅ litt lenger ut fra kanten */
   background: none;
   border: none;
   padding: 4px;
   cursor: pointer;
-  z-index: 15;
+  z-index: 20;    /* ✅ over badge */
   transition: transform 0.2s ease, filter 0.3s ease;
+  pointer-events: auto;
 }
 
 .fav-btn:hover {
@@ -2529,7 +2531,7 @@ nav.mega-menu .menu-section {
   height: 22px;
   fill: none;
   stroke: #111;
-  stroke-width: 1.2; /* ✅ syltynn sort outline */
+  stroke-width: 1.2;
   transition: all 0.35s ease;
   pointer-events: none;
 }
