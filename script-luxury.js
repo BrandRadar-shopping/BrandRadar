@@ -135,12 +135,16 @@ function renderLuxuryProducts() {
     `;
 
     // Klikk på kort → produktdetalj (ikke hjerte)
-    card.addEventListener("click", (e) => {
-      const clickedFav = e.target.closest(".fav-btn");
-      if (clickedFav) return; // stopper åpning hvis hjerte trykkes
-      if (p.id) window.location.href = `product.html?id=${p.id}`;
-      else if (p.product_url) window.open(p.product_url, "_blank");
-    });
+card.addEventListener("click", (e) => {
+  // stopper produktnavigasjon hvis hjerte eller noe inni hjerte blir trykket
+  if (e.target.matches(".fav-btn, .fav-btn *")) return;
+
+  if (p.id) {
+    window.location.href = `product.html?id=${p.id}`;
+  } else if (p.product_url) {
+    window.open(p.product_url, "_blank");
+  }
+});
 
     // ❤️ Favorittknapp logikk
     const favBtn = card.querySelector(".fav-btn");
