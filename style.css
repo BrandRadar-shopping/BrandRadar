@@ -2551,6 +2551,22 @@ svg#gold-gradient-defs {
   pointer-events: none;
 }
 
+.luxury-product-card img,
+.luxury-hero-card img {
+  margin-top: 10px; /* Gir lik visuell spacing som index */
+}
+
+/* 🔒 Sørg for at gull-badge kun brukes på luxury.html */
+.luxury-page .discount-badge {
+  background: #d4af37;
+  color: #000;
+}
+
+/* og gjenopprett standard røde badge for resten */
+:not(.luxury-page) .discount-badge {
+  background: #e63946;
+  color: #fff;
+}
 
 
 
