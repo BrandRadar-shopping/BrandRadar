@@ -1,5 +1,5 @@
 // ============================================
-// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon
+// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon (v3.1)
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -39,7 +39,7 @@ function loadLuxuryBrands(sheetId, sheetName) {
         const card = document.createElement("div");
         card.classList.add("brand-card");
         card.innerHTML = `
-          <img src="${b.logo}" class="brand-logo" alt="">
+          <img src="${b.logo}" class="brand-logo" alt="${b.brand}">
           <h3>${b.brand}</h3>
         `;
         card.addEventListener("click", () => {
@@ -75,6 +75,8 @@ function renderLuxuryProducts() {
   const prodGrid = document.getElementById("luxuryProductGrid");
   const empty = document.getElementById("luxury-empty");
 
+  if (!goldGrid || !prodGrid) return;
+
   goldGrid.innerHTML = "";
   prodGrid.innerHTML = "";
 
@@ -83,15 +85,13 @@ function renderLuxuryProducts() {
 
   let list = [...allLuxury];
 
-  if (filterVal !== "all")
-    list = list.filter(p => p.category === filterVal);
+  // --- Filtrering ---
+  if (filterVal !== "all") list = list.filter(p => p.category === filterVal);
 
-  if (sortVal === "rating")
-    list.sort((a, b) => b.rating - a.rating);
-  if (sortVal === "highprice")
-    list.sort((a, b) => Number(b.price) - Number(a.price));
-  if (sortVal === "lowprice")
-    list.sort((a, b) => Number(a.price) - Number(b.price));
+  // --- Sortering ---
+  if (sortVal === "rating") list.sort((a, b) => b.rating - a.rating);
+  if (sortVal === "highprice") list.sort((a, b) => Number(b.price) - Number(a.price));
+  if (sortVal === "lowprice") list.sort((a, b) => Number(a.price) - Number(b.price));
 
   empty.style.display = list.length ? "none" : "block";
 
@@ -108,11 +108,15 @@ function renderLuxuryProducts() {
       ? `<span class="discount-badge">${p.discount}%</span>`
       : "";
 
-    // 💛 Favorittikon inkludert her
+    const favId = p.id || p.title;
+    const isFav = typeof isFavorite === "function" && isFavorite(favId);
+    const favActive = isFav ? "active" : "";
+
+    // 💛 Kortets innhold
     card.innerHTML = `
       ${discount}
       ${goldTag}
-      <button class="fav-btn" data-id="${p.id || p.title}" title="Legg til favoritt">
+      <button class="fav-btn ${favActive}" data-id="${favId}" title="Legg til favoritt">
         <svg class="fav-icon" viewBox="0 0 24 24">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
                    2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
@@ -121,7 +125,7 @@ function renderLuxuryProducts() {
                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
         </svg>
       </button>
-      <img src="${p.image_url}" alt="${p.title}">
+      <img src="${p.image_url}" alt="${p.title}" class="luxury-img">
       <div class="luxury-info">
         <h4>${p.title}</h4>
         <p class="brand">${p.brand}</p>
@@ -130,20 +134,16 @@ function renderLuxuryProducts() {
       </div>
     `;
 
-    // Klikk på kort → produktdetalj
-    card.addEventListener("click", () => {
+    // Klikk på kort → produktdetalj (ikke hjerte)
+    card.addEventListener("click", (e) => {
+      const clickedFav = e.target.closest(".fav-btn");
+      if (clickedFav) return; // stopper åpning hvis hjerte trykkes
       if (p.id) window.location.href = `product.html?id=${p.id}`;
-      else window.open(p.product_url, "_blank");
+      else if (p.product_url) window.open(p.product_url, "_blank");
     });
 
     // ❤️ Favorittknapp logikk
     const favBtn = card.querySelector(".fav-btn");
-    const favId = p.id || p.title;
-
-    if (typeof isFavorite === "function" && isFavorite(favId)) {
-      favBtn.classList.add("active");
-    }
-
     favBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       if (typeof toggleFavorite === "function") {
@@ -152,17 +152,22 @@ function renderLuxuryProducts() {
       favBtn.classList.toggle("active");
     });
 
+    // --- Legg til i riktig grid ---
     if (goldPick) goldGrid.appendChild(card);
     else prodGrid.appendChild(card);
   });
 }
 
+// ============================================
+// ✅ Filter-hendelser
+// ============================================
 function setFilterEvents() {
-  document.getElementById("filterCategory")
-    .addEventListener("change", renderLuxuryProducts);
-  document.getElementById("sortProducts")
-    .addEventListener("change", renderLuxuryProducts);
+  const filter = document.getElementById("filterCategory");
+  const sort = document.getElementById("sortProducts");
+  if (filter) filter.addEventListener("change", renderLuxuryProducts);
+  if (sort) sort.addEventListener("change", renderLuxuryProducts);
 }
+
 
 
 
