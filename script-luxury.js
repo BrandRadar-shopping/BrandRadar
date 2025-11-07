@@ -149,20 +149,20 @@ card.addEventListener("click", (e) => {
     // ❤️ Favorittknapp logikk (forhindrer kortklikk fullstendig)
 const favBtn = card.querySelector(".fav-btn");
 
-// lag unik id for favoritten
-const favId = p.id || p.title;
-
-// marker som aktiv hvis fra før
-if (typeof isFavorite === "function" && isFavorite(favId)) {
-  favBtn.classList.add("active");
-}
-
 // hindrer at hjertet klikker produktet
 ["click", "mousedown", "mouseup"].forEach(evt => {
   favBtn.addEventListener(evt, e => {
-    e.stopImmediatePropagation(); // stopp alt bubbling
+    e.stopImmediatePropagation(); // stopp all bubbling
     e.preventDefault();           // unngå standard handling
   });
+});
+
+// toggle favoritt på klikk
+favBtn.addEventListener("click", () => {
+  if (typeof toggleFavorite === "function") {
+    toggleFavorite(favId);
+  }
+  favBtn.classList.toggle("active");
 });
 
 // toggle favoritt på klikk
