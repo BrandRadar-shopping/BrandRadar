@@ -113,5 +113,26 @@
 <script src="script.js"></script>
 <script src="script-megamenu.js"></script>
 
+<!-- ✅ Gullgradient definisjon for favoritt-ikon -->
+<svg id="gold-gradient-defs" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37">
+        <animate attributeName="stop-color"
+                 values="#d4af37;#f5e29e;#d4af37"
+                 dur="4s"
+                 repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#f8e08e">
+        <animate attributeName="stop-color"
+                 values="#f8e08e;#fff5b8;#f8e08e"
+                 dur="4s"
+                 repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+  </defs>
+</svg>
+
+  
 </body>
 </html>
