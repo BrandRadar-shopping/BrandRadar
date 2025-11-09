@@ -126,7 +126,7 @@ function renderLuxuryProducts() {
     // --- Klikk på kort → produktdetalj ---
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-btn")) return;
-      if (p.id) window.location.href = `product.html?id=${p.id}`;
+      if (p.id) window.location.href = `product.html?id=${p.id}&luxury=true`;
       else if (p.product_url) window.open(p.product_url, "_blank");
     });
 
