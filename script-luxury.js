@@ -1,5 +1,5 @@
 // ============================================
-// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon (v3.1)
+// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon (v4 Final)
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -76,19 +76,14 @@ function renderLuxuryProducts() {
   const empty = document.getElementById("luxury-empty");
 
   if (!goldGrid || !prodGrid) return;
-
   goldGrid.innerHTML = "";
   prodGrid.innerHTML = "";
 
   const filterVal = document.getElementById("filterCategory").value;
   const sortVal = document.getElementById("sortProducts").value;
-
   let list = [...allLuxury];
 
-  // --- Filtrering ---
   if (filterVal !== "all") list = list.filter(p => p.category === filterVal);
-
-  // --- Sortering ---
   if (sortVal === "rating") list.sort((a, b) => b.rating - a.rating);
   if (sortVal === "highprice") list.sort((a, b) => Number(b.price) - Number(a.price));
   if (sortVal === "lowprice") list.sort((a, b) => Number(a.price) - Number(b.price));
@@ -100,19 +95,13 @@ function renderLuxuryProducts() {
     card.classList.add("luxury-product-card");
 
     const goldPick = (p.goldpick || "").toLowerCase() === "yes";
-    const goldTag = goldPick
-      ? `<span class="gold-pick-badge">👑 Gold Pick</span>`
-      : "";
-
-    const discount = p.discount
-      ? `<span class="discount-badge">${p.discount}%</span>`
-      : "";
+    const goldTag = goldPick ? `<span class="gold-pick-badge">👑 Gold Pick</span>` : "";
+    const discount = p.discount ? `<span class="discount-badge">${p.discount}%</span>` : "";
 
     const favId = p.id || p.title;
     const isFav = typeof isFavorite === "function" && isFavorite(favId);
     const favActive = isFav ? "active" : "";
 
-    // 💛 Kortets innhold
     card.innerHTML = `
       ${discount}
       ${goldTag}
@@ -135,55 +124,34 @@ function renderLuxuryProducts() {
     `;
 
     // --- Klikk på kort → produktdetalj ---
-card.addEventListener("click", (e) => {
-  // stopper produktnavigasjon hvis hjerte eller noe inni hjerte blir trykket
-  if (e.target.closest(".fav-btn")) return;
-
-  if (p.id) {
-    window.location.href = `product.html?id=${p.id}`;
-  } else if (p.product_url) {
-    window.open(p.product_url, "_blank");
-  }
-});
-
-// --- ❤️ Favorittknapp logikk ---
-const favBtn = card.querySelector(".fav-btn");
-
-// stopp ALT klikkbubbling på hjertet
-["click", "mousedown", "mouseup"].forEach(evt => {
-  favBtn.addEventListener(evt, e => {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    e.preventDefault();
-  });
-});
-
-// toggle favoritt
-favBtn.addEventListener("click", () => {
-  // Gullfyll + visuell toggle
-  favBtn.classList.toggle("active");
-
-  // Send hele produktet (p) til toggleFavorite()
-  if (typeof toggleFavorite === "function") {
-    toggleFavorite({
-      id: p.id || favId,
-      title: p.title,
-      brand: p.brand,
-      price: p.price,
-      discount: p.discount,
-      image_url: p.image_url,
-      product_url: p.product_url,
-      category: p.category,
-      rating: p.rating
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".fav-btn")) return;
+      if (p.id) window.location.href = `product.html?id=${p.id}`;
+      else if (p.product_url) window.open(p.product_url, "_blank");
     });
-  }
-});
 
+    // --- ❤️ Favorittknapp ---
+    const favBtn = card.querySelector(".fav-btn");
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
 
+      favBtn.classList.toggle("active");
 
+      if (typeof toggleFavorite === "function") {
+        toggleFavorite({
+          id: Number(p.id) || favId,
+          title: p.title,
+          brand: p.brand,
+          price: p.price,
+          discount: p.discount,
+          image_url: p.image_url,
+          product_url: p.product_url,
+          category: p.category,
+          rating: p.rating
+        });
+      }
+    });
 
-
-    // --- Legg til i riktig grid ---
     if (goldPick) goldGrid.appendChild(card);
     else prodGrid.appendChild(card);
   });
