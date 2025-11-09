@@ -165,14 +165,6 @@ favBtn.addEventListener("click", () => {
   favBtn.classList.toggle("active");
 });
 
-// toggle favoritt på klikk
-favBtn.addEventListener("click", () => {
-  if (typeof toggleFavorite === "function") {
-    toggleFavorite(favId);
-  }
-  favBtn.classList.toggle("active");
-});
-
 
 
     // --- Legg til i riktig grid ---
