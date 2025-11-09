@@ -2649,47 +2649,62 @@ svg#gold-gradient-defs {
 }
 
 /* ============================================
-   💎 Luxury Split Layout v3
-   - Mørk hero + lys base
+   💎 Luxury Hero – Fullbredde mørk topp (v4)
 ============================================ */
-
-/* Mørk hero-topp */
 .luxury-hero {
-  background: linear-gradient(to bottom, #0a0a0a 0%, #1a1a1a 100%);
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* tvinger full bredde */
+  background: linear-gradient(to bottom, #0a0a0a, #1a1a1a 90%);
   color: #fff;
-  padding: 4rem 0 3rem;
   text-align: center;
-  border-bottom: 1px solid #222;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  padding: 5rem 2rem 4rem;
+  border-bottom: 2px solid #d4af37;
+  position: relative;
+  z-index: 1;
 }
 
-/* Lys hoveddel under hero */
+.luxury-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f6e27a, #d4af37, #f6e27a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: goldWave 8s linear infinite;
+}
+
+.luxury-hero p {
+  color: #ddd;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+@keyframes goldWave {
+  0% { background-position: 200% center; }
+  50% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Lys seksjon rett under hero */
 .luxury-section {
   background-color: #fff;
   color: #111;
   padding: 3rem 0;
 }
 
-/* Myk overgang mellom mørk og lys del */
+/* Myk overgang (fade) mellom hero og første hvite seksjon */
 .luxury-hero::after {
   content: "";
-  display: block;
-  height: 40px;
-  background: linear-gradient(to bottom, rgba(10,10,10,1), rgba(255,255,255,0));
-  position: relative;
-  bottom: -1px;
-  z-index: 2;
-}
-
-/* Liten “kort”-effekt på seksjoner */
-.luxury-section > div,
-#luxuryBrandGrid,
-#luxuryGoldPickGrid,
-#luxuryProductGrid {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 0 12px rgba(0,0,0,0.05);
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(26,26,26,1), rgba(255,255,255,0));
+  z-index: 0;
 }
 
 
