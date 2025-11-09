@@ -1,42 +1,53 @@
 // ======================================================
-// ✅ Product page — Single source of truth: Google Sheets
-// Nå med støtte for Luxury Corner (uten å bryte noe)
+// ✅ Product page — Felles for vanlige + Luxury produkter
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const productId = Number(params.get("id"));
-  const isLuxury = params.get("luxury") === "true"; // 💎 Nytt: sjekk om luxury-produkt
+  const isLuxuryParam = params.get("luxury") === "true";
 
   if (!productId) {
     console.error("❌ Ingen produkt-ID i URL");
     return;
   }
 
-  // ✅ Velg riktig Google Sheet basert på parameter
-  let SHEET_ID, SHEET_NAME;
+  // 🟦 Primære kilder
+  const MAIN_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const MAIN_SHEET_NAME = "BrandRadarProdukter";
+  const LUXURY_SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
+  const LUXURY_SHEET_NAME = "LuxuryProducts";
 
-  if (isLuxury) {
-    SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
-    SHEET_NAME = "LuxuryProducts";
-  } else {
-    SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-    SHEET_NAME = "BrandRadarProdukter";
+  // 🔹 Forsøk 1: BrandRadar (standard)
+  let products = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
+    .then(r => r.json())
+    .catch(() => []);
+
+  let product = products.find(p => Number(p.id) === productId);
+
+  // 🔹 Forsøk 2: Luxury-arket
+  if (!product) {
+    const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
+      .then(r => r.json())
+      .catch(() => []);
+    product = luxuryProducts.find(p => Number(p.id) === productId);
+    if (product) {
+      products = luxuryProducts;
+      product.sheet_source = "luxury";
+    }
   }
 
-  // ✅ Hent produktdata
-  const products = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
-    .then(r => r.json())
-    .catch(err => console.error("❌ Klarte ikke hente produkter", err));
-
-  const product = products.find(p => Number(p.id) === productId);
   if (!product) return alert("Produktet ble ikke funnet!");
 
-  // ✅ Sett produktinfo
+  const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
+
+  // ======================================================
+  // ✅ Sett inn produktinfo
+  // ======================================================
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent =
-   product.info || product.description || "Dette eksklusive produktet kombinerer kvalitet og eleganse.";
+    product.info || product.description || "Dette eksklusive produktet kombinerer kvalitet og eleganse.";
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.product_url;
 
@@ -64,8 +75,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   ].filter(Boolean);
 
   mainImg.src = images[0] || "https://via.placeholder.com/600x700?text=No+Image";
-
   thumbs.innerHTML = "";
+
   images.forEach((src, i) => {
     const img = document.createElement("img");
     img.src = src;
@@ -85,14 +96,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ✅ Favorittknapp
   setupFavoriteButton(product);
 
-  // 💎 BONUS: Luxury styling (uten å påvirke vanlige sider)
+  // 💎 Luxury styling
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
     document.getElementById("product-price").style.color = "#d4af37";
     document.getElementById("product-title").style.color = "#111";
   }
 });
-
 
 // ======================================================
 // ✅ Relaterte produkter
@@ -139,8 +149,8 @@ async function loadRecommendations(products, currentProduct) {
       </div>
     `;
 
-    // 💎 Hvis luxury=true, behold parameter i lenken
-    const luxuryParam = (currentProduct.goldpick || currentProduct.sheet_source === "luxury") ? "&luxury=true" : "";
+    // Behold luxury-param hvis aktuelt
+    const luxuryParam = (currentProduct.sheet_source === "luxury") ? "&luxury=true" : "";
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}${luxuryParam}`;
     });
@@ -151,9 +161,8 @@ async function loadRecommendations(products, currentProduct) {
   updateSliderNav();
 }
 
-
 // ======================================================
-// ✅ Favoritt-knapp (uendret, men støtter luxury)
+// ✅ Favoritt-knapp
 // ======================================================
 function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
@@ -175,9 +184,8 @@ function setupFavoriteButton(product) {
   });
 }
 
-
 // ======================================================
-// ✅ Slider arrows
+// ✅ Slider navigation
 // ======================================================
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
@@ -200,7 +208,6 @@ btnNext?.addEventListener("click", () => {
 });
 
 slider?.addEventListener("scroll", updateSliderNav);
-
 
 // ======================================================
 // ✅ Tilbake-knapp
