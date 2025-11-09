@@ -2649,6 +2649,26 @@ svg#gold-gradient-defs {
 }
 
 
+/* ============================================
+   💎 Luxury Layout – Delt bakgrunn
+============================================ */
+.luxury-hero-banner {
+  background-color: #0a0a0a;
+  color: #fff;
+}
+
+.luxury-section {
+  background-color: #fff;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border-top: 1px solid #eee;
+}
+
+/* Mellomrom mellom hero og første seksjon */
+.luxury-hero-banner + .luxury-section {
+  margin-top: -1rem;
+}
+
 
 
 
