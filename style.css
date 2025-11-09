@@ -2650,23 +2650,45 @@ svg#gold-gradient-defs {
 
 
 /* ============================================
-   💎 Luxury Layout – Delt bakgrunn
+   💎 Luxury Split Layout v2
+   - Mørk hero + lys hoveddel
 ============================================ */
-.luxury-hero-banner {
-  background-color: #0a0a0a;
-  color: #fff;
-}
-
-.luxury-section {
+body.luxury-page {
   background-color: #fff;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  border-top: 1px solid #eee;
 }
 
-/* Mellomrom mellom hero og første seksjon */
+/* Hero-banneret skal være mørkt, eksklusivt */
+.luxury-hero-banner {
+  background: linear-gradient(to bottom, #0a0a0a 0%, #1a1a1a 100%);
+  color: #fff;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Alle seksjoner under heroen */
+main.luxury-main,
+section.luxury-section {
+  background-color: #fff;
+  color: #111;
+  padding: 3rem 0;
+}
+
+/* Avstand mellom hero og første seksjon */
 .luxury-hero-banner + .luxury-section {
-  margin-top: -1rem;
+  margin-top: 0;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+/* Hvit boksfølelse for gridene */
+.luxury-section > div,
+#luxuryBrandGrid,
+#luxuryGoldPickGrid,
+#luxuryProductGrid {
+  background: #fff;
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
 
 
