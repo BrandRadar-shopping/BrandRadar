@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ✅ Sett produktinfo
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
-  document.getElementById("product-desc").textContent = product.description || "";
+  document.getElementById("product-desc").textContent =
+   product.info || product.description || "Dette eksklusive produktet kombinerer kvalitet og eleganse.";
   document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.product_url;
 
