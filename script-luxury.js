@@ -134,10 +134,10 @@ function renderLuxuryProducts() {
       </div>
     `;
 
-    // Klikk på kort → produktdetalj (ikke hjerte)
+    // --- Klikk på kort → produktdetalj ---
 card.addEventListener("click", (e) => {
   // stopper produktnavigasjon hvis hjerte eller noe inni hjerte blir trykket
-  if (e.target.matches(".fav-btn, .fav-btn *")) return;
+  if (e.target.closest(".fav-btn")) return;
 
   if (p.id) {
     window.location.href = `product.html?id=${p.id}`;
@@ -146,18 +146,19 @@ card.addEventListener("click", (e) => {
   }
 });
 
-    // ❤️ Favorittknapp logikk (forhindrer kortklikk fullstendig)
+// --- ❤️ Favorittknapp logikk ---
 const favBtn = card.querySelector(".fav-btn");
 
-// hindrer at hjertet klikker produktet
+// stopp ALT klikkbubbling på hjertet
 ["click", "mousedown", "mouseup"].forEach(evt => {
   favBtn.addEventListener(evt, e => {
-    e.stopImmediatePropagation(); // stopp all bubbling
-    e.preventDefault();           // unngå standard handling
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    e.preventDefault();
   });
 });
 
-// toggle favoritt på klikk
+// toggle favoritt
 favBtn.addEventListener("click", () => {
   if (typeof toggleFavorite === "function") {
     toggleFavorite(favId);
