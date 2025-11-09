@@ -2533,7 +2533,7 @@ nav.mega-menu .menu-section {
   stroke: #111;
   stroke-width: 1.2;
   transition: all 0.35s ease;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 /* ✅ Når aktiv (favoritt) → Gullfyll + lett glød */
@@ -2567,6 +2567,7 @@ svg#gold-gradient-defs {
   background: #e63946;
   color: #fff;
 }
+
 
 
 
