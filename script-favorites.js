@@ -164,8 +164,9 @@ function loadFavoriteProducts() {
 
     // Klikk = gå til produkt
     card.addEventListener("click", () => {
-      window.location.href = `product.html?id=${product.id}`;
-    });
+  const luxuryParam = product.luxury ? "&luxury=true" : "";
+  window.location.href = `product.html?id=${product.id}${luxuryParam}`;
+});
 
     // Fjern favoritt tag
     card.querySelector(".remove-tag").addEventListener("click", (e) => {
