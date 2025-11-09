@@ -39,13 +39,15 @@ const toggleFavorite = (product) => {
       image_url: product.image_url,
       product_url: product.product_url,
       category: product.category,
-      rating: product.rating
+      rating: product.rating,
+      luxury: product.sheet_source === "luxury" || product.luxury === true // 💎 NYTT felt
     });
     showToast("✅ Lagt til i favoritter");
   }
 
   saveFavorites(favorites);
 };
+
 
 // ✅ Oppdater teller i navbar
 const updateFavoriteCount = () => {
