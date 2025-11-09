@@ -6,6 +6,13 @@
 const getFavorites = () =>
   JSON.parse(localStorage.getItem("favorites") || "[]");
 
+// ✅ Sjekk om produkt allerede er i favoritter
+const isFavorite = (id) => {
+  const favorites = getFavorites();
+  return favorites.some(f => String(f.id) === String(id));
+};
+
+
 // ✅ Lagre produkter + oppdater teller
 const saveFavorites = (favorites) => {
   localStorage.setItem("favorites", JSON.stringify(favorites));
