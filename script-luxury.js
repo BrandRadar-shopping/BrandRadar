@@ -167,6 +167,7 @@ favBtn.addEventListener("click", () => {
 
 
 
+
     // --- Legg til i riktig grid ---
     if (goldPick) goldGrid.appendChild(card);
     else prodGrid.appendChild(card);
