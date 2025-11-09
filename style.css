@@ -2568,20 +2568,6 @@ svg#gold-gradient-defs {
   color: #fff;
 }
 
-/* ============================================
-   💎 Luxury Product Info
-============================================ */
-body.luxury-mode .product-info .description {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #333;
-  background: #fff9e6;
-  border-left: 4px solid #d4af37;
-  padding: 14px 18px;
-  border-radius: 8px;
-  margin-top: 18px;
-  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.1);
-}
 
 
 
