@@ -160,11 +160,25 @@ const favBtn = card.querySelector(".fav-btn");
 
 // toggle favoritt
 favBtn.addEventListener("click", () => {
-  if (typeof toggleFavorite === "function") {
-    toggleFavorite(favId);
-  }
+  // Gullfyll + visuell toggle
   favBtn.classList.toggle("active");
+
+  // Send hele produktet (p) til toggleFavorite()
+  if (typeof toggleFavorite === "function") {
+    toggleFavorite({
+      id: p.id || favId,
+      title: p.title,
+      brand: p.brand,
+      price: p.price,
+      discount: p.discount,
+      image_url: p.image_url,
+      product_url: p.product_url,
+      category: p.category,
+      rating: p.rating
+    });
+  }
 });
+
 
 
 
