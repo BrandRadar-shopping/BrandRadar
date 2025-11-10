@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.innerHTML = "";
 
     const featured = rows.filter(r =>
-      String(r.featured).toLowerCase() === "true" || String(r.featured).toLowerCase() === "yes"
+    String(r.featured).toLowerCase() === "true" || String(r.featured).toLowerCase() === "yes"
     );
 
     if (!featured.length) {
