@@ -2,8 +2,9 @@
 // 🧭 HERO SLIDER fra Google Sheet (BrandRadar)
 // ============================================
 document.addEventListener("DOMContentLoaded", async () => {
-  const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw"; // samme som de andre arkene
-  const SHEET_NAME = "HeroSlides";
+const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY"; 
+const SHEET_NAME = "HeroSlides";
+ 
 
   const sliderContainer = document.querySelector(".hero-slider .slides");
   const dotsContainer = document.querySelector(".hero-slider .dots");
