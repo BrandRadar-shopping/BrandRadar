@@ -2977,7 +2977,9 @@ svg#gold-gradient-defs {
   background: #fff;
 }
 
-------------------------- partner banner stil ------------------------
+/* =========================================
+   Partner banner stil v2 - slett om ikke ser bra ut ✅
+   ========================================= */
 .partner-banner {
   background: #f9f9f9;
   border-radius: 16px;
@@ -3018,6 +3020,7 @@ svg#gold-gradient-defs {
 .partner-btn:hover {
   background: #0059c9;
 }
+
 
 
 
