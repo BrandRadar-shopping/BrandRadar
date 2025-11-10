@@ -2977,6 +2977,47 @@ svg#gold-gradient-defs {
   background: #fff;
 }
 
+------------------------- partner banner stil ------------------------
+.partner-banner {
+  background: #f9f9f9;
+  border-radius: 16px;
+  padding: 40px;
+  margin: 50px auto;
+  max-width: 1100px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+.partner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.partner-inner img {
+  width: 200px;
+  height: auto;
+  object-fit: contain;
+}
+
+.partner-text {
+  max-width: 600px;
+}
+
+.partner-btn {
+  display: inline-block;
+  background: #0070f3;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.partner-btn:hover {
+  background: #0059c9;
+}
 
 
 
