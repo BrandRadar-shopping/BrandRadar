@@ -2861,6 +2861,122 @@ svg#gold-gradient-defs {
 }
 
 
+/* ============================================
+   🌟 HERO SLIDER
+============================================ */
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  border-radius: 0 0 16px 16px;
+  margin-bottom: 3rem;
+}
+
+.hero-slider .slides {
+  display: flex;
+  transition: transform 0.8s ease;
+  width: 300%;
+}
+
+.hero-slider .slide {
+  flex: 1 0 100%;
+  height: 480px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.hero-slider .slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.slide-content {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  color: #fff;
+  max-width: 420px;
+  text-align: left;
+}
+
+.slide-content h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+.slide-content p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 1.2rem;
+}
+
+.slide-content .btn {
+  background: #0070f3;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.slide-content .btn:hover {
+  background: #0059c1;
+}
+
+/* Navigasjon */
+.hero-slider .nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.3s;
+  z-index: 10;
+}
+
+.hero-slider .nav:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.hero-slider .nav.prev { left: 16px; }
+.hero-slider .nav.next { right: 16px; }
+
+/* Dots */
+.hero-slider .dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.hero-slider .dots span {
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hero-slider .dots span.active {
+  background: #fff;
+}
+
 
 
 
