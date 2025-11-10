@@ -1,13 +1,13 @@
 // ======================================================
 // ✅ BrandRadar – Forside (Picks fra News)
-// Bruker eksisterende "picks"-ark (med liten p)
+// Bruker eksisterende "picks"-ark (med liten p) + tooltip for reason
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("✅ Index script loaded (picks)");
-  
+
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "picks"; // 🔥 liten p, matcher arket nøyaktig
+  const SHEET_NAME = "picks"; // 🔥 liten p
   const grid = document.getElementById("featured-grid");
 
   if (!grid) return;
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const rows = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
     grid.innerHTML = "";
 
-    // 🔍 Filtrer kun featured produkter (TRUE/YES)
     const featured = rows.filter(r =>
       String(r.featured).toLowerCase() === "true" || String(r.featured).toLowerCase() === "yes"
     );
@@ -34,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     featured.slice(0, 12).forEach(p => {
-      // Hvis du ikke har id-kolonne enda → bruk tilfeldig ID
       const id = p.id ? Number(p.id) : Math.floor(Math.random() * 100000);
       const isFav = getFavorites().some(f => Number(f.id) === id);
       const discountTxt = formatDiscount(p.discount);
@@ -42,6 +40,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const card = document.createElement("div");
       card.classList.add("product-card");
+
+      // 🟡 Tooltip med “reason”-tekst (fra Google Sheet)
+      const tooltipText = p.reason ? p.reason.replace(/"/g, "&quot;") : "";
 
       card.innerHTML = `
         ${discountTxt ? `<div class="discount-badge">-${discountTxt}</div>` : ""}
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <img src="${p.image_url}" alt="${p.product_name}">
-        <div class="product-info">
+        <div class="product-info" title="${tooltipText}">
           <h3>${p.product_name}</h3>
           ${p.brand ? `<p class="brand">${p.brand}</p>` : ""}
           ${rating ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>` : ""}
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.innerHTML = "<p>Kunne ikke laste produktene akkurat nå.</p>";
   }
 });
+
 
 
 
