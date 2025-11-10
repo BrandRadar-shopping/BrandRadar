@@ -1,41 +1,58 @@
-// ============================================
+// ======================================================
 // 🧭 HERO SLIDER fra Google Sheet (BrandRadar)
-// ============================================
+// Kombinert versjon – trim, zoom-fix, og bedre stabilitet
+// ======================================================
 document.addEventListener("DOMContentLoaded", async () => {
-const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY"; 
-const SHEET_NAME = "HeroSlides";
- 
+  console.log("✅ Hero slider init");
+
+  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
+  const SHEET_NAME = "HeroSlides";
 
   const sliderContainer = document.querySelector(".hero-slider .slides");
   const dotsContainer = document.querySelector(".hero-slider .dots");
   const prev = document.querySelector(".hero-slider .prev");
   const next = document.querySelector(".hero-slider .next");
 
+  if (!sliderContainer) {
+    console.warn("⚠️ Fant ikke .hero-slider-container");
+    return;
+  }
+
   try {
-    const slidesData = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
-      .then(r => r.json());
+    const slidesDataRaw = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+    const slidesData = slidesDataRaw
+      .filter(s => s.image_url && s.image_url.trim().startsWith("http"))
+      .map(s => ({
+        image_url: s.image_url.trim(),
+        title: s.title?.trim() || "",
+        subtitle: s.subtitle?.trim() || "",
+        link: s.link?.trim() || "",
+        button_text: s.button_text?.trim() || "Les mer",
+        active: String(s.active || "").toLowerCase() === "true"
+      }));
 
     if (!slidesData.length) {
       sliderContainer.innerHTML = "<p>Ingen slides tilgjengelig.</p>";
       return;
     }
 
-    // Lag slides dynamisk
+    // 🖼️ Lag slides
     sliderContainer.innerHTML = slidesData
-      .filter(s => s.image_url)
-      .map((s, i) => `
-        <div class="slide${s.active?.toLowerCase() === 'true' || i === 0 ? ' active' : ''}" 
+      .map(
+        (s, i) => `
+        <div class="slide${s.active || i === 0 ? " active" : ""}" 
              style="background-image:url('${s.image_url}');">
           <div class="slide-content">
-            <h1>${s.title || ''}</h1>
-            <p>${s.subtitle || ''}</p>
-            ${s.link ? `<a href="${s.link}" class="btn">${s.button_text || 'Les mer'}</a>` : ''}
+            ${s.title ? `<h1>${s.title}</h1>` : ""}
+            ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
+            ${s.link ? `<a href="${s.link}" class="btn">${s.button_text}</a>` : ""}
           </div>
         </div>
-      `)
+      `
+      )
       .join("");
 
-    // Dot-navigasjon
+    // 🔘 Dot-navigasjon
     const slides = document.querySelectorAll(".hero-slider .slide");
     slides.forEach((_, i) => {
       const dot = document.createElement("span");
@@ -45,7 +62,8 @@ const SHEET_NAME = "HeroSlides";
     });
     const dots = dotsContainer.querySelectorAll("span");
 
-    let index = slidesData.findIndex(s => s.active?.toLowerCase() === "true");
+    // 🎞️ Slidebytte
+    let index = slidesData.findIndex(s => s.active);
     if (index < 0) index = 0;
     let timer;
 
@@ -74,3 +92,4 @@ const SHEET_NAME = "HeroSlides";
     console.error("❌ Klarte ikke hente HeroSlides:", err);
   }
 });
+
