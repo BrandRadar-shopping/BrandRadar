@@ -1,25 +1,27 @@
 // ======================================================
-// ✅ Index Page — Featured Products with Favorites + ID Routing
+// ✅ BrandRadar – Ukens Radar Picks (med favoritter)
+// Kombinerer logikk fra tidligere index.js + nytt layout
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Index script loaded");
 
   const SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const SHEET_NAME = "BrandRadarProdukter";
-  const productGrid = document.querySelector(".product-grid");
+  const SHEET_NAME = "picks_sheet"; // 💡 hent ukens utvalgte fra Google Sheet
+  const productGrid = document.getElementById("featured-grid");
 
   if (!productGrid) {
-    console.warn("⚠️ Fant ikke .product-grid på index.html");
+    console.warn("⚠️ Fant ikke #featured-grid på index.html");
     return;
   }
 
+  // --- Hjelpefunksjoner ---
   const toNumber = (v) => (v === null || v === undefined || v === "" ? NaN : Number(v));
 
   const formatDiscount = (value) => {
-    if (value === null || value === undefined || value === "") return "";
+    if (!value) return "";
     let num = parseFloat(String(value).replace("%", "").trim());
-    if (!isNaN(num) && num > 0 && num < 1) num *= 100;  // 0.2 -> 20%
+    if (!isNaN(num) && num > 0 && num < 1) num *= 100;
     if (isNaN(num)) return "";
     return `${Math.round(num)}%`;
   };
@@ -30,22 +32,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return isNaN(n) ? null : n;
   };
 
+  // --- Hent produkter ---
   fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
     .then((res) => res.json())
     .then((rows) => {
-      console.log("✅ Products loaded:", rows.length);
+      console.log("✅ Radar Picks loaded:", rows.length);
 
       if (!rows.length) {
         productGrid.innerHTML = "<p>Ingen produkter tilgjengelig.</p>";
         return;
       }
 
-      // Velg et tilfeldig utvalg (12) til forsiden
-      const shuffled = [...rows].sort(() => Math.random() - 0.5).slice(0, 12);
-
       productGrid.innerHTML = "";
 
-      shuffled.forEach((p) => {
+      rows.slice(0, 12).forEach((p) => {
         const id = toNumber(p.id);
         if (!id || !p.title || !p.image_url) return;
 
@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const rating = parseRating(p.rating);
         const discountTxt = formatDiscount(p.discount);
 
+        // --- Bygg kort ---
         const card = document.createElement("div");
         card.classList.add("product-card");
 
@@ -71,22 +72,21 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="product-info">
             <h3>${p.title}</h3>
             ${p.brand ? `<p class="brand">${p.brand}</p>` : ""}
-            ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
+            ${rating ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>` : ""}
             ${p.price ? `<p class="price">${p.price} kr</p>` : ""}
           </div>
         `;
 
-        // Klikk på kortet -> product.html?id=...
+        // --- Klikk på kortet -> produktdetalj ---
         card.addEventListener("click", (e) => {
-          if (e.target.closest(".fav-icon")) return; // unngå navigasjon når man trykker på hjerte
+          if (e.target.closest(".fav-icon")) return;
           window.location.href = `product.html?id=${id}`;
         });
 
-        // Favoritt-knapp (SVG)
+        // --- Favoritt-knapp ---
         card.querySelector(".fav-icon").addEventListener("click", (e) => {
           e.stopPropagation();
 
-          // Lag "cleanProduct" på samme format som i script-favorites.js
           const cleanProduct = {
             id,
             title: p.title,
@@ -106,9 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
           };
 
           const existing = getFavorites().some((f) => Number(f.id) === id);
-          toggleFavorite(cleanProduct); // håndterer lagring + toast + teller
-
-          // UI-oppdatering for hjertet
+          toggleFavorite(cleanProduct);
           e.currentTarget.classList.toggle("active", !existing);
         });
 
@@ -120,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       productGrid.innerHTML = "<p>Kunne ikke laste produkter akkurat nå.</p>";
     });
 });
+
 
 
 
