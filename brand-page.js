@@ -1,39 +1,42 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page (Clean Final Version)
+// ✅ BrandRadar – Brand Page (vanlig + Luxury)
 // ======================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const brandName = new URLSearchParams(window.location.search).get("brand");
   if (!brandName) return;
 
-  // Sheets
-  const brandInfoUrl = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
-  const productUrl   = "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
+  // --- Google Sheets Sources
+  const MAIN_BRAND_URL =
+    "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+  const MAIN_PRODUCTS_URL =
+    "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
 
-  // DOM
+  const LUXURY_BRAND_URL =
+    "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryBrands";
+  const LUXURY_PRODUCTS_URL =
+    "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryProducts";
+
+  // --- DOM refs
   const titleEl = document.getElementById("brand-title");
-  const descEl  = document.getElementById("brand-description");
-  const logoEl  = document.getElementById("brand-logo");
+  const descEl = document.getElementById("brand-description");
+  const logoEl = document.getElementById("brand-logo");
   const siteBtn = document.getElementById("brand-site-btn");
-  const favBtn  = document.getElementById("favorite-brand-btn");
-
+  const favBtn = document.getElementById("favorite-brand-btn");
   const grid = document.querySelector(".product-grid");
   const emptyMsg = document.querySelector(".empty-message");
   const resultCount = document.querySelector(".result-count");
   const categorySelect = document.getElementById("category-filter");
   const sortSelect = document.getElementById("sort-select");
 
-  // --- Favorite Brand (localStorage)
+  // --- Favorites logic
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
   function toggleFavBrand() {
     let favs = getFavBrands();
-    if (favs.includes(brandName)) {
-      favs = favs.filter(b => b !== brandName);
-    } else {
-      favs.push(brandName);
-    }
+    if (favs.includes(brandName)) favs = favs.filter(b => b !== brandName);
+    else favs.push(brandName);
     localStorage.setItem("favoriteBrands", JSON.stringify(favs));
     updateFavUI();
     updateFavoriteCount?.();
@@ -46,73 +49,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   favBtn?.addEventListener("click", toggleFavBrand);
 
-  // --- Fetch brand info
-  fetch(brandInfoUrl)
-    .then(r => r.json())
-    .then(rows => {
-      const brand = rows.find(
-        b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
-      );
-      if (!brand) return;
+  // --- Fetch both normal + luxury brand data
+  const [mainBrands, luxuryBrands] = await Promise.all([
+    fetch(MAIN_BRAND_URL).then(r => r.json()).catch(() => []),
+    fetch(LUXURY_BRAND_URL).then(r => r.json()).catch(() => [])
+  ]);
 
-      if (titleEl) titleEl.textContent = brand.brand || brandName;
-      if (descEl)  descEl.textContent  = brand.about || "Ingen informasjon tilgjengelig.";
-      if (logoEl)  logoEl.src          = brand.logo || "";
-      if (siteBtn) siteBtn.href        = brand.homepage_url || "#";
+  const allBrands = [...mainBrands, ...luxuryBrands];
+  const brand = allBrands.find(
+    b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
+  );
 
-      // Populate category filter (optional)
-      if (brand.categories && categorySelect) {
-        brand.categories
-          .split(",")
-          .map(c => c.trim())
-          .filter(Boolean)
-          .forEach(cat => {
-            const opt = document.createElement("option");
-            opt.value = cat;
-            opt.textContent = cat;
-            categorySelect.appendChild(opt);
-          });
-      }
+  const isLuxury = luxuryBrands.some(
+    b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
+  );
 
-      updateFavUI();
-    })
-    .catch(() => { /* ignore */ });
+  if (brand) {
+    if (titleEl) titleEl.textContent = brand.brand || brandName;
+    if (descEl)
+      descEl.textContent =
+        brand.about || brand.description || "Ingen informasjon tilgjengelig.";
+    if (logoEl) logoEl.src = brand.logo || brand.image_url || "";
+    if (siteBtn) siteBtn.href = brand.homepage_url || brand.link || "#";
+  }
 
-  // --- Fetch products
-  let brandProducts = [];
+  updateFavUI();
 
-  fetch(productUrl)
-    .then(r => r.json())
-    .then(products => {
-      brandProducts = products.filter(
-        p => p.brand && p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
-      );
+  // --- Fetch both normal + luxury products
+  const [mainProducts, luxuryProducts] = await Promise.all([
+    fetch(MAIN_PRODUCTS_URL).then(r => r.json()).catch(() => []),
+    fetch(LUXURY_PRODUCTS_URL).then(r => r.json()).catch(() => [])
+  ]);
 
-      if (!brandProducts.length) {
-        if (emptyMsg) emptyMsg.style.display = "block";
-        if (resultCount) resultCount.textContent = "0 produkter";
-        return;
-      }
+  const allProducts = [...mainProducts, ...luxuryProducts];
+  let brandProducts = allProducts.filter(
+    p => p.brand && p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
+  );
 
-      applyFiltersAndSort();
-      updateFavoriteCount?.();
-    })
-    .catch(() => {
-      if (emptyMsg) emptyMsg.style.display = "block";
-    });
+  if (!brandProducts.length) {
+    emptyMsg.style.display = "block";
+    resultCount.textContent = "0 produkter";
+  } else {
+    applyFiltersAndSort();
+  }
 
-  // --- Helpers for sorting
-  const cleanPrice  = v => parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-  const cleanRating = v => parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+  // --- Helpers
+  const cleanPrice = v =>
+    parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+  const cleanRating = v =>
+    parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-  // --- Filter + sort pipeline
   function applyFiltersAndSort() {
     let list = [...brandProducts];
-
     if (categorySelect && categorySelect.value !== "all") {
       list = list.filter(p => (p.category || "").trim() === categorySelect.value);
     }
-
     if (sortSelect) {
       switch (sortSelect.value) {
         case "price-asc":
@@ -124,56 +115,51 @@ document.addEventListener("DOMContentLoaded", () => {
         case "rating-desc":
           list.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
           break;
-        // "featured" or default: no sort
       }
     }
-
     renderProducts(list);
   }
 
-  // --- Render product cards
+  // --- Render products
   function renderProducts(list) {
-    if (!grid) return;
     grid.innerHTML = "";
-
     if (!list.length) {
-      if (emptyMsg) emptyMsg.style.display = "block";
-      if (resultCount) resultCount.textContent = "0 produkter";
+      emptyMsg.style.display = "block";
+      resultCount.textContent = "0 produkter";
       return;
     }
-
-    if (emptyMsg) emptyMsg.style.display = "none";
-    if (resultCount) resultCount.textContent = `${list.length} produkter`;
+    emptyMsg.style.display = "none";
+    resultCount.textContent = `${list.length} produkter`;
 
     list.forEach(p => {
       const id = p.id;
       const ratingNum = cleanRating(p.rating);
       const rating = ratingNum ? ratingNum.toFixed(1) : null;
 
+      const isLuxuryProd = isLuxury || p.sheet_source === "luxury";
+      const luxuryParam = isLuxuryProd ? "&luxury=true" : "";
+
       const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
-        <img src="${p.image_url}" alt="${p.title}">
+        <img src="${p.image_url}" alt="${p.title || p.product_name}">
         <div class="product-info">
-          <h3>${p.title}</h3>
+          <h3>${p.title || p.product_name}</h3>
           ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
           <p class="price">${p.price ? `${p.price} kr` : ""}</p>
         </div>
       `;
 
       card.addEventListener("click", () => {
-        window.location.href = `product.html?id=${id}`;
+        window.location.href = `product.html?id=${id}${luxuryParam}`;
       });
 
       grid.appendChild(card);
     });
   }
 
-  // Listeners
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
-
-  updateFavUI();
 });
 
 
