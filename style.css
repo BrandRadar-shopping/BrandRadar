@@ -3146,39 +3146,106 @@ svg#gold-gradient-defs {
 
 
 
-/* --- Brand Info Card Layout --- */
+/* --- Brand Info Card Layout (rebalansert grid) --- */
 .brand-info-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: 280px 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 3rem;
-  padding: 2rem 3rem;
+  gap: 2.5rem;
+  padding: 2.5rem 3rem;
   background: #fff;
   border-radius: 16px;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 3rem auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
+.brand-info-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .brand-info-left img {
   width: 200px;
-  max-width: 250px;
+  max-width: 100%;
   height: auto;
   display: block;
+  margin: 0 auto;
+}
+
+.brand-info-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.brand-info-right h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.brand-info-right p {
+  line-height: 1.6;
+  color: #444;
   margin-bottom: 0.5rem;
 }
 
-/* --- Luxury Badge (under logo) --- */
+/* Buttons */
+.brand-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.brand-btn,
+.brand-btn-outline {
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.brand-btn {
+  background: #000;
+  color: white;
+}
+
+.brand-btn:hover {
+  opacity: 0.85;
+}
+
+.brand-btn-outline {
+  background: transparent;
+  border: 1.8px solid #000;
+}
+
+.brand-btn-outline:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* --- Luxury badge under logo --- */
 .luxury-badge-under {
   font-size: 0.9rem;
-  font-weight: 600;
-  background: linear-gradient(90deg, #f8d347, #ffd700, #fff4c1);
+  font-weight: 700;
+  background: linear-gradient(110deg, #f5d76e 0%, #ffd700 40%, #fff4c1 70%, #f5d76e 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
-  margin-top: 0.5rem;
-  animation: fadeInLuxury 0.8s ease;
+  margin-top: 0.8rem;
+  animation: shimmerGold 4s linear infinite;
 }
+
+@keyframes shimmerGold {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
 @keyframes fadeInLuxury {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
@@ -3261,6 +3328,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .heart-icon {
   fill: #e63946;
 }
+
 
 
 
