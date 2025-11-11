@@ -160,8 +160,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
 
       card.addEventListener("click", () => {
-      window.location.href = `product.html?id=\${id}\${luxuryParam}\`;
-      });
+  window.location.href = `product.html?id=${id}${luxuryParam}`;
+});
 
       grid.appendChild(card);
     });
