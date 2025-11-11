@@ -1,12 +1,12 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page (vanlig + Luxury + hearts)
+// ✅ BrandRadar – Brand Page (vanlig + Luxury + refined UI)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   const brandName = new URLSearchParams(window.location.search).get("brand");
   if (!brandName) return;
 
-  // --- Helpers (må ligge øverst)
+  // --- Helpers
   const cleanPrice = v =>
     parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
   const cleanRating = v =>
@@ -69,16 +69,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // --- Sett brandinfo
   if (brand) {
-    if (titleEl)
-      titleEl.innerHTML = `${brand.brand || brandName}${
-        isLuxury
-          ? ' <span class="luxury-badge">Luxury Brand ✨</span>'
-          : ""
-      }`;
+    if (titleEl) titleEl.textContent = brand.brand || brandName;
     if (descEl)
       descEl.textContent =
         brand.about || brand.description || "Ingen informasjon tilgjengelig.";
-    if (logoEl) logoEl.src = brand.logo || brand.image_url || "";
+    if (logoEl) {
+      logoEl.src = brand.logo || brand.image_url || "";
+      if (isLuxury) {
+        const badge = document.createElement("div");
+        badge.className = "luxury-badge-under";
+        badge.textContent = "Luxury Brand ✨";
+        logoEl.parentElement.appendChild(badge);
+      }
+    }
     if (siteBtn) siteBtn.href = brand.homepage_url || brand.link || "#";
   }
 
@@ -127,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderProducts(list);
   }
 
-  // --- Render cards (med favoritt-ikon)
+  // --- Render cards
   function renderProducts(list) {
     grid.innerHTML = "";
     if (!list.length) {
@@ -146,9 +149,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const img = p.image_url || p.image || p.img || "";
       const name = p.title || p.product_name || p.name || "Uten navn";
       if (!img) return;
-
-      const isLuxuryProd = isLuxury || p.sheet_source === "luxury";
-      const luxuryParam = isLuxuryProd ? "&luxury=true" : "";
 
       const isFav = getFavorites().some(f => Number(f.id) === Number(id));
 
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // klikk for produkt
       card.addEventListener("click", e => {
         if (e.target.closest(".fav-icon")) return;
-        window.location.href = `product.html?id=${id}${luxuryParam}`;
+        window.location.href = `product.html?id=${id}`;
       });
 
       // favoritt
@@ -204,4 +204,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
 });
+
 
