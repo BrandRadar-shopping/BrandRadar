@@ -1,5 +1,5 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page (vanlig + Luxury)
+// ✅ BrandRadar – Brand Page (vanlig + Luxury + hearts)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
   const MAIN_PRODUCTS_URL =
     "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
-
   const LUXURY_BRAND_URL =
     "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryBrands";
   const LUXURY_PRODUCTS_URL =
@@ -35,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const categorySelect = document.getElementById("category-filter");
   const sortSelect = document.getElementById("sort-select");
 
-  // --- Favorites logic
+  // --- Favoritter (brands)
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
@@ -55,24 +54,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   favBtn?.addEventListener("click", toggleFavBrand);
 
-  // --- Fetch both normal + luxury brand data
+  // --- Hent brands
   const [mainBrands, luxuryBrands] = await Promise.all([
     fetch(MAIN_BRAND_URL).then(r => r.json()).catch(() => []),
     fetch(LUXURY_BRAND_URL).then(r => r.json()).catch(() => [])
   ]);
-
   const allBrands = [...mainBrands, ...luxuryBrands];
   const brand = allBrands.find(
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
   );
-
   const isLuxury = luxuryBrands.some(
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
   );
 
-  // --- Sett brand info
+  // --- Sett brandinfo
   if (brand) {
-    if (titleEl) titleEl.textContent = brand.brand || brandName;
+    if (titleEl)
+      titleEl.innerHTML = `${brand.brand || brandName}${
+        isLuxury
+          ? ' <span class="luxury-badge">Luxury Brand ✨</span>'
+          : ""
+      }`;
     if (descEl)
       descEl.textContent =
         brand.about || brand.description || "Ingen informasjon tilgjengelig.";
@@ -82,12 +84,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   updateFavUI();
 
-  // --- Fetch both normal + luxury products
+  // --- Hent produkter
   const [mainProducts, luxuryProducts] = await Promise.all([
     fetch(MAIN_PRODUCTS_URL).then(r => r.json()).catch(() => []),
     fetch(LUXURY_PRODUCTS_URL).then(r => r.json()).catch(() => [])
   ]);
-
   const allProducts = [...mainProducts, ...luxuryProducts];
   let brandProducts = allProducts.filter(
     p =>
@@ -102,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     applyFiltersAndSort();
   }
 
-  // --- Filter + sort pipeline
+  // --- Filter & sort
   function applyFiltersAndSort() {
     let list = [...brandProducts];
     if (categorySelect && categorySelect.value !== "all") {
@@ -126,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderProducts(list);
   }
 
-  // --- Render products
+  // --- Render cards (med favoritt-ikon)
   function renderProducts(list) {
     grid.innerHTML = "";
     if (!list.length) {
@@ -142,21 +143,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       const id = p.id || p.product_id || Math.floor(Math.random() * 100000);
       const ratingNum = cleanRating(p.rating);
       const rating = ratingNum ? ratingNum.toFixed(1) : null;
-
       const img = p.image_url || p.image || p.img || "";
       const name = p.title || p.product_name || p.name || "Uten navn";
-
-      if (!img) {
-        console.warn("⚠️ Produkt uten bilde hoppet over:", name);
-        return;
-      }
+      if (!img) return;
 
       const isLuxuryProd = isLuxury || p.sheet_source === "luxury";
       const luxuryParam = isLuxuryProd ? "&luxury=true" : "";
 
+      const isFav = getFavorites().some(f => Number(f.id) === Number(id));
+
       const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
+        <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
+          <svg viewBox="0 0 24 24" class="heart-icon">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+            14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
+            6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+
         <img src="${img}" alt="${name}">
         <div class="product-info">
           <h3>${name}</h3>
@@ -165,8 +172,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
 
-      card.addEventListener("click", () => {
+      // klikk for produkt
+      card.addEventListener("click", e => {
+        if (e.target.closest(".fav-icon")) return;
         window.location.href = `product.html?id=${id}${luxuryParam}`;
+      });
+
+      // favoritt
+      card.querySelector(".fav-icon").addEventListener("click", e => {
+        e.stopPropagation();
+        const cleanProduct = {
+          id,
+          title: name,
+          brand: p.brand,
+          price: p.price,
+          discount: p.discount,
+          image_url: img,
+          product_url: p.product_url || p.link,
+          category: p.category,
+          rating: p.rating
+        };
+        const exists = getFavorites().some(f => Number(f.id) === Number(id));
+        toggleFavorite(cleanProduct);
+        e.currentTarget.classList.toggle("active", !exists);
       });
 
       grid.appendChild(card);
@@ -176,3 +204,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
 });
+
