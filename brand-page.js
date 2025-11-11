@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     fetch(MAIN_BRAND_URL).then(r => r.json()).catch(() => []),
     fetch(LUXURY_BRAND_URL).then(r => r.json()).catch(() => [])
   ]);
+
   const allBrands = [...mainBrands, ...luxuryBrands];
   const brand = allBrands.find(
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
@@ -151,37 +152,37 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!img) return;
 
       const isFav = getFavorites().some(f => Number(f.id) === Number(id));
+      const heartColor = isLuxury ? "heart-icon gold-heart" : "heart-icon";
+
+      const ratingHTML = rating ? `<p class="rating">⭐ ${rating}</p>` : "";
+      const priceHTML = p.price ? `<p class="price">${p.price} kr</p>` : "";
 
       const card = document.createElement("div");
-card.className = "product-card";
-const heartColor = isLuxury ? "heart-icon gold-heart" : "heart-icon";
-card.innerHTML = `
-  <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
-    <svg viewBox="0 0 24 24" class="${heartColor}">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-      2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
-      14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
-      6.86-8.55 11.54L12 21.35z"/>
-    </svg>
-  </div>
-`;
-
-
+      card.className = "product-card";
+      card.innerHTML = `
+        <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
+          <svg viewBox="0 0 24 24" class="${heartColor}">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+            14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
+            6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
         <img src="${img}" alt="${name}">
         <div class="product-info">
           <h3>${name}</h3>
-          ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
-          <p class="price">${p.price ? `${p.price} kr` : ""}</p>
+          ${ratingHTML}
+          ${priceHTML}
         </div>
       `;
 
-      // klikk for produkt
+      // Klikk for produkt
       card.addEventListener("click", e => {
         if (e.target.closest(".fav-icon")) return;
         window.location.href = `product.html?id=${id}`;
       });
 
-      // favoritt
+      // Favoritt
       card.querySelector(".fav-icon").addEventListener("click", e => {
         e.stopPropagation();
         const cleanProduct = {
@@ -207,5 +208,6 @@ card.innerHTML = `
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
 });
+
 
 
