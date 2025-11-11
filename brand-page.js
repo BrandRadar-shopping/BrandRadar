@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const brandName = new URLSearchParams(window.location.search).get("brand");
   if (!brandName) return;
 
+  // --- Helpers (må ligge øverst)
+  const cleanPrice = v =>
+    parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+  const cleanRating = v =>
+    parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+
   // --- Google Sheets Sources
   const MAIN_BRAND_URL =
     "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
@@ -64,6 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
   );
 
+  // --- Sett brand info
   if (brand) {
     if (titleEl) titleEl.textContent = brand.brand || brandName;
     if (descEl)
@@ -83,7 +90,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const allProducts = [...mainProducts, ...luxuryProducts];
   let brandProducts = allProducts.filter(
-    p => p.brand && p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
+    p =>
+      p.brand &&
+      p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
   );
 
   if (!brandProducts.length) {
@@ -93,16 +102,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     applyFiltersAndSort();
   }
 
-   // --- Helpers
-  const cleanPrice = v =>
-    parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-  const cleanRating = v =>
-    parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-
+  // --- Filter + sort pipeline
   function applyFiltersAndSort() {
     let list = [...brandProducts];
     if (categorySelect && categorySelect.value !== "all") {
-      list = list.filter(p => (p.category || "").trim() === categorySelect.value);
+      list = list.filter(
+        p => (p.category || "").trim() === categorySelect.value
+      );
     }
     if (sortSelect) {
       switch (sortSelect.value) {
@@ -160,8 +166,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
 
       card.addEventListener("click", () => {
-  window.location.href = `product.html?id=${id}${luxuryParam}`;
-});
+        window.location.href = `product.html?id=${id}${luxuryParam}`;
+      });
 
       grid.appendChild(card);
     });
@@ -170,7 +176,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
 });
-
-
-
-
