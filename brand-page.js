@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     applyFiltersAndSort();
   }
 
-  // --- Helpers
+   // --- Helpers
   const cleanPrice = v =>
     parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
   const cleanRating = v =>
@@ -128,13 +128,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       resultCount.textContent = "0 produkter";
       return;
     }
+
     emptyMsg.style.display = "none";
     resultCount.textContent = `${list.length} produkter`;
 
     list.forEach(p => {
-      const id = p.id;
+      const id = p.id || p.product_id || Math.floor(Math.random() * 100000);
       const ratingNum = cleanRating(p.rating);
       const rating = ratingNum ? ratingNum.toFixed(1) : null;
+
+      const img = p.image_url || p.image || p.img || "";
+      const name = p.title || p.product_name || p.name || "Uten navn";
+
+      if (!img) {
+        console.warn("⚠️ Produkt uten bilde hoppet over:", name);
+        return;
+      }
 
       const isLuxuryProd = isLuxury || p.sheet_source === "luxury";
       const luxuryParam = isLuxuryProd ? "&luxury=true" : "";
@@ -142,16 +151,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
-        <img src="${p.image_url}" alt="${p.title || p.product_name}">
+        <img src="${img}" alt="${name}">
         <div class="product-info">
-          <h3>${p.title || p.product_name}</h3>
+          <h3>${name}</h3>
           ${rating ? `<p class="rating">⭐ ${rating}</p>` : ""}
           <p class="price">${p.price ? `${p.price} kr` : ""}</p>
         </div>
       `;
 
       card.addEventListener("click", () => {
-        window.location.href = `product.html?id=${id}${luxuryParam}`;
+        window.location.href = \`product.html?id=\${id}\${luxuryParam}\`;
       });
 
       grid.appendChild(card);
