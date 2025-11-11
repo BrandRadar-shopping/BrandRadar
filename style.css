@@ -3329,6 +3329,51 @@ svg#gold-gradient-defs {
   fill: #e63946;
 }
 
+/* === Luxury shimmer text === */
+.luxury-badge-under {
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(
+    110deg,
+    #f5d76e 0%,
+    #ffd700 20%,
+    #fff4c1 40%,
+    #f0c419 60%,
+    #f5d76e 80%,
+    #ffd700 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-top: 0.6rem;
+  animation: shimmerGold 4s linear infinite;
+}
+
+@keyframes shimmerGold {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* === Gold heart for luxury brands === */
+.gold-heart path {
+  fill: url(#gold-gradient);
+}
+
+.gold-heart {
+  fill: #e6b800;
+  transition: transform 0.2s ease, fill 0.3s ease;
+}
+.gold-heart:hover {
+  transform: scale(1.15);
+  fill: #ffcc33;
+}
+
+/* fallback for active luxury favorites */
+.fav-icon.active .gold-heart {
+  fill: #ffd700;
+}
+
 
 
 
