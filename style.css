@@ -1817,108 +1817,6 @@ nav.mega-menu .menu-section {
   transform: scale(0.96);
 }
 
-
-/* ================================
-   ✅ Brand Page Layout – Clean Final
-================================= */
-
-/* 📌 Brand Info Card */
-.brand-info-card {
-  max-width: 1200px;
-  margin: 30px auto 20px;
-  padding: 35px;
-  display: flex;
-  gap: 40px;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  align-items: center;
-}
-
-.brand-info-left img#brand-logo {
-  width: 220px;
-  max-height: 160px;
-  object-fit: contain;
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  border: 1px solid #eee;
-}
-
-.brand-info-right h1 {
-  margin-bottom: 12px;
-  font-size: 28px;
-  font-weight: 700;
-  color: #111;
-}
-
-.brand-info-right p {
-  font-size: 15px;
-  line-height: 1.55;
-  margin-bottom: 20px;
-  max-width: 650px;
-  color: #444;
-}
-
-/* 📌 Buttons */
-.brand-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.brand-btn,
-.brand-btn-outline {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.brand-btn {
-  background: #000;
-  color: #fff;
-  border: 1px solid #000;
-  text-decoration: none;
-}
-
-.brand-btn:hover {
-  background: #222;
-  transform: translateY(-2px);
-}
-
-.brand-btn-outline {
-  background: transparent;
-  border: 1px solid #111;
-  color: #111;
-}
-
-.brand-btn-outline:hover,
-.brand-btn-outline.active {
-  background: #000;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-/* 📌 Responsive */
-@media (max-width: 800px) {
-  .brand-info-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 25px;
-  }
-
-  .brand-buttons {
-    justify-content: center;
-  }
-
-  .brand-info-left img#brand-logo {
-    width: 180px;
-  }
-}
-
 /* ======================================
    ✅ BRAND FAVORITT-IKON — Oppdatert Final
 ====================================== */
@@ -3117,6 +3015,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
