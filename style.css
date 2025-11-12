@@ -176,71 +176,61 @@ body {
 }
 
 /* =========================================
-   IMPROVED PRODUCT CARD DESIGN — REFINED
+   ELITE PRODUCT CARD DESIGN — FINAL POLISH
    ========================================= */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  padding: 2.5rem 1rem;
-  justify-items: center;
-}
-
-/* 🎯 Hovedkort */
 .product-card {
-  background: #ffffff;
-  border-radius: 16px;
+  background: #fff;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   width: 100%;
-  max-width: 280px;
+  max-width: 320px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   text-align: left;
   position: relative;
+  transform-origin: center bottom;
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
-/* 🎨 Produktbilde */
+/* Bilde */
 .product-card img {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1.15 / 1;
   object-fit: cover;
-  border-bottom: 1px solid #e9e9e9;
-  transition: transform 0.4s ease, filter 0.3s ease;
+  border-bottom: 1px solid #efefef;
+  transition: transform 0.5s ease, filter 0.4s ease;
 }
-
 .product-card:hover img {
-  transform: scale(1.05);
-  filter: brightness(1.05);
+  transform: scale(1.06);
+  filter: brightness(1.08);
 }
 
-/* 📄 Produktinfo */
+/* Info */
 .product-info {
-  padding: 1.2rem 1.3rem 1.4rem 1.3rem;
+  padding: 1.4rem 1.5rem 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .product-info h3 {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #111;
-  line-height: 1.35;
-  min-height: 2.6em; /* sikrer lik høyde */
+  line-height: 1.4;
+  min-height: 2.6em;
 }
 
 .product-info .rating {
   font-size: 0.9rem;
-  color: #444;
+  color: #777;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -248,69 +238,69 @@ body {
 
 .product-info .price {
   font-weight: 700;
-  font-size: 1.15rem;
-  color: #0070f3;
-  margin-top: 0.25rem;
+  font-size: 1.25rem;
+  color: #0066ff;
+  letter-spacing: -0.3px;
+  margin-top: 0.4rem;
 }
 
-/* ✨ Discount badge */
+/* Discount Badge */
 .discount-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #ff5252;
+  top: 14px;
+  left: 14px;
+  background: linear-gradient(135deg, #ff5c5c, #ff2d2d);
   color: #fff;
   font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.35rem 0.65rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-weight: 700;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
 }
 
-/* ❤️ Favorittikon */
+/* Favorittikon */
 .fav-icon {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
 }
-
 .fav-icon:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
-
 .heart-icon {
-  width: 22px;
-  height: 22px;
-  stroke: #111;
+  width: 24px;
+  height: 24px;
+  stroke: #222;
   fill: transparent;
-  stroke-width: 1.4px;
-  transition: 0.22s ease;
+  stroke-width: 1.6px;
+  transition: fill 0.25s ease, stroke 0.25s ease;
 }
-
 .fav-icon.active .heart-icon {
-  fill: #ff1f3d;
-  stroke-width: 1.4px;
+  fill: #ff2953;
+  stroke: #ff2953;
 }
 
-/* 🌟 Luxury-kort */
+/* Luxury variant */
 .product-card.luxury {
-  border: 1.5px solid rgba(255,215,0,0.55);
-  box-shadow: 0 4px 18px rgba(255,215,0,0.15);
+  border: 1.5px solid rgba(218, 165, 32, 0.5);
+  box-shadow: 0 6px 25px rgba(218, 165, 32, 0.15);
 }
 .product-card.luxury:hover {
-  box-shadow: 0 6px 25px rgba(255,215,0,0.22);
+  box-shadow: 0 10px 35px rgba(218, 165, 32, 0.25);
 }
 .product-card.luxury .price {
-  color: #c4a400;
+  color: #c9a400;
 }
+
 
 
 /* ============================
@@ -2976,6 +2966,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
