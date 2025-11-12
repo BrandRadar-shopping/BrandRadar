@@ -176,56 +176,44 @@ body {
 }
 
 /* =========================================
-   ELITE PRODUCT CARD v5 — CONSISTENT & CLEAN
+   ELITE PRODUCT CARD v6 — VISUAL FOCUS
    ========================================= */
 .product-card {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   width: 100%;
   max-width: 300px;
-  min-height: 420px; /* 🔒 Ens høyde på kortene */
   display: flex;
   flex-direction: column;
-  position: relative;
   cursor: pointer;
+  border: 1px solid #e5e5e5; /* markert, ren kant */
 }
 
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #d0d0d0;
 }
 
-/* 🔒 Stabil bildeflate – fast høyde + balansert padding */
-.product-card .image-wrapper {
-  width: 100%;
-  height: 240px; /* jevn høyde for alle bilder */
-  background: #f7f7f7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #eee;
-  overflow: hidden;
-}
-
+/* Bilde – fyller hele toppen */
 .product-card img {
-  width: 90%;
-  height: auto;
-  max-height: 200px;
-  object-fit: contain;
-  transition: transform 0.4s ease;
+  width: 100%;
+  height: 260px;
+  object-fit: cover; /* fyller uten forvrengning */
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
 .product-card:hover img {
   transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
 /* Info */
 .product-info {
-  flex: 1;
-  padding: 1.2rem 1.4rem 1.6rem;
+  padding: 1rem 1.2rem 1.4rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -233,18 +221,18 @@ body {
 }
 
 .product-info h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #111;
   line-height: 1.4;
-  margin-bottom: 0.3rem;
-  min-height: 2.6em; /* 🔒 samme høyde uansett tekstlengde */
+  margin-bottom: 0.35rem;
+  min-height: 2.5em;
 }
 
 .product-info .brand {
   color: #777;
   font-size: 0.9rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
 
 .product-info .rating {
@@ -258,39 +246,44 @@ body {
 
 .product-info .price {
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: #0070f3;
   letter-spacing: -0.3px;
   margin-top: auto;
+  transition: color 0.3s ease;
 }
 
-/* Rabatt-badge */
+.product-card:hover .price {
+  color: #0059c1;
+}
+
+/* Rabatt */
 .discount-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 14px;
+  left: 14px;
   background: linear-gradient(135deg, #ff5858, #ff1f3d);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 0.35rem 0.7rem;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
   z-index: 2;
 }
 
 /* Favorittikon */
 .fav-icon {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   width: 28px;
   height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 10;
   transition: transform 0.25s ease;
 }
 
@@ -312,17 +305,18 @@ body {
   stroke: #ff2953;
 }
 
-/* Luksusvariant */
+/* Luxury variant */
 .product-card.luxury {
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.15);
 }
 .product-card.luxury:hover {
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 10px 35px rgba(212, 175, 55, 0.25);
 }
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
@@ -2989,6 +2983,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
