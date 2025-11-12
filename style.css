@@ -3235,36 +3235,6 @@ svg#gold-gradient-defs {
   background: #fff;
 }
 
-/* --- Product Grid --- */
-.product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 2rem auto;
-}
-.product-card {
-  position: relative;
-  width: 240px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  overflow: hidden;
-  transition: transform 0.25s ease;
-}
-.product-card:hover {
-  transform: translateY(-6px);
-}
-.product-card img {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-}
-.product-card .product-info {
-  padding: 0.8rem 1rem 1.2rem;
-  text-align: left;
-}
 
 /* --- Heart Icon --- */
 .product-card .fav-icon {
@@ -3332,6 +3302,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
