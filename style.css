@@ -176,13 +176,13 @@ body {
 }
 
 /* =========================================
-   ELITE PRODUCT CARD DESIGN — FINAL POLISH
+   ELITE PRODUCT CARD DESIGN v4 — POLISHED
    ========================================= */
 .product-card {
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #fdfdfd 100%);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   width: 100%;
   max-width: 320px;
@@ -191,33 +191,34 @@ body {
   flex-direction: column;
   text-align: left;
   position: relative;
-  transform-origin: center bottom;
 }
 
 .product-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%);
 }
 
-/* Bilde */
+/* Produktbilde med subtile bakgrunn og shadow */
 .product-card img {
   width: 100%;
   aspect-ratio: 1.15 / 1;
-  object-fit: cover;
-  border-bottom: 1px solid #efefef;
+  object-fit: contain;
+  background: #f7f7f7;
+  border-bottom: 1px solid #ececec;
   transition: transform 0.5s ease, filter 0.4s ease;
 }
 .product-card:hover img {
-  transform: scale(1.06);
-  filter: brightness(1.08);
+  transform: scale(1.04);
+  filter: brightness(1.1);
 }
 
 /* Info */
 .product-info {
-  padding: 1.4rem 1.5rem 1.6rem;
+  padding: 1.4rem 1.6rem 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .product-info h3 {
@@ -228,9 +229,15 @@ body {
   min-height: 2.6em;
 }
 
+.product-info .brand {
+  color: #777;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 .product-info .rating {
   font-size: 0.9rem;
-  color: #777;
+  color: #666;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -238,32 +245,37 @@ body {
 
 .product-info .price {
   font-weight: 700;
-  font-size: 1.25rem;
-  color: #0066ff;
+  font-size: 1.3rem;
+  color: #0070f3;
   letter-spacing: -0.3px;
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* Discount Badge */
+.product-card:hover .price {
+  color: #0057c2;
+  transform: scale(1.03);
+}
+
+/* Discount badge */
 .discount-badge {
   position: absolute;
   top: 14px;
   left: 14px;
-  background: linear-gradient(135deg, #ff5c5c, #ff2d2d);
+  background: linear-gradient(135deg, #ff5858, #ff1f3d);
   color: #fff;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 0.4rem 0.7rem;
   border-radius: 8px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-  text-transform: uppercase;
 }
 
 /* Favorittikon */
 .fav-icon {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -293,6 +305,7 @@ body {
 .product-card.luxury {
   border: 1.5px solid rgba(218, 165, 32, 0.5);
   box-shadow: 0 6px 25px rgba(218, 165, 32, 0.15);
+  background: linear-gradient(180deg, #fffbe8 0%, #fffdf3 100%);
 }
 .product-card.luxury:hover {
   box-shadow: 0 10px 35px rgba(218, 165, 32, 0.25);
@@ -2966,6 +2979,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
