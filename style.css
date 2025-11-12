@@ -430,58 +430,6 @@ body {
   transform: translateY(0);
 }
 
-/* FAVORITTER */
-.favorites-section {
-  padding: 3rem 2rem;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.favorites-section h2 {
-  text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-}
-
-.favorites-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-
-.favorites-grid .product-card {
-  cursor: pointer;
-  background: white;
-  border-radius: 10px;
-  padding: 1rem;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease;
-}
-
-.favorites-grid .product-card:hover {
-  transform: translateY(-5px);
-}
-
-.remove-fav-btn {
-  background: #ff3b30;
-  color: #fff;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  margin-top: 0.5rem;
-}
-
-.remove-fav-btn:hover {
-  background: #e63228;
-}
-
-.empty-favorites {
-  text-align: center;
-  margin-top: 3rem;
-}
 
 .empty-favorites .back-btn {
   display: inline-block;
@@ -3169,6 +3117,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
