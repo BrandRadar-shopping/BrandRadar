@@ -176,63 +176,75 @@ body {
 }
 
 /* =========================================
-   ELITE PRODUCT CARD DESIGN v4 — POLISHED
+   ELITE PRODUCT CARD v5 — CONSISTENT & CLEAN
    ========================================= */
 .product-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fdfdfd 100%);
-  border-radius: 18px;
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
   width: 100%;
-  max-width: 320px;
-  cursor: pointer;
+  max-width: 300px;
+  min-height: 420px; /* 🔒 Ens høyde på kortene */
   display: flex;
   flex-direction: column;
-  text-align: left;
   position: relative;
+  cursor: pointer;
 }
 
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-  background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* Produktbilde med subtile bakgrunn og shadow */
-.product-card img {
+/* 🔒 Stabil bildeflate – fast høyde + balansert padding */
+.product-card .image-wrapper {
   width: 100%;
-  aspect-ratio: 1.15 / 1;
-  object-fit: contain;
+  height: 240px; /* jevn høyde for alle bilder */
   background: #f7f7f7;
-  border-bottom: 1px solid #ececec;
-  transition: transform 0.5s ease, filter 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
 }
+
+.product-card img {
+  width: 90%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
 .product-card:hover img {
-  transform: scale(1.04);
-  filter: brightness(1.1);
+  transform: scale(1.05);
 }
 
 /* Info */
 .product-info {
-  padding: 1.4rem 1.6rem 1.6rem;
+  flex: 1;
+  padding: 1.2rem 1.4rem 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .product-info h3 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #111;
   line-height: 1.4;
-  min-height: 2.6em;
+  margin-bottom: 0.3rem;
+  min-height: 2.6em; /* 🔒 samme høyde uansett tekstlengde */
 }
 
 .product-info .brand {
   color: #777;
   font-size: 0.9rem;
-  font-weight: 500;
+  margin-bottom: 0.3rem;
 }
 
 .product-info .rating {
@@ -241,74 +253,72 @@ body {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .product-info .price {
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #0070f3;
   letter-spacing: -0.3px;
-  margin-top: 0.6rem;
-  transition: color 0.3s ease, transform 0.3s ease;
+  margin-top: auto;
 }
 
-.product-card:hover .price {
-  color: #0057c2;
-  transform: scale(1.03);
-}
-
-/* Discount badge */
+/* Rabatt-badge */
 .discount-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
+  top: 12px;
+  left: 12px;
   background: linear-gradient(135deg, #ff5858, #ff1f3d);
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.4rem 0.7rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
 /* Favorittikon */
 .fav-icon {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 30px;
-  height: 30px;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 5;
   transition: transform 0.25s ease;
 }
+
 .fav-icon:hover {
   transform: scale(1.1);
 }
+
 .heart-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   stroke: #222;
   fill: transparent;
   stroke-width: 1.6px;
   transition: fill 0.25s ease, stroke 0.25s ease;
 }
+
 .fav-icon.active .heart-icon {
   fill: #ff2953;
   stroke: #ff2953;
 }
 
-/* Luxury variant */
+/* Luksusvariant */
 .product-card.luxury {
-  border: 1.5px solid rgba(218, 165, 32, 0.5);
-  box-shadow: 0 6px 25px rgba(218, 165, 32, 0.15);
-  background: linear-gradient(180deg, #fffbe8 0%, #fffdf3 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
 }
 .product-card.luxury:hover {
-  box-shadow: 0 10px 35px rgba(218, 165, 32, 0.25);
+  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.25);
 }
 .product-card.luxury .price {
   color: #c9a400;
@@ -2979,6 +2989,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
