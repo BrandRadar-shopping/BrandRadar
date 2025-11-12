@@ -157,47 +157,6 @@ body {
   font-weight: 700;
 }
 
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.9rem;
-}
-
-.product-card {
-  background: white;
-  border-radius: 10px;
-  padding: 1rem;
-  text-align: center;
-  position: relative;
-  transition: transform 0.2s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-.discount-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #ff4b4b;
-  color: white;
-  font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-}
-
-.product-card img {
-  width: 100%;
-  border-radius: 8px;
-}
-
-.gender-tag {
-  color: #777;
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-}
-
 /* =========================================
    SMOOTH HOVER ANIMATION
    ========================================= */
@@ -215,7 +174,6 @@ body {
     transform: translateY(0);
   }
 }
-
 
 /* =========================================
    IMPROVED PRODUCT CARD DESIGN
@@ -346,6 +304,7 @@ body {
   font-weight: 600;
   margin-bottom: 0.4rem;
 }
+
 
 /* =========================
    PRODUCT DETAIL – COMPACT LAYOUT
@@ -3373,6 +3332,7 @@ svg#gold-gradient-defs {
 .fav-icon.active .gold-heart {
   fill: #ffd700;
 }
+
 
 
 
