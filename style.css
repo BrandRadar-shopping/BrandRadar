@@ -2841,7 +2841,7 @@ svg#gold-gradient-defs {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 400px; /* ⬆ bredere kort */
+  max-width: 340px; /* ⬆ bredere kort */
   min-height: 540px; /* ⬆ mer vertikal plass */
   display: flex;
   flex-direction: column;
@@ -2978,6 +2978,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
