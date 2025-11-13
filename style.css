@@ -1418,12 +1418,15 @@ nav.mega-menu .menu-section {
 }
 
 /* Grid forbedring */
-.category-products .product-grid {
+.product-grid,
+.category-products .product-grid,
+.brand-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
   padding: 20px 0;
   width: 100%;
+  justify-items: center;
 }
 
 /* Tom kategori melding */
@@ -2975,6 +2978,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
