@@ -1423,7 +1423,7 @@ nav.mega-menu .menu-section {
 .brand-products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+  gap: 15px;
   padding: 20px 0;
   width: 100%;
   justify-items: center;
@@ -2841,7 +2841,7 @@ svg#gold-gradient-defs {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 340px; /* ⬆ bredere kort */
+  max-width: 330px; /* ⬆ bredere kort */
   min-height: 540px; /* ⬆ mer vertikal plass */
   display: flex;
   flex-direction: column;
@@ -2978,6 +2978,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
