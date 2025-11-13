@@ -2828,87 +2828,126 @@ svg#gold-gradient-defs {
 
 
 /* =========================================
-   ELITE PRODUCT CARD v7 — SCALED & FRAMED
+   ELITE PRODUCT CARD v8 — BALANCED & SPACIOUS
    ========================================= */
 .product-card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 1px solid #e1e1e1;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 360px;     /* ⬆ bredere */
-  min-height: 500px;    /* ⬆ høyere */
+  max-width: 400px; /* ⬆ bredere kort */
+  min-height: 540px; /* ⬆ mer vertikal plass */
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  position: relative;
 }
 
 .product-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  border-color: #d5d5d5;
+  border-color: #d0d0d0;
 }
 
-/* 🔹 Bilde — fyller hele toppen */
+/* 🔹 Produktbilde */
 .product-card img {
   width: 100%;
-  height: 340px;        /* ⬆ mer vertikal plass */
-  object-fit: cover;    /* fyller helt opp og ut */
+  height: 360px; /* ⬆ større bilde */
+  object-fit: cover;
   display: block;
   transition: transform 0.4s ease, filter 0.3s ease;
   border-bottom: 1px solid #eee;
 }
 
 .product-card:hover img {
-  transform: scale(1.06);
-  filter: brightness(1.08);
+  transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
-/* 🔹 Info */
+/* 🔹 Informasjonsseksjon */
 .product-info {
-  padding: 1.4rem 1.5rem 1.6rem;
+  padding: 1.2rem 1.4rem 1.6rem;
   display: flex;
   flex-direction: column;
-  text-align: left;
+  justify-content: space-between;
   flex: 1;
+  text-align: left;
 }
 
 .product-info h3 {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #111;
   line-height: 1.4;
-  margin-bottom: 0.35rem;
-  min-height: 2.5em;
+  margin-bottom: 0.4rem;
+  min-height: 2.6em;
 }
 
 .product-info .brand {
-  color: #777;
-  font-size: 0.95rem;
-  margin-bottom: 0.4rem;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
 }
 
 .product-info .rating {
   font-size: 0.9rem;
-  color: #666;
+  color: #555;
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.8rem;
 }
 
 .product-info .price {
-  font-weight: 700;
-  font-size: 1.35rem;
+  font-weight: 800;
+  font-size: 1.5rem;
   color: #0070f3;
   margin-top: auto;
   transition: color 0.3s ease;
 }
-.product-card:hover .price { color: #0057c1; }
 
-/* 🔹 Rabatt */
+.product-card:hover .price {
+  color: #0057c1;
+}
+
+/* 🔹 Favorittikon */
+.fav-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+  z-index: 10;
+}
+
+.fav-icon:hover {
+  transform: scale(1.1);
+}
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.6px;
+  transition: fill 0.25s ease, stroke 0.25s ease;
+}
+
+.fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
+
+/* 🔹 Rabattmerke */
 .discount-badge {
   position: absolute;
   top: 14px;
@@ -2920,34 +2959,7 @@ svg#gold-gradient-defs {
   padding: 0.4rem 0.7rem;
   border-radius: 6px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
-}
-
-/* 🔹 Favorittikon */
-.fav-icon {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease;
-}
-.fav-icon:hover { transform: scale(1.1); }
-
-.heart-icon {
-  width: 24px;
-  height: 24px;
-  stroke: #222;
-  fill: transparent;
-  stroke-width: 1.6px;
-  transition: fill 0.25s ease, stroke 0.25s ease;
-}
-.fav-icon.active .heart-icon {
-  fill: #ff2953;
-  stroke: #ff2953;
+  z-index: 10;
 }
 
 /* 🔹 Luxury variant */
@@ -2955,28 +2967,14 @@ svg#gold-gradient-defs {
   border: 1.5px solid rgba(212, 175, 55, 0.45);
   box-shadow: 0 8px 28px rgba(212, 175, 55, 0.2);
 }
+
 .product-card.luxury:hover {
   box-shadow: 0 12px 38px rgba(212, 175, 55, 0.3);
 }
+
 .product-card.luxury .price {
   color: #c9a400;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
