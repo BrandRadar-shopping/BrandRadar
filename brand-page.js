@@ -8,9 +8,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // --- Helpers
   const cleanPrice = v =>
-    parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+    parseFloat(String(v ?? "").replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+
   const cleanRating = v =>
-    parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+    parseFloat(String(v ?? "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+
+  // Kalkuler %-rabatt hvis discount mangler men old_price finnes
+  const computeDiscountText = p => {
+    const d = (p.discount ?? "").toString().trim();
+    if (d) return d; // allerede oppgitt i arket
+    const price = cleanPrice(p.price);
+    const old = cleanPrice(p.old_price || p.compare_at_price || p.before_price);
+    if (old > 0 && price > 0 && price < old) {
+      const pct = Math.round(((old - price) / old) * 100);
+      return pct > 0 ? `-${pct}%` : "";
+    }
+    return "";
+  };
 
   // --- Google Sheets Sources
   const MAIN_BRAND_URL =
@@ -76,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         brand.about || brand.description || "Ingen informasjon tilgjengelig.";
     if (logoEl) {
       logoEl.src = brand.logo || brand.image_url || "";
-      if (isLuxury) {
+      if (isLuxury && logoEl.parentElement) {
         const badge = document.createElement("div");
         badge.className = "luxury-badge-under";
         badge.textContent = "Luxury Brand ✨";
@@ -101,8 +115,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   if (!brandProducts.length) {
-    emptyMsg.style.display = "block";
-    resultCount.textContent = "0 produkter";
+    emptyMsg && (emptyMsg.style.display = "block");
+    resultCount && (resultCount.textContent = "0 produkter");
   } else {
     applyFiltersAndSort();
   }
@@ -133,15 +147,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // --- Render cards
   function renderProducts(list) {
+    if (!grid) return;
+
     grid.innerHTML = "";
     if (!list.length) {
-      emptyMsg.style.display = "block";
-      resultCount.textContent = "0 produkter";
+      emptyMsg && (emptyMsg.style.display = "block");
+      resultCount && (resultCount.textContent = "0 produkter");
       return;
     }
 
-    emptyMsg.style.display = "none";
-    resultCount.textContent = `${list.length} produkter`;
+    emptyMsg && (emptyMsg.style.display = "none");
+    resultCount && (resultCount.textContent = `${list.length} produkter`);
 
     list.forEach(p => {
       const id = p.id || p.product_id || Math.floor(Math.random() * 100000);
@@ -151,32 +167,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       const name = p.title || p.product_name || p.name || "Uten navn";
       if (!img) return;
 
+      // Disse antas å finnes globalt fra prosjektet (ikke rør funksjonaliteten)
       const isFav = getFavorites().some(f => Number(f.id) === Number(id));
       const heartColor = isLuxury ? "heart-icon gold-heart" : "heart-icon";
 
       const ratingHTML = rating ? `<p class="rating">⭐ ${rating}</p>` : "";
       const priceHTML = p.price ? `<p class="price">${p.price} kr</p>` : "";
 
+      const discountText = computeDiscountText(p);
+      const discountHTML = discountText
+        ? `<div class="discount-badge">${discountText}</div>`
+        : "";
+
       const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
-  ${p.discount ? `<div class="discount-badge">${p.discount}</div>` : ""}
-  <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
-    <svg viewBox="0 0 24 24" class="${heartColor}">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-      2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
-      14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
-      6.86-8.55 11.54L12 21.35z"/>
-    </svg>
-  </div>
-  <img src="${img}" alt="${name}">
-  <div class="product-info">
-    <h3>${name}</h3>
-    ${ratingHTML}
-    ${priceHTML}
-  </div>
-`;
-
+        ${discountHTML}
+        <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
+          <svg viewBox="0 0 24 24" class="${heartColor}">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+            14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
+            6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        <img src="${img}" alt="${name}">
+        <div class="product-info">
+          <h3>${name}</h3>
+          ${ratingHTML}
+          ${priceHTML}
+        </div>
       `;
 
       // Klikk for produkt
@@ -193,7 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           title: name,
           brand: p.brand,
           price: p.price,
-          discount: p.discount,
+          discount: discountText || p.discount || "",
           image_url: img,
           product_url: p.product_url || p.link,
           category: p.category,
