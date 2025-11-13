@@ -2325,20 +2325,7 @@ svg#gold-gradient-defs {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.8rem;
 }
-.product-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  transition: all 0.25s ease;
-  cursor: pointer;
-}
-.product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 22px rgba(0,0,0,0.15); }
-.product-card img {
-  width: 100%;
-  height: 260px;
-  object-fit: contain;
-  border-radius: 14px 14px 0 0;
-}
+
 .product-info { padding: 1rem; text-align: center; }
 .product-info h3 { font-size: 1rem; margin-bottom: 4px; font-weight: 600; }
 .product-info .price { color: #0070f3; font-weight: 700; }
@@ -2974,6 +2961,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
