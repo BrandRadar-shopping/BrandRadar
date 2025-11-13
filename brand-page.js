@@ -174,10 +174,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       const ratingHTML = rating ? `<p class="rating">⭐ ${rating}</p>` : "";
       const priceHTML = p.price ? `<p class="price">${p.price} kr</p>` : "";
 
-      const discountText = computeDiscountText(p);
-      const discountHTML = discountText
-        ? `<div class="discount-badge">${discountText}</div>`
-        : "";
+     let discountText = computeDiscountText(p)?.trim();
+
+// Hvis det er et tall uten %, legg til %
+if (discountText && /^\d+$/.test(discountText)) {
+  discountText += "%";
+}
+
+// Hvis den bare sier "-15", legg til % etter tallet
+if (discountText && /^-\d+$/.test(discountText)) {
+  discountText = discountText + "%";
+}
+
+// Hvis det er tall + %, men ingen tekst, legg til " discount"
+if (discountText && /%$/.test(discountText) && !/discount/i.test(discountText)) {
+  discountText = `${discountText} discount`;
+}
+
+const discountHTML = discountText
+  ? `<div class="discount-badge">${discountText}</div>`
+  : "";
+
 
       const card = document.createElement("div");
       card.className = "product-card";
