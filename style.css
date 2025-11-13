@@ -1422,10 +1422,10 @@ nav.mega-menu .menu-section {
 .category-products .product-grid,
 .brand-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
   padding: 20px 0;
-  width: 100%;
+  width: 80%;
   justify-items: center;
 }
 
@@ -2978,6 +2978,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
