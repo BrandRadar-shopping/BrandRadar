@@ -1425,7 +1425,7 @@ nav.mega-menu .menu-section {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
   padding: 20px 0;
-  width: 60%;
+  width: 100%;
   justify-items: center;
 }
 
@@ -2978,6 +2978,7 @@ svg#gold-gradient-defs {
 .product-card.luxury .price {
   color: #c9a400;
 }
+
 
 
 
