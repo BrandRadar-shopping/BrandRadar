@@ -3186,7 +3186,7 @@ svg#gold-gradient-defs {
   /* BASE LAYOUT */
   display: flex;
   flex-direction: column;
-  width: 208px;
+  width: 280px;
   min-width: 280px;
   max-width: 280px;
   background: #fff;
@@ -3282,6 +3282,7 @@ svg#gold-gradient-defs {
   border-radius: 6px;
   font-weight: 700;
 }
+
 
 
 
