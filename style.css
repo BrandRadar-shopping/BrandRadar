@@ -1213,27 +1213,6 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   display: none;
 }
 
-/* ✅ Produktkort */
-.related-slider .product-card {
-  background: #fff;
-  min-width: 260px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.related-slider .product-card:hover {
-  transform: translateY(-5px);
-}
-
-.related-slider .product-card img {
-  width: 100%;
-  height: 230px;
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
-}
-
 /* ✅ Piler */
 .related-section .slider-btn {
   position: absolute;
@@ -3194,6 +3173,7 @@ svg#gold-gradient-defs {
   font-weight: 700;
   z-index: 4;
 }
+
 
 
 
