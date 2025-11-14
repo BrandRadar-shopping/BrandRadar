@@ -3082,7 +3082,7 @@ svg#gold-gradient-defs {
 
 #related-slider .premium-related-card {
   position: relative;
-  max-width: 290px;
+  max-width: 280px;
   width: 100%;
   border-radius: 14px;
   background: #fff;
@@ -3186,9 +3186,9 @@ svg#gold-gradient-defs {
   /* BASE LAYOUT */
   display: flex;
   flex-direction: column;
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
+  width: 290px;
+  min-width: 290px;
+  max-width: 290px;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -3282,6 +3282,7 @@ svg#gold-gradient-defs {
   border-radius: 6px;
   font-weight: 700;
 }
+
 
 
 
