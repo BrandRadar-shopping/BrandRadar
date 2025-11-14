@@ -3091,6 +3091,27 @@ svg#gold-gradient-defs {
   background: #d63030;
 }
 
+#tab-products .price-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+#tab-products .new-price {
+  color: #111;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+#tab-products .old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
 
 
 
