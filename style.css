@@ -3206,12 +3206,14 @@ svg#gold-gradient-defs {
 /* ---------- BILDET ---------- */
 #related-slider .premium-related-card img {
   width: 100%;
-  height: 260px; /* balansert høyde */
-  object-fit: contain;       /* unngå kutting av skoene */
-  background: #f7f7f7;       /* premium bakgrunn, som favoritter */
+  aspect-ratio: 1 / 0.78;     /* 👈 Samme som favoritter */
+  object-fit: cover;          /* 👈 Premium – fyller hele rammen */
+  display: block;
+  background: #f7f7f7;
   border-radius: 14px 14px 0 0;
   transition: transform 0.35s ease;
 }
+
 
 #related-slider .premium-related-card:hover img {
   transform: scale(1.05);
@@ -3280,6 +3282,7 @@ svg#gold-gradient-defs {
   border-radius: 6px;
   font-weight: 700;
 }
+
 
 
 
