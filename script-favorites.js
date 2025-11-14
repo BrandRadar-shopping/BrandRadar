@@ -12,7 +12,6 @@ const isFavorite = (id) => {
   return favorites.some(f => String(f.id) === String(id));
 };
 
-
 // ✅ Lagre produkter + oppdater teller
 const saveFavorites = (favorites) => {
   localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -23,7 +22,6 @@ const saveFavorites = (favorites) => {
 const toggleFavorite = (product) => {
   const favorites = getFavorites();
   const productId = Number(product.id);
-
   const index = favorites.findIndex(fav => Number(fav.id) === productId);
 
   if (index >= 0) {
@@ -47,7 +45,6 @@ const toggleFavorite = (product) => {
 
   saveFavorites(favorites);
 };
-
 
 // ✅ Oppdater teller i navbar
 const updateFavoriteCount = () => {
@@ -94,44 +91,15 @@ const toggleBrandFavorite = (brand) => {
 };
 
 // ======================================================
-// ✅ Favoritter.html: Tabs og lasting
-// ======================================================
-document.addEventListener("DOMContentLoaded", () => {
-  updateFavoriteCount();
-
-  loadFavoriteProducts(); // ⭐ NYTT - last inn produkter
-
-  const tabBtns = document.querySelectorAll(".tab-btn");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  if (tabBtns.length > 0) {
-    tabBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const showTab = btn.dataset.tab;
-
-        tabBtns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        tabContents.forEach(c =>
-          c.classList.remove("active")
-        );
-        document.getElementById(`tab-${showTab}`).classList.add("active");
-      });
-    });
-
-    loadFavoriteBrands();
-    updateFavoriteTabsCount();
-  }
-});
-
 // ✅ Last inn produkt-favoritter
+// ======================================================
+
 function loadFavoriteProducts() {
   const favorites = getFavorites();
   const grid = document.getElementById("favorites-product-grid");
   const emptyMsg = document.getElementById("empty-products");
 
   if (!grid) return;
-
   grid.innerHTML = "";
 
   if (favorites.length === 0) {
@@ -186,13 +154,17 @@ function loadFavoriteProducts() {
     // Rating
     const rating = document.createElement("p");
     rating.classList.add("rating");
-    if (ratingValue) rating.innerHTML = `⭐ ${ratingValue.toFixed(1)}`;
+    if (ratingValue) {
+      rating.innerHTML = `⭐ ${ratingValue.toFixed(1)}`;
+    } else {
+      rating.innerHTML = `<span style="color:#ccc;">–</span>`;
+    }
 
     // === Prislinje ===
     const priceLine = document.createElement("div");
     priceLine.classList.add("price-line");
 
-    // beregn ny pris hvis discount finnes
+    // Beregn ny pris hvis rabatt finnes
     let newPriceValue = product.price;
     if (product.discount && product.price) {
       const numericPrice = parseFloat(product.price.replace(/[^\d.,]/g, "").replace(",", "."));
@@ -206,7 +178,7 @@ function loadFavoriteProducts() {
     newPrice.textContent = `${newPriceValue} kr`;
     priceLine.appendChild(newPrice);
 
-    // vis gammel pris strøket ut kun hvis rabatt finnes
+    // Vis gammel pris strøket ut kun hvis rabatt finnes
     if (product.discount && product.price) {
       const oldPrice = document.createElement("span");
       oldPrice.classList.add("old-price");
@@ -235,11 +207,58 @@ function loadFavoriteProducts() {
   });
 }
 
+// ======================================================
+// ✅ Brands i favoritter
+// ======================================================
 
+function loadFavoriteBrands() {
+  const favBrands = getFavoriteBrands();
+  const allBrandsData = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
+
+  const grid = document.getElementById("favorites-brand-grid");
+  const emptyMsg = document.getElementById("empty-brands");
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+  if (favBrands.length === 0) {
+    emptyMsg.style.display = "block";
+    return;
+  }
+  emptyMsg.style.display = "none";
+
+  favBrands.forEach(brand => {
+    const brandData = allBrandsData.find(b => b.brand.trim() === brand.trim());
+    if (!brandData) return;
+
+    const card = document.createElement("div");
+    card.classList.add("brand-card");
+
+    card.innerHTML = `
+      <span class="remove-brand-tag" data-brand="${brand}">Fjern</span>
+      <img class="brand-logo" src="${brandData.logo}" alt="${brand}">
+      <h3>${brand}</h3>
+    `;
+
+    card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleBrandFavorite(brand);
+      loadFavoriteBrands();
+      updateFavoriteTabsCount();
+    });
+
+    card.addEventListener("click", () => {
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
+    });
+
+    grid.appendChild(card);
+  });
+}
 
 // ======================================================
 // ✅ Teller
 // ======================================================
+
 function updateFavoriteTabsCount() {
   const elProducts = document.getElementById("fav-products-count");
   const elBrands = document.getElementById("fav-brands-count");
@@ -247,5 +266,35 @@ function updateFavoriteTabsCount() {
   if (elProducts) elProducts.textContent = getFavorites().length;
   if (elBrands) elBrands.textContent = getFavoriteBrands().length;
 }
+
+// ======================================================
+// ✅ DOMContentLoaded – nå nederst (trygt og komplett)
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateFavoriteCount();
+  loadFavoriteProducts();
+
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  if (tabBtns.length > 0) {
+    tabBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const showTab = btn.dataset.tab;
+
+        tabBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        tabContents.forEach(c => c.classList.remove("active"));
+        document.getElementById(`tab-${showTab}`).classList.add("active");
+      });
+    });
+
+    loadFavoriteBrands();
+    updateFavoriteTabsCount();
+  }
+});
+
 
 
