@@ -3099,7 +3099,7 @@ svg#gold-gradient-defs {
 
 #related-slider .premium-related-card img {
   width: 100%;
-  aspect-ratio: 1 / 1.15;
+  aspect-ratio: 1 / 1.1;
   object-fit: cover;
   border-radius: 14px 14px 0 0;
   transition: transform 0.35s ease;
@@ -3173,6 +3173,7 @@ svg#gold-gradient-defs {
   font-weight: 700;
   z-index: 4;
 }
+
 
 
 
