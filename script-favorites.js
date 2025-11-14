@@ -18,7 +18,7 @@ const saveFavorites = (favorites) => {
   updateFavoriteCount();
 };
 
-// ✅ Legg til / fjern produktfavoritt (med rating-fallback)
+// ✅ Legg til / fjern produktfavoritt (nå med universell feltstøtte)
 const toggleFavorite = (product, sourceElement = null) => {
   const favorites = getFavorites();
   const productId = Number(product.id);
@@ -28,8 +28,13 @@ const toggleFavorite = (product, sourceElement = null) => {
     favorites.splice(index, 1);
     showToast("❌ Fjernet fra favoritter");
   } else {
-    // --- Hent rating fra produkt eller DOM ---
-    let ratingValue = product.rating;
+    // --- Hent rating (med fallback for forskjellige feltnavn og DOM) ---
+    let ratingValue =
+      product.rating ||
+      product.Rating ||
+      product["Product Rating"] ||
+      "";
+
     if ((!ratingValue || ratingValue === "") && sourceElement) {
       const ratingEl = sourceElement.querySelector(".rating");
       if (ratingEl) {
@@ -37,23 +42,34 @@ const toggleFavorite = (product, sourceElement = null) => {
       }
     }
 
+    // --- Hent øvrige felter (med store/små bokstaver) ---
+    const title = product.title || product.Name || product.name || "";
+    const brand = product.brand || product.Brand || "";
+    const price = product.price || product.Price || "";
+    const discount = product.discount || product.Discount || "";
+    const image_url = product.image_url || product.Image || product.image || "";
+    const product_url = product.product_url || product.Link || "";
+    const category = product.category || product.Category || "";
+
     favorites.push({
       id: productId,
-      title: product.title,
-      brand: product.brand,
-      price: product.price,
-      discount: product.discount,
-      image_url: product.image_url,
-      product_url: product.product_url,
-      category: product.category,
-      rating: ratingValue || "",
-      luxury: product.sheet_source === "luxury" || product.luxury === true // 💎 NYTT felt
+      title,
+      brand,
+      price,
+      discount,
+      image_url,
+      product_url,
+      category,
+      rating: ratingValue,
+      luxury: product.sheet_source === "luxury" || product.luxury === true
     });
+
     showToast("✅ Lagt til i favoritter");
   }
 
   saveFavorites(favorites);
 };
+
 
 // ✅ Oppdater teller i navbar
 const updateFavoriteCount = () => {
