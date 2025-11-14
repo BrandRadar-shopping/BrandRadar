@@ -18,8 +18,8 @@ const saveFavorites = (favorites) => {
   updateFavoriteCount();
 };
 
-// ✅ Legg til / fjern produktfavoritt
-const toggleFavorite = (product) => {
+// ✅ Legg til / fjern produktfavoritt (med rating-fallback)
+const toggleFavorite = (product, sourceElement = null) => {
   const favorites = getFavorites();
   const productId = Number(product.id);
   const index = favorites.findIndex(fav => Number(fav.id) === productId);
@@ -28,6 +28,15 @@ const toggleFavorite = (product) => {
     favorites.splice(index, 1);
     showToast("❌ Fjernet fra favoritter");
   } else {
+    // --- Hent rating fra produkt eller DOM ---
+    let ratingValue = product.rating;
+    if ((!ratingValue || ratingValue === "") && sourceElement) {
+      const ratingEl = sourceElement.querySelector(".rating");
+      if (ratingEl) {
+        ratingValue = ratingEl.textContent.replace("⭐", "").trim();
+      }
+    }
+
     favorites.push({
       id: productId,
       title: product.title,
@@ -37,7 +46,7 @@ const toggleFavorite = (product) => {
       image_url: product.image_url,
       product_url: product.product_url,
       category: product.category,
-      rating: product.rating,
+      rating: ratingValue || "",
       luxury: product.sheet_source === "luxury" || product.luxury === true // 💎 NYTT felt
     });
     showToast("✅ Lagt til i favoritter");
@@ -268,7 +277,7 @@ function updateFavoriteTabsCount() {
 }
 
 // ======================================================
-// ✅ DOMContentLoaded – nå nederst (trygt og komplett)
+// ✅ DOMContentLoaded – nederst (trygt og komplett)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
