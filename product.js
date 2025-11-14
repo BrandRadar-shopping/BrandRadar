@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ======================================================
-// ✅ Relaterte produkter
+// ✅ Relaterte produkter – Premium Cards (samme som favoritter)
 // ======================================================
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
@@ -114,12 +114,14 @@ async function loadRecommendations(products, currentProduct) {
   const curCat = (currentProduct.category || "").toLowerCase();
   const curBrand = (currentProduct.brand || "").toLowerCase();
 
+  // Finn produkter med samme kategori først
   let matches = products.filter(p =>
     Number(p.id) !== Number(currentProduct.id) &&
     p.image_url &&
     (p.category || "").toLowerCase() === curCat
   );
 
+  // Hvis for få, fyll på med samme brand
   if (matches.length < 4) {
     matches = matches.concat(products.filter(p =>
       Number(p.id) !== Number(currentProduct.id) &&
@@ -128,6 +130,7 @@ async function loadRecommendations(products, currentProduct) {
     ));
   }
 
+  // Fjern duplikater og begrens til 8
   matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
 
   if (!matches.length) {
@@ -136,20 +139,48 @@ async function loadRecommendations(products, currentProduct) {
   }
 
   slider.innerHTML = "";
+
   matches.forEach(p => {
+    // --- Clean rating (samme som favoritter) ---
+    const ratingValue = cleanRating(p.rating);
+
+    // --- Beregn ny pris ---
+    let newPriceValue = p.price;
+    if (p.discount && p.price) {
+      const numericPrice = parseFloat(
+        p.price.replace(/[^\d.,]/g, "").replace(",", ".")
+      );
+      if (!isNaN(numericPrice)) {
+        newPriceValue = (numericPrice * (1 - p.discount / 100)).toFixed(0);
+      }
+    }
+
+    // --- Kortet ---
     const card = document.createElement("div");
-    card.classList.add("product-card");
+    card.classList.add("product-card", "premium-related-card");
 
     card.innerHTML = `
-      ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
-      <img src="${p.image_url}" alt="${p.title}" />
+      ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
+
+      <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+
       <div class="product-info">
-        <h3>${p.title}</h3>
-        <p class="price">${p.price} kr</p>
+        <p class="brand">${p.brand || ""}</p>
+
+        <h3 class="product-name">${p.title}</h3>
+
+        <p class="rating">
+          ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
+        </p>
+
+        <div class="price-line">
+          <span class="new-price">${newPriceValue} kr</span>
+          ${p.discount ? `<span class="old-price">${p.price} kr</span>` : ""}
+        </div>
       </div>
     `;
 
-    // Behold luxury-param hvis aktuelt
+    // Klikk → produkt
     const luxuryParam = (currentProduct.sheet_source === "luxury") ? "&luxury=true" : "";
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}${luxuryParam}`;
@@ -160,6 +191,7 @@ async function loadRecommendations(products, currentProduct) {
 
   updateSliderNav();
 }
+
 
 // ======================================================
 // ✅ Favoritt-knapp
