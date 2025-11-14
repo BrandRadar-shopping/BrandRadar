@@ -18,7 +18,7 @@ const saveFavorites = (favorites) => {
   updateFavoriteCount();
 };
 
-// ✅ Legg til / fjern produktfavoritt (nå med universell feltstøtte)
+// ✅ Legg til / fjern produktfavoritt (nå med DOM-basert rating fallback)
 const toggleFavorite = (product, sourceElement = null) => {
   const favorites = getFavorites();
   const productId = Number(product.id);
@@ -28,7 +28,7 @@ const toggleFavorite = (product, sourceElement = null) => {
     favorites.splice(index, 1);
     showToast("❌ Fjernet fra favoritter");
   } else {
-    // --- Hent rating (med fallback for forskjellige feltnavn og DOM) ---
+    // --- Hent rating (fra objekt, alternativt DOM) ---
     let ratingValue =
       product.rating ||
       product.Rating ||
@@ -38,11 +38,12 @@ const toggleFavorite = (product, sourceElement = null) => {
     if ((!ratingValue || ratingValue === "") && sourceElement) {
       const ratingEl = sourceElement.querySelector(".rating");
       if (ratingEl) {
-        ratingValue = ratingEl.textContent.replace("⭐", "").trim();
+        // Fjerner eventuelle "⭐" og formaterer til ren verdi
+        ratingValue = ratingEl.textContent.replace(/[^\d.,]/g, "").trim();
       }
     }
 
-    // --- Hent øvrige felter (med store/små bokstaver) ---
+    // --- Hent øvrige felt (uavhengig av store/små bokstaver) ---
     const title = product.title || product.Name || product.name || "";
     const brand = product.brand || product.Brand || "";
     const price = product.price || product.Price || "";
@@ -60,7 +61,7 @@ const toggleFavorite = (product, sourceElement = null) => {
       image_url,
       product_url,
       category,
-      rating: ratingValue,
+      rating: ratingValue || "",
       luxury: product.sheet_source === "luxury" || product.luxury === true
     });
 
