@@ -2980,6 +2980,117 @@ svg#gold-gradient-defs {
 }
 
 
+/* ============================================
+   ✅ Favorittside – Produktkort forbedret v2
+   (Oppdatert for brand + rating + prislinje)
+============================================ */
+
+#tab-products .product-card {
+  position: relative;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
+#tab-products .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+#tab-products .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  transition: transform 0.35s ease;
+}
+
+#tab-products .product-card:hover img {
+  transform: scale(1.05);
+}
+
+#tab-products .product-info {
+  padding: 0.9rem 1rem 1.2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#tab-products .product-info .brand {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#tab-products .product-info .product-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#tab-products .product-info .rating {
+  font-size: 0.9rem;
+  color: #f5c518;
+  margin: 2px 0 4px;
+}
+
+#tab-products .price-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+#tab-products .new-price {
+  color: #111;
+  font-weight: 400;
+  font-size: 1.05rem;
+}
+
+#tab-products .old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+}
+
+#tab-products .discount {
+  color: #e60023;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Fjern-tag */
+#tab-products .remove-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s ease;
+}
+
+#tab-products .remove-tag:hover {
+  background: #d63030;
+}
+
 
 
 
