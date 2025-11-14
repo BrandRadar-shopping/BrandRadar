@@ -154,7 +154,7 @@ function loadFavoriteProducts() {
     removeTag.dataset.id = product.id;
     card.appendChild(removeTag);
 
-    // === Rabattmerke ===
+    // === Rabattmerke (beholdes) ===
     if (product.discount) {
       const discountBadge = document.createElement("div");
       discountBadge.classList.add("discount-badge");
@@ -186,32 +186,32 @@ function loadFavoriteProducts() {
     // Rating
     const rating = document.createElement("p");
     rating.classList.add("rating");
-    if (ratingValue) {
-      rating.innerHTML = `⭐ ${ratingValue.toFixed(1)}`;
-    }
+    if (ratingValue) rating.innerHTML = `⭐ ${ratingValue.toFixed(1)}`;
 
-    // Prislinje
+    // === Prislinje ===
     const priceLine = document.createElement("div");
     priceLine.classList.add("price-line");
 
-    const newPrice = document.createElement("span");
-    newPrice.classList.add("new-price");
-    newPrice.textContent = `${product.price || ""} kr`;
-    priceLine.appendChild(newPrice);
-
-    // gammel pris og rabatt vises kun hvis discount finnes
-    if (product.old_price) {
-      const oldPrice = document.createElement("span");
-      oldPrice.classList.add("old-price");
-      oldPrice.textContent = `${product.old_price} kr`;
-      priceLine.appendChild(oldPrice);
+    // beregn ny pris hvis discount finnes
+    let newPriceValue = product.price;
+    if (product.discount && product.price) {
+      const numericPrice = parseFloat(product.price.replace(/[^\d.,]/g, "").replace(",", "."));
+      if (!isNaN(numericPrice)) {
+        newPriceValue = (numericPrice * (1 - product.discount / 100)).toFixed(0);
+      }
     }
 
-    if (product.discount) {
-      const discount = document.createElement("span");
-      discount.classList.add("discount");
-      discount.textContent = `-${product.discount}%`;
-      priceLine.appendChild(discount);
+    const newPrice = document.createElement("span");
+    newPrice.classList.add("new-price");
+    newPrice.textContent = `${newPriceValue} kr`;
+    priceLine.appendChild(newPrice);
+
+    // vis gammel pris strøket ut kun hvis rabatt finnes
+    if (product.discount && product.price) {
+      const oldPrice = document.createElement("span");
+      oldPrice.classList.add("old-price");
+      oldPrice.textContent = `${product.price} kr`;
+      priceLine.appendChild(oldPrice);
     }
 
     info.append(brand, name, rating, priceLine);
@@ -234,6 +234,7 @@ function loadFavoriteProducts() {
     grid.appendChild(card);
   });
 }
+
 
 
 // ======================================================
