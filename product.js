@@ -157,7 +157,7 @@ async function loadRecommendations(products, currentProduct) {
 
     // --- Kortet ---
     const card = document.createElement("div");
-    card.classList.add("product-card", "premium-related-card");
+    card.classList.add("premium-related-card");
 
     card.innerHTML = `
       ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
