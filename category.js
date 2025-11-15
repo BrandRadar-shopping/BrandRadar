@@ -123,49 +123,100 @@ document.addEventListener("DOMContentLoaded", () => {
           brandFilter.appendChild(opt);
         });
 
-      // ✅ Render products
+      // ✅ Render products – OPPDATERT med premium prislinje
       function renderProducts(list) {
         productGrid.innerHTML = "";
 
         list.forEach(p => {
           const id = Number(p.id);
-          const rating = p.rating ? parseFloat(String(p.rating).replace(",", ".").replace(/[^0-9.]/g, "")) : null;
+
+          // Rating – samme rens som ellers
+          let ratingValue = null;
+          if (p.rating) {
+            const parsed = parseFloat(
+              String(p.rating)
+                .replace(",", ".")
+                .replace(/[^0-9.]/g, "")
+            );
+            if (!isNaN(parsed)) ratingValue = parsed;
+          }
+
+          // Ny pris ved rabatt
+          let newPriceValue = p.price;
+          if (p.discount && p.price) {
+            const numericPrice = parseFloat(
+              String(p.price).replace(/[^\d.,]/g, "").replace(",", ".")
+            );
+            if (!isNaN(numericPrice)) {
+              const discountNum = parseFloat(p.discount);
+              const factor = isNaN(discountNum)
+                ? null
+                : (discountNum > 1 ? discountNum / 100 : discountNum);
+              if (factor !== null) {
+                newPriceValue = (numericPrice * (1 - factor)).toFixed(0);
+              }
+            }
+          }
+
           const isFav = getFavorites().some(f => Number(f.id) === id);
 
           const card = document.createElement("div");
           card.classList.add("product-card");
+
           card.innerHTML = `
-            ${p.discount ? `<div class="discount-badge">${p.discount}%</div>` : ""}
+            ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
+
             <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
-  <svg viewBox="0 0 24 24" class="heart-icon">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 
-    12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 
-    0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
-    16.5 3 19.58 3 22 5.42 22 8.5c0 
-    3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-  </svg>
-</div>
+              <svg viewBox="0 0 24 24" class="heart-icon">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 
+                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 
+                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
+                16.5 3 19.58 3 22 5.42 22 8.5c0 
+                3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
 
             <img src="${p.image_url}" alt="${p.title}">
+
             <div class="product-info">
-              <h3>${p.title}</h3>
               <p class="brand">${p.brand || ""}</p>
-              ${rating ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>` : ""}
-              <p class="price">${p.price || ""} kr</p>
+
+              <h3 class="product-name">${p.title}</h3>
+
+              <p class="rating">
+                ${
+                  ratingValue
+                    ? `⭐ ${ratingValue.toFixed(1)}`
+                    : `<span style="color:#ccc;">–</span>`
+                }
+              </p>
+
+              <div class="price-line">
+                <span class="new-price">
+                  ${newPriceValue ? `${newPriceValue} kr` : ""}
+                </span>
+                ${
+                  p.discount && p.price
+                    ? `<span class="old-price">${p.price} kr</span>`
+                    : ""
+                }
+              </div>
             </div>
           `;
 
-          // ✅ Product click -> open page
+          // ✅ Product click -> open page (ikke trigge på hjertet)
           card.addEventListener("click", e => {
-            if (!e.target.closest(".fav-icon"))
+            if (!e.target.closest(".fav-icon")) {
               window.location.href = `product.html?id=${id}`;
+            }
           });
 
           // ✅ Toggle favorite
-          card.querySelector(".fav-icon").addEventListener("click", e => {
+          const favIconEl = card.querySelector(".fav-icon");
+          favIconEl.addEventListener("click", e => {
             e.stopPropagation();
             toggleFavorite(p);
-            e.currentTarget.classList.toggle("active");
+            favIconEl.classList.toggle("active");
             updateFavoriteCount();
           });
 
