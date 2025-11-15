@@ -3202,6 +3202,38 @@ svg#gold-gradient-defs {
   color: #e60023;
 }
 
+/* =====================================================
+   CATEGORY PRODUCTS – PREMIUM PRISLINJE + RATING
+   (matcher favoritter + "Du vil kanskje like")
+   ===================================================== */
+
+.category-products .product-info .rating {
+  font-size: 0.9rem;
+  color: #f5c518;          /* gullstjerne */
+  margin: 3px 0 6px;
+}
+
+.category-products .price-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.category-products .new-price {
+  color: #111;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.category-products .old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
 
 
 
