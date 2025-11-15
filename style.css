@@ -2820,8 +2820,8 @@ svg#gold-gradient-defs {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 330px; /* ⬆ bredere kort */
-  min-height: 540px; /* ⬆ mer vertikal plass */
+  max-width: 330px;
+  min-height: 540px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -2837,7 +2837,7 @@ svg#gold-gradient-defs {
 /* 🔹 Produktbilde */
 .product-card img {
   width: 100%;
-  height: 360px; /* ⬆ større bilde */
+  height: 360px;
   object-fit: cover;
   display: block;
   transition: transform 0.4s ease, filter 0.3s ease;
@@ -2959,10 +2959,8 @@ svg#gold-gradient-defs {
 }
 
 /* ============================================
-   ✅ FAVORITTER – PRODUKTKORT (v3, ren og optimal)
-   Forbedret layout med brand, rating og prislinje
+   FAVORITTER KORT
 ============================================ */
-
 #tab-products .product-card {
   position: relative;
   max-width: 260px;
@@ -2980,7 +2978,6 @@ svg#gold-gradient-defs {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* 🖼️ Produktbilde */
 #tab-products .product-card img {
   width: 100%;
   aspect-ratio: 1 / 1.1;
@@ -2993,7 +2990,6 @@ svg#gold-gradient-defs {
   transform: scale(1.05);
 }
 
-/* ℹ️ Produktinfo */
 #tab-products .product-info {
   padding: 0.9rem 1rem 1.2rem;
   text-align: left;
@@ -3027,7 +3023,6 @@ svg#gold-gradient-defs {
   margin: 3px 0 6px;
 }
 
-/* 💰 Prislinje */
 #tab-products .price-line {
   display: flex;
   flex-direction: column;
@@ -3049,14 +3044,12 @@ svg#gold-gradient-defs {
   font-weight: 400;
 }
 
-/* 🏷️ Rabatt (valgfri tekst hvis brukt senere) */
 #tab-products .discount {
   color: #e60023;
   font-weight: 500;
   font-size: 0.9rem;
 }
 
-/* ❌ Fjern-tag */
 #tab-products .remove-tag {
   position: absolute;
   top: 8px;
@@ -3076,119 +3069,18 @@ svg#gold-gradient-defs {
   background: #d63030;
 }
 
-/* ==========================================================
-   Premium Card Styling for Related Products (samme som favoritter)
-   ========================================================== */
-
-#related-slider .premium-related-card {
-  position: relative;
-  max-width: 280px;
-  width: 100%;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  cursor: pointer;
-  overflow: hidden;
-  transition: 0.25s ease;
-}
-
-#related-slider .premium-related-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-#related-slider .premium-related-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1.1;
-  object-fit: cover;
-  border-radius: 14px 14px 0 0;
-  transition: transform 0.35s ease;
-}
-
-#related-slider .premium-related-card:hover img {
-  transform: scale(1.05);
-}
-
-#related-slider .product-info {
-  padding: 0.9rem 1rem 1.2rem;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-#related-slider .product-info .brand {
-  font-size: 0.85rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-#related-slider .product-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-#related-slider .rating {
-  font-size: 0.9rem;
-  margin: 2px 0 4px;
-  color: #f5c518;
-}
-
-#related-slider .price-line {
-  display: flex;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-#related-slider .new-price {
-  color: #111;
-  font-weight: 500;
-  font-size: 1.05rem;
-}
-
-#related-slider .old-price {
-  color: #999;
-  text-decoration: line-through;
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-/* Rabattbadge (samme som favoritter) */
-#related-slider .discount-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: #ff3b3b;
-  color: #fff;
-  font-size: 0.75rem;
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: 700;
-  z-index: 4;
-}
-
 /* ============================================================
-   PREMIUM RELATED PRODUCTS — FULLY ISOLATED CARD SYSTEM (v1)
-   Overstyrer alle globale .product-card regler
-   ============================================================ */
-
+   PREMIUM RELATED PRODUCTS — FINAL ISOLATED VERSION
+============================================================ */
 #related-slider .premium-related-card {
-  /* FULL ISOLASJON — fjern ALLE arvede regler fra .product-card */
-  all: unset;
+  all: unset; /* full isolasjon fra globale .product-card */
 
-  /* BASE LAYOUT */
   display: flex;
   flex-direction: column;
-  width: 290px;
-  min-width: 290px;
-  max-width: 290px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -3203,25 +3095,24 @@ svg#gold-gradient-defs {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* ---------- BILDET ---------- */
+/* Bilde */
 #related-slider .premium-related-card img {
   width: 100%;
-  aspect-ratio: 1 / 0.78;     /* 👈 Samme som favoritter */
-  object-fit: cover;          /* 👈 Premium – fyller hele rammen */
+  aspect-ratio: 1 / 1.1; /* identisk med favoritter */
+  object-fit: cover;
   display: block;
-  background: #f7f7f7;
   border-radius: 14px 14px 0 0;
+  background: #f7f7f7;
   transition: transform 0.35s ease;
 }
-
 
 #related-slider .premium-related-card:hover img {
   transform: scale(1.05);
 }
 
-/* ---------- INFO ---------- */
+/* Info */
 #related-slider .product-info {
-  padding: 1rem 1rem 1.2rem;
+  padding: 0.9rem 1rem 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -3251,7 +3142,7 @@ svg#gold-gradient-defs {
   color: #f5c518;
 }
 
-/* ---------- PRIS ---------- */
+/* Pris */
 #related-slider .price-line {
   display: flex;
   gap: 6px;
@@ -3270,7 +3161,7 @@ svg#gold-gradient-defs {
   text-decoration: line-through;
 }
 
-/* ---------- RABATTBADGE ---------- */
+/* Rabatt */
 #related-slider .discount-badge {
   position: absolute;
   top: 10px;
@@ -3283,11 +3174,9 @@ svg#gold-gradient-defs {
   font-weight: 700;
 }
 
-
 /* ===============================
    PRODUCT PAGE – PREMIUM PRICE
-   =============================== */
-
+=============================== */
 #product-price-box {
   display: flex;
   flex-direction: column;
@@ -3298,7 +3187,7 @@ svg#gold-gradient-defs {
 #new-price {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #111;      /* 👈 Ikke blå */
+  color: #111;
 }
 
 #old-price {
@@ -3312,6 +3201,7 @@ svg#gold-gradient-defs {
   font-weight: 600;
   color: #e60023;
 }
+
 
 
 
