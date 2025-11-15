@@ -18,16 +18,16 @@
       <button>🔍</button>
     </div>
 
-     <!-- Toppmeny -->
-   <nav class="top-links">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html">Brands</a>
-  <a href="favoritter.html">
-    Favoritter <span id="favorites-count">0</span>
-  </a>
-     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
-</nav>
+    <!-- Toppmeny -->
+    <nav class="top-links">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">
+        Favoritter <span id="favorites-count">0</span>
+      </a>
+      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+    </nav>
 
   </div>
 
@@ -58,10 +58,13 @@
     <div id="product-brand" class="product-brand"></div>
     <div id="product-rating" class="rating"></div>
 
-    <div class="price-block">
-      <span id="product-price" class="price"></span>
-      <span id="product-discount" class="discount-badge"></span>
+    <!-- 🔥 OPPDATERT PRIS-SEKSJON -->
+    <div id="product-price-box">
+      <span id="new-price"></span>
+      <span id="old-price"></span>
+      <span id="discount-tag"></span>
     </div>
+    <!-- 🔥 SLUTT OPPDATERT PRIS -->
 
     <p id="product-desc" class="description"></p>
 
@@ -72,7 +75,7 @@
 
 </section>
 
- <!-- ✅ RELATED PRODUCTS SLIDER -->
+<!-- RELATED PRODUCTS SLIDER -->
 <section class="related-section">
   <h2 class="related-title">Du vil kanskje like</h2>
 
@@ -88,8 +91,6 @@
   </div>
 </section>
 
-
-
 <script src="script.js"></script>
 <script src="script-megamenu.js"></script>
 <script src="script-favorites.js"></script>
@@ -97,3 +98,4 @@
 
 </body>
 </html>
+
