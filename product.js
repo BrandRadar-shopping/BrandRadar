@@ -42,29 +42,52 @@ document.addEventListener("DOMContentLoaded", async () => {
   const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
 
   // ======================================================
-  // ✅ Sett inn produktinfo
+  // ⭐ Sett inn produktinfo
   // ======================================================
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent =
     product.info || product.description || "Dette eksklusive produktet kombinerer kvalitet og eleganse.";
-  document.getElementById("product-price").textContent = product.price ? `${product.price} kr` : "";
   document.getElementById("buy-link").href = product.product_url;
 
-  // ✅ Rating
+  // ======================================================
+  // ⭐ PREMIUM PRICE ENGINE
+  // ======================================================
+  const newPriceEl = document.getElementById("new-price");
+  const oldPriceEl = document.getElementById("old-price");
+  const discountTagEl = document.getElementById("discount-tag");
+
+  // Rens pris
+  const rawPrice = product.price
+    ? String(product.price).replace(/[^\d.,]/g, "").replace(",", ".")
+    : null;
+  const numericPrice = rawPrice ? parseFloat(rawPrice) : null;
+
+  // Clean discount
+  let discount = parseFloat(String(product.discount).replace(",", "."));
+  if (discount && discount < 1) discount = discount * 100; // 0.2 → 20%
+
+  if (numericPrice && discount > 0) {
+    const newPrice = Math.round(numericPrice * (1 - discount / 100));
+    newPriceEl.textContent = `${newPrice} kr`;
+    oldPriceEl.textContent = `${numericPrice} kr`;
+    discountTagEl.textContent = `-${discount.toFixed(0)}%`;
+  } else {
+    newPriceEl.textContent = product.price ? `${product.price} kr` : "";
+    oldPriceEl.textContent = "";
+    discountTagEl.textContent = "";
+  }
+
+  // ======================================================
+  // ⭐ Rating
+  // ======================================================
   const ratingNum = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
   document.getElementById("product-rating").textContent =
     !isNaN(ratingNum) ? `⭐ ${ratingNum.toFixed(1)} / 5` : "⭐ Ingen rating";
 
-  // ✅ Rabatt
-  const discountEl = document.getElementById("product-discount");
-  const discountNum = parseFloat(product.discount);
-  discountEl.textContent =
-    (!isNaN(discountNum) && discountNum > 0)
-      ? `-${(discountNum <= 1 ? discountNum * 100 : discountNum).toFixed(0)}%`
-      : "";
-
-  // ✅ Bilder
+  // ======================================================
+  // ⭐ Bilder
+  // ======================================================
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
   const images = [
@@ -90,22 +113,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     thumbs.appendChild(img);
   });
 
-  // ✅ Relaterte produkter
+  // ======================================================
+  // ⭐ Relaterte produkter
+  // ======================================================
   loadRecommendations(products, product);
 
-  // ✅ Favorittknapp
+  // ======================================================
+  // ⭐ Favorittknapp
+  // ======================================================
   setupFavoriteButton(product);
 
-  // 💎 Luxury styling
+  // ======================================================
+  // ⭐ Luxury styling
+  // ======================================================
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
-    document.getElementById("product-price").style.color = "#d4af37";
+    newPriceEl.style.color = "#d4af37";
     document.getElementById("product-title").style.color = "#111";
   }
 });
 
 // ======================================================
-// ✅ Relaterte produkter – Premium Cards (samme som favoritter)
+// ⭐ Relaterte produkter – Premium Cards
 // ======================================================
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
@@ -114,14 +143,12 @@ async function loadRecommendations(products, currentProduct) {
   const curCat = (currentProduct.category || "").toLowerCase();
   const curBrand = (currentProduct.brand || "").toLowerCase();
 
-  // Finn produkter med samme kategori først
   let matches = products.filter(p =>
     Number(p.id) !== Number(currentProduct.id) &&
     p.image_url &&
     (p.category || "").toLowerCase() === curCat
   );
 
-  // Hvis for få, fyll på med samme brand
   if (matches.length < 4) {
     matches = matches.concat(products.filter(p =>
       Number(p.id) !== Number(currentProduct.id) &&
@@ -130,7 +157,6 @@ async function loadRecommendations(products, currentProduct) {
     ));
   }
 
-  // Fjern duplikater og begrens til 8
   matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
 
   if (!matches.length) {
@@ -141,10 +167,8 @@ async function loadRecommendations(products, currentProduct) {
   slider.innerHTML = "";
 
   matches.forEach(p => {
-    // --- Clean rating (samme som favoritter) ---
     const ratingValue = cleanRating(p.rating);
 
-    // --- Beregn ny pris ---
     let newPriceValue = p.price;
     if (p.discount && p.price) {
       const numericPrice = parseFloat(
@@ -155,24 +179,18 @@ async function loadRecommendations(products, currentProduct) {
       }
     }
 
-    // --- Kortet ---
     const card = document.createElement("div");
     card.classList.add("premium-related-card");
 
     card.innerHTML = `
       ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
-
       <img src="${p.image_url}" alt="${p.title}" loading="lazy">
-
       <div class="product-info">
         <p class="brand">${p.brand || ""}</p>
-
         <h3 class="product-name">${p.title}</h3>
-
         <p class="rating">
           ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
         </p>
-
         <div class="price-line">
           <span class="new-price">${newPriceValue} kr</span>
           ${p.discount ? `<span class="old-price">${p.price} kr</span>` : ""}
@@ -180,7 +198,6 @@ async function loadRecommendations(products, currentProduct) {
       </div>
     `;
 
-    // Klikk → produkt
     const luxuryParam = (currentProduct.sheet_source === "luxury") ? "&luxury=true" : "";
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}${luxuryParam}`;
@@ -192,9 +209,8 @@ async function loadRecommendations(products, currentProduct) {
   updateSliderNav();
 }
 
-
 // ======================================================
-// ✅ Favoritt-knapp
+// ⭐ Favoritt-knapp
 // ======================================================
 function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
@@ -217,7 +233,7 @@ function setupFavoriteButton(product) {
 }
 
 // ======================================================
-// ✅ Slider navigation
+// ⭐ Slider navigation
 // ======================================================
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
@@ -242,7 +258,7 @@ btnNext?.addEventListener("click", () => {
 slider?.addEventListener("scroll", updateSliderNav);
 
 // ======================================================
-// ✅ Tilbake-knapp
+// ⭐ Tilbake-knapp
 // ======================================================
 document.getElementById("back-btn")?.addEventListener("click", () => {
   const ref = document.referrer;
