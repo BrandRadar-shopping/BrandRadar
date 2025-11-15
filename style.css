@@ -3284,6 +3284,35 @@ svg#gold-gradient-defs {
 }
 
 
+/* ===============================
+   PRODUCT PAGE – PREMIUM PRICE
+   =============================== */
+
+#product-price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+#new-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111;      /* 👈 Ikke blå */
+}
+
+#old-price {
+  font-size: 1rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+#discount-tag {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e60023;
+}
+
 
 
 
