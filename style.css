@@ -2505,12 +2505,14 @@ svg#gold-gradient-defs {
   height: 100%;
   top: 0;
   left: 0;
-  background-size: contain; /* 👈 Fikser zoom */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  background-attachment: scroll;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
+
 
 .hero-slider .slide.active {
   opacity: 1;
@@ -3359,6 +3361,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
