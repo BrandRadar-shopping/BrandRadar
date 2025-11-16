@@ -3235,6 +3235,131 @@ svg#gold-gradient-defs {
 }
 
 
+/* ==========================================================
+   GLOBAL PAGE CONTAINER (brukes på alle seksjoner unntatt hero)
+   ========================================================== */
+.container {
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ==========================================================
+   GENERELT VERTICAL SPACING FOR SEKSJONER
+   ========================================================== */
+section {
+  padding: 60px 0;
+}
+
+/* ==========================================================
+   FEATURED GRID — NY PREMIUM GRID LAYOUT
+   ========================================================== */
+#featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 32px;
+  justify-items: center;
+  margin-top: 40px;
+}
+
+/* ==========================================================
+   INDEX — PRODUKTKORT PREMIUM (match category/brands)
+   ========================================================== */
+#featured-grid .product-card {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  width: 290px;
+  min-width: 290px;
+  max-width: 290px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: 0.25s ease;
+  position: relative;
+}
+
+#featured-grid .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Bilde */
+#featured-grid .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  display: block;
+  background: #f7f7f7;
+  border-radius: 14px 14px 0 0;
+  transition: transform 0.3s ease;
+}
+
+#featured-grid .product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Info */
+#featured-grid .product-info {
+  padding: 1rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#featured-grid .product-info .brand {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#featured-grid .product-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  min-height: 2.5em;
+  line-height: 1.35;
+}
+
+/* Pris */
+#featured-grid .price {
+  color: #111 !important; /* ikke blå */
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+/* Favoritt-ikon */
+#featured-grid .fav-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#featured-grid .heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.6px;
+  transition: 0.25s ease;
+}
+
+#featured-grid .fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
+
 
 
 
