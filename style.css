@@ -2328,7 +2328,7 @@ svg#gold-gradient-defs {
 /* =========================================
    🌌 BRANDRADAR – ULTRA PREMIUM HERO SLIDER
    Fullscreen, radar-motion & parallax
-   ========================================= */
+========================================= */
 
 .hero-slider {
   position: relative;
@@ -2344,7 +2344,7 @@ svg#gold-gradient-defs {
   --parallax-y: 0px;
 }
 
-/* vignette */
+/* Vignette overlay */
 .hero-slider::before {
   content: "";
   position: absolute;
@@ -2356,7 +2356,7 @@ svg#gold-gradient-defs {
   z-index: 1;
 }
 
-/* radar wave */
+/* Radar pulse */
 .hero-slider::after {
   content: "";
   position: absolute;
@@ -2379,7 +2379,7 @@ svg#gold-gradient-defs {
   100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
 }
 
-/* Slides container */
+/* Slides wrapper */
 .hero-slider .slides {
   position: relative;
   width: 100%;
@@ -2387,7 +2387,7 @@ svg#gold-gradient-defs {
   z-index: 0;
 }
 
-/* Slide */
+/* Each slide */
 .hero-slider .slide {
   position: absolute;
   inset: 0;
@@ -2407,7 +2407,7 @@ svg#gold-gradient-defs {
   z-index: 0;
 }
 
-/* Glass content */
+/* Glassmorphism content */
 .hero-slider .slide-content {
   position: absolute;
   left: 50%;
@@ -2439,7 +2439,7 @@ svg#gold-gradient-defs {
   margin-bottom: 1.4rem;
 }
 
-/* CTA */
+/* CTA button */
 .hero-slider .slide-content .btn {
   display: inline-block;
   background: linear-gradient(90deg, #0070f3, #00b4ff);
@@ -2456,7 +2456,7 @@ svg#gold-gradient-defs {
 
 .hero-slider .slide-content .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 112, 243, 0.45);
+  box-shadow: 0 10px 28px rgba(0,112,243,0.45);
   background-position: right center;
 }
 
@@ -2525,7 +2525,7 @@ svg#gold-gradient-defs {
   opacity: 1;
 }
 
-/* Responsiv */
+/* Responsive */
 @media (max-width: 900px) {
   .hero-slider {
     min-height: 70vh;
@@ -2553,11 +2553,8 @@ svg#gold-gradient-defs {
     top: 55%;
     padding: 1.4rem 1.5rem;
   }
-
-  .hero-slider .slide-content::before {
-    font-size: 0.7rem;
-  }
 }
+
 
 
 /* Gullbadge for luxury brands */
@@ -3347,6 +3344,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
