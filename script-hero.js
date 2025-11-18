@@ -1,202 +1,96 @@
 // ===============================================
-// BrandRadar – Ultra Premium Hero Slider v4
-// Henter slides fra Google Sheet (HeroSlides)
-// Auto-rotate, dots, arrows, parallax + radar feel
+// BrandRadar – Ultra Premium Hero Slider (Sheet Powered)
+// Henter slides fra Google Sheet + automatisk bygging
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const slider = document.querySelector(".hero-slider");
-  if (!slider) return;
-
-  const slidesWrapper = slider.querySelector(".slides");
-  const dotsContainer = slider.querySelector(".dots");
-  const prevBtn = slider.querySelector(".nav.prev");
-  const nextBtn = slider.querySelector(".nav.next");
+  console.log("🎨 HERO: Initialiserer…");
 
   const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
   const SHEET_NAME = "HeroSlides";
 
-  let slides = [];
-  let dots = [];
-  let current = 0;
-  let autoTimer = null;
-  const AUTO_TIME = 7000; // 7 sek mellom hver slide
+  const slider = document.querySelector(".hero-slider");
+  const slidesContainer = slider.querySelector(".slides");
+  const dotsContainer = slider.querySelector(".dots");
+  const prevBtn = slider.querySelector(".nav.prev");
+  const nextBtn = slider.querySelector(".nav.next");
 
   try {
-    const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
-    const raw = await res.json();
-    console.log("✅ HeroSlides rådata:", raw);
+    const raw = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
 
-    // Rens og normaliser data
+    console.log("📄 RAW SHEET DATA:", raw);
+
     const slidesData = raw
-      .filter(row => row && row.image_url && row.image_url.trim().startsWith("http"))
-      .map(row => ({
-        image_url: (row.image_url || "").trim(),
-        title: (row.title || "").trim(),
-        subtitle: (row.subtitle || "").trim(),
-        link: (row.link || "").trim(),
-        button_text: ((row.button_text || "").trim()) || "Les mer",
-        active: String(row.active || "").toLowerCase() === "true"
+      .filter(s => s.image_url && s.image_url.startsWith("http"))
+      .map(s => ({
+        img: s.image_url.trim(),
+        title: s.title?.trim() || "",
+        subtitle: s.subtitle?.trim() || "",
+        link: s.link?.trim() || "",
+        btn: s.button_text?.trim() || "Utforsk",
+        active: (s.active || "").toLowerCase() === "true"
       }));
 
-    console.log("✅ HeroSlides normalisert:", slidesData);
+    console.log("🎯 PARSED SLIDES:", slidesData);
 
     if (!slidesData.length) {
-      console.warn("⚠️ Ingen gyldige slides funnet i HeroSlides-arket.");
+      slidesContainer.innerHTML = "<p>Ingen slides tilgjengelig.</p>";
       return;
     }
 
-    // Bygg HTML for slides
-    const hasExplicitActive = slidesData.some(s => s.active);
-
-    slidesWrapper.innerHTML = slidesData
-      .map((s, i) => {
-        const isActive = hasExplicitActive ? s.active : i === 0;
-        return `
-          <div class="slide${isActive ? " active" : ""}"
-               style="background-image:url('${s.image_url}');">
-            <div class="slide-content">
-              ${s.title ? `<h1>${s.title}</h1>` : ""}
-              ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
-              ${
-                s.link
-                  ? `<a href="${s.link}" class="btn" target="_blank" rel="noopener">
-                       ${s.button_text}
-                     </a>`
-                  : ""
-              }
-            </div>
-          </div>
-        `;
-      })
+    // --- Build slides ---
+    slidesContainer.innerHTML = slidesData
+      .map(
+        (s, i) => `
+      <div class="slide ${i === 0 ? "active" : ""}" 
+        style="background-image:url('${s.img}')">
+        <div class="slide-content">
+          ${s.title ? `<h1>${s.title}</h1>` : ""}
+          ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
+          ${s.link ? `<a href="${s.link}" class="btn">${s.btn}</a>` : ""}
+        </div>
+      </div>`
+      )
       .join("");
 
-    // Referanser til faktiske slide-elementer
-    slides = Array.from(slider.querySelectorAll(".slide"));
+    const slides = [...slider.querySelectorAll(".slide")];
 
-    if (!slides.length) {
-      console.warn("⚠️ Ingen .slide-elementer funnet etter bygging.");
-      return;
-    }
-
-    // Finn startindeks
-    current = slides.findIndex(s => s.classList.contains("active"));
-    if (current < 0) {
-      current = 0;
-      slides[0].classList.add("active");
-    }
-
-    // Bygg dots basert på antall slides
+    // --- Build dots ---
     dotsContainer.innerHTML = "";
-    slides.forEach((_, idx) => {
+    slides.forEach((_, i) => {
       const dot = document.createElement("span");
-      dot.dataset.index = idx;
-      if (idx === current) dot.classList.add("active");
+      if (i === 0) dot.classList.add("active");
+      dot.dataset.index = i;
       dotsContainer.appendChild(dot);
     });
-    dots = Array.from(dotsContainer.querySelectorAll("span"));
 
-    // --- Slider logikk ---
-    function goTo(index) {
-      if (!slides.length) return;
-      const newIndex = (index + slides.length) % slides.length;
-      if (newIndex === current) return;
+    const dots = [...dotsContainer.querySelectorAll("span")];
 
+    let current = 0;
+
+    function goTo(i) {
       slides[current].classList.remove("active");
-      if (dots[current]) dots[current].classList.remove("active");
+      dots[current].classList.remove("active");
 
-      current = newIndex;
+      current = (i + slides.length) % slides.length;
 
       slides[current].classList.add("active");
-      if (dots[current]) dots[current].classList.add("active");
+      dots[current].classList.add("active");
     }
 
-    function next() {
-      goTo(current + 1);
-    }
+    // Arrows
+    nextBtn.onclick = () => goTo(current + 1);
+    prevBtn.onclick = () => goTo(current - 1);
 
-    function prev() {
-      goTo(current - 1);
-    }
+    // Dots
+    dots.forEach(dot =>
+      dot.addEventListener("click", () => goTo(Number(dot.dataset.index)))
+    );
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = setInterval(next, AUTO_TIME);
-    }
+    console.log("✅ HERO SLIDER KLAR!");
 
-    function stopAuto() {
-      if (autoTimer) clearInterval(autoTimer);
-      autoTimer = null;
-    }
-
-    // Piler
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        prev();
-        startAuto();
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        next();
-        startAuto();
-      });
-    }
-
-    // Dots-klikk
-    dots.forEach(dot => {
-      dot.addEventListener("click", () => {
-        const idx = Number(dot.dataset.index || 0);
-        goTo(idx);
-        startAuto();
-      });
-    });
-
-    // Pause på hover
-    slider.addEventListener("mouseenter", stopAuto);
-    slider.addEventListener("mouseleave", startAuto);
-
-    // --- Parallax-effekt ---
-    slider.addEventListener("mousemove", (e) => {
-      const rect = slider.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width - 0.5;
-      const relY = (e.clientY - rect.top) / rect.height - 0.5;
-
-      const maxMoveX = 12;
-      const maxMoveY = 8;
-
-      const x = relX * maxMoveX;
-      const y = relY * maxMoveY;
-
-      slider.style.setProperty("--parallax-x", `${x}px`);
-      slider.style.setProperty("--parallax-y", `${y}px`);
-    });
-
-    slider.addEventListener("mouseleave", () => {
-      slider.style.setProperty("--parallax-x", "0px");
-      slider.style.setProperty("--parallax-y", "0px");
-    });
-
-    // --- Scroll fade (subtil) ---
-    function handleScroll() {
-      const rect = slider.getBoundingClientRect();
-      const windowH = window.innerHeight || document.documentElement.clientHeight;
-      const visible = Math.min(
-        Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5),
-        1
-      );
-      slider.style.opacity = visible;
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    // Start
-    startAuto();
-    handleScroll();
-    console.log("✅ Hero slider klar.");
   } catch (err) {
-    console.error("❌ Klarte ikke hente HeroSlides:", err);
+    console.error("❌ FEIL I HERO SLIDER:", err);
   }
 });
 
