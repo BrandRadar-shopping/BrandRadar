@@ -1,161 +1,203 @@
-// ======================================================
-// BrandRadar – Hero Slider (Dynamic from Google Sheets)
-// Ultra Premium v3 + radar + parallax + fade + auto-rotate
-// ======================================================
+// ===============================================
+// BrandRadar – Ultra Premium Hero Slider v4
+// Henter slides fra Google Sheet (HeroSlides)
+// Auto-rotate, dots, arrows, parallax + radar feel
+// ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("🌟 HeroSlider: Initializing...");
+  const slider = document.querySelector(".hero-slider");
+  if (!slider) return;
 
-  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY"; 
+  const slidesWrapper = slider.querySelector(".slides");
+  const dotsContainer = slider.querySelector(".dots");
+  const prevBtn = slider.querySelector(".nav.prev");
+  const nextBtn = slider.querySelector(".nav.next");
+
+  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
   const SHEET_NAME = "HeroSlides";
 
-  const slider = document.querySelector(".hero-slider");
-  const slidesContainer = slider?.querySelector(".slides");
-  const dotsContainer = slider?.querySelector(".dots");
-  const prevBtn = slider?.querySelector(".nav.prev");
-  const nextBtn = slider?.querySelector(".nav.next");
+  let slides = [];
+  let dots = [];
+  let current = 0;
+  let autoTimer = null;
+  const AUTO_TIME = 7000; // 7 sek mellom hver slide
 
-  if (!slider || !slidesContainer) {
-    console.warn("❌ Hero slider not found in DOM");
-    return;
-  }
-
-  // ------------------------------------------------------
-  // 1. HENT DATA FRA GOOGLE SHEET
-  // ------------------------------------------------------
-  let slidesData = [];
   try {
-    const raw = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
-      .then(r => r.json());
+    const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
+    const raw = await res.json();
+    console.log("✅ HeroSlides rådata:", raw);
 
-    slidesData = raw
-      .filter(s => s.image_url && s.image_url.startsWith("http"))
-      .map(s => ({
-        image: s.image_url.trim(),
-        title: s.title?.trim() || "",
-        subtitle: s.subtitle?.trim() || "",
-        link: s.link?.trim() || "",
-        button: s.button_text?.trim() || "Les mer",
-        active: String(s.active || "").toLowerCase() === "true"
+    // Rens og normaliser data
+    const slidesData = raw
+      .filter(row => row && row.image_url && row.image_url.trim().startsWith("http"))
+      .map(row => ({
+        image_url: (row.image_url || "").trim(),
+        title: (row.title || "").trim(),
+        subtitle: (row.subtitle || "").trim(),
+        link: (row.link || "").trim(),
+        button_text: ((row.button_text || "").trim()) || "Les mer",
+        active: String(row.active || "").toLowerCase() === "true"
       }));
 
+    console.log("✅ HeroSlides normalisert:", slidesData);
+
     if (!slidesData.length) {
-      slidesContainer.innerHTML = "<p style='color:white;text-align:center;'>Ingen slides funnet</p>";
+      console.warn("⚠️ Ingen gyldige slides funnet i HeroSlides-arket.");
       return;
     }
+
+    // Bygg HTML for slides
+    const hasExplicitActive = slidesData.some(s => s.active);
+
+    slidesWrapper.innerHTML = slidesData
+      .map((s, i) => {
+        const isActive = hasExplicitActive ? s.active : i === 0;
+        return `
+          <div class="slide${isActive ? " active" : ""}"
+               style="background-image:url('${s.image_url}');">
+            <div class="slide-content">
+              ${s.title ? `<h1>${s.title}</h1>` : ""}
+              ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
+              ${
+                s.link
+                  ? `<a href="${s.link}" class="btn" target="_blank" rel="noopener">
+                       ${s.button_text}
+                     </a>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+    // Referanser til faktiske slide-elementer
+    slides = Array.from(slider.querySelectorAll(".slide"));
+
+    if (!slides.length) {
+      console.warn("⚠️ Ingen .slide-elementer funnet etter bygging.");
+      return;
+    }
+
+    // Finn startindeks
+    current = slides.findIndex(s => s.classList.contains("active"));
+    if (current < 0) {
+      current = 0;
+      slides[0].classList.add("active");
+    }
+
+    // Bygg dots basert på antall slides
+    dotsContainer.innerHTML = "";
+    slides.forEach((_, idx) => {
+      const dot = document.createElement("span");
+      dot.dataset.index = idx;
+      if (idx === current) dot.classList.add("active");
+      dotsContainer.appendChild(dot);
+    });
+    dots = Array.from(dotsContainer.querySelectorAll("span"));
+
+    // --- Slider logikk ---
+    function goTo(index) {
+      if (!slides.length) return;
+      const newIndex = (index + slides.length) % slides.length;
+      if (newIndex === current) return;
+
+      slides[current].classList.remove("active");
+      if (dots[current]) dots[current].classList.remove("active");
+
+      current = newIndex;
+
+      slides[current].classList.add("active");
+      if (dots[current]) dots[current].classList.add("active");
+    }
+
+    function next() {
+      goTo(current + 1);
+    }
+
+    function prev() {
+      goTo(current - 1);
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(next, AUTO_TIME);
+    }
+
+    function stopAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = null;
+    }
+
+    // Piler
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        prev();
+        startAuto();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        next();
+        startAuto();
+      });
+    }
+
+    // Dots-klikk
+    dots.forEach(dot => {
+      dot.addEventListener("click", () => {
+        const idx = Number(dot.dataset.index || 0);
+        goTo(idx);
+        startAuto();
+      });
+    });
+
+    // Pause på hover
+    slider.addEventListener("mouseenter", stopAuto);
+    slider.addEventListener("mouseleave", startAuto);
+
+    // --- Parallax-effekt ---
+    slider.addEventListener("mousemove", (e) => {
+      const rect = slider.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const maxMoveX = 12;
+      const maxMoveY = 8;
+
+      const x = relX * maxMoveX;
+      const y = relY * maxMoveY;
+
+      slider.style.setProperty("--parallax-x", `${x}px`);
+      slider.style.setProperty("--parallax-y", `${y}px`);
+    });
+
+    slider.addEventListener("mouseleave", () => {
+      slider.style.setProperty("--parallax-x", "0px");
+      slider.style.setProperty("--parallax-y", "0px");
+    });
+
+    // --- Scroll fade (subtil) ---
+    function handleScroll() {
+      const rect = slider.getBoundingClientRect();
+      const windowH = window.innerHeight || document.documentElement.clientHeight;
+      const visible = Math.min(
+        Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5),
+        1
+      );
+      slider.style.opacity = visible;
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Start
+    startAuto();
+    handleScroll();
+    console.log("✅ Hero slider klar.");
   } catch (err) {
-    console.error("❌ Klarte ikke hente slides:", err);
-    return;
+    console.error("❌ Klarte ikke hente HeroSlides:", err);
   }
-
-  // ------------------------------------------------------
-  // 2. GENERER HTML SLIDES
-  // ------------------------------------------------------
-  slidesContainer.innerHTML = slidesData.map((s, i) => {
-    return `
-      <div class="slide ${s.active || i === 0 ? "active" : ""}"
-           style="background-image:url('${s.image}')">
-        <div class="slide-content">
-          ${s.title ? `<h1>${s.title}</h1>` : ""}
-          ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
-          ${s.link ? `<a href="${s.link}" class="btn">${s.button}</a>` : ""}
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  const slides = [...slider.querySelectorAll(".slide")];
-
-  // ------------------------------------------------------
-  // 3. DOT NAVIGATION
-  // ------------------------------------------------------
-  dotsContainer.innerHTML = "";
-  slides.forEach((_, i) => {
-    const dot = document.createElement("span");
-    if (slides[i].classList.contains("active")) dot.classList.add("active");
-    dot.dataset.index = i;
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = [...dotsContainer.querySelectorAll("span")];
-
-  // ------------------------------------------------------
-  // 4. SLIDE LOGIKK
-  // ------------------------------------------------------
-  let current = slides.findIndex(s => s.classList.contains("active"));
-  if (current === -1) current = 0;
-  let timer = null;
-  const AUTO_TIME = 7000;
-
-  const goTo = (i) => {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-
-    current = (i + slides.length) % slides.length;
-
-    slides[current].classList.add("active");
-    dots[current].classList.add("active");
-
-    restartTimer();
-  };
-
-  const next = () => goTo(current + 1);
-  const prev = () => goTo(current - 1);
-
-  // ------------------------------------------------------
-  // 5. AUTO ROTATE
-  // ------------------------------------------------------
-  const restartTimer = () => {
-    clearInterval(timer);
-    timer = setInterval(next, AUTO_TIME);
-  };
-
-  restartTimer();
-
-  // ------------------------------------------------------
-  // 6. DOT / ARROW EVENTS
-  // ------------------------------------------------------
-  dots.forEach(dot =>
-    dot.addEventListener("click", () => goTo(Number(dot.dataset.index)))
-  );
-
-  prevBtn?.addEventListener("click", prev);
-  nextBtn?.addEventListener("click", next);
-
-  slider.addEventListener("mouseenter", () => clearInterval(timer));
-  slider.addEventListener("mouseleave", restartTimer);
-
-  // ------------------------------------------------------
-  // 7. PARALLAX-EFFEKT
-  // ------------------------------------------------------
-  slider.addEventListener("mousemove", e => {
-    const rect = slider.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 8;
-
-    slider.style.setProperty("--parallax-x", `${x}px`);
-    slider.style.setProperty("--parallax-y", `${y}px`);
-  });
-
-  slider.addEventListener("mouseleave", () => {
-    slider.style.setProperty("--parallax-x", `0px`);
-    slider.style.setProperty("--parallax-y", `0px`);
-  });
-
-  // ------------------------------------------------------
-  // 8. SUBTIL SCROLL FADE
-  // ------------------------------------------------------
-  const handleScroll = () => {
-    const rect = slider.getBoundingClientRect();
-    const windowH = window.innerHeight;
-    const visible = Math.min(Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5), 1);
-    slider.style.opacity = visible;
-  };
-
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll();
-
-  console.log("🌟 HeroSlider: Ready.");
 });
 
 
