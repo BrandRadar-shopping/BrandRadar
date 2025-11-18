@@ -2339,12 +2339,12 @@ svg#gold-gradient-defs {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  isolation: isolate;
+  isolation: isolate; /* nødvendig for lagdeling */
   --parallax-x: 0px;
   --parallax-y: 0px;
 }
 
-/* Vignette overlay */
+/* --- Vignette overlay --- */
 .hero-slider::before {
   content: "";
   position: absolute;
@@ -2353,10 +2353,10 @@ svg#gold-gradient-defs {
   background:
     radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.45) 70%),
     linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 40%);
-  z-index: 1;
+  z-index: 2; /* Ligger over bildene, men under tekst/arrows */
 }
 
-/* Radar pulse */
+/* --- Radar pulse --- */
 .hero-slider::after {
   content: "";
   position: absolute;
@@ -2370,7 +2370,7 @@ svg#gold-gradient-defs {
   box-shadow: 0 0 60px rgba(0,112,243,0.3);
   animation: radarWave 6s ease-out infinite;
   opacity: 0.6;
-  z-index: 0;
+  z-index: 2;
 }
 
 @keyframes radarWave {
@@ -2379,15 +2379,15 @@ svg#gold-gradient-defs {
   100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
 }
 
-/* Slides wrapper */
+/* --- Slides wrapper --- */
 .hero-slider .slides {
   position: relative;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 0; /* slides nederst */
 }
 
-/* Each slide */
+/* --- Enkelt-slide --- */
 .hero-slider .slide {
   position: absolute;
   inset: 0;
@@ -2400,14 +2400,14 @@ svg#gold-gradient-defs {
   transition:
     opacity 0.9s ease-in-out,
     transform 8s ease-out;
+  z-index: 0; /* eksplisitt: ligger bak overlay */
 }
 
 .hero-slider .slide.active {
   opacity: 1;
-  z-index: 0;
 }
 
-/* Glassmorphism content */
+/* --- Glassmorphism content --- */
 .hero-slider .slide-content {
   position: absolute;
   left: 50%;
@@ -2421,7 +2421,7 @@ svg#gold-gradient-defs {
   border: 1px solid rgba(255,255,255,0.28);
   backdrop-filter: blur(18px);
   box-shadow: 0 18px 60px rgba(0,0,0,0.45);
-  z-index: 2;
+  z-index: 3; /* ligger over vignette + bilde */
 }
 
 .hero-slider .slide-content h1 {
@@ -2439,7 +2439,7 @@ svg#gold-gradient-defs {
   margin-bottom: 1.4rem;
 }
 
-/* CTA button */
+/* --- CTA --- */
 .hero-slider .slide-content .btn {
   display: inline-block;
   background: linear-gradient(90deg, #0070f3, #00b4ff);
@@ -2460,7 +2460,7 @@ svg#gold-gradient-defs {
   background-position: right center;
 }
 
-/* Navigation arrows */
+/* --- Navigation arrows --- */
 .hero-slider .nav {
   position: absolute;
   top: 50%;
@@ -2476,7 +2476,7 @@ svg#gold-gradient-defs {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 4;
+  z-index: 4; /* øverst */
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
   transition: transform 0.2s ease, background 0.2s ease,
@@ -2493,7 +2493,7 @@ svg#gold-gradient-defs {
   box-shadow: 0 12px 32px rgba(0,0,0,0.6);
 }
 
-/* Dots */
+/* --- Dots --- */
 .hero-slider .dots {
   position: absolute;
   bottom: 26px;
@@ -2502,7 +2502,7 @@ svg#gold-gradient-defs {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  z-index: 4;
+  z-index: 4; /* helt øverst */
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(0,0,0,0.35);
@@ -2525,17 +2525,15 @@ svg#gold-gradient-defs {
   opacity: 1;
 }
 
-/* Responsive */
+/* --- Responsive --- */
 @media (max-width: 900px) {
   .hero-slider {
     min-height: 70vh;
   }
-
   .hero-slider .slide-content {
     width: 90%;
     padding: 1.6rem 1.8rem;
   }
-
   .hero-slider .slide-content h1 {
     font-size: 1.9rem;
   }
@@ -2548,7 +2546,6 @@ svg#gold-gradient-defs {
     font-size: 1.2rem;
     top: 52%;
   }
-
   .hero-slider .slide-content {
     top: 55%;
     padding: 1.4rem 1.5rem;
@@ -3344,6 +3341,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
