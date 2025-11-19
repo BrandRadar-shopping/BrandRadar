@@ -89,39 +89,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-// ===============================
-// Load Top Trending Products
-// ===============================
-async function loadTrendingProducts() {
-  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
-  const SHEET_NAME = "BrandRadarProdukter";
+/* =========================================
+   TRENDING RIGHT NOW – Loader
+========================================= */
 
+// 🔗 Ark: TrendingNow
+const TRENDING_URL = "https://opensheet.elk.sh/13klEz2o7CZ0Q4mbm8WT_b1Sz7LMoJqcluyrFyg58uRc/TrendingNow";
+
+document.addEventListener("DOMContentLoaded", loadTrendingNow);
+
+async function loadTrendingNow() {
   const container = document.getElementById("trending-grid");
   if (!container) return;
 
   try {
-    const data = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+    const res = await fetch(TRENDING_URL);
+    const data = await res.json();
 
-    // Pick first 4 featured products for now
-    const trending = data.slice(0, 4);
+    console.log("🔥 Trending data:", data);
 
-    container.innerHTML = trending
-      .map(p => `
-        <a href="product.html?id=${p.id}" class="product-card">
-          <img src="${p.image_url}" alt="${p.name}" />
-          <div class="info">
-            <h3>${p.name}</h3>
-            <p class="price">${p.price} kr</p>
-          </div>
-        </a>
-      `).join("");
+    // Sort by rank (1 = hottest)
+    data.sort((a, b) => Number(a.rank) - Number(b.rank));
+
+    container.innerHTML = "";
+
+    data.forEach(item => {
+      const card = document.createElement("a");
+      card.href = item.link || "#";
+      card.className = "trending-card";
+      card.target = "_blank";
+
+      card.innerHTML = `
+        <span class="rank-badge">#${item.rank}</span>
+        <h3>${item.title}</h3>
+        <p>${item.description}</p>
+      `;
+
+      container.appendChild(card);
+    });
 
   } catch (err) {
-    console.error("Trending error:", err);
+    console.error("TrendingNow load error:", err);
+    container.innerHTML = "<p>Kunne ikke laste trending nå.</p>";
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadTrendingProducts);
 
 
 // ===============================
