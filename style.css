@@ -2306,44 +2306,31 @@ svg#gold-gradient-defs {
 }
 
 /* ===============================
-   PREMIUM UNIVERS-GRID v3
+   PREMIUM UNIVERS-GRID v4 – 4 cards always in one row
    =============================== */
 
-.universes {
-  padding: 80px 0;
-  text-align: center;
-}
-
-.universes h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.universes .section-sub {
-  color: #555;
-  font-size: 1rem;
-  margin-bottom: 50px;
-}
-
 .universe-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: center;
   gap: 28px;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: nowrap; /* 🔥 hindrer at én havner under */
   padding: 0 20px;
 }
 
 .u-card {
+  width: 100%;
+  max-width: 260px; /* 🔥 smalere = 4 får plass */
   background: #fff;
-  padding: 28px 28px 32px;
+  padding: 26px 24px 30px;
   border-radius: 18px;
   box-shadow: 0 4px 28px rgba(0,0,0,0.06);
   text-decoration: none;
   color: inherit;
   text-align: left;
   transition: transform .18s ease, box-shadow .22s ease;
+  flex-shrink: 0; /* 🔥 viktig: ikke krymp mer enn max-width */
 }
 
 .u-card h3 {
@@ -2366,16 +2353,21 @@ svg#gold-gradient-defs {
 /* Responsive */
 @media (max-width: 900px) {
   .universe-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
+    flex-wrap: wrap; /* 2 + 2 layout */
   }
 }
 
 @media (max-width: 600px) {
   .universe-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .u-card {
+    max-width: 320px;
   }
 }
+
 
 
 
@@ -3467,6 +3459,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
