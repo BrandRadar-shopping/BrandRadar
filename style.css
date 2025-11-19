@@ -2284,7 +2284,7 @@ svg#gold-gradient-defs {
   width: 36px;
   height: 36px;
   opacity: 0.82;
-  stroke: #0070f3;
+  stroke: #000; /* sort */
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -3407,6 +3407,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
