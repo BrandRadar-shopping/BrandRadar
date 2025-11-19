@@ -89,6 +89,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+// ===============================
+// Load Top Trending Products
+// ===============================
+async function loadTrendingProducts() {
+  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
+  const SHEET_NAME = "BrandRadarProdukter";
+
+  const container = document.getElementById("trending-grid");
+  if (!container) return;
+
+  try {
+    const data = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+
+    // Pick first 4 featured products for now
+    const trending = data.slice(0, 4);
+
+    container.innerHTML = trending
+      .map(p => `
+        <a href="product.html?id=${p.id}" class="product-card">
+          <img src="${p.image_url}" alt="${p.name}" />
+          <div class="info">
+            <h3>${p.name}</h3>
+            <p class="price">${p.price} kr</p>
+          </div>
+        </a>
+      `).join("");
+
+  } catch (err) {
+    console.error("Trending error:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadTrendingProducts);
 
 
 
