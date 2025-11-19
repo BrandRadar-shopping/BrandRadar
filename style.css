@@ -2312,8 +2312,8 @@ svg#gold-gradient-defs {
 
 .universes {
   max-width: 1200px;
-  margin: 0 auto;         /* ✔️ Sentrerer hele seksjonen */
-  text-align: center;     /* ✔️ Sentrerer tittel & tekst */
+  margin: 0 auto;
+  text-align: center;
   padding: 4rem 1rem;
 }
 
@@ -2331,32 +2331,59 @@ svg#gold-gradient-defs {
   line-height: 1.55;
 }
 
-/* ===============================
-   PREMIUM UNIVERS-GRID v4 – 4 cards always in one row
-   =============================== */
+/* ==========================================================
+   PREMIUM UNIVERS-GRID – Always 4 cards in one row (desktop)
+   ========================================================== */
 
 .universe-grid {
   display: flex;
-  justify-content: center;  /* ✔️ Sentrerer gridet */
+  justify-content: center;
   gap: 28px;
   max-width: 1200px;
-  margin: 0 auto;           /* ✔️ Sentrerer gridet i container */
-  flex-wrap: nowrap;        /* 🔥 hindrer at én havner under */
+  margin: 0 auto;
+  flex-wrap: nowrap; /* 🔥 Hindrer at 1 faller under */
   padding: 0 20px;
 }
 
+/* ----------------------------------------------------------
+   PREMIUM CARD DESIGN – A + B (subtile gradients per card)
+   ---------------------------------------------------------- */
+
+/* Luxury Corner */
+.u-card.luxury {
+  background: linear-gradient(135deg, #ffffff 0%, #fff7eb 100%);
+}
+
+/* Trender, Nyheter & Kampanjer */
+.u-card.trends {
+  background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+}
+
+/* Brands */
+.u-card.brands {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f4ff 100%);
+}
+
+/* Produkter */
+.u-card.products {
+  background: linear-gradient(135deg, #ffffff 0%, #f4fff8 100%);
+}
+
+/* ----------------------------------------------------------
+   Shared card styling
+   ---------------------------------------------------------- */
 .u-card {
   width: 100%;
-  max-width: 260px;         /* 🔥 smalere kort → 4 på en linje */
-  background: #fff;
+  max-width: 260px;
   padding: 26px 24px 30px;
   border-radius: 18px;
-  box-shadow: 0 4px 28px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 28px rgba(0,0,0,0.05);
   text-decoration: none;
   color: inherit;
   text-align: left;
   transition: transform .18s ease, box-shadow .22s ease;
-  flex-shrink: 0;           /* 🔥 viktig: ikke krymp mer enn max-width */
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .u-card h3 {
@@ -2372,14 +2399,17 @@ svg#gold-gradient-defs {
 }
 
 .u-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 32px rgba(0,0,0,0.12);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.10);
 }
 
-/* Responsive */
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
 @media (max-width: 900px) {
   .universe-grid {
-    flex-wrap: wrap; /* ✔️ 2 + 2 layout */
+    flex-wrap: wrap; /* 2 + 2 layout */
   }
 }
 
@@ -2388,10 +2418,12 @@ svg#gold-gradient-defs {
     flex-direction: column;
     align-items: center;
   }
+
   .u-card {
     max-width: 320px;
   }
 }
+
 
 
 
@@ -3485,6 +3517,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
