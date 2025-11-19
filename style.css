@@ -3519,57 +3519,95 @@ section {
 }
 
 
-/* ================================
-   TOP TRENDING RIGHT NOW
-================================ */
-
-.trending-now {
+/* =======================================
+   🔥 TRENDING RIGHT NOW – PREMIUM GRID
+======================================= */
+.trending-section {
   max-width: 1200px;
-  margin: 5rem auto;
+  margin: 4rem auto;
   padding: 0 1rem;
   text-align: center;
 }
 
-.trending-now h2 {
+.trending-section h2 {
   font-size: 2rem;
   font-weight: 800;
-  margin-bottom: .5rem;
+  margin-bottom: 0.6rem;
 }
 
-.trending-now .section-sub {
-  font-size: 1rem;
-  opacity: .8;
-  margin-bottom: 2rem;
+.trending-section .section-sub {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  margin-bottom: 2.5rem;
 }
 
+/* GRID */
 .trending-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 26px;
 }
 
-/* Reuse Elite v8 product cards (same style you already have) */
-.trending-grid .product-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-  padding: 0;
-  overflow: hidden;
-  cursor: pointer;
-  transition: .25s ease;
+/* CARD */
+.trending-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px 24px 26px;
+  text-align: left;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.06);
+  transition: transform .18s ease, box-shadow .22s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-left: 5px solid #0070f3; /* brand stripe */
 }
 
-.trending-grid .product-card:hover {
+/* Rank badge */
+.rank-badge {
+  background: #0070f3;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  width: fit-content;
+}
+
+.trending-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.trending-card p {
+  font-size: .95rem;
+  opacity: .85;
+  line-height: 1.45;
+}
+
+.trending-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.12);
 }
 
-.trending-grid .product-card img {
-  width: 100%;
-  border-radius: 12px 12px 0 0;
-  height: 260px;
-  object-fit: cover;
+/* CTA inside card */
+.trending-card a {
+  margin-top: auto;
+  display: inline-block;
+  padding: 8px 14px;
+  background: #0070f3;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: .2s;
 }
+
+.trending-card a:hover {
+  background: #005fcc;
+}
+
 
 
 /* ================================
@@ -3618,6 +3656,7 @@ section {
   margin-bottom: 1rem;
   opacity: .95;
 }
+
 
 
 
