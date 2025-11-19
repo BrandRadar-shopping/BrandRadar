@@ -124,6 +124,35 @@ async function loadTrendingProducts() {
 document.addEventListener("DOMContentLoaded", loadTrendingProducts);
 
 
+// ===============================
+// Load Top Brands This Week
+// ===============================
+async function loadTopBrands() {
+  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
+  const SHEET_NAME = "brands_sheet";
+
+  const container = document.getElementById("brands-grid");
+  if (!container) return;
+
+  try {
+    const brands = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+
+    const top = brands.slice(0, 4); // highlight 4 brands
+
+    container.innerHTML = top
+      .map(b => `
+        <a href="brand-page.html?brand=${encodeURIComponent(b.brand)}" class="brand-card">
+          <img src="${b.logo}" alt="${b.brand}">
+          <h3>${b.brand}</h3>
+        </a>
+      `).join("");
+
+  } catch (err) {
+    console.error("Brand error:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadTopBrands);
 
 
 
