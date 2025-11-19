@@ -3608,6 +3608,25 @@ section {
   background: #005fcc;
 }
 
+/* TRENDING NOW SECTION */
+.trending-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.trending-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.trending-section .section-sub {
+  opacity: .8;
+  margin-bottom: 2rem;
+}
+
+/* Produktkortene bruker premium-grid og product-card globalt */
 
 
 /* ================================
@@ -3656,6 +3675,7 @@ section {
   margin-bottom: 1rem;
   opacity: .95;
 }
+
 
 
 
