@@ -2306,22 +2306,48 @@ svg#gold-gradient-defs {
 }
 
 /* ===============================
+   UNIVERS – CONTAINER
+   Sentrert tittel, tekst & grid
+   =============================== */
+
+.universes {
+  max-width: 1200px;
+  margin: 0 auto;         /* ✔️ Sentrerer hele seksjonen */
+  text-align: center;     /* ✔️ Sentrerer tittel & tekst */
+  padding: 4rem 1rem;
+}
+
+.universes h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+}
+
+.universes .section-desc {
+  max-width: 760px;
+  margin: 0 auto 3rem;
+  font-size: 1.05rem;
+  opacity: 0.85;
+  line-height: 1.55;
+}
+
+/* ===============================
    PREMIUM UNIVERS-GRID v4 – 4 cards always in one row
    =============================== */
 
 .universe-grid {
   display: flex;
-  justify-content: center;
+  justify-content: center;  /* ✔️ Sentrerer gridet */
   gap: 28px;
   max-width: 1200px;
-  margin: 0 auto;
-  flex-wrap: nowrap; /* 🔥 hindrer at én havner under */
+  margin: 0 auto;           /* ✔️ Sentrerer gridet i container */
+  flex-wrap: nowrap;        /* 🔥 hindrer at én havner under */
   padding: 0 20px;
 }
 
 .u-card {
   width: 100%;
-  max-width: 260px; /* 🔥 smalere = 4 får plass */
+  max-width: 260px;         /* 🔥 smalere kort → 4 på en linje */
   background: #fff;
   padding: 26px 24px 30px;
   border-radius: 18px;
@@ -2330,7 +2356,7 @@ svg#gold-gradient-defs {
   color: inherit;
   text-align: left;
   transition: transform .18s ease, box-shadow .22s ease;
-  flex-shrink: 0; /* 🔥 viktig: ikke krymp mer enn max-width */
+  flex-shrink: 0;           /* 🔥 viktig: ikke krymp mer enn max-width */
 }
 
 .u-card h3 {
@@ -2353,7 +2379,7 @@ svg#gold-gradient-defs {
 /* Responsive */
 @media (max-width: 900px) {
   .universe-grid {
-    flex-wrap: wrap; /* 2 + 2 layout */
+    flex-wrap: wrap; /* ✔️ 2 + 2 layout */
   }
 }
 
@@ -2362,11 +2388,11 @@ svg#gold-gradient-defs {
     flex-direction: column;
     align-items: center;
   }
-
   .u-card {
     max-width: 320px;
   }
 }
+
 
 
 
@@ -3459,6 +3485,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
