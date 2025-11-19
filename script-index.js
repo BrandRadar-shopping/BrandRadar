@@ -89,82 +89,76 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-/* =========================================
-   TRENDING RIGHT NOW – Loader
-========================================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-// 🔗 Ark: TrendingNow
-const TRENDING_URL = "https://opensheet.elk.sh/13klEz2o7CZ0Q4mbm8WT_b1Sz7LMoJqcluyrFyg58uRc/TrendingNow";
+  /* =========================================================
+     🔥 LOAD TRENDING NOW
+  ========================================================= */
+  async function loadTrending() {
+    try {
+      const url = "https://opensheet.elk.sh/1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY/TrendingNow";
 
-document.addEventListener("DOMContentLoaded", loadTrendingNow);
+      const res = await fetch(url);
+      const data = await res.json();
 
-async function loadTrendingNow() {
-  const container = document.getElementById("trending-grid");
-  if (!container) return;
+      console.log("🔥 Trending data:", data);
 
-  try {
-    const res = await fetch(TRENDING_URL);
-    const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) return;
 
-    console.log("🔥 Trending data:", data);
+      const container = document.querySelector("#trending-grid");
+      if (!container) return;
 
-    // Sort by rank (1 = hottest)
-    data.sort((a, b) => Number(a.rank) - Number(b.rank));
+      container.innerHTML = data
+        .map(item => `
+          <a class="trend-card" href="${item.link}" target="_blank">
+            <img src="${item.image_url}" alt="${item.title}">
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+          </a>
+        `)
+        .join("");
 
-    container.innerHTML = "";
-
-    data.forEach(item => {
-      const card = document.createElement("a");
-      card.href = item.link || "#";
-      card.className = "trending-card";
-      card.target = "_blank";
-
-      card.innerHTML = `
-        <span class="rank-badge">#${item.rank}</span>
-        <h3>${item.title}</h3>
-        <p>${item.description}</p>
-      `;
-
-      container.appendChild(card);
-    });
-
-  } catch (err) {
-    console.error("TrendingNow load error:", err);
-    container.innerHTML = "<p>Kunne ikke laste trending nå.</p>";
+    } catch (err) {
+      console.error("Trending error:", err);
+    }
   }
-}
 
+  /* =========================================================
+     🔥 LOAD TOP BRANDS
+  ========================================================= */
+  async function loadTopBrands() {
+    try {
+      const url = "https://opensheet.elk.sh/1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY/TopBrands";
 
+      const res = await fetch(url);
+      const data = await res.json();
 
-// ===============================
-// Load Top Brands This Week
-// ===============================
-async function loadTopBrands() {
-  const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
-  const SHEET_NAME = "brands_sheet";
+      console.log("🔥 TopBrands data:", data);
 
-  const container = document.getElementById("brands-grid");
-  if (!container) return;
+      if (!Array.isArray(data) || data.length === 0) return;
 
-  try {
-    const brands = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`).then(r => r.json());
+      const container = document.querySelector("#topbrands-grid");
+      if (!container) return;
 
-    const top = brands.slice(0, 4); // highlight 4 brands
+      container.innerHTML = data
+        .map(item => `
+          <a class="topbrand-card" href="${item.link}">
+            <img src="${item.logo}" alt="${item.brand_name}">
+            <h3>${item.brand_name}</h3>
+            <p>${item.description}</p>
+          </a>
+        `)
+        .join("");
 
-    container.innerHTML = top
-      .map(b => `
-        <a href="brand-page.html?brand=${encodeURIComponent(b.brand)}" class="brand-card">
-          <img src="${b.logo}" alt="${b.brand}">
-          <h3>${b.brand}</h3>
-        </a>
-      `).join("");
-
-  } catch (err) {
-    console.error("Brand error:", err);
+    } catch (err) {
+      console.error("Brand error:", err);
+    }
   }
-}
 
-document.addEventListener("DOMContentLoaded", loadTopBrands);
+  // Run both loaders
+  loadTrending();
+  loadTopBrands();
+});
 
 
 
