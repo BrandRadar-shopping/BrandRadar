@@ -2305,20 +2305,71 @@ svg#gold-gradient-defs {
   line-height: 1.5;
 }
 
-/* UNIVERSER */
-.universes { text-align: center; margin: 5rem auto; max-width: 1100px; }
-.universe-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+/* 🌐 UTFORSK UNIVERS – DASHBOARD-FØLELSE */
+.universes {
+  margin: 5rem 0;
+}
+
+.universes .container {
+  text-align: center;
+}
+
+.universes h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.universes-sub {
+  font-size: 0.98rem;
+  color: #666;
+  max-width: 640px;
+  margin: 0 auto 2.4rem;
+}
+
+/* Grid */
+.universe-grid {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Kortene */
 .u-card {
   background: #fff;
   border-radius: 16px;
-  padding: 2rem;
-  font-weight: 700;
+  padding: 1.7rem 1.8rem;
+  text-align: left;
   text-decoration: none;
   color: #111;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  border: 1px solid transparent;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 150px;
 }
-.u-card:hover { transform: translateY(-5px); box-shadow: 0 8px 22px rgba(0,0,0,0.15); }
+
+.u-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.u-card p {
+  font-size: 0.93rem;
+  color: #555;
+  line-height: 1.45;
+}
+
+/* Hover-effekt – “seriøs”, ikke leketøysaktig */
+.u-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+  border-color: #e0e0e0;
+}
+
+
 /* PARTNER & GIVEAWAY */
 .partner-highlight {
   max-width: 1000px;
@@ -3407,6 +3458,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
