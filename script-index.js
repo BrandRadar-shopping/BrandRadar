@@ -194,16 +194,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ---------- TRENDING NOW (via TrendingNow + BrandRadarProdukter) ----------
-
-  // ---------- TRENDING NOW (NY SLIDER-VERSJON) ----------
+ // ---------- TRENDING NOW (ROLLBACK TIL ORIGINAL GRID-VERSJON) ----------
 
 async function loadTrendingNow() {
-  const container = document.getElementById("trendingTrack");  // ← RIKTIG ID
-  if (!container) {
-    console.error("❌ Fant ikke trendingTrack-container!");
-    return;
-  }
+  const container = document.getElementById("trending-grid");  // ← tilbake til original
+  if (!container) return;
 
   try {
     const trendingUrl = `https://opensheet.elk.sh/${TRENDING_SHEET_ID}/${TRENDING_TAB}`;
@@ -221,7 +216,8 @@ async function loadTrendingNow() {
 
     const productById = {};
     allProducts.forEach(p => {
-      if (p.id) productById[String(p.id).trim()] = p;
+      if (!p.id) return;
+      productById[String(p.id).trim()] = p;
     });
 
     const active = trendingRows
@@ -232,6 +228,7 @@ async function loadTrendingNow() {
       })
       .filter(x => x.product);
 
+    // sorter etter rank
     active.sort((a, b) => {
       const ra = parseNumber(a.row.rank) || 9999;
       const rb = parseNumber(b.row.rank) || 9999;
@@ -239,44 +236,25 @@ async function loadTrendingNow() {
     });
 
     const limited = active.slice(0, 10);
+    if (!limited.length) return;
+
+    // Render kort i original stil
     container.innerHTML = "";
+    const orderedProducts = [];
 
     limited.forEach(({ product }) => {
-      const card = document.createElement("div");
-      card.className = "trending-card";
+      // original "Elite" card renderer
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = buildProductCardMarkup(product);
+      const cardEl = wrapper.firstElementChild;
 
-      card.innerHTML = `
-        <div class="trending-card-inner">
-
-          <button class="trending-favorite-btn" data-product-id="${product.id}">
-            <svg viewBox="0 0 24 24">
-              <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
-            </svg>
-          </button>
-
-          <a href="product.html?id=${product.id}">
-            <div class="trending-img-wrapper">
-              <img src="${product.image_url}">
-            </div>
-
-            <div class="trending-info">
-              <h3 class="trending-title">${product.title}</h3>
-              <p class="trending-brand">${product.brand}</p>
-
-              <div class="trending-price-block">
-                <span class="price">${product.price} kr</span>
-                ${product.old_price ? `<span class="old-price">${product.old_price} kr</span>` : ""}
-              </div>
-            </div>
-          </a>
-
-        </div>
-      `;
-
-      container.appendChild(card);
+      orderedProducts.push(product);
+      container.appendChild(cardEl);
     });
 
-    initTrendingArrows();
+    // Klikk → product.html
+    attachProductCardNavigation(container, orderedProducts);
+
   } catch (err) {
     console.error("❌ TrendingNow error:", err);
   }
