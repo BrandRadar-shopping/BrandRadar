@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
         <div class="product-info">
           <p class="brand">${p.brand || ""}</p>
-          <h3>${p.product_name || ""}</h3>
+        <h3 class="product-title">${p.product_name || ""}</h3>
           ${priceBlock}
         </div>
       </div>
