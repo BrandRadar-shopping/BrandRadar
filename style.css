@@ -3519,25 +3519,54 @@ section {
 }
 
 
+/* =======================================
+   🔥 TRENDING RIGHT NOW – PREMIUM GRID
+======================================= */
+
+.trending-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  text-align: center; /* Viktig! Midtstilt heading + tekst */
+}
+
+.trending-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center; /* Sikrer sentrering */
+}
+
+.trending-section .section-sub {
+  opacity: .8;
+  margin-bottom: 2rem;
+  text-align: center; /* Sikrer sentrering */
+}
+
+/* Selve gridet (BEHOLDT AKKURAT SOM FØR) */
 .trending-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 26px;
 }
 
+/* Kortene (AKKURAT SOM DU HADDE DEM) */
 .trending-card {
   background: #ffffff;
   border-radius: 18px;
   padding: 20px 24px 26px;
   text-align: left;
   box-shadow: 0 4px 22px rgba(0,0,0,0.06);
-  transition: .18s ease, box-shadow .22s ease;
+  transition: transform .18s ease, box-shadow .22s ease;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-left: 5px solid #0070f3;
+  border-left: 5px solid #0070f3; /* blå stripe */
 }
 
+.trending-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.12);
+}
 
 
 /* ================================
@@ -3588,23 +3617,19 @@ section {
 }
 
 
-
-
-
-/* Sørg for at produktkort på forsiden ser rene ut */
+/* Globale produktkort-justeringer */
 .product-card h3,
 .product-card p,
 .product-card span {
   text-decoration: none;
 }
 
-/* Dersom noe inni kortet er et <a>, fjern strek & arve farge */
 .product-card a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Old price med strek – brukes på index nå også */
+/* Old price med strek */
 .price-row .old-price {
   margin-left: 8px;
   font-size: 0.9rem;
@@ -3612,7 +3637,7 @@ section {
   text-decoration: line-through;
 }
 
-/* Rabatt-pill (samme stil som andre steder) */
+/* Rabatt-pill */
 .discount-pill {
   margin-left: 10px;
   padding: 3px 8px;
@@ -3623,38 +3648,7 @@ section {
   color: #fff;
 }
 
-/* Enkel trending-karusell */
-.trending-section {
-  position: relative;
-}
 
-.trending-grid {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding-bottom: 8px;
-}
-
-.trending-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.05);
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.trending-nav.prev { left: 10px; }
-.trending-nav.next { right: 10px; }
-
-.trending-nav:hover {
-  background: rgba(0,0,0,0.12);
-}
 
 
 
