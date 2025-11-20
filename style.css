@@ -3680,6 +3680,75 @@ section {
 
 
 
+/* Sørg for at produktkort på forsiden ser rene ut */
+.product-card h3,
+.product-card p,
+.product-card span {
+  text-decoration: none;
+}
+
+/* Dersom noe inni kortet er et <a>, fjern strek & arve farge */
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Old price med strek – brukes på index nå også */
+.price-row .old-price {
+  margin-left: 8px;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* Rabatt-pill (samme stil som andre steder) */
+.discount-pill {
+  margin-left: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #ff4d4f;
+  color: #fff;
+}
+
+/* Enkel trending-karusell */
+.trending-section {
+  position: relative;
+}
+
+.trending-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+}
+
+.trending-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.05);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.trending-nav.prev { left: 10px; }
+.trending-nav.next { right: 10px; }
+
+.trending-nav:hover {
+  background: rgba(0,0,0,0.12);
+}
+
+
+
+
+
 
 
 
