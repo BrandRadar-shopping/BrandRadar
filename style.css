@@ -3649,40 +3649,15 @@ section {
 }
 
 
+.trending-section,
+.trending-section h2,
+.trending-section .section-sub {
+  text-align: center !important;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
 
 
