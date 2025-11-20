@@ -124,19 +124,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Klikk → product.html?id=...
-  function attachProductCardNavigation(container, productsInOrder) {
-    const cards = container.querySelectorAll(".product-card");
-    cards.forEach((card, idx) => {
-      const product = productsInOrder[idx];
-      if (!product) return;
-      const id = encodeURIComponent(product.id || product.product_id || deriveId(product.product_name));
-      card.addEventListener("click", e => {
-        // (Favoritt-ikon kan hoppes over senere om vi legger det inn)
-        if (e.target.closest(".fav-icon")) return;
-        window.location.href = `product.html?id=${id}`;
-      });
+function attachProductCardNavigation(container, productsInOrder) {
+  const cards = container.querySelectorAll(".product-card");
+
+  cards.forEach((card, idx) => {
+    const product = productsInOrder[idx];
+    if (!product) return;
+
+    const id = encodeURIComponent(
+      product.id || product.product_id || deriveId(product.product_name)
+    );
+
+    card.addEventListener("click", e => {
+      
+      // ⭐ Favoritt-ikon klikk → skal IKKE åpne produkt
+      const fav = e.target.closest(".fav-icon");
+      if (fav) {
+        toggleFavorite(product);
+        updateFavoriteCounter();
+        fav.classList.toggle("active");
+        return; // stopper bubbling
+      }
+
+      // ⭐ Vanlig kortklikk → gå til product.html
+      window.location.href = `product.html?id=${id}`;
     });
-  }
+  });
+}
+
 
   // ---------- FEATURED PICKS (CSV) ----------
 
