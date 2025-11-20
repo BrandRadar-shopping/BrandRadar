@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const TOPBRANDS_SHEET_ID = "1n3mCxmTb42RnZ_sNvP5CnYdGjwYFkU5kmnI_BFyiNkU";
   const TOPBRANDS_TAB = "TopBrands";
 
-  // ---------- HJELPEFUNKSJONER ----------
+  // ---------- FORMATTERING ----------
   const nbFormatter = new Intl.NumberFormat("nb-NO");
 
   function parseNumber(val) {
@@ -82,37 +82,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ⭐ FAVORITTLOGIKK (GLOBAL)
   // ======================================================
 
-  function toggleFavorite(product, heartEl) {
-    if (!product || !product.id) return;
-    const pid = String(product.id);
+  function updateFavoriteCounter() {
+    const counter = document.getElementById("favorites-count"); // ← RIKTIG ELEMENT
+    if (!counter) return;
 
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    counter.textContent = favorites.length;
+  }
+
+  function toggleFavorite(product, favEl) {
+    if (!product || !product.id) return;
+
+    const pid = String(product.id);
     let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
     const index = favorites.indexOf(pid);
 
     if (index === -1) {
       favorites.push(pid);
-      heartEl.classList.add("active");
+      favEl.classList.add("active");
     } else {
       favorites.splice(index, 1);
-      heartEl.classList.remove("active");
+      favEl.classList.remove("active");
     }
 
     localStorage.setItem("favorites", JSON.stringify(favorites));
     updateFavoriteCounter();
   }
 
-  function updateFavoriteCounter() {
-    const counter = document.querySelector(".favorite-counter");
-    if (!counter) return;
-
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    counter.textContent = favorites.length;
-  }
-
   updateFavoriteCounter();
 
   // ======================================================
-  // ⭐ PRODUKTKORT (KORREKT MARKUP)
+  // ⭐ PRODUKTKORT (ELITE DESIGN)
   // ======================================================
 
   function buildProductCardMarkup(p) {
@@ -134,10 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         <div class="product-info">
           <p class="brand">${p.brand || ""}</p>
-
-          <!-- ⭐ KORREKT PRODUKTNAVN -->
           <h3 class="product-title">${p.product_name || ""}</h3>
-
           ${priceBlock}
         </div>
       </div>
@@ -145,7 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ KORTKLIKK (produkt + favoritt)
+  // ⭐ NAVIGASJON + FAVORITTHJERTE
   // ======================================================
 
   function attachProductCardNavigation(container, productsInOrder) {
@@ -170,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = `product.html?id=${id}`;
       });
 
-      // ⭐ MARKER SOM FAVORITT VED RELOAD
+      // Sett favorittstatus ved load
       const favEl = card.querySelector(".fav-icon");
       const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
       if (favorites.includes(String(product.id))) {
@@ -202,11 +200,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const featured = items.filter(p => (p.featured || "").toLowerCase() === "true");
 
-      if (!featured.length) {
-        grid.innerHTML = "<p>Ingen utvalgte produkter akkurat nå.</p>";
-        return;
-      }
-
       grid.innerHTML = "";
       const orderedProducts = [];
 
@@ -236,7 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ TRENDING NOW (riktig versjon med produktnavn + hjerte)
+  // ⭐ TRENDING NOW
   // ======================================================
 
   async function loadTrendingNow() {
@@ -299,7 +292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
 
   async function loadTopBrands() {
-    const container = document.getElementById("brands-grid");
+    const container = document.getElementById("topbrands-grid");
     if (!container) return;
 
     try {
@@ -331,13 +324,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // KJØR ALLE SEKSJONENE
+  // RUN EVERYTHING
   // ======================================================
 
   loadFeaturedPicks();
   loadTrendingNow();
   loadTopBrands();
 });
+
 
 
 
