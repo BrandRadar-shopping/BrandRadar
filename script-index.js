@@ -196,111 +196,116 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- TRENDING NOW (via TrendingNow + BrandRadarProdukter) ----------
 
-  async function loadTrendingNow() {
-    const container = document.getElementById("trending-grid");
-    if (!container) return;
+  // ---------- TRENDING NOW (NY SLIDER-VERSJON) ----------
 
-    try {
-      const trendingUrl = `https://opensheet.elk.sh/${TRENDING_SHEET_ID}/${TRENDING_TAB}`;
-      const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
-
-      const [trendingRes, productsRes] = await Promise.all([
-        fetch(trendingUrl),
-        fetch(productsUrl)
-      ]);
-
-      const trendingRows = await trendingRes.json();
-      const allProducts = await productsRes.json();
-
-      console.log("🔥 TrendingNow rows:", trendingRows);
-      console.log("🔥 BrandRadarProdukter rows:", allProducts.length);
-
-      if (!Array.isArray(trendingRows) || !trendingRows.length) return;
-
-      const productById = {};
-      allProducts.forEach(p => {
-        if (!p.id) return;
-        productById[String(p.id).trim()] = p;
-      });
-
-      const active = trendingRows
-        .filter(r => String(r.active || "").toLowerCase() === "true")
-        .map(r => {
-          const key = String(r.product_id || "").trim();
-          return {
-            row: r,
-            product: productById[key]
-          };
-        })
-        .filter(x => x.product);
-
-      // sorter etter rank (lavest først)
-      active.sort((a, b) => {
-        const ra = parseNumber(a.row.rank) || 9999;
-        const rb = parseNumber(b.row.rank) || 9999;
-        return ra - rb;
-      });
-
-      const limited = active.slice(0, 10);
-      if (!limited.length) return;
-
-      // Render kort
-      container.innerHTML = "";
-      const orderedProducts = [];
-
-      limited.forEach(({ product, row }) => {
-        // Berik produktet med ev. highlight_reason om vi vil bruke senere
-        const enriched = {
-          ...product,
-          highlight_reason: row.highlight_reason
-        };
-
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(enriched);
-        const cardEl = wrapper.firstElementChild;
-
-        orderedProducts.push(enriched);
-        container.appendChild(cardEl);
-      });
-
-      // Navigasjon til product.html
-      attachProductCardNavigation(container, orderedProducts);
-
-      // Enkel horisontal “karusell” med piler
-      initTrendingCarousel(container);
-    } catch (err) {
-      console.error("❌ TrendingNow error:", err);
-    }
+async function loadTrendingNow() {
+  const container = document.getElementById("trendingTrack");  // ← RIKTIG ID
+  if (!container) {
+    console.error("❌ Fant ikke trendingTrack-container!");
+    return;
   }
 
-  function initTrendingCarousel(gridElement) {
-    const section = document.querySelector(".trending-section");
-    if (!section) return;
+  try {
+    const trendingUrl = `https://opensheet.elk.sh/${TRENDING_SHEET_ID}/${TRENDING_TAB}`;
+    const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
 
-    // Hvis vi allerede har lagt til piler, ikke dupliser
-    if (section.querySelector(".trending-nav")) return;
+    const [trendingRes, productsRes] = await Promise.all([
+      fetch(trendingUrl),
+      fetch(productsUrl)
+    ]);
 
-    const prevBtn = document.createElement("button");
-    prevBtn.className = "trending-nav prev";
-    prevBtn.textContent = "❮";
+    const trendingRows = await trendingRes.json();
+    const allProducts = await productsRes.json();
 
-    const nextBtn = document.createElement("button");
-    nextBtn.className = "trending-nav next";
-    nextBtn.textContent = "❯";
+    if (!Array.isArray(trendingRows) || !trendingRows.length) return;
 
-    section.appendChild(prevBtn);
-    section.appendChild(nextBtn);
-
-    const scrollAmount = 320; // ca. ett kort
-
-    prevBtn.addEventListener("click", () => {
-      gridElement.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    const productById = {};
+    allProducts.forEach(p => {
+      if (p.id) productById[String(p.id).trim()] = p;
     });
 
-    nextBtn.addEventListener("click", () => {
-      gridElement.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    const active = trendingRows
+      .filter(r => String(r.active || "").toLowerCase() === "true")
+      .map(r => {
+        const key = String(r.product_id || "").trim();
+        return { row: r, product: productById[key] };
+      })
+      .filter(x => x.product);
+
+    active.sort((a, b) => {
+      const ra = parseNumber(a.row.rank) || 9999;
+      const rb = parseNumber(b.row.rank) || 9999;
+      return ra - rb;
     });
+
+    const limited = active.slice(0, 10);
+    container.innerHTML = "";
+
+    limited.forEach(({ product }) => {
+      const card = document.createElement("div");
+      card.className = "trending-card";
+
+      card.innerHTML = `
+        <div class="trending-card-inner">
+
+          <button class="trending-favorite-btn" data-product-id="${product.id}">
+            <svg viewBox="0 0 24 24">
+              <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+            </svg>
+          </button>
+
+          <a href="product.html?id=${product.id}">
+            <div class="trending-img-wrapper">
+              <img src="${product.image_url}">
+            </div>
+
+            <div class="trending-info">
+              <h3 class="trending-title">${product.title}</h3>
+              <p class="trending-brand">${product.brand}</p>
+
+              <div class="trending-price-block">
+                <span class="price">${product.price} kr</span>
+                ${product.old_price ? `<span class="old-price">${product.old_price} kr</span>` : ""}
+              </div>
+            </div>
+          </a>
+
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    initTrendingArrows();
+  } catch (err) {
+    console.error("❌ TrendingNow error:", err);
   }
+}
+
+
+// ---------- PIL-LOGIKK FOR SLIDER ----------
+
+function initTrendingArrows() {
+  const track = document.getElementById("trendingTrack");
+  const prev = document.getElementById("trendingPrev");
+  const next = document.getElementById("trendingNext");
+
+  if (!track || !prev || !next) {
+    console.warn("⚠️ Mangler en eller flere slider-elementer");
+    return;
+  }
+
+  const scrollAmount = 320;
+
+  prev.addEventListener("click", () => {
+    track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  });
+
+  next.addEventListener("click", () => {
+    track.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  });
+}
+
 
   // ---------- TOP BRANDS ----------
 
