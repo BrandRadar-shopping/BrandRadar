@@ -105,6 +105,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     return `
       <div class="product-card" data-id="${id}">
+      <div class="fav-icon" data-id="${id}">
+  <svg class="heart-icon" viewBox="0 0 24 24">
+    <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+  </svg>
+</div>
+
         <div class="product-image-wrapper">
           <img src="${p.image_url || ""}" alt="${p.product_name || ""}">
         </div>
