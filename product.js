@@ -4,7 +4,9 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
-  const productId = Number(params.get("id"));
+
+  // ❗ ID MÅ være string – hele systemet bruker string-ID
+  const productId = String(params.get("id"));
   const isLuxuryParam = params.get("luxury") === "true";
 
   if (!productId) {
@@ -12,32 +14,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 🟦 Primære kilder
+  // 🟦 Google Sheets
   const MAIN_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const MAIN_SHEET_NAME = "BrandRadarProdukter";
+
   const LUXURY_SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
   const LUXURY_SHEET_NAME = "LuxuryProducts";
 
-  // 🔹 Forsøk 1: BrandRadar (standard)
+  // ======================================================
+  // 🔍 Finn produkt (string-sammenligning, ikke Number)
+  // ======================================================
+
   let products = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
     .then(r => r.json())
     .catch(() => []);
 
-  let product = products.find(p => Number(p.id) === productId);
+  let product = products.find(p => String(p.id).trim() === productId);
 
-  // 🔹 Forsøk 2: Luxury-arket
+  // Prøv luxury-arket hvis ikke funnet
   if (!product) {
     const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
       .then(r => r.json())
       .catch(() => []);
-    product = luxuryProducts.find(p => Number(p.id) === productId);
-    if (product) {
+
+    const found = luxuryProducts.find(p => String(p.id).trim() === productId);
+    if (found) {
+      product = { ...found, sheet_source: "luxury" };
       products = luxuryProducts;
-      product.sheet_source = "luxury";
     }
   }
 
-  if (!product) return alert("Produktet ble ikke funnet!");
+  if (!product) {
+    alert("Produktet ble ikke funnet!");
+    return;
+  }
 
   const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
 
@@ -47,25 +57,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("product-title").textContent = product.title;
   document.getElementById("product-brand").textContent = product.brand;
   document.getElementById("product-desc").textContent =
-    product.info || product.description || "Dette eksklusive produktet kombinerer kvalitet og eleganse.";
+    product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
   document.getElementById("buy-link").href = product.product_url;
 
   // ======================================================
-  // ⭐ PREMIUM PRICE ENGINE
+  // ⭐ Price Engine (premium)
   // ======================================================
   const newPriceEl = document.getElementById("new-price");
   const oldPriceEl = document.getElementById("old-price");
   const discountTagEl = document.getElementById("discount-tag");
 
-  // Rens pris
   const rawPrice = product.price
     ? String(product.price).replace(/[^\d.,]/g, "").replace(",", ".")
     : null;
   const numericPrice = rawPrice ? parseFloat(rawPrice) : null;
 
-  // Clean discount
   let discount = parseFloat(String(product.discount).replace(",", "."));
-  if (discount && discount < 1) discount = discount * 100; // 0.2 → 20%
+  if (discount && discount < 1) discount *= 100;
 
   if (numericPrice && discount > 0) {
     const newPrice = Math.round(numericPrice * (1 - discount / 100));
@@ -81,7 +89,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
   // ⭐ Rating
   // ======================================================
-  const ratingNum = parseFloat(String(product.rating).replace(",", ".").replace(/[^0-9.]/g, ""));
+  const ratingNum = parseFloat(
+    String(product.rating).replace(",", ".").replace(/[^0-9.]/g, "")
+  );
+
   document.getElementById("product-rating").textContent =
     !isNaN(ratingNum) ? `⭐ ${ratingNum.toFixed(1)} / 5` : "⭐ Ingen rating";
 
@@ -90,6 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
+
   const images = [
     product.image_url,
     product.image2,
@@ -105,11 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     img.src = src;
     img.classList.add("thumb");
     if (i === 0) img.classList.add("active");
+
     img.addEventListener("click", () => {
       document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
       img.classList.add("active");
       mainImg.src = src;
     });
+
     thumbs.appendChild(img);
   });
 
@@ -119,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadRecommendations(products, product);
 
   // ======================================================
-  // ⭐ Favorittknapp
+  // ⭐ Favorittknapp — string-basert ID
   // ======================================================
   setupFavoriteButton(product);
 
@@ -129,7 +143,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
     newPriceEl.style.color = "#d4af37";
-    document.getElementById("product-title").style.color = "#111";
   }
 });
 
@@ -144,17 +157,19 @@ async function loadRecommendations(products, currentProduct) {
   const curBrand = (currentProduct.brand || "").toLowerCase();
 
   let matches = products.filter(p =>
-    Number(p.id) !== Number(currentProduct.id) &&
+    String(p.id).trim() !== String(currentProduct.id).trim() &&
     p.image_url &&
     (p.category || "").toLowerCase() === curCat
   );
 
   if (matches.length < 4) {
-    matches = matches.concat(products.filter(p =>
-      Number(p.id) !== Number(currentProduct.id) &&
-      p.image_url &&
-      (p.brand || "").toLowerCase() === curBrand
-    ));
+    matches = matches.concat(
+      products.filter(p =>
+        String(p.id).trim() !== String(currentProduct.id).trim() &&
+        p.image_url &&
+        (p.brand || "").toLowerCase() === curBrand
+      )
+    );
   }
 
   matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
@@ -188,9 +203,7 @@ async function loadRecommendations(products, currentProduct) {
       <div class="product-info">
         <p class="brand">${p.brand || ""}</p>
         <h3 class="product-name">${p.title}</h3>
-        <p class="rating">
-          ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
-        </p>
+        <p class="rating">${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}</p>
         <div class="price-line">
           <span class="new-price">${newPriceValue} kr</span>
           ${p.discount ? `<span class="old-price">${p.price} kr</span>` : ""}
@@ -198,7 +211,7 @@ async function loadRecommendations(products, currentProduct) {
       </div>
     `;
 
-    const luxuryParam = (currentProduct.sheet_source === "luxury") ? "&luxury=true" : "";
+    const luxuryParam = currentProduct.sheet_source === "luxury" ? "&luxury=true" : "";
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}${luxuryParam}`;
     });
@@ -210,22 +223,24 @@ async function loadRecommendations(products, currentProduct) {
 }
 
 // ======================================================
-// ⭐ Favoritt-knapp
+// ⭐ Favoritt-knapp — bruker global toggleFavorite()
 // ======================================================
 function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
   if (!btn) return;
 
-  const id = Number(product.id);
-  const exists = getFavorites().some(f => Number(f.id) === id);
+  const id = String(product.id).trim();
+  const exists = getFavorites().some(f => String(f.id) === id);
 
   btn.innerHTML = exists
     ? `<span class="heart active"></span> Fjern fra favoritter`
     : `<span class="heart"></span> Legg til favoritter`;
 
   btn.addEventListener("click", () => {
-    toggleFavorite(product);
-    const nowExists = getFavorites().some(f => Number(f.id) === id);
+    toggleFavorite(product, btn.querySelector(".heart"));
+
+    const nowExists = getFavorites().some(f => String(f.id) === id);
+
     btn.innerHTML = nowExists
       ? `<span class="heart active"></span> Fjern fra favoritter`
       : `<span class="heart"></span> Legg til favoritter`;
