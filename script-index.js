@@ -76,117 +76,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return html;
   }
 
-  function deriveId(raw) {
-    if (!raw) return "";
-    return String(raw).trim().replace(/\s+/g, "_");
-  }
-
-  // ======================================================
-  // ⭐ FAVORITTLOGIKK (ID-BASERT, FELLES FORMAT)
-  // ======================================================
-
-  function getFavoriteProducts() {
-    // Vi bruker KUN favoriteProducts som sannhet,
-    // men gjør det robust i tilfelle det ligger gamle objekter der.
-    const raw = JSON.parse(localStorage.getItem("favoriteProducts") || "[]");
-
-    const ids = raw
-      .map(v => {
-        if (v == null) return "";
-        if (typeof v === "object") {
-          if ("id" in v && v.id != null) return String(v.id);
-          return "";
-        }
-        return String(v);
-      })
-      .map(s => s.trim())
-      .filter(id => id && id !== "undefined" && id !== "null");
-
-    return [...new Set(ids)];
-  }
-
-  function setFavoriteProducts(list) {
-    const unique = [...new Set(list.map(String))].map(s => s.trim()).filter(Boolean);
-    localStorage.setItem("favoriteProducts", JSON.stringify(unique));
-    // Mirror til "favorites" som ren ID-liste (for kompatibilitet)
-    localStorage.setItem("favorites", JSON.stringify(unique));
-  }
-
-  function updateFavoriteCounter() {
-    const counter = document.getElementById("favorites-count");
-    if (!counter) return;
-
-    const productFavs = getFavoriteProducts();
-    const brandFavs = JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
-    const total = productFavs.length + brandFavs.length;
-
-    counter.textContent = total;
-  }
-
-  function getProductName(p) {
-    return p.product_name || p.title || p.name || p.product || "";
-  }
-
-  // ⭐ Felles & trygg ID-resolver – bruker id som primær
-  function resolveProductId(p) {
-    const directId =
-      (p.id && String(p.id).trim()) ||
-      (p.product_id && String(p.product_id).trim());
-
-    if (directId) return directId;
-
-    const name = getProductName(p);
-    if (name) return deriveId(name);
-
-    return "";
-  }
-
-  // 🔔 Toast-melding når man legger til / fjerner favoritt
-  function showFavoriteToast(message, type = "success") {
-    let toast = document.querySelector(".toast");
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.className = "toast";
-      document.body.appendChild(toast);
-    }
-
-    toast.textContent = message;
-    toast.classList.remove("success", "error");
-    toast.classList.add(type);
-    toast.classList.add("visible");
-
-    clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(() => {
-      toast.classList.remove("visible");
-    }, 2000);
-  }
-
-  function toggleFavorite(product, favEl) {
-    if (!product) return;
-    const pid = resolveProductId(product);
-    if (!pid) return;
-
-    let favorites = getFavoriteProducts();
-    const index = favorites.indexOf(pid);
-
-    if (index === -1) {
-      favorites.push(pid);
-      favEl && favEl.classList.add("active");
-      const name = getProductName(product) || "Produkt";
-      showFavoriteToast(`${name} lagt til i favoritter`, "success");
-    } else {
-      favorites.splice(index, 1);
-      favEl && favEl.classList.remove("active");
-      const name = getProductName(product) || "Produkt";
-      showFavoriteToast(`${name} fjernet fra favoritter`, "success");
-    }
-
-    setFavoriteProducts(favorites);
-    updateFavoriteCounter();
-  }
-
-  updateFavoriteCounter();
-
   // ======================================================
   // ⭐ PRODUKTKORT (ELITE DESIGN – FELLES FOR INDEX)
   // ======================================================
@@ -223,18 +112,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function attachProductCardNavigation(container, productsInOrder) {
     const cards = container.querySelectorAll(".product-card");
-    const currentFavs = getFavoriteProducts();
+    const favorites = getFavorites();
+    const favIdSet = new Set(favorites.map(f => String(f.id)));
 
     cards.forEach((card, idx) => {
       const product = productsInOrder[idx];
       if (!product) return;
 
       const pid = resolveProductId(product);
-      if (!pid) return;
-
       const favEl = card.querySelector(".fav-icon");
 
-      if (favEl && currentFavs.includes(pid)) {
+      if (favEl && favIdSet.has(String(pid))) {
         favEl.classList.add("active");
       }
 
@@ -242,6 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const fav = e.target.closest(".fav-icon");
 
         if (fav) {
+          e.stopPropagation();
           toggleFavorite(product, fav);
           return;
         }
@@ -284,10 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const product = {
           ...p,
           product_name: p.product_name || p.title || p.name,
-          id:
-            (p.id && String(p.id).trim()) ||
-            (p.product_id && String(p.product_id).trim()) ||
-            deriveId(p.product_name || p.title || p.name)
+          id: resolveProductId(p)
         };
 
         const wrapper = document.createElement("div");
