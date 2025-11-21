@@ -79,50 +79,103 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ FAVORITTLOGIKK (GLOBAL)
+  // ⭐ FAVORITTLOGIKK (GLOBAL – INDEKSEN SIN EGEN)
   // ======================================================
 
+  function getFavoriteProducts() {
+    // Støtter både gammel "favorites" og ny "favoriteProducts"
+    const a = JSON.parse(localStorage.getItem("favoriteProducts") || "[]");
+    const b = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const arr = [...a, ...b].map(String);
+    return [...new Set(arr)]; // unike
+  }
+
+  function setFavoriteProducts(list) {
+    const unique = [...new Set(list.map(String))];
+    localStorage.setItem("favoriteProducts", JSON.stringify(unique));
+    // skriv også til "favorites" for max kompat
+    localStorage.setItem("favorites", JSON.stringify(unique));
+  }
+
   function updateFavoriteCounter() {
-    const counter = document.getElementById("favorites-count"); // ← RIKTIG ELEMENT
+    const counter = document.getElementById("favorites-count");
     if (!counter) return;
 
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    counter.textContent = favorites.length;
+    const productFavs = getFavoriteProducts();
+    const brandFavs = JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
+    const total = productFavs.length + brandFavs.length;
+
+    counter.textContent = total;
+  }
+
+  function getProductName(p) {
+    // Robust navn – uansett hva kolonnen heter
+    return (
+      p.product_name ||
+      p.title ||
+      p.name ||
+      p.product ||
+      ""
+    );
+  }
+
+  // 🔔 Toast-melding når man legger til / fjerner favoritt
+  function showFavoriteToast(message, type = "success") {
+    let toast = document.querySelector(".toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "toast";
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.classList.remove("success", "error");
+    toast.classList.add(type);
+    toast.classList.add("visible");
+
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+      toast.classList.remove("visible");
+    }, 2000);
   }
 
   function toggleFavorite(product, favEl) {
-    if (!product || !product.id) return;
+    if (!product) return;
+    const pid = String(product.id || product.product_id || deriveId(getProductName(product)));
+    if (!pid) return;
 
-    const pid = String(product.id);
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
+    let favorites = getFavoriteProducts();
     const index = favorites.indexOf(pid);
 
     if (index === -1) {
       favorites.push(pid);
-      favEl.classList.add("active");
+      favEl && favEl.classList.add("active");
+      const name = getProductName(product) || "Produkt";
+      showFavoriteToast(`${name} lagt til i favoritter`, "success");
     } else {
       favorites.splice(index, 1);
-      favEl.classList.remove("active");
+      favEl && favEl.classList.remove("active");
+      const name = getProductName(product) || "Produkt";
+      showFavoriteToast(`${name} fjernet fra favoritter`, "success");
     }
 
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    setFavoriteProducts(favorites);
     updateFavoriteCounter();
   }
 
   updateFavoriteCounter();
 
   // ======================================================
-  // ⭐ PRODUKTKORT (ELITE DESIGN)
+  // ⭐ PRODUKTKORT (ELITE DESIGN – FELLES FOR INDEX)
   // ======================================================
 
   function buildProductCardMarkup(p) {
-    const id = p.id || p.product_id || deriveId(p.product_name);
+    const name = getProductName(p);
+    const id = p.id || p.product_id || deriveId(name);
     const priceBlock = buildPriceBlock(p);
 
     return `
       <div class="product-card" data-id="${id}">
-
         <div class="fav-icon" data-id="${id}">
           <svg class="heart-icon" viewBox="0 0 24 24">
             <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
@@ -130,12 +183,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div class="product-image-wrapper">
-          <img src="${p.image_url || ""}" alt="${p.product_name || ""}">
+          <img src="${p.image_url || ""}" alt="${name}">
         </div>
 
         <div class="product-info">
           <p class="brand">${p.brand || ""}</p>
-          <h3 class="product-title">${p.product_name || ""}</h3>
+          <h3 class="product-title">${name}</h3>
           ${priceBlock}
         </div>
       </div>
@@ -148,14 +201,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function attachProductCardNavigation(container, productsInOrder) {
     const cards = container.querySelectorAll(".product-card");
+    const currentFavs = getFavoriteProducts();
 
     cards.forEach((card, idx) => {
       const product = productsInOrder[idx];
       if (!product) return;
 
-      const id = encodeURIComponent(
-        product.id || product.product_id || deriveId(product.product_name)
-      );
+      const name = getProductName(product);
+      const pid = String(product.id || product.product_id || deriveId(name));
+
+      const favEl = card.querySelector(".fav-icon");
+      if (favEl && currentFavs.includes(pid)) {
+        favEl.classList.add("active");
+      }
 
       card.addEventListener("click", e => {
         const fav = e.target.closest(".fav-icon");
@@ -165,15 +223,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           return;
         }
 
-        window.location.href = `product.html?id=${id}`;
+        const idParam = encodeURIComponent(pid);
+        window.location.href = `product.html?id=${idParam}`;
       });
-
-      // Sett favorittstatus ved load
-      const favEl = card.querySelector(".fav-icon");
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      if (favorites.includes(String(product.id))) {
-        favEl.classList.add("active");
-      }
     });
   }
 
@@ -205,8 +257,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       featured.forEach(p => {
         const product = {
-          id: p.id || deriveId(p.product_name),
-          product_name: p.product_name,
+          id: p.id || deriveId(p.product_name || p.title || p.name),
+          product_name: p.product_name || p.title || p.name,
           brand: p.brand,
           price: p.price,
           old_price: p.old_price,
@@ -250,7 +302,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const productById = {};
       allProducts.forEach(p => {
-        if (p.id) productById[String(p.id).trim()] = p;
+        if (!p.id) return;
+        productById[String(p.id).trim()] = p;
       });
 
       const active = trendingRows
