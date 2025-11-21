@@ -7,87 +7,80 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- ✅ NY HEADER -->
+  <header class="main-header">
+    <div class="nav-container">
 
-<!-- ==========================================
-     HEADER
-========================================== -->
-<header class="main-header">
-  <div class="nav-container">
+      <a href="index.html" class="logo">BRANDRADAR</a>
 
-    <a href="index.html" class="logo">BRANDRADAR</a>
+      <div class="search-box">
+        <input type="text" placeholder="Søk produkter eller merker..." />
+        <button>🔍</button>
+      </div>
 
-    <div class="search-box">
-      <input type="text" placeholder="Søk produkter eller merker..." />
-      <button>🔍</button>
+      <!-- Toppmeny -->
+      <nav class="top-links">
+        <a href="index.html">Hjem</a>
+        <a href="news.html">Nyheter</a>
+        <a href="brands.html">Brands</a>
+        <a href="favoritter.html">
+          Favoritter <span id="favorites-count">0</span>
+        </a>
+        <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+      </nav>
     </div>
 
-    <nav class="top-links">
-      <a href="index.html">Hjem</a>
-      <a href="news.html">Nyheter</a>
-      <a href="brands.html">Brands</a>
-      <a href="favoritter.html">Favoritter <span id="favorites-count">0</span></a>
-      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
-    </nav>
+    <!-- 🔽 Kategorier som åpner megamenu -->
+    <ul class="category-bar">
+      <li class="category-item" data-category="Clothing">Klær</li>
+      <li class="category-item" data-category="Shoes">Sko</li>
+      <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+      <li class="category-item" data-category="Accessories">Tilbehør</li>
+      <li class="category-item" data-category="Selfcare">Selfcare</li>
+    </ul>
+  </header>
 
-  </div>
+  <!-- ✅ MEGA-MENYEN LASTES HER -->
+  <nav class="mega-menu"></nav>
 
-  <ul class="category-bar">
-    <li class="category-item" data-category="Clothing">Klær</li>
-    <li class="category-item" data-category="Shoes">Sko</li>
-    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
-    <li class="category-item" data-category="Accessories">Tilbehør</li>
-    <li class="category-item" data-category="Selfcare">Selfcare</li>
-  </ul>
-</header>
+  <!-- 🔽 MAIN INNHOLD -->
+  <main class="news-page">
+    <!-- 🧩 1. Partner Banner -->
+    <section class="partner-banner section-padding loading">
+      Laster partnerkampanje...
+    </section>
 
-<nav class="mega-menu"></nav>
+    <!-- 🔥 2. Ukens Deals -->
+    <section id="deals-section" class="section-padding">
+      <h2>Ukens Deals 🔥</h2>
+      <div class="deals-grid loading">Laster deals...</div>
+    </section>
 
-<!-- ==========================================
-     MAIN CONTENT
-========================================== -->
-<main class="news-page">
+    <!-- 🛰️ 3. Radar Picks -->
+    <section id="picks-section" class="section-padding">
+      <h2>Radar Picks 🛰️</h2>
+      <div class="picks-grid loading">Laster picks...</div>
+    </section>
 
-  <!-- 1) PARTNER BANNER -->
-  <section id="partner-banner" class="section-padding"></section>
+    <!-- ✨ 4. Ukens Spotlight -->
+    <section id="featured-news" class="section-padding">
+      <h2>Ukens Spotlight ✨</h2>
+      <div class="featured-wrapper loading">Laster spotlight...</div>
+    </section>
 
-  <!-- 2) UKENS DEALS -->
-  <section class="section-padding">
-    <h2>Ukens Deals 🔥</h2>
-    <div id="deals-grid" class="news-grid loading">Laster deals...</div>
-  </section>
+    <!-- 🆕 5. Nye Produkter / Trender -->
+    <section id="news-feed" class="section-padding">
+      <h2>Nye Produkter & Trender</h2>
+      <div id="news-grid" class="news-grid loading">Laster produkter...</div>
+    </section>
+  </main>
 
-  <!-- 3) RADAR PICKS -->
-  <section class="section-padding">
-    <h2>Radar Picks 🛰️</h2>
-    <div id="radar-picks-grid" class="news-grid loading">Laster picks...</div>
-  </section>
-
-  <!-- 4) SPOTLIGHT -->
-  <section class="section-padding">
-    <div id="featured-news" class="featured-wrapper loading">Laster spotlight...</div>
-  </section>
-
-  <!-- 5) NYHETSFLOW -->
-  <section class="section-padding">
-    <h2>Nye Produkter & Trender</h2>
-    <div id="news-grid" class="news-grid loading">Laster produkter...</div>
-  </section>
-
-</main>
-
-<!-- ==========================================
-     SCRIPTS (KORREKT REKKEFØLGE)
-========================================== -->
-<script src="favorites-core.js"></script>
-<script src="script.js"></script>
-<script src="script-megamenu.js"></script>
-
-<!-- Hele news-logikken ligger nå i ÉN fil -->
-<script src="news.js"></script>
-
-<!-- Til slutt favorites-rendering -->
-<script src="script-favorites.js"></script>
-
+  <!-- 🧠 Scripts -->
+  <script src="favorites-core.js"></script>
+  <script src="script.js"></script>
+  <script src="script-megamenu.js"></script>
+  <script src="news.js"></script>
+  <script src="script-favorites.js"></script>
 </body>
 </html>
 
