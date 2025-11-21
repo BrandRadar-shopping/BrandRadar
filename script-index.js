@@ -82,21 +82,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ FAVORITTLOGIKK (GLOBAL – INDEKSEN SIN EGEN)
+  // ⭐ FAVORITTLOGIKK (ID-BASERT, FELLES FORMAT)
   // ======================================================
 
   function getFavoriteProducts() {
-    // Støtter både gammel "favorites" og ny "favoriteProducts"
-    const a = JSON.parse(localStorage.getItem("favoriteProducts") || "[]");
-    const b = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const arr = [...a, ...b].map(String);
-    return [...new Set(arr)]; // unike
+    // Vi bruker KUN favoriteProducts som sannhet,
+    // men gjør det robust i tilfelle det ligger gamle objekter der.
+    const raw = JSON.parse(localStorage.getItem("favoriteProducts") || "[]");
+
+    const ids = raw
+      .map(v => {
+        if (v == null) return "";
+        if (typeof v === "object") {
+          if ("id" in v && v.id != null) return String(v.id);
+          return "";
+        }
+        return String(v);
+      })
+      .map(s => s.trim())
+      .filter(id => id && id !== "undefined" && id !== "null");
+
+    return [...new Set(ids)];
   }
 
   function setFavoriteProducts(list) {
-    const unique = [...new Set(list.map(String))];
+    const unique = [...new Set(list.map(String))].map(s => s.trim()).filter(Boolean);
     localStorage.setItem("favoriteProducts", JSON.stringify(unique));
-    // skriv også til "favorites" for max kompat
+    // Mirror til "favorites" som ren ID-liste (for kompatibilitet)
     localStorage.setItem("favorites", JSON.stringify(unique));
   }
 
@@ -112,11 +124,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getProductName(p) {
-    // Robust navn – uansett hva kolonnen heter
     return p.product_name || p.title || p.name || p.product || "";
   }
 
-  // ⭐ Felles & trygg ID-resolver – brukes OVERALT
+  // ⭐ Felles & trygg ID-resolver – bruker id som primær
   function resolveProductId(p) {
     const directId =
       (p.id && String(p.id).trim()) ||
@@ -219,6 +230,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!product) return;
 
       const pid = resolveProductId(product);
+      if (!pid) return;
+
       const favEl = card.querySelector(".fav-icon");
 
       if (favEl && currentFavs.includes(pid)) {
@@ -337,7 +350,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
 
       limited.forEach(({ row, product }) => {
-        // Berik produktet slik at ID + navn alltid finnes
         const enriched = {
           ...product,
           product_name: getProductName(product),
@@ -354,8 +366,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       attachProductCardNavigation(container, orderedProducts);
-
-      // ⭐ Aktiver pilene etter rendering
       initTrendingArrows();
     } catch (err) {
       console.error("❌ TrendingNow error:", err);
