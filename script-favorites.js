@@ -1,92 +1,54 @@
 // ======================================================
-// BrandRadar.shop – Favorittsystem (ID-basert og stabilt)
+// BrandRadar – Favorittsystem (ID-basert & synket med index)
 // ======================================================
 
-// Sanitizer: Ensartet rating parsing
+const BRAND_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+const BRAND_TAB = "BrandRadarProdukter";
+const BRAND_SHEET_URL = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
+
+// --- Utils ---
+
 function cleanRating(value) {
   if (!value) return null;
-  return parseFloat(
-    value.toString().replace(",", ".").replace(/[^0-9.\-]/g, "")
-  ) || null;
+  return (
+    parseFloat(
+      value.toString().replace(",", ".").replace(/[^0-9.\-]/g, "")
+    ) || null
+  );
 }
 
-// ======================================================
-// FAVORITT-PRODUKTER
-// ======================================================
+// 🔹 Hent produkt-favoritt-ID-er (ENESTE sanne formatet)
+function getFavoriteProductIds() {
+  const raw = JSON.parse(localStorage.getItem("favoriteProducts") || "[]");
 
-// Hent produktfavoritter
-const getFavorites = () =>
-  JSON.parse(localStorage.getItem("favorites") || "[]");
+  const ids = raw
+    .map(v => {
+      if (v == null) return "";
+      if (typeof v === "object") {
+        if ("id" in v && v.id != null) return String(v.id);
+        return "";
+      }
+      return String(v);
+    })
+    .map(s => s.trim())
+    .filter(id => id && id !== "undefined" && id !== "null");
 
-// Sjekk om produkt allerede er i favoritter
-const isFavorite = (id) => {
-  const favorites = getFavorites();
-  return favorites.some(f => String(f.id) === String(id));
-};
+  return [...new Set(ids)];
+}
 
-// Lagre produkter + oppdater teller
-const saveFavorites = (favorites) => {
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateFavoriteCount();
-};
+// 🔹 Lagre ID-er (og speil til "favorites" som ID-liste for kompat)
+function setFavoriteProductIds(ids) {
+  const unique = [...new Set(ids.map(String))].map(s => s.trim()).filter(Boolean);
+  localStorage.setItem("favoriteProducts", JSON.stringify(unique));
+  localStorage.setItem("favorites", JSON.stringify(unique));
+}
 
-// Legg til / fjern produktfavoritt
-const toggleFavorite = (product) => {
-  const favorites = getFavorites();
-  const productId = Number(product.id);
-  const index = favorites.findIndex(fav => Number(fav.id) === productId);
+// 🔹 Brand-favoritter (samme som før)
+function getFavoriteBrands() {
+  return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
+}
 
-  if (index >= 0) {
-    favorites.splice(index, 1);
-    showToast("❌ Fjernet fra favoritter");
-  } else {
-    favorites.push({
-      id: productId,
-      title: product.title,
-      brand: product.brand,
-      price: product.price,
-      discount: product.discount,
-      image_url: product.image_url,
-      product_url: product.product_url,
-      category: product.category,
-      rating: cleanRating(product.rating),     // ✅ FIXED: alltid tall
-      luxury: product.sheet_source === "luxury" || product.luxury === true
-    });
-    showToast("✅ Lagt til i favoritter");
-  }
-
-  saveFavorites(favorites);
-};
-
-// Oppdater teller i navbar
-const updateFavoriteCount = () => {
-  const count = getFavorites().length;
-  document.querySelectorAll("#favorites-count")
-    .forEach(el => el.textContent = count);
-};
-
-// Toast melding
-const showToast = (message) => {
-  let toast = document.querySelector(".toast-message");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.className = "toast-message";
-    document.body.appendChild(toast);
-  }
-
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 1800);
-};
-
-// ======================================================
-// FAVORITT-BRANDS
-// ======================================================
-
-const getFavoriteBrands = () =>
-  JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
-
-const toggleBrandFavorite = (brand) => {
+function toggleBrandFavorite(brand) {
   const brands = getFavoriteBrands();
   const index = brands.indexOf(brand);
 
@@ -100,52 +62,129 @@ const toggleBrandFavorite = (brand) => {
 
   localStorage.setItem("favoriteBrands", JSON.stringify(brands));
   updateFavoriteTabsCount();
-};
+  updateFavoriteCount();
+}
+
+// 🔹 Teller i header
+function updateFavoriteCount() {
+  const productCount = getFavoriteProductIds().length;
+  const brandCount = getFavoriteBrands().length;
+  const total = productCount + brandCount;
+
+  document
+    .querySelectorAll("#favorites-count")
+    .forEach(el => (el.textContent = total));
+}
+
+// 🔹 Teller på tabs
+function updateFavoriteTabsCount() {
+  const elProducts = document.getElementById("fav-products-count");
+  const elBrands = document.getElementById("fav-brands-count");
+
+  if (elProducts) elProducts.textContent = getFavoriteProductIds().length;
+  if (elBrands) elBrands.textContent = getFavoriteBrands().length;
+}
+
+// 🔹 Toast
+function showToast(message) {
+  let toast = document.querySelector(".toast-message");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "toast-message";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+// 🔹 Toggle produkt-favoritt via ID
+function toggleFavoriteById(id) {
+  const pid = String(id).trim();
+  if (!pid) return;
+
+  const favorites = getFavoriteProductIds();
+  const index = favorites.indexOf(pid);
+
+  if (index >= 0) {
+    favorites.splice(index, 1);
+    showToast("❌ Fjernet fra favoritter");
+  } else {
+    favorites.push(pid);
+    showToast("✅ Lagt til i favoritter");
+  }
+
+  setFavoriteProductIds(favorites);
+  updateFavoriteCount();
+  updateFavoriteTabsCount();
+}
 
 // ======================================================
-// LAST INN PRODUKT-FAVORITTER
+// LAST INN FAVORITT-PRODUKTER (fra BrandRadarProdukter)
 // ======================================================
 
-function loadFavoriteProducts() {
-  const favorites = getFavorites();
+async function loadFavoriteProducts() {
   const grid = document.getElementById("favorites-product-grid");
   const emptyMsg = document.getElementById("empty-products");
-
   if (!grid) return;
+
+  const favIds = getFavoriteProductIds();
   grid.innerHTML = "";
 
-  if (favorites.length === 0) {
-    emptyMsg.style.display = "block";
+  if (favIds.length === 0) {
+    if (emptyMsg) emptyMsg.style.display = "block";
+    updateFavoriteTabsCount();
     return;
   }
-  emptyMsg.style.display = "none";
+  if (emptyMsg) emptyMsg.style.display = "none";
 
-  favorites.forEach(product => {
+  let allProducts = [];
+  try {
+    const res = await fetch(BRAND_SHEET_URL);
+    allProducts = await res.json();
+  } catch (err) {
+    console.error("❌ Klarte ikke laste BrandRadarProdukter for favoritter:", err);
+    if (emptyMsg) emptyMsg.style.display = "block";
+    return;
+  }
+
+  const productById = {};
+  allProducts.forEach(p => {
+    if (!p.id) return;
+    productById[String(p.id).trim()] = p;
+  });
+
+  const validIds = [];
+  favIds.forEach(fid => {
+    const p = productById[fid];
+    if (!p) return;
+
+    validIds.push(fid);
+    const ratingValue = cleanRating(p.rating);
+
     const card = document.createElement("div");
     card.classList.add("product-card");
 
-    // Fix rating (fallback for gamle favoritter)
-    const ratingValue = cleanRating(product.rating);
-
-    // Fjern-knapp
+    // Fjern-tag
     const removeTag = document.createElement("span");
     removeTag.classList.add("remove-tag");
     removeTag.textContent = "Fjern";
-    removeTag.dataset.id = product.id;
+    removeTag.dataset.id = fid;
     card.appendChild(removeTag);
 
     // Rabattmerke
-    if (product.discount) {
+    if (p.discount) {
       const discountBadge = document.createElement("div");
       discountBadge.classList.add("discount-badge");
-      discountBadge.textContent = `-${product.discount}%`;
+      discountBadge.textContent = `-${p.discount}%`;
       card.appendChild(discountBadge);
     }
 
-    // Produktbilde
+    // Bilde
     const img = document.createElement("img");
-    img.src = product.image_url;
-    img.alt = product.title;
+    img.src = p.image_url || "";
+    img.alt = p.title || p.product_name || "";
     img.loading = "lazy";
     card.appendChild(img);
 
@@ -155,13 +194,12 @@ function loadFavoriteProducts() {
 
     const brand = document.createElement("p");
     brand.classList.add("brand");
-    brand.textContent = product.brand || "";
+    brand.textContent = p.brand || "";
 
     const name = document.createElement("h3");
     name.classList.add("product-name");
-    name.textContent = product.title || "";
+    name.textContent = p.title || p.product_name || "";
 
-    // Rating
     const rating = document.createElement("p");
     rating.classList.add("rating");
     rating.innerHTML = ratingValue
@@ -172,52 +210,59 @@ function loadFavoriteProducts() {
     const priceLine = document.createElement("div");
     priceLine.classList.add("price-line");
 
-    // Beregn ny pris
-    let newPriceValue = product.price;
-    if (product.discount && product.price) {
-      const numericPrice = parseFloat(
-        product.price.replace(/[^\d.,]/g, "").replace(",", ".")
-      );
-      if (!isNaN(numericPrice)) {
-        newPriceValue = (numericPrice * (1 - product.discount / 100)).toFixed(0);
-      }
-    }
-
     const newPrice = document.createElement("span");
     newPrice.classList.add("new-price");
-    newPrice.textContent = `${newPriceValue} kr`;
+
+    let priceText = p.price || "";
+    if (p.price) {
+      const numericPrice = parseFloat(
+        p.price.toString().replace(/[^\d.,]/g, "").replace(",", ".")
+      );
+      if (!isNaN(numericPrice)) {
+        priceText = `${numericPrice.toFixed(0)} kr`;
+      }
+    }
+    newPrice.textContent = priceText;
     priceLine.appendChild(newPrice);
 
-    if (product.discount && product.price) {
+    // Hvis både price + old_price -> vis gammel pris
+    if (p.old_price) {
       const oldPrice = document.createElement("span");
       oldPrice.classList.add("old-price");
-      oldPrice.textContent = `${product.price} kr`;
+      oldPrice.textContent = `${p.old_price} kr`;
       priceLine.appendChild(oldPrice);
     }
 
     info.append(brand, name, rating, priceLine);
     card.appendChild(info);
 
-    // Klikk → produktdetalj
+    // Klikk → product.html?id=...
     card.addEventListener("click", () => {
-      const luxuryParam = product.luxury ? "&luxury=true" : "";
-      window.location.href = `product.html?id=${product.id}${luxuryParam}`;
+      window.location.href = `product.html?id=${encodeURIComponent(fid)}`;
     });
 
-    // Fjern favoritt
-    removeTag.addEventListener("click", (e) => {
+    // Fjern favoritt (kun denne, ikke navigasjon)
+    removeTag.addEventListener("click", e => {
       e.stopPropagation();
-      toggleFavorite(product);
+      toggleFavoriteById(fid);
       loadFavoriteProducts();
-      updateFavoriteTabsCount();
     });
 
     grid.appendChild(card);
   });
+
+  // Rydd opp i lokale favoritter hvis noen IDs manglet i arket
+  if (validIds.length !== favIds.length) {
+    setFavoriteProductIds(validIds);
+    updateFavoriteCount();
+    updateFavoriteTabsCount();
+  }
+
+  updateFavoriteTabsCount();
 }
 
 // ======================================================
-// FAVORITT-BRANDS RENDERING
+// FAVORITT-BRANDS RENDERING (som før)
 // ======================================================
 
 function loadFavoriteBrands() {
@@ -231,13 +276,15 @@ function loadFavoriteBrands() {
 
   grid.innerHTML = "";
   if (favBrands.length === 0) {
-    emptyMsg.style.display = "block";
+    if (emptyMsg) emptyMsg.style.display = "block";
     return;
   }
-  emptyMsg.style.display = "none";
+  if (emptyMsg) emptyMsg.style.display = "none";
 
   favBrands.forEach(brand => {
-    const brandData = allBrandsData.find(b => b.brand.trim() === brand.trim());
+    const brandData = allBrandsData.find(
+      b => b.brand && b.brand.trim() === brand.trim()
+    );
     if (!brandData) return;
 
     const card = document.createElement("div");
@@ -249,11 +296,10 @@ function loadFavoriteBrands() {
       <h3>${brand}</h3>
     `;
 
-    card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
+    card.querySelector(".remove-brand-tag").addEventListener("click", e => {
       e.stopPropagation();
       toggleBrandFavorite(brand);
       loadFavoriteBrands();
-      updateFavoriteTabsCount();
     });
 
     card.addEventListener("click", () => {
@@ -265,19 +311,7 @@ function loadFavoriteBrands() {
 }
 
 // ======================================================
-// TELLER
-// ======================================================
-
-function updateFavoriteTabsCount() {
-  const elProducts = document.getElementById("fav-products-count");
-  const elBrands = document.getElementById("fav-brands-count");
-
-  if (elProducts) elProducts.textContent = getFavorites().length;
-  if (elBrands) elBrands.textContent = getFavoriteBrands().length;
-}
-
-// ======================================================
-// DOMContentLoaded — Nederst (riktig rekkefølge)
+// DOMContentLoaded – start alt
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -304,3 +338,4 @@ document.addEventListener("DOMContentLoaded", () => {
     updateFavoriteTabsCount();
   }
 });
+
