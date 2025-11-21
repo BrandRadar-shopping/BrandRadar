@@ -3527,9 +3527,9 @@ section {
 .trending-section {
   max-width: 1200px;
   margin: 4rem auto;
-  padding: 0 3rem; /* litt mer luft til piler */
+  padding: 0 3rem; /* Luft til piler */
   text-align: center;
-  position: relative; /* nødvendig for piler */
+  position: relative; /* Påkrevd for pil-posisjon */
 }
 
 .trending-section h2 {
@@ -3545,13 +3545,14 @@ section {
 }
 
 /* ===============================
-   🔥 SLIDER LAYOUT (1 linje)
+   🔥 SLIDER LAYOUT – TVING HORISONTAL
 ================================*/
-
 .trending-grid {
-  display: flex !important;   /* tvinger horisontal layout */
+  display: flex !important;           /* tving horisontal layout */
+  flex-direction: row !important;     /* horisontal retning */
+  flex-wrap: nowrap !important;       /* ingen line-break */
   gap: 26px;
-  overflow-x: auto;
+  overflow-x: auto !important;        /* scroll/slider */
   scroll-behavior: smooth;
   padding: 10px 0 20px;
   width: 100%;
@@ -3562,19 +3563,17 @@ section {
 }
 
 /* ===============================
-   🔥 KORTSTØRRELSE – 330px som resten
+   🔥 KORTSTØRRELSE – matcher designet
 ================================*/
-
 .trending-grid .product-card {
-  min-width: 330px;
-  max-width: 330px;
-  flex-shrink: 0;
+  min-width: 330px !important;
+  max-width: 330px !important;
+  flex-shrink: 0 !important;
 }
 
 /* ===============================
-   🔥 SLIDER-PILER – flyttet lenger ut
+   🔥 SLIDER-PILER
 ================================*/
-
 .trending-nav {
   position: absolute;
   top: 50%;
@@ -3596,7 +3595,7 @@ section {
   transform: translateY(-50%) scale(1.07);
 }
 
-/* Posisjoner litt MER ut enn før */
+/* Posisjoner piler litt lenger ut */
 .trending-nav.prev {
   left: -40px;
 }
@@ -3605,11 +3604,6 @@ section {
   right: -40px;
 }
 
-.trending-section .trending-grid {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-}
 
 
 /* ================================
@@ -3702,6 +3696,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
