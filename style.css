@@ -3568,6 +3568,56 @@ section {
   box-shadow: 0 10px 32px rgba(0,0,0,0.12);
 }
 
+/* ===============================
+   TRENDING SLIDER
+================================*/
+
+.trending-section {
+  position: relative;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2.5rem; /* plass til piler */
+  text-align: center;
+}
+
+.trending-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.trending-track::-webkit-scrollbar {
+  height: 0; /* skjul scrollbar */
+}
+
+.trending-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.06);
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.trending-nav:hover {
+  background: rgba(0,0,0,0.12);
+}
+
+.trending-nav.prev {
+  left: 0;
+}
+
+.trending-nav.next {
+  right: 0;
+}
+
 
 /* ================================
    TOP BRANDS THIS WEEK
@@ -3659,5 +3709,6 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
