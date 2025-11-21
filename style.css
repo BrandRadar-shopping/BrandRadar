@@ -3605,6 +3605,11 @@ section {
   right: -40px;
 }
 
+.trending-section .trending-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+}
 
 
 /* ================================
@@ -3697,6 +3702,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
