@@ -3523,74 +3523,59 @@ section {
    🔥 TRENDING RIGHT NOW – PREMIUM GRID
 ======================================= */
 
+/* Seksjonen */
 .trending-section {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1rem;
-  text-align: center; /* Viktig! Midtstilt heading + tekst */
+  margin: 4rem auto;
+  padding: 0 3rem; /* litt mer luft til piler */
+  text-align: center;
+  position: relative; /* nødvendig for piler */
 }
 
 .trending-section h2 {
   font-size: 2rem;
   font-weight: 800;
-  text-align: center; /* Sikrer sentrering */
+  text-align: center;
 }
 
 .trending-section .section-sub {
   opacity: .8;
   margin-bottom: 2rem;
-  text-align: center; /* Sikrer sentrering */
-}
-
-/* Selve gridet (BEHOLDT AKKURAT SOM FØR) */
-.trending-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 26px;
-}
-
-/* Kortene (AKKURAT SOM DU HADDE DEM) */
-.trending-card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px 24px 26px;
-  text-align: left;
-  box-shadow: 0 4px 22px rgba(0,0,0,0.06);
-  transition: transform .18s ease, box-shadow .22s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-left: 5px solid #0070f3; /* blå stripe */
-}
-
-.trending-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 32px rgba(0,0,0,0.12);
-}
-
-/* ===============================
-   TRENDING SLIDER
-================================*/
-
-.trending-section {
-  position: relative;
-  max-width: 1200px;
-  margin: 4rem auto;
-  padding: 0 2.5rem; /* plass til piler */
   text-align: center;
 }
 
-.trending-track {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
+/* ===============================
+   🔥 SLIDER LAYOUT (1 linje)
+================================*/
+
+.trending-grid {
+  display: flex;                  /* horisontal rad */
+  gap: 26px;
+  overflow-x: auto;               /* scroll i bredden */
   scroll-behavior: smooth;
   padding-bottom: 10px;
 }
 
-.trending-track::-webkit-scrollbar {
+.trending-grid::-webkit-scrollbar {
   height: 0; /* skjul scrollbar */
 }
+
+/* ===============================
+   🔥 KORTSTØRRELSE (samme som før)
+================================*/
+
+.trending-grid .product-card {
+  min-width: 300px;     /* fast bredde */
+  max-width: 300px;
+  flex-shrink: 0;       /* hindrer krymping */
+}
+
+/* La resten av kort-designet stå urørt
+   (du liker det slik det er allerede!) */
+
+/* ===============================
+   🔥 SLIDER-PILER
+================================*/
 
 .trending-nav {
   position: absolute;
@@ -3610,12 +3595,13 @@ section {
   background: rgba(0,0,0,0.12);
 }
 
+/* Flyttet ut til hver side */
 .trending-nav.prev {
-  left: 0;
+  left: -20px;
 }
 
 .trending-nav.next {
-  right: 0;
+  right: -20px;
 }
 
 
@@ -3709,6 +3695,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
