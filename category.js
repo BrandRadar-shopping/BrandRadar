@@ -1,5 +1,6 @@
 // ======================================================
 // ✅ BrandRadar – Category Page FINAL + Filter Tags
+//    (Oppdatert til nytt favorittsystem via favorites-core.js)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -123,12 +124,17 @@ document.addEventListener("DOMContentLoaded", () => {
           brandFilter.appendChild(opt);
         });
 
-      // ✅ Render products – OPPDATERT med premium prislinje
+      // ======================================================
+      // ✅ Render products – OPPDATERT til nytt favorittsystem
+      // ======================================================
       function renderProducts(list) {
         productGrid.innerHTML = "";
 
         list.forEach(p => {
-          const id = Number(p.id);
+          // Bruk global ID-resolver fra favorites-core.js
+          const pid = typeof resolveProductId === "function"
+            ? resolveProductId(p)
+            : (p.id || p.product_id || "");
 
           // Rating – samme rens som ellers
           let ratingValue = null;
@@ -158,7 +164,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          const isFav = getFavorites().some(f => Number(f.id) === id);
+          // Sjekk favoritt-status via global isProductFavorite
+          const isFav = (typeof isProductFavorite === "function")
+            ? isProductFavorite(pid)
+            : false;
 
           const card = document.createElement("div");
           card.classList.add("product-card");
@@ -204,20 +213,37 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `;
 
-          // ✅ Product click -> open page (ikke trigge på hjertet)
+          // ✅ Product click -> open product page (ikke trigge på hjertet)
           card.addEventListener("click", e => {
             if (!e.target.closest(".fav-icon")) {
-              window.location.href = `product.html?id=${id}`;
+              if (pid) {
+                window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+              }
             }
           });
 
-          // ✅ Toggle favorite
+          // ✅ Toggle favorite via global toggleFavorite
           const favIconEl = card.querySelector(".fav-icon");
           favIconEl.addEventListener("click", e => {
             e.stopPropagation();
-            toggleFavorite(p);
-            favIconEl.classList.toggle("active");
-            updateFavoriteCount();
+
+            if (typeof toggleFavorite === "function") {
+              const productData = {
+                id: pid,
+                product_name: p.title || p.product_name || p.name,
+                title: p.title || p.product_name || p.name,
+                brand: p.brand || "",
+                price: p.price,
+                discount: p.discount,
+                image_url: p.image_url,
+                product_url: p.product_url,
+                category: p.category || p.main_category || "",
+                rating: p.rating,
+                luxury: false
+              };
+
+              toggleFavorite(productData, favIconEl);
+            }
           });
 
           productGrid.appendChild(card);
@@ -324,7 +350,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // ✅ First render
       applyFiltersAndSort();
-      setTimeout(() => updateFavoriteCount?.(), 50);
+
+      // Oppdater global teller etter at kort er rendret
+      setTimeout(() => {
+        if (typeof updateFavoriteCounter === "function") {
+          updateFavoriteCounter();
+        }
+      }, 50);
     })
     .catch(err => console.error("❌ Category error:", err));
 });
+
