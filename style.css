@@ -3549,60 +3549,62 @@ section {
 ================================*/
 
 .trending-grid {
-  display: flex;                  /* horisontal rad */
+  display: flex !important;   /* tvinger horisontal layout */
   gap: 26px;
-  overflow-x: auto;               /* scroll i bredden */
+  overflow-x: auto;
   scroll-behavior: smooth;
-  padding-bottom: 10px;
+  padding: 10px 0 20px;
+  width: 100%;
 }
 
 .trending-grid::-webkit-scrollbar {
-  height: 0; /* skjul scrollbar */
+  height: 0; 
 }
 
 /* ===============================
-   🔥 KORTSTØRRELSE (samme som før)
+   🔥 KORTSTØRRELSE – 330px som resten
 ================================*/
 
 .trending-grid .product-card {
-  min-width: 300px;     /* fast bredde */
-  max-width: 300px;
-  flex-shrink: 0;       /* hindrer krymping */
+  min-width: 330px;
+  max-width: 330px;
+  flex-shrink: 0;
 }
 
-/* La resten av kort-designet stå urørt
-   (du liker det slik det er allerede!) */
-
 /* ===============================
-   🔥 SLIDER-PILER
+   🔥 SLIDER-PILER – flyttet lenger ut
 ================================*/
 
 .trending-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
+  width: 45px;
+  height: 45px;
   border: none;
   border-radius: 50%;
-  background: rgba(0,0,0,0.06);
-  font-size: 20px;
+  background: rgba(0,0,0,0.07);
+  font-size: 22px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 50;
+  backdrop-filter: blur(3px);
+  transition: 0.25s ease;
 }
 
 .trending-nav:hover {
-  background: rgba(0,0,0,0.12);
+  background: rgba(0,0,0,0.14);
+  transform: translateY(-50%) scale(1.07);
 }
 
-/* Flyttet ut til hver side */
+/* Posisjoner litt MER ut enn før */
 .trending-nav.prev {
-  left: -20px;
+  left: -40px;
 }
 
 .trending-nav.next {
-  right: -20px;
+  right: -40px;
 }
+
 
 
 /* ================================
@@ -3695,6 +3697,7 @@ section {
   fill: #ff2953;
   stroke: #ff2953;
 }
+
 
 
 
