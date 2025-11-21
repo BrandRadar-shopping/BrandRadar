@@ -1,5 +1,5 @@
 // ============================================
-// 💎 Luxury Corner - Filtering + Gold Picks + Favorittikon (v4 Final)
+// 💎 Luxury Corner - FINAL v5 (Feilfri + Favorittfix)
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -51,7 +51,7 @@ function loadLuxuryBrands(sheetId, sheetName) {
 }
 
 // ============================================
-// ✅ Premium Products (with filters + GoldPicks + Favorites)
+// ✅ Premium Products (Filters + GoldPick + Favorites)
 // ============================================
 let allLuxury = [];
 
@@ -98,14 +98,15 @@ function renderLuxuryProducts() {
     const goldTag = goldPick ? `<span class="gold-pick-badge">👑 Gold Pick</span>` : "";
     const discount = p.discount ? `<span class="discount-badge">${p.discount}%</span>` : "";
 
-    const favId = p.id || p.title;
-    const isFav = typeof isFavorite === "function" && isFavorite(favId);
+    // GLOBAL FAVORITT-STATUS
+    const storedId = resolveProductId(p);
+    const isFav = typeof isProductFavorite === "function" && isProductFavorite(storedId);
     const favActive = isFav ? "active" : "";
 
     card.innerHTML = `
       ${discount}
       ${goldTag}
-      <button class="fav-btn ${favActive}" data-id="${favId}" title="Legg til favoritt">
+      <button class="fav-btn ${favActive}" data-id="${storedId}">
         <svg class="fav-icon" viewBox="0 0 24 24">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
                    2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
@@ -114,6 +115,7 @@ function renderLuxuryProducts() {
                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
         </svg>
       </button>
+
       <img src="${p.image_url}" alt="${p.title}" class="luxury-img">
       <div class="luxury-info">
         <h4>${p.title}</h4>
@@ -123,43 +125,42 @@ function renderLuxuryProducts() {
       </div>
     `;
 
-    // --- Klikk på kort → produktdetalj ---
+    // Klikk → produktdetalj
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-btn")) return;
       if (p.id) window.location.href = `product.html?id=${p.id}&luxury=true`;
       else if (p.product_url) window.open(p.product_url, "_blank");
     });
 
-  // --- ❤️ Favorittknapp ---
-const favBtn = card.querySelector(".fav-btn");
-favBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
+    // ❤️ FAVORITT-KNAPP
+    const favBtn = card.querySelector(".fav-btn");
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
 
-  // Bruk global ID-resolver (VIKTIG!)
-  const favId = resolveProductId(p);
+      const productData = {
+        id: resolveProductId(p),
+        product_name: p.title,
+        title: p.title,
+        brand: p.brand,
+        price: p.price,
+        discount: p.discount,
+        image_url: p.image_url,
+        product_url: p.product_url,
+        category: p.category,
+        rating: p.rating,
+        luxury: true
+      };
 
-  // Bygg produktobjektet EXACT slik favorites-core forventer
-  const productData = {
-    id: favId,
-    product_name: p.title,
-    title: p.title,
-    brand: p.brand,
-    price: p.price,
-    discount: p.discount,
-    image_url: p.image_url,
-    product_url: p.product_url,
-    category: p.category,
-    rating: p.rating,
-    luxury: true
-  };
+      toggleFavorite(productData, favBtn);
+    });
 
-  // Kjør global toggle
-  toggleFavorite(productData, favBtn);
-});
-
+    if (goldPick) goldGrid.appendChild(card);
+    else prodGrid.appendChild(card);
+  });
+}
 
 // ============================================
-// ✅ Filter-hendelser
+// Filters
 // ============================================
 function setFilterEvents() {
   const filter = document.getElementById("filterCategory");
@@ -168,19 +169,20 @@ function setFilterEvents() {
   if (sort) sort.addEventListener("change", renderLuxuryProducts);
 }
 
-
 // ============================================
-// 💫 Luxury Hero Banner – Automatisk fade
+// Hero Banner Fade
 // ============================================
 document.addEventListener("DOMContentLoaded", () => {
   const slides = document.querySelectorAll(".luxury-hero-banner .hero-slide");
   let current = 0;
 
+  if (!slides.length) return;
+
   setInterval(() => {
     slides[current].classList.remove("active");
     current = (current + 1) % slides.length;
     slides[current].classList.add("active");
-  }, 6000); // 6 sekunders intervall
+  }, 6000);
 });
 
 
