@@ -130,32 +130,33 @@ function renderLuxuryProducts() {
       else if (p.product_url) window.open(p.product_url, "_blank");
     });
 
-    // --- ❤️ Favorittknapp ---
-    const favBtn = card.querySelector(".fav-btn");
-    favBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+  // --- ❤️ Favorittknapp ---
+const favBtn = card.querySelector(".fav-btn");
+favBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
 
-      favBtn.classList.toggle("active");
+  // Bruk global ID-resolver (VIKTIG!)
+  const favId = resolveProductId(p);
 
-      if (typeof toggleFavorite === "function") {
-        toggleFavorite({
-          id: Number(p.id) || favId,
-          title: p.title,
-          brand: p.brand,
-          price: p.price,
-          discount: p.discount,
-          image_url: p.image_url,
-          product_url: p.product_url,
-          category: p.category,
-          rating: p.rating
-        });
-      }
-    });
+  // Bygg produktobjektet EXACT slik favorites-core forventer
+  const productData = {
+    id: favId,
+    product_name: p.title,
+    title: p.title,
+    brand: p.brand,
+    price: p.price,
+    discount: p.discount,
+    image_url: p.image_url,
+    product_url: p.product_url,
+    category: p.category,
+    rating: p.rating,
+    luxury: true
+  };
 
-    if (goldPick) goldGrid.appendChild(card);
-    else prodGrid.appendChild(card);
-  });
-}
+  // Kjør global toggle
+  toggleFavorite(productData, favBtn);
+});
+
 
 // ============================================
 // ✅ Filter-hendelser
