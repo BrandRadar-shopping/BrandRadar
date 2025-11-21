@@ -1,381 +1,351 @@
 // ======================================================
-// ✅ BrandRadar – News Page v10 (Partner + Spotlight + Picks + Deals + Feed)
+// 📰 BrandRadar – News page (partner + deals + picks + spotlight + feed)
 // ======================================================
 
-// -----------------------------
-// Konstanter / Sheets
-// -----------------------------
+(function () {
+  console.log("✅ news.js loaded");
 
-// 1) Hovedfeed (CSV – allerede publisert)
-const NEWS_SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9bBCAqzJwCcyOfw5R5mAPtqkx8ISp_U_yaXaZU89J7G8V656GKvU0NzUK0UdGmEPk8m-vCm2rIXeI/pub?output=csv";
+  // ---------- SHEET-KONFIG ----------
+  const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
+  const NEWS_TAB = "news";
 
-// 2) Partnerbanner (opensheet)
-const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
-const PARTNER_TAB = "Ark 1";
+  const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
+  const DEALS_TAB = "deals";
 
-// 3) Ukens Deals (opensheet)
-const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
-const DEALS_TAB = "Ark 1";
+  const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
+  const PICKS_TAB = "picks";
 
-// 4) Radar Picks (opensheet)
-const RADAR_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
-const RADAR_TAB = "Ark 1";
+  const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
+  const PARTNER_TAB = "partner_banner";
 
-// -----------------------------
-// Felles helpers
-// -----------------------------
+  // ---------- DOM ----------
+  const partnerBannerEl = document.querySelector(".partner-banner");
+  const dealsGridEl = document.querySelector(".deals-grid");
+  const picksGridEl = document.querySelector(".picks-grid");
+  const spotlightWrapper = document.querySelector("#featured-news .featured-wrapper");
+  const newsGridEl = document.querySelector("#news-grid");
 
-const nbFormatter = new Intl.NumberFormat("nb-NO");
+  // ---------- HELPERS ----------
+  const nb = new Intl.NumberFormat("nb-NO");
 
-function parseNumber(val) {
-  if (val == null) return null;
-  const s = String(val)
-    .replace(/\s/g, "")
-    .replace(/[^\d,.\-]/g, "")
-    .replace(",", ".");
-  const n = Number(s);
-  return Number.isFinite(n) ? n : null;
-}
-
-function formatPrice(val) {
-  const n = parseNumber(val);
-  if (!n && n !== 0) return "";
-  return `${nbFormatter.format(Math.round(n))} kr`;
-}
-
-// Enkel CSV-parser for NEWS_SHEET_URL
-async function fetchCsvSheet(url) {
-  const res = await fetch(url);
-  const text = await res.text();
-
-  const rows = text.trim().split("\n").map(r => r.split(","));
-  const headers = rows[0].map(h => h.trim());
-
-  return rows.slice(1).map(row => {
-    const obj = {};
-    row.forEach((val, i) => {
-      obj[headers[i]] = (val || "").trim();
-    });
-    return obj;
-  });
-}
-
-// Generic opensheet fetch
-async function fetchJsonSheet(sheetId, tabName) {
-  const url = `https://opensheet.elk.sh/${sheetId}/${encodeURIComponent(
-    tabName
-  )}`;
-  const res = await fetch(url);
-  return await res.json();
-}
-
-// -----------------------------
-// 1) Partnerbanner
-// -----------------------------
-
-async function loadPartnerBanner() {
-  const container = document.getElementById("partner-banner");
-  if (!container) return;
-
-  try {
-    const rows = await fetchJsonSheet(PARTNER_SHEET_ID, PARTNER_TAB);
-    if (!rows || !rows.length) {
-      container.style.display = "none";
-      return;
-    }
-
-    const row = rows[0]; // vi bruker bare første rad
-    const imageUrl = row.image_url || "";
-    const link = row.link || "#";
-    const alt = row.alt_text || row.campaign_name || "Ukens partner";
-    const title = row.campaign_name || "Ukens partner";
-    const desc = row.description || "";
-    const cta = row.cta_text || "Se kampanjen";
-
-    container.innerHTML = `
-      <a href="${link}" target="_blank" class="partner-banner-card">
-        <div class="partner-banner-image">
-          <img src="${imageUrl}" alt="${alt}">
-        </div>
-        <div class="partner-banner-content">
-          <p class="partner-tag">${title}</p>
-          <p class="partner-desc">${desc}</p>
-          <span class="partner-cta">${cta}</span>
-        </div>
-      </a>
-    `;
-  } catch (err) {
-    console.error("❌ Klarte ikke laste partnerbanner:", err);
-    container.style.display = "none";
+  function parseNumber(val) {
+    if (val == null) return null;
+    const s = String(val).replace(/\s/g, "").replace(/[^\d,.\-]/g, "").replace(",", ".");
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
   }
-}
 
-// -----------------------------
-// 2) Radar Picks
-// -----------------------------
-
-async function loadRadarPicks() {
-  const container = document.getElementById("radar-picks-grid");
-  if (!container) return;
-
-  try {
-    const rows = await fetchJsonSheet(RADAR_SHEET_ID, RADAR_TAB);
-    if (!rows || !rows.length) {
-      container.innerHTML = "<p>Ingen radar-picks tilgjengelig akkurat nå.</p>";
-      return;
-    }
-
-    // featured først
-    const featured = rows.filter(
-      r => String(r.featured || "").toLowerCase() === "true"
-    );
-    const regular = rows.filter(
-      r => String(r.featured || "").toLowerCase() !== "true"
-    );
-
-    const ordered = [...featured, ...regular];
-
-    container.innerHTML = "";
-
-    ordered.forEach(item => {
-      const priceText = formatPrice(item.price);
-      const reason = item.reason || "";
-      const rating = parseNumber(item.rating);
-      const discount = parseNumber(item.discount);
-
-      const card = document.createElement("article");
-      card.className = "news-card radar-card";
-      if (featured.includes(item)) card.classList.add("featured");
-
-      card.innerHTML = `
-        ${
-          discount
-            ? `<div class="discount-badge">-${discount}%</div>`
-            : ""
-        }
-        <img src="${item.image_url || ""}" alt="${item.product_name || ""}">
-        <div class="news-info">
-          <h3>${item.brand || ""}</h3>
-          <p class="product">${item.product_name || ""}</p>
-          ${
-            rating
-              ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>`
-              : `<p class="rating"><span style="color:#ccc;">–</span></p>`
-          }
-          <div class="price-line">
-            ${
-              priceText
-                ? `<span class="new-price">${priceText}</span>`
-                : ""
-            }
-          </div>
-          ${
-            reason
-              ? `<p class="tagline">${reason}</p>`
-              : ""
-          }
-          ${
-            item.link
-              ? `<a href="${item.link}" target="_blank" class="read-more">Se produkt</a>`
-              : ""
-          }
-        </div>
-      `;
-
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error("❌ Klarte ikke laste Radar Picks:", err);
+  function formatPrice(n) {
+    if (n == null) return "";
+    return `${nb.format(Math.round(n))} kr`;
   }
-}
 
-// -----------------------------
-// 3) Ukens Deals
-// -----------------------------
+  function formatDate(iso) {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    if (!y || !m || !d) return iso;
+    return `${d}.${m}.${y}`;
+  }
 
-async function loadDeals() {
-  const container = document.getElementById("deals-grid");
-  if (!container) return;
+  async function fetchSheetJson(sheetId, tab) {
+    const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Feil ved henting av ${tab}: ${res.status}`);
+    return res.json();
+  }
 
-  try {
-    const rows = await fetchJsonSheet(DEALS_SHEET_ID, DEALS_TAB);
-    if (!rows || !rows.length) {
-      container.innerHTML = "<p>Ingen aktive deals akkurat nå.</p>";
-      return;
-    }
+  // ======================================================
+  // 1) PARTNER BANNER
+  // ======================================================
+  async function loadPartnerBanner() {
+    if (!partnerBannerEl) return;
 
-    // highlight først
-    const highlighted = rows.filter(
-      r => String(r.highlight || "").toLowerCase() === "true"
-    );
-    const others = rows.filter(
-      r => String(r.highlight || "").toLowerCase() !== "true"
-    );
-
-    const ordered = [...highlighted, ...others];
-
-    container.innerHTML = "";
-
-    ordered.forEach(deal => {
-      const oldPrice = formatPrice(deal.old_price);
-      const newPrice = formatPrice(deal.new_price);
-
-      let discount = null;
-      const oldVal = parseNumber(deal.old_price);
-      const newVal = parseNumber(deal.new_price);
-      if (oldVal && newVal && oldVal > newVal) {
-        discount = Math.round(((oldVal - newVal) / oldVal) * 100);
+    try {
+      const rows = await fetchSheetJson(PARTNER_SHEET_ID, PARTNER_TAB);
+      const row = rows[0];
+      if (!row) {
+        partnerBannerEl.style.display = "none";
+        return;
       }
 
-      const card = document.createElement("article");
-      card.className = "news-card deal-card";
-      if (highlighted.includes(deal)) card.classList.add("highlight");
-
-      card.innerHTML = `
-        ${
-          discount
-            ? `<div class="discount-badge">-${discount}%</div>`
-            : ""
-        }
-        <img src="${deal.image_url || ""}" alt="${deal.product_name || ""}">
-        <div class="news-info">
-          <h3>${deal.brand || ""}</h3>
-          <p class="product">${deal.product_name || ""}</p>
-          <div class="price-line">
+      partnerBannerEl.classList.remove("loading");
+      partnerBannerEl.innerHTML = `
+        <div class="partner-banner-inner">
+          <div class="partner-banner-text">
+            <p class="partner-tag">${row.campaign_name || "Ukens partner"}</p>
+            <h2>${row.description || ""}</h2>
+            <p class="partner-sub">${row.alt_text || ""}</p>
             ${
-              newPrice
-                ? `<span class="new-price">${newPrice}</span>`
-                : ""
-            }
-            ${
-              oldPrice
-                ? `<span class="old-price">${oldPrice}</span>`
+              row.link
+                ? `<a href="${row.link}" target="_blank" class="partner-cta">
+                    ${row.cta_text || "Se kampanjen"}
+                  </a>`
                 : ""
             }
           </div>
           ${
-            deal.valid_until
-              ? `<p class="tagline">Gjelder til ${deal.valid_until}</p>`
-              : ""
-          }
-          ${
-            deal.link
-              ? `<a href="${deal.link}" target="_blank" class="read-more">Se tilbud</a>`
+            row.image_url
+              ? `<div class="partner-banner-image">
+                   <img src="${row.image_url}" alt="${row.alt_text || row.campaign_name || "Partner"}">
+                 </div>`
               : ""
           }
         </div>
       `;
-
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error("❌ Klarte ikke laste Ukens deals:", err);
+    } catch (err) {
+      console.error("❌ Partner banner error:", err);
+      partnerBannerEl.textContent = "Kunne ikke laste partnerkampanjen.";
+    }
   }
-}
 
-// -----------------------------
-// 4) Spotlight + Nyhetsfeed (CSV)
-// -----------------------------
+  // ======================================================
+  // 2) UKENS DEALS
+  // ======================================================
+  async function loadDeals() {
+    if (!dealsGridEl) return;
 
-const featuredContainer = document.querySelector("#featured-news");
-const newsGrid = document.querySelector("#news-grid");
+    try {
+      const rows = await fetchSheetJson(DEALS_SHEET_ID, DEALS_TAB);
+      dealsGridEl.classList.remove("loading");
+      dealsGridEl.innerHTML = "";
 
-async function loadNewsFeed() {
-  if (!featuredContainer && !newsGrid) return;
+      if (!rows.length) {
+        dealsGridEl.textContent = "Ingen deals akkurat nå.";
+        return;
+      }
 
-  try {
-    const items = await fetchCsvSheet(NEWS_SHEET_URL);
+      rows.forEach(d => {
+        const oldPrice = parseNumber(d.old_price);
+        const newPrice = parseNumber(d.new_price);
+        let discount = null;
 
-    const featured = items.filter(
-      p => String(p.featured || "").toLowerCase() === "true"
-    );
-    const regular = items.filter(
-      p => String(p.featured || "").toLowerCase() !== "true"
-    );
+        if (oldPrice && newPrice && oldPrice > newPrice) {
+          discount = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
+        }
 
-    // 🌟 Ukens Spotlight
-    if (featuredContainer) {
-      if (!featured.length) {
-        featuredContainer.innerHTML = "";
-      } else {
-        featuredContainer.innerHTML = `
-          <h2>Ukens Spotlight ✨</h2>
-          ${featured
-            .map(item => {
-              const priceText = formatPrice(item.price);
-              return `
-                <article class="featured-card fade-in">
-                  <img src="${item.image_url || ""}" alt="${
-                item.product_name || ""
-              }">
-                  <div class="featured-content">
-                    <h3>${item.brand || ""} – ${item.product_name || ""}</h3>
-                    <p>${item.excerpt || ""}</p>
-                    ${
-                      priceText
-                        ? `<p class="price">${priceText}</p>`
-                        : ""
-                    }
-                    ${
-                      item.link
-                        ? `<a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>`
-                        : ""
-                    }
-                  </div>
-                </article>
-              `;
-            })
-            .join("")}
+        const validText = d.valid_until
+          ? `Gjelder til ${formatDate(d.valid_until)}`
+          : "";
+
+        const card = document.createElement("article");
+        card.className = "deal-card";
+
+        card.innerHTML = `
+          ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+          <div class="deal-image">
+            <img src="${d.image_url || ""}" alt="${d.product_name || ""}">
+          </div>
+          <div class="deal-info">
+            <p class="brand">${d.brand || ""}</p>
+            <h3 class="product-name">${d.product_name || ""}</h3>
+            <div class="price-line">
+              <span class="new-price">${newPrice ? formatPrice(newPrice) : ""}</span>
+              ${oldPrice ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ""}
+            </div>
+            ${
+              validText
+                ? `<p class="valid-until">${validText}</p>`
+                : ""
+            }
+            ${
+              d.link
+                ? `<a href="${d.link}" target="_blank" class="deal-btn">Se deal</a>`
+                : ""
+            }
+          </div>
         `;
-      }
-    }
 
-    // 🛍️ Flere produkter (news feed)
-    if (newsGrid) {
-      newsGrid.innerHTML = `
-        ${regular
-          .map(item => {
-            const priceText = formatPrice(item.price);
-            return `
-              <article class="news-card fade-in">
-                <img src="${item.image_url || ""}" alt="${
-              item.product_name || ""
-            }">
-                <div class="news-info">
-                  <h3>${item.brand || ""}</h3>
-                  <p class="product">${item.product_name || ""}</p>
-                  ${
-                    priceText
-                      ? `<p class="price">${priceText}</p>`
-                      : ""
-                  }
-                  <p class="tagline">${item.excerpt || ""}</p>
-                  ${
-                    item.link
-                      ? `<a href="${item.link}" target="_blank" class="read-more">Se produkt</a>`
-                      : ""
-                  }
-                </div>
-              </article>
-            `;
-          })
-          .join("")}
-      `;
+        dealsGridEl.appendChild(card);
+      });
+    } catch (err) {
+      console.error("❌ Deals error:", err);
+      dealsGridEl.textContent = "Kunne ikke laste deals.";
     }
-  } catch (error) {
-    console.error("❌ Feil ved henting av produktdata til news-feed:", error);
   }
-}
 
-// -----------------------------
-// INIT – kjør alt når DOM er klar
-// -----------------------------
+  // ======================================================
+  // 3) RADAR PICKS
+  // ======================================================
+  async function loadPicks() {
+    if (!picksGridEl) return;
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadPartnerBanner();
-  loadRadarPicks();
-  loadDeals();
-  loadNewsFeed();
-});
+    try {
+      const rows = await fetchSheetJson(PICKS_SHEET_ID, PICKS_TAB);
+      picksGridEl.classList.remove("loading");
+      picksGridEl.innerHTML = "";
+
+      if (!rows.length) {
+        picksGridEl.textContent = "Ingen picks akkurat nå.";
+        return;
+      }
+
+      rows.forEach(p => {
+        const price = parseNumber(p.price);
+        const rating = parseNumber(p.rating);
+        const discount = parseNumber(p.discount);
+
+        const card = document.createElement("article");
+        card.className = "pick-card";
+
+        card.innerHTML = `
+          ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+          <div class="pick-image">
+            <img src="${p.image_url || ""}" alt="${p.product_name || ""}">
+          </div>
+          <div class="pick-info">
+            <p class="brand">${p.brand || ""}</p>
+            <h3 class="product-name">${p.product_name || ""}</h3>
+            ${
+              rating
+                ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>`
+                : `<p class="rating"><span style="color:#ccc;">–</span></p>`
+            }
+            ${
+              price
+                ? `<p class="price">${formatPrice(price)}</p>`
+                : ""
+            }
+            ${
+              p.reason
+                ? `<p class="reason">${p.reason}</p>`
+                : ""
+            }
+            ${
+              p.link
+                ? `<a href="${p.link}" target="_blank" class="pick-btn">Se produkt</a>`
+                : ""
+            }
+          </div>
+        `;
+
+        picksGridEl.appendChild(card);
+      });
+    } catch (err) {
+      console.error("❌ Picks error:", err);
+      picksGridEl.textContent = "Kunne ikke laste picks.";
+    }
+  }
+
+  // ======================================================
+  // 4) SPOTLIGHT + NEWS FEED
+  // ======================================================
+  async function loadNewsFeed() {
+    if (!spotlightWrapper && !newsGridEl) return;
+
+    try {
+      const rows = await fetchSheetJson(NEWS_SHEET_ID, NEWS_TAB);
+
+      const featured = rows.filter(
+        r => String(r.featured || "").toLowerCase() === "true"
+      );
+      const regular = rows.filter(
+        r => String(r.featured || "").toLowerCase() !== "true"
+      );
+
+      // ----- Spotlight -----
+      if (spotlightWrapper) {
+        spotlightWrapper.classList.remove("loading");
+        spotlightWrapper.innerHTML = "";
+
+        if (!featured.length) {
+          spotlightWrapper.textContent = "Ingen spotlight-produkter akkurat nå.";
+        } else {
+          featured.forEach(item => {
+            const price = parseNumber(item.price);
+
+            const article = document.createElement("article");
+            article.className = "featured-card";
+
+            article.innerHTML = `
+              <div class="featured-image">
+                <img src="${item.image_url || ""}" alt="${item.product_name || ""}">
+              </div>
+              <div class="featured-content">
+                <p class="badge">Spotlight</p>
+                <h3>${item.brand || ""} – ${item.product_name || ""}</h3>
+                ${
+                  item.excerpt
+                    ? `<p class="excerpt">${item.excerpt}</p>`
+                    : ""
+                }
+                ${
+                  price
+                    ? `<p class="price">${formatPrice(price)}</p>`
+                    : ""
+                }
+                ${
+                  item.link
+                    ? `<a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>`
+                    : ""
+                }
+              </div>
+            `;
+
+            spotlightWrapper.appendChild(article);
+          });
+        }
+      }
+
+      // ----- News feed -----
+      if (newsGridEl) {
+        newsGridEl.classList.remove("loading");
+        newsGridEl.innerHTML = "";
+
+        if (!regular.length) {
+          newsGridEl.textContent = "Ingen nye produkter akkurat nå.";
+          return;
+        }
+
+        regular.forEach(item => {
+          const price = parseNumber(item.price);
+
+          const article = document.createElement("article");
+          article.className = "news-card";
+
+          article.innerHTML = `
+            <div class="news-image">
+              <img src="${item.image_url || ""}" alt="${item.product_name || ""}">
+            </div>
+            <div class="news-info">
+              <p class="brand">${item.brand || ""}</p>
+              <p class="product">${item.product_name || ""}</p>
+              ${
+                item.excerpt
+                  ? `<p class="tagline">${item.excerpt}</p>`
+                  : ""
+              }
+              ${
+                price
+                  ? `<p class="price">${formatPrice(price)}</p>`
+                  : ""
+              }
+              ${
+                item.link
+                  ? `<a href="${item.link}" target="_blank" class="read-more">Se produkt</a>`
+                  : ""
+              }
+            </div>
+          `;
+
+          newsGridEl.appendChild(article);
+        });
+      }
+    } catch (err) {
+      console.error("❌ News feed error:", err);
+      if (newsGridEl) newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
+      if (spotlightWrapper) spotlightWrapper.textContent = "Kunne ikke laste spotlight.";
+    }
+  }
+
+  // ======================================================
+  // RUN
+  // ======================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    loadPartnerBanner();
+    loadDeals();
+    loadPicks();
+    loadNewsFeed();
+  });
+})();
+
 
