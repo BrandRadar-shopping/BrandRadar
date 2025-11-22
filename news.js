@@ -5,19 +5,18 @@
 (function () {
   console.log("✅ news.js loaded");
 
-  // ---------- SHEET-KONFIG ----------
- const NEWS_SHEET_ID = "1CSjjhLvL7VytKfCd61lQf-53g3nAl9Grc1Vmz7ZGF54";
-const NEWS_TAB = "news";
+  // ---------- SHEET-KONFIG (100% RIKTIGE) ----------
+  const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
+  const NEWS_TAB = "news";
 
-const DEALS_SHEET_ID = "1GZH_z1dSV40X9GRKWNV_F1Oe8JwapRBY9nnDP0KmY";
-const DEALS_TAB = "deals";
+  const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
+  const DEALS_TAB = "deals";
 
-const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
-const PICKS_TAB = "picks";
+  const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
+  const PICKS_TAB = "picks";
 
-const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
-const PARTNER_TAB = "partner_banner";
-
+  const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
+  const PARTNER_TAB = "partner_banner";
 
   // ---------- DOM ----------
   const partnerBannerEl = document.querySelector(".partner-banner");
@@ -143,11 +142,7 @@ const PARTNER_TAB = "partner_banner";
               <span class="new-price">${newPrice ? formatPrice(newPrice) : ""}</span>
               ${oldPrice ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ""}
             </div>
-            ${
-              validText
-                ? `<p class="valid-until">${validText}</p>`
-                : ""
-            }
+            ${validText ? `<p class="valid-until">${validText}</p>` : ""}
             ${
               d.link
                 ? `<a href="${d.link}" target="_blank" class="deal-btn">Se deal</a>`
@@ -201,16 +196,8 @@ const PARTNER_TAB = "partner_banner";
                 ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>`
                 : `<p class="rating"><span style="color:#ccc;">–</span></p>`
             }
-            ${
-              price
-                ? `<p class="price">${formatPrice(price)}</p>`
-                : ""
-            }
-            ${
-              p.reason
-                ? `<p class="reason">${p.reason}</p>`
-                : ""
-            }
+            ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
+            ${p.reason ? `<p class="reason">${p.reason}</p>` : ""}
             ${
               p.link
                 ? `<a href="${p.link}" target="_blank" class="pick-btn">Se produkt</a>`
@@ -264,16 +251,8 @@ const PARTNER_TAB = "partner_banner";
               <div class="featured-content">
                 <p class="badge">Spotlight</p>
                 <h3>${item.brand || ""} – ${item.product_name || ""}</h3>
-                ${
-                  item.excerpt
-                    ? `<p class="excerpt">${item.excerpt}</p>`
-                    : ""
-                }
-                ${
-                  price
-                    ? `<p class="price">${formatPrice(price)}</p>`
-                    : ""
-                }
+                ${item.excerpt ? `<p class="excerpt">${item.excerpt}</p>` : ""}
+                ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
                 ${
                   item.link
                     ? `<a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>`
@@ -310,16 +289,8 @@ const PARTNER_TAB = "partner_banner";
             <div class="news-info">
               <p class="brand">${item.brand || ""}</p>
               <p class="product">${item.product_name || ""}</p>
-              ${
-                item.excerpt
-                  ? `<p class="tagline">${item.excerpt}</p>`
-                  : ""
-              }
-              ${
-                price
-                  ? `<p class="price">${formatPrice(price)}</p>`
-                  : ""
-              }
+              ${item.excerpt ? `<p class="tagline">${item.excerpt}</p>` : ""}
+              ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
               ${
                 item.link
                   ? `<a href="${item.link}" target="_blank" class="read-more">Se produkt</a>`
