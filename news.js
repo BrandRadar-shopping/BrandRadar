@@ -6,17 +6,18 @@
   console.log("✅ news.js loaded");
 
   // ---------- SHEET-KONFIG ----------
-  const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
-  const NEWS_TAB = "news";
+ const NEWS_SHEET_ID = "1CSjjhLvL7VytKfCd61lQf-53g3nAl9Grc1Vmz7ZGF54";
+const NEWS_TAB = "news";
 
-  const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
-  const DEALS_TAB = "deals";
+const DEALS_SHEET_ID = "1GZH_z1dSV40X9GRKWNV_F1Oe8JwapRBY9nnDP0KmY";
+const DEALS_TAB = "deals";
 
-  const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
-  const PICKS_TAB = "picks";
+const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
+const PICKS_TAB = "picks";
 
-  const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
-  const PARTNER_TAB = "partner_banner";
+const PARTNER_SHEET_ID = "166anlag430W7KlUKCrkVGd585PldREW7fC8JQ5g7WK4";
+const PARTNER_TAB = "partner_banner";
+
 
   // ---------- DOM ----------
   const partnerBannerEl = document.querySelector(".partner-banner");
