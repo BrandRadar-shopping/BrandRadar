@@ -1,13 +1,17 @@
 // ======================================================
-// 📰 BrandRadar – News page (partner + deals + picks + spotlight + feed)
+// 📰 BrandRadar – MASTER-Driven News Page
+// (Spotlight + News Feed + Partner + Deals + Picks)
 // ======================================================
 
 (function () {
-  console.log("✅ news.js loaded");
+  console.log("✅ news.js (master-driven) loaded");
 
-  // ---------- SHEET-KONFIG (100% RIKTIGE) ----------
+  // ---------- SHEET-KONFIG ----------
   const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
   const NEWS_TAB = "news";
+
+  const MASTER_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const MASTER_TAB = "BrandRadarProdukter";
 
   const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
   const DEALS_TAB = "deals";
@@ -28,30 +32,47 @@
   // ---------- HELPERS ----------
   const nb = new Intl.NumberFormat("nb-NO");
 
-  function parseNumber(val) {
-    if (val == null) return null;
-    const s = String(val).replace(/\s/g, "").replace(/[^\d,.\-]/g, "").replace(",", ".");
-    const n = Number(s);
-    return Number.isFinite(n) ? n : null;
+  function parseNum(v) {
+    if (!v) return null;
+    return Number(String(v).replace(/[^\d.,-]/g, "").replace(",", "."));
   }
 
   function formatPrice(n) {
-    if (n == null) return "";
-    return `${nb.format(Math.round(n))} kr`;
+    return n == null ? "" : `${nb.format(Math.round(n))} kr`;
   }
 
-  function formatDate(iso) {
-    if (!iso) return "";
-    const [y, m, d] = iso.split("-");
-    if (!y || !m || !d) return iso;
-    return `${d}.${m}.${y}`;
-  }
-
-  async function fetchSheetJson(sheetId, tab) {
-    const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
+  async function fetchJson(id, sheet) {
+    const url = `https://opensheet.elk.sh/${id}/${sheet}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Feil ved henting av ${tab}: ${res.status}`);
     return res.json();
+  }
+
+  function escapeAttr(v) {
+    return String(v || "").replace(/"/g, "&quot;");
+  }
+
+  function renderFavoriteButton(p) {
+    return `
+      <button class="favorite-toggle"
+        data-product-id="${escapeAttr(p.id)}"
+        data-product-brand="${escapeAttr(p.brand)}"
+        data-product-name="${escapeAttr(p.title)}"
+        data-product-image="${escapeAttr(p.image_url)}"
+        data-product-price="${escapeAttr(p.price)}"
+        data-product-link="${escapeAttr(p.product_url)}"
+        data-product-category="${escapeAttr(p.category)}"
+      >
+        <span class="heart-icon">❤</span>
+      </button>
+    `;
+  }
+
+  function cardClickHandler(card, url) {
+    if (!card || !url) return;
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".favorite-toggle")) return;
+      window.open(url, "_blank");
+    });
   }
 
   // ======================================================
@@ -59,42 +80,24 @@
   // ======================================================
   async function loadPartnerBanner() {
     if (!partnerBannerEl) return;
-
     try {
-      const rows = await fetchSheetJson(PARTNER_SHEET_ID, PARTNER_TAB);
-      const row = rows[0];
-      if (!row) {
-        partnerBannerEl.style.display = "none";
-        return;
-      }
+      const [row] = await fetchJson(PARTNER_SHEET_ID, PARTNER_TAB);
+      if (!row) return;
 
       partnerBannerEl.classList.remove("loading");
       partnerBannerEl.innerHTML = `
         <div class="partner-banner-inner">
           <div class="partner-banner-text">
-            <p class="partner-tag">${row.campaign_name || "Ukens partner"}</p>
-            <h2>${row.description || ""}</h2>
+            <p class="partner-tag">${row.campaign_name}</p>
+            <h2>${row.description}</h2>
             <p class="partner-sub">${row.alt_text || ""}</p>
-            ${
-              row.link
-                ? `<a href="${row.link}" target="_blank" class="partner-cta">
-                    ${row.cta_text || "Se kampanjen"}
-                  </a>`
-                : ""
-            }
+            ${row.link ? `<a class="partner-cta" href="${row.link}" target="_blank">${row.cta_text || "Se kampanjen"}</a>` : ""}
           </div>
-          ${
-            row.image_url
-              ? `<div class="partner-banner-image">
-                   <img src="${row.image_url}" alt="${row.alt_text || row.campaign_name || "Partner"}">
-                 </div>`
-              : ""
-          }
+          ${row.image_url ? `<div class="partner-banner-image"><img src="${row.image_url}"></div>` : ""}
         </div>
       `;
     } catch (err) {
-      console.error("❌ Partner banner error:", err);
-      partnerBannerEl.textContent = "Kunne ikke laste partnerkampanjen.";
+      console.error("❌ Partner error", err);
     }
   }
 
@@ -103,59 +106,52 @@
   // ======================================================
   async function loadDeals() {
     if (!dealsGridEl) return;
-
     try {
-      const rows = await fetchSheetJson(DEALS_SHEET_ID, DEALS_TAB);
+      const rows = await fetchJson(DEALS_SHEET_ID, DEALS_TAB);
       dealsGridEl.classList.remove("loading");
       dealsGridEl.innerHTML = "";
 
-      if (!rows.length) {
-        dealsGridEl.textContent = "Ingen deals akkurat nå.";
-        return;
-      }
+      rows.forEach((d, i) => {
+        const oldP = parseNum(d.old_price);
+        const newP = parseNum(d.new_price);
+        const discount = oldP && newP ? Math.round(((oldP - newP) / oldP) * 100) : null;
 
-      rows.forEach(d => {
-        const oldPrice = parseNumber(d.old_price);
-        const newPrice = parseNumber(d.new_price);
-        let discount = null;
-
-        if (oldPrice && newPrice && oldPrice > newPrice) {
-          discount = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
-        }
-
-        const validText = d.valid_until
-          ? `Gjelder til ${formatDate(d.valid_until)}`
-          : "";
+        const p = {
+          id: d.id || `deal_${i}`,
+          brand: d.brand || "",
+          title: d.product_name || "",
+          price: newP || oldP || "",
+          image_url: d.image_url || "",
+          product_url: d.link || "",
+          category: "Deal",
+        };
 
         const card = document.createElement("article");
-        card.className = "deal-card";
-
+        card.className = "product-card deal-card";
         card.innerHTML = `
-          ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
-          <div class="deal-image">
-            <img src="${d.image_url || ""}" alt="${d.product_name || ""}">
-          </div>
-          <div class="deal-info">
-            <p class="brand">${d.brand || ""}</p>
-            <h3 class="product-name">${d.product_name || ""}</h3>
-            <div class="price-line">
-              <span class="new-price">${newPrice ? formatPrice(newPrice) : ""}</span>
-              ${oldPrice ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ""}
+          <div class="product-card-inner">
+            <div class="product-card-media">
+              ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+              <div class="favorite-wrapper">${renderFavoriteButton(p)}</div>
+              <div class="product-image"><img src="${p.image_url}"></div>
             </div>
-            ${validText ? `<p class="valid-until">${validText}</p>` : ""}
-            ${
-              d.link
-                ? `<a href="${d.link}" target="_blank" class="deal-btn">Se deal</a>`
-                : ""
-            }
+            <div class="product-card-body">
+              <p class="brand">${p.brand}</p>
+              <h3 class="product-name">${p.title}</h3>
+              <div class="price-line">
+                <span class="new-price">${newP ? formatPrice(newP) : ""}</span>
+                ${oldP ? `<span class="old-price">${formatPrice(oldP)}</span>` : ""}
+              </div>
+            </div>
           </div>
         `;
 
+        cardClickHandler(card, p.product_url);
         dealsGridEl.appendChild(card);
       });
+
     } catch (err) {
-      console.error("❌ Deals error:", err);
-      dealsGridEl.textContent = "Kunne ikke laste deals.";
+      console.error("❌ Deals error", err);
     }
   }
 
@@ -164,109 +160,125 @@
   // ======================================================
   async function loadPicks() {
     if (!picksGridEl) return;
-
     try {
-      const rows = await fetchSheetJson(PICKS_SHEET_ID, PICKS_TAB);
+      const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
       picksGridEl.classList.remove("loading");
       picksGridEl.innerHTML = "";
 
-      if (!rows.length) {
-        picksGridEl.textContent = "Ingen picks akkurat nå.";
-        return;
-      }
+      rows.forEach((p, i) => {
+        const id = p.id || p.product_id || `pick_${i}`;
+        const price = parseNum(p.price);
+        const rating = parseNum(p.rating);
+        const discount = parseNum(p.discount);
 
-      rows.forEach(p => {
-        const price = parseNumber(p.price);
-        const rating = parseNumber(p.rating);
-        const discount = parseNumber(p.discount);
+        const meta = {
+          id,
+          brand: p.brand,
+          title: p.product_name,
+          price,
+          image_url: p.image_url,
+          product_url: p.link,
+          category: "Pick",
+        };
 
         const card = document.createElement("article");
-        card.className = "pick-card";
-
+        card.className = "product-card pick-card";
         card.innerHTML = `
-          ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
-          <div class="pick-image">
-            <img src="${p.image_url || ""}" alt="${p.product_name || ""}">
-          </div>
-          <div class="pick-info">
-            <p class="brand">${p.brand || ""}</p>
-            <h3 class="product-name">${p.product_name || ""}</h3>
-            ${
-              rating
-                ? `<p class="rating">⭐ ${rating.toFixed(1)}</p>`
-                : `<p class="rating"><span style="color:#ccc;">–</span></p>`
-            }
-            ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
-            ${p.reason ? `<p class="reason">${p.reason}</p>` : ""}
-            ${
-              p.link
-                ? `<a href="${p.link}" target="_blank" class="pick-btn">Se produkt</a>`
-                : ""
-            }
+          <div class="product-card-inner">
+            <div class="product-card-media">
+              ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+              <div class="favorite-wrapper">${renderFavoriteButton(meta)}</div>
+              <div class="product-image"><img src="${meta.image_url}"></div>
+            </div>
+            <div class="product-card-body">
+              <p class="brand">${meta.brand}</p>
+              <h3 class="product-name">${meta.title}</h3>
+              <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}</p>
+              ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
+            </div>
           </div>
         `;
 
+        cardClickHandler(card, meta.product_url);
         picksGridEl.appendChild(card);
       });
+
     } catch (err) {
-      console.error("❌ Picks error:", err);
-      picksGridEl.textContent = "Kunne ikke laste picks.";
+      console.error("❌ Picks error", err);
     }
   }
 
   // ======================================================
-  // 4) SPOTLIGHT + NEWS FEED
-  // ======================================================
+  // 4) SPOTLIGHT + NEWS FEED (Master-driven)
+// ======================================================
   async function loadNewsFeed() {
-    if (!spotlightWrapper && !newsGridEl) return;
+    if (!newsGridEl && !spotlightWrapper) return;
 
     try {
-      const rows = await fetchSheetJson(NEWS_SHEET_ID, NEWS_TAB);
+      // Load News-rows (id + metadata)
+      const newsRows = await fetchJson(NEWS_SHEET_ID, NEWS_TAB);
 
-      const featured = rows.filter(
-        r => String(r.featured || "").toLowerCase() === "true"
-      );
-      const regular = rows.filter(
-        r => String(r.featured || "").toLowerCase() !== "true"
-      );
+      // Load master product data
+      const masterProducts = await fetchJson(MASTER_SHEET_ID, MASTER_TAB);
 
-      // ----- Spotlight -----
+      const merged = [];
+
+      newsRows.forEach(row => {
+        const master = masterProducts.find(p => String(p.id).trim() === String(row.id).trim());
+        if (!master) return;
+
+        merged.push({
+          ...master,
+          excerpt: row.excerpt || "",
+          featured: String(row.featured || "").toLowerCase() === "true",
+          tag: row.tag || "",
+          priority: row.priority ? parseInt(row.priority) : 999,
+        });
+      });
+
+      const spotlight = merged.filter(p => p.featured);
+      const regular = merged.filter(p => !p.featured).sort((a, b) => a.priority - b.priority);
+
+      // ===== Spotlight =====
       if (spotlightWrapper) {
         spotlightWrapper.classList.remove("loading");
         spotlightWrapper.innerHTML = "";
 
-        if (!featured.length) {
-          spotlightWrapper.textContent = "Ingen spotlight-produkter akkurat nå.";
+        if (!spotlight.length) {
+          spotlightWrapper.textContent = "Ingen spotlight-produkter.";
         } else {
-          featured.forEach(item => {
-            const price = parseNumber(item.price);
+          spotlight.forEach(prod => {
+            const newPrice = parseNum(prod.price);
+            const oldPrice = prod.old_price ? parseNum(prod.old_price) : null;
+            const discount = oldPrice && newPrice ? Math.round(((oldPrice - newPrice) / oldPrice) * 100) : null;
+            const rating = parseNum(prod.rating);
 
-            const article = document.createElement("article");
-            article.className = "featured-card";
-
-            article.innerHTML = `
-              <div class="featured-image">
-                <img src="${item.image_url || ""}" alt="${item.product_name || ""}">
-              </div>
-              <div class="featured-content">
-                <p class="badge">Spotlight</p>
-                <h3>${item.brand || ""} – ${item.product_name || ""}</h3>
-                ${item.excerpt ? `<p class="excerpt">${item.excerpt}</p>` : ""}
-                ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
-                ${
-                  item.link
-                    ? `<a href="${item.link}" target="_blank" class="product-btn">Se produkt</a>`
-                    : ""
-                }
+            const card = document.createElement("article");
+            card.className = "product-card featured-card";
+            card.innerHTML = `
+              <div class="product-card-inner featured-layout">
+                <div class="product-card-media">
+                  ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+                  <div class="favorite-wrapper">${renderFavoriteButton(prod)}</div>
+                  <div class="product-image"><img src="${prod.image_url}"></div>
+                </div>
+                <div class="product-card-body">
+                  <p class="brand">${prod.brand}</p>
+                  <h3 class="product-name">${prod.title}</h3>
+                  ${prod.excerpt ? `<p class="excerpt">${prod.excerpt}</p>` : ""}
+                  <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}</p>
+                  ${newPrice ? `<p class="price">${formatPrice(newPrice)}</p>` : ""}
+                </div>
               </div>
             `;
 
-            spotlightWrapper.appendChild(article);
+            cardClickHandler(card, prod.product_url);
+            spotlightWrapper.appendChild(card);
           });
         }
       }
 
-      // ----- News feed -----
+      // ===== News Feed =====
       if (newsGridEl) {
         newsGridEl.classList.remove("loading");
         newsGridEl.innerHTML = "";
@@ -276,36 +288,38 @@
           return;
         }
 
-        regular.forEach(item => {
-          const price = parseNumber(item.price);
+        regular.forEach(prod => {
+          const newPrice = parseNum(prod.price);
+          const oldPrice = prod.old_price ? parseNum(prod.old_price) : null;
+          const discount = oldPrice && newPrice ? Math.round(((oldPrice - newPrice) / oldPrice) * 100) : null;
+          const rating = parseNum(prod.rating);
 
-          const article = document.createElement("article");
-          article.className = "news-card";
-
-          article.innerHTML = `
-            <div class="news-image">
-              <img src="${item.image_url || ""}" alt="${item.product_name || ""}">
-            </div>
-            <div class="news-info">
-              <p class="brand">${item.brand || ""}</p>
-              <p class="product">${item.product_name || ""}</p>
-              ${item.excerpt ? `<p class="tagline">${item.excerpt}</p>` : ""}
-              ${price ? `<p class="price">${formatPrice(price)}</p>` : ""}
-              ${
-                item.link
-                  ? `<a href="${item.link}" target="_blank" class="read-more">Se produkt</a>`
-                  : ""
-              }
+          const card = document.createElement("article");
+          card.className = "product-card news-card";
+          card.innerHTML = `
+            <div class="product-card-inner">
+              <div class="product-card-media">
+                ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+                <div class="favorite-wrapper">${renderFavoriteButton(prod)}</div>
+                <div class="product-image"><img src="${prod.image_url}"></div>
+              </div>
+              <div class="product-card-body">
+                <p class="brand">${prod.brand}</p>
+                <h3 class="product-name">${prod.title}</h3>
+                ${prod.excerpt ? `<p class="tagline">${prod.excerpt}</p>` : ""}
+                <p class="rating">${rating ? `⭐ ${rating.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}</p>
+                ${newPrice ? `<p class="price">${formatPrice(newPrice)}</p>` : ""}
+              </div>
             </div>
           `;
 
-          newsGridEl.appendChild(article);
+          cardClickHandler(card, prod.product_url);
+          newsGridEl.appendChild(card);
         });
       }
+
     } catch (err) {
-      console.error("❌ News feed error:", err);
-      if (newsGridEl) newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
-      if (spotlightWrapper) spotlightWrapper.textContent = "Kunne ikke laste spotlight.";
+      console.error("❌ News feed error", err);
     }
   }
 
@@ -319,5 +333,6 @@
     loadNewsFeed();
   });
 })();
+
 
 
