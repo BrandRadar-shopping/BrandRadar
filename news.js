@@ -1,14 +1,14 @@
 // ======================================================
-// 📰 BrandRadar – News page (MASTER-driven)
+// 📰 BrandRadar – News page (MASTER-driven, Elite v8)
 //  - Partner banner
 //  - Ukens Deals (grid, eget ark)
-//  - Radar Picks (slider, eget ark)
-//  - Ukens Spotlight (slider, fra BrandRadarProdukter via NEWS)
-//  - Nye Produkter & Trender (grid, fra BrandRadarProdukter via NEWS)
+//  - Radar Picks (slider med dots + auto)
+//  - Ukens Spotlight (slider med piler + dots + auto)
+//  - Nye Produkter & Trender (grid)
 // ======================================================
 
 (function () {
-  console.log("✅ news.js (master-driven v2) loaded");
+  console.log("✅ news.js (master-driven v3) loaded");
 
   // ---------- SHEET-KONFIG ----------
   const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
@@ -97,7 +97,6 @@
       sheet_source: masterRow.sheet_source || "master"
     };
 
-    // Sørg for konsistent ID via global resolver
     if (typeof window.resolveProductId === "function") {
       base.id = window.resolveProductId(base);
     }
@@ -105,6 +104,7 @@
     return base;
   }
 
+  // ---------- ELITE V8 KORT ----------
   function buildEliteCard(prod, options = {}) {
     const {
       showExcerpt = false,
@@ -118,7 +118,7 @@
         ? window.resolveProductId(prod)
         : prod.id || prod.product_id || "";
 
-    prod.id = pid; // viktig for favorites-core
+    prod.id = pid;
 
     const ratingValue = cleanRatingFn(prod.rating);
     const priceNum = parseNum(prod.price);
@@ -196,7 +196,7 @@
       </div>
     `;
 
-    // Klikk på kort → product.html
+    // Kort-klikk → product.html
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-icon")) return;
       if (!pid) return;
@@ -213,6 +213,166 @@
     });
 
     return card;
+  }
+
+  // ---------- GENERELL SLIDER-LOGIKK (auto + dots + piler) ----------
+  function initSlider(trackEl, options = {}) {
+    const {
+      sectionEl,          // parent section (for controls)
+      showArrows = false, // Spotlight: true, Picks: false
+      auto = false,       // begge: true
+      intervalMs = 5000
+    } = options;
+
+    if (!trackEl || !sectionEl) return;
+
+    const cards = Array.from(trackEl.querySelectorAll(".product-card"));
+    if (cards.length <= 1) {
+      // Ingen slider hvis bare ett kort
+      return;
+    }
+
+    trackEl.classList.add("slider-row");
+
+    // Controls container
+    const controls = document.createElement("div");
+    controls.className = "slider-controls";
+
+    let arrowPrev = null;
+    let arrowNext = null;
+
+    if (showArrows) {
+      arrowPrev = document.createElement("button");
+      arrowPrev.className = "slider-arrow prev";
+      arrowPrev.type = "button";
+      arrowPrev.innerHTML = "‹";
+
+      arrowNext = document.createElement("button");
+      arrowNext.className = "slider-arrow next";
+      arrowNext.type = "button";
+      arrowNext.innerHTML = "›";
+
+      controls.appendChild(arrowPrev);
+    }
+
+    const dotsWrap = document.createElement("div");
+    dotsWrap.className = "slider-dots";
+    const dots = cards.map((_, idx) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "slider-dot";
+      if (idx === 0) dot.classList.add("active");
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+    controls.appendChild(dotsWrap);
+
+    if (showArrows && arrowNext) {
+      controls.appendChild(arrowNext);
+    }
+
+    sectionEl.appendChild(controls);
+
+    let currentIndex = 0;
+    let autoTimer = null;
+    let isManual = false;
+
+    function goTo(index, behavior = "smooth") {
+      const clamped = Math.min(Math.max(index, 0), cards.length - 1);
+      currentIndex = clamped;
+      const targetCard = cards[clamped];
+      const offset = targetCard.offsetLeft;
+
+      trackEl.scrollTo({
+        left: offset,
+        behavior
+      });
+
+      dots.forEach((d, i) => {
+        d.classList.toggle("active", i === clamped);
+      });
+    }
+
+    function resetAuto() {
+      if (!auto) return;
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        if (isManual) return;
+        const nextIndex = (currentIndex + 1) % cards.length;
+        goTo(nextIndex);
+      }, intervalMs);
+    }
+
+    // Dots klikking
+    dots.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        isManual = true;
+        goTo(idx);
+        setTimeout(() => {
+          isManual = false;
+        }, intervalMs * 1.2);
+        resetAuto();
+      });
+    });
+
+    // Arrows
+    if (showArrows && arrowPrev && arrowNext) {
+      arrowPrev.addEventListener("click", () => {
+        isManual = true;
+        goTo(currentIndex - 1);
+        setTimeout(() => {
+          isManual = false;
+        }, intervalMs * 1.2);
+        resetAuto();
+      });
+
+      arrowNext.addEventListener("click", () => {
+        isManual = true;
+        goTo(currentIndex + 1);
+        setTimeout(() => {
+          isManual = false;
+        }, intervalMs * 1.2);
+        resetAuto();
+      });
+    }
+
+    // Manuell scroll/drag → oppdater aktiv dot
+    let scrollTimeout;
+    trackEl.addEventListener("scroll", () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const scrollLeft = trackEl.scrollLeft;
+        let closestIndex = 0;
+        let closestDist = Infinity;
+        cards.forEach((card, idx) => {
+          const dist = Math.abs(card.offsetLeft - scrollLeft);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closestIndex = idx;
+          }
+        });
+        currentIndex = closestIndex;
+        dots.forEach((d, i) => {
+          d.classList.toggle("active", i === closestIndex);
+        });
+      }, 100);
+    });
+
+    // Pause/restart auto på hover/touch
+    ["mouseenter", "touchstart"].forEach(evt => {
+      trackEl.addEventListener(evt, () => {
+        isManual = true;
+      });
+    });
+    ["mouseleave", "touchend", "touchcancel"].forEach(evt => {
+      trackEl.addEventListener(evt, () => {
+        setTimeout(() => {
+          isManual = false;
+        }, intervalMs * 1.2);
+      });
+    });
+
+    resetAuto();
   }
 
   // ======================================================
@@ -256,7 +416,7 @@
   }
 
   // ======================================================
-  // 2) UKENS DEALS (GRID – eget ark)
+  // 2) UKENS DEALS (GRID)
   // ======================================================
   async function loadDeals() {
     if (!dealsGridEl) return;
@@ -290,7 +450,6 @@
           luxury: false
         };
 
-        // Sørg for konsistent ID
         if (typeof window.resolveProductId === "function") {
           prod.id = window.resolveProductId(prod);
         }
@@ -356,7 +515,7 @@
   }
 
   // ======================================================
-  // 3) RADAR PICKS (SLIDER – eget ark)
+  // 3) RADAR PICKS (SLIDER + DOTS)
   // ======================================================
   async function loadPicks() {
     if (!picksGridEl) return;
@@ -364,7 +523,6 @@
       const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
       picksGridEl.classList.remove("loading");
       picksGridEl.innerHTML = "";
-      picksGridEl.classList.add("slider-row"); // gjør raden horisontal med CSS
 
       if (!rows.length) {
         picksGridEl.textContent = "Ingen picks akkurat nå.";
@@ -397,7 +555,7 @@
           extraClasses: "pick-card"
         });
 
-        // Override click → eksternt produkt (ikke product.html)
+        // Override kort-klikk → eksternt produkt
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
@@ -405,6 +563,15 @@
 
         picksGridEl.appendChild(card);
       });
+
+      const picksSection = document.getElementById("picks-section");
+      initSlider(picksGridEl, {
+        sectionEl: picksSection,
+        showArrows: false,
+        auto: true,
+        intervalMs: 5000
+      });
+
     } catch (err) {
       console.error("❌ Picks error:", err);
       picksGridEl.textContent = "Kunne ikke laste picks.";
@@ -413,7 +580,7 @@
 
   // ======================================================
   // 4) SPOTLIGHT + NEWS FEED (MASTER + NEWS-ark)
-//      NEWS-kolonner: id | spotlight | show_in_feed | excerpt | tag | priority
+//      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
   // ======================================================
   async function loadNewsSections() {
     if (!spotlightWrapper && !newsGridEl) return;
@@ -453,11 +620,10 @@
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
 
-      // ----- Spotlight (slider) -----
+      // ----- Spotlight (slider: piler + dots) -----
       if (spotlightWrapper) {
         spotlightWrapper.classList.remove("loading");
         spotlightWrapper.innerHTML = "";
-        spotlightWrapper.classList.add("slider-row");
 
         if (!spotlightItems.length) {
           spotlightWrapper.textContent = "Ingen spotlight-produkter akkurat nå.";
@@ -470,6 +636,14 @@
               extraClasses: "featured-card"
             });
             spotlightWrapper.appendChild(card);
+          });
+
+          const spotlightSection = document.getElementById("featured-news");
+          initSlider(spotlightWrapper, {
+            sectionEl: spotlightSection,
+            showArrows: true,
+            auto: true,
+            intervalMs: 5000
           });
         }
       }
@@ -515,6 +689,7 @@
     loadNewsSections();
   });
 })();
+
 
 
 
