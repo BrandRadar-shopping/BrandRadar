@@ -125,3 +125,114 @@
 .category-item:hover {
   color: #0070f3;
 }
+
+/* ✅ BRANDRADAR — HEADER + CATEGORY + MEGA MENU 2.0 */
+
+/* CATEGORY BAR */
+.category-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  padding: 0.65rem 0;
+  background: #222;
+  border-top: 1px solid #000;
+  font-size: 0.94rem;
+}
+.category-item {
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+}
+.category-item:hover {
+  color: #0070f3;
+}
+
+/* ✅ Mega-menu container (hidden by default) */
+nav.mega-menu {
+  position: relative;
+  width: 100%;
+  z-index: 3000;
+}
+
+/* ✅ Panel positioning */
+nav.mega-menu .menu-panel {
+  display: none;
+  position: absolute;
+  top: 100%; /* DIRECTLY below category-bar */
+  left: 0;
+  width: 100vw;
+  background: #fff;
+  border-radius: 0 0 14px 14px;
+  padding: 2rem 0;
+  justify-content: center;
+  gap: 4rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* ✅ Show on hover */
+.category-item:hover ~ nav.mega-menu #clothing,
+.category-item[data-category="Clothing"]:hover ~ nav.mega-menu #clothing,
+.category-item[data-category="Shoes"]:hover ~ nav.mega-menu #shoes,
+.category-item[data-category="Gymcorner"]:hover ~ nav.mega-menu #gymcorner,
+.category-item[data-category="Accessories"]:hover ~ nav.mega-menu #accessories,
+.category-item[data-category="Selfcare"]:hover ~ nav.mega-menu #selfcare {
+  display: flex;
+}
+
+/* ✅ Main structure inside */
+nav.mega-menu .menu-block {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 2rem;
+  padding-right: 2.5rem;
+  border-right: 1px solid #e5e5e5;
+}
+nav.mega-menu .menu-block:last-child {
+  border-right: none;
+}
+
+/* ✅ Typography */
+nav.mega-menu .menu-section h4 {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+nav.mega-menu .menu-subtitle {
+  margin-top: 0.7rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ✅ Lists */
+nav.mega-menu .menu-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+nav.mega-menu .menu-section li {
+  margin: 0.35rem 0;
+}
+nav.mega-menu .menu-section a {
+  color: #222;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: 0.15s ease;
+}
+nav.mega-menu .menu-section a:hover {
+  color: #0070f3;
+}
+
+/* ✅ Layout fix */
+nav.mega-menu .menu-section.brands {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+nav.mega-menu .menu-section {
+  line-height: 1.35rem;
+}
+
