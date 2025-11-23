@@ -1,9 +1,12 @@
 // ======================================================
-// ✅ BrandRadar – Forside (Picks + Trending Now + Top Brands)
+// ✅ BrandRadar – Forside (Elite v9 kort)
+//  - Featured Picks (CSV)
+//  - Trending Now (master + TrendingNow-ark)
+//  - Top Brands This Week
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("✅ Index script loaded");
+  console.log("✅ Index script (Elite v9) loaded");
 
   // ---------- KONSTANTER ----------
   const PICKS_CSV_URL =
@@ -18,8 +21,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const TOPBRANDS_SHEET_ID = "1n3mCxmTb42RnZ_sNvP5CnYdGjwYFkU5kmnI_BFyiNkU";
   const TOPBRANDS_TAB = "TopBrands";
 
-  // ---------- FORMATTERING ----------
+  // ---------- FORMATTERING / HJELPERE ----------
   const nbFormatter = new Intl.NumberFormat("nb-NO");
+
+  const cleanRatingRef =
+    window.cleanRating ||
+    function (value) {
+      if (!value) return null;
+      const n = parseFloat(
+        value.toString().replace(",", ".").replace(/[^0-9.\-]/g, "")
+      );
+      return Number.isFinite(n) ? n : null;
+    };
 
   function parseNumber(val) {
     if (val == null) return null;
@@ -36,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `${nbFormatter.format(Math.round(n))} kr`;
   }
 
+  // Gjenbruker pris-logikken fra gammel index, men rendrer i Elite v9-markup
   function getPriceInfo(p) {
     let price = parseNumber(p.price);
     let oldPrice = parseNumber(p.old_price);
@@ -56,95 +70,116 @@ document.addEventListener("DOMContentLoaded", async () => {
     return { price, oldPrice, discount };
   }
 
-  function buildPriceBlock(p) {
-    const { price, oldPrice, discount } = getPriceInfo(p);
-    const mainPrice = price ? formatPrice(price) : null;
+  // ======================================================
+  // ⭐ ELITE V9 PRODUKTKORT – FELLES FOR INDEX
+  // ======================================================
+  function buildEliteCard(prod, options = {}) {
+    const {
+      showExcerpt = false,
+      excerpt = "",
+      tag = "",
+      extraClasses = "",
+      openExternal = false // true = åpne ekstern lenke, false = product.html
+    } = options;
 
-    let html = `<div class="price-row">`;
-    if (mainPrice) html += `<span class="price-main">${mainPrice}</span>`;
-    if (oldPrice) html += `<span class="old-price">${formatPrice(oldPrice)}</span>`;
-    html += `</div>`;
-
-    if (discount) {
-      html =
-        `<div class="price-wrapper">` +
-        html +
-        `<span class="discount-pill">-${discount}%</span>` +
-        `</div>`;
+    if (typeof window.getProductName === "function") {
+      prod.product_name = prod.product_name || window.getProductName(prod);
     }
 
-    return html;
-  }
+    const pid =
+      typeof window.resolveProductId === "function"
+        ? window.resolveProductId(prod)
+        : prod.id || prod.product_id || "";
 
-  // ======================================================
-  // ⭐ PRODUKTKORT (ELITE DESIGN – FELLES FOR INDEX)
-  // ======================================================
+    prod.id = pid;
 
-  function buildProductCardMarkup(p) {
-    const name = getProductName(p);
-    const id = resolveProductId(p);
-    const priceBlock = buildPriceBlock(p);
+    const ratingValue = cleanRatingRef(prod.rating);
+    const { price, oldPrice, discount } = getPriceInfo(prod);
 
-    return `
-      <div class="product-card" data-id="${id}">
-        <div class="fav-icon" data-id="${id}">
-          <svg class="heart-icon" viewBox="0 0 24 24">
-            <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
-          </svg>
-        </div>
+    const isFav =
+      typeof window.isProductFavorite === "function" && pid
+        ? window.isProductFavorite(pid)
+        : false;
 
-        <div class="product-image-wrapper">
-          <img src="${p.image_url || ""}" alt="${name}">
-        </div>
+    const card = document.createElement("article");
+    card.className = `product-card ${extraClasses}`.trim();
 
-        <div class="product-info">
-          <p class="brand">${p.brand || ""}</p>
-          <h3 class="product-title">${name}</h3>
-          ${priceBlock}
+    card.innerHTML = `
+      ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
+
+      <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
+        <svg class="heart-icon" viewBox="0 0 24 24">
+          <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+        </svg>
+      </div>
+
+      <img src="${prod.image_url || ""}" alt="${prod.product_name || ""}" loading="lazy">
+
+      <div class="product-info">
+        <p class="brand">${prod.brand || ""}</p>
+        <h3 class="product-name">${prod.product_name || ""}</h3>
+
+        ${
+          showExcerpt && excerpt
+            ? `<p class="tagline">${excerpt}</p>`
+            : ""
+        }
+        ${
+          tag
+            ? `<p class="product-tag">${tag}</p>`
+            : ""
+        }
+
+        <p class="rating">
+          ${
+            ratingValue
+              ? `⭐ ${ratingValue.toFixed(1)}`
+              : `<span style="color:#ccc;">–</span>`
+          }
+        </p>
+
+        <div class="price-line">
+          <span class="new-price">
+            ${price != null ? formatPrice(price) : ""}
+          </span>
+          ${
+            oldPrice != null
+              ? `<span class="old-price">${formatPrice(oldPrice)}</span>`
+              : ""
+          }
         </div>
       </div>
     `;
-  }
 
-  // ======================================================
-  // ⭐ NAVIGASJON + FAVORITTHJERTE
-  // ======================================================
+    // Klikk på kort → enten ekstern lenke eller product.html
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".fav-icon")) return;
 
-  function attachProductCardNavigation(container, productsInOrder) {
-    const cards = container.querySelectorAll(".product-card");
-    const favorites = getFavorites();
-    const favIdSet = new Set(favorites.map(f => String(f.id)));
-
-    cards.forEach((card, idx) => {
-      const product = productsInOrder[idx];
-      if (!product) return;
-
-      const pid = resolveProductId(product);
-      const favEl = card.querySelector(".fav-icon");
-
-      if (favEl && favIdSet.has(String(pid))) {
-        favEl.classList.add("active");
+      if (openExternal && prod.product_url) {
+        window.open(prod.product_url, "_blank");
+        return;
       }
 
-      card.addEventListener("click", e => {
-        const fav = e.target.closest(".fav-icon");
-
-        if (fav) {
-          e.stopPropagation();
-          toggleFavorite(product, fav);
-          return;
-        }
-
-        const idParam = encodeURIComponent(pid);
-        window.location.href = `product.html?id=${idParam}`;
-      });
+      if (!pid) return;
+      const idParam = encodeURIComponent(pid);
+      window.location.href = `product.html?id=${idParam}`;
     });
+
+    // Favoritt-klikk
+    const favEl = card.querySelector(".fav-icon");
+    favEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (typeof window.toggleFavorite === "function") {
+        window.toggleFavorite(prod, favEl);
+      }
+    });
+
+    return card;
   }
 
   // ======================================================
-  // FEATURED PICKS
+  // ⭐ FEATURED PICKS (fra CSV – grid)
   // ======================================================
-
   async function loadFeaturedPicks() {
     const grid = document.getElementById("featured-grid");
     if (!grid) return;
@@ -167,33 +202,40 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
 
       grid.innerHTML = "";
-      const orderedProducts = [];
 
       featured.forEach(p => {
         const product = {
           ...p,
-          product_name: p.product_name || p.title || p.name,
-          id: resolveProductId(p)
+          product_name: p.product_name || p.title || p.name || "",
+          brand: p.brand || "",
+          price: p.price || "",
+          old_price: p.old_price || "",
+          discount: p.discount || "",
+          image_url: p.image_url || "",
+          product_url: p.link || ""
         };
 
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(product);
-        const cardEl = wrapper.firstElementChild;
+        if (typeof window.resolveProductId === "function") {
+          product.id = window.resolveProductId(product);
+        }
 
-        orderedProducts.push(product);
-        grid.appendChild(cardEl);
+        const card = buildEliteCard(product, {
+          showExcerpt: false,
+          tag: "",
+          extraClasses: "home-feature card-medium",
+          openExternal: false // vi antar disse finnes i master og har product-page
+        });
+
+        grid.appendChild(card);
       });
-
-      attachProductCardNavigation(grid, orderedProducts);
     } catch (err) {
       console.error("❌ Klarte ikke laste Featured Picks:", err);
     }
   }
 
   // ======================================================
-  // ⭐ TRENDING NOW
+  // ⭐ TRENDING NOW (master + TrendingNow-ark)
   // ======================================================
-
   async function loadTrendingNow() {
     const container = document.getElementById("trending-grid");
     if (!container) return;
@@ -231,27 +273,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       const limited = active.slice(0, 10);
-      const orderedProducts = [];
 
       container.innerHTML = "";
 
       limited.forEach(({ row, product }) => {
         const enriched = {
           ...product,
-          product_name: getProductName(product),
-          id: resolveProductId(product),
-          highlight_reason: row.highlight_reason
+          product_name: window.getProductName
+            ? window.getProductName(product)
+            : (product.product_name || product.title || product.name || ""),
+          highlight_reason: row.highlight_reason || ""
         };
 
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(enriched);
-        const cardEl = wrapper.firstElementChild;
+        if (typeof window.resolveProductId === "function") {
+          enriched.id = window.resolveProductId(enriched);
+        }
 
-        container.appendChild(cardEl);
-        orderedProducts.push(enriched);
+        const card = buildEliteCard(enriched, {
+          showExcerpt: false,
+          tag: enriched.highlight_reason,
+          extraClasses: "trending-card card-medium",
+          openExternal: false
+        });
+
+        container.appendChild(card);
       });
 
-      attachProductCardNavigation(container, orderedProducts);
       initTrendingArrows();
     } catch (err) {
       console.error("❌ TrendingNow error:", err);
@@ -259,9 +306,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ PIL-NAVIGASJON FOR TRENDING
+  // ⭐ PIL-NAVIGASJON FOR TRENDING (horisontal scroll)
   // ======================================================
-
   function initTrendingArrows() {
     const track = document.getElementById("trending-grid");
     const prev = document.getElementById("trendingPrev");
@@ -284,9 +330,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // TOP BRANDS
+  // ⭐ TOP BRANDS THIS WEEK
   // ======================================================
-
   async function loadTopBrands() {
     const container = document.getElementById("topbrands-grid");
     if (!container) return;
@@ -322,7 +367,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
   // RUN EVERYTHING
   // ======================================================
-
   loadFeaturedPicks();
   loadTrendingNow();
   loadTopBrands();
