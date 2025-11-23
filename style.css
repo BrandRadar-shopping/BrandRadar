@@ -2,6 +2,9 @@
    BrandRadar – CSS entry point (modulært)
    ========================================= */
 
+/* 0) Legacy først – så nye filer kan overstyre */
+@import url("css/legacy.css");
+
 /* 1) Base + utils */
 @import url("css/base.css");
 @import url("css/utils.css");
@@ -24,5 +27,3 @@
 @import url("css/brands.css");
 @import url("css/luxury.css");
 
-/* 5) Legacy styles (alt gammelt inntil vi har ryddet) */
-@import url("css/legacy.css");
