@@ -1,1 +1,472 @@
+/* ============================================================
+   BrandRadar – INDEX PAGE (Forside) 
+   Ryddig, modulær styling for alle seksjoner på index.html
+   ------------------------------------------------------------
+   Viktig:
+   - Ingen globale regler
+   - Ingen produktkort-stiler
+   - Ingen header/footer
+   - Kun layout + spacing + seksjonsdesign for index-siden
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   🌟 HERO SLIDER (øverst på siden)
+   ------------------------------------------------------------ */
+
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  background: #f4f4f4;
+  border-radius: 22px;
+  margin: 2rem auto 3rem;
+  max-width: 1200px;
+}
+
+.hero-slider .slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+}
+
+.hero-slider .slides img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+}
+
+.hero-slider .nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.hero-slider .nav:hover {
+  background: white;
+}
+
+.hero-slider .nav.prev { left: 16px; }
+.hero-slider .nav.next { right: 16px; }
+
+.hero-slider .dots {
+  position: absolute;
+  bottom: 14px;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-slider .dots button {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: none;
+  margin: 0 5px;
+  background: #ccc;
+  cursor: pointer;
+}
+
+.hero-slider .dots button.active {
+  background: #0070f3;
+}
+
+
+
+/* ------------------------------------------------------------
+   💎 HERO SECTION (tekst + radar background)
+   ------------------------------------------------------------ */
+
+.hero {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  position: relative;
+  padding: 4rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-content {
+  max-width: 620px;
+}
+
+.hero-content h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content .cta-btn {
+  display: inline-block;
+  padding: 0.9rem 1.6rem;
+  border-radius: 12px;
+  background: #0070f3;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.hero-content .cta-btn:hover {
+  background: #005ac1;
+}
+
+.radar-bg {
+  width: 420px;
+  height: 420px;
+  background: url("assets/radar-bg.svg") center/contain no-repeat;
+  opacity: 0.25;
+}
+
+
+
+/* ------------------------------------------------------------
+   🧭 INTRO GRID – “Hva er BrandRadar?”
+   ------------------------------------------------------------ */
+
+.intro {
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+
+.intro h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: #111;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
+}
+
+.intro-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 22px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.intro-card:hover {
+  transform: translateY(-6px);
+}
+
+.intro-card .icon {
+  margin-bottom: 1rem;
+}
+
+.intro-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+  color: #0070f3;
+}
+
+.intro-card p {
+  color: #444;
+}
+
+
+
+/* ------------------------------------------------------------
+   🌐 U N I V E R S E S SECTION
+   ------------------------------------------------------------ */
+
+.universes {
+  max-width: 1200px;
+  margin: 3rem auto 4rem;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.universes h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.section-sub {
+  margin-top: 0.4rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.universe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2.2rem;
+}
+
+.u-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #111;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease;
+}
+
+.u-card:hover {
+  transform: translateY(-6px);
+}
+
+.u-card p {
+  color: #444;
+  margin-top: 0.4rem;
+}
+
+
+
+/* ------------------------------------------------------------
+   🔥 TRENDING RIGHT NOW
+   ------------------------------------------------------------ */
+
+.trending-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.trending-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+.trending-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.4rem;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+}
+
+.trending-grid::-webkit-scrollbar {
+  height: 8px;
+}
+.trending-grid::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.trending-nav {
+  background: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-right: 6px;
+  transition: background 0.2s;
+}
+
+.trending-nav:hover {
+  background: #f4f4f4;
+}
+
+
+
+/* ------------------------------------------------------------
+   🏆 TOP BRANDS THIS WEEK
+   ------------------------------------------------------------ */
+
+.top-brands {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2rem;
+}
+
+.topbrand-card {
+  background: #fff;
+  padding: 1.6rem;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #111;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease;
+}
+
+.topbrand-card:hover {
+  transform: translateY(-6px);
+}
+
+.topbrand-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 0.8rem;
+}
+
+
+
+/* ------------------------------------------------------------
+   🎁 GIVEAWAY SECTION
+   ------------------------------------------------------------ */
+
+.giveaway {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 2.4rem 1.6rem;
+  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
+  border-radius: 26px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.giveaway h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.giveaway p {
+  margin: 0.6rem 0 1rem;
+  color: #444;
+}
+
+.giveaway .cta-btn {
+  padding: 0.9rem 1.6rem;
+  border-radius: 12px;
+  background: #0070f3;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.giveaway .cta-btn:hover {
+  background: #005ac1;
+}
+
+
+
+/* ------------------------------------------------------------
+   🧭 FEATURED PICKS GRID (Ukens Radar Picks)
+   ------------------------------------------------------------ */
+
+.featured-products {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2rem;
+}
+
+
+
+/* ------------------------------------------------------------
+   ✉️ NEWSLETTER CTA FOOTER
+   ------------------------------------------------------------ */
+
+.footer-cta {
+  text-align: center;
+  margin: 5rem auto 3rem;
+  padding: 3rem 1rem;
+  background: #fafafa;
+  border-radius: 24px;
+  max-width: 900px;
+}
+
+.footer-cta h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.footer-cta p {
+  margin-top: 0.4rem;
+  color: #555;
+}
+
+.newsletter {
+  margin-top: 1.6rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.newsletter input {
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 260px;
+}
+
+.newsletter button {
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  background: #0070f3;
+  color: white;
+  font-weight: 600;
+  border: none;
+}
+
+.newsletter button:hover {
+  background: #005ac1;
+}
+
+
+
+/* ------------------------------------------------------------
+   📱 RESPONSIVE
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .radar-bg {
+    display: none;
+  }
+
+  .intro-grid,
+  .universe-grid,
+  .premium-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trending-nav {
+    display: none;
+  }
+}
 
