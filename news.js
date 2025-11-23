@@ -1,5 +1,5 @@
 // ======================================================
-// 📰 BrandRadar – News page (MASTER-driven, Elite v8)
+// 📰 BrandRadar – News page (MASTER-driven, Elite v9)
 //  - Partner banner
 //  - Ukens Deals (grid, eget ark)
 //  - Radar Picks (slider med dots + auto)
@@ -8,7 +8,7 @@
 // ======================================================
 
 (function () {
-  console.log("✅ news.js (master-driven v3) loaded");
+  console.log("✅ news.js (master-driven v4 – Elite v9) loaded");
 
   // ---------- SHEET-KONFIG ----------
   const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
@@ -104,13 +104,14 @@
     return base;
   }
 
-  // ---------- ELITE V8 KORT ----------
+  // ---------- ELITE V9 KORT ----------
   function buildEliteCard(prod, options = {}) {
     const {
       showExcerpt = false,
       excerpt = "",
       tag = "",
-      extraClasses = ""
+      extraClasses = "",
+      openExternal = false // NY: true = åpne ekstern lenke, false = product.html
     } = options;
 
     const pid =
@@ -196,9 +197,13 @@
       </div>
     `;
 
-    // Kort-klikk → product.html
+    // Kort-klikk → enten ekstern lenke eller product.html
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-icon")) return;
+      if (openExternal && prod.product_url) {
+        window.open(prod.product_url, "_blank");
+        return;
+      }
       if (!pid) return;
       window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
     });
@@ -416,7 +421,7 @@
   }
 
   // ======================================================
-  // 2) UKENS DEALS (GRID)
+  // 2) UKENS DEALS (GRID – kompakt kort)
   // ======================================================
   async function loadDeals() {
     if (!dealsGridEl) return;
@@ -460,7 +465,7 @@
             : false;
 
         const card = document.createElement("article");
-        card.className = "product-card deal-card";
+        card.className = "product-card card-compact deal-card";
 
         card.innerHTML = `
           ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
@@ -493,6 +498,7 @@
           </div>
         `;
 
+        // Klikk → ekstern deal-lenke
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
@@ -515,7 +521,7 @@
   }
 
   // ======================================================
-  // 3) RADAR PICKS (SLIDER + DOTS)
+  // 3) RADAR PICKS (SLIDER + DOTS – medium kort)
   // ======================================================
   async function loadPicks() {
     if (!picksGridEl) return;
@@ -552,13 +558,8 @@
           showExcerpt: false,
           excerpt: "",
           tag: p.reason || "",
-          extraClasses: "pick-card"
-        });
-
-        // Override kort-klikk → eksternt produkt
-        card.addEventListener("click", (e) => {
-          if (e.target.closest(".fav-icon")) return;
-          if (prod.product_url) window.open(prod.product_url, "_blank");
+          extraClasses: "pick-card card-medium",
+          openExternal: true // NY: Picks åpner ekstern lenke
         });
 
         picksGridEl.appendChild(card);
@@ -580,7 +581,7 @@
 
   // ======================================================
   // 4) SPOTLIGHT + NEWS FEED (MASTER + NEWS-ark)
-//      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
+  //      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
   // ======================================================
   async function loadNewsSections() {
     if (!spotlightWrapper && !newsGridEl) return;
@@ -620,7 +621,7 @@
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
 
-      // ----- Spotlight (slider: piler + dots) -----
+      // ----- Spotlight (slider: piler + dots, large kort) -----
       if (spotlightWrapper) {
         spotlightWrapper.classList.remove("loading");
         spotlightWrapper.innerHTML = "";
@@ -633,7 +634,8 @@
               showExcerpt: true,
               excerpt: item.excerpt,
               tag: item.tag || "Spotlight",
-              extraClasses: "featured-card"
+              extraClasses: "featured-card card-large",
+              openExternal: false // Går til product.html (detaljside)
             });
             spotlightWrapper.appendChild(card);
           });
@@ -648,7 +650,7 @@
         }
       }
 
-      // ----- News feed (grid) -----
+      // ----- News feed (grid – kompakte kort) -----
       if (newsGridEl) {
         newsGridEl.classList.remove("loading");
         newsGridEl.innerHTML = "";
@@ -663,7 +665,8 @@
             showExcerpt: true,
             excerpt: item.excerpt,
             tag: item.tag || "",
-            extraClasses: "news-card"
+            extraClasses: "news-card card-compact",
+            openExternal: false // Går til product.html
           });
           newsGridEl.appendChild(card);
         });
