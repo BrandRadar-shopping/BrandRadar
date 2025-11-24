@@ -1,0 +1,3144 @@
+
+/* =========================================
+   RESET & BASE STYLES
+   ========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #fafafa;
+  color: #222;
+}
+
+
+/* =========================================
+   FEATURED PRODUCTS
+   ========================================= */
+.featured-products {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.featured-products h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* =========================================
+   SMOOTH HOVER ANIMATION
+   ========================================= */
+.mega-menu.active {
+  animation: fadeInMenu 0.25s ease forwards;
+}
+
+@keyframes fadeInMenu {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================
+   BRAND PAGE STYLING
+   ============================ */
+
+.brand-search {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1rem;
+}
+
+#brandSearch {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 320px;
+  font-size: 1rem;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.brand-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.brand-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.brand-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+.brand-card p {
+  color: #666;
+  font-size: 0.9rem;
+  min-height: 40px;
+}
+
+.brand-card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #000; /* <-- Ny farge */
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.25s ease; /* smoother hover */
+}
+
+.brand-card a:hover {
+  background: #222; /* <-- Ny hover */
+  transform: translateY(-2px); /* liten løft-effekt */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+
+/* Fremhevede brands */
+.highlighted-brands {
+  background: #f7f9fc;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.highlighted-brands .brand-card {
+  border: 2px solid #0070f3;
+  box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
+}
+
+.highlighted-brands h2,
+.all-brands h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Toast melding (favoritt notifikasjon) */
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #0070f3;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.toast-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.empty-favorites .back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #0070f3;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+
+/* ===========================
+   TOAST MESSAGE
+   =========================== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #333;
+  color: #fff;
+  padding: 0.8rem 1.4rem;
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  z-index: 9999;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+  background: #0070f3;
+}
+
+.toast.error {
+  background: #ff4b4b;
+}
+
+
+/* ============================================
+   FAVORITTER-SIDE – modernisert spacing og layout
+   ============================================ */
+.favorites-section {
+  max-width: 1300px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.favorites-section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.8rem;
+  justify-content: center; /* sentrerer gridet når det ikke fyller hele raden */
+  justify-items: center;
+}
+
+.favorites-grid .product-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 250px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.favorites-grid .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+}
+
+.fav-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.remove-btn {
+  background: #ff4b4b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #e03d3d;
+}
+
+.empty-favorites {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-size: 1.1rem;
+}
+
+.empty-favorites .back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #0070f3;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.empty-favorites .back-btn:hover {
+  background: #005dc1;
+}
+
+
+/* ✅ Produktlayout moderne e-commerce */
+.product-detail {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: 2rem auto;
+  align-items: flex-start;
+}
+
+/* ✅ Thumbnails venstre */
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.thumbnails .thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all .2s ease;
+}
+.thumbnails .thumb.active {
+  border-color: #111;
+}
+
+/* ✅ Hovedbilde */
+#main-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* ✅ Info-seksjon */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.product-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.product-brand {
+  font-size: 1.1rem;
+  color: #444;
+}
+.price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #111;
+}
+.discount-badge {
+  background: #e60023;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  font-size: .85rem;
+}
+.rating {
+  font-weight: 600;
+}
+
+/* ✅ CTA buttons premium */
+#buy-link {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+#buy-link:hover { background: #000; }
+
+#favorite-btn {
+  margin-top: .5rem;
+  width: 100%;
+  background: #f2f2f2;
+  color: #111;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+#favorite-btn:hover { background: #e9e9e9; }
+
+/* ✅ Back button clean */
+#back-btn {
+  color: #111;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  margin-bottom: 1.2rem;
+}
+#back-btn::before { content: "←"; }
+#back-btn:hover { opacity: 0.7; }
+
+/* ✅ Perfeksjonert spacing */
+.product-detail {
+  padding: 2rem 0;
+}
+
+/* ✅ Unngå at ting krasjer ved lavere bredder */
+@media (max-width: 1100px) {
+  .product-detail {
+    grid-template-columns: 100px 1fr;
+  }
+  .product-info {
+    margin-top: 1rem;
+  }
+}
+
+/* ✅ Mobilvisning */
+@media (max-width: 768px) {
+  .product-detail {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .thumbnails {
+    flex-direction: row;
+    order: 2;
+    margin-top: 1rem;
+  }
+  .thumbnails .thumb {
+    width: 65px;
+    height: 65px;
+  }
+  #main-image {
+    order: 1;
+  }
+  .product-info {
+    order: 3;
+    margin-top: 1rem;
+  }
+}
+
+.product-detail {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: 2rem auto;
+  align-items: flex-start;
+}
+
+.product-detail.no-thumbnails {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: .2s ease;
+}
+.thumb.active {
+  border-color: #111;
+}
+
+#main-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+#buy-link {
+  background: #111;
+  color: #fff !important;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  transition: .2s;
+}
+#favorite-btn {
+  background: #f2f2f2;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.price-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.discount-badge {
+  background: #e60023;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+
+#favorites-count {
+  background: #ff4757;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  margin-left: 4px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+}
+
+/* ✅ Related Products */
+.related-products {
+  max-width: 1300px;
+  margin: 4rem auto;
+  padding-top: 2rem;
+}
+
+.related-products h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* ================================
+STØRRE HOVEDBILDE PRODUCT.HTML
+================================ */
+
+#main-image {
+  width: 100%;
+  max-width: 550px; /* øker størrelse */
+  border-radius: 10px;
+  border: 2px solid #000; /* svart ramme */
+  object-fit: contain;
+}
+
+/* ==================================
+SORT RAMME RUNDT HOVEDBILDET
+================================== */
+
+.thumb.active {
+  border-color: #000 !important;
+}
+
+/* ==================================
+MELLOMROM THUMBNAILS -> HOVEDBILDE
+================================== */
+
+.thumbnails {
+  margin-right: 10px;
+}
+
+/* =====================================
+   PREMIUM RELATED PRODUCT SLIDER – FINAL ✅
+======================================*/
+
+.related-section {
+  padding: 3rem 0;
+  border-top: 1px solid #222;
+  margin-top: 3rem;
+}
+
+.related-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  text-align: left;
+  max-width: 1300px;
+  margin: 0 auto 1rem auto;
+}
+
+/* ✅ Wrapper for slider – kun i related-section */
+.related-section .slider-wrapper {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* ✅ Selve slideren – horisontal scroll */
+.related-section .related-slider {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0 20px 0;
+}
+
+.related-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* ✅ Piler */
+.related-section .slider-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #111;
+  background: #fff;
+  font-size: 24px;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: 0.25s ease;
+}
+
+.related-section .slider-btn:hover {
+  transform: translateY(-50%) scale(1.08);
+  background: #f5f5f5;
+}
+
+.related-section .slider-btn.prev {
+  left: -35px;
+}
+
+.related-section .slider-btn.next {
+  right: -35px;
+}
+
+/* ✅ Fade på sidene */
+.related-section .slider-wrapper::before,
+.related-section .slider-wrapper::after {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 100%;
+  top: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.related-section .slider-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.related-section .slider-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+/* ✅ Mobil: piler skjules – swipe aktiv */
+@media (max-width: 768px) {
+  .related-section .slider-btn {
+    display: none;
+  }
+}
+
+
+/* ✅ Sørg for at slider-knapper alltid ligger OVER kortene */
+.slider-btn {
+  z-index: 200 !important;
+}
+
+/* ✅ Sørg for at kanten ikke kutter knappene */
+.slider-wrapper {
+  overflow: visible !important;
+  z-index: 1;
+}
+
+/* ✅ Fade gradient må ikke ligge over knappene */
+.slider-wrapper::before,
+.slider-wrapper::after {
+  z-index: 50 !important;
+}
+
+
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+}
+
+/* ✅ REMOVE OLD FLOATING MEGA MENU TRIGGERS */
+.menu-top {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* ✅ Align dropdown perfectly under category-bar */
+nav.mega-menu .menu-panel {
+  top: 100%; /* EXACTLY under category bar */
+  margin-top: 0;
+}
+
+
+/* ✅ Hver blokk: 1 kolonne produkt-kategorier + 1 kolonne toppmerker */
+nav.mega-menu .menu-block {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 2rem;
+  padding-right: 2.5rem;
+  border-right: 1px solid #e5e5e5;
+}
+
+/* ✅ Siste blokk trenger ikke strek */
+nav.mega-menu .menu-block:last-child {
+  border-right: none;
+}
+
+/* ✅ Typografi */
+nav.mega-menu .menu-section h4 {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #111;
+}
+
+nav.mega-menu .menu-subtitle {
+  margin-top: 0.7rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ✅ List styling */
+nav.mega-menu .menu-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav.mega-menu .menu-section li {
+  margin: 0.35rem 0;
+}
+
+nav.mega-menu .menu-section a {
+  color: #222;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: 0.15s ease;
+}
+
+nav.mega-menu .menu-section a:hover {
+  color: #0070f3;
+}
+
+/* ✅ Toppmerker får riktig layout */
+nav.mega-menu .menu-section.brands {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ✅ Padding justering for perfekt linjehøyde */
+nav.mega-menu .menu-section {
+  line-height: 1.35rem;
+}
+
+
+.breadcrumb {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.breadcrumb a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Grid forbedring */
+.product-grid,
+.category-products .product-grid,
+.brand-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
+  padding: 20px 0;
+  width: 100%;
+  justify-items: center;
+}
+
+/* Tom kategori melding */
+.empty-message {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin: 30px 0;
+}
+
+
+/* ======================================================
+   ✅ Unified Filter + Sort Bar — Category Page
+====================================================== */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background: #ffffff;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  gap: 16px;
+}
+
+.filters-left,
+.filters-right {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar label {
+  font-weight: 600;
+}
+
+.filter-bar select,
+.filter-bar input[type="checkbox"] {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.result-count {
+  font-weight: 600;
+  color: #333;
+  margin-left: 6px;
+}
+
+/* ✅ Mobile optimization */
+@media (max-width: 700px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .filters-left,
+  .filters-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ======================================================
+   ✅ Active Filter Tags (future use)
+====================================================== */
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: 0.18s ease-in-out;
+}
+
+.filter-tag:hover {
+  border-color: #0070f3;
+  transform: translateY(-2px);
+}
+
+.filter-tag svg {
+  width: 14px;
+  height: 14px;
+  fill: #0070f3;
+  pointer-events: none;
+}
+
+.filter-tags.hidden {
+  display: none;
+}
+
+/* ======================================================
+   ✅ Favoritt-ikon — syltynn outline
+====================================================== */
+
+.fav-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.fav-icon:hover {
+  transform: scale(1.08);
+}
+
+.heart-icon {
+  width: 22px;
+  height: 22px;
+  stroke: #111;
+  fill: transparent;
+  stroke-width: 1.4px; /* ✅ syltynn outline */
+  transition: 0.22s ease;
+}
+
+.fav-icon.active .heart-icon {
+  fill: #ff1f3d;
+  stroke-width: 1.4px;
+}
+
+/* ======================================================
+   ✅ Brand Alphabet Filter — cleaned & unified
+====================================================== */
+
+.brand-alphabet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px auto 25px;
+  padding: 5px 0;
+  max-width: 900px;
+}
+
+.brand-alphabet span {
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #111;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.65;
+  transition: 0.22s ease;
+}
+
+.brand-alphabet span:hover {
+  opacity: 1;
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.brand-alphabet span.active {
+  opacity: 1;
+  background: #0070f3;
+  color: #fff;
+  border-color: #0070f3;
+}
+
+/* ======================================================
+   ✅ Minimalist knapper til brand cards
+====================================================== */
+
+.brand-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: 1px solid #111;
+  background: transparent;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.brand-btn:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.brand-btn:active {
+  transform: scale(0.96);
+}
+
+/* ======================================
+   ✅ BRAND FAVORITT-IKON — Oppdatert Final
+====================================== */
+.brand-card .fav-icon {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.brand-card .fav-icon .heart-icon {
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.4px;
+  transition: 0.22s ease;
+}
+
+.brand-card .fav-icon.active .heart-icon {
+  fill: #ff1f3d;
+  stroke: #ff1f3d;
+}
+
+.brand-card:hover .fav-icon .heart-icon {
+  transform: scale(1.14);
+}
+
+/* ✅ Favoritt-tabs */
+.fav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.8rem;
+}
+
+.tab-btn {
+  background: #eaeaea;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: #d5d5d5;
+}
+
+.tab-btn.active {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ✅ Brand favorites layout */
+#favorites-brand-grid .brand-card {
+  cursor: pointer;
+  position: relative;
+  padding-top: 45px;
+}
+
+#favorites-brand-grid .brand-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin: 0 auto 0.7rem;
+}
+
+/* ✅ Remove tag (brand favorites) */
+.remove-brand-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff1f3d;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 20;
+  transition: 0.2s ease;
+}
+
+.remove-brand-tag:hover {
+  background: #d81430;
+  transform: scale(1.06);
+}
+
+/* ===========================================
+   ✅ Favorittside – Produktkort forbedring
+=========================================== */
+#tab-products .product-card {
+  position: relative;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+#tab-products .product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+#tab-products .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+}
+
+#tab-products .product-info {
+  padding: 0.8rem 1rem 1rem;
+  text-align: center;
+}
+
+#tab-products .product-info h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+#tab-products .product-info .brand {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+#tab-products .product-info .rating {
+  color: #111;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+#tab-products .product-info .price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0070f3;
+}
+
+/* ✅ Fjern-tag */
+#tab-products .remove-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s ease;
+}
+
+#tab-products .remove-tag:hover {
+  background: #d63030;
+}
+
+
+/* ============================================
+   Justert for korrekt z-index, bildehøyde og ikonplassering
+============================================ */
+
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1250px;
+  padding: 0 20px;
+}
+
+/* ✅ Hero-seksjon midtstilt */
+  text-align: center;
+  padding: 3.5rem 0 2rem;
+  margin: 0 auto;
+}
+
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #111;
+}
+
+  font-size: 16px;
+  opacity: .75;
+  margin-top: 6px;
+}
+
+/* ✅ Seksjoner (Gold Picks, Filter, Produkter) */
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  text-align: center;
+}
+
+  margin-bottom: 1.8rem;
+  font-size: 24px;
+  font-weight: 800;
+  color: #d4af37;
+}
+
+/* ✅ Filterbar midtstilt */
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+  padding: 7px 10px;
+  font-size: 14px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ============================================
+   💎 Gold Picks Grid + Produkt Grid
+============================================ */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  justify-items: center;
+  align-items: start;
+}
+
+/* ============================================
+   💎 Kortstruktur (gjelder både hero og produkter)
+============================================ */
+  background: #fff;
+  border-radius: 14px;
+  overflow: visible;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.35);
+}
+
+/* ✅ Bildehåndtering */
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  background: #fff;
+  display: block;
+  margin: 0 auto;
+  border-radius: 14px 14px 0 0;
+}
+
+/* ✅ Infoområde */
+  text-align: center;
+  padding: 12px 14px;
+}
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+  color: #111;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+  font-weight: 700;
+  font-size: 1rem;
+  color: #d4af37;
+}
+
+/* ============================================
+   👑 Gold Pick badge – med shine-animasjon
+============================================ */
+.gold-pick-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: linear-gradient(90deg, #d4af37, #f8e08e);
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  animation: goldShine 4s infinite linear;
+}
+
+@keyframes goldShine {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.35); }
+  100% { filter: brightness(1); }
+}
+
+/* ============================================
+   💛 Rabatt-badge
+============================================ */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #d4af37;
+  color: #000;
+  padding: 4px 8px;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 8px;
+  z-index: 12;
+}
+
+/* ============================================
+============================================ */
+.fav-btn {
+  position: absolute;
+  top: 42px;      /* ✅ flyttet ned for å unngå Gold Pick */
+  right: 14px;    /* ✅ litt lenger ut fra kanten */
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  z-index: 20;    /* ✅ over badge */
+  transition: transform 0.2s ease, filter 0.3s ease;
+  pointer-events: auto;
+}
+
+.fav-btn:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.5));
+}
+
+.fav-icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: #111;
+  stroke-width: 1.2;
+  transition: all 0.35s ease;
+  pointer-events: auto;
+}
+
+/* ✅ Når aktiv (favoritt) → Gullfyll + lett glød */
+.fav-btn.active .fav-icon {
+  fill: url(#goldGradient);
+  stroke: none;
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.6));
+}
+
+/* ✨ Gullgradient-definisjon for SVG-fill */
+svg#gold-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+  margin-top: 10px; /* Gir lik visuell spacing som index */
+}
+
+  background: #d4af37;
+  color: #000;
+}
+
+/* og gjenopprett standard røde badge for resten */
+  background: #e63946;
+  color: #fff;
+}
+
+
+/* ============================================
+============================================ */
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  background: #111;
+}
+
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  opacity: 1;
+}
+
+.hero-content {
+  text-align: center;
+  color: white;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.35);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  animation: fadeInDown 1.5s ease;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  color: #f2f2f2;
+  animation: fadeInUp 1.5s ease;
+}
+
+/* ✨ Fade inn animasjoner */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ✨ Gullrefleks-animasjon på hero-tittel */
+.hero-title {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, #d4af37, #fff8c9, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: shineGold 8s linear infinite;
+}
+
+@keyframes shineGold {
+  0% { background-position: 200% center; }
+  50% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ============================================
+============================================ */
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* tvinger full bredde */
+  background: linear-gradient(to bottom, #0a0a0a, #1a1a1a 90%);
+  color: #fff;
+  text-align: center;
+  padding: 5rem 2rem 4rem;
+  border-bottom: 2px solid #d4af37;
+  position: relative;
+  z-index: 1;
+}
+
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f6e27a, #d4af37, #f6e27a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: goldWave 8s linear infinite;
+}
+
+  color: #ddd;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+@keyframes goldWave {
+  0% { background-position: 200% center; }
+  50% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Lys seksjon rett under hero */
+  background-color: #fff;
+  color: #111;
+  padding: 3rem 0;
+}
+
+/* Myk overgang (fade) mellom hero og første hvite seksjon */
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(26,26,26,1), rgba(255,255,255,0));
+  z-index: 0;
+}
+
+
+/* ============================================
+   🌟 BrandRadar Index – Hero & Struktur
+============================================ */
+.hero {
+  position: relative;
+  text-align: center;
+  color: #fff;
+  padding: 6rem 1rem 7rem;
+  background: radial-gradient(circle at center, #111 0%, #0b0b0b 80%);
+  overflow: hidden;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+.hero p {
+  opacity: 0.85;
+  margin-bottom: 1.8rem;
+  font-size: 1.1rem;
+}
+.cta-btn {
+  background: linear-gradient(90deg, #0070f3, #00b4ff);
+  color: #fff;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+.cta-btn:hover {
+  transform: scale(1.04);
+  background: linear-gradient(90deg, #00b4ff, #0070f3);
+}
+.radar-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 1%, transparent 70%);
+  animation: radarPulse 6s infinite ease-in-out;
+}
+@keyframes radarPulse {
+  0%,100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+/* =========================================
+   🌟 BrandRadar Premium Intro Section
+========================================= */
+
+.intro {
+  text-align: center;
+  max-width: 1100px;
+  margin: 6rem auto;
+  padding: 0 1.5rem;
+}
+
+.intro h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2.5rem;
+}
+
+.intro-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2.2rem 1.8rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  transition: all 0.25s ease;
+  text-align: center;
+  cursor: default;
+}
+
+.intro-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+}
+
+.intro-card .icon {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.intro-card .icon svg {
+  width: 36px;
+  height: 36px;
+  opacity: 0.82;
+  stroke: #000; /* sort */
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.intro-card:hover .icon svg {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.intro-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.intro-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ===============================
+   UNIVERS – CONTAINER
+   Sentrert tittel, tekst & grid
+   =============================== */
+
+.universes {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.universes h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+}
+
+.universes .section-desc {
+  max-width: 760px;
+  margin: 0 auto 3rem;
+  font-size: 1.05rem;
+  opacity: 0.85;
+  line-height: 1.55;
+}
+
+/* ==========================================================
+   PREMIUM UNIVERS-GRID – Always 4 cards in one row (desktop)
+   ========================================================== */
+
+.universe-grid {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: nowrap; /* 🔥 Hindrer at 1 faller under */
+  padding: 0 20px;
+}
+
+/* ----------------------------------------------------------
+   PREMIUM CARD DESIGN – A + B (subtile gradients per card)
+   ---------------------------------------------------------- */
+
+  background: linear-gradient(135deg, #ffffff 0%, #fff7eb 100%);
+}
+
+/* Trender, Nyheter & Kampanjer */
+.u-card.trends {
+  background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+}
+
+/* Brands */
+.u-card.brands {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f4ff 100%);
+}
+
+/* Produkter */
+.u-card.products {
+  background: linear-gradient(135deg, #ffffff 0%, #f4fff8 100%);
+}
+
+/* ----------------------------------------------------------
+   Shared card styling
+   ---------------------------------------------------------- */
+.u-card {
+  width: 100%;
+  max-width: 260px;
+  padding: 26px 24px 30px;
+  border-radius: 18px;
+  box-shadow: 0 4px 28px rgba(0,0,0,0.05);
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  transition: transform .18s ease, box-shadow .22s ease;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.u-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.u-card p {
+  font-size: .95rem;
+  opacity: .85;
+  line-height: 1.45;
+}
+
+.u-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.10);
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .universe-grid {
+    flex-wrap: wrap; /* 2 + 2 layout */
+  }
+}
+
+@media (max-width: 600px) {
+  .universe-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .u-card {
+    max-width: 320px;
+  }
+}
+
+
+
+
+
+
+/* PARTNER & GIVEAWAY */
+.partner-highlight {
+  max-width: 1000px;
+  margin: 5rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+.partner-highlight img { width: 280px; border-radius: 12px; }
+.giveaway {
+  text-align: center;
+  background: linear-gradient(90deg, #d4af37, #f5d76e);
+  color: #111;
+  padding: 3rem 1rem;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 4rem auto;
+}
+.giveaway button {
+  background: #111; color: #fff; border: none;
+  padding: 0.8rem 1.6rem; font-weight: 600; border-radius: 8px;
+  cursor: pointer; transition: 0.25s;
+}
+.giveaway button:hover { background: #222; }
+/* FEATURED PRODUCTS (RADAR PICKS) */
+.featured-products {
+  max-width: 1200px;
+  margin: 5rem auto 6rem;
+  text-align: center;
+  padding: 0 1rem;
+}
+.featured-products h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+.section-sub { font-size: 1rem; color: #666; margin-bottom: 2rem; }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.8rem;
+}
+
+.product-info { padding: 1rem; text-align: center; }
+.product-info h3 { font-size: 1rem; margin-bottom: 4px; font-weight: 600; }
+.product-info .price { color: #0070f3; font-weight: 700; }
+/* FOOTER CTA */
+.footer-cta { background: #f8f8f8; text-align: center; padding: 4rem 1rem; }
+.newsletter { margin-top: 1rem; }
+.newsletter input {
+  padding: 0.8rem 1rem; border: 1px solid #ccc;
+  border-radius: 8px; width: 250px;
+}
+.newsletter button {
+  padding: 0.8rem 1rem; background: #0070f3;
+  border: none; color: #fff; border-radius: 8px;
+  cursor: pointer; margin-left: 0.5rem;
+}
+
+
+/* =========================================
+   🌌 BRANDRADAR – ULTRA PREMIUM HERO SLIDER
+   Fullscreen, radar-motion & parallax
+========================================= */
+
+.hero-slider {
+  position: relative;
+  width: 100%;
+
+  /* 🔥 Viktig: gi slideren ekte høyde, ikke bare min-height */
+  height: clamp(420px, 75vh, 620px);
+  min-height: 420px;
+
+  background: radial-gradient(circle at center, #15151b 0%, #050509 70%);
+  color: #fff;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  isolation: isolate; /* nødvendig for lagdeling */
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+}
+
+/* --- Vignette overlay --- */
+.hero-slider::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.45) 70%),
+    linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 40%);
+  z-index: 2; /* Ligger over bildene, men under tekst/arrows */
+}
+
+/* --- Radar pulse --- */
+.hero-slider::after {
+  content: "";
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,112,243,0.25);
+  transform: translate(-50%, -50%) scale(1);
+  box-shadow: 0 0 60px rgba(0,112,243,0.3);
+  animation: radarWave 6s ease-out infinite;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+@keyframes radarWave {
+  0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0.45; }
+  70%  { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+}
+
+/* --- Slides wrapper --- */
+.hero-slider .slides {
+  position: relative;
+  width: 100%;
+  height: 100%;        /* 🧱 Arver nå høyden fra hero-slider */
+  min-height: inherit; /* ekstra sikkerhet */
+  z-index: 0;          /* slides nederst */
+}
+
+/* --- Enkelt-slide --- */
+.hero-slider .slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.03)
+    translate(var(--parallax-x), var(--parallax-y));
+  transition:
+    opacity 0.9s ease-in-out,
+    transform 8s ease-out;
+  z-index: 0; /* eksplisitt: ligger bak overlay */
+}
+
+.hero-slider .slide.active {
+  opacity: 1;
+}
+
+/* --- Glassmorphism content --- */
+.hero-slider .slide-content {
+  position: absolute;
+  left: 50%;
+  top: 52%;  /* litt høyere, så den ikke “kolliderer” visuelt med header */
+  transform: translate(-50%, -50%);
+  text-align: center;
+  max-width: 520px;
+  padding: 2rem 2.4rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+  z-index: 3; /* ligger over vignette + bilde */
+}
+
+.hero-slider .slide-content h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.4px;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+.hero-slider .slide-content p {
+  font-size: 1rem;
+  opacity: 0.92;
+  margin-bottom: 1.4rem;
+}
+
+/* --- CTA --- */
+.hero-slider .slide-content .btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #0070f3, #00b4ff);
+  color: #fff;
+  padding: 0.8rem 1.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease,
+              background-position 0.4s ease;
+  background-size: 200% auto;
+}
+
+.hero-slider .slide-content .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,112,243,0.45);
+  background-position: right center;
+}
+
+/* --- Navigation arrows --- */
+.hero-slider .nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 4; /* øverst */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, background 0.2s ease,
+              border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-slider .nav.prev { left: 24px; }
+.hero-slider .nav.next { right: 24px; }
+
+.hero-slider .nav:hover {
+  transform: translateY(-50%) scale(1.06);
+  background: rgba(0,0,0,0.65);
+  border-color: #fff;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+}
+
+/* --- Dots --- */
+.hero-slider .dots {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4; /* helt øverst */
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}
+
+.hero-slider .dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.45);
+  transition: width 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.hero-slider .dots span.active {
+  width: 18px;
+  background: #fff;
+  opacity: 1;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .hero-slider {
+    height: 70vh;
+    min-height: 380px;
+  }
+  .hero-slider .slide-content {
+    width: 90%;
+    padding: 1.6rem 1.8rem;
+  }
+  .hero-slider .slide-content h1 {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-slider .nav {
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+    top: 52%;
+  }
+  .hero-slider .slide-content {
+    top: 55%;
+    padding: 1.4rem 1.5rem;
+  }
+}
+
+/* Overstyr global section-padding for hero-slider */
+section.hero-slider {
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+  font-size: 0.8rem;
+  background: linear-gradient(90deg, #ffd700, #e8c547, #fff4c1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Favorittikon i brand-produkter */
+.product-card {
+  position: relative;
+}
+.product-card .fav-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+.product-card .fav-icon:hover {
+  transform: scale(1.15);
+}
+.heart-icon {
+  fill: #ccc;
+  width: 100%;
+  height: 100%;
+}
+.fav-icon.active .heart-icon {
+  fill: #e63946;
+}
+
+
+
+/* --- Brand Info Card Layout (rebalansert grid) --- */
+.brand-info-card {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2.5rem 3rem;
+  background: #fff;
+  border-radius: 16px;
+  max-width: 1100px;
+  margin: 3rem auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.brand-info-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-info-left img {
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.brand-info-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.brand-info-right h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.brand-info-right p {
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.brand-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.brand-btn,
+.brand-btn-outline {
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.brand-btn {
+  background: #000;
+  color: white;
+}
+
+.brand-btn:hover {
+  opacity: 0.85;
+}
+
+.brand-btn-outline {
+  background: transparent;
+  border: 1.8px solid #000;
+}
+
+.brand-btn-outline:hover {
+  background: #000;
+  color: #fff;
+}
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(110deg, #f5d76e 0%, #ffd700 40%, #fff4c1 70%, #f5d76e 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-top: 0.8rem;
+  animation: shimmerGold 4s linear infinite;
+}
+
+@keyframes shimmerGold {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Filter Bar --- */
+.brand-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  padding: 1.5rem 2rem;
+  background: #fafafa;
+  border-radius: 12px;
+  max-width: 1100px;
+  margin: 2rem auto;
+}
+.brand-filter-bar label {
+  font-weight: 600;
+  color: #333;
+}
+.brand-filter-bar select {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+}
+
+
+/* --- Heart Icon --- */
+.product-card .fav-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  transition: transform 0.2s ease;
+}
+.product-card .fav-icon:hover {
+  transform: scale(1.15);
+}
+.heart-icon {
+  fill: #ccc;
+  width: 100%;
+  height: 100%;
+}
+.fav-icon.active .heart-icon {
+  fill: #e63946;
+}
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(
+    110deg,
+    #f5d76e 0%,
+    #ffd700 20%,
+    #fff4c1 40%,
+    #f0c419 60%,
+    #f5d76e 80%,
+    #ffd700 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-top: 0.6rem;
+  animation: shimmerGold 4s linear infinite;
+}
+
+@keyframes shimmerGold {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+.gold-heart path {
+  fill: url(#gold-gradient);
+}
+
+.gold-heart {
+  fill: #e6b800;
+  transition: transform 0.2s ease, fill 0.3s ease;
+}
+.gold-heart:hover {
+  transform: scale(1.15);
+  fill: #ffcc33;
+}
+
+.fav-icon.active .gold-heart {
+  fill: #ffd700;
+}
+
+
+/* =========================================
+   ELITE PRODUCT CARD v8 — BALANCED & SPACIOUS
+   ========================================= */
+.product-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 330px;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  border-color: #d0d0d0;
+}
+
+/* 🔹 Produktbilde */
+.product-card img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+  border-bottom: 1px solid #eee;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* 🔹 Informasjonsseksjon */
+.product-info {
+  padding: 1.2rem 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  text-align: left;
+}
+
+.product-info h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+  min-height: 2.6em;
+}
+
+.product-info .brand {
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+
+.product-info .rating {
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.product-info .price {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #0070f3;
+  margin-top: auto;
+  transition: color 0.3s ease;
+}
+
+.product-card:hover .price {
+  color: #0057c1;
+}
+
+/* 🔹 Favorittikon */
+.fav-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+  z-index: 10;
+}
+
+.fav-icon:hover {
+  transform: scale(1.1);
+}
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.6px;
+  transition: fill 0.25s ease, stroke 0.25s ease;
+}
+
+.fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
+
+/* 🔹 Rabattmerke */
+.discount-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: linear-gradient(135deg, #ff5858, #ff1f3d);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.2);
+}
+
+  box-shadow: 0 12px 38px rgba(212, 175, 55, 0.3);
+}
+
+  color: #c9a400;
+}
+
+/* ============================================
+   FAVORITTER KORT
+============================================ */
+#tab-products .product-card {
+  position: relative;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#tab-products .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+#tab-products .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  transition: transform 0.35s ease;
+}
+
+#tab-products .product-card:hover img {
+  transform: scale(1.05);
+}
+
+#tab-products .product-info {
+  padding: 0.9rem 1rem 1.2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#tab-products .product-info .brand {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#tab-products .product-info .product-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+
+#tab-products .product-info .rating {
+  font-size: 0.9rem;
+  color: #f5c518;
+  margin: 3px 0 6px;
+}
+
+#tab-products .price-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+#tab-products .new-price {
+  color: #111;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+#tab-products .old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+#tab-products .discount {
+  color: #e60023;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+#tab-products .remove-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s ease;
+}
+
+#tab-products .remove-tag:hover {
+  background: #d63030;
+}
+
+/* ============================================================
+   PREMIUM RELATED PRODUCTS — FINAL ISOLATED VERSION
+============================================================ */
+#related-slider .premium-related-card {
+  all: unset; /* full isolasjon fra globale .product-card */
+
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#related-slider .premium-related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Bilde */
+#related-slider .premium-related-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1; /* identisk med favoritter */
+  object-fit: cover;
+  display: block;
+  border-radius: 14px 14px 0 0;
+  background: #f7f7f7;
+  transition: transform 0.35s ease;
+}
+
+#related-slider .premium-related-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Info */
+#related-slider .product-info {
+  padding: 0.9rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#related-slider .brand {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#related-slider .product-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+}
+
+#related-slider .rating {
+  font-size: 0.9rem;
+  color: #f5c518;
+}
+
+/* Pris */
+#related-slider .price-line {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+#related-slider .new-price {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111;
+}
+
+#related-slider .old-price {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* Rabatt */
+#related-slider .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* ===============================
+   PRODUCT PAGE – PREMIUM PRICE
+=============================== */
+#product-price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+#new-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111;
+}
+
+#old-price {
+  font-size: 1rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+#discount-tag {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e60023;
+}
+
+/* =====================================================
+   CATEGORY PRODUCTS – PREMIUM PRISLINJE + RATING
+   (matcher favoritter + "Du vil kanskje like")
+   ===================================================== */
+
+.category-products .product-info .rating {
+  font-size: 0.9rem;
+  color: #f5c518;          /* gullstjerne */
+  margin: 3px 0 6px;
+}
+
+.category-products .price-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.category-products .new-price {
+  color: #111;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.category-products .old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+
+/* ==========================================================
+   GLOBAL PAGE CONTAINER (brukes på alle seksjoner unntatt hero)
+   ========================================================== */
+.container {
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ==========================================================
+   GENERELT VERTICAL SPACING FOR SEKSJONER
+   ========================================================== */
+section {
+  padding: 60px 0;
+}
+
+/* ==========================================================
+   FEATURED GRID — NY PREMIUM GRID LAYOUT
+   ========================================================== */
+#featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 32px;
+  justify-items: center;
+  margin-top: 40px;
+}
+
+/* ==========================================================
+   INDEX — PRODUKTKORT PREMIUM (match category/brands)
+   ========================================================== */
+#featured-grid .product-card {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  width: 290px;
+  min-width: 290px;
+  max-width: 290px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: 0.25s ease;
+  position: relative;
+}
+
+#featured-grid .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Bilde */
+#featured-grid .product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  display: block;
+  background: #f7f7f7;
+  border-radius: 14px 14px 0 0;
+  transition: transform 0.3s ease;
+}
+
+#featured-grid .product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Info */
+#featured-grid .product-info {
+  padding: 1rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#featured-grid .product-info .brand {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#featured-grid .product-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  min-height: 2.5em;
+  line-height: 1.35;
+}
+
+/* Pris */
+#featured-grid .price {
+  color: #111 !important;
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+/* Favoritt-ikon */
+#featured-grid .fav-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#featured-grid .heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.6px;
+  transition: 0.25s ease;
+}
+
+#featured-grid .fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
+
+
+/* =======================================
+   🔥 TRENDING RIGHT NOW – PREMIUM GRID
+======================================= */
+
+/* Seksjonen */
+.trending-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 3rem; /* Luft til piler */
+  text-align: center;
+  position: relative; /* Påkrevd for pil-posisjon */
+}
+
+.trending-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.trending-section .section-sub {
+  opacity: .8;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ===============================
+   🔥 SLIDER LAYOUT – TVING HORISONTAL
+================================*/
+.trending-grid {
+  display: flex !important;           /* tving horisontal layout */
+  flex-direction: row !important;     /* horisontal retning */
+  flex-wrap: nowrap !important;       /* ingen line-break */
+  gap: 26px;
+  overflow-x: auto !important;        /* scroll/slider */
+  scroll-behavior: smooth;
+  padding: 10px 0 20px;
+  width: 100%;
+}
+
+.trending-grid::-webkit-scrollbar {
+  height: 0; 
+}
+
+/* ===============================
+   🔥 KORTSTØRRELSE – matcher designet
+================================*/
+.trending-grid .product-card {
+  min-width: 330px !important;
+  max-width: 330px !important;
+  flex-shrink: 0 !important;
+}
+
+/* ===============================
+   🔥 SLIDER-PILER
+================================*/
+.trending-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.07);
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 50;
+  backdrop-filter: blur(3px);
+  transition: 0.25s ease;
+}
+
+.trending-nav:hover {
+  background: rgba(0,0,0,0.14);
+  transform: translateY(-50%) scale(1.07);
+}
+
+/* Posisjoner piler litt lenger ut */
+.trending-nav.prev {
+  left: -40px;
+}
+
+.trending-nav.next {
+  right: -40px;
+}
+
+
+
+/* ================================
+   TOP BRANDS THIS WEEK
+================================ */
+
+.top-brands {
+  max-width: 1200px;
+  margin: 5rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.top-brands h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: .5rem;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.brand-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: .25s ease;
+}
+
+.brand-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+.brand-card img {
+  width: 100%;
+  max-height: 90px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  opacity: .95;
+}
+
+
+/* Globale produktkort-justeringer */
+.product-card h3,
+.product-card p,
+.product-card span {
+  text-decoration: none;
+}
+
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Old price med strek */
+.price-row .old-price {
+  margin-left: 8px;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* Rabatt-pill */
+.discount-pill {
+  margin-left: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #ff4d4f;
+  color: #fff;
+}
+
+
+.trending-section,
+.trending-section h2,
+.trending-section .section-sub {
+  text-align: center !important;
+}
+
+.fav-icon.active .heart-icon {
+  fill: #ff2953;
+  stroke: #ff2953;
+}
+
+
+/* Horisontale rader for Spotlight og Picks */
+.slider-row {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.slider-row .product-card {
+  flex: 0 0 auto;
+  min-width: 260px;
+}
+
+/* Litt ekstra så kortene ikke blir for smale på mobil */
+@media (max-width: 600px) {
+  .slider-row .product-card {
+    min-width: 220px;
+  }
+}
+
+/* Horisontal slider-rad (Spotlight + Picks) */
+.slider-row {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.75rem;
+}
+
+.slider-row .product-card {
+  flex: 0 0 auto;
+  min-width: 260px;
+  scroll-snap-align: start;
+}
+
+/* Litt smalere på mobil */
+@media (max-width: 600px) {
+  .slider-row .product-card {
+    min-width: 220px;
+  }
+}
+
+/* Slider-kontroller (dots + piler) */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.slider-arrow {
+  border: none;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  background: #f3f4f6;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.slider-arrow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+}
+
+.slider-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  background: #d4d4d8;
+  cursor: pointer;
+  padding: 0;
+  transition: width 0.15s ease, background 0.15s ease;
+}
+
+.slider-dot.active {
+  width: 18px;
+  background: #111827;
+}
+
+
+
+
+
+
