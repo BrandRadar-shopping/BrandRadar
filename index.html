@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrandRadar | Finn trendene før alle andre</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- 🟦 HEADER -->
+<header class="main-header">
+  <div class="nav-container">
+    <a href="index.html" class="logo">BRANDRADAR</a>
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
+      <button>🔍</button>
+    </div>
+
+    <nav class="top-links">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter <span id="favorites-count">0</span></a>
+      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+    </nav>
+  </div>
+
+  <ul class="category-bar">
+    <li class="category-item" data-category="Clothing">Klær</li>
+    <li class="category-item" data-category="Shoes">Sko</li>
+    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+    <li class="category-item" data-category="Accessories">Tilbehør</li>
+    <li class="category-item" data-category="Selfcare">Selfcare</li>
+  </ul>
+</header>
+
+<nav class="mega-menu"></nav>
+
+<!-- ============================================
+     🌟 HERO SLIDER (Dynamisk – tom container)
+============================================ -->
+<section class="hero-slider">
+  <div class="slides"></div>
+
+  <button class="nav prev">❮</button>
+  <button class="nav next">❯</button>
+
+  <div class="dots"></div>
+</section>
+
+<!-- 💎 HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Oppdag trender. Følg radarene. Finn din stil.</h1>
+    <p>BrandRadar samler de mest ettertraktede produktene fra toppmerker, alt på ett sted.</p>
+    <a href="luxury.html" class="cta-btn">Utforsk Luxury Corner ✨</a>
+  </div>
+  <div class="radar-bg"></div>
+</section>
+
+<!-- ✅ Partner Banner Section -->
+<section id="partner-banner-section" class="partner-banner">
+  <div id="partner-banner-content">
+    <img id="partner-banner-img" src="" alt="Ukens samarbeid" />
+    <div class="partner-text">
+      <h3 id="partner-name"></h3>
+      <p id="partner-desc"></p>
+      <a id="partner-link" href="#" target="_blank" class="btn-primary">Se samarbeid</a>
+    </div>
+  </div>
+</section>
+
+<!-- 🧭 INTRO – Premium v2 -->
+<section class="intro">
+  <h2>Hva er BrandRadar?</h2>
+
+  <div class="intro-grid">
+
+    <!-- CARD 1 -->
+    <div class="intro-card">
+      <div class="icon">
+        <!-- Search Icon (Lucide) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" 
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3>Vi finner</h3>
+      <p>De mest spennende trendene og produktene akkurat nå.</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="intro-card">
+      <div class="icon">
+        <!-- Sliders Icon (Lucide) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      </div>
+      <h3>Vi filtrerer</h3>
+      <p>Kvalitet uten støy. Vi håndplukker det beste.</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="intro-card">
+      <div class="icon">
+        <!-- Lightbulb Icon (Lucide) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18h6"></path>
+          <path d="M10 22h4"></path>
+          <path d="M12 2a7 7 0 0 0-7 7c0 2.76 1.5 5.19 3.75 6.32a2.46 2.46 0 0 1 1.25 2.1V18h6v-.58c0-.88.5-1.69 1.25-2.1C17.5 14.19 19 11.76 19 9a7 7 0 0 0-7-7z"></path>
+        </svg>
+      </div>
+      <h3>Du oppdager</h3>
+      <p>Alt samlet på ett sted — fra klær til selfcare.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- 🌐 UTFORSK BRANDRADAR-UNIVERSET -->
+<section class="universes">
+  <h2>Utforsk BrandRadar-universet</h2>
+  <p class="section-sub">Velg hvor du vil starte reisen – dyppdykk i luksus, trender, brands eller kategorier.</p>
+
+  <div class="universe-grid">
+
+    <a href="luxury.html" class="u-card luxury">
+      <h3>Luxury Corner ✨</h3>
+      <p>Eksklusive merker og håndplukkede premium-produkter i øverste sjikt.</p>
+    </a>
+
+    <a href="news.html" class="u-card trends">
+      <h3>Trender, Nyheter & Kampanjer</h3>
+      <p>Oppdag nye drops, sesongtrender, eksklusive deals og kampanjer.</p>
+    </a>
+
+    <a href="brands.html" class="u-card brands">
+      <h3>Brands</h3>
+      <p>Utforsk merkeuniverset, finn favorittbrandene dine og oppdag nye navn.</p>
+    </a>
+
+    <a href="category.html" class="u-card products">
+      <h3>Produkter</h3>
+      <p>Bla gjennom klær, sko, gym, selfcare og tilbehør – alt samlet.</p>
+    </a>
+
+  </div>
+</section>
+
+  <!-- 🌟 TRENDING RIGHT NOW -->
+<section class="trending-section">
+  <h2>Trending Right Now</h2>
+  <p class="section-sub">Det som beveger seg mest akkurat nå på radaren</p>
+
+  <button id="trendingPrev" class="trending-nav prev">❮</button>
+  <button id="trendingNext" class="trending-nav next">❯</button>
+
+  <div id="trending-grid" class="trending-grid"></div>
+    <!-- Dynamisk innhold -->
+  </div>
+</section>
+
+
+
+<!-- 🌟 TOP BRANDS THIS WEEK -->
+<section class="top-brands">
+  <h2>Top Brands This Week</h2>
+  <p class="section-sub">Merker som trender på radaren akkurat nå.</p>
+
+  <div class="brands-grid" id="topbrands-grid"></div>
+</section>
+
+
+<!-- 🎁 KONKURRANSE -->
+<section class="giveaway">
+  <h2>Vinn gavekort på 2000 kr!</h2>
+  <p>Meld deg på før trekning <span id="countdown">00:00:00</span></p>
+  <button class="cta-btn">Delta nå 🎉</button>
+</section>
+
+<!-- 🧭 UKENS RADAR PICKS -->
+<section class="featured-products">
+  <h2>Ukens Radar Picks</h2>
+  <p class="section-sub">Håndplukket inspirasjon – rett fra radaren vår.</p>
+
+  <!-- ⭐️ Oppgradert Featured Grid -->
+  <div class="product-grid premium-grid" id="featured-grid"></div>
+</section>
+
+<!-- ✉️ CTA FOOTER -->
+<footer class="footer-cta">
+  <h2>Hold deg på radaren</h2>
+  <p>Få ukens radar picks og eksklusive nyheter først.</p>
+  <div class="newsletter">
+    <input type="email" placeholder="Din e-postadresse" />
+    <button>Meld meg på</button>
+  </div>
+</footer>
+
+<script src="favorites-core.js"></script>
+<script src="script-index.js"></script>
+<script src="script.js"></script>
+<script src="script-megamenu.js"></script>
+<script src="partnerBanner.js"></script>
+<script src="script-favorites.js"></script>
+<script src="script-hero.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

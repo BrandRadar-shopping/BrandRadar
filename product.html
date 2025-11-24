@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produktdetaljer | BrandRadar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="main-header">
+  <div class="nav-container">
+
+    <a href="index.html" class="logo">BRANDRADAR</a>
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
+      <button>🔍</button>
+    </div>
+
+    <!-- Toppmeny -->
+    <nav class="top-links">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">
+        Favoritter <span id="favorites-count">0</span>
+      </a>
+      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+    </nav>
+
+  </div>
+
+  <ul class="category-bar">
+    <li class="category-item" data-category="Clothing">Klær</li>
+    <li class="category-item" data-category="Shoes">Sko</li>
+    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+    <li class="category-item" data-category="Accessories">Tilbehør</li>
+    <li class="category-item" data-category="Selfcare">Selfcare</li>
+  </ul>
+</header>
+
+<nav class="mega-menu"></nav>
+
+<section class="product-detail">
+
+  <div class="thumbnails" id="thumbnails"></div>
+
+  <div class="image-gallery">
+    <img id="main-image" src="" alt="Produktbilde" />
+  </div>
+
+  <div class="product-info">
+
+    <button id="back-btn">← Tilbake</button>
+
+    <h1 id="product-title"></h1>
+    <div id="product-brand" class="product-brand"></div>
+    <div id="product-rating" class="rating"></div>
+
+    <!-- 🔥 OPPDATERT PRIS-SEKSJON -->
+    <div id="product-price-box">
+      <span id="new-price"></span>
+      <span id="old-price"></span>
+      <span id="discount-tag"></span>
+    </div>
+    <!-- 🔥 SLUTT OPPDATERT PRIS -->
+
+    <p id="product-desc" class="description"></p>
+
+    <button id="favorite-btn">🤍 Legg til favoritter</button>
+    <a id="buy-link" href="#" target="_blank">Kjøp produkt</a>
+
+  </div>
+
+</section>
+
+<!-- RELATED PRODUCTS SLIDER -->
+<section class="related-section">
+  <h2 class="related-title">Du vil kanskje like</h2>
+
+  <div class="slider-wrapper">
+    
+    <button class="slider-btn prev">❮</button>
+    
+    <div class="related-slider" id="related-slider">
+      <!-- Dynamiske produktkort -->
+    </div>
+
+    <button class="slider-btn next">❯</button>
+  </div>
+</section>
+
+<script src="favorites-core.js"></script>
+<script src="script.js"></script>
+<script src="script-megamenu.js"></script>
+<script src="script-favorites.js"></script>
+<script src="product.js"></script>
+
+</body>
+</html>
+

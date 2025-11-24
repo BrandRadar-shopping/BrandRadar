@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kategori – BrandRadar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ✅ NY HEADER -->
+<header class="main-header">
+  <div class="nav-container">
+
+    <a href="index.html" class="logo">BRANDRADAR</a>
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker..." />
+      <button>🔍</button>
+    </div>
+
+     <!-- Toppmeny -->
+   <nav class="top-links">
+  <a href="index.html">Hjem</a>
+  <a href="news.html">Nyheter</a>
+  <a href="brands.html">Brands</a>
+  <a href="favoritter.html">
+    Favoritter <span id="favorites-count">0</span>
+  </a>
+     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+</nav>
+
+
+  </div>
+
+  <!-- 🔽 Kategorier som åpner megamenu -->
+  <ul class="category-bar">
+    <li class="category-item" data-category="Clothing">Klær</li>
+    <li class="category-item" data-category="Shoes">Sko</li>
+    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+    <li class="category-item" data-category="Accessories">Tilbehør</li>
+    <li class="category-item" data-category="Selfcare">Selfcare</li>
+  </ul>
+</header>
+
+<!-- ✅ Manglet – MEGA-MENYEN LASTES HER -->
+<nav class="mega-menu"></nav>
+
+<!-- ✅ Dynamisk breadcrumb + tittel -->
+<section class="category-header">
+  <nav class="breadcrumb"></nav>
+  <h1 id="category-title">Laster kategori...</h1>
+</section>
+  
+ <!-- ✅ Filter + Sort Bar (Unified) -->
+<div class="filter-bar">
+  <div class="filters-left">
+    <label>Merke:</label>
+    <select id="brand-filter">
+      <option value="all">Alle</option>
+    </select>
+
+    <label>Pris:</label>
+    <select id="price-filter">
+      <option value="all">Alle</option>
+      <option value="0-299">0–299</option>
+      <option value="300-599">300–599</option>
+      <option value="600-999">600–999</option>
+      <option value="1000+">1000+</option>
+    </select>
+
+    <label class="checkbox-label">
+      <input type="checkbox" id="discount-filter" />
+      Kun tilbud
+    </label>
+  </div>
+
+  <div class="filters-right">
+    <span class="result-count">Laster...</span>
+    <select id="sort-select">
+      <option value="featured">Anbefalt</option>
+      <option value="price-asc">Pris: lav → høy</option>
+      <option value="price-desc">Pris: høy → lav</option>
+      <option value="rating-desc">Best vurdert</option>
+    </select>
+  </div>
+</div>
+
+<!-- ✅ Active Filter Tags -->
+<div class="filter-tags"></div>
+
+
+<!-- ✅ Produktgrid -->
+<section class="category-products">
+  <div class="product-grid"></div>
+  <p class="empty-message" style="display:none;">
+    Ingen produkter funnet i denne kategorien
+  </p>
+</section>
+
+
+<script src="favorites-core.js"></script>
+<script src="script-favorites.js"></script>
+<script src="script.js"></script>
+<script src="script-megamenu.js"></script>
+<script src="category.js"></script>
+
+ 
+
+</body>
+</html>
+
+
+
+

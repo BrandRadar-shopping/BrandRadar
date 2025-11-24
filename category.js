@@ -1,0 +1,363 @@
+// ======================================================
+// ✅ BrandRadar – Category Page FINAL + Filter Tags
+//    (Oppdatert til nytt favorittsystem via favorites-core.js)
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ✅ Google Sheets config
+  const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
+  const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/BrandRadarProdukter`;
+  const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
+
+  // ✅ DOM Elements
+  const titleEl = document.getElementById("category-title");
+  const productGrid = document.querySelector(".product-grid");
+  const emptyMessage = document.querySelector(".empty-message");
+  const breadcrumbEl = document.querySelector(".breadcrumb");
+
+  const brandFilter = document.getElementById("brand-filter");
+  const priceFilter = document.getElementById("price-filter");
+  const discountFilter = document.getElementById("discount-filter");
+  const sortSelect = document.getElementById("sort-select");
+  const filterTagsContainer = document.querySelector(".filter-tags");
+
+  // ✅ URL Params
+  const params = new URLSearchParams(window.location.search);
+  const genderParam = params.get("gender");
+  const categoryParam = params.get("category");
+  const subParam = params.get("subcategory");
+
+  if (!genderParam || !categoryParam) {
+    titleEl.textContent = "Ugyldig kategori";
+    emptyMessage.style.display = "block";
+    return;
+  }
+
+  // ✅ Slug Normalization
+  const normalize = txt =>
+    (txt || "")
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/&/g, "and")
+      .replace(/[^\w\d]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  const categorySlug = normalize(categoryParam);
+  let genderSlug = normalize(genderParam);
+  if (genderSlug === "herre") genderSlug = "men";
+  if (genderSlug === "dame") genderSlug = "women";
+  if (genderSlug === "barn") genderSlug = "kids";
+  const subSlug = normalize(subParam);
+
+  // ✅ Fetch Data
+  Promise.all([
+    fetch(mappingUrl).then(r => r.json()),
+    fetch(productUrl).then(r => r.json())
+  ])
+    .then(([mapRows, products]) => {
+
+      // ✅ Mapping match
+      const match = mapRows.find(row =>
+        normalize(row.main_category) === categorySlug &&
+        (!row.gender || normalize(row.gender) === genderSlug)
+      );
+
+      if (!match) {
+        emptyMessage.style.display = "block";
+        return;
+      }
+
+      const norskGender =
+        genderSlug === "men" ? "Herre" :
+        genderSlug === "women" ? "Dame" :
+        genderSlug === "kids" ? "Barn" : genderParam;
+
+      let subNameNo = null;
+      if (subSlug) {
+        const subMatch = mapRows.find(row =>
+          normalize(row.url_slug) === subSlug &&
+          normalize(row.main_category) === categorySlug
+        );
+        if (subMatch) subNameNo = subMatch.display_name;
+      }
+
+      // ✅ Update page title + breadcrumb
+      titleEl.textContent = subNameNo
+        ? `${subNameNo} – ${norskGender}`
+        : `${match.display_name} – ${norskGender}`;
+
+      document.title = `${titleEl.textContent} | BrandRadar`;
+
+      breadcrumbEl.innerHTML = `
+        <a href="index.html">Hjem</a> ›
+        <a href="category.html?gender=${genderParam}&category=${categoryParam}">
+          ${norskGender}
+        </a> ›
+        ${subNameNo || match.display_name}
+      `;
+
+      // ✅ Filter Data
+      const filtered = products.filter(p => {
+        const pGender = normalize(p.gender);
+        return (
+          normalize(p.category) === categorySlug &&
+          (!subSlug || normalize(p.subcategory) === subSlug) &&
+          (pGender === genderSlug || pGender === "unisex" || pGender === "")
+        );
+      });
+
+      if (!filtered.length) {
+        emptyMessage.style.display = "block";
+        return;
+      }
+      emptyMessage.style.display = "none";
+
+      // ✅ Populate Brand dropdown
+      [...new Set(filtered.map(p => p.brand).filter(Boolean))]
+        .sort()
+        .forEach(b => {
+          const opt = document.createElement("option");
+          opt.value = b;
+          opt.textContent = b;
+          brandFilter.appendChild(opt);
+        });
+
+      // ======================================================
+      // ✅ Render products – OPPDATERT til nytt favorittsystem
+      // ======================================================
+      function renderProducts(list) {
+        productGrid.innerHTML = "";
+
+        list.forEach(p => {
+          // Bruk global ID-resolver fra favorites-core.js
+          const pid = typeof resolveProductId === "function"
+            ? resolveProductId(p)
+            : (p.id || p.product_id || "");
+
+          // Rating – samme rens som ellers
+          let ratingValue = null;
+          if (p.rating) {
+            const parsed = parseFloat(
+              String(p.rating)
+                .replace(",", ".")
+                .replace(/[^0-9.]/g, "")
+            );
+            if (!isNaN(parsed)) ratingValue = parsed;
+          }
+
+          // Ny pris ved rabatt
+          let newPriceValue = p.price;
+          if (p.discount && p.price) {
+            const numericPrice = parseFloat(
+              String(p.price).replace(/[^\d.,]/g, "").replace(",", ".")
+            );
+            if (!isNaN(numericPrice)) {
+              const discountNum = parseFloat(p.discount);
+              const factor = isNaN(discountNum)
+                ? null
+                : (discountNum > 1 ? discountNum / 100 : discountNum);
+              if (factor !== null) {
+                newPriceValue = (numericPrice * (1 - factor)).toFixed(0);
+              }
+            }
+          }
+
+          // Sjekk favoritt-status via global isProductFavorite
+          const isFav = (typeof isProductFavorite === "function")
+            ? isProductFavorite(pid)
+            : false;
+
+          const card = document.createElement("div");
+          card.classList.add("product-card");
+
+          card.innerHTML = `
+            ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
+
+            <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
+              <svg viewBox="0 0 24 24" class="heart-icon">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 
+                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 
+                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
+                16.5 3 19.58 3 22 5.42 22 8.5c0 
+                3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+
+            <img src="${p.image_url}" alt="${p.title}">
+
+            <div class="product-info">
+              <p class="brand">${p.brand || ""}</p>
+
+              <h3 class="product-name">${p.title}</h3>
+
+              <p class="rating">
+                ${
+                  ratingValue
+                    ? `⭐ ${ratingValue.toFixed(1)}`
+                    : `<span style="color:#ccc;">–</span>`
+                }
+              </p>
+
+              <div class="price-line">
+                <span class="new-price">
+                  ${newPriceValue ? `${newPriceValue} kr` : ""}
+                </span>
+                ${
+                  p.discount && p.price
+                    ? `<span class="old-price">${p.price} kr</span>`
+                    : ""
+                }
+              </div>
+            </div>
+          `;
+
+          // ✅ Product click -> open product page (ikke trigge på hjertet)
+          card.addEventListener("click", e => {
+            if (!e.target.closest(".fav-icon")) {
+              if (pid) {
+                window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+              }
+            }
+          });
+
+          // ✅ Toggle favorite via global toggleFavorite
+          const favIconEl = card.querySelector(".fav-icon");
+          favIconEl.addEventListener("click", e => {
+            e.stopPropagation();
+
+            if (typeof toggleFavorite === "function") {
+              const productData = {
+                id: pid,
+                product_name: p.title || p.product_name || p.name,
+                title: p.title || p.product_name || p.name,
+                brand: p.brand || "",
+                price: p.price,
+                discount: p.discount,
+                image_url: p.image_url,
+                product_url: p.product_url,
+                category: p.category || p.main_category || "",
+                rating: p.rating,
+                luxury: false
+              };
+
+              toggleFavorite(productData, favIconEl);
+            }
+          });
+
+          productGrid.appendChild(card);
+        });
+
+        const resultEl = document.querySelector(".filter-bar .result-count");
+        if (resultEl) resultEl.textContent = `${list.length} produkter`;
+      }
+
+      // ✅ Create filter tags dynamically
+      function updateFilterTags() {
+        filterTagsContainer.innerHTML = "";
+        const tags = [];
+
+        if (brandFilter.value !== "all") {
+          tags.push({
+            label: brandFilter.value,
+            remove: () => {
+              brandFilter.value = "all";
+              applyFiltersAndSort();
+            }
+          });
+        }
+
+        if (priceFilter.value !== "all") {
+          tags.push({
+            label: `Pris: ${priceFilter.options[priceFilter.selectedIndex].text}`,
+            remove: () => {
+              priceFilter.value = "all";
+              applyFiltersAndSort();
+            }
+          });
+        }
+
+        if (discountFilter.checked) {
+          tags.push({
+            label: "Kun tilbud",
+            remove: () => {
+              discountFilter.checked = false;
+              applyFiltersAndSort();
+            }
+          });
+        }
+
+        filterTagsContainer.classList.toggle("hidden", tags.length === 0);
+
+        tags.forEach(tag => {
+          const el = document.createElement("div");
+          el.classList.add("filter-tag");
+          el.innerHTML = `${tag.label} <span class="close-tag">×</span>`;
+          el.addEventListener("click", tag.remove);
+          filterTagsContainer.appendChild(el);
+        });
+      }
+
+      // ✅ Filters & sorting combined
+      function applyFiltersAndSort() {
+        let result = [...filtered];
+
+        const getPrice = v =>
+          parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+        const getRating = v =>
+          parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+
+        if (brandFilter.value !== "all")
+          result = result.filter(p => p.brand === brandFilter.value);
+
+        if (priceFilter.value !== "all") {
+          if (priceFilter.value === "1000+")
+            result = result.filter(p => getPrice(p.price) >= 1000);
+          else {
+            const [min, max] = priceFilter.value.split("-").map(Number);
+            result = result.filter(p => {
+              const price = getPrice(p.price);
+              return price >= min && price <= max;
+            });
+          }
+        }
+
+        if (discountFilter.checked)
+          result = result.filter(p => parseFloat(p.discount) > 0);
+
+        switch (sortSelect.value) {
+          case "price-asc":
+            result.sort((a,b) => getPrice(a.price) - getPrice(b.price));
+            break;
+          case "price-desc":
+            result.sort((a,b) => getPrice(b.price) - getPrice(a.price));
+            break;
+          case "rating-desc":
+            result.sort((a,b) => getRating(b.rating) - getRating(a.rating));
+            break;
+        }
+
+        renderProducts(result);
+        updateFilterTags();
+      }
+
+      // ✅ Hook up change events
+      brandFilter.addEventListener("change", applyFiltersAndSort);
+      priceFilter.addEventListener("change", applyFiltersAndSort);
+      discountFilter.addEventListener("change", applyFiltersAndSort);
+      sortSelect.addEventListener("change", applyFiltersAndSort);
+
+      // ✅ First render
+      applyFiltersAndSort();
+
+      // Oppdater global teller etter at kort er rendret
+      setTimeout(() => {
+        if (typeof updateFavoriteCounter === "function") {
+          updateFavoriteCounter();
+        }
+      }, 50);
+    })
+    .catch(err => console.error("❌ Category error:", err));
+});
+

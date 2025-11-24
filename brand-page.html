@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Brand – BrandRadar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="nav-container">
+    <a href="index.html" class="logo">BRANDRADAR</a>
+
+    <div class="search-box">
+      <input type="text" placeholder="Søk produkter eller merker...">
+      <button>🔍</button>
+    </div>
+
+     <!-- Toppmeny -->
+   <nav class="top-links">
+  <a href="index.html">Hjem</a>
+  <a href="news.html">Nyheter</a>
+  <a href="brands.html">Brands</a>
+  <a href="favoritter.html">
+    Favoritter <span id="favorites-count">0</span>
+  </a>
+     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+</nav>
+  </div>
+
+  <ul class="category-bar">
+    <li class="category-item" data-category="Clothing">Klær</li>
+    <li class="category-item" data-category="Shoes">Sko</li>
+    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+    <li class="category-item" data-category="Accessories">Tilbehør</li>
+    <li class="category-item" data-category="Selfcare">Selfcare</li>
+  </ul>
+</header>
+
+<nav class="mega-menu"></nav>
+
+<!-- ✅ Brand Info – eneste hero seksjon som skal være her -->
+<section class="brand-info-card">
+  <div class="brand-info-left">
+    <img id="brand-logo" alt="Brand logo">
+  </div>
+
+  <div class="brand-info-right">
+    <h1 id="brand-title">Brand</h1>
+    <p id="brand-description"></p>
+
+    <div class="brand-buttons">
+      <button id="favorite-brand-btn" class="brand-btn-outline">♡ Favoritt-brand</button>
+      <a id="brand-site-btn" class="brand-btn" target="_blank">Besøk brand</a>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ Filter + Sort Bar -->
+<div class="brand-filter-bar">
+  <label>Kategori:</label>
+  <select id="category-filter">
+    <option value="all">Alle</option>
+  </select>
+
+  <label>Sorter:</label>
+  <select id="sort-select">
+    <option value="featured">Anbefalt</option>
+    <option value="price-asc">Pris: lav → høy</option>
+    <option value="price-desc">Pris: høy → lav</option>
+    <option value="rating-desc">Best vurdert</option>
+  </select>
+
+  <span class="result-count">0 produkter</span>
+</div>
+
+<!-- ✅ Produkt Grid -->
+<section class="category-products">
+  <h2>Produkter</h2>
+  <div class="product-grid"></div>
+  <p class="empty-message" style="display:none;">Ingen produkter funnet</p>
+</section>
+
+
+<script src="favorites-core.js"></script>
+<script src="script-favorites.js"></script>
+<script src="script.js"></script>
+<script src="script-megamenu.js"></script>
+<script src="brand-page.js"></script>
+
+</body>
+</html>
+
