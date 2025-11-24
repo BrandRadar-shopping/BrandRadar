@@ -6,12 +6,12 @@
   <title>Luxury Corner | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  
 
+<body>
+
+<!-- 🟦 HEADER -->
 <header class="main-header">
   <div class="nav-container">
-
     <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box">
@@ -19,22 +19,15 @@
       <button>🔍</button>
     </div>
 
-  
-
-    <!-- Toppmeny -->
     <nav class="top-links">
       <a href="index.html">Hjem</a>
       <a href="news.html">Nyheter</a>
       <a href="brands.html">Brands</a>
-      <a href="favoritter.html">
-        Favoritter <span id="favorites-count">0</span>
-      </a>
-      <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+      <a href="favoritter.html">Favoritter <span id="favorites-count">0</span></a>
+      <a href="luxury.html" class="luxury-link active">Luxury Corner ✨</a>
     </nav>
-
   </div>
 
-  <!-- 🔽 Kategorimenylinje -->
   <ul class="category-bar">
     <li class="category-item" data-category="Clothing">Klær</li>
     <li class="category-item" data-category="Shoes">Sko</li>
@@ -44,134 +37,90 @@
   </ul>
 </header>
 
-  <nav class="mega-menu"></nav>
+<nav class="mega-menu"></nav>
 
-  <!-- =========================================
-     💎 Luxury Hero Banner (fade variant)
-========================================= -->
+<!-- ============================= -->
+<!-- 🏆 NY LUXURY HERO SLIDER -->
+<!-- ============================= -->
+
 <section class="luxury-hero-banner">
-  <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1600&q=80');">
+
+  <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1517840933437-c41356892b11?q=80&w=2070');">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <h1 class="hero-title">Premium produkter fra verdens mest eksklusive merker</h1>
-      <p class="hero-subtitle">Curated luxury — selected by BrandRadar</p>
+      <h1>Premium produkter fra verdens mest eksklusive merker</h1>
+      <p>Curated luxury — selected by BrandRadar</p>
     </div>
   </div>
 
-  <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80');">
+  <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1523381167958-8dd131ad09e0?q=80&w=2070');">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <h1 class="hero-title">Der stil møter substans</h1>
-      <p class="hero-subtitle">Oppdag tidløs eleganse og moderne uttrykk</p>
+      <h1>Der stil møter substans</h1>
+      <p>Oppdag tidløs eleganse og moderne uttrykk</p>
     </div>
   </div>
 
-  <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1536184071535-78906f7172c4?auto=format&fit=crop&w=1600&q=80');">
+  <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=2070');">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <h1 class="hero-title">Merker som definerer luksus</h1>
-      <p class="hero-subtitle">Fra klassisk til cutting-edge</p>
+      <h1>Merker som definerer luksus</h1>
+      <p>Fra klassisk til cutting-edge</p>
     </div>
   </div>
+
+  <button class="hero-nav prev">❮</button>
+  <button class="hero-nav next">❯</button>
+
+  <div class="hero-dots"></div>
 </section>
 
 <!-- ============================= -->
-<!-- 🏆 HERO-SEKSJON -->
+<!-- MAIN CONTENT -->
 <!-- ============================= -->
+
 <main class="luxury-page">
 
-  <section class="luxury-hero-banner">
-  <h1 class="luxury-hero-title">Luksus håndplukket for deg.</h1>
-  <p class="luxury-hero-subtitle">Premium produkter fra verdens mest eksklusive merker</p>
-</section>
-
-
-  <!-- ============================= -->
-  <!-- 🌟 Eksklusive Brands -->
-  <!-- ============================= -->
+  <!-- ⭐ EXCLUSIVE BRANDS SECTION -->
   <section class="luxury-section">
-    <h2>Eksklusive Brands</h2>
-    <div class="brand-grid" id="luxuryBrandGrid"></div>
+    <h2 class="luxury-section-title">Eksklusive Merker</h2>
+    <p class="luxury-section-sub">Utforsk merkevarer som rydder plass på verdens luksusmarked</p>
+
+    <div class="luxury-brands-grid" id="luxury-brands-grid"></div>
   </section>
 
-
-  <!-- ============================= -->
-  <!-- ✨ Gold Picks -->
-  <!-- ============================= -->
+  <!-- ⭐ GOLD PICKS SECTION -->
   <section class="luxury-section" id="goldPickSection">
-    <h2>Gold Picks ✨</h2>
-    <div class="luxury-product-grid" id="luxuryGoldPickGrid"></div>
+    <h2 class="luxury-section-title">Gold Picks ✨</h2>
+    <p class="luxury-section-sub">Håndplukkede produkter fra øverste hylle</p>
+
+    <div class="luxury-grid" id="gold-picks-grid"></div>
   </section>
 
-
-  <!-- ============================= -->
-  <!-- 🛍 Premium Produkter -->
-  <!-- ============================= -->
+  <!-- ⭐ PREMIUM PRODUCTS SECTION -->
   <section class="luxury-section">
+    <h2 class="luxury-section-title">Premium Produkter</h2>
+    <p class="luxury-section-sub">For deg som setter pris på kvalitet uten kompromisser</p>
 
-    <!-- ✅ Filterbar -->
-    <div class="luxury-filter-bar">
-      <select id="filterCategory">
-        <option value="all">Alle kategorier</option>
-        <option value="bag">Vesker</option>
-        <option value="watch">Klokker</option>
-        <option value="sneakers">Sko</option>
-        <option value="jewelry">Smykker</option>
-        <option value="accessories">Tilbehør</option>
-        <option value="other">Annet</option>
-      </select>
-
-      <select id="sortProducts">
-        <option value="popular">Populært</option>
-        <option value="highprice">Høy pris → Lav</option>
-        <option value="lowprice">Lav pris → Høy</option>
-        <option value="rating">Rating</option>
-      </select>
-    </div>
-
-    <div class="luxury-product-grid" id="luxuryProductGrid"></div>
-    <p id="luxury-empty" class="empty-message" style="display:none;">
-      Ingen produkter matcher valget ditt 🔍
-    </p>
-
+    <div class="luxury-grid" id="luxury-products-grid"></div>
   </section>
 
 </main>
 
+<!-- FOOTER -->
+<footer class="footer-cta">
+  <h2>Hold deg på radaren</h2>
+  <p>Få eksklusive luksustips og premium-dropp før alle andre.</p>
+  <div class="newsletter">
+    <input type="email" placeholder="Din e-postadresse" />
+    <button>Meld meg på</button>
+  </div>
+</footer>
+
 <script src="favorites-core.js"></script>
+<script src="script-megamenu.js"></script>
 <script src="script-favorites.js"></script>
 <script src="script-luxury.js"></script>
-<script src="script.js"></script>
-<script src="script-megamenu.js"></script>
 
-<!-- ✅ Gullgradient definisjon for favoritt-ikon -->
-<svg id="gold-gradient-defs" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d4af37">
-        <animate attributeName="stop-color"
-                 values="#d4af37;#f5e29e;#d4af37"
-                 dur="4s"
-                 repeatCount="indefinite"/>
-      </stop>
-      <stop offset="100%" stop-color="#f8e08e">
-        <animate attributeName="stop-color"
-                 values="#f8e08e;#fff5b8;#f8e08e"
-                 dur="4s"
-                 repeatCount="indefinite"/>
-      </stop>
-    </linearGradient>
-  </defs>
-</svg>
-
-  <!-- Gull-gradient-definisjon for SVG -->
-<svg id="gold-gradient-defs" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d4af37" />
-      <stop offset="50%" stop-color="#f8e08e" />
-      <stop offset="100%" stop-color="#d4af37" />
-    </linearGradient>
-  </defs>
-</svg>
-
-  
 </body>
 </html>
