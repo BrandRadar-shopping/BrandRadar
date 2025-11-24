@@ -2,6 +2,54 @@
    BRANDRADAR – LUXURY CORNER (EXTRACTED)
    ============================================ */
 
+/* ============================================
+   LUXURY HERO – full replacement
+============================================ */
+
+.luxury-hero-banner {
+  width: 100%;
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+  color: white;
+  text-align: center;
+  border-radius: 0 0 40px 40px;
+  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-hero-banner::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,215,130,0.18) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(40px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.luxury-hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 1rem;
+  color: #f8df98;
+}
+
+.luxury-hero-subtitle {
+  font-size: 1.3rem;
+  font-weight: 400;
+  max-width: 650px;
+  margin: 0 auto;
+  color: #e6e6e6;
+}
+
+
+
 /* --- Page wrapper --- */
 .luxury-page {
   max-width: 1200px;
