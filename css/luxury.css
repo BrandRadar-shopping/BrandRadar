@@ -1,163 +1,338 @@
 /* ============================================
-   BRANDRADAR – LUXURY CORNER (EXTRACTED)
+   BRANDRADAR – LUXURY CORNER V4
+   Matcher luxury.html (hero + sections + grids)
    ============================================ */
 
-/* ============================================
-   LUXURY HERO – full replacement
-============================================ */
+/* ------------ HERO BANNER (SLIDER) ------------ */
 
 .luxury-hero-banner {
-  width: 100%;
-  padding: 6rem 2rem;
-  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
-  color: white;
-  text-align: center;
-  border-radius: 0 0 40px 40px;
-  margin-bottom: 4rem;
   position: relative;
+  width: 100%;
+  min-height: 360px;
+  padding: 5rem 2rem;
   overflow: hidden;
+  border-radius: 0 0 40px 40px;
+  margin-bottom: 3.5rem;
+  background: #050505;
+  color: #fff;
 }
 
-.luxury-hero-banner::after {
+/* Alle slides ligger oppå hverandre, JS setter .active */
+.luxury-hero-banner .hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+}
+
+.luxury-hero-banner .hero-slide.active {
+  opacity: 1;
+}
+
+/* Mørk overlay for bedre lesbarhet */
+.luxury-hero-banner .hero-slide::before {
   content: "";
   position: absolute;
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255,215,130,0.18) 0%, rgba(0,0,0,0) 70%);
-  filter: blur(40px);
-  opacity: 0.7;
-  pointer-events: none;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.9) 60%);
+  mix-blend-mode: normal;
 }
 
-.luxury-hero-title {
-  font-size: 3rem;
+/* Tekstinnhold i hero */
+.luxury-hero-banner .hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  text-align: center;
+}
+
+.luxury-hero-banner .hero-title {
+  font-size: 2.4rem;
   font-weight: 800;
-  letter-spacing: -1px;
+  letter-spacing: -0.03em;
   margin-bottom: 1rem;
-  color: #f8df98;
 }
 
-.luxury-hero-subtitle {
-  font-size: 1.3rem;
-  font-weight: 400;
-  max-width: 650px;
-  margin: 0 auto;
+.luxury-hero-banner .hero-subtitle {
+  font-size: 1.2rem;
   color: #e6e6e6;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
+/* ----------------- MAIN WRAPPER ----------------- */
 
-
-/* --- Page wrapper --- */
 .luxury-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem 6rem 1rem;
 }
 
-/* --- Luxury Hero Banner --- */
-.luxury-hero {
-  background: linear-gradient(135deg, #faf7f2, #f0ebe2);
-  padding: 4rem 2rem;
-  border-radius: 30px;
-  margin-bottom: 3rem;
-  text-align: center;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-}
+/* ----------------- SECTIONS ----------------- */
 
-.luxury-hero h1 {
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #2a2a2a;
-  margin-bottom: 0.8rem;
-}
-
-.luxury-hero p {
-  max-width: 700px;
-  margin: 0.5rem auto 0;
-  font-size: 1.2rem;
-  color: #555;
-}
-
-/* --- Section wrapper --- */
 .luxury-section {
-  margin: 3rem 0;
+  margin-bottom: 3.5rem;
 }
 
 .luxury-section h2 {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 700;
-  margin-bottom: 1.2rem;
-  color: #222;
+  margin-bottom: 0.4rem;
 }
 
-/* --- Filter Bar --- */
+.luxury-section .luxury-section-sub {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ----------------- BRAND GRID ----------------- */
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.6rem;
+}
+
+/* Hvis script-luxury lager .brand-card, style den pent */
+.brand-grid .brand-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.4rem 1.2rem;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-grid .brand-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+}
+
+.brand-grid .brand-card img {
+  max-width: 120px;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.brand-grid .brand-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ----------------- FILTER BAR ----------------- */
+
 .luxury-filter-bar {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1.8rem;
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
 }
 
 .luxury-filter-bar select {
   padding: 0.6rem 1rem;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  font-size: 0.95rem;
+  background: #fff;
   cursor: pointer;
-  background: #fff;
 }
 
-.luxury-filter-bar option {
-  font-size: 1rem;
-}
+/* ----------------- PRODUCT GRIDS ----------------- */
 
-/* --- Luxury Product Grid --- */
-.luxury-grid {
+.luxury-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.8rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.6rem;
 }
 
-.luxury-grid .product-card {
-  background: #fff;
+/* Vi antar at script-luxury lager .product-card som på resten av siten */
+
+.luxury-product-grid .product-card {
+  position: relative;
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 3px 16px rgba(0,0,0,0.07);
-  transition: transform 0.28s ease;
+  box-shadow: 0 3px 18px rgba(0,0,0,0.08);
+  background: #fff;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
-.luxury-grid .product-card:hover {
-  transform: translateY(-6px);
+.luxury-product-grid .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
 }
 
-.luxury-grid .product-card img {
+.luxury-product-grid .product-card img {
   width: 100%;
-  height: 270px;
+  height: 260px;
   object-fit: cover;
 }
 
-/* --- Luxury badge --- */
-.luxury-badge {
+/* Info-område inne i kortet */
+.luxury-product-grid .product-info {
+  padding: 1rem 1.2rem 1.2rem;
+}
+
+.luxury-product-grid .product-info .brand {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #777;
+  margin-bottom: 0.35rem;
+}
+
+.luxury-product-grid .product-info .product-name,
+.luxury-product-grid .product-info .product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.luxury-product-grid .product-info .rating {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Price line (bruker samme struktur som resten av siden) */
+.luxury-product-grid .price-line,
+.luxury-product-grid .price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.luxury-product-grid .new-price,
+.luxury-product-grid .price-main {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.luxury-product-grid .old-price {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* Optional discount badge hvis kortene har .discount-badge */
+.luxury-product-grid .discount-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #e60023;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* Favoritt-ikon (samme struktur som andre sider) */
+.luxury-product-grid .fav-icon {
   position: absolute;
   top: 12px;
   left: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.luxury-product-grid .fav-icon .heart-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #555;
+  stroke-width: 1.7;
+}
+
+.luxury-product-grid .fav-icon.active .heart-icon {
+  fill: url(#goldGradient);
+  stroke: #b88a2b;
+}
+
+/* ----------------- LUXURY BADGE / HIGHLIGHT ----------------- */
+
+.luxury-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
   background: linear-gradient(135deg, #e8d18f, #c9a446);
   color: #fff;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
-/* --- Luxury Highlight Border --- */
 .luxury-highlight {
   border: 2px solid #c9a446 !important;
-  box-shadow: 0 4px 18px rgba(201,164,70,0.18) !important;
+  box-shadow: 0 4px 18px rgba(201,164,70,0.22) !important;
 }
 
+/* ----------------- TOM-MELDING ----------------- */
 
+#luxury-empty.empty-message {
+  font-size: 0.95rem;
+  color: #666;
+  text-align: center;
+  margin-top: 1rem;
+}
 
+/* ----------------- RESPONSIVT ----------------- */
+
+@media (max-width: 900px) {
+  .luxury-hero-banner {
+    padding: 4rem 1.5rem;
+    border-radius: 0 0 30px 30px;
+  }
+
+  .luxury-hero-banner .hero-slide {
+    padding: 4rem 1.5rem;
+  }
+
+  .luxury-hero-banner .hero-title {
+    font-size: 2rem;
+  }
+
+  .luxury-page {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .luxury-hero-banner {
+    padding: 3.5rem 1.2rem;
+    border-radius: 0 0 26px 26px;
+  }
+
+  .luxury-hero-banner .hero-title {
+    font-size: 1.7rem;
+  }
+
+  .luxury-hero-banner .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .luxury-product-grid {
+    grid-template-columns: 1fr;
+  }
+}
