@@ -3788,6 +3788,255 @@ section {
 }
 
 
+/* ============================================
+   GLOBALT PRODUKTKORT – ELITE v9
+   Gjelder ALLE .product-card på tvers av sider
+   (index, news, category, brand-page, favoritter)
+============================================ */
+
+/* Base container */
+.product-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+}
+
+/* Bilde */
+.product-card img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Wrapper som noen kort bruker (index) */
+.product-card .product-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Info-blokk */
+.product-card .product-info {
+  padding: 0.9rem 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Brand / kategori */
+.product-card .brand {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 0.15rem;
+}
+
+/* Produktnavn (alle varianter) */
+.product-card .product-name,
+.product-card .product-title,
+.product-card h3 {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.2rem;
+}
+
+/* Tagline / ekstra tekst (news spotlight / feed / picks) */
+.product-card .tagline {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0.15rem 0 0.1rem;
+}
+
+.product-card .product-tag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #1d4ed8;
+  background: #e0ebff;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  display: inline-block;
+  margin: 0.15rem 0 0.2rem;
+}
+
+/* Rating (stjerne + eller placeholder) */
+.product-card .rating {
+  font-size: 0.85rem;
+  color: #111827;
+  margin: 0.25rem 0 0.15rem;
+}
+
+/* Prislinje – index, news, category, favoritter */
+.product-card .price-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+/* Ny pris – hovedpris */
+.product-card .new-price,
+.product-card .price-main {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #111827;
+}
+
+/* Gammel pris – strøket */
+.product-card .old-price {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+/* Rabatt-pill (index featured + global bruk) */
+.product-card .discount-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+}
+
+/* Wrapper for pris + rabatt-pill (index featured bruker denne) */
+.product-card .price-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+/* Enkle pris-varianter (brand-page m.m. som bruker .price direkt) */
+.product-card .price {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #111827;
+  margin-top: 0.25rem;
+}
+
+/* Rabatt-badge hjørne (brukes flere steder) */
+.product-card .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+  z-index: 2;
+}
+
+/* Favoritt-ikon (global posisjon) */
+.product-card .fav-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(15,23,42,0.18);
+  z-index: 3;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.product-card .fav-icon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15,23,42,0.25);
+  background: #ffffff;
+}
+
+.product-card .heart-icon {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: #9ca3af;
+  stroke-width: 1.8;
+}
+
+.product-card .fav-icon.active .heart-icon {
+  fill: #ef4444;
+  stroke: #ef4444;
+}
+
+/* Gold heart til luxury hvis du bruker egen klasse */
+.product-card .heart-icon.gold-heart {
+  fill: #facc15;
+  stroke: #fbbf24;
+}
+
+/* "Fjern" tag på favoritter */
+.product-card .remove-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  background: rgba(17, 24, 39, 0.92);
+  color: #f9fafb;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  z-index: 4;
+}
+
+/* Favorites-grid spacing / layout (uten å kræsje andre grids) */
+.favorites-grid .product-card {
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* News: små variasjoner for deals/picks/spotlight/nyheter */
+.deal-card.product-card,
+.pick-card.product-card,
+.news-card.product-card,
+.featured-card.product-card {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+/* Category-page: litt større kort på desktop */
+.category-products .product-grid .product-card {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* Brand-page: behold clean layout, men med v9-look */
+.category-products .product-card .product-info h3 {
+  margin-bottom: 0.35rem;
+}
+
+/* Responsiv finpuss */
+@media (max-width: 768px) {
+  .product-card {
+    border-radius: 16px;
+  }
+
+  .category-products .product-grid .product-card,
+  .favorites-grid .product-card {
+    max-width: 100%;
+  }
+}
+
 
 
 
