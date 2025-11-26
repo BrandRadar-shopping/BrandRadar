@@ -4037,6 +4037,20 @@ section {
   }
 }
 
+/* Fix for FAVORITTER: ensure "Fjern" does NOT stretch full width */
+.favorites-grid .remove-tag {
+  width: auto !important;
+  display: inline-flex !important;
+  text-align: left !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 999px !important;
+  background: #ef4444 !important;
+  color: white !important;
+  font-weight: 600;
+  top: 10px !important;
+  left: 10px !important;
+}
+
 
 
 
