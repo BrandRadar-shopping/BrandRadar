@@ -15,9 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const TRENDING_SHEET_ID = "13klEz2o7CZ0Q4mbm8WT_b1Sz7LMoJqcluyrFyg58uRc";
   const TRENDING_TAB = "TrendingNow";
 
-  const TOPBRANDS_SHEET_ID = "1n3mCxmTb42RnZ_sNvP5CnYdGjwYFkU5kmnI_BFyiNkU";
-  const TOPBRANDS_TAB = "TopBrands";
-
   // ---------- FORMATTERING ----------
   const nbFormatter = new Intl.NumberFormat("nb-NO");
 
