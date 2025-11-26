@@ -284,40 +284,62 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // TOP BRANDS
-  // ======================================================
+// ⭐ TOP BRANDS (from BrandRadar_Brands – Ark 1)
+// ======================================================
 
-  async function loadTopBrands() {
+async function loadTopBrands() {
+  const url = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    console.log("✅ TopBrands rådata:", data);
+
+    // 1. Filtrer: highlight === "yes"
+    const highlights = data.filter(b => 
+      (b.highlight || "").toLowerCase() === "yes"
+    );
+
+    // 2. Sorter alfabetisk på brandnavn
+    highlights.sort((a, b) =>
+      a.brand.localeCompare(b.brand, "no", { sensitivity: "base" })
+    );
+
+    // 3. Finne container
     const container = document.getElementById("topbrands-grid");
-    if (!container) return;
+    container.innerHTML = "";
 
-    try {
-      const url = `https://opensheet.elk.sh/${TOPBRANDS_SHEET_ID}/${TOPBRANDS_TAB}`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      container.innerHTML = "";
-
-      data.forEach(item => {
-        if (String(item.active || "").toLowerCase() !== "true") return;
-
-        const card = document.createElement("a");
-        card.className = "topbrand-card";
-        card.href = item.link || "#";
-        card.target = "_blank";
-
-        card.innerHTML = `
-          <img src="${item.logo || ""}" alt="${item.brand_name || ""}">
-          <h3>${item.brand_name || ""}</h3>
-          <p>${item.description || ""}</p>
-        `;
-
-        container.appendChild(card);
-      });
-    } catch (err) {
-      console.error("❌ TopBrands error:", err);
+    // 4. Tom liste → return
+    if (highlights.length === 0) {
+      container.innerHTML = "<p>Ingen fremhevede brands akkurat nå.</p>";
+      return;
     }
+
+    // 5. Bygg markup
+    highlights.forEach(b => {
+      container.innerHTML += `
+        <a class="topbrand-card" href="brand-page.html?brand=${encodeURIComponent(b.brand)}">
+          <div class="topbrand-logo">
+            <img src="${b.logo || ""}" alt="${b.brand}">
+          </div>
+
+          <h3 class="topbrand-name">${b.brand}</h3>
+
+          <p class="topbrand-tagline">
+            ${b.description?.trim() || "Utforsk dette merket"}
+          </p>
+        </a>
+      `;
+    });
+
+    console.log("✅ Top Brands lastet inn:", highlights.length);
+
+  } catch (err) {
+    console.error("❌ TopBrands error:", err);
   }
+}
+
 
   // ======================================================
   // RUN EVERYTHING
