@@ -1,13 +1,13 @@
 // ======================================================
-// ✅ BrandRadar – Forside (Picks + Trending Now + Top Brands)
+// ✅ BrandRadar – Forside (Radar Picks + Trending Now + Top Brands)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("✅ Index script loaded");
 
   // ---------- KONSTANTER ----------
-  const PICKS_CSV_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9bBCAqzJwCcyOfw5R5mAPtqkx8ISp_U_yaXaZU89J7G8V656GKvU0NzUK0UdGmEPk8m-vCm2rIXeI/pub?output=csv";
+  const PICKS_URL =
+    "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks";
 
   const BRAND_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const BRAND_TAB = "BrandRadarProdukter";
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // FEATURED PICKS
+  // ⭐️ RADAR PICKS (OpenSheet JSON – ingen CSV)
   // ======================================================
 
   async function loadFeaturedPicks() {
@@ -147,17 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!grid) return;
 
     try {
-      const res = await fetch(PICKS_CSV_URL);
-      const csvText = await res.text();
-
-      const rows = csvText.trim().split("\n").map(r => r.split(","));
-      const headers = rows[0].map(h => h.trim());
-
-      const items = rows.slice(1).map(row => {
-        const obj = {};
-        row.forEach((val, i) => (obj[headers[i]] = val.trim()));
-        return obj;
-      });
+      const items = await (await fetch(PICKS_URL)).json();
 
       const featured = items.filter(
         p => (p.featured || "").toLowerCase() === "true"
@@ -169,21 +159,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       featured.forEach(p => {
         const product = {
           ...p,
-          product_name: p.product_name || p.title || p.name,
-          id: resolveProductId(p)
+          id: p.id || p.product_name,
+          product_name: p.product_name,
+          brand: p.brand,
+          image_url: p.image_url,
+          price: p.price,
+          discount: p.discount,
+          old_price: p.old_price,
+          rating: p.rating
         };
 
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(product);
-        const cardEl = wrapper.firstElementChild;
+        const wrap = document.createElement("div");
+        wrap.innerHTML = buildProductCardMarkup(product);
 
+        grid.appendChild(wrap.firstElementChild);
         orderedProducts.push(product);
-        grid.appendChild(cardEl);
       });
 
       attachProductCardNavigation(grid, orderedProducts);
+
     } catch (err) {
-      console.error("❌ Klarte ikke laste Featured Picks:", err);
+      console.error("❌ Klarte ikke laste Radar Picks:", err);
     }
   }
 
@@ -281,62 +277,55 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-// ⭐ TOP BRANDS (from BrandRadar_Brands – Ark 1)
-// ======================================================
+  // ⭐ TOP BRANDS (fra BrandRadar_Brands – Ark 1)
+  // ======================================================
 
-async function loadTopBrands() {
-  const url = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+  async function loadTopBrands() {
+    const url = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
 
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
 
-    console.log("✅ TopBrands rådata:", data);
+      // 1. Filtrer highlight
+      const highlights = data.filter(
+        b => (b.highlight || "").toLowerCase() === "yes"
+      );
 
-    // 1. Filtrer: highlight === "yes"
-    const highlights = data.filter(b => 
-      (b.highlight || "").toLowerCase() === "yes"
-    );
+      // 2. Sortering
+      highlights.sort((a, b) =>
+        a.brand.localeCompare(b.brand, "no", { sensitivity: "base" })
+      );
 
-    // 2. Sorter alfabetisk på brandnavn
-    highlights.sort((a, b) =>
-      a.brand.localeCompare(b.brand, "no", { sensitivity: "base" })
-    );
+      const container = document.getElementById("topbrands-grid");
+      container.innerHTML = "";
 
-    // 3. Finne container
-    const container = document.getElementById("topbrands-grid");
-    container.innerHTML = "";
+      if (highlights.length === 0) {
+        container.innerHTML = "<p>Ingen fremhevede brands akkurat nå.</p>";
+        return;
+      }
 
-    // 4. Tom liste → return
-    if (highlights.length === 0) {
-      container.innerHTML = "<p>Ingen fremhevede brands akkurat nå.</p>";
-      return;
+      highlights.forEach(b => {
+        container.innerHTML += `
+          <a class="topbrand-card" href="brand-page.html?brand=${encodeURIComponent(
+            b.brand
+          )}">
+            <div class="topbrand-logo">
+              <img src="${b.logo || ""}" alt="${b.brand}">
+            </div>
+
+            <h3 class="topbrand-name">${b.brand}</h3>
+
+            <p class="topbrand-tagline">
+              ${b.description?.trim() || "Utforsk dette merket"}
+            </p>
+          </a>
+        `;
+      });
+    } catch (err) {
+      console.error("❌ TopBrands error:", err);
     }
-
-    // 5. Bygg markup
-    highlights.forEach(b => {
-      container.innerHTML += `
-        <a class="topbrand-card" href="brand-page.html?brand=${encodeURIComponent(b.brand)}">
-          <div class="topbrand-logo">
-            <img src="${b.logo || ""}" alt="${b.brand}">
-          </div>
-
-          <h3 class="topbrand-name">${b.brand}</h3>
-
-          <p class="topbrand-tagline">
-            ${b.description?.trim() || "Utforsk dette merket"}
-          </p>
-        </a>
-      `;
-    });
-
-    console.log("✅ Top Brands lastet inn:", highlights.length);
-
-  } catch (err) {
-    console.error("❌ TopBrands error:", err);
   }
-}
-
 
   // ======================================================
   // RUN EVERYTHING
@@ -346,6 +335,7 @@ async function loadTopBrands() {
   loadTrendingNow();
   loadTopBrands();
 });
+
 
 
 
