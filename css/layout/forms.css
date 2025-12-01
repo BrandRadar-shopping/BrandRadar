@@ -1,1 +1,27 @@
+.brand-search {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1rem;
+}
+
+#brandSearch {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 320px;
+  font-size: 1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
