@@ -8,3 +8,14 @@ body {
   color: #222;
 }
 
+.brand-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+.brand-card p {
+  color: #666;
+  font-size: 0.9rem;
+  min-height: 40px;
+}
