@@ -88,24 +88,6 @@
   font-size: 1rem;
 }
 
-/* ✅ Top links */
-.top-links {
-  display: flex;
-  gap: 1.4rem;
-  margin-left: auto;
-}
-
-.top-links a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.top-links a:hover {
-  color: #0070f3;
-}
-
 /* ✅ Category bar */
 .category-bar {
   display: flex;
