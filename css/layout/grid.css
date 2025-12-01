@@ -45,7 +45,19 @@
   justify-items: center;
 }
 
+/* ==========================================================
+   PREMIUM UNIVERS-GRID – Always 4 cards in one row (desktop)
+   ========================================================== */
 
+.universe-grid {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: nowrap; /* 🔥 Hindrer at 1 faller under */
+  padding: 0 20px;
+}
 
 
 
