@@ -240,14 +240,6 @@
   box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
 }
 
-.highlighted-brands h2,
-.all-brands h2 {
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
 /* Toast melding (favoritt notifikasjon) */
 .toast-message {
   position: fixed;
