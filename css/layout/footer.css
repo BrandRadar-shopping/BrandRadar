@@ -1,1 +1,14 @@
+/* FOOTER CTA */
+.footer-cta { background: #f8f8f8; text-align: center; padding: 4rem 1rem; }
+.newsletter { margin-top: 1rem; }
+.newsletter input {
+  padding: 0.8rem 1rem; border: 1px solid #ccc;
+  border-radius: 8px; width: 250px;
+}
+.newsletter button {
+  padding: 0.8rem 1rem; background: #0070f3;
+  border: none; color: #fff; border-radius: 8px;
+  cursor: pointer; margin-left: 0.5rem;
+}
+
 
