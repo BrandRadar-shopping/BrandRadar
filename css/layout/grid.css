@@ -33,3 +33,23 @@
   gap: 1.6rem;
 }
 
+/* Grid forbedring */
+.product-grid,
+.category-products .product-grid,
+.brand-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
+  padding: 20px 0;
+  width: 100%;
+  justify-items: center;
+}
+
+
+
+
+
+
+
+
+
