@@ -509,11 +509,6 @@
 }
 
 /* --- 3. RADAR PICKS --- */
-.picks-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
 
 .pick-card {
   background: #fff;
