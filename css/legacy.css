@@ -315,13 +315,6 @@
   padding: 1rem;
 }
 
-.favorites-section h2 {
-  text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  font-weight: 700;
-}
-
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
