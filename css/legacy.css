@@ -2275,26 +2275,9 @@ svg#gold-gradient-defs {
    Responsive
    ========================================================== */
 
-@media (max-width: 900px) {
-  .universe-grid {
-    flex-wrap: wrap; /* 2 + 2 layout */
-  }
-}
-
-@media (max-width: 600px) {
-  .universe-grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .u-card {
     max-width: 320px;
   }
-}
-
-
-
-
 
 
 /* PARTNER & GIVEAWAY */
