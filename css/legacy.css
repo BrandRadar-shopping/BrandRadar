@@ -1,18 +1,4 @@
 
-/* =========================================
-   RESET & BASE STYLES
-   ========================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', Arial, sans-serif;
-  background: #fafafa;
-  color: #222;
-}
 
 /* =========================================
    HEADER LAYOUT – FIXED ✅
