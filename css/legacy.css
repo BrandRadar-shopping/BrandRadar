@@ -622,11 +622,6 @@
 
 
 /* --- 5. NYE PRODUKTER / TRENDER --- */
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.6rem;
-}
 
 .news-card {
   background: #fff;
