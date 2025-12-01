@@ -24,3 +24,6 @@
 @import url('./css/pages/category.css');
 @import url('./css/pages/favorites.css');
 @import url('./css/pages/luxury.css');
+
+/* TEMP: Legacy fallback */
+@import url('./css/legacy.css');
