@@ -1284,65 +1284,6 @@ nav.mega-menu .menu-section {
   margin: 30px 0;
 }
 
-
-/* ✅ Mobile optimization */
-@media (max-width: 700px) {
-  .filter-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .filters-left,
-  .filters-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-/* ======================================================
-   ✅ Active Filter Tags (future use)
-====================================================== */
-
-.filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0 20px;
-}
-
-.filter-tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #222;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: 0.18s ease-in-out;
-}
-
-.filter-tag:hover {
-  border-color: #0070f3;
-  transform: translateY(-2px);
-}
-
-.filter-tag svg {
-  width: 14px;
-  height: 14px;
-  fill: #0070f3;
-  pointer-events: none;
-}
-
-.filter-tags.hidden {
-  display: none;
-}
-
 /* ======================================================
    ✅ Favoritt-ikon — syltynn outline
 ====================================================== */
