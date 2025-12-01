@@ -48,7 +48,11 @@ body {
   font-weight: 700;
 }
 
-
+.related-products h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
 
 
 
