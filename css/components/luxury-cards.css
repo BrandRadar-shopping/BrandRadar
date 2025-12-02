@@ -30,3 +30,18 @@
   opacity: .75;
   margin-top: 6px;
 }
+
+
+/* ✅ Seksjoner (Gold Picks, Filter, Produkter) */
+.luxury-section {
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  text-align: center;
+}
+
+.luxury-section h2 {
+  margin-bottom: 1.8rem;
+  font-size: 24px;
+  font-weight: 800;
+  color: #d4af37;
+}
