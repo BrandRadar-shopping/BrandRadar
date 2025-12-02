@@ -63,7 +63,329 @@
   cursor: pointer;
 }
 
+/* ============================================
+   💎 Gold Picks Grid + Produkt Grid
+============================================ */
+#luxuryGoldPickGrid,
+#luxuryProductGrid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  justify-items: center;
+  align-items: start;
+}
 
+/* ============================================
+   💎 Kortstruktur (gjelder både hero og produkter)
+============================================ */
+.luxury-product-card,
+.luxury-hero-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: visible;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.luxury-product-card:hover,
+.luxury-hero-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.35);
+}
+
+/* ✅ Bildehåndtering */
+.luxury-product-card img,
+.luxury-hero-card img,
+.luxury-img {
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  background: #fff;
+  display: block;
+  margin: 0 auto;
+  border-radius: 14px 14px 0 0;
+}
+
+/* ✅ Infoområde */
+.luxury-info {
+  text-align: center;
+  padding: 12px 14px;
+}
+
+.luxury-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.luxury-info .brand {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.luxury-info .rating {
+  color: #111;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.luxury-info .price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #d4af37;
+}
+
+/* ============================================
+   👑 Gold Pick badge – med shine-animasjon
+============================================ */
+.gold-pick-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: linear-gradient(90deg, #d4af37, #f8e08e);
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  animation: goldShine 4s infinite linear;
+}
+
+@keyframes goldShine {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.35); }
+  100% { filter: brightness(1); }
+}
+
+/* ============================================
+   💛 Rabatt-badge
+============================================ */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #d4af37;
+  color: #000;
+  padding: 4px 8px;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 8px;
+  z-index: 12;
+}
+
+/* ============================================
+   💛 Favoritt-ikon (Luxury-versjon)
+============================================ */
+.fav-btn {
+  position: absolute;
+  top: 42px;      /* ✅ flyttet ned for å unngå Gold Pick */
+  right: 14px;    /* ✅ litt lenger ut fra kanten */
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  z-index: 20;    /* ✅ over badge */
+  transition: transform 0.2s ease, filter 0.3s ease;
+  pointer-events: auto;
+}
+
+.fav-btn:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.5));
+}
+
+.fav-icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: #111;
+  stroke-width: 1.2;
+  transition: all 0.35s ease;
+  pointer-events: auto;
+}
+
+/* ✅ Når aktiv (favoritt) → Gullfyll + lett glød */
+.fav-btn.active .fav-icon {
+  fill: url(#goldGradient);
+  stroke: none;
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.6));
+}
+
+/* ✨ Gullgradient-definisjon for SVG-fill */
+svg#gold-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.luxury-product-card img,
+.luxury-hero-card img {
+  margin-top: 10px; /* Gir lik visuell spacing som index */
+}
+
+/* 🔒 Sørg for at gull-badge kun brukes på luxury.html */
+.luxury-page .discount-badge {
+  background: #d4af37;
+  color: #000;
+}
+
+/* og gjenopprett standard røde badge for resten */
+:not(.luxury-page) .discount-badge {
+  background: #e63946;
+  color: #fff;
+}
+
+
+/* ============================================
+   💎 Luxury Hero Banner – Fade variant
+============================================ */
+.luxury-hero-banner {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  background: #111;
+}
+
+.luxury-hero-banner .hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.luxury-hero-banner .hero-slide.active {
+  opacity: 1;
+}
+
+.hero-content {
+  text-align: center;
+  color: white;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.35);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  animation: fadeInDown 1.5s ease;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  color: #f2f2f2;
+  animation: fadeInUp 1.5s ease;
+}
+
+/* ✨ Fade inn animasjoner */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ✨ Gullrefleks-animasjon på hero-tittel */
+.hero-title {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, #d4af37, #fff8c9, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: shineGold 8s linear infinite;
+}
+
+@keyframes shineGold {
+  0% { background-position: 200% center; }
+  50% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ============================================
+   💎 Luxury Hero – Fullbredde mørk topp (v4)
+============================================ */
+.luxury-hero {
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* tvinger full bredde */
+  background: linear-gradient(to bottom, #0a0a0a, #1a1a1a 90%);
+  color: #fff;
+  text-align: center;
+  padding: 5rem 2rem 4rem;
+  border-bottom: 2px solid #d4af37;
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f6e27a, #d4af37, #f6e27a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: goldWave 8s linear infinite;
+}
+
+.luxury-hero p {
+  color: #ddd;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+@keyframes goldWave {
+  0% { background-position: 200% center; }
+  50% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Lys seksjon rett under hero */
+.luxury-section {
+  background-color: #fff;
+  color: #111;
+  padding: 3rem 0;
+}
+
+/* Myk overgang (fade) mellom hero og første hvite seksjon */
+.luxury-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(26,26,26,1), rgba(255,255,255,0));
+  z-index: 0;
+}
 
 
 
