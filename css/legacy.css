@@ -1312,20 +1312,6 @@ nav.mega-menu .menu-section {
 }
 
 
-/* ✅ Seksjoner (Gold Picks, Filter, Produkter) */
-.luxury-section {
-  max-width: 1200px;
-  margin: 2.5rem auto;
-  text-align: center;
-}
-
-.luxury-section h2 {
-  margin-bottom: 1.8rem;
-  font-size: 24px;
-  font-weight: 800;
-  color: #d4af37;
-}
-
 /* ✅ Filterbar midtstilt */
 .luxury-filter-bar {
   display: flex;
