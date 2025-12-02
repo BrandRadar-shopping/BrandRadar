@@ -1,1 +1,32 @@
+/* ============================================
+   💎 Luxury Corner – Premium Cards & Layout (v3.2)
+   Justert for korrekt z-index, bildehøyde og ikonplassering
+============================================ */
 
+/* ✅ Sentraliser hele Luxury-siden */
+.luxury-page {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1250px;
+  padding: 0 20px;
+}
+
+/* ✅ Hero-seksjon midtstilt */
+.luxury-hero {
+  text-align: center;
+  padding: 3.5rem 0 2rem;
+  margin: 0 auto;
+}
+
+.luxury-hero h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #111;
+}
+
+.luxury-hero p {
+  font-size: 16px;
+  opacity: .75;
+  margin-top: 6px;
+}
