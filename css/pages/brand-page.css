@@ -1,1 +1,54 @@
+/* ============================
+   BRAND PAGE STYLING
+   ============================ */
 
+.brand-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.brand-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.brand-card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #000; /* <-- Ny farge */
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.25s ease; /* smoother hover */
+}
+
+.brand-card a:hover {
+  background: #222; /* <-- Ny hover */
+  transform: translateY(-2px); /* liten løft-effekt */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+
+/* Fremhevede brands */
+.highlighted-brands {
+  background: #f7f9fc;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.highlighted-brands .brand-card {
+  border: 2px solid #0070f3;
+  box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
+}
