@@ -445,42 +445,6 @@ nav.mega-menu .menu-section {
   margin: 30px 0;
 }
 
-/* ======================================================
-   ✅ Favoritt-ikon — syltynn outline
-====================================================== */
-
-.fav-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: transform 0.2s ease;
-}
-
-.fav-icon:hover {
-  transform: scale(1.08);
-}
-
-.heart-icon {
-  width: 22px;
-  height: 22px;
-  stroke: #111;
-  fill: transparent;
-  stroke-width: 1.4px; /* ✅ syltynn outline */
-  transition: 0.22s ease;
-}
-
-.fav-icon.active .heart-icon {
-  fill: #ff1f3d;
-  stroke-width: 1.4px;
-}
-
 /* ===========================================
    ✅ Favorittside – Produktkort forbedring
 =========================================== */
