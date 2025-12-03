@@ -2163,17 +2163,6 @@ section.hero-slider {
 }
 
 /* ==========================================================
-   FEATURED GRID — NY PREMIUM GRID LAYOUT
-   ========================================================== */
-#featured-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 32px;
-  justify-items: center;
-  margin-top: 40px;
-}
-
-/* ==========================================================
    INDEX — PRODUKTKORT PREMIUM (match category/brands)
    ========================================================== */
 #featured-grid .product-card {
