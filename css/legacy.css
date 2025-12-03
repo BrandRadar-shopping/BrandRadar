@@ -481,44 +481,6 @@ nav.mega-menu .menu-section {
   stroke-width: 1.4px;
 }
 
-/* ======================================================
-   ✅ Brand Alphabet Filter — cleaned & unified
-====================================================== */
-
-.brand-alphabet {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 10px auto 25px;
-  padding: 5px 0;
-  max-width: 900px;
-}
-
-.brand-alphabet span {
-  padding: 6px 10px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #111;
-  font-size: 15px;
-  font-weight: 600;
-  opacity: 0.65;
-  transition: 0.22s ease;
-}
-
-.brand-alphabet span:hover {
-  opacity: 1;
-  color: #0070f3;
-  border-color: #0070f3;
-}
-
-.brand-alphabet span.active {
-  opacity: 1;
-  background: #0070f3;
-  color: #fff;
-  border-color: #0070f3;
-}
 
 /* ======================================================
    ✅ Minimalist knapper til brand cards
