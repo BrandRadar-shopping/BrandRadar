@@ -1138,26 +1138,6 @@ section.hero-slider {
   100% { background-position: -200% center; }
 }
 
-/* === Gold heart for luxury brands === */
-.gold-heart path {
-  fill: url(#gold-gradient);
-}
-
-.gold-heart {
-  fill: #e6b800;
-  transition: transform 0.2s ease, fill 0.3s ease;
-}
-.gold-heart:hover {
-  transform: scale(1.15);
-  fill: #ffcc33;
-}
-
-/* fallback for active luxury favorites */
-.fav-icon.active .gold-heart {
-  fill: #ffd700;
-}
-
-
 /* =========================================
    ELITE PRODUCT CARD v8 — BALANCED & SPACIOUS
    ========================================= */
