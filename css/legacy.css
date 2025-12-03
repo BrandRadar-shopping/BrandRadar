@@ -481,42 +481,6 @@ nav.mega-menu .menu-section {
   stroke-width: 1.4px;
 }
 
-
-/* ✅ Brand favorites layout */
-#favorites-brand-grid .brand-card {
-  cursor: pointer;
-  position: relative;
-  padding-top: 45px;
-}
-
-#favorites-brand-grid .brand-logo {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-  margin: 0 auto 0.7rem;
-}
-
-/* ✅ Remove tag (brand favorites) */
-.remove-brand-tag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff1f3d;
-  color: #fff;
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  z-index: 20;
-  transition: 0.2s ease;
-}
-
-.remove-brand-tag:hover {
-  background: #d81430;
-  transform: scale(1.06);
-}
-
 /* ===========================================
    ✅ Favorittside – Produktkort forbedring
 =========================================== */
