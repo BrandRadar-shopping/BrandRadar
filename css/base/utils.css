@@ -12,7 +12,22 @@
   }
 }
 
+/* ==========================================================
+   GLOBAL PAGE CONTAINER (brukes på alle seksjoner unntatt hero)
+   ========================================================== */
+.container {
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
+/* ==========================================================
+   GENERELT VERTICAL SPACING FOR SEKSJONER
+   ========================================================== */
+section {
+  padding: 60px 0;
+}
 
 
 
