@@ -1116,21 +1116,6 @@ section.hero-slider {
   color: #0057c1;
 }
 
-/* 🔹 Rabattmerke */
-.discount-badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: linear-gradient(135deg, #ff5858, #ff1f3d);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.4rem 0.7rem;
-  border-radius: 6px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
-  z-index: 10;
-}
-
 /* 🔹 Luxury variant */
 .product-card.luxury {
   border: 1.5px solid rgba(212, 175, 55, 0.45);
