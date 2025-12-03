@@ -2583,26 +2583,6 @@ section {
   stroke: #ff2953;
 }
 
-/* Horisontale rader for Spotlight og Picks */
-.slider-row {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  scrollbar-width: thin;
-}
-
-.slider-row .product-card {
-  flex: 0 0 auto;
-  min-width: 260px;
-}
-
-/* Litt ekstra så kortene ikke blir for smale på mobil */
-@media (max-width: 600px) {
-  .slider-row .product-card {
-    min-width: 220px;
-  }
-}
 
 /* Slider-kontroller (dots + piler) */
 .slider-controls {
