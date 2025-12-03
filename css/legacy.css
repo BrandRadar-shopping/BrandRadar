@@ -1116,39 +1116,6 @@ section.hero-slider {
   color: #0057c1;
 }
 
-/* 🔹 Favorittikon */
-.fav-icon {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease;
-  z-index: 10;
-}
-
-.fav-icon:hover {
-  transform: scale(1.1);
-}
-
-.heart-icon {
-  width: 24px;
-  height: 24px;
-  stroke: #222;
-  fill: transparent;
-  stroke-width: 1.6px;
-  transition: fill 0.25s ease, stroke 0.25s ease;
-}
-
-.fav-icon.active .heart-icon {
-  fill: #ff2953;
-  stroke: #ff2953;
-}
-
 /* 🔹 Rabattmerke */
 .discount-badge {
   position: absolute;
