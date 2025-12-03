@@ -1039,20 +1039,6 @@ section.hero-slider {
   margin: 0;
 }
 
-
-
-
-/* Gullbadge for luxury brands */
-.luxury-badge {
-  font-size: 0.8rem;
-  background: linear-gradient(90deg, #ffd700, #e8c547, #fff4c1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-left: 8px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
 /* Favorittikon i brand-produkter */
 .product-card {
   position: relative;
