@@ -1003,28 +1003,6 @@ section.hero-slider {
   margin: 0;
 }
 
-/* --- Heart Icon --- */
-.product-card .fav-icon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  cursor: pointer;
-  width: 26px;
-  height: 26px;
-  transition: transform 0.2s ease;
-}
-.product-card .fav-icon:hover {
-  transform: scale(1.15);
-}
-.heart-icon {
-  fill: #ccc;
-  width: 100%;
-  height: 100%;
-}
-.fav-icon.active .heart-icon {
-  fill: #e63946;
-}
-
 /* === Luxury shimmer text === */
 .luxury-badge-under {
   font-size: 0.9rem;
