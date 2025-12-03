@@ -1078,29 +1078,6 @@ section.hero-slider {
   fill: #e63946;
 }
 
-/* --- Luxury badge under logo --- */
-.luxury-badge-under {
-  font-size: 0.9rem;
-  font-weight: 700;
-  background: linear-gradient(110deg, #f5d76e 0%, #ffd700 40%, #fff4c1 70%, #f5d76e 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin-top: 0.8rem;
-  animation: shimmerGold 4s linear infinite;
-}
-
-@keyframes shimmerGold {
-  0% { background-position: 0% center; }
-  100% { background-position: -200% center; }
-}
-
-@keyframes fadeInLuxury {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* --- Filter Bar --- */
 .brand-filter-bar {
   display: flex;
