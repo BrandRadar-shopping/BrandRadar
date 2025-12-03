@@ -481,32 +481,6 @@ nav.mega-menu .menu-section {
   stroke-width: 1.4px;
 }
 
-
-/* ======================================
-   ✅ BRAND FAVORITT-IKON — Oppdatert Final
-====================================== */
-.brand-card .fav-icon {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.brand-card .fav-icon .heart-icon {
-  stroke: #222;
-  fill: transparent;
-  stroke-width: 1.4px;
-  transition: 0.22s ease;
-}
-
-.brand-card .fav-icon.active .heart-icon {
-  fill: #ff1f3d;
-  stroke: #ff1f3d;
-}
-
-.brand-card:hover .fav-icon .heart-icon {
-  transform: scale(1.14);
-}
-
 /* ✅ Favoritt-tabs */
 .fav-tabs {
   display: flex;
