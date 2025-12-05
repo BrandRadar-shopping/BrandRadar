@@ -1,1 +1,17 @@
+/* =========================================
+   SMOOTH HOVER ANIMATION
+   ========================================= */
+.mega-menu.active {
+  animation: fadeInMenu 0.25s ease forwards;
+}
 
+@keyframes fadeInMenu {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
