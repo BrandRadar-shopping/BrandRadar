@@ -1,1 +1,21 @@
+/* --- Responsivt --- */
+@media (max-width: 768px) {
+  .partner-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .partner-inner img {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .featured-card {
+    flex-direction: column;
+  }
+
+  .featured-card img {
+    width: 100%;
+  }
+}
 
