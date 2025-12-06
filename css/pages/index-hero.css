@@ -19,3 +19,54 @@
   }
 }
 
+/* ============================================
+   🌟 BrandRadar Index – Hero & Struktur
+============================================ */
+.hero {
+  position: relative;
+  text-align: center;
+  color: #fff;
+  padding: 6rem 1rem 7rem;
+  background: radial-gradient(circle at center, #111 0%, #0b0b0b 80%);
+  overflow: hidden;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+.hero p {
+  opacity: 0.85;
+  margin-bottom: 1.8rem;
+  font-size: 1.1rem;
+}
+.cta-btn {
+  background: linear-gradient(90deg, #0070f3, #00b4ff);
+  color: #fff;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+.cta-btn:hover {
+  transform: scale(1.04);
+  background: linear-gradient(90deg, #00b4ff, #0070f3);
+}
+.radar-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 1%, transparent 70%);
+  animation: radarPulse 6s infinite ease-in-out;
+}
+@keyframes radarPulse {
+  0%,100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
