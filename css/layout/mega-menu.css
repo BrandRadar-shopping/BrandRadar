@@ -80,3 +80,10 @@ nav.mega-menu .menu-section {
   line-height: 1.35rem;
 }
 
+/* ✅ Align dropdown perfectly under category-bar */
+nav.mega-menu .menu-panel {
+  top: 100%; /* EXACTLY under category bar */
+  margin-top: 0;
+}
+
+
