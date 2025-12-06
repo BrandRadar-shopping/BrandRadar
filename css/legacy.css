@@ -8,14 +8,6 @@
   text-decoration: none;
 }
 
-/* ✅ REMOVE OLD FLOATING MEGA MENU TRIGGERS */
-.menu-top {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
 
 /* ✅ Align dropdown perfectly under category-bar */
 nav.mega-menu .menu-panel {
@@ -23,69 +15,6 @@ nav.mega-menu .menu-panel {
   margin-top: 0;
 }
 
-
-/* ✅ Hver blokk: 1 kolonne produkt-kategorier + 1 kolonne toppmerker */
-nav.mega-menu .menu-block {
-  display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  gap: 2rem;
-  padding-right: 2.5rem;
-  border-right: 1px solid #e5e5e5;
-}
-
-/* ✅ Siste blokk trenger ikke strek */
-nav.mega-menu .menu-block:last-child {
-  border-right: none;
-}
-
-/* ✅ Typografi */
-nav.mega-menu .menu-section h4 {
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  color: #111;
-}
-
-nav.mega-menu .menu-subtitle {
-  margin-top: 0.7rem;
-  margin-bottom: 0.25rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #444;
-}
-
-/* ✅ List styling */
-nav.mega-menu .menu-section ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav.mega-menu .menu-section li {
-  margin: 0.35rem 0;
-}
-
-nav.mega-menu .menu-section a {
-  color: #222;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: 0.15s ease;
-}
-
-nav.mega-menu .menu-section a:hover {
-  color: #0070f3;
-}
-
-/* ✅ Toppmerker får riktig layout */
-nav.mega-menu .menu-section.brands {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* ✅ Padding justering for perfekt linjehøyde */
-nav.mega-menu .menu-section {
-  line-height: 1.35rem;
-}
 
 /* ============================================
    🌟 BrandRadar Index – Hero & Struktur
