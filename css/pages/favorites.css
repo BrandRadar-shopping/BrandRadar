@@ -145,3 +145,21 @@
 #tab-products .remove-tag:hover {
   background: #d63030;
 }
+
+.empty-favorites .back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #0070f3;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
