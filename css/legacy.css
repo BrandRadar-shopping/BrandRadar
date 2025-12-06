@@ -174,32 +174,6 @@ nav.mega-menu .menu-section {
   50% { opacity: 0.5; transform: scale(1.2); }
 }
 
-/* ===============================
-   UNIVERS – CONTAINER
-   Sentrert tittel, tekst & grid
-   =============================== */
-
-.universes {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 4rem 1rem;
-}
-
-.universes h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 0.6rem;
-}
-
-.universes .section-desc {
-  max-width: 760px;
-  margin: 0 auto 3rem;
-  font-size: 1.05rem;
-  opacity: 0.85;
-  line-height: 1.55;
-}
-
 /* ----------------------------------------------------------
    PREMIUM CARD DESIGN – A + B (subtile gradients per card)
    ---------------------------------------------------------- */
