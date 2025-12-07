@@ -1,47 +1,66 @@
-/* ============================================
-   🌐 BASE
-============================================ */
-@import url('./base/reset.css');
-@import url('./base/variables.css');
-@import url('./base/typography.css');
-@import url('./base/utils.css');
+/* =========================================================
+   BASE
+========================================================= */
+@import url('./css/base/reset.css');
+@import url('./css/base/variables.css');
+@import url('./css/base/typography.css');
+@import url('./css/base/utils.css');
 
-/* ============================================
-   🧱 GLOBAL STRUCTURE
-============================================ */
-@import url('./global/layout.css');
-@import url('./global/grid.css');
-@import url('./global/forms.css');
 
-/* ============================================
-   🧩 COMPONENTS
-============================================ */
-@import url('./components/buttons.css');
-@import url('./components/breadcrumb.css');
-@import url('./components/badges.css');
-@import url('./components/banner.css');
-@import url('./components/news-cards.css');
-@import url('./components/featured-cards.css');
-@import url('./components/related-cards.css');
-@import url('./components/top-brands.css');
-@import url('./components/luxury-cards.css');
-@import url('./components/slider-row.css');
-@import url('./components/slider-controls.css');
-@import url('./components/cards-global.css');
+/* =========================================================
+   GLOBAL STRUCTURE
+========================================================= */
+@import url('./css/layout/layout.css');
+@import url('./css/layout/grid.css');
+@import url('./css/layout/forms.css');
+@import url('./css/layout/footer.css');
+@import url('./css/layout/mega-menu.css');   /* ← LÅ MANGLE, MEN FINNES I GITHUB */
 
-/* ============================================
-   📄 PAGE-SPECIFIC
-============================================ */
-@import url('./pages/index.css');
-@import url('./pages/news.css');
-@import url('./pages/category.css');
-@import url('./pages/product-page.css');
-@import url('./pages/brand-page.css');
-@import url('./pages/favorites.css');
-@import url('./pages/luxury.css');
 
-/* ============================================
-   🏚️ (OPTIONAL) Legacy fallback
-   Skal fjernes helt når vi har ryddet alt.
-============================================ */
-@import url('./legacy.css');
+/* =========================================================
+   COMPONENTS
+========================================================= */
+@import url('./css/components/buttons.css');
+@import url('./css/components/breadcrumb.css');
+@import url('./css/components/badges.css');
+@import url('./css/components/banners.css');
+@import url('./css/components/cards.css');                /* GLOBAL CARD BASE */
+@import url('./css/components/cards-global.css');         /* (hvis tom ok, må fylles senere) */
+@import url('./css/components/featured-cards.css');
+@import url('./css/components/news-cards.css');
+@import url('./css/components/top-brands.css');
+@import url('./css/components/luxury-cards.css');
+@import url('./css/components/related-cards.css');
+@import url('./css/components/sliders.css');
+@import url('./css/components/slider-row.css');
+@import url('./css/components/slider-controls.css');
+@import url('./css/components/luxury-badge.css');
+@import url('./css/components/partner.css');              /* ← Funnet i GitHub */
+@import url('./css/components/toast.css');                /* ← Funnet i GitHub */
+
+
+/* =========================================================
+   HERO / INTRO SECTIONS
+========================================================= */
+@import url('./css/components/hero.css');
+@import url('./css/components/index-hero.css');           /* ← Funnet i GitHub */
+@import url('./css/components/intro.css');
+
+
+/* =========================================================
+   PAGE-SPECIFIC
+========================================================= */
+@import url('./css/pages/index.css');
+@import url('./css/pages/news.css');
+@import url('./css/pages/category.css');
+@import url('./css/pages/brand-page.css');
+@import url('./css/pages/product-page.css');
+@import url('./css/pages/favorites.css');
+@import url('./css/pages/luxury.css');
+@import url('./css/pages/trending.css');                  /* ← Funnet i GitHub */
+
+
+/* =========================================================
+   FALLBACK (temporary)
+========================================================= */
+@import url('./css/legacy.css');
