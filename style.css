@@ -1,29 +1,47 @@
-/* Import base */
-@import url('./css/base/reset.css');
-@import url('./css/base/variables.css');
-@import url('./css/base/typography.css');
-@import url('./css/base/utils.css');
+/* ============================================
+   🌐 BASE
+============================================ */
+@import url('./base/reset.css');
+@import url('./base/variables.css');
+@import url('./base/typography.css');
+@import url('./base/utils.css');
 
-/* Import layout */
-@import url('./css/layout/grid.css');
-@import url('./css/layout/forms.css');
-@import url('./css/layout/footer.css');
+/* ============================================
+   🧱 GLOBAL STRUCTURE
+============================================ */
+@import url('./global/layout.css');
+@import url('./global/grid.css');
+@import url('./global/forms.css');
 
-/* Import components */
-@import url('./css/components/buttons.css');
-@import url('./css/components/cards.css');
-@import url('./css/components/banners.css');
-@import url('./css/components/badges.css');
-@import url('./css/components/sliders.css');
-@import url('./css/components/hero.css');
+/* ============================================
+   🧩 COMPONENTS
+============================================ */
+@import url('./components/buttons.css');
+@import url('./components/breadcrumb.css');
+@import url('./components/badges.css');
+@import url('./components/banner.css');
+@import url('./components/news-cards.css');
+@import url('./components/featured-cards.css');
+@import url('./components/related-cards.css');
+@import url('./components/top-brands.css');
+@import url('./components/luxury-cards.css');
+@import url('./components/slider-row.css');
+@import url('./components/slider-controls.css');
+@import url('./components/cards-global.css');
 
-/* Import pages */
-@import url('./css/pages/index.css');
-@import url('./css/pages/news.css');
-@import url('./css/pages/brand-page.css');
-@import url('./css/pages/category.css');
-@import url('./css/pages/favorites.css');
-@import url('./css/pages/luxury.css');
+/* ============================================
+   📄 PAGE-SPECIFIC
+============================================ */
+@import url('./pages/index.css');
+@import url('./pages/news.css');
+@import url('./pages/category.css');
+@import url('./pages/product-page.css');
+@import url('./pages/brand-page.css');
+@import url('./pages/favorites.css');
+@import url('./pages/luxury.css');
 
-/* TEMP: Legacy fallback */
-@import url('./css/legacy.css');
+/* ============================================
+   🏚️ (OPTIONAL) Legacy fallback
+   Skal fjernes helt når vi har ryddet alt.
+============================================ */
+@import url('./legacy.css');
