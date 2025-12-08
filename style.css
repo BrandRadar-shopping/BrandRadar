@@ -10,7 +10,7 @@
 /* =========================================
    LAYOUT / GLOBAL STRUKTUR
 ========================================= */
-@import url('./css/layout/header.css');
+@import url('./css/layout/mega-menu.css');
 @import url('./css/layout/footer.css');
 @import url('./css/layout/grid.css');
 @import url('./css/layout/forms.css');
@@ -22,7 +22,6 @@
 ========================================= */
 
 /* Navigasjon, toast, etc. */
-@import url('./css/components/mega-menu.css');
 @import url('./css/components/toast.css');
 
 /* Kort / knapper / små byggeklosser */
@@ -46,8 +45,7 @@
 @import url('./css/components/breadcrumb.css');
 
 /* Evt. eldre index-hero-styling (beholder for trygghet) */
-@import url('./css/components/index-hero.css');
-
+@import url('./css/pages/index-hero.css');
 
 /* =========================================
    SIDE-SPESIFIKK STYLING
@@ -61,8 +59,10 @@
 @import url('./css/pages/luxury.css');
 
 
+
 /* =========================================
    LEGACY / Fallback
    (tom nå, men beholdes i tilfelle vi trenger noe senere)
 ========================================= */
 @import url('./css/legacy.css');
+
