@@ -1,66 +1,68 @@
-/* =========================================================
+/* =========================================
    BASE
-========================================================= */
+========================================= */
 @import url('./css/base/reset.css');
 @import url('./css/base/variables.css');
 @import url('./css/base/typography.css');
 @import url('./css/base/utils.css');
 
 
-/* =========================================================
-   GLOBAL STRUCTURE
-========================================================= */
-@import url('./css/layout/layout.css');
+/* =========================================
+   LAYOUT / GLOBAL STRUKTUR
+========================================= */
+@import url('./css/layout/header.css');
+@import url('./css/layout/footer.css');
 @import url('./css/layout/grid.css');
 @import url('./css/layout/forms.css');
-@import url('./css/layout/footer.css');
-@import url('./css/layout/mega-menu.css');   /* ← LÅ MANGLE, MEN FINNES I GITHUB */
 
 
-/* =========================================================
-   COMPONENTS
-========================================================= */
+/* =========================================
+   GLOBALE KOMPONENTER
+   (ting som brukes på flere sider)
+========================================= */
+
+/* Navigasjon, toast, etc. */
+@import url('./css/components/mega-menu.css');
+@import url('./css/components/toast.css');
+
+/* Kort / knapper / små byggeklosser */
 @import url('./css/components/buttons.css');
-@import url('./css/components/breadcrumb.css');
-@import url('./css/components/badges.css');
-@import url('./css/components/banners.css');
-@import url('./css/components/cards.css');                /* GLOBAL CARD BASE */
-@import url('./css/components/cards-global.css');         /* (hvis tom ok, må fylles senere) */
+@import url('./css/components/cards.css');
 @import url('./css/components/featured-cards.css');
-@import url('./css/components/news-cards.css');
-@import url('./css/components/top-brands.css');
 @import url('./css/components/luxury-cards.css');
 @import url('./css/components/related-cards.css');
+
+@import url('./css/components/badges.css');
+@import url('./css/components/banners.css');
+@import url('./css/components/partner.css');
+@import url('./css/components/top-brands.css');
+@import url('./css/components/trending.css');
+@import url('./css/components/universes.css');
+@import url('./css/components/news-cards.css');
 @import url('./css/components/sliders.css');
-@import url('./css/components/slider-row.css');
-@import url('./css/components/slider-controls.css');
-@import url('./css/components/luxury-badge.css');
-@import url('./css/components/partner.css');              /* ← Funnet i GitHub */
-@import url('./css/components/toast.css');                /* ← Funnet i GitHub */
-
-
-/* =========================================================
-   HERO / INTRO SECTIONS
-========================================================= */
 @import url('./css/components/hero.css');
-@import url('./css/components/index-hero.css');           /* ← Funnet i GitHub */
-@import url('./css/components/intro.css');
+
+/* Breadcrumbs / små helpers */
+@import url('./css/components/breadcrumb.css');
+
+/* Evt. eldre index-hero-styling (beholder for trygghet) */
+@import url('./css/components/index-hero.css');
 
 
-/* =========================================================
-   PAGE-SPECIFIC
-========================================================= */
+/* =========================================
+   SIDE-SPESIFIKK STYLING
+========================================= */
 @import url('./css/pages/index.css');
 @import url('./css/pages/news.css');
-@import url('./css/pages/category.css');
 @import url('./css/pages/brand-page.css');
-@import url('./css/pages/product-page.css');
+@import url('./css/pages/category.css');
 @import url('./css/pages/favorites.css');
+@import url('./css/pages/product-page.css');
 @import url('./css/pages/luxury.css');
-@import url('./css/pages/trending.css');                  /* ← Funnet i GitHub */
 
 
-/* =========================================================
-   FALLBACK (temporary)
-========================================================= */
+/* =========================================
+   LEGACY / Fallback
+   (tom nå, men beholdes i tilfelle vi trenger noe senere)
+========================================= */
 @import url('./css/legacy.css');
