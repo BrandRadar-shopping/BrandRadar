@@ -26,6 +26,7 @@
 
 /* Kort / knapper / små byggeklosser */
 @import url('./css/components/buttons.css');
+@import url('./css/components/header.css');
 @import url('./css/components/cards.css');
 @import url('./css/components/featured-cards.css');
 @import url('./css/components/luxury-cards.css');
@@ -65,4 +66,5 @@
    (tom nå, men beholdes i tilfelle vi trenger noe senere)
 ========================================= */
 @import url('./css/legacy.css');
+
 
