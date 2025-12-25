@@ -184,34 +184,48 @@ async function loadRecommendations(products, currentProduct) {
   matches.forEach(p => {
     const ratingValue = cleanRating(p.rating);
 
+    // Pris + discount
     let newPriceValue = p.price;
-    if (p.discount && p.price) {
-      const numericPrice = parseFloat(
-        p.price.replace(/[^\d.,]/g, "").replace(",", ".")
-      );
+    let oldPriceValue = "";
+
+    const discountNum = parseFloat(String(p.discount || "").replace(",", "."));
+    const hasDiscount = !isNaN(discountNum) && discountNum > 0;
+
+    if (hasDiscount && p.price) {
+      const numericPrice = parseFloat(String(p.price).replace(/[^\d.,]/g, "").replace(",", "."));
       if (!isNaN(numericPrice)) {
-        newPriceValue = (numericPrice * (1 - p.discount / 100)).toFixed(0);
+        newPriceValue = (numericPrice * (1 - discountNum / 100)).toFixed(0);
+        oldPriceValue = `${numericPrice} kr`;
       }
     }
 
     const card = document.createElement("div");
-    card.classList.add("premium-related-card");
+
+    // ✅ NØKKELEN: bruk global Elite v9
+    card.className = "product-card";
 
     card.innerHTML = `
-      ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
+      ${hasDiscount ? `<div class="discount-badge">-${discountNum.toFixed(0)}%</div>` : ""}
+
       <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+
       <div class="product-info">
         <p class="brand">${p.brand || ""}</p>
-        <h3 class="product-name">${p.title}</h3>
-        <p class="rating">${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}</p>
+        <h3 class="product-name">${p.title || ""}</h3>
+        <p class="rating">
+          ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
+        </p>
+
         <div class="price-line">
-          <span class="new-price">${newPriceValue} kr</span>
-          ${p.discount ? `<span class="old-price">${p.price} kr</span>` : ""}
+          <span class="new-price">${newPriceValue ? `${newPriceValue} kr` : ""}</span>
+          ${hasDiscount && p.price ? `<span class="old-price">${p.price} kr</span>` : ""}
         </div>
       </div>
     `;
 
+    // Behold luxury-parameter hvis du er inne i luxury-modus
     const luxuryParam = currentProduct.sheet_source === "luxury" ? "&luxury=true" : "";
+
     card.addEventListener("click", () => {
       window.location.href = `product.html?id=${p.id}${luxuryParam}`;
     });
