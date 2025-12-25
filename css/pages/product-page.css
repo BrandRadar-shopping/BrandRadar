@@ -413,3 +413,25 @@ MELLOMROM THUMBNAILS -> HOVEDBILDE
   top: 0;
   z-index: 5000;
 }    
+
+
+/* =========================================
+   RELATED SLIDER – lås kortbredde (FIX)
+========================================= */
+.related-section .related-slider {
+  align-items: stretch;
+}
+
+.related-section .related-slider .product-card {
+  flex: 0 0 260px;      /* fast kortbredde */
+  min-width: 260px;
+  max-width: 260px;
+}
+
+@media (max-width: 768px) {
+  .related-section .related-slider .product-card {
+    flex: 0 0 220px;
+    min-width: 220px;
+    max-width: 220px;
+  }
+}
