@@ -1,4 +1,8 @@
-/* ✅ Produktlayout moderne e-commerce */
+/* =====================================================
+   PRODUCT PAGE – CLEANED (samme output, mindre rot)
+===================================================== */
+
+/* ✅ Layout: Produktdetaljer */
 .product-detail {
   display: grid;
   grid-template-columns: 120px 1fr 1fr;
@@ -6,40 +10,52 @@
   max-width: 1300px;
   margin: 2rem auto;
   align-items: flex-start;
+  padding: 2rem 0;
 }
 
-/* ✅ Thumbnails venstre */
+.product-detail.no-thumbnails {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+/* ✅ Thumbnails */
 .thumbnails {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-right: 10px; /* beholdt fra original */
 }
-.thumbnails .thumb {
+
+.thumb {
   width: 80px;
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: all .2s ease;
-}
-.thumbnails .thumb.active {
-  border-color: #111;
+  transition: 0.2s ease;
 }
 
-/* ✅ Hovedbilde */
+/* Viktig: du hadde denne som siste vinner */
+.thumb.active {
+  border-color: #000 !important;
+}
+
+/* ✅ Hovedbilde (slutt-resultat fra original) */
 #main-image {
   width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
+  max-width: 550px;
+  border-radius: 10px;
+  border: 2px solid #000;
+  object-fit: contain;
 }
 
-/* ✅ Info-seksjon (product detail) */
+/* ✅ Produkt-info (detaljkolonnen) */
 .product-detail-info {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .product-detail-info h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -50,42 +66,44 @@
   color: #444;
 }
 
+.rating {
+  font-weight: 600;
+}
+
+/* (Beholdt – i tilfelle den brukes et sted på produkt-siden) */
 .price {
   font-size: 1.6rem;
   font-weight: 800;
   color: #111;
 }
 
+/* ⚠️ Beholdt for å ikke endre nåværende output (du hadde denne globalt) */
 .discount-badge {
   background: #e60023;
   color: #fff;
   padding: 4px 8px;
   border-radius: 6px;
   margin-left: 10px;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
-.rating {
-  font-weight: 600;
-}
-
-/* ✅ CTA buttons premium */
+/* ✅ Knapper */
 #buy-link {
   width: 100%;
   background: #111;
-  color: #fff;
+  color: #fff !important;
   padding: 14px;
   border-radius: 10px;
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 #buy-link:hover { background: #000; }
 
 #favorite-btn {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   width: 100%;
   background: #f2f2f2;
   color: #111;
@@ -100,7 +118,7 @@
 }
 #favorite-btn:hover { background: #e9e9e9; }
 
-/* ✅ Back button clean */
+/* ✅ Back button */
 #back-btn {
   color: #111;
   background: transparent;
@@ -115,130 +133,7 @@
 #back-btn::before { content: "←"; }
 #back-btn:hover { opacity: 0.7; }
 
-/* =====================================
-   PREMIUM RELATED PRODUCT SLIDER – FINAL ✅
-======================================*/
-
-.related-section {
-  padding: 3rem 0;
-  border-top: 1px solid #222;
-  margin-top: 3rem;
-}
-
-.related-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #111;
-  text-align: left;
-  max-width: 1300px;
-  margin: 0 auto 1rem auto;
-}
-
-/* ✅ Wrapper for slider – kun i related-section */
-.related-section .slider-wrapper {
-  position: relative;
-  max-width: 1300px;
-  margin: 0 auto;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* ✅ Selve slideren – horisontal scroll */
-.related-section .related-slider {
-  display: flex;
-  gap: 18px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 10px 0 20px 0;
-}
-
-.related-slider::-webkit-scrollbar {
-  display: none;
-}
-
-/* ✅ Piler */
-.related-section .slider-btn {
-  position: absolute;
-  top: 40%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #111;
-  background: #fff;
-  font-size: 24px;
-  color: #111;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  transition: 0.25s ease;
-}
-
-.related-section .slider-btn:hover {
-  transform: translateY(-50%) scale(1.08);
-  background: #f5f5f5;
-}
-
-.related-section .slider-btn.prev {
-  left: -35px;
-}
-
-.related-section .slider-btn.next {
-  right: -35px;
-}
-
-/* ✅ Fade på sidene */
-.related-section .slider-wrapper::before,
-.related-section .slider-wrapper::after {
-  content: "";
-  position: absolute;
-  width: 70px;
-  height: 100%;
-  top: 0;
-  pointer-events: none;
-  z-index: 15;
-}
-
-.related-section .slider-wrapper::before {
-  left: 0;
-  background: linear-gradient(to right, #fff, transparent);
-}
-
-.related-section .slider-wrapper::after {
-  right: 0;
-  background: linear-gradient(to left, #fff, transparent);
-}
-
-/* ✅ Mobil: piler skjules – swipe aktiv */
-@media (max-width: 768px) {
-  .related-section .slider-btn {
-    display: none;
-  }
-}
-
-/* ✅ Sørg for at slider-knapper alltid ligger OVER kortene */
-.slider-btn {
-  z-index: 200 !important;
-}
-
-/* ✅ Sørg for at kanten ikke kutter knappene */
-.slider-wrapper {
-  overflow: visible !important;
-  z-index: 1;
-}
-
-/* ✅ Fade gradient må ikke ligge over knappene */
-.slider-wrapper::before,
-.slider-wrapper::after {
-  z-index: 50 !important;
-}
-
-/* ===============================
-   PRODUCT PAGE – PREMIUM PRICE
-=============================== */
+/* ✅ Pris-boks */
 #product-price-box {
   display: flex;
   flex-direction: column;
@@ -264,12 +159,112 @@
   color: #e60023;
 }
 
-/* ✅ Perfeksjonert spacing */
-.product-detail {
-  padding: 2rem 0;
+/* =====================================================
+   RELATED PRODUCTS SLIDER
+===================================================== */
+.related-section {
+  padding: 3rem 0;
+  border-top: 1px solid #222;
+  margin-top: 3rem;
 }
 
-/* ✅ Unngå at ting krasjer ved lavere bredder */
+.related-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  text-align: left;
+  max-width: 1300px;
+  margin: 0 auto 1rem auto;
+}
+
+.related-section .slider-wrapper {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.related-section .related-slider {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0 20px 0;
+  align-items: stretch;
+}
+
+.related-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* ✅ Lås kortbredde (fixen du bekreftet) */
+.related-section .related-slider .product-card {
+  flex: 0 0 260px;
+  min-width: 260px;
+  max-width: 260px;
+}
+
+/* ✅ Piler */
+.related-section .slider-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #111;
+  background: #fff;
+  font-size: 24px;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200; /* samlet her */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: 0.25s ease;
+}
+
+.related-section .slider-btn:hover {
+  transform: translateY(-50%) scale(1.08);
+  background: #f5f5f5;
+}
+
+.related-section .slider-btn.prev { left: -35px; }
+.related-section .slider-btn.next { right: -35px; }
+
+/* ✅ Fade */
+.related-section .slider-wrapper::before,
+.related-section .slider-wrapper::after {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 100%;
+  top: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.related-section .slider-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.related-section .slider-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+/* ✅ Sørg for at kanten ikke kutter knappene */
+.slider-wrapper {
+  overflow: visible !important;
+  z-index: 1;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 @media (max-width: 1100px) {
   .product-detail {
     grid-template-columns: 100px 1fr;
@@ -279,163 +274,48 @@
   }
 }
 
-/* ✅ Mobilvisning */
 @media (max-width: 768px) {
   .product-detail {
     grid-template-columns: 1fr;
     text-align: left;
   }
+
   .thumbnails {
     flex-direction: row;
     order: 2;
     margin-top: 1rem;
   }
-  .thumbnails .thumb {
+
+  .thumb {
     width: 65px;
     height: 65px;
   }
+
   #main-image {
     order: 1;
   }
+
   .product-detail-info {
     order: 3;
     margin-top: 1rem;
   }
-}
 
-.product-detail {
-  display: grid;
-  grid-template-columns: 120px 1fr 1fr;
-  gap: 2rem;
-  max-width: 1300px;
-  margin: 2rem auto;
-  align-items: flex-start;
-}
+  .related-section .slider-btn {
+    display: none;
+  }
 
-.product-detail.no-thumbnails {
-  grid-template-columns: 1fr 1.2fr;
-}
-
-.thumbnails {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.thumb {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: .2s ease;
-}
-.thumb.active {
-  border-color: #111;
-}
-
-#main-image {
-  width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.product-detail-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-#buy-link {
-  background: #111;
-  color: #fff !important;
-  padding: 14px;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 600;
-  transition: .2s;
-}
-
-#favorite-btn {
-  background: #f2f2f2;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.price-block {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.discount-badge {
-  background: #e60023;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-/* ✅ Related Products */
-.related-products {
-  max-width: 1300px;
-  margin: 4rem auto;
-  padding-top: 2rem;
-}
-
-/* ================================
-STØRRE HOVEDBILDE PRODUCT.HTML
-================================ */
-
-#main-image {
-  width: 100%;
-  max-width: 550px; /* øker størrelse */
-  border-radius: 10px;
-  border: 2px solid #000; /* svart ramme */
-  object-fit: contain;
-}
-
-/* ==================================
-SORT RAMME RUNDT HOVEDBILDET
-================================== */
-
-.thumb.active {
-  border-color: #000 !important;
-}
-
-/* ==================================
-MELLOMROM THUMBNAILS -> HOVEDBILDE
-================================== */
-
-.thumbnails {
-  margin-right: 10px;
-}
-
-.main-header {
-  position: sticky;
-  top: 0;
-  z-index: 5000;
-}
-
-/* =========================================
-   RELATED SLIDER – lås kortbredde (FIX)
-========================================= */
-.related-section .related-slider {
-  align-items: stretch;
-}
-
-.related-section .related-slider .product-card {
-  flex: 0 0 260px;      /* fast kortbredde */
-  min-width: 260px;
-  max-width: 260px;
-}
-
-@media (max-width: 768px) {
   .related-section .related-slider .product-card {
     flex: 0 0 220px;
     min-width: 220px;
     max-width: 220px;
   }
 }
+
+/* ✅ Sticky header */
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+}
+
 
