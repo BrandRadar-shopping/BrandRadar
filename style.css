@@ -53,6 +53,7 @@
 ========================================= */
 @import url('./css/pages/index.css');
 @import url('./css/pages/news.css');
+@import url('./css/pages/brands.css');
 @import url('./css/pages/brand-page.css');
 @import url('./css/pages/category.css');
 @import url('./css/pages/favorites.css');
@@ -66,5 +67,6 @@
    (tom nå, men beholdes i tilfelle vi trenger noe senere)
 ========================================= */
 @import url('./css/legacy.css');
+
 
 
