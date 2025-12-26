@@ -403,6 +403,41 @@
   100% { background-position: -200% center; }
 }
 
+/* ======================================
+   FIX: Brand fav-icon (hindrer gigantisk SVG)
+   Gjelder brands.html + favoritt-brands
+====================================== */
+
+/* Sørg for at kortet er referanse for absolute pos */
+.brand-card {
+  position: relative;
+}
+
+/* Selve hjertets container (liten, sticky i hjørnet) */
+.brand-card .fav-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.18);
+  z-index: 5;
+}
+
+/* Lås SVG-størrelsen så den aldri kan “eksplodere” */
+.brand-card .fav-icon .heart-icon {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
 
 
 
