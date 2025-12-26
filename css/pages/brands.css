@@ -1,1 +1,151 @@
+/* ============================
+   BRANDS PAGE (brands.html)
+   ============================ */
+
+/* Fremhevede brands */
+.highlighted-brands {
+  background: #f7f9fc;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.highlighted-brands .brand-card {
+  border: 2px solid #0070f3;
+  box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
+}
+
+/* Brand cards (listevisning) */
+.brand-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* viktig for fav-icon */
+  position: relative;
+}
+
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.brand-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+/* Minimalist knapper til brand cards */
+.brand-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: 1px solid #111;
+  background: transparent;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.brand-btn:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.brand-btn:active {
+  transform: scale(0.96);
+}
+
+/* ======================================================
+   Brand Alphabet Filter — cleaned & unified
+====================================================== */
+
+.brand-alphabet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px auto 25px;
+  padding: 5px 0;
+  max-width: 900px;
+}
+
+.brand-alphabet span {
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #111;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.65;
+  transition: 0.22s ease;
+}
+
+.brand-alphabet span:hover {
+  opacity: 1;
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.brand-alphabet span.active {
+  opacity: 1;
+  background: #0070f3;
+  color: #fff;
+  border-color: #0070f3;
+}
+
+/* ======================================
+   FIX: Brand fav-icon (hindrer gigantisk SVG)
+   Gjelder brands.html
+====================================== */
+.brand-card .fav-icon {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 10px rgba(15,23,42,0.18);
+  z-index: 20;
+}
+
+.brand-card .fav-icon .heart-icon {
+  width: 17px;
+  height: 17px;
+  display: block;
+
+  stroke: #222;
+  fill: transparent;
+  stroke-width: 1.4px;
+  transition: 0.22s ease;
+}
+
+.brand-card .fav-icon.active .heart-icon {
+  fill: #ff1f3d;
+  stroke: #ff1f3d;
+}
+
+.brand-card:hover .fav-icon .heart-icon {
+  transform: scale(1.14);
+}
 
