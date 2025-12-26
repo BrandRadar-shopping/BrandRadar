@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ------------------------------------------------------
   // 🩶 Favoritt-ikonet skal ALLTID være synlig
+  // (kan fjernes senere når CSS er helt ryddet)
   // ------------------------------------------------------
   const forceHeartStyles = document.createElement("style");
   forceHeartStyles.textContent = `
@@ -32,6 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(forceHeartStyles);
 
   // ------------------------------------------------------
+  // ✅ Sync: Oppdater ALLE hjerter for samme brand i DOM
+  // Robust: bruker dataset-sammenligning (ingen CSS.escape)
+  // ------------------------------------------------------
+  function syncBrandHearts(brandKey, isActive) {
+    document.querySelectorAll(".fav-icon[data-brand]").forEach(el => {
+      if (String(el.dataset.brand || "").trim() === brandKey) {
+        el.classList.toggle("active", isActive);
+      }
+    });
+  }
+
+  // ------------------------------------------------------
   // 📡 Hent brands fra Google Sheet
   // ------------------------------------------------------
   const url = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
@@ -39,15 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch(url)
     .then(res => res.json())
     .then(rows => {
-      const brands = rows.map(r => ({
-        brand: (r.brand || "").trim(),
-        logo: (r.logo || "").trim(),
-        description: (r.description || "").trim(),
-        homepage: (r.homepage_url || "").trim() || "#",
-        about: (r.about || "").trim(),
-        highlight: (r.highlight || "").toLowerCase() === "yes",
-        categories: r.categories ? r.categories.split(",").map(c => c.trim()) : []
-      }));
+      const brands = rows
+        .map(r => ({
+          brand: (r.brand || "").trim(),
+          logo: (r.logo || "").trim(),
+          description: (r.description || "").trim(),
+          homepage: (r.homepage_url || "").trim() || "#",
+          about: (r.about || "").trim(),
+          highlight: (r.highlight || "").toLowerCase() === "yes",
+          categories: r.categories ? r.categories.split(",").map(c => c.trim()) : []
+        }))
+        .filter(b => b.brand); // dropp tomme rader
 
       // Lagre for favoritter.html
       localStorage.setItem("allBrandsData", JSON.stringify(brands));
@@ -60,9 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (searchInput) {
         searchInput.addEventListener("input", e => {
           const search = e.target.value.toLowerCase();
-          const filtered = brands.filter(b =>
-            b.brand.toLowerCase().includes(search)
-          );
+          const filtered = brands.filter(b => b.brand.toLowerCase().includes(search));
           renderBrands(filtered);
         });
       }
@@ -70,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(err => console.error("❌ FEIL ved lasting av brands:", err));
 
   // ------------------------------------------------------
-  // 🔁 Render funksjon – Nå VISER highlightede brands i BEGGE grids
+  // 🔁 Render funksjon – VISER highlightede brands i BEGGE grids
   // ------------------------------------------------------
   function renderBrands(brands) {
     highlightGrid.innerHTML = "";
@@ -79,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const favList = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
 
     brands.forEach(b => {
-      const isFav = favList.includes(b.brand);
+      const brandKey = String(b.brand || "").trim();
+      const isFav = favList.includes(brandKey);
 
       // 🧱 BYGG KORT
       const card = createBrandCard(b, isFav);
@@ -99,18 +113,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🧩 Funksjon som bygger et brand-card med events
   // ------------------------------------------------------
   function createBrandCard(b, isFav) {
+    const brandKey = String(b.brand || "").trim();
+
     const card = document.createElement("div");
     card.classList.add("brand-card");
 
     card.innerHTML = `
-      <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${b.brand}">
-        <svg class="heart-icon" viewBox="0 0 24 24">
+      <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${brandKey}">
+        <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
         </svg>
       </span>
 
-      <img src="${b.logo}" alt="${b.brand}" class="brand-logo">
-      <h3>${b.brand}</h3>
+      <img src="${b.logo}" alt="${brandKey}" class="brand-logo">
+      <h3>${brandKey}</h3>
       <p>${b.description || ""}</p>
 
       <a class="brand-btn">Se produkter →</a>
@@ -119,15 +135,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // Navigasjon
     card.querySelector(".brand-btn").addEventListener("click", e => {
       e.stopPropagation();
-      window.location.href = `brand-page.html?brand=${encodeURIComponent(b.brand)}`;
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
     });
 
-    // Favoritt-click
+    // Favoritt-click (✅ sync begge grids)
     const heart = card.querySelector(".fav-icon");
     heart.addEventListener("click", e => {
       e.stopPropagation();
-      if (window.toggleBrandFavorite) window.toggleBrandFavorite(b.brand);
-      heart.classList.toggle("active");
+
+      if (window.toggleBrandFavorite) window.toggleBrandFavorite(brandKey);
+
+      // Sannhet fra storage etter toggle
+      const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
+      const isNowFav = updatedFavs.includes(brandKey);
+
+      // ✅ Oppdater alle hjerter for samme brand
+      syncBrandHearts(brandKey, isNowFav);
+
       if (window.updateFavoriteCounter) window.updateFavoriteCounter();
     });
 
