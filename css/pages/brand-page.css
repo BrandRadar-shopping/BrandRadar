@@ -1,221 +1,6 @@
 /* ============================
-   BRAND PAGE STYLING
+   BRAND PAGE (brand-page.html)
    ============================ */
-
-.brand-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  text-align: center;
-  padding: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.brand-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.brand-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  margin-bottom: 1rem;
-}
-
-.brand-card a {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #000; /* <-- Ny farge */
-  color: #fff;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: 0.25s ease; /* smoother hover */
-}
-
-.brand-card a:hover {
-  background: #222; /* <-- Ny hover */
-  transform: translateY(-2px); /* liten løft-effekt */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-
-/* Fremhevede brands */
-.highlighted-brands {
-  background: #f7f9fc;
-  padding: 2rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.highlighted-brands .brand-card {
-  border: 2px solid #0070f3;
-  box-shadow: 0 0 15px rgba(0, 112, 243, 0.25);
-}
-
-/* ======================================================
-   ✅ Brand Alphabet Filter — cleaned & unified
-====================================================== */
-
-.brand-alphabet {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 10px auto 25px;
-  padding: 5px 0;
-  max-width: 900px;
-}
-
-.brand-alphabet span {
-  padding: 6px 10px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #111;
-  font-size: 15px;
-  font-weight: 600;
-  opacity: 0.65;
-  transition: 0.22s ease;
-}
-
-.brand-alphabet span:hover {
-  opacity: 1;
-  color: #0070f3;
-  border-color: #0070f3;
-}
-
-.brand-alphabet span.active {
-  opacity: 1;
-  background: #0070f3;
-  color: #fff;
-  border-color: #0070f3;
-}
-
-/* ======================================================
-   ✅ Minimalist knapper til brand cards
-====================================================== */
-
-.brand-btn {
-  display: inline-block;
-  padding: 8px 18px;
-  border-radius: 6px;
-  border: 1px solid #111;
-  background: transparent;
-  color: #111;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: 0.2s ease;
-}
-
-.brand-btn:hover {
-  background: #111;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.brand-btn:active {
-  transform: scale(0.96);
-}
-
-/* ======================================
-   ✅ BRAND FAVORITT-IKON — Oppdatert Final
-====================================== */
-.brand-card .fav-icon {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.brand-card .fav-icon .heart-icon {
-  stroke: #222;
-  fill: transparent;
-  stroke-width: 1.4px;
-  transition: 0.22s ease;
-}
-
-.brand-card .fav-icon.active .heart-icon {
-  fill: #ff1f3d;
-  stroke: #ff1f3d;
-}
-
-.brand-card:hover .fav-icon .heart-icon {
-  transform: scale(1.14);
-}
-
-/* ✅ Favoritt-tabs */
-.fav-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 1.8rem;
-}
-
-.tab-btn {
-  background: #eaeaea;
-  color: #333;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.tab-btn:hover {
-  background: #d5d5d5;
-}
-
-.tab-btn.active {
-  background: #111;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* ✅ Brand favorites layout */
-#favorites-brand-grid .brand-card {
-  cursor: pointer;
-  position: relative;
-  padding-top: 45px;
-}
-
-#favorites-brand-grid .brand-logo {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-  margin: 0 auto 0.7rem;
-}
-
-/* ✅ Remove tag (brand favorites) */
-.remove-brand-tag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff1f3d;
-  color: #fff;
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  z-index: 20;
-  transition: 0.2s ease;
-}
-
-.remove-brand-tag:hover {
-  background: #d81430;
-  transform: scale(1.06);
-}
 
 /* --- Brand Info Card Layout (rebalansert grid) --- */
 .brand-info-card {
@@ -303,12 +88,20 @@
 .luxury-badge-under {
   font-size: 0.9rem;
   font-weight: 700;
-  background: linear-gradient(110deg, #f5d76e 0%, #ffd700 40%, #fff4c1 70%, #f5d76e 100%);
+  background: linear-gradient(
+    110deg,
+    #f5d76e 0%,
+    #ffd700 20%,
+    #fff4c1 40%,
+    #f0c419 60%,
+    #f5d76e 80%,
+    #ffd700 100%
+  );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
-  margin-top: 0.8rem;
+  margin-top: 0.6rem;
   animation: shimmerGold 4s linear infinite;
 }
 
@@ -365,10 +158,12 @@
   max-width: 1100px;
   margin: 2rem auto;
 }
+
 .brand-filter-bar label {
   font-weight: 600;
   color: #333;
 }
+
 .brand-filter-bar select {
   padding: 0.6rem 1rem;
   font-size: 1rem;
@@ -377,66 +172,76 @@
   background: #fff;
 }
 
-/* === Luxury shimmer text === */
-.luxury-badge-under {
-  font-size: 0.9rem;
-  font-weight: 700;
-  background: linear-gradient(
-    110deg,
-    #f5d76e 0%,
-    #ffd700 20%,
-    #fff4c1 40%,
-    #f0c419 60%,
-    #f5d76e 80%,
-    #ffd700 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin-top: 0.6rem;
-  animation: shimmerGold 4s linear infinite;
+/* ✅ Favoritt-tabs (hvis du bruker tabs på brand favorites/brand page) */
+.fav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.8rem;
 }
 
-@keyframes shimmerGold {
-  0% { background-position: 0% center; }
-  100% { background-position: -200% center; }
+.tab-btn {
+  background: #eaeaea;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* ======================================
-   FIX: Brand fav-icon (hindrer gigantisk SVG)
-   Gjelder brands.html + favoritt-brands
-====================================== */
+.tab-btn:hover {
+  background: #d5d5d5;
+}
 
-/* Sørg for at kortet er referanse for absolute pos */
-.brand-card {
+.tab-btn.active {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ✅ Brand favorites layout */
+#favorites-brand-grid .brand-card {
+  cursor: pointer;
   position: relative;
+  padding-top: 45px;
 }
 
-/* Selve hjertets container (liten, sticky i hjørnet) */
-.brand-card .fav-icon {
+#favorites-brand-grid .brand-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin: 0 auto 0.7rem;
+}
+
+/* ✅ Remove tag (brand favorites) */
+.remove-brand-tag {
   position: absolute;
   top: 10px;
   right: 10px;
-
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.18);
-  z-index: 5;
+  background: #ff1f3d;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 20;
+  transition: 0.2s ease;
 }
 
-/* Lås SVG-størrelsen så den aldri kan “eksplodere” */
-.brand-card .fav-icon .heart-icon {
-  width: 17px;
-  height: 17px;
-  display: block;
+.remove-brand-tag:hover {
+  background: #d81430;
+  transform: scale(1.06);
 }
 
 
