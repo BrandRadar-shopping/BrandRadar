@@ -1,14 +1,14 @@
 // ======================================================
 // 📰 BrandRadar – News page (MASTER-driven, Elite v8)
 //  - Partner banner
-//  - Ukens Deals (grid, eget ark)
-//  - Radar Picks (slider med dots + auto)
-//  - Ukens Spotlight (slider med piler + dots + auto)
+//  - Ukens Deals (slider m/piler-only)
+//  - Radar Picks (slider m/piler-only)
+//  - Ukens Spotlight (slider m/piler-only)
 //  - Nye Produkter & Trender (grid)
 // ======================================================
 
 (function () {
-  console.log("✅ news.js (master-driven v3) loaded");
+  console.log("✅ news.js (piler-only sliders) loaded");
 
   // ---------- SHEET-KONFIG ----------
   const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
@@ -39,17 +39,13 @@
     window.cleanRating ||
     function (value) {
       if (!value) return null;
-      const n = parseFloat(
-        value.toString().replace(",", ".").replace(/[^0-9.\-]/g, "")
-      );
+      const n = parseFloat(value.toString().replace(",", ".").replace(/[^0-9.\-]/g, ""));
       return Number.isFinite(n) ? n : null;
     };
 
   function parseNum(v) {
     if (v == null || v === "") return null;
-    const n = Number(
-      String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", ".")
-    );
+    const n = Number(String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", "."));
     return Number.isFinite(n) ? n : null;
   }
 
@@ -76,16 +72,8 @@
 
     const base = {
       id: String(masterRow.id || "").trim(),
-      title:
-        masterRow.title ||
-        masterRow.product_name ||
-        masterRow.name ||
-        "",
-      product_name:
-        masterRow.title ||
-        masterRow.product_name ||
-        masterRow.name ||
-        "",
+      title: masterRow.title || masterRow.product_name || masterRow.name || "",
+      product_name: masterRow.title || masterRow.product_name || masterRow.name || "",
       brand: masterRow.brand || "",
       price: masterRow.price || "",
       discount: masterRow.discount || "",
@@ -104,14 +92,9 @@
     return base;
   }
 
-  // ---------- ELITE V8 KORT ----------
+  // ---------- ELITE-KORT ----------
   function buildEliteCard(prod, options = {}) {
-    const {
-      showExcerpt = false,
-      excerpt = "",
-      tag = "",
-      extraClasses = ""
-    } = options;
+    const { showExcerpt = false, excerpt = "", tag = "", extraClasses = "" } = options;
 
     const pid =
       typeof window.resolveProductId === "function"
@@ -138,9 +121,7 @@
     }
 
     const isFav =
-      typeof window.isProductFavorite === "function" && pid
-        ? window.isProductFavorite(pid)
-        : false;
+      typeof window.isProductFavorite === "function" && pid ? window.isProductFavorite(pid) : false;
 
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
@@ -164,34 +145,16 @@
         <p class="brand">${prod.brand || ""}</p>
         <h3 class="product-name">${prod.title || ""}</h3>
 
-        ${
-          showExcerpt && excerpt
-            ? `<p class="tagline">${excerpt}</p>`
-            : ""
-        }
-        ${
-          tag
-            ? `<p class="product-tag">${tag}</p>`
-            : ""
-        }
+        ${showExcerpt && excerpt ? `<p class="tagline">${excerpt}</p>` : ""}
+        ${tag ? `<p class="product-tag">${tag}</p>` : ""}
 
         <p class="rating">
-          ${
-            ratingValue
-              ? `⭐ ${ratingValue.toFixed(1)}`
-              : `<span style="color:#ccc;">–</span>`
-          }
+          ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
         </p>
 
         <div class="price-line">
-          <span class="new-price">
-            ${newPriceNum != null ? formatPrice(newPriceNum) : ""}
-          </span>
-          ${
-            oldPriceNum != null
-              ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>`
-              : ""
-          }
+          <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
+          ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
         </div>
       </div>
     `;
@@ -215,164 +178,49 @@
     return card;
   }
 
-  // ---------- GENERELL SLIDER-LOGIKK (auto + dots + piler) ----------
-  function initSlider(trackEl, options = {}) {
-    const {
-      sectionEl,          // parent section (for controls)
-      showArrows = false, // Spotlight: true, Picks: false
-      auto = false,       // begge: true
-      intervalMs = 5000
-    } = options;
+  // ======================================================
+  // ✅ Piler-only slider helper (samme stil som related)
+  // ======================================================
+  function ensureArrowSlider(sectionEl, trackEl, scrollAmount = 340) {
+    if (!sectionEl || !trackEl) return;
 
-    if (!trackEl || !sectionEl) return;
+    // marker track for CSS ([data-slider])
+    trackEl.setAttribute("data-slider", "true");
 
-    const cards = Array.from(trackEl.querySelectorAll(".product-card"));
-    if (cards.length <= 1) {
-      // Ingen slider hvis bare ett kort
-      return;
+    // wrap track i slider-wrapper hvis ikke allerede
+    let wrapper = trackEl.closest(".slider-wrapper");
+    if (!wrapper) {
+      wrapper = document.createElement("div");
+      wrapper.className = "slider-wrapper";
+      trackEl.parentNode.insertBefore(wrapper, trackEl);
+      wrapper.appendChild(trackEl);
     }
 
-    trackEl.classList.add("slider-row");
+    // unngå duplikate knapper
+    if (wrapper.querySelector(".slider-btn.prev") || wrapper.querySelector(".slider-btn.next")) return;
 
-    // Controls container
-    const controls = document.createElement("div");
-    controls.className = "slider-controls";
+    const prev = document.createElement("button");
+    prev.type = "button";
+    prev.className = "slider-btn prev";
+    prev.setAttribute("aria-label", "Forrige");
+    prev.textContent = "❮";
 
-    let arrowPrev = null;
-    let arrowNext = null;
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "slider-btn next";
+    next.setAttribute("aria-label", "Neste");
+    next.textContent = "❯";
 
-    if (showArrows) {
-      arrowPrev = document.createElement("button");
-      arrowPrev.className = "slider-arrow prev";
-      arrowPrev.type = "button";
-      arrowPrev.innerHTML = "‹";
-
-      arrowNext = document.createElement("button");
-      arrowNext.className = "slider-arrow next";
-      arrowNext.type = "button";
-      arrowNext.innerHTML = "›";
-
-      controls.appendChild(arrowPrev);
-    }
-
-    const dotsWrap = document.createElement("div");
-    dotsWrap.className = "slider-dots";
-    const dots = cards.map((_, idx) => {
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.className = "slider-dot";
-      if (idx === 0) dot.classList.add("active");
-      dotsWrap.appendChild(dot);
-      return dot;
-    });
-    controls.appendChild(dotsWrap);
-
-    if (showArrows && arrowNext) {
-      controls.appendChild(arrowNext);
-    }
-
-    sectionEl.appendChild(controls);
-
-    let currentIndex = 0;
-    let autoTimer = null;
-    let isManual = false;
-
-    function goTo(index, behavior = "smooth") {
-      const clamped = Math.min(Math.max(index, 0), cards.length - 1);
-      currentIndex = clamped;
-      const targetCard = cards[clamped];
-      const offset = targetCard.offsetLeft;
-
-      trackEl.scrollTo({
-        left: offset,
-        behavior
-      });
-
-      dots.forEach((d, i) => {
-        d.classList.toggle("active", i === clamped);
-      });
-    }
-
-    function resetAuto() {
-      if (!auto) return;
-      if (autoTimer) clearInterval(autoTimer);
-      autoTimer = setInterval(() => {
-        if (isManual) return;
-        const nextIndex = (currentIndex + 1) % cards.length;
-        goTo(nextIndex);
-      }, intervalMs);
-    }
-
-    // Dots klikking
-    dots.forEach((dot, idx) => {
-      dot.addEventListener("click", () => {
-        isManual = true;
-        goTo(idx);
-        setTimeout(() => {
-          isManual = false;
-        }, intervalMs * 1.2);
-        resetAuto();
-      });
+    prev.addEventListener("click", () => {
+      trackEl.scrollBy({ left: -scrollAmount, behavior: "smooth" });
     });
 
-    // Arrows
-    if (showArrows && arrowPrev && arrowNext) {
-      arrowPrev.addEventListener("click", () => {
-        isManual = true;
-        goTo(currentIndex - 1);
-        setTimeout(() => {
-          isManual = false;
-        }, intervalMs * 1.2);
-        resetAuto();
-      });
-
-      arrowNext.addEventListener("click", () => {
-        isManual = true;
-        goTo(currentIndex + 1);
-        setTimeout(() => {
-          isManual = false;
-        }, intervalMs * 1.2);
-        resetAuto();
-      });
-    }
-
-    // Manuell scroll/drag → oppdater aktiv dot
-    let scrollTimeout;
-    trackEl.addEventListener("scroll", () => {
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        const scrollLeft = trackEl.scrollLeft;
-        let closestIndex = 0;
-        let closestDist = Infinity;
-        cards.forEach((card, idx) => {
-          const dist = Math.abs(card.offsetLeft - scrollLeft);
-          if (dist < closestDist) {
-            closestDist = dist;
-            closestIndex = idx;
-          }
-        });
-        currentIndex = closestIndex;
-        dots.forEach((d, i) => {
-          d.classList.toggle("active", i === closestIndex);
-        });
-      }, 100);
+    next.addEventListener("click", () => {
+      trackEl.scrollBy({ left: scrollAmount, behavior: "smooth" });
     });
 
-    // Pause/restart auto på hover/touch
-    ["mouseenter", "touchstart"].forEach(evt => {
-      trackEl.addEventListener(evt, () => {
-        isManual = true;
-      });
-    });
-    ["mouseleave", "touchend", "touchcancel"].forEach(evt => {
-      trackEl.addEventListener(evt, () => {
-        setTimeout(() => {
-          isManual = false;
-        }, intervalMs * 1.2);
-      });
-    });
-
-    resetAuto();
+    wrapper.appendChild(prev);
+    wrapper.appendChild(next);
   }
 
   // ======================================================
@@ -416,7 +264,7 @@
   }
 
   // ======================================================
-  // 2) UKENS DEALS (GRID)
+  // 2) UKENS DEALS (piler-only slider)
   // ======================================================
   async function loadDeals() {
     if (!dealsGridEl) return;
@@ -438,7 +286,6 @@
 
         const prod = {
           id: d.id || d.product_id || `deal_${index}`,
-          product_name: d.product_name || "",
           title: d.product_name || "",
           brand: d.brand || "",
           price: newPrice != null ? newPrice : oldPrice,
@@ -481,23 +328,19 @@
             <p class="brand">${prod.brand}</p>
             <h3 class="product-name">${prod.title}</h3>
             <div class="price-line">
-              <span class="new-price">
-                ${newPrice != null ? formatPrice(newPrice) : ""}
-              </span>
-              ${
-                oldPrice != null
-                  ? `<span class="old-price">${formatPrice(oldPrice)}</span>`
-                  : ""
-              }
+              <span class="new-price">${newPrice != null ? formatPrice(newPrice) : ""}</span>
+              ${oldPrice != null ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ""}
             </div>
           </div>
         `;
 
+        // Click → ekstern link
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
         });
 
+        // Fav click
         const favEl = card.querySelector(".fav-icon");
         favEl.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -508,6 +351,9 @@
 
         dealsGridEl.appendChild(card);
       });
+
+      const dealsSection = document.getElementById("deals-section");
+      ensureArrowSlider(dealsSection, dealsGridEl, 340);
     } catch (err) {
       console.error("❌ Deals error:", err);
       dealsGridEl.textContent = "Kunne ikke laste deals.";
@@ -515,7 +361,7 @@
   }
 
   // ======================================================
-  // 3) RADAR PICKS (SLIDER + DOTS)
+  // 3) RADAR PICKS (piler-only slider)
   // ======================================================
   async function loadPicks() {
     if (!picksGridEl) return;
@@ -532,7 +378,6 @@
       rows.forEach((p, index) => {
         const prod = {
           id: p.id || p.product_id || `pick_${index}`,
-          product_name: p.product_name || "",
           title: p.product_name || "",
           brand: p.brand || "",
           price: p.price || "",
@@ -555,7 +400,7 @@
           extraClasses: "pick-card"
         });
 
-        // Override kort-klikk → eksternt produkt
+        // Override → ekstern link
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
@@ -565,13 +410,7 @@
       });
 
       const picksSection = document.getElementById("picks-section");
-      initSlider(picksGridEl, {
-        sectionEl: picksSection,
-        showArrows: false,
-        auto: true,
-        intervalMs: 5000
-      });
-
+      ensureArrowSlider(picksSection, picksGridEl, 340);
     } catch (err) {
       console.error("❌ Picks error:", err);
       picksGridEl.textContent = "Kunne ikke laste picks.";
@@ -580,7 +419,7 @@
 
   // ======================================================
   // 4) SPOTLIGHT + NEWS FEED (MASTER + NEWS-ark)
-//      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
+  //      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
   // ======================================================
   async function loadNewsSections() {
     if (!spotlightWrapper && !newsGridEl) return;
@@ -597,9 +436,7 @@
         const id = String(row.id || "").trim();
         if (!id) return;
 
-        const master = masterRows.find(
-          (p) => String(p.id || "").trim() === id
-        );
+        const master = masterRows.find((p) => String(p.id || "").trim() === id);
         if (!master) return;
 
         const base = createProductBaseFromMaster(master);
@@ -620,7 +457,7 @@
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
 
-      // ----- Spotlight (slider: piler + dots) -----
+      // ----- Spotlight (piler-only slider) -----
       if (spotlightWrapper) {
         spotlightWrapper.classList.remove("loading");
         spotlightWrapper.innerHTML = "";
@@ -639,12 +476,7 @@
           });
 
           const spotlightSection = document.getElementById("featured-news");
-          initSlider(spotlightWrapper, {
-            sectionEl: spotlightSection,
-            showArrows: true,
-            auto: true,
-            intervalMs: 5000
-          });
+          ensureArrowSlider(spotlightSection, spotlightWrapper, 420);
         }
       }
 
@@ -670,12 +502,8 @@
       }
     } catch (err) {
       console.error("❌ News sections error:", err);
-      if (spotlightWrapper) {
-        spotlightWrapper.textContent = "Kunne ikke laste spotlight.";
-      }
-      if (newsGridEl) {
-        newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
-      }
+      if (spotlightWrapper) spotlightWrapper.textContent = "Kunne ikke laste spotlight.";
+      if (newsGridEl) newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
     }
   }
 
@@ -689,6 +517,7 @@
     loadNewsSections();
   });
 })();
+
 
 
 
