@@ -1,5 +1,7 @@
 /* ==========================================
-   BRANDRADAR – NEWS PAGE (layout)
+   BRANDRADAR – NEWS PAGE (FIXED)
+   - Deals/Picks/Spotlight = 1 rad slider + piler
+   - News feed = grid (ikke slider)
 ========================================== */
 
 .news-page {
@@ -13,144 +15,126 @@
   border-bottom: 1px solid #eee;
 }
 
-/* ------------------------------------------
-   1) PARTNER BANNER (matcher news.js markup)
------------------------------------------- */
-
-.partner-banner {
-  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
-  border-radius: 24px;
-  padding: 2.5rem;
-  margin: 2rem 0 4rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+/* ==========================================
+   Slider wrapper + piler (som product related)
+========================================== */
+.news-page .slider-wrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden; /* viktig: hindrer 2 rader/rare hopp */
 }
 
-.partner-banner-inner {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2rem;
-  align-items: center;
-}
-
-.partner-banner-text .partner-tag {
-  display: inline-block;
-  font-weight: 700;
-  color: #0070f3;
-  margin-bottom: 0.6rem;
-}
-
-.partner-banner-text h2 {
-  margin: 0 0 0.6rem;
-  font-size: 1.8rem;
-}
-
-.partner-banner-text .partner-sub {
-  color: #444;
-  line-height: 1.55;
-  margin-bottom: 1rem;
-}
-
-.partner-cta {
-  display: inline-block;
-  background: #0070f3;
-  color: #fff;
-  text-decoration: none;
-  padding: 0.8rem 1.4rem;
-  border-radius: 10px;
-  font-weight: 600;
-  transition: .2s;
-}
-
-.partner-cta:hover {
-  background: #005ac1;
-}
-
-.partner-banner-image img {
-  width: 100%;
-  max-width: 380px;
-  border-radius: 20px;
-  object-fit: cover;
-  display: block;
-  margin-left: auto;
-}
-
-@media (max-width: 900px) {
-  .partner-banner-inner {
-    grid-template-columns: 1fr;
-  }
-  .partner-banner-image img {
-    margin: 0;
-    max-width: 100%;
-  }
-}
-
-/* ------------------------------------------
-   2) DEALS GRID
------------------------------------------- */
-
-.deals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
-}
-
-/* ------------------------------------------
-   3) PICKS (JS gjør den om til slider-row)
-   - Når ikke slider aktiv: vis som grid
------------------------------------------- */
-
-.picks-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
-}
-
-/* Når JS aktiverer slider */
-.picks-grid.slider-row {
-  display: flex; /* slider.css tar resten, men dette sikrer override */
-}
-
-/* ------------------------------------------
-   4) SPOTLIGHT wrapper
-   - JS fyller .featured-wrapper og initSlider()
------------------------------------------- */
-
-.featured-wrapper {
+.news-page .slider-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid #111;
+  background: #fff;
+  font-size: 22px;
+  color: #111;
+  cursor: pointer;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: 0.2s ease;
+}
+
+.news-page .slider-btn:hover {
+  transform: translateY(-50%) scale(1.06);
+  background: #f5f5f5;
+}
+
+.news-page .slider-btn.prev { left: -16px; }
+.news-page .slider-btn.next { right: -16px; }
+
+/* Mobil: piler av (swipe) */
+@media (max-width: 768px) {
+  .news-page .slider-btn { display: none; }
+}
+
+/* ==========================================
+   1 RAD TRACKS (Deals / Picks / Spotlight)
+========================================== */
+.news-page .deals-grid,
+.news-page .picks-grid,
+.news-page .featured-wrapper {
+  display: flex;
+  flex-wrap: nowrap;         /* ← stopper 2 rader */
   gap: 18px;
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 10px 0 20px;
-  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
 
-.featured-wrapper::-webkit-scrollbar {
+.news-page .deals-grid::-webkit-scrollbar,
+.news-page .picks-grid::-webkit-scrollbar,
+.news-page .featured-wrapper::-webkit-scrollbar {
   display: none;
 }
 
-.featured-wrapper .featured-card {
-  flex: 0 0 520px;
-  min-width: 520px;
-  scroll-snap-align: start;
+/* Fast kortbredde i disse sliderne */
+.news-page .deals-grid .product-card,
+.news-page .picks-grid .product-card {
+  flex: 0 0 280px;
+  min-width: 280px;
+  max-width: 280px;
 }
 
-@media (max-width: 900px) {
-  .featured-wrapper .featured-card {
-    flex: 0 0 360px;
-    min-width: 360px;
+/* Spotlight skal føles “spotlight” (større kort) */
+.news-page .featured-wrapper .product-card.featured-large {
+  flex: 0 0 520px;
+  min-width: 520px;
+  max-width: 520px;
+}
+
+@media (max-width: 768px) {
+  .news-page .deals-grid .product-card,
+  .news-page .picks-grid .product-card {
+    flex: 0 0 240px;
+    min-width: 240px;
+    max-width: 240px;
+  }
+
+  .news-page .featured-wrapper .product-card.featured-large {
+    flex: 0 0 320px;
+    min-width: 320px;
+    max-width: 320px;
   }
 }
 
-/* ------------------------------------------
-   5) NEWS FEED GRID (DETTE VAR HOVEDFEILEN)
------------------------------------------- */
+/* Spotlight-bilde litt høyere for premium feeling */
+.news-page .featured-wrapper .product-card.featured-large img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
 
-.news-grid {
+/* ==========================================
+   NEWS FEED = GRID (hindrer gigant-bilde)
+========================================== */
+.news-page .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 18px;
   align-items: start;
+}
+
+/* Sikrer at kort ikke strekker seg rart */
+.news-page .news-grid .product-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Hindrer “gigantisk bilde” – låser bildeformat */
+.news-page .news-grid .product-card img {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
 }
 
 
