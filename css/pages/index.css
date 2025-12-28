@@ -1,3 +1,72 @@
+/* ==========================================================
+   INDEX – LAYOUT FIX (hindrer venstre-stuck innhold)
+   Trygg: gjelder kun hovedinnhold på index
+========================================================== */
+
+/* Hvis du har <main> på andre sider, påvirker dette ikke dem
+   fordi dette ligger i index.css (kun lastet på index). */
+body {
+  overflow-x: hidden;
+}
+
+/* Sentrer “innholdet” under header på index */
+.hero-slider,
+.hero,
+#partner-banner-section,
+.intro,
+.universes,
+.trending-section,
+.top-brands,
+.giveaway,
+.featured-products,
+.footer-cta {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+
+/* ==========================================================
+   INDEX – PARTNER BANNER FIX (matcher HTML-en din)
+========================================================== */
+
+#partner-banner-section.partner-banner {
+  /* behold din styling ellers, men sikre riktig plassering */
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Dette er wrapperen du faktisk bruker i index.html */
+#partner-banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  /* hindrer at ting “klasker” til venstre */
+  box-sizing: border-box;
+}
+
+/* Logo / bilde */
+#partner-banner-img {
+  max-width: 520px;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Tekstblokk */
+#partner-banner-content .partner-text {
+  flex: 1;
+  min-width: 240px;
+}
+
+
 /* Horisontale rader for Spotlight og Picks */
 .slider-row {
   display: flex;
