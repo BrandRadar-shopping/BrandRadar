@@ -56,40 +56,43 @@
 <section id="deals-section" class="section-padding">
   <h2>Ukens Deals 🔥</h2>
 
-  <div class="slider-wrapper">
-    <button type="button" class="slider-btn prev" data-target="deals" aria-label="Forrige">❮</button>
+  <div class="slider-wrapper" data-slider="deals">
+    <button type="button" class="slider-btn prev" aria-label="Forrige deals">❮</button>
 
-    <div class="deals-grid loading" data-slider="deals">Laster deals...</div>
+    <div class="deals-grid loading" id="deals-track">Laster deals...</div>
 
-    <button type="button" class="slider-btn next" data-target="deals" aria-label="Neste">❯</button>
+    <button type="button" class="slider-btn next" aria-label="Neste deals">❯</button>
   </div>
 </section>
+
 
 <!-- 🛰️ 3. Radar Picks -->
 <section id="picks-section" class="section-padding">
   <h2>Radar Picks 🛰️</h2>
 
-  <div class="slider-wrapper">
-    <button type="button" class="slider-btn prev" data-target="picks" aria-label="Forrige">❮</button>
+  <div class="slider-wrapper" data-slider="picks">
+    <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
 
-    <div class="picks-grid loading" data-slider="picks">Laster picks...</div>
+    <div class="picks-grid loading" id="picks-track">Laster picks...</div>
 
-    <button type="button" class="slider-btn next" data-target="picks" aria-label="Neste">❯</button>
+    <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
   </div>
 </section>
+
 
 <!-- ✨ 4. Ukens Spotlight -->
 <section id="featured-news" class="section-padding">
   <h2>Ukens Spotlight ✨</h2>
 
-  <div class="slider-wrapper">
-    <button type="button" class="slider-btn prev" data-target="spotlight" aria-label="Forrige">❮</button>
+  <div class="slider-wrapper" data-slider="spotlight">
+    <button type="button" class="slider-btn prev" aria-label="Forrige spotlight">❮</button>
 
-    <div class="featured-wrapper loading" data-slider="spotlight">Laster spotlight...</div>
+    <div class="featured-wrapper loading" id="spotlight-track">Laster spotlight...</div>
 
-    <button type="button" class="slider-btn next" data-target="spotlight" aria-label="Neste">❯</button>
+    <button type="button" class="slider-btn next" aria-label="Neste spotlight">❯</button>
   </div>
 </section>
+
 
     <!-- 🆕 5. Nye Produkter / Trender -->
     <section id="news-feed" class="section-padding">
