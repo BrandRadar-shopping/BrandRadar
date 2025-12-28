@@ -1,16 +1,18 @@
 /* ==========================================================
-   INDEX – LAYOUT FIX (hindrer venstre-stuck innhold)
-   Trygg: gjelder kun hovedinnhold på index
+   INDEX — PAGE LAYOUT (Trygt + stabilt)
+   - IKKE slider-styling her (den ligger i css/components/sliders.css)
+   - Fokus: container/sentrering + partner banner + featured grid
 ========================================================== */
 
-/* Hvis du har <main> på andre sider, påvirker dette ikke dem
-   fordi dette ligger i index.css (kun lastet på index). */
 body {
   overflow-x: hidden;
 }
 
-/* Sentrer “innholdet” under header på index */
-.hero-slider,
+/* ----------------------------------------------------------
+   1) “Container” for innhold på index
+   (NB: hero-slider er ofte fullbredde – vi wrapper kontrollert)
+---------------------------------------------------------- */
+
 .hero,
 #partner-banner-section,
 .intro,
@@ -27,223 +29,144 @@ body {
   padding-right: 1rem;
 }
 
-
-/* ==========================================================
-   INDEX – PARTNER BANNER FIX (matcher HTML-en din)
-========================================================== */
-
-#partner-banner-section.partner-banner {
-  /* behold din styling ellers, men sikre riktig plassering */
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+/* Hero-slider: la den være fullbredde, men sentrer innholdet hvis den trenger */
+.hero-slider {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Dette er wrapperen du faktisk bruker i index.html */
-#partner-banner-content {
+/* ----------------------------------------------------------
+   2) PARTNER BANNER (Index – matcher din HTML)
+   HTML:
+   <section id="partner-banner-section" class="partner-banner">
+     <div id="partner-banner-content">
+       <img id="partner-banner-img" />
+       <div class="partner-text">...</div>
+     </div>
+   </section>
+---------------------------------------------------------- */
+
+#partner-banner-section.partner-banner {
   max-width: 1200px;
+  margin: 2rem auto 3rem;
+  padding: 2.25rem 1.25rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* Wrapperen din i index.html */
+#partner-banner-content {
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-
-  /* hindrer at ting “klasker” til venstre */
   box-sizing: border-box;
 }
 
-/* Logo / bilde */
+/* Bilde: aldri gigantisk, alltid “contain” */
 #partner-banner-img {
-  max-width: 520px;
-  width: 100%;
+  width: min(420px, 100%);
+  max-width: 420px;
   height: auto;
   display: block;
   object-fit: contain;
+  border-radius: 18px;
 }
 
-/* Tekstblokk */
+/* Tekst */
 #partner-banner-content .partner-text {
   flex: 1;
-  min-width: 240px;
-}
-
-
-/* Horisontale rader for Spotlight og Picks */
-.slider-row {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  scrollbar-width: thin;
-}
-
-.slider-row .product-card {
-  flex: 0 0 auto;
   min-width: 260px;
 }
 
-/* Litt ekstra så kortene ikke blir for smale på mobil */
-@media (max-width: 600px) {
-  .slider-row .product-card {
-    min-width: 220px;
+#partner-banner-content .partner-text h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  color: #0f172a;
+}
+
+#partner-banner-content .partner-text p {
+  margin: 0 0 0.9rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+/* Mobil: stack */
+@media (max-width: 900px) {
+  #partner-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #partner-banner-img {
+    width: 100%;
+    max-width: 520px;
   }
 }
 
+/* ----------------------------------------------------------
+   3) INTRO (sikrer fin grid og riktig plassering)
+---------------------------------------------------------- */
 
-/* Slider-kontroller (dots + piler) */
-.slider-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
+.intro {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 
-.slider-arrow {
-  border: none;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  cursor: pointer;
-  font-size: 1.2rem;
-  background: #f3f4f6;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.slider-arrow:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+@media (max-width: 900px) {
+  .intro-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.slider-dots {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+/* ----------------------------------------------------------
+   4) FEATURED GRID (Ukens Radar Picks)
+   Viktig: IKKE bruk all: unset; — det ødelegger global cards.css
+---------------------------------------------------------- */
+
+.featured-products {
+  padding-top: 2.5rem;
+  padding-bottom: 3.5rem;
 }
 
-.slider-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  border: none;
-  background: #d4d4d8;
-  cursor: pointer;
-  padding: 0;
-  transition: width 0.15s ease, background 0.15s ease;
-}
-
-.slider-dot.active {
-  width: 18px;
-  background: #111827;
-}
-
-
-/* ==========================================================
-   FEATURED GRID — NY PREMIUM GRID LAYOUT
-   ========================================================== */
 #featured-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 32px;
-  justify-items: center;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 28px;
+  margin-top: 24px;
+  align-items: stretch;
 }
 
-/* ==========================================================
-   INDEX — PRODUKTKORT PREMIUM (match category/brands)
-   ========================================================== */
+/* La global .product-card styre kortet,
+   men gi en liten “premium touch” uten å kødde */
 #featured-grid .product-card {
-  all: unset;
-  display: flex;
-  flex-direction: column;
-  width: 290px;
-  min-width: 290px;
-  max-width: 290px;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: 0.25s ease;
-  position: relative;
+  height: 100%;
 }
 
-#featured-grid .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-/* Bilde */
 #featured-grid .product-card img {
-  width: 100%;
+  /* global cards.css bruker aspect-ratio 4/5 — det er bra
+     men hvis du vil litt mer “index feeling”, kan du bruke 1/1.1 */
   aspect-ratio: 1 / 1.1;
-  object-fit: cover;
-  display: block;
-  background: #f7f7f7;
-  border-radius: 14px 14px 0 0;
-  transition: transform 0.3s ease;
 }
 
-#featured-grid .product-card:hover img {
-  transform: scale(1.05);
+/* Litt tighter på små skjermer */
+@media (max-width: 600px) {
+  #featured-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+  }
 }
 
-/* Info */
-#featured-grid .product-info {
-  padding: 1rem 1rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-#featured-grid .product-info .brand {
-  font-size: 0.85rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-#featured-grid .product-info h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111;
-  min-height: 2.5em;
-  line-height: 1.35;
-}
-
-/* Pris */
-#featured-grid .price {
-  color: #111 !important;
-  font-weight: 600;
-  font-size: 1.15rem;
-}
-
-/* Favoritt-ikon */
-#featured-grid .fav-icon {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-#featured-grid .heart-icon {
-  width: 24px;
-  height: 24px;
-  stroke: #222;
-  fill: transparent;
-  stroke-width: 1.6px;
-  transition: 0.25s ease;
-}
-
-#featured-grid .fav-icon.active .heart-icon {
-  fill: #ff2953;
-  stroke: #ff2953;
-}
 
 
 
