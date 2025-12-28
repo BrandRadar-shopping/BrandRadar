@@ -137,4 +137,108 @@
   object-fit: cover;
 }
 
+/* ==========================================
+   Partner banner (FIX) – news.html
+   Matcher markup fra news.js:
+   .partner-banner-inner / -text / -image / .partner-cta
+========================================== */
+
+.news-page .partner-banner {
+  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
+  border-radius: 24px;
+  padding: 2.2rem;
+  margin: 1.5rem 0 3rem;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.news-page .partner-banner-inner {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  align-items: center;
+}
+
+.news-page .partner-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.news-page .partner-tag {
+  display: inline-flex;
+  width: fit-content;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #e0ebff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin: 0;
+}
+
+.news-page .partner-banner-text h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.news-page .partner-sub {
+  margin: 0;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.news-page .partner-cta {
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  background: #0070f3;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.news-page .partner-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+}
+
+.news-page .partner-banner-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news-page .partner-banner-image img {
+  width: 100%;
+  max-width: 380px;
+  height: 220px;          /* <- dette hindrer gigantisk logo */
+  object-fit: contain;    /* logo ser ren ut */
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
+}
+
+/* Mobil */
+@media (max-width: 900px) {
+  .news-page .partner-banner-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .news-page .partner-banner-image img {
+    max-width: 100%;
+    height: 200px;
+  }
+
+  .news-page .partner-banner-text h2 {
+    font-size: 1.6rem;
+  }
+}
 
