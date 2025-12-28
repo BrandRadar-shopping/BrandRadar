@@ -1,14 +1,14 @@
 // ======================================================
-// 📰 BrandRadar – News page (MASTER-driven, Elite v8)
+// 📰 BrandRadar – News page (MASTER-driven, Elite cards)
 //  - Partner banner
-//  - Ukens Deals (slider m/piler-only)
-//  - Radar Picks (slider m/piler-only)
-//  - Ukens Spotlight (slider m/piler-only)
+//  - Ukens Deals (1 rad slider + piler)
+//  - Radar Picks (1 rad slider + piler)
+//  - Ukens Spotlight (stor slider + piler)
 //  - Nye Produkter & Trender (grid)
 // ======================================================
 
 (function () {
-  console.log("✅ news.js (piler-only sliders) loaded");
+  console.log("✅ news.js loaded");
 
   // ---------- SHEET-KONFIG ----------
   const NEWS_SHEET_ID = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
@@ -28,18 +28,20 @@
 
   // ---------- DOM ----------
   const partnerBannerEl = document.querySelector(".partner-banner");
-  const dealsGridEl = document.querySelector(".deals-grid");
-  const picksGridEl = document.querySelector(".picks-grid");
-  const spotlightWrapper = document.querySelector("#featured-news .featured-wrapper");
+
+  const dealsTrack = document.getElementById("deals-track") || document.querySelector(".deals-grid");
+  const picksTrack = document.getElementById("picks-track") || document.querySelector(".picks-grid");
+  const spotlightTrack = document.getElementById("spotlight-track") || document.querySelector("#featured-news .featured-wrapper");
   const newsGridEl = document.querySelector("#news-grid");
 
   // ---------- HELPERS ----------
   const nb = new Intl.NumberFormat("nb-NO");
+
   const cleanRatingFn =
     window.cleanRating ||
     function (value) {
       if (!value) return null;
-      const n = parseFloat(value.toString().replace(",", ".").replace(/[^0-9.\-]/g, ""));
+      const n = parseFloat(String(value).replace(",", ".").replace(/[^0-9.\-]/g, ""));
       return Number.isFinite(n) ? n : null;
     };
 
@@ -73,7 +75,6 @@
     const base = {
       id: String(masterRow.id || "").trim(),
       title: masterRow.title || masterRow.product_name || masterRow.name || "",
-      product_name: masterRow.title || masterRow.product_name || masterRow.name || "",
       brand: masterRow.brand || "",
       price: masterRow.price || "",
       discount: masterRow.discount || "",
@@ -82,17 +83,16 @@
       category: masterRow.category || masterRow.main_category || "",
       rating: masterRow.rating || "",
       luxury: false,
-      sheet_source: masterRow.sheet_source || "master"
+      sheet_source: masterRow.sheet_source || "master",
     };
 
     if (typeof window.resolveProductId === "function") {
       base.id = window.resolveProductId(base);
     }
-
     return base;
   }
 
-  // ---------- ELITE-KORT ----------
+  // ---------- ELITE CARD ----------
   function buildEliteCard(prod, options = {}) {
     const { showExcerpt = false, excerpt = "", tag = "", extraClasses = "" } = options;
 
@@ -121,7 +121,9 @@
     }
 
     const isFav =
-      typeof window.isProductFavorite === "function" && pid ? window.isProductFavorite(pid) : false;
+      typeof window.isProductFavorite === "function" && pid
+        ? window.isProductFavorite(pid)
+        : false;
 
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
@@ -159,14 +161,13 @@
       </div>
     `;
 
-    // Kort-klikk → product.html
+    // default: product.html
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-icon")) return;
       if (!pid) return;
       window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
     });
 
-    // Favoritt-klikk
     const favEl = card.querySelector(".fav-icon");
     favEl.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -178,49 +179,47 @@
     return card;
   }
 
-  // ======================================================
-  // ✅ Piler-only slider helper (samme stil som related)
-  // ======================================================
-  function ensureArrowSlider(sectionEl, trackEl, scrollAmount = 340) {
-    if (!sectionEl || !trackEl) return;
+  // ---------- ARROW SLIDER (som related) ----------
+  function initArrowSlider(trackEl) {
+    if (!trackEl) return;
 
-    // marker track for CSS ([data-slider])
-    trackEl.setAttribute("data-slider", "true");
+    const wrapper = trackEl.closest(".slider-wrapper");
+    if (!wrapper) return;
 
-    // wrap track i slider-wrapper hvis ikke allerede
-    let wrapper = trackEl.closest(".slider-wrapper");
-    if (!wrapper) {
-      wrapper = document.createElement("div");
-      wrapper.className = "slider-wrapper";
-      trackEl.parentNode.insertBefore(wrapper, trackEl);
-      wrapper.appendChild(trackEl);
+    const btnPrev = wrapper.querySelector(".slider-btn.prev");
+    const btnNext = wrapper.querySelector(".slider-btn.next");
+
+    function getStep() {
+      const first = trackEl.querySelector(".product-card");
+      if (!first) return 320;
+      const rect = first.getBoundingClientRect();
+      return Math.max(260, Math.round(rect.width + 18));
     }
 
-    // unngå duplikate knapper
-    if (wrapper.querySelector(".slider-btn.prev") || wrapper.querySelector(".slider-btn.next")) return;
+    function updateButtons() {
+      const canScroll = trackEl.scrollWidth > trackEl.clientWidth + 8;
+      if (!canScroll) {
+        btnPrev && (btnPrev.style.display = "none");
+        btnNext && (btnNext.style.display = "none");
+        return;
+      }
+      btnPrev && (btnPrev.style.display = "");
+      btnNext && (btnNext.style.display = "");
+    }
 
-    const prev = document.createElement("button");
-    prev.type = "button";
-    prev.className = "slider-btn prev";
-    prev.setAttribute("aria-label", "Forrige");
-    prev.textContent = "❮";
-
-    const next = document.createElement("button");
-    next.type = "button";
-    next.className = "slider-btn next";
-    next.setAttribute("aria-label", "Neste");
-    next.textContent = "❯";
-
-    prev.addEventListener("click", () => {
-      trackEl.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    btnPrev?.addEventListener("click", () => {
+      trackEl.scrollBy({ left: -getStep(), behavior: "smooth" });
+    });
+    btnNext?.addEventListener("click", () => {
+      trackEl.scrollBy({ left: getStep(), behavior: "smooth" });
     });
 
-    next.addEventListener("click", () => {
-      trackEl.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    trackEl.addEventListener("scroll", () => {
+      // enkel/robust – vi trenger ikke dots
     });
 
-    wrapper.appendChild(prev);
-    wrapper.appendChild(next);
+    window.addEventListener("resize", updateButtons);
+    setTimeout(updateButtons, 150);
   }
 
   // ======================================================
@@ -264,17 +263,17 @@
   }
 
   // ======================================================
-  // 2) UKENS DEALS (piler-only slider)
+  // 2) UKENS DEALS (SLIDER 1 RAD)
   // ======================================================
   async function loadDeals() {
-    if (!dealsGridEl) return;
+    if (!dealsTrack) return;
     try {
       const rows = await fetchJson(DEALS_SHEET_ID, DEALS_TAB);
-      dealsGridEl.classList.remove("loading");
-      dealsGridEl.innerHTML = "";
+      dealsTrack.classList.remove("loading");
+      dealsTrack.innerHTML = "";
 
       if (!rows.length) {
-        dealsGridEl.textContent = "Ingen deals akkurat nå.";
+        dealsTrack.textContent = "Ingen deals akkurat nå.";
         return;
       }
 
@@ -292,86 +291,44 @@
           discount: discount,
           image_url: d.image_url || "",
           product_url: d.link || "",
-          category: "Deal",
           rating: null,
-          luxury: false
+          luxury: false,
         };
 
         if (typeof window.resolveProductId === "function") {
           prod.id = window.resolveProductId(prod);
         }
 
-        const isFav =
-          typeof window.isProductFavorite === "function" && prod.id
-            ? window.isProductFavorite(prod.id)
-            : false;
+        const card = buildEliteCard(prod, { extraClasses: "deal-card" });
 
-        const card = document.createElement("article");
-        card.className = "product-card deal-card";
-
-        card.innerHTML = `
-          ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
-
-          <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
-            <svg viewBox="0 0 24 24" class="heart-icon">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 
-              12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 
-              0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
-              16.5 3 19.58 3 22 5.42 22 8.5c0 
-              3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-          </div>
-
-          <img src="${prod.image_url}" alt="${prod.title}" loading="lazy">
-
-          <div class="product-info">
-            <p class="brand">${prod.brand}</p>
-            <h3 class="product-name">${prod.title}</h3>
-            <div class="price-line">
-              <span class="new-price">${newPrice != null ? formatPrice(newPrice) : ""}</span>
-              ${oldPrice != null ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ""}
-            </div>
-          </div>
-        `;
-
-        // Click → ekstern link
+        // deals: klikk → ekstern link
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
         });
 
-        // Fav click
-        const favEl = card.querySelector(".fav-icon");
-        favEl.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (typeof window.toggleFavorite === "function") {
-            window.toggleFavorite(prod, favEl);
-          }
-        });
-
-        dealsGridEl.appendChild(card);
+        dealsTrack.appendChild(card);
       });
 
-      const dealsSection = document.getElementById("deals-section");
-      ensureArrowSlider(dealsSection, dealsGridEl, 340);
+      initArrowSlider(dealsTrack);
     } catch (err) {
       console.error("❌ Deals error:", err);
-      dealsGridEl.textContent = "Kunne ikke laste deals.";
+      dealsTrack.textContent = "Kunne ikke laste deals.";
     }
   }
 
   // ======================================================
-  // 3) RADAR PICKS (piler-only slider)
+  // 3) RADAR PICKS (SLIDER 1 RAD)
   // ======================================================
   async function loadPicks() {
-    if (!picksGridEl) return;
+    if (!picksTrack) return;
     try {
       const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
-      picksGridEl.classList.remove("loading");
-      picksGridEl.innerHTML = "";
+      picksTrack.classList.remove("loading");
+      picksTrack.innerHTML = "";
 
       if (!rows.length) {
-        picksGridEl.textContent = "Ingen picks akkurat nå.";
+        picksTrack.textContent = "Ingen picks akkurat nå.";
         return;
       }
 
@@ -384,9 +341,8 @@
           discount: p.discount || "",
           image_url: p.image_url || "",
           product_url: p.link || "",
-          category: "Radar Pick",
           rating: p.rating || "",
-          luxury: false
+          luxury: false,
         };
 
         if (typeof window.resolveProductId === "function") {
@@ -395,39 +351,37 @@
 
         const card = buildEliteCard(prod, {
           showExcerpt: false,
-          excerpt: "",
           tag: p.reason || "",
-          extraClasses: "pick-card"
+          extraClasses: "pick-card",
         });
 
-        // Override → ekstern link
+        // picks: klikk → ekstern link
         card.addEventListener("click", (e) => {
           if (e.target.closest(".fav-icon")) return;
           if (prod.product_url) window.open(prod.product_url, "_blank");
         });
 
-        picksGridEl.appendChild(card);
+        picksTrack.appendChild(card);
       });
 
-      const picksSection = document.getElementById("picks-section");
-      ensureArrowSlider(picksSection, picksGridEl, 340);
+      initArrowSlider(picksTrack);
     } catch (err) {
       console.error("❌ Picks error:", err);
-      picksGridEl.textContent = "Kunne ikke laste picks.";
+      picksTrack.textContent = "Kunne ikke laste picks.";
     }
   }
 
   // ======================================================
-  // 4) SPOTLIGHT + NEWS FEED (MASTER + NEWS-ark)
-  //      NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
+  // 4) SPOTLIGHT (STOR SLIDER) + NEWS FEED (GRID)
+  //    NEWS: id | spotlight | show_in_feed | excerpt | tag | priority
   // ======================================================
   async function loadNewsSections() {
-    if (!spotlightWrapper && !newsGridEl) return;
+    if (!spotlightTrack && !newsGridEl) return;
 
     try {
       const [newsRows, masterRows] = await Promise.all([
         fetchJson(NEWS_SHEET_ID, NEWS_TAB),
-        fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+        fetchJson(MASTER_SHEET_ID, MASTER_TAB),
       ]);
 
       const merged = [];
@@ -448,7 +402,7 @@
           showInFeed: parseBool(row.show_in_feed),
           excerpt: row.excerpt || "",
           tag: row.tag || "",
-          priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
+          priority: row.priority ? parseInt(row.priority, 10) || 999 : 999,
         });
       });
 
@@ -457,30 +411,29 @@
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
 
-      // ----- Spotlight (piler-only slider) -----
-      if (spotlightWrapper) {
-        spotlightWrapper.classList.remove("loading");
-        spotlightWrapper.innerHTML = "";
+      // Spotlight (stor)
+      if (spotlightTrack) {
+        spotlightTrack.classList.remove("loading");
+        spotlightTrack.innerHTML = "";
 
         if (!spotlightItems.length) {
-          spotlightWrapper.textContent = "Ingen spotlight-produkter akkurat nå.";
+          spotlightTrack.textContent = "Ingen spotlight-produkter akkurat nå.";
         } else {
           spotlightItems.forEach((item) => {
             const card = buildEliteCard(item.product, {
               showExcerpt: true,
               excerpt: item.excerpt,
               tag: item.tag || "Spotlight",
-              extraClasses: "featured-card"
+              extraClasses: "featured-card featured-large",
             });
-            spotlightWrapper.appendChild(card);
+            spotlightTrack.appendChild(card);
           });
 
-          const spotlightSection = document.getElementById("featured-news");
-          ensureArrowSlider(spotlightSection, spotlightWrapper, 420);
+          initArrowSlider(spotlightTrack);
         }
       }
 
-      // ----- News feed (grid) -----
+      // News feed (grid)
       if (newsGridEl) {
         newsGridEl.classList.remove("loading");
         newsGridEl.innerHTML = "";
@@ -495,21 +448,19 @@
             showExcerpt: true,
             excerpt: item.excerpt,
             tag: item.tag || "",
-            extraClasses: "news-card"
+            extraClasses: "news-card",
           });
           newsGridEl.appendChild(card);
         });
       }
     } catch (err) {
       console.error("❌ News sections error:", err);
-      if (spotlightWrapper) spotlightWrapper.textContent = "Kunne ikke laste spotlight.";
+      if (spotlightTrack) spotlightTrack.textContent = "Kunne ikke laste spotlight.";
       if (newsGridEl) newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
     }
   }
 
-  // ======================================================
   // RUN
-  // ======================================================
   document.addEventListener("DOMContentLoaded", () => {
     loadPartnerBanner();
     loadDeals();
@@ -517,6 +468,7 @@
     loadNewsSections();
   });
 })();
+
 
 
 
