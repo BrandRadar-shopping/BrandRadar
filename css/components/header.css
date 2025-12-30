@@ -408,6 +408,16 @@ nav.mega-menu .menu-section {
   border-radius: 999px;
 }
 
+#site-search { position: relative; }
+#site-search .search-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  z-index: 99999;
+}
+.main-header { z-index: 5000; } /* du har dette allerede */
+.hero-slider { z-index: 0; }    /* viktig at den ikke ligger over */
 
 
 
