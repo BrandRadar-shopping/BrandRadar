@@ -1,24 +1,23 @@
 /* ==========================================================
    BrandRadar — INDEX (pages/index.css)
-   Ren og stabil: kun index-layout + seksjoner
+   Ren og stabil:
+   - Partner banner styles ligger GLOBALT i components/partner.css
    - Slider-styling ligger i components/sliders.css
    - Produktkort styres av cards.css
 ========================================================== */
 
-/* ---------- Base sikkerhet (hindrer horisontal “skli”) ---------- */
+/* Sikkerhet: hindrer horisontal “skli” */
 html, body {
   max-width: 100%;
   overflow-x: hidden;
 }
 
-/* ---------- Container (gjelder kun index-seksjoner) ---------- */
-/* Vi sentrer alt “innhold” under header, men lar hero-slider være fullbredde */
+/* Index “container” for alle vanlige seksjoner */
 :root {
   --index-max: 1200px;
   --index-pad: 1rem;
 }
 
-.index-container,
 #partner-banner-section,
 .intro,
 .universes,
@@ -34,149 +33,66 @@ html, body {
   padding-right: var(--index-pad);
 }
 
-/* HERO (svart seksjon) = full bredde, men content sentrert */
-.hero {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.hero .hero-content {
-  max-width: var(--index-max);
-  margin: 0 auto;
-  padding: 3rem var(--index-pad);
-  text-align: center; /* hvis du vil ha samme uttrykk som nå */
-}
-
-/* Hvis du har .radar-bg som bakgrunn/overlay */
-.hero .radar-bg {
-  width: 100%;
-}
-
-
-/* Hero-slider skal være full bredde */
+/* Hero-slider full bredde */
 .hero-slider {
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
-/* ----------------------------------------------------------
-   PARTNER BANNER (index)
-   NB: partnerBanner.js renderer:
-   <section class="partner-banner">
-     <div class="partner-inner fade-in">
-       <img ...>
-       <div class="partner-text">...</div>
-     </div>
-   </section>
----------------------------------------------------------- */
-.partner-banner {
+/* ==========================================================
+   HERO (svart seksjon) — MÅ være fullbredde
+========================================================== */
+.hero {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  /* IKKE sett overflow hidden her – det kan “klippe” CTA */
+}
+
+.hero .hero-content {
   max-width: var(--index-max);
-  margin: 1.7rem auto 2.6rem;
-  padding: 2.2rem;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  margin: 0 auto;
+  padding: 3rem var(--index-pad) 2.2rem;
+  text-align: center;
 }
 
-.partner-banner .partner-inner {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2rem;
-  align-items: center;
-}
-
-.partner-banner .partner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-/* “Ukens partner” label-look (samme vibe som news) */
-.partner-banner .partner-text h3 {
-  margin: 0;
-  font-size: 2rem;
-  line-height: 1.15;
-  color: #0f172a;
-  letter-spacing: -0.4px;
-}
-
-.partner-banner .partner-text p {
-  margin: 0;
-  color: #334155;
-  line-height: 1.5;
-  font-size: 1rem;
-}
-
-/* CTA knapp (matcher news .partner-cta feeling) */
-.partner-banner .partner-btn,
-.partner-banner a.partner-btn {
-  margin-top: 0.6rem;
+/* Sørg for at CTA ikke “klippes” */
+.hero .cta-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  padding: 0.85rem 1.25rem;
-  border-radius: 12px;
-  background: #0070f3;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  transition: 0.2s ease;
+  margin-top: 0.9rem;
 }
 
-.partner-banner .partner-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(0.95);
-}
-
-/* Image “card” slik du har i news */
-.partner-banner .partner-inner > img {
+.hero .radar-bg {
   width: 100%;
-  max-width: 380px;
-  height: 220px;          /* hindrer gigant-logo */
-  object-fit: contain;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
-  justify-self: end;
 }
 
-/* Mobil */
-@media (max-width: 900px) {
-  .partner-banner {
-    padding: 1.6rem;
-  }
+/* ==========================================================
+   PARTNER BANNER (INDEX)
+   NB: INGEN egen styling her.
+   Alt ligger i components/partner.css.
+   Dette lar index + news bli 100% identiske.
+========================================================== */
 
-  .partner-banner .partner-inner {
-    grid-template-columns: 1fr;
-  }
-
-  .partner-banner .partner-inner > img {
-    max-width: 100%;
-    height: 200px;
-    justify-self: start;
-  }
-
-  .partner-banner .partner-text h3 {
-    font-size: 1.6rem;
-  }
+/* Liten spacing-kontroll på seksjonen på index (trygt) */
+#partner-banner-section.partner-banner {
+  margin-top: 1.7rem;
+  margin-bottom: 2.6rem;
 }
 
-/* ----------------------------------------------------------
-   INTRO: “Hva er BrandRadar?” – ryddig premium
----------------------------------------------------------- */
+/* ==========================================================
+   INTRO: “Hva er BrandRadar?” — mer ryddig/premium
+========================================================== */
 .intro {
-  padding: 3.0rem var(--index-pad) 2.2rem;
+  padding: 3rem var(--index-pad) 2.2rem;
   text-align: center;
 }
 
 .intro h2 {
-  margin: 0 0 1.6rem;
+  margin: 0 auto 1.6rem;
   font-size: clamp(1.9rem, 2.4vw, 2.4rem);
   letter-spacing: -0.4px;
   color: #0f172a;
@@ -209,6 +125,7 @@ html, body {
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
 }
 
+/* Ikon mer “ordnet”: samme størrelse + fin bakgrunn */
 .intro-card .icon {
   width: 46px;
   height: 46px;
@@ -217,7 +134,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 .intro-card .icon svg {
@@ -241,22 +158,19 @@ html, body {
 }
 
 @media (max-width: 900px) {
-  .intro {
-    text-align: left;
-  }
-  .intro-grid {
-    grid-template-columns: 1fr;
-  }
+  .intro { text-align: left; }
+  .intro-grid { grid-template-columns: 1fr; }
 }
 
-/* ----------------------------------------------------------
-   FEATURED: Ukens Radar Picks (grid) – la cards.css styre kort
----------------------------------------------------------- */
+/* ==========================================================
+   FEATURED: Ukens Radar Picks (grid)
+========================================================== */
 .featured-products {
   padding-top: 2.6rem;
   padding-bottom: 3.4rem;
 }
 
+/* Viktig: gjør grid robust og hindrer “smale” kort */
 #featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -265,42 +179,21 @@ html, body {
   align-items: stretch;
 }
 
-/* Sørg for at kort tar full grid-bredde (ikke smale) */
 #featured-grid .product-card {
   width: 100%;
   max-width: 100%;
 }
 
-/* Bildet i index kan være litt “index-feel” */
+/* Index-feel på bilder (valgfritt, men stabilt) */
 #featured-grid .product-card img {
   aspect-ratio: 1 / 1.1;
 }
 
-/* Små skjermer */
 @media (max-width: 600px) {
   #featured-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 18px;
   }
-}
-
-/* ----------------------------------------------------------
-   CTA i hero-seksjonen: hindre at knappen “klippes”
-   (av og til skjer det når hero har tight høyde/overflow)
----------------------------------------------------------- */
-.hero {
-  padding-bottom: 1.2rem;
-}
-
-.hero .hero-content {
-  padding-bottom: 1.4rem;
-}
-
-.hero .cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 0.9rem;
 }
 
 
