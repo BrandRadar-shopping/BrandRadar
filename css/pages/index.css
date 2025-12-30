@@ -19,7 +19,6 @@ html, body {
 }
 
 .index-container,
-.hero,
 #partner-banner-section,
 .intro,
 .universes,
@@ -34,6 +33,28 @@ html, body {
   padding-left: var(--index-pad);
   padding-right: var(--index-pad);
 }
+
+/* HERO (svart seksjon) = full bredde, men content sentrert */
+.hero {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hero .hero-content {
+  max-width: var(--index-max);
+  margin: 0 auto;
+  padding: 3rem var(--index-pad);
+  text-align: center; /* hvis du vil ha samme uttrykk som nå */
+}
+
+/* Hvis du har .radar-bg som bakgrunn/overlay */
+.hero .radar-bg {
+  width: 100%;
+}
+
 
 /* Hero-slider skal være full bredde */
 .hero-slider {
