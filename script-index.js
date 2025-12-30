@@ -78,30 +78,47 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
 
   function buildProductCardMarkup(p) {
-    const name = getProductName(p);
-    const id = resolveProductId(p);
-    const priceBlock = buildPriceBlock(p);
+  const name = getProductName(p);
+  const id = resolveProductId(p);
+  const priceBlock = buildPriceBlock(p);
 
-    return `
-      <div class="product-card" data-id="${id}">
-        <div class="fav-icon" data-id="${id}">
-          <svg class="heart-icon" viewBox="0 0 24 24">
-            <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
-          </svg>
-        </div>
+  const rawImg = (p.image_url || "").trim();
 
-        <div class="product-image-wrapper">
-          <img src="${p.image_url || ""}" alt="${name}">
-        </div>
+  // ✅ Fallback image (hindrer “broken image”-ikon + rare kort)
+  const fallbackSvg =
+    "data:image/svg+xml;utf8," +
+    encodeURIComponent(`
+      <svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'>
+        <rect width='100%' height='100%' fill='#f3f4f6'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+              font-family='Arial' font-size='32' fill='#9ca3af'>
+          Bilde kommer
+        </text>
+      </svg>
+    `);
 
-        <div class="product-info">
-          <p class="brand">${p.brand || ""}</p>
-          <h3 class="product-title">${name}</h3>
-          ${priceBlock}
-        </div>
+  const imgSrc = rawImg ? rawImg : fallbackSvg;
+
+  return `
+    <div class="product-card ${rawImg ? "" : "no-image"}" data-id="${id}">
+      <div class="fav-icon" data-id="${id}">
+        <svg class="heart-icon" viewBox="0 0 24 24">
+          <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+        </svg>
       </div>
-    `;
-  }
+
+      <div class="product-image-wrapper">
+        <img src="${imgSrc}" alt="${name}" loading="lazy">
+      </div>
+
+      <div class="product-info">
+        <p class="brand">${p.brand || ""}</p>
+        <h3 class="product-title">${name}</h3>
+        ${priceBlock}
+      </div>
+    </div>
+  `;
+}
 
   // ======================================================
   // ⭐ NAVIGASJON + FAVORITTHJERTE
