@@ -2,6 +2,7 @@
    BRANDRADAR – NEWS PAGE (FIXED)
    - Deals/Picks/Spotlight = 1 rad slider + piler
    - News feed = grid (ikke slider)
+   - Partner banner styles ligger GLOBALT i components/partner.css
 ========================================== */
 
 .news-page {
@@ -22,7 +23,7 @@
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  overflow: hidden; /* viktig: hindrer 2 rader/rare hopp */
+  overflow: hidden; /* hindrer 2 rader/rare hopp */
 }
 
 .news-page .slider-btn {
@@ -53,7 +54,6 @@
 .news-page .slider-btn.prev { left: -16px; }
 .news-page .slider-btn.next { right: -16px; }
 
-/* Mobil: piler av (swipe) */
 @media (max-width: 768px) {
   .news-page .slider-btn { display: none; }
 }
@@ -65,7 +65,7 @@
 .news-page .picks-grid,
 .news-page .featured-wrapper {
   display: flex;
-  flex-wrap: nowrap;         /* ← stopper 2 rader */
+  flex-wrap: nowrap; /* stopper 2 rader */
   gap: 18px;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -87,7 +87,7 @@
   max-width: 280px;
 }
 
-/* Spotlight skal føles “spotlight” (større kort) */
+/* Spotlight skal føles “spotlight” */
 .news-page .featured-wrapper .product-card.featured-large {
   flex: 0 0 520px;
   min-width: 520px;
@@ -109,14 +109,14 @@
   }
 }
 
-/* Spotlight-bilde litt høyere for premium feeling */
+/* Spotlight-bilde premium */
 .news-page .featured-wrapper .product-card.featured-large img {
   aspect-ratio: 16 / 10;
   object-fit: cover;
 }
 
 /* ==========================================
-   NEWS FEED = GRID (hindrer gigant-bilde)
+   NEWS FEED = GRID
 ========================================== */
 .news-page .news-grid {
   display: grid;
@@ -125,120 +125,14 @@
   align-items: start;
 }
 
-/* Sikrer at kort ikke strekker seg rart */
 .news-page .news-grid .product-card {
   width: 100%;
   max-width: 100%;
 }
 
-/* Hindrer “gigantisk bilde” – låser bildeformat */
 .news-page .news-grid .product-card img {
   aspect-ratio: 4 / 5;
   object-fit: cover;
 }
 
-/* ==========================================
-   Partner banner (FIX) – news.html
-   Matcher markup fra news.js:
-   .partner-banner-inner / -text / -image / .partner-cta
-========================================== */
-
-.news-page .partner-banner {
-  background: linear-gradient(135deg, #f4f8ff, #eaf2ff);
-  border-radius: 24px;
-  padding: 2.2rem;
-  margin: 1.5rem 0 3rem;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
-}
-
-.news-page .partner-banner-inner {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2rem;
-  align-items: center;
-}
-
-.news-page .partner-banner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.news-page .partner-tag {
-  display: inline-flex;
-  width: fit-content;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #1d4ed8;
-  background: #e0ebff;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  margin: 0;
-}
-
-.news-page .partner-banner-text h2 {
-  margin: 0;
-  font-size: 2rem;
-  line-height: 1.15;
-  color: #0f172a;
-}
-
-.news-page .partner-sub {
-  margin: 0;
-  color: #334155;
-  line-height: 1.5;
-}
-
-.news-page .partner-cta {
-  margin-top: 0.6rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 0.8rem 1.2rem;
-  border-radius: 12px;
-  background: #0070f3;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  transition: 0.2s ease;
-}
-
-.news-page .partner-cta:hover {
-  transform: translateY(-2px);
-  filter: brightness(0.95);
-}
-
-.news-page .partner-banner-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.news-page .partner-banner-image img {
-  width: 100%;
-  max-width: 380px;
-  height: 220px;          /* <- dette hindrer gigantisk logo */
-  object-fit: contain;    /* logo ser ren ut */
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
-}
-
-/* Mobil */
-@media (max-width: 900px) {
-  .news-page .partner-banner-inner {
-    grid-template-columns: 1fr;
-  }
-
-  .news-page .partner-banner-image img {
-    max-width: 100%;
-    height: 200px;
-  }
-
-  .news-page .partner-banner-text h2 {
-    font-size: 1.6rem;
-  }
-}
 
