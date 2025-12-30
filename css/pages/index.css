@@ -91,5 +91,21 @@ body { overflow-x: hidden; }
   }
 }
 
+/* ✅ Hero CTA skal aldri klippes */
+.hero {
+  padding-bottom: 64px;
+  overflow: visible;
+}
+
+.hero .hero-content {
+  padding-bottom: 24px;
+}
+
+.hero .cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 
 
