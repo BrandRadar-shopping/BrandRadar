@@ -15,10 +15,33 @@
 
       <a href="index.html" class="logo">BRANDRADAR</a>
 
-      <div class="search-box">
-        <input type="text" placeholder="Søk produkter eller merker..." />
-        <button>🔍</button>
-      </div>
+      <div class="search-box" id="site-search">
+  <span class="search-icon" aria-hidden="true">🔍</span>
+
+  <input
+    id="search-input"
+    type="search"
+    placeholder="Søk produkter eller merker…"
+    autocomplete="off"
+    spellcheck="false"
+    aria-label="Søk"
+  />
+
+  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+
+  <div class="search-dropdown" id="search-dropdown" hidden>
+    <div class="search-section" data-section="products">
+      <p class="search-section-title">Produkter</p>
+      <div class="search-results" id="search-results-products"></div>
+    </div>
+
+    <div class="search-section" data-section="brands">
+      <p class="search-section-title">Brands</p>
+      <div class="search-results" id="search-results-brands"></div>
+    </div>
+  </div>
+</div>
+
 
       <!-- Toppmeny -->
       <nav class="top-links">
