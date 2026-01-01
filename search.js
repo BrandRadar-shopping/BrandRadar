@@ -1,93 +1,145 @@
 // search.js — global site search (autosuggest + keyboard + price)
 (function () {
-  function onReady(fn) {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", fn);
-    } else {
-      fn();
-    }
+  const DEBUG = true;
+
+  function log(...args) {
+    if (DEBUG) console.log(...args);
+  }
+  function warn(...args) {
+    console.warn(...args);
   }
 
-  onReady(async function initSearch() {
+  // ---------- Sources ----------
+  const MASTER_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const MASTER_TAB = "BrandRadarProdukter";
+
+  const BRANDS_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
+  const BRANDS_TAB = "Ark 1";
+
+  const MAX_RESULTS = 7;
+  const nb = new Intl.NumberFormat("nb-NO");
+
+  function norm(s) {
+    return String(s || "")
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
+
+  function parseNum(v) {
+    if (v == null || v === "") return null;
+    const n = Number(String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", "."));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function formatPrice(n) {
+    if (n == null) return "";
+    return `${nb.format(Math.round(n))} kr`;
+  }
+
+  function priceInfo(p) {
+    const price = parseNum(p.price);
+    const oldPrice = parseNum(p.old_price) ?? parseNum(p.oldPrice);
+    const discount = parseNum(p.discount);
+
+    let computedOld = oldPrice;
+    let computedNew = price;
+
+    if (computedNew != null && computedOld == null && discount != null && discount > 0) {
+      computedOld = Math.round(computedNew / (1 - discount / 100));
+    }
+
+    let pct = null;
+    if (computedOld != null && computedNew != null && computedOld > computedNew) {
+      pct = Math.round(((computedOld - computedNew) / computedOld) * 100);
+    } else if (discount != null && discount > 0) {
+      pct = Math.round(discount > 1 ? discount : discount * 100);
+    }
+
+    return { newP: computedNew, oldP: computedOld, pct };
+  }
+
+  function resolveId(p) {
+    if (typeof window.resolveProductId === "function") return window.resolveProductId(p);
+    return String(p.id || "").trim();
+  }
+
+  function scoreMatch(title, brand, q) {
+    const t = norm(title);
+    const b = norm(brand);
+    let s = 0;
+    if (t.startsWith(q)) s += 10;
+    if (b.startsWith(q)) s += 8;
+    if (t.includes(q)) s += 4;
+    if (b.includes(q)) s += 3;
+    return s;
+  }
+
+  async function fetchJson(sheetId, tab) {
+    const url = `https://opensheet.elk.sh/${sheetId}/${encodeURIComponent(tab)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Fetch failed: ${res.status} (${tab})`);
+    return res.json();
+  }
+
+  // ---------- Init boot (retry, fordi header/DOM kan komme litt senere) ----------
+  function boot() {
     const root = document.getElementById("site-search");
     const input = document.getElementById("search-input");
     const dropdown = document.getElementById("search-dropdown");
-    const clearBtn = root ? root.querySelector(".search-clear") : null;
-
     const prodWrap = document.getElementById("search-results-products");
     const brandWrap = document.getElementById("search-results-brands");
+    const clearBtn = root ? root.querySelector(".search-clear") : null;
 
-    // Hvis noe mangler: ikke krasj, men logg så du ser det i console
-    if (!root || !input || !dropdown || !clearBtn || !prodWrap || !brandWrap) {
-      console.warn("🔎 Search init failed: mangler elementer/ID-er i header.");
-      return;
+    const missing = [];
+    if (!root) missing.push("#site-search");
+    if (!input) missing.push("#search-input");
+    if (!dropdown) missing.push("#search-dropdown");
+    if (!prodWrap) missing.push("#search-results-products");
+    if (!brandWrap) missing.push("#search-results-brands");
+    if (!clearBtn) missing.push(".search-clear");
+
+    if (missing.length) {
+      warn("🔎 Search init blocked: mangler elementer:", missing);
+      return false;
     }
 
-    // ---- Sources
-    const MASTER_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-    const MASTER_TAB = "BrandRadarProdukter";
+    initSearch({ root, input, dropdown, prodWrap, brandWrap, clearBtn });
+    return true;
+  }
 
-    const BRANDS_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
-    const BRANDS_TAB = "Ark 1";
+  document.addEventListener("DOMContentLoaded", () => {
+    log("✅ search.js loaded");
+    if (boot()) return;
 
-    const MAX_RESULTS = 7;
-    const nb = new Intl.NumberFormat("nb-NO");
+    // Retry i tilfelle header endrer seg etter load
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      if (boot() || tries > 30) clearInterval(t); // ~3 sek
+    }, 100);
+  });
+
+  // ---------- Main ----------
+  function initSearch({ root, input, dropdown, prodWrap, brandWrap, clearBtn }) {
+    log("🔎 Search DOM ok:", {
+      root: true,
+      input: true,
+      dropdown: true,
+      prodWrap: true,
+      brandWrap: true,
+    });
 
     let products = [];
     let brands = [];
     let flatItems = [];
     let activeIndex = -1;
 
-    const fetchJson = async (sheetId, tab) => {
-      const url = `https://opensheet.elk.sh/${sheetId}/${encodeURIComponent(tab)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
-      return res.json();
-    };
-
-    const norm = (s) =>
-      String(s || "")
-        .toLowerCase()
-        .normalize("NFKD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
-
-    function parseNum(v) {
-      if (v == null || v === "") return null;
-      const n = Number(String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", "."));
-      return Number.isFinite(n) ? n : null;
-    }
-
-    function priceInfo(p) {
-      const price = parseNum(p.price);
-      const oldPrice = parseNum(p.old_price) ?? parseNum(p.oldPrice);
-      const discount = parseNum(p.discount);
-
-      // Hvis discount finnes men old_price ikke gjør det:
-      let computedOld = oldPrice;
-      let computedNew = price;
-
-      if (computedNew != null && computedOld == null && discount != null && discount > 0) {
-        computedOld = Math.round(computedNew / (1 - discount / 100));
-      }
-
-      let pct = null;
-      if (computedOld != null && computedNew != null && computedOld > computedNew) {
-        pct = Math.round(((computedOld - computedNew) / computedOld) * 100);
-      } else if (discount != null && discount > 0) {
-        pct = Math.round(discount > 1 ? discount : discount * 100);
-      }
-
-      return { newP: computedNew, oldP: computedOld, pct };
-    }
-
-    function formatPrice(n) {
-      if (n == null) return "";
-      return `${nb.format(Math.round(n))} kr`;
-    }
-
     function openDropdown() {
       dropdown.hidden = false;
+      // sikker: alltid over alt
+      dropdown.style.zIndex = "99999";
     }
 
     function closeDropdown() {
@@ -102,23 +154,6 @@
 
     function renderEmpty(el, msg) {
       el.innerHTML = `<div class="search-empty">${msg}</div>`;
-    }
-
-    function resolveId(p) {
-      if (typeof window.resolveProductId === "function") return window.resolveProductId(p);
-      return String(p.id || "").trim();
-    }
-
-    function scoreMatch(title, brand, q) {
-      // enkel scoring: startsWith vinner over includes
-      const t = norm(title);
-      const b = norm(brand);
-      let s = 0;
-      if (t.startsWith(q)) s += 10;
-      if (b.startsWith(q)) s += 8;
-      if (t.includes(q)) s += 4;
-      if (b.includes(q)) s += 3;
-      return s;
     }
 
     function syncActive() {
@@ -146,7 +181,6 @@
         return;
       }
 
-      // Products
       const prodMatches = products
         .map((p) => {
           const title = p.title || p.product_name || p.name || "";
@@ -165,7 +199,6 @@
         .sort((a, b) => b.score - a.score)
         .slice(0, MAX_RESULTS);
 
-      // Brands
       const brandMatches = brands
         .map((b) => ({
           type: "brand",
@@ -182,13 +215,14 @@
       prodMatches.forEach((p) => {
         const { newP, oldP, pct } = priceInfo(p.raw);
 
-        const priceLine = newP != null
-          ? `<div class="search-price">
-              <span class="sp-new">${formatPrice(newP)}</span>
-              ${oldP != null && oldP > newP ? `<span class="sp-old">${formatPrice(oldP)}</span>` : ""}
-              ${pct ? `<span class="sp-pill">-${pct}%</span>` : ""}
-            </div>`
-          : "";
+        const priceLine =
+          newP != null
+            ? `<div class="search-price">
+                <span class="sp-new">${formatPrice(newP)}</span>
+                ${oldP != null && oldP > newP ? `<span class="sp-old">${formatPrice(oldP)}</span>` : ""}
+                ${pct ? `<span class="sp-pill">-${pct}%</span>` : ""}
+              </div>`
+            : "";
 
         const el = document.createElement("div");
         el.className = "search-item";
@@ -235,7 +269,7 @@
       });
 
       flatItems = Array.from(dropdown.querySelectorAll(".search-item"));
-      activeIndex = flatItems.length ? 0 : -1; // auto highlight første
+      activeIndex = flatItems.length ? 0 : -1;
       syncActive();
     }
 
@@ -247,27 +281,38 @@
     }
 
     // Load data once
-    try {
-      const [master, brandRows] = await Promise.all([
-        fetchJson(MASTER_SHEET_ID, MASTER_TAB),
-        fetchJson(BRANDS_SHEET_ID, BRANDS_TAB).catch(() => []),
-      ]);
+    (async () => {
+      try {
+        const [master, brandRows] = await Promise.all([
+          fetchJson(MASTER_SHEET_ID, MASTER_TAB),
+          fetchJson(BRANDS_SHEET_ID, BRANDS_TAB).catch(() => []),
+        ]);
 
-      products = Array.isArray(master) ? master : [];
-      brands = Array.isArray(brandRows) ? brandRows : [];
+        products = Array.isArray(master) ? master : [];
+        brands = Array.isArray(brandRows) ? brandRows : [];
 
-      // Fallback brands fra products hvis brands-sheet tom
-      if (!brands.length) {
-        const set = new Set();
-        brands = products
-          .map((p) => String(p.brand || "").trim())
-          .filter(Boolean)
-          .filter((b) => (set.has(b) ? false : (set.add(b), true)))
-          .map((b) => ({ brand: b, description: "" }));
+        if (!brands.length) {
+          const set = new Set();
+          brands = products
+            .map((p) => String(p.brand || "").trim())
+            .filter(Boolean)
+            .filter((b) => (set.has(b) ? false : (set.add(b), true)))
+            .map((b) => ({ brand: b, description: "" }));
+        }
+
+        log("🔎 Search data loaded:", {
+          products: products.length,
+          brands: brands.length,
+          exampleProduct: products[0],
+          exampleBrand: brands[0],
+        });
+
+        render();
+      } catch (e) {
+        warn("🔎 Search data load failed:", e);
+        render();
       }
-    } catch (e) {
-      console.warn("🔎 Search data load failed:", e);
-    }
+    })();
 
     // Initial UI
     render();
@@ -305,10 +350,7 @@
       }
 
       if (e.key === "Enter") {
-        // Enter åpner aktivt element – hvis ingen aktiv: render og åpne første
-        if (!flatItems.length) {
-          render();
-        }
+        if (!flatItems.length) render();
         if (activeIndex < 0 && flatItems.length) activeIndex = 0;
         if (activeIndex >= 0) {
           e.preventDefault();
@@ -329,6 +371,7 @@
         syncActive();
       }
     });
-  });
+  }
 })();
+
 
