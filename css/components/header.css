@@ -450,6 +450,14 @@ nav.mega-menu .menu-section {
   box-shadow: 0 18px 40px rgba(0,0,0,0.18);
 }
 
+#site-search .search-dropdown {
+  display: block;           /* viktig */
+  pointer-events: auto;
+}
+
+#site-search .search-dropdown[hidden] {
+  display: none;
+}
 
 
 
