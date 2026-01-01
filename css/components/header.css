@@ -213,7 +213,6 @@ nav.mega-menu .menu-section {
   min-width: 360px;
   max-width: 520px;
   flex: 1;
-  backdrop-filter: blur(10px);
 }
 
 .search-box:focus-within {
