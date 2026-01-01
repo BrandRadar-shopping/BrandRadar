@@ -1,272 +1,155 @@
-/* ============================================
-   FAVORITTER-SIDE – modernisert spacing og layout
-   ============================================ */
+/* ==========================================================
+   BrandRadar — FAVORITTER (pages/favorites.css)
+   Ren & stabil:
+   - Bruker global cards.css (Elite v9) for .product-card
+   - favorites.css styrer kun layout/grid/tabs + "Fjern"-tag
+========================================================== */
+
+:root {
+  --fav-max: 1200px;
+  --fav-pad: 1rem;
+}
+
+/* ---------- Page container ---------- */
 .favorites-section {
-  max-width: 1300px;
-  margin: 2rem auto;
-  padding: 1rem;
+  max-width: var(--fav-max);
+  margin: 2.5rem auto 5rem;
+  padding: 0 var(--fav-pad);
 }
 
-
-.favorites-grid .product-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 100%;
-  max-width: 250px;
+.favorites-section h2 {
   text-align: center;
-  cursor: pointer;
+  font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+  letter-spacing: -0.4px;
+  margin: 0 0 1.4rem;
+  color: #0f172a;
 }
 
-.favorites-grid .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
-}
-
-.fav-actions {
+/* ---------- Tabs ---------- */
+.fav-tabs {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
-  margin-top: 0.8rem;
+  gap: 0.75rem;
+  margin: 0 auto 1.4rem;
+  flex-wrap: wrap;
 }
 
-.remove-btn {
-  background: #ff4b4b;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-  background: #e03d3d;
-}
-
-.empty-favorites {
-  text-align: center;
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
-}
-
-.empty-favorites .back-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  background: #0070f3;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.empty-favorites .back-btn:hover {
-  background: #005dc1;
-}
-
-
-/* ===========================================
-   ✅ Favorittside – Produktkort forbedring
-=========================================== */
-#tab-products .product-card {
-  position: relative;
-  max-width: 260px;
-  width: 100%;
-  border-radius: 14px;
+.fav-tabs .tab-btn {
+  border: 1px solid rgba(15, 23, 42, 0.12);
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  color: #0f172a;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 800;
   cursor: pointer;
-  transition: .2s ease;
+  transition: 0.18s ease;
 }
 
-#tab-products .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+.fav-tabs .tab-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
-#tab-products .product-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1.1;
-  object-fit: cover;
-  border-radius: 14px 14px 0 0;
+.fav-tabs .tab-btn.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
 }
 
-#tab-products .product-info {
-  padding: 0.8rem 1rem 1rem;
+/* ---------- Tabs content ---------- */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ---------- Empty message ---------- */
+.empty-message {
   text-align: center;
-}
-
-#tab-products .product-info h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 4px;
-}
-
-#tab-products .product-info .brand {
-  color: #666;
-  font-size: 0.85rem;
-  margin-bottom: 4px;
-}
-
-#tab-products .product-info .rating {
-  color: #111;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
-}
-
-#tab-products .product-info .price {
-  font-weight: 700;
+  margin-top: 1.5rem;
+  color: #64748b;
   font-size: 1rem;
-  color: #0070f3;
 }
 
-/* ✅ Fjern-tag */
-#tab-products .remove-tag {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #ff3b3b;
-  color: #fff;
-  font-size: 0.75rem;
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 5;
-  transition: background 0.2s ease;
+/* ---------- Products grid ---------- */
+#favorites-product-grid.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+  justify-items: center;
+  align-items: stretch;
 }
 
-#tab-products .remove-tag:hover {
-  background: #d63030;
-}
-
-.empty-favorites .back-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  background: #0070f3;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  text-decoration: none;
-}
-
-/* ============================================
-   FAVORITTER KORT
-============================================ */
-#tab-products .product-card {
-  position: relative;
-  max-width: 260px;
+/* La global .product-card style vinne, men sørg for riktig grid-bredde */
+#favorites-product-grid .product-card {
   width: 100%;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 320px;
+  height: 100%;
+}
+
+/* ---------- "Fjern" tag (ALLTID liten pill, aldri full bredde) ---------- */
+#favorites-product-grid .product-card .remove-tag,
+#tab-products .product-card .remove-tag {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  width: auto !important;
+  max-width: max-content !important;
+  padding: 0.22rem 0.65rem !important;
+
+  border-radius: 999px !important;
+  background: rgba(239, 68, 68, 0.92) !important;
+  color: #fff !important;
+
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em;
+
+  z-index: 6 !important;
   cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.25);
 }
 
-#tab-products .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+#favorites-product-grid .product-card .remove-tag:hover,
+#tab-products .product-card .remove-tag:hover {
+  transform: translateY(-1px);
+  background: rgba(220, 38, 38, 0.95) !important;
 }
 
-#tab-products .product-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1.1;
-  object-fit: cover;
-  border-radius: 14px 14px 0 0;
-  transition: transform 0.35s ease;
+/* Sikring hvis "remove-tag" tilfeldigvis er en <button> */
+#favorites-product-grid .product-card button.remove-tag,
+#tab-products .product-card button.remove-tag {
+  border: 0 !important;
+  appearance: none !important;
 }
 
-#tab-products .product-card:hover img {
-  transform: scale(1.05);
+/* ---------- Brands grid ---------- */
+#favorites-brand-grid.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  justify-items: center;
 }
 
-#tab-products .product-info {
-  padding: 0.9rem 1rem 1.2rem;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .favorites-section {
+    margin-top: 2rem;
+  }
 
-#tab-products .product-info .brand {
-  font-size: 0.85rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  #favorites-product-grid.favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
 }
-
-#tab-products .product-info .product-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 2.6em;
-}
-
-#tab-products .product-info .rating {
-  font-size: 0.9rem;
-  color: #f5c518;
-  margin: 3px 0 6px;
-}
-
-#tab-products .price-line {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  margin-top: 4px;
-}
-
-#tab-products .new-price {
-  color: #111;
-  font-weight: 500;
-  font-size: 1.05rem;
-}
-
-#tab-products .old-price {
-  color: #999;
-  text-decoration: line-through;
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-#tab-products .discount {
-  color: #e60023;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-#tab-products .remove-tag {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #ff3b3b;
-  color: #fff;
-  font-size: 0.75rem;
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 5;
-  transition: background 0.2s ease;
-}
-
-#tab-products .remove-tag:hover {
-  background: #d63030;
-}
-
 
 
 
