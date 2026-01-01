@@ -215,6 +215,18 @@ nav.mega-menu .menu-section {
   flex: 1;
 }
 
+/* Search wrapper – skaper riktig stacking context */
+#site-search {
+  position: relative;
+  z-index: 7000;
+}
+
+/* Selve input-boksen beholder glass-effekt */
+#site-search .search-box {
+  backdrop-filter: blur(10px);
+}
+
+
 .search-box:focus-within {
   border-color: rgba(0,112,243,0.7);
   box-shadow: 0 0 0 4px rgba(0,112,243,0.22);
