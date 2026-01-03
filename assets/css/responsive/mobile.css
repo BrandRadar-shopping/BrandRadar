@@ -1,1 +1,160 @@
+/* =========================
+   MOBILE: HEADER (<= 768px)
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Sticky + stacking */
+  header,
+  .site-header,
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: #fff;
+  }
+
+  /* Dropdown / menus must not be clipped */
+  header,
+  .site-header,
+  .header,
+  .header-inner,
+  .header-top {
+    overflow: visible !important;
+  }
+
+  /* If some parent has transform, it can break stacking contexts.
+     We can't unset transform safely globally, but we can keep header above. */
+  header,
+  .site-header,
+  .header {
+    isolation: isolate;
+  }
+
+  /* Force header layout into 2 rows */
+  .header-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  /* Top row: menu - logo - favorites */
+  .header-top {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Tap targets */
+  .mobile-menu-btn,
+  .favorites-btn,
+  .header-menu-btn,
+  .menu-btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Center logo */
+  .header-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-logo img {
+    max-height: 28px;
+    width: auto;
+  }
+
+  /* Search row full width */
+  .header-search {
+    position: relative;
+    width: 100%;
+  }
+  .header-search input[type="search"],
+  .header-search input[type="text"] {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+
+  /* Search dropdown results */
+  .search-results,
+  .search-dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(44px + 8px);
+    z-index: 10000;
+    background: #fff;
+    border-radius: 12px;
+    max-height: 60vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide desktop nav/mega on mobile */
+  .nav-desktop,
+  .mega-menu,
+  .header-nav {
+    display: none !important;
+  }
+}
+
+
+/* =========================
+   MOBILE: DRAWER MENU
+   ========================= */
+@media (max-width: 768px) {
+
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 12000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+  .mobile-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(86vw, 360px);
+    background: #fff;
+    z-index: 13000;
+    transform: translateX(-102%);
+    transition: transform 220ms ease;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px;
+  }
+  .mobile-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  body.is-locked {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  .mobile-drawer a,
+  .mobile-drawer button {
+    min-height: 44px;
+  }
+}
 
