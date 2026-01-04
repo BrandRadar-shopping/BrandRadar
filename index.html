@@ -14,6 +14,10 @@
 <!-- 🟦 HEADER -->
 <header class="main-header">
   <div class="nav-container">
+    <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
+  ☰
+</button>
+
     <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box" id="site-search">
@@ -63,6 +67,32 @@
       <li class="category-item" data-category="Selfcare">Selfcare</li>
     </ul>
 </header>
+
+  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
+  <div class="mobile-drawer-header">
+    <p class="mobile-drawer-title">Meny</p>
+    <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
+  </div>
+
+  <div class="mobile-drawer-section">
+    <a href="index.html">Hjem</a>
+    <a href="news.html">Nyheter</a>
+    <a href="brands.html">Brands</a>
+    <a href="favoritter.html">Favoritter</a>
+    <a href="luxury.html">Luxury Corner ✨</a>
+  </div>
+
+  <div class="mobile-drawer-section">
+    <p class="mobile-drawer-subtitle">Kategorier</p>
+    <a href="category.html?category=Clothing">Klær</a>
+    <a href="category.html?category=Shoes">Sko</a>
+    <a href="category.html?category=Gymcorner">Gymcorner</a>
+    <a href="category.html?category=Accessories">Tilbehør</a>
+    <a href="category.html?category=Selfcare">Selfcare</a>
+  </div>
+</nav>
 
 <nav class="mega-menu"></nav>
 
@@ -253,6 +283,7 @@
 
 </body>
 </html>
+
 
 
 
