@@ -1,114 +1,7 @@
 /* =========================
-   MOBILE: HEADER (<= 768px)
+   BrandRadar – Mobile Overrides
+   Breakpoint: <= 768px
    ========================= */
-@media (max-width: 768px) {
-
-  /* Sticky + stacking */
-  header,
-  .site-header,
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-    background: #fff;
-  }
-
-  /* Dropdown / menus must not be clipped */
-  header,
-  .site-header,
-  .header,
-  .header-inner,
-  .header-top {
-    overflow: visible !important;
-  }
-
-  /* If some parent has transform, it can break stacking contexts.
-     We can't unset transform safely globally, but we can keep header above. */
-  header,
-  .site-header,
-  .header {
-    isolation: isolate;
-  }
-
-  /* Force header layout into 2 rows */
-  .header-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px 12px;
-  }
-
-  /* Top row: menu - logo - favorites */
-  .header-top {
-    display: grid;
-    grid-template-columns: 44px 1fr 44px;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* Tap targets */
-  .mobile-menu-btn,
-  .favorites-btn,
-  .header-menu-btn,
-  .menu-btn {
-    width: 44px;
-    height: 44px;
-    border: 0;
-    background: transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Center logo */
-  .header-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .header-logo img {
-    max-height: 28px;
-    width: auto;
-  }
-
-  /* Search row full width */
-  .header-search {
-    position: relative;
-    width: 100%;
-  }
-  .header-search input[type="search"],
-  .header-search input[type="text"] {
-    width: 100%;
-    height: 44px;
-    border-radius: 12px;
-    padding: 0 12px;
-  }
-
-  /* Search dropdown results */
-  .search-results,
-  .search-dropdown {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(44px + 8px);
-    z-index: 10000;
-    background: #fff;
-    border-radius: 12px;
-    max-height: 60vh;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Hide desktop nav/mega on mobile */
-  .nav-desktop,
-  .mega-menu,
-  .header-nav {
-    display: none !important;
-  }
-}
-
 
 /* =========================
    MOBILE: DRAWER MENU
@@ -156,14 +49,56 @@
   .mobile-drawer button {
     min-height: 44px;
   }
+
+  /* Optional: nice drawer header if you add it */
+  .mobile-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    margin-bottom: 10px;
+  }
+  .mobile-drawer-title {
+    margin: 0;
+    font-weight: 700;
+  }
+  .mobile-drawer-close {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .mobile-drawer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+  }
+  .mobile-drawer-section a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  .mobile-drawer-subtitle {
+    margin: 0 0 4px;
+    font-size: 13px;
+    opacity: 0.7;
+  }
 }
+
 
 /* =========================
    BrandRadar – MOBILE HEADER
    ========================= */
 @media (max-width: 768px) {
 
-  /* Header sticky + riktig stacking */
+  /* Header sticky + stacking */
   .main-header {
     position: sticky;
     top: 0;
@@ -181,6 +116,7 @@
 
   /* Mobil layout: 2 rader (top row + search) */
   .nav-container {
+    position: relative;
     display: grid;
     grid-template-columns: 44px 1fr 44px;
     grid-template-areas:
@@ -191,6 +127,7 @@
     align-items: center;
   }
 
+  /* Hamburger */
   .mobile-menu-btn {
     grid-area: menu;
     width: 44px;
@@ -206,20 +143,22 @@
     line-height: 1;
   }
 
+  /* Logo */
   .logo {
     grid-area: logo;
     justify-self: center;
     text-decoration: none;
   }
 
-  /* Favoritter-link blir en ikonknapp på mobil (uten å endre HTML) */
+  /* Favoritter: gjøres til ikon på mobil */
   .top-links {
     grid-area: fav;
     justify-self: end;
   }
 
   /* Skjul desktop-navlinks, men behold favoritter synlig */
-  .top-links a { display: none; }
+  .top-links a:not(.favorites-link) { display: none; }
+
   .top-links .favorites-link {
     display: inline-flex;
     align-items: center;
@@ -229,21 +168,16 @@
     border-radius: 12px;
     position: relative;
     text-decoration: none;
+    font-size: 0; /* skjul teksten */
+    -webkit-tap-highlight-color: transparent;
   }
 
-  /* Legg på "hjerte" visuelt uten å endre teksten */
   .top-links .favorites-link::before {
     content: "❤️";
     font-size: 18px;
     line-height: 1;
   }
 
-  /* Skjul teksten "Favoritter" på mobil */
-  .top-links .favorites-link {
-    font-size: 0;
-  }
-
-  /* Bubble count */
   #favorites-count {
     position: absolute;
     top: 6px;
@@ -261,11 +195,13 @@
 
   /* Search full width */
   .search-box {
+    position: relative;
     grid-area: search;
     width: 100%;
   }
 
   #search-input {
+    width: 100%;
     height: 44px;
     border-radius: 12px;
   }
@@ -283,7 +219,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Category bar: gjør den horisontal-scroll på mobil */
+  /* Category bar: horisontal scroll */
   .category-bar {
     display: flex;
     gap: 10px;
@@ -294,7 +230,11 @@
   }
   .category-bar::-webkit-scrollbar { display: none; }
 
-  .category-item {
-    flex: 0 0 auto;
+  .category-item { flex: 0 0 auto; }
+
+  /* Skjul mega-menu container hvis den finnes på mobil */
+  nav.mega-menu {
+    display: none !important;
   }
 }
+
