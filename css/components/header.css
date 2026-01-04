@@ -408,4 +408,10 @@ nav.mega-menu .menu-section a:hover {
   }
 }
 
+/* =========================
+   Mobile menu button (desktop default)
+   ========================= */
+.mobile-menu-btn {
+  display: none;
+}
 
