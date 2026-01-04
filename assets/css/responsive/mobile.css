@@ -238,3 +238,8 @@
   }
 }
 
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+}
