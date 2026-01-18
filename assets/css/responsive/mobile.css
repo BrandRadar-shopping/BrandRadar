@@ -4,7 +4,7 @@
    ========================= */
 
 /* =========================
-   MOBILE: DRAWER MENU
+   MOBILE: DRAWER MENU (Zalando-style fullscreen)
    ========================= */
 @media (max-width: 768px) {
 
@@ -22,19 +22,22 @@
     pointer-events: auto;
   }
 
+  /* Fullscreen drawer (slide in from right) */
   .mobile-drawer {
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
+    left: auto;
     height: 100dvh;
-    width: min(86vw, 360px);
+    width: 100vw;
     background: #fff;
     z-index: 13000;
-    transform: translateX(-102%);
+    transform: translateX(102%);
     transition: transform 220ms ease;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 14px;
+    padding: 14px 14px 22px;
+    border-radius: 0;
   }
   .mobile-drawer.is-open {
     transform: translateX(0);
@@ -50,7 +53,7 @@
     min-height: 44px;
   }
 
-  /* Optional: nice drawer header if you add it */
+  /* Drawer header */
   .mobile-drawer-header {
     display: flex;
     align-items: center;
@@ -62,7 +65,8 @@
   }
   .mobile-drawer-title {
     margin: 0;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 20px;
   }
   .mobile-drawer-close {
     width: 44px;
@@ -70,25 +74,139 @@
     border: 0;
     background: transparent;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 22px;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-drawer-section {
+  /* =========================
+     Linje 1: hovedkategorier (chips)
+     ========================= */
+  .m-topcats {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px 0;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 2px 6px;
+    margin: 4px -2px 6px;
   }
-  .mobile-drawer-section a {
-    min-height: 44px;
+  .m-topcats::-webkit-scrollbar { display: none; }
+
+  .m-chip {
+    flex: 0 0 auto;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
+    border-radius: 999px;
+    padding: 10px 14px;
+    min-height: 40px;
+    font-weight: 800;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-chip.is-active {
+    border-color: #0070f3;
+  }
+
+  /* =========================
+     Linje 2: segment tabs (Dame/Herre/Barn)
+     ========================= */
+  .m-segments {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid rgba(0,0,0,0.10);
+    margin-top: 6px;
+  }
+
+  .m-seg {
+    border: 0;
+    background: transparent;
+    padding: 12px 6px;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-seg.is-active::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+    height: 3px;
+    background: #111;
+    border-radius: 999px;
+  }
+
+  /* =========================
+     Linje 3: results
+     ========================= */
+  .m-results {
+    padding-top: 14px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .m-section-title {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 900;
+    opacity: 0.75;
+  }
+
+  /* Subcategory tiles (2 cols) */
+  .m-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .m-tile {
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.10);
+    text-decoration: none;
+    background: #fff;
+    min-height: 120px;
+    position: relative;
+  }
+
+  .m-tile-img {
+    height: 84px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
+  }
+
+  .m-tile-label {
+    padding: 10px 10px 12px;
+    font-weight: 900;
+    font-size: 16px;
+    color: inherit;
+  }
+
+  /* Brands row (horizontal scroll) */
+  .m-brand-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .m-brand-row::-webkit-scrollbar { display: none; }
+
+  .m-brand-pill {
+    flex: 0 0 auto;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 900;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    min-height: 40px;
     display: inline-flex;
     align-items: center;
-    text-decoration: none;
-  }
-  .mobile-drawer-subtitle {
-    margin: 0 0 4px;
-    font-size: 13px;
-    opacity: 0.7;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -134,7 +252,7 @@
     height: 44px;
     border: 0;
     background: transparent;
-    display: inline-flex;
+    display: inline-flex; /* important: shown on mobile */
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -154,6 +272,8 @@
   .top-links {
     grid-area: fav;
     justify-self: end;
+    display: flex;
+    justify-content: flex-end;
   }
 
   /* Skjul desktop-navlinks, men behold favoritter synlig */
@@ -238,8 +358,3 @@
   }
 }
 
-@media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: inline-flex;
-  }
-}
