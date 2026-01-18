@@ -72,26 +72,38 @@
 
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
   <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Meny</p>
-    <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
+  <p class="mobile-drawer-title">Søk etter kategori</p>
+  <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
+</div>
+
+<!-- Linje 1: hovedkategorier -->
+<div class="m-topcats" role="tablist" aria-label="Hovedkategorier">
+  <button class="m-chip is-active" data-cat="clothing" type="button">Klær</button>
+  <button class="m-chip" data-cat="shoes" type="button">Sko</button>
+  <button class="m-chip" data-cat="gymcorner" type="button">Gymcorner</button>
+  <button class="m-chip" data-cat="accessories" type="button">Tilbehør</button>
+  <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
+</div>
+
+<!-- Linje 2: segment -->
+<div class="m-segments" role="tablist" aria-label="Segment">
+  <button class="m-seg is-active" data-seg="Dame" type="button">Dame</button>
+  <button class="m-seg" data-seg="Herre" type="button">Herre</button>
+  <button class="m-seg" data-seg="Barn" type="button">Barn</button>
+</div>
+
+<!-- Linje 3: resultater -->
+<div class="m-results">
+  <div class="m-subcats">
+    <h3 class="m-section-title">Kategorier</h3>
+    <div class="m-grid" id="mSubcatGrid"></div>
   </div>
 
-  <div class="mobile-drawer-section">
-    <a href="index.html">Hjem</a>
-    <a href="news.html">Nyheter</a>
-    <a href="brands.html">Brands</a>
-    <a href="favoritter.html">Favoritter</a>
-    <a href="luxury.html">Luxury Corner ✨</a>
+  <div class="m-brands">
+    <h3 class="m-section-title">Toppmerker</h3>
+    <div class="m-brand-row" id="mBrandRow"></div>
   </div>
-
-  <div class="mobile-drawer-section">
-    <p class="mobile-drawer-subtitle">Kategorier</p>
-    <a href="category.html?category=Clothing">Klær</a>
-    <a href="category.html?category=Shoes">Sko</a>
-    <a href="category.html?category=Gymcorner">Gymcorner</a>
-    <a href="category.html?category=Accessories">Tilbehør</a>
-    <a href="category.html?category=Selfcare">Selfcare</a>
-  </div>
+</div>
 </nav>
 
 <nav class="mega-menu"></nav>
@@ -283,6 +295,7 @@
 
 </body>
 </html>
+
 
 
 
