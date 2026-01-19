@@ -3,6 +3,7 @@
    Breakpoint: <= 768px
    ========================= */
 
+
 /* =========================
    MOBILE: DRAWER MENU (Zalando-style fullscreen)
    ========================= */
@@ -79,24 +80,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-@media (max-width: 768px) {
-  .m-tile,
-  .m-tile:visited,
-  .m-tile:hover,
-  .m-tile:active {
-    color: inherit;
-  }
-}
-
-@media (max-width: 768px) {
-  .m-tile-label {
-    color: #111;
-    letter-spacing: -0.2px;
-  }
-}
-
-
-   
   /* =========================
      Linje 1: hovedkategorier (chips)
      ========================= */
@@ -188,18 +171,41 @@
     background: #fff;
     min-height: 120px;
     position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   }
 
+  /* Tiles skal ikke se ut som blå lenker */
+  .m-tile,
+  .m-tile:visited,
+  .m-tile:hover,
+  .m-tile:active {
+    color: inherit;
+  }
+
+  /* Image-ready tile top */
   .m-tile-img {
     height: 84px;
+    position: relative;
     background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .m-tile-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.00), rgba(0,0,0,0.05));
+    pointer-events: none;
   }
 
   .m-tile-label {
     padding: 10px 10px 12px;
     font-weight: 900;
     font-size: 16px;
-    color: inherit;
+    color: #111;
+    letter-spacing: -0.2px;
   }
 
   /* Brands row (horizontal scroll) */
@@ -270,7 +276,7 @@
     height: 44px;
     border: 0;
     background: transparent;
-    display: inline-flex; /* important: shown on mobile */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -375,4 +381,3 @@
     display: none !important;
   }
 }
-
