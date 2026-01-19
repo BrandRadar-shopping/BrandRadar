@@ -1,15 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ script.js loaded");
 
-  // 1) Mobile drawer (global)
+  // 1) Mobile drawer + browse UI (safe on pages without markup)
   initMobileDrawer();
-
-  // 1b) Mobile browse menu (Zalando-style) - safe on pages without the markup
   initMobileBrowseMenu();
 
-  // 2) Mega menu (desktop only)
+  // 2) Desktop mega-menu only
   if (window.innerWidth <= 768) {
-    console.log("📱 Mobile detected — skipping mega-menu init");
+    console.log("📱 Mobile detected — skipping desktop mega-menu init");
     return;
   }
 
@@ -27,50 +25,115 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((html) => {
       menuContainer.innerHTML = html;
       console.log("✅ Mega-menu loaded into DOM");
-      activateMegaMenu();
+
+      // Desktop behaviors (matches your existing working script-megamenu.js logic)
+      initDesktopMegaMenuHover();
+      initDesktopMegaMenuRoutingSlugs();
     })
     .catch((err) => console.error(err));
 });
 
-function activateMegaMenu() {
-  const topLinks = document.querySelectorAll(".menu-top li");
-  const panels = document.querySelectorAll(".menu-panel");
+/* =========================================================
+   DESKTOP: Mega-menu hover/click (category-bar -> panels)
+   Matches your current DOM:
+   - Triggers: .category-bar .category-item (data-category="Clothing"/"Shoes"...)
+   - Panels:   nav.mega-menu .menu-panel (#clothing/#shoes/...)
+   ========================================================= */
+function initDesktopMegaMenuHover() {
+  const barItems = document.querySelectorAll(".category-bar .category-item");
+  const panels = document.querySelectorAll("nav.mega-menu .menu-panel");
+  const navWrap = document.querySelector("nav.mega-menu");
 
-  if (!topLinks.length || !panels.length) {
-    console.error("❌ Mega-menu elements not found after load");
+  if (!barItems.length || !panels.length || !navWrap) {
+    console.warn("⚠️ Desktop mega-menu: triggers/panels not found");
     return;
   }
 
-  topLinks.forEach((link) => {
-    link.addEventListener("mouseenter", () => {
-      const target = link.getAttribute("data-menu");
+  const hideAll = () => panels.forEach((p) => (p.style.display = "none"));
 
-      panels.forEach((p) => (p.style.display = "none"));
-      const activePanel = document.getElementById(target);
-      if (activePanel) activePanel.style.display = "flex";
+  const showPanel = (key) => {
+    hideAll();
+    const id = String(key || "").toLowerCase(); // Clothing -> clothing
+    const panel = document.getElementById(id);
+    if (panel) panel.style.display = "flex";
+  };
+
+  barItems.forEach((li) => {
+    // Hover shows panel
+    li.addEventListener("mouseenter", () => showPanel(li.dataset.category));
+    // Click also shows (useful on touch laptops)
+    li.addEventListener("click", () => showPanel(li.dataset.category));
+  });
+
+  navWrap.addEventListener("mouseleave", hideAll);
+
+  // Click outside closes
+  document.addEventListener("click", (e) => {
+    if (!navWrap.contains(e.target) && !e.target.closest(".category-bar")) hideAll();
+  });
+
+  console.log("✅ Desktop mega-menu hover ready");
+}
+
+/* =========================================================
+   DESKTOP: Slug routing for mega-menu links
+   Builds URLs like:
+   category.html?category=clothing&gender=Men&subcategory=sneakers
+   ========================================================= */
+function initDesktopMegaMenuRoutingSlugs() {
+  function slugify(txt) {
+    return (txt || "")
+      .toLowerCase()
+      .replace(/æ/g, "a")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .replace(/&/g, "og")
+      .replace(/[^\w\d]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .trim();
+  }
+
+  document.querySelectorAll("nav.mega-menu .menu-panel").forEach((panel) => {
+    const panelId = panel.id; // clothing/shoes/...
+    const categorySlug = slugify(panelId);
+
+    panel.querySelectorAll("li a").forEach((link) => {
+      const sub = link.textContent.trim();
+      const subSlug = slugify(sub);
+
+      // Find local column heading (Herre/Dame/Barn)
+      const section = link.closest(".menu-section");
+      const headerText = section?.querySelector("h4")?.textContent.trim() || "";
+      const lower = headerText.toLowerCase();
+
+      // Norsk -> engelsk parameter
+      let genderSlug = null;
+      if (lower === "herre") genderSlug = "Men";
+      else if (lower === "dame") genderSlug = "Women";
+      else if (lower === "barn") genderSlug = "Kids";
+
+      let url = `category.html?category=${encodeURIComponent(categorySlug)}`;
+      if (genderSlug) url += `&gender=${encodeURIComponent(genderSlug)}`;
+      if (subSlug && subSlug !== categorySlug) url += `&subcategory=${encodeURIComponent(subSlug)}`;
+
+      link.href = url;
     });
   });
 
-  const mega = document.querySelector("nav.mega-menu");
-  if (mega) {
-    mega.addEventListener("mouseleave", () => {
-      panels.forEach((p) => (p.style.display = "none"));
-    });
-  }
-
-  console.log("✅ Mega-menu interaction initialized");
+  console.log("✅ Desktop mega-menu routing slugs enabled");
 }
 
+/* =========================
+   MOBILE DRAWER
+   ========================= */
 function initMobileDrawer() {
   const btn = document.querySelector(".mobile-menu-btn");
   const drawer = document.getElementById("mobileDrawer");
   const overlay = document.getElementById("mobileOverlay");
   const closeBtn = drawer ? drawer.querySelector(".mobile-drawer-close") : null;
 
-  if (!btn || !drawer || !overlay) {
-    // Ikke alle sider må ha drawer — det er ok.
-    return;
-  }
+  if (!btn || !drawer || !overlay) return;
 
   function openMenu() {
     drawer.hidden = false;
@@ -122,10 +185,6 @@ function initMobileDrawer() {
 
 /* =========================
    MOBILE BROWSE MENU (Zalando-style)
-   Renders subcategories + brands based on:
-   - Selected top category (clothing/shoes/gymcorner/accessories/selfcare)
-   - Selected segment (Dame/Herre/Barn)
-   Data source: mega-menu.html
    ========================= */
 function initMobileBrowseMenu() {
   const drawer = document.getElementById("mobileDrawer");
@@ -133,10 +192,7 @@ function initMobileBrowseMenu() {
 
   const subcatGrid = document.getElementById("mSubcatGrid");
   const brandRow = document.getElementById("mBrandRow");
-  if (!subcatGrid || !brandRow) {
-    // Page may still be using old drawer markup — safe exit.
-    return;
-  }
+  if (!subcatGrid || !brandRow) return;
 
   const catButtons = drawer.querySelectorAll(".m-chip[data-cat]");
   const segButtons = drawer.querySelectorAll(".m-seg[data-seg]");
@@ -170,28 +226,19 @@ function initMobileBrowseMenu() {
   }
 
   function getBestSectionForSegment(panel, segment) {
-    // Normal case: each segment is a menu-block with a .menu-section h4 = Dame/Herre/Barn
     const blocks = [...panel.querySelectorAll(".menu-block")];
-
     for (const b of blocks) {
       const h4 = b.querySelector(".menu-section h4");
       if (h4 && h4.textContent.trim() === segment) return b;
     }
-
-    // Fallback (gymcorner/selfcare etc.): use first block
     return blocks[0] || panel;
   }
 
   function collectSubLinks(segmentBlock) {
-    // Non-brand sections: everything in .menu-section:not(.brands)
     const nonBrandSections = [...segmentBlock.querySelectorAll(".menu-section:not(.brands)")];
-
-    // If no sections found (edge case), fallback to any ul links
     const sectionsToUse = nonBrandSections.length ? nonBrandSections : [segmentBlock];
-
     const links = sectionsToUse.flatMap((sec) => [...sec.querySelectorAll("ul li a")]);
 
-    // Deduplicate by text
     const seen = new Set();
     const unique = [];
     for (const a of links) {
@@ -227,16 +274,12 @@ function initMobileBrowseMenu() {
     if (!panel) return;
 
     const segmentBlock = getBestSectionForSegment(panel, currentSeg);
-
     const subcats = collectSubLinks(segmentBlock);
     const brands = collectBrandLinks(segmentBlock);
 
-    // Render subcategory tiles
     subcatGrid.innerHTML = subcats
-      .slice(0, 20) // safety cap for mobile
+      .slice(0, 20)
       .map((label) => {
-        // Foreløpig: route til category.html med query (enkelt og stabilt).
-        // Senere kan vi mappe dette til din faktiske filtrering/URL-struktur.
         const href =
           `category.html?category=${encodeURIComponent(currentCat)}` +
           `&segment=${encodeURIComponent(currentSeg)}` +
@@ -245,7 +288,6 @@ function initMobileBrowseMenu() {
       })
       .join("");
 
-    // Render brands row
     brandRow.innerHTML = brands
       .slice(0, 12)
       .map((brand) => {
@@ -269,29 +311,24 @@ function initMobileBrowseMenu() {
       });
   }
 
-  // Bind category buttons
   catButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
       setActive(catButtons, btn);
       currentCat = btn.dataset.cat;
-
       await loadMegaOnce();
       render();
     });
   });
 
-  // Bind segment buttons
   segButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
       setActive(segButtons, btn);
       currentSeg = btn.dataset.seg;
-
       await loadMegaOnce();
       render();
     });
   });
 
-  // Init defaults (match initial .is-active in HTML if present)
   const activeCatBtn = drawer.querySelector(".m-chip.is-active[data-cat]");
   const activeSegBtn = drawer.querySelector(".m-seg.is-active[data-seg]");
   if (activeCatBtn) currentCat = activeCatBtn.dataset.cat;
@@ -299,7 +336,6 @@ function initMobileBrowseMenu() {
 
   loadMegaOnce().then(render).catch(console.error);
 }
-
 
 
 
