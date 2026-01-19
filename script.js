@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       menuContainer.innerHTML = html;
       console.log("✅ Mega-menu loaded into DOM");
 
-      // Desktop behaviors (matches your existing working script-megamenu.js logic)
+      // Desktop behaviors
       initDesktopMegaMenuHover();
       initDesktopMegaMenuRoutingSlugs();
     })
@@ -35,9 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* =========================================================
    DESKTOP: Mega-menu hover/click (category-bar -> panels)
-   Matches your current DOM:
-   - Triggers: .category-bar .category-item (data-category="Clothing"/"Shoes"...)
-   - Panels:   nav.mega-menu .menu-panel (#clothing/#shoes/...)
    ========================================================= */
 function initDesktopMegaMenuHover() {
   const barItems = document.querySelectorAll(".category-bar .category-item");
@@ -59,15 +56,12 @@ function initDesktopMegaMenuHover() {
   };
 
   barItems.forEach((li) => {
-    // Hover shows panel
     li.addEventListener("mouseenter", () => showPanel(li.dataset.category));
-    // Click also shows (useful on touch laptops)
     li.addEventListener("click", () => showPanel(li.dataset.category));
   });
 
   navWrap.addEventListener("mouseleave", hideAll);
 
-  // Click outside closes
   document.addEventListener("click", (e) => {
     if (!navWrap.contains(e.target) && !e.target.closest(".category-bar")) hideAll();
   });
@@ -77,8 +71,6 @@ function initDesktopMegaMenuHover() {
 
 /* =========================================================
    DESKTOP: Slug routing for mega-menu links
-   Builds URLs like:
-   category.html?category=clothing&gender=Men&subcategory=sneakers
    ========================================================= */
 function initDesktopMegaMenuRoutingSlugs() {
   function slugify(txt) {
@@ -102,12 +94,10 @@ function initDesktopMegaMenuRoutingSlugs() {
       const sub = link.textContent.trim();
       const subSlug = slugify(sub);
 
-      // Find local column heading (Herre/Dame/Barn)
       const section = link.closest(".menu-section");
       const headerText = section?.querySelector("h4")?.textContent.trim() || "";
       const lower = headerText.toLowerCase();
 
-      // Norsk -> engelsk parameter
       let genderSlug = null;
       if (lower === "herre") genderSlug = "Men";
       else if (lower === "dame") genderSlug = "Women";
@@ -139,7 +129,6 @@ function initMobileDrawer() {
     drawer.hidden = false;
     overlay.hidden = false;
 
-    // Trigger reflow for smooth transition
     drawer.offsetHeight;
 
     drawer.classList.add("is-open");
@@ -185,6 +174,7 @@ function initMobileDrawer() {
 
 /* =========================
    MOBILE BROWSE MENU (Zalando-style)
+   + Static tile images (default per main category)
    ========================= */
 function initMobileBrowseMenu() {
   const drawer = document.getElementById("mobileDrawer");
@@ -202,6 +192,19 @@ function initMobileBrowseMenu() {
   let currentCat = "clothing";
   let currentSeg = "Dame";
 
+  // ✅ Static images (one per main category) — fast + stable + cache-friendly
+  const DEFAULT_CAT_IMAGE = {
+    clothing: "assets/img/tiles/default-clothing.jpg",
+    shoes: "assets/img/tiles/default-shoes.jpg",
+    gymcorner: "assets/img/tiles/default-gymcorner.jpg",
+    accessories: "assets/img/tiles/default-accessories.jpg",
+    selfcare: "assets/img/tiles/default-selfcare.jpg"
+  };
+
+  function getTileImage(cat) {
+    return DEFAULT_CAT_IMAGE[cat] || "";
+  }
+
   function setActive(nodeList, el) {
     nodeList.forEach((b) => b.classList.remove("is-active"));
     el.classList.add("is-active");
@@ -217,9 +220,12 @@ function initMobileBrowseMenu() {
   }
 
   function tileHTML(label, href) {
+    const img = getTileImage(currentCat);
+    const bg = img ? ` style="background-image:url('${img}');"` : "";
+
     return `
       <a class="m-tile" href="${href}">
-        <div class="m-tile-img" aria-hidden="true"></div>
+        <div class="m-tile-img"${bg} aria-hidden="true"></div>
         <div class="m-tile-label">${escapeHtml(label)}</div>
       </a>
     `;
@@ -336,10 +342,3 @@ function initMobileBrowseMenu() {
 
   loadMegaOnce().then(render).catch(console.error);
 }
-
-
-
-
-
-
-
