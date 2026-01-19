@@ -79,6 +79,24 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+@media (max-width: 768px) {
+  .m-tile,
+  .m-tile:visited,
+  .m-tile:hover,
+  .m-tile:active {
+    color: inherit;
+  }
+}
+
+@media (max-width: 768px) {
+  .m-tile-label {
+    color: #111;
+    letter-spacing: -0.2px;
+  }
+}
+
+
+   
   /* =========================
      Linje 1: hovedkategorier (chips)
      ========================= */
