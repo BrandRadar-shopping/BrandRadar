@@ -208,6 +208,33 @@
     letter-spacing: -0.2px;
   }
 
+/* ✅ Fix: tiles skal aldri “brekke ut” av skjermen */
+.m-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.m-tile {
+  min-width: 0;               /* viktig for grid overflow-bugs */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Sørg for at alt inni tiles også kan krympe */
+.m-tile-img,
+.m-tile-label {
+  min-width: 0;
+}
+
+/* (Valgfritt men ofte nødvendig hvis noe globalt overstyrer) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+   
   /* Brands row (horizontal scroll) */
   .m-brand-row {
     display: flex;
