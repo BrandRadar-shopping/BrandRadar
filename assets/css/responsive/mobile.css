@@ -33,16 +33,16 @@
   .mobile-drawer {
     position: fixed;
     top: 0;
-    left: 0;            /* ✅ */
-    right: 0;           /* ✅ */
+    left: 0;
+    right: 0;
     height: 100dvh;
-    width: auto;        /* ✅ */
-    max-width: 100%;    /* ✅ */
+    width: auto;
+    max-width: 100%;
 
     background: #fff;
     z-index: 13000;
 
-    transform: translateX(100%);  /* ✅ */
+    transform: translateX(100%);
     transition: transform 220ms ease;
 
     overflow-y: auto;
@@ -59,6 +59,7 @@
 
   body.is-locked {
     overflow: hidden;
+    overflow-x: hidden; /* ekstra sikkerhet mot horisontal scroll */
     touch-action: none;
   }
 
@@ -241,6 +242,25 @@
   }
 
   /* =========================
+     ✅ Small phones: 1 kolonne (<= 360px)
+     (iPhone SE / “Mobile S”)
+     ========================= */
+  @media (max-width: 360px) {
+    .m-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Litt mer premium på 1-kolonne */
+    .m-tile-img {
+      height: 110px;
+    }
+
+    .m-tile-label {
+      font-size: 16px;
+    }
+  }
+
+  /* =========================
      Brands row (horizontal scroll)
      ========================= */
   .m-brand-row {
@@ -407,4 +427,5 @@
     display: none !important;
   }
 }
+
 
