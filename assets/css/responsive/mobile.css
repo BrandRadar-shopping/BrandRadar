@@ -3,17 +3,16 @@
    Breakpoint: <= 768px
    ========================= */
 
-/* Global defensive box sizing (prevents width math bugs) */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 /* =========================
    MOBILE: DRAWER MENU (Zalando-style fullscreen)
    ========================= */
 @media (max-width: 768px) {
+
+  /* Safety: aldri la drawer-content lage horisontal scroll */
+  .mobile-drawer,
+  .mobile-drawer * {
+    box-sizing: border-box;
+  }
 
   .mobile-overlay {
     position: fixed;
@@ -41,14 +40,11 @@
     z-index: 13000;
     transform: translateX(102%);
     transition: transform 220ms ease;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden; /* ✅ kritisk */
     -webkit-overflow-scrolling: touch;
     padding: 14px 14px 22px;
     border-radius: 0;
-
-    /* Safety */
-    max-width: 100vw;
-    contain: layout paint;
   }
   .mobile-drawer.is-open {
     transform: translateX(0);
@@ -62,11 +58,6 @@
   .mobile-drawer a,
   .mobile-drawer button {
     min-height: 44px;
-  }
-
-  /* ✅ Hard clamp: nothing inside drawer may exceed viewport width */
-  .mobile-drawer * {
-    max-width: 100%;
   }
 
   /* Drawer header */
@@ -83,7 +74,6 @@
     margin: 0;
     font-weight: 800;
     font-size: 20px;
-    letter-spacing: -0.2px;
   }
   .mobile-drawer-close {
     width: 44px;
@@ -103,9 +93,11 @@
     display: flex;
     gap: 10px;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 2px 6px;
-    margin: 4px -2px 6px;
+    padding: 10px 0 6px;   /* ✅ fjernet negative margin-fellen */
+    margin: 4px 0 6px;     /* ✅ fjernet negative margin-fellen */
+    max-width: 100%;
   }
   .m-topcats::-webkit-scrollbar { display: none; }
 
@@ -133,6 +125,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     border-bottom: 1px solid rgba(0,0,0,0.10);
     margin-top: 6px;
+    max-width: 100%;
   }
 
   .m-seg {
@@ -159,6 +152,14 @@
   /* =========================
      Linje 3: results
      ========================= */
+  .m-results,
+  .m-subcats,
+  .m-brands {
+    max-width: 100%;
+    overflow-x: hidden; /* ✅ */
+    min-width: 0;       /* ✅ */
+  }
+
   .m-results {
     padding-top: 14px;
     display: grid;
@@ -172,28 +173,31 @@
     opacity: 0.75;
   }
 
-  /* ✅ Subcategory tiles: 1 column (stable on 320px) */
+  /* ✅ Subcategory tiles: 1 kolonne (stabilt for 320–430px) */
   .m-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
+    max-width: 100%;
     min-width: 0;
+    overflow-x: hidden;
   }
 
   .m-tile {
     display: block;
     width: 100%;
-    min-width: 0;               /* critical for overflow bugs */
+    min-width: 0;             /* ✅ viktig i grid */
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.10);
     text-decoration: none;
     background: #fff;
+    min-height: 120px;
     position: relative;
     box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   }
 
-  /* Tiles should never look like blue links */
+  /* Tiles skal ikke se ut som blå lenker */
   .m-tile,
   .m-tile:visited,
   .m-tile:hover,
@@ -201,15 +205,14 @@
     color: inherit;
   }
 
-  /* Image block */
   .m-tile-img {
-    height: 120px;              /* slightly taller since single column */
+    height: 110px; /* litt mer “premium” i 1 kolonne */
+    min-width: 0;
     position: relative;
     background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-width: 0;
   }
 
   .m-tile-img::after {
@@ -220,25 +223,14 @@
     pointer-events: none;
   }
 
-  /* Label: wrap + clamp to avoid width pushes */
   .m-tile-label {
-    padding: 12px 12px 14px;
+    padding: 10px 12px 12px;
     font-weight: 900;
     font-size: 16px;
     color: #111;
     letter-spacing: -0.2px;
-
-    /* ✅ Prevent “min-content width” from forcing overflow */
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
     min-width: 0;
-
-    /* Nice clamp */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    word-break: break-word; /* ✅ failsafe */
   }
 
   /* Brands row (horizontal scroll) */
@@ -246,8 +238,10 @@
     display: flex;
     gap: 10px;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
+    max-width: 100%;
   }
   .m-brand-row::-webkit-scrollbar { display: none; }
 
@@ -268,12 +262,12 @@
   }
 }
 
-
 /* =========================
    BrandRadar – MOBILE HEADER
    ========================= */
 @media (max-width: 768px) {
 
+  /* Header sticky + stacking */
   .main-header {
     position: sticky;
     top: 0;
@@ -282,12 +276,14 @@
     isolation: isolate;
   }
 
+  /* Viktig: søk-dropdown må ikke klippes */
   .main-header,
   .nav-container,
   .search-box {
     overflow: visible !important;
   }
 
+  /* Mobil layout: 2 rader (top row + search) */
   .nav-container {
     position: relative;
     display: grid;
@@ -300,6 +296,7 @@
     align-items: center;
   }
 
+  /* Hamburger */
   .mobile-menu-btn {
     grid-area: menu;
     width: 44px;
@@ -315,12 +312,14 @@
     line-height: 1;
   }
 
+  /* Logo */
   .logo {
     grid-area: logo;
     justify-self: center;
     text-decoration: none;
   }
 
+  /* Favoritter: ikon på mobil */
   .top-links {
     grid-area: fav;
     justify-self: end;
@@ -364,6 +363,7 @@
     color: #fff;
   }
 
+  /* Search full width */
   .search-box {
     position: relative;
     grid-area: search;
@@ -376,6 +376,7 @@
     border-radius: 12px;
   }
 
+  /* Dropdown over alt */
   .search-dropdown {
     position: absolute;
     left: 0;
@@ -388,6 +389,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Category bar: horisontal scroll */
   .category-bar {
     display: flex;
     gap: 10px;
@@ -397,8 +399,10 @@
     white-space: nowrap;
   }
   .category-bar::-webkit-scrollbar { display: none; }
+
   .category-item { flex: 0 0 auto; }
 
+  /* Skjul mega-menu container på mobil */
   nav.mega-menu {
     display: none !important;
   }
