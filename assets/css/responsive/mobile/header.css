@@ -53,6 +53,7 @@
     grid-area: logo;
     justify-self: center;
     text-decoration: none;
+    line-height: 1;
   }
 
   /* Favoritter: ikon på mobil */
@@ -106,13 +107,39 @@
     width: 100%;
   }
 
+  /* Gjør input “app-clean”: plass til ikon + clear */
   #search-input {
     width: 100%;
     height: 44px;
     border-radius: 12px;
+    padding-left: 40px;  /* plass til 🔍 */
+    padding-right: 40px; /* plass til ✕ */
   }
 
-  /* Dropdown over alt */
+  /* Search icon og clear button posisjoneres pent på mobil */
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Dropdown over alt (men under drawer) */
   .search-dropdown {
     position: absolute;
     left: 0;
@@ -125,6 +152,11 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Failsafe: hidden skal være hidden */
+  .search-dropdown[hidden] {
+    display: none !important;
+  }
+
   /* Category bar: horisontal scroll */
   .category-bar {
     display: flex;
@@ -133,6 +165,8 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
+    margin: 0;
+    list-style: none;
   }
   .category-bar::-webkit-scrollbar { display: none; }
 
@@ -143,4 +177,5 @@
     display: none !important;
   }
 }
+
 
