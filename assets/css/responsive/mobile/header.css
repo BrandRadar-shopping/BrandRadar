@@ -219,3 +219,36 @@
   }
 }
 
+@media (max-width: 360px) {
+
+  /* Litt strammere padding i header */
+  .nav-container {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  /* Gjør søkefeltet mer kompakt */
+  #search-input {
+    height: 42px;
+    padding-left: 38px;
+    padding-right: 34px;
+    font-size: 14px;
+  }
+
+  .search-clear {
+    width: 32px;
+    height: 32px;
+    right: 8px;
+  }
+
+  /* Favoritt-badge litt mindre så den ikke sprenger */
+  #favorites-count {
+    top: 5px;
+    right: 5px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+}
