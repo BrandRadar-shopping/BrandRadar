@@ -7,3 +7,44 @@
    Dette er plassen for globale mobil-failsafes og “site-wide” mobilregler
    som ikke tilhører header/drawer/tiles. */
 
+@media (max-width: 768px) {
+
+  /* === Mobile anti-overflow firewall === */
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    overflow-x: hidden;
+  }
+
+  /* Hindrer klassisk “100vw + padding” overflow */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Grid/flex barn må få lov til å krympe */
+  .nav-container,
+  .search-box,
+  #search-input,
+  .top-links,
+  .category-bar {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Nøytraliser typiske fullbredde-triks fra desktop */
+  .main-header,
+  .nav-container,
+  .category-bar {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Hvis category-bar/sections bruker “bleed” (negative margins), stopp det */
+  .category-bar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
