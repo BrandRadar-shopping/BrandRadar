@@ -1,1 +1,146 @@
+/* =========================
+   BrandRadar – MOBILE HEADER
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Header sticky + stacking */
+  .main-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: #fff;
+    isolation: isolate;
+  }
+
+  /* Viktig: søk-dropdown må ikke klippes */
+  .main-header,
+  .nav-container,
+  .search-box {
+    overflow: visible !important;
+  }
+
+  /* Mobil layout: 2 rader (top row + search) */
+  .nav-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    grid-template-areas:
+      "menu logo fav"
+      "search search search";
+    gap: 10px;
+    padding: 10px 12px;
+    align-items: center;
+  }
+
+  /* Hamburger */
+  .mobile-menu-btn {
+    grid-area: menu;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Logo */
+  .logo {
+    grid-area: logo;
+    justify-self: center;
+    text-decoration: none;
+  }
+
+  /* Favoritter: ikon på mobil */
+  .top-links {
+    grid-area: fav;
+    justify-self: end;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .top-links a:not(.favorites-link) { display: none; }
+
+  .top-links .favorites-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    position: relative;
+    text-decoration: none;
+    font-size: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .top-links .favorites-link::before {
+    content: "❤️";
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  #favorites-count {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    background: #0070f3;
+    color: #fff;
+  }
+
+  /* Search full width */
+  .search-box {
+    position: relative;
+    grid-area: search;
+    width: 100%;
+  }
+
+  #search-input {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  /* Dropdown over alt */
+  .search-dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(44px + 10px);
+    z-index: 10000;
+    border-radius: 12px;
+    max-height: 60vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Category bar: horisontal scroll */
+  .category-bar {
+    display: flex;
+    gap: 10px;
+    padding: 8px 12px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .category-bar::-webkit-scrollbar { display: none; }
+
+  .category-item { flex: 0 0 auto; }
+
+  /* Skjul mega-menu container på mobil */
+  nav.mega-menu {
+    display: none !important;
+  }
+}
 
