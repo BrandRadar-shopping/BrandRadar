@@ -252,3 +252,38 @@
     line-height: 16px;
   }
 }
+
+@media (max-width: 768px) {
+  /* GRID/FLEX: la barna få krympe (fixer “forsvinner på 320px”) */
+  .nav-container > * { min-width: 0; }
+
+  /* spesielt viktig hvis desktop har min-width på disse */
+  .search-box { min-width: 0; }
+  #search-input { min-width: 0; }
+
+  /* top-links kan også få min-width fra desktop */
+  .top-links { min-width: 0; }
+}
+
+@media (max-width: 360px) {
+  .nav-container {
+    grid-template-columns: 40px 1fr 40px; /* litt mindre enn 44px */
+  }
+
+  .mobile-menu-btn,
+  .top-links .favorites-link {
+    width: 40px;
+    height: 40px;
+  }
+
+  #favorites-count {
+    top: 4px;
+    right: 4px;
+  }
+}
+
+
+
+
+
+
