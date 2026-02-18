@@ -250,6 +250,11 @@
   }
 }
 
+@media (max-width: 360px) {
+  .nav-container {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+  }
+}
 
 
 
