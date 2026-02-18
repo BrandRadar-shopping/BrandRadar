@@ -1,6 +1,7 @@
 /* =========================
-   BrandRadar – MOBILE HEADER
+   BrandRadar – MOBILE HEADER (Clean)
    ========================= */
+
 @media (max-width: 768px) {
 
   /* Header sticky + stacking */
@@ -10,6 +11,9 @@
     z-index: 9999;
     background: #fff;
     isolation: isolate;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 100%;
   }
 
   /* Viktig: søk-dropdown må ikke klippes */
@@ -30,7 +34,12 @@
     gap: 10px;
     padding: 10px 12px;
     align-items: center;
+    width: 100%;
+    max-width: 100%;
   }
+
+  /* La grid-barn krympe (kritisk på små skjermer) */
+  .nav-container > * { min-width: 0; }
 
   /* Hamburger */
   .mobile-menu-btn {
@@ -46,6 +55,7 @@
     -webkit-tap-highlight-color: transparent;
     font-size: 20px;
     line-height: 1;
+    color: #111;
   }
 
   /* Logo */
@@ -54,20 +64,27 @@
     justify-self: center;
     text-decoration: none;
     line-height: 1;
+    display: block;
+    color: #111;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
   }
 
-  /* Favoritter: ikon på mobil */
+  /* Favoritter: kun ikon på mobil */
   .top-links {
     grid-area: fav;
     justify-self: end;
     display: flex;
     justify-content: flex-end;
+    min-width: 0;
   }
 
-  .top-links a:not(.favorites-link) { display: none; }
+  .top-links a:not(.favorites-link) { display: none !important; }
 
   .top-links .favorites-link {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     width: 44px;
@@ -77,12 +94,14 @@
     text-decoration: none;
     font-size: 0;
     -webkit-tap-highlight-color: transparent;
+    background: rgba(0,0,0,0.04);
   }
 
   .top-links .favorites-link::before {
     content: "❤️";
     font-size: 18px;
     line-height: 1;
+    color: #111;
   }
 
   #favorites-count {
@@ -105,24 +124,36 @@
     position: relative;
     grid-area: search;
     width: 100%;
+    display: block;
+    min-width: 0;
   }
 
-  /* Gjør input “app-clean”: plass til ikon + clear */
   #search-input {
     width: 100%;
+    min-width: 0;
     height: 44px;
     border-radius: 12px;
     padding-left: 40px;  /* plass til 🔍 */
     padding-right: 40px; /* plass til ✕ */
+    background: #f3f4f6;
+    border: 1px solid rgba(0,0,0,0.12);
+    color: #111;
+    outline: none;
+    font-size: 15px;
   }
 
-  /* Search icon og clear button posisjoneres pent på mobil */
+  #search-input::placeholder {
+    color: rgba(0,0,0,0.45);
+  }
+
   .search-icon {
     position: absolute;
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+    color: #111;
+    opacity: 0.9;
   }
 
   .search-clear {
@@ -137,6 +168,8 @@
     border-radius: 10px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    color: #111;
+    opacity: 0.9;
   }
 
   /* Dropdown over alt (men under drawer) */
@@ -152,10 +185,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Failsafe: hidden skal være hidden */
-  .search-dropdown[hidden] {
-    display: none !important;
-  }
+  .search-dropdown[hidden] { display: none !important; }
 
   /* Category bar: horisontal scroll */
   .category-bar {
@@ -167,107 +197,27 @@
     white-space: nowrap;
     margin: 0;
     list-style: none;
+    background: #111; /* matcher det du ser i screenshot */
   }
   .category-bar::-webkit-scrollbar { display: none; }
 
-  .category-item { flex: 0 0 auto; }
+  .category-item {
+    flex: 0 0 auto;
+    color: #fff;
+    font-weight: 900;
+  }
 
   /* Skjul mega-menu container på mobil */
-  nav.mega-menu {
-    display: none !important;
-  }
+  nav.mega-menu { display: none !important; }
 }
 
-@media (max-width: 768px) {
-
-  /* --- FORCE VISIBILITY (desktop kan ha overstyringer) --- */
-  .logo { 
-    display: block !important;
-    color: #111 !important;
-    font-weight: 900;
-    font-size: 18px;
-    letter-spacing: -0.3px;
-  }
-
-  .search-box { 
-    display: block !important;
-  }
-
-  .top-links { 
-    display: flex !important;
-  }
-
-  .top-links .favorites-link {
-    display: inline-flex !important;
-  }
-
-  /* --- INPUT: gjør søkefelt synlig og “app-ish” --- */
-  #search-input {
-    background: #f3f4f6;
-    border: 1px solid rgba(0,0,0,0.10);
-    color: #111;
-    outline: none;
-  }
-
-  #search-input::placeholder {
-    color: rgba(0,0,0,0.45);
-  }
-
-  /* litt “header separation” fra resten */
-  .main-header {
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-  }
-}
-
+/* Tight mode: små skjermer (iPhone SE / 320px) */
 @media (max-width: 360px) {
 
-  /* Litt strammere padding i header */
   .nav-container {
     padding: 8px 10px;
     gap: 8px;
-  }
-
-  /* Gjør søkefeltet mer kompakt */
-  #search-input {
-    height: 42px;
-    padding-left: 38px;
-    padding-right: 34px;
-    font-size: 14px;
-  }
-
-  .search-clear {
-    width: 32px;
-    height: 32px;
-    right: 8px;
-  }
-
-  /* Favoritt-badge litt mindre så den ikke sprenger */
-  #favorites-count {
-    top: 5px;
-    right: 5px;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
-    font-size: 11px;
-    line-height: 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  /* GRID/FLEX: la barna få krympe (fixer “forsvinner på 320px”) */
-  .nav-container > * { min-width: 0; }
-
-  /* spesielt viktig hvis desktop har min-width på disse */
-  .search-box { min-width: 0; }
-  #search-input { min-width: 0; }
-
-  /* top-links kan også få min-width fra desktop */
-  .top-links { min-width: 0; }
-}
-
-@media (max-width: 360px) {
-  .nav-container {
-    grid-template-columns: 40px 1fr 40px; /* litt mindre enn 44px */
+    grid-template-columns: 40px 1fr 40px;
   }
 
   .mobile-menu-btn,
@@ -279,8 +229,27 @@
   #favorites-count {
     top: 4px;
     right: 4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  #search-input {
+    height: 42px;
+    font-size: 14px;
+    padding-left: 38px;
+    padding-right: 34px;
+  }
+
+  .search-clear {
+    width: 32px;
+    height: 32px;
+    right: 8px;
   }
 }
+
 
 
 
