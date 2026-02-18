@@ -1,1 +1,9 @@
+/* =========================
+   BrandRadar – Mobile Overrides
+   Breakpoint: <= 768px
+   ========================= */
+
+/* (Tom foreløpig)
+   Dette er plassen for globale mobil-failsafes og “site-wide” mobilregler
+   som ikke tilhører header/drawer/tiles. */
 
