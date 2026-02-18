@@ -3,17 +3,17 @@
    Breakpoint: <= 768px
    ========================= */
 
+/* Global defensive box sizing (prevents width math bugs) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* =========================
    MOBILE: DRAWER MENU (Zalando-style fullscreen)
    ========================= */
 @media (max-width: 768px) {
-
-  /* Global defensive box sizing */
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
 
   .mobile-overlay {
     position: fixed;
@@ -29,37 +29,33 @@
     pointer-events: auto;
   }
 
-  /* ✅ Fullscreen drawer (viewport-safe: NOT 100vw) */
+  /* Fullscreen drawer (slide in from right) */
   .mobile-drawer {
     position: fixed;
     top: 0;
-    left: 0;
     right: 0;
+    left: auto;
     height: 100dvh;
-    width: auto;
-    max-width: 100%;
-
+    width: 100vw;
     background: #fff;
     z-index: 13000;
-
-    transform: translateX(100%);
+    transform: translateX(102%);
     transition: transform 220ms ease;
-
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
-
     padding: 14px 14px 22px;
     border-radius: 0;
-  }
 
+    /* Safety */
+    max-width: 100vw;
+    contain: layout paint;
+  }
   .mobile-drawer.is-open {
     transform: translateX(0);
   }
 
   body.is-locked {
     overflow: hidden;
-    overflow-x: hidden; /* ekstra sikkerhet mot horisontal scroll */
     touch-action: none;
   }
 
@@ -68,7 +64,7 @@
     min-height: 44px;
   }
 
-  /* ✅ Safety clamp: ingenting i drawer får lov å bli bredere enn viewport */
+  /* ✅ Hard clamp: nothing inside drawer may exceed viewport width */
   .mobile-drawer * {
     max-width: 100%;
   }
@@ -83,13 +79,12 @@
     border-bottom: 1px solid rgba(0,0,0,0.08);
     margin-bottom: 10px;
   }
-
   .mobile-drawer-title {
     margin: 0;
     font-weight: 800;
     font-size: 20px;
+    letter-spacing: -0.2px;
   }
-
   .mobile-drawer-close {
     width: 44px;
     height: 44px;
@@ -126,7 +121,6 @@
     -webkit-tap-highlight-color: transparent;
     white-space: nowrap;
   }
-
   .m-chip.is-active {
     border-color: #0070f3;
   }
@@ -151,7 +145,6 @@
     position: relative;
     -webkit-tap-highlight-color: transparent;
   }
-
   .m-seg.is-active::after {
     content: "";
     position: absolute;
@@ -179,12 +172,10 @@
     opacity: 0.75;
   }
 
-  /* =========================
-     Subcategory tiles (2 cols, overflow-safe)
-     ========================= */
+  /* ✅ Subcategory tiles: 1 column (stable on 320px) */
   .m-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 12px;
     min-width: 0;
   }
@@ -192,17 +183,17 @@
   .m-tile {
     display: block;
     width: 100%;
-    min-width: 0;
+    min-width: 0;               /* critical for overflow bugs */
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.10);
     text-decoration: none;
     background: #fff;
-    min-height: 120px;
     position: relative;
     box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   }
 
+  /* Tiles should never look like blue links */
   .m-tile,
   .m-tile:visited,
   .m-tile:hover,
@@ -210,14 +201,15 @@
     color: inherit;
   }
 
+  /* Image block */
   .m-tile-img {
-    height: 84px;
-    min-width: 0;
+    height: 120px;              /* slightly taller since single column */
     position: relative;
     background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    min-width: 0;
   }
 
   .m-tile-img::after {
@@ -228,41 +220,28 @@
     pointer-events: none;
   }
 
+  /* Label: wrap + clamp to avoid width pushes */
   .m-tile-label {
-    padding: 10px 10px 12px;
-    min-width: 0;
+    padding: 12px 12px 14px;
     font-weight: 900;
     font-size: 16px;
     color: #111;
     letter-spacing: -0.2px;
 
-    /* ✅ hard wrap: stopper ALLE rare overflow cases */
-    word-break: break-word;
+    /* ✅ Prevent “min-content width” from forcing overflow */
+    white-space: normal;
     overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
+
+    /* Nice clamp */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  /* =========================
-     ✅ Small phones: 1 kolonne (<= 360px)
-     (iPhone SE / “Mobile S”)
-     ========================= */
-  @media (max-width: 360px) {
-    .m-grid {
-      grid-template-columns: 1fr;
-    }
-
-    /* Litt mer premium på 1-kolonne */
-    .m-tile-img {
-      height: 110px;
-    }
-
-    .m-tile-label {
-      font-size: 16px;
-    }
-  }
-
-  /* =========================
-     Brands row (horizontal scroll)
-     ========================= */
+  /* Brands row (horizontal scroll) */
   .m-brand-row {
     display: flex;
     gap: 10px;
@@ -270,7 +249,6 @@
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
   }
-
   .m-brand-row::-webkit-scrollbar { display: none; }
 
   .m-brand-pill {
@@ -418,9 +396,7 @@
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
   }
-
   .category-bar::-webkit-scrollbar { display: none; }
-
   .category-item { flex: 0 0 auto; }
 
   nav.mega-menu {
