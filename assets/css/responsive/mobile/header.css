@@ -178,4 +178,44 @@
   }
 }
 
+@media (max-width: 768px) {
+
+  /* --- FORCE VISIBILITY (desktop kan ha overstyringer) --- */
+  .logo { 
+    display: block !important;
+    color: #111 !important;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+
+  .search-box { 
+    display: block !important;
+  }
+
+  .top-links { 
+    display: flex !important;
+  }
+
+  .top-links .favorites-link {
+    display: inline-flex !important;
+  }
+
+  /* --- INPUT: gjør søkefelt synlig og “app-ish” --- */
+  #search-input {
+    background: #f3f4f6;
+    border: 1px solid rgba(0,0,0,0.10);
+    color: #111;
+    outline: none;
+  }
+
+  #search-input::placeholder {
+    color: rgba(0,0,0,0.45);
+  }
+
+  /* litt “header separation” fra resten */
+  .main-header {
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+}
 
