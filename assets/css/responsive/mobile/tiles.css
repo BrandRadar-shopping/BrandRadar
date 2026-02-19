@@ -60,3 +60,8 @@
   #trendingPrev { left: 10px; }
   #trendingNext { right: 10px; }
 }
+
+@media (max-width: 360px) {
+  .hero-slider .nav.prev, #trendingPrev { left: 8px; }
+  .hero-slider .nav.next, #trendingNext { right: 8px; }
+}
