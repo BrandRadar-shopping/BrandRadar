@@ -9,3 +9,54 @@
    - Brand-grids på mobil
 */
 
+/* =========================
+   BrandRadar – Mobile Tiles / Layout
+   ========================= */
+@media (max-width: 768px) {
+
+  /* GENERELL FAILSAFE: sections må ikke lage bredde > viewport */
+  section, header, footer {
+    max-width: 100%;
+    overflow-x: clip; /* bedre enn hidden når støttet */
+  }
+
+  /* HERO SLIDER: hold alt inni viewport */
+  .hero-slider {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; /* slider + knapper skal ikke skape side-scroll */
+    position: relative;
+  }
+
+  .hero-slider .slides {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Slider-nav knapper: aldri negative offsets */
+  .hero-slider .nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .hero-slider .nav.prev { left: 10px; }
+  .hero-slider .nav.next { right: 10px; }
+
+  /* Trending: samme prinsipp hvis piler er absolutte */
+  .trending-section {
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #trendingPrev, #trendingNext {
+    position: absolute; /* hvis de allerede er absolute i desktop */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+  #trendingPrev { left: 10px; }
+  #trendingNext { right: 10px; }
+}
