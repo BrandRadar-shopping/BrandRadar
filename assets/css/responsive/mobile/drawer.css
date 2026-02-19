@@ -81,6 +81,22 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+/* Hard-hide når hidden-attributtet er på */
+.mobile-overlay[hidden],
+.mobile-drawer[hidden] {
+  display: none !important;
+}
+
+/* Failsafe: overlay skal være helt transparent når ikke open */
+.mobile-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+.mobile-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+   
   /* =========================
      Linje 1: hovedkategorier (chips)
      ========================= */
