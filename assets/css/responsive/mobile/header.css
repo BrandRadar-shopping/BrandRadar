@@ -16,6 +16,11 @@
     max-width: 100%;
   }
 
+/* Category bar er redundant på mobil når vi har drawer */
+.category-bar {
+  display: none !important;
+}
+   
   /* Viktig: søk-dropdown må ikke klippes */
   .main-header,
   .nav-container,
