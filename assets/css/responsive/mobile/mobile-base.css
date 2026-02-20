@@ -92,3 +92,180 @@
     opacity: 1;
   }
 }
+
+@media (max-width: 768px) {
+
+  /* Search screen layout */
+  .m-search-header {
+    position: sticky;
+    top: 0;
+    z-index: 10001; /* over innhold, under drawer */
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 10px 12px 12px;
+  }
+
+  .m-search-top {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+  }
+
+  .m-back-btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: rgba(0,0,0,0.04);
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .m-search-wrap {
+    position: relative;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .m-search-main {
+    padding: 14px 12px 18px;
+  }
+
+  .m-search-block {
+    margin-bottom: 18px;
+  }
+
+  .m-search-block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .m-search-block h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+  }
+
+  .m-link {
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 13px;
+    color: #0070f3;
+  }
+
+  .m-allcats-btn {
+    border: 1px solid rgba(0,0,0,0.10);
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 900;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Category icon chips */
+  .m-cat-chips {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .m-cat-chips::-webkit-scrollbar { display: none; }
+
+  .m-cat-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
+    border-radius: 999px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: #111;
+    font-weight: 900;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .m-cat-ico {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  /* Featured tiles 2x2 */
+  .m-feature-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .m-feature-tile {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: 128px;
+    text-decoration: none;
+    color: #fff;
+    background: #111;
+  }
+
+  .m-feature-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: center;
+    filter: saturate(1.05);
+    transform: scale(1.02);
+  }
+
+  .m-feature-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.60));
+  }
+
+  .m-feature-title,
+  .m-feature-sub {
+    position: relative;
+    display: block;
+    padding: 0 12px;
+    z-index: 1;
+  }
+
+  .m-feature-title {
+    padding-top: 12px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+  }
+
+  .m-feature-sub {
+    padding-top: 4px;
+    font-size: 12px;
+    opacity: 0.85;
+    font-weight: 800;
+  }
+
+  .m-feature-note {
+    margin: 10px 2px 0;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  /* Toppmerker rad (gjenbruker m-brand-row/m-brand-pill fra drawer.css) */
+  .m-brand-row--search {
+    padding-bottom: 2px;
+  }
+}
