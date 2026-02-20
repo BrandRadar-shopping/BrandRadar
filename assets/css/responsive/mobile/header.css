@@ -185,6 +185,36 @@
   nav.mega-menu { display: none !important; }
 }
 
+@media (max-width: 768px) {
+  /* Hard reset av desktop-bredder i header på mobil */
+  .main-header,
+  .nav-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Sikrer at grid faktisk kan krympe på 320 */
+  .nav-container {
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+  }
+
+  /* Søk-wrap må aldri bli bredere enn cellen */
+  #site-search,
+  .search-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Input må respektere containeren */
+  #search-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
 /* Tight mode: små skjermer */
 @media (max-width: 360px) {
   .nav-container {
