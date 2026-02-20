@@ -17,6 +17,29 @@
     box-sizing: border-box;
   }
 
+@media (max-width: 768px) {
+  .m-ico {
+    width: 22px;
+    height: 22px;
+    color: #111;
+  }
+
+  /* Luxury: sort bakgrunn + gull ikon/tekst */
+  .m-nav-item.m-lux {
+    background: #0b0b0c;
+    border-radius: 14px;
+    margin: 8px 10px;           /* gjør den “chip”-aktig */
+    height: calc(64px - 16px);
+    align-content: center;
+  }
+
+  .m-nav-item.m-lux .m-ico,
+  .m-nav-item.m-lux .m-txt {
+    color: #d8b24c;             /* “gold” */
+    opacity: 1;
+  }
+}
+   
   /* La grid/flex barn få krympe */
   .nav-container > *,
   .search-box,
