@@ -342,3 +342,41 @@ function initMobileBrowseMenu() {
 
   loadMegaOnce().then(render).catch(console.error);
 }
+
+(function () {
+  const mq = window.matchMedia("(max-width: 768px)");
+  if (!mq.matches) return;
+
+  const nav = document.querySelector(".m-bottom-nav");
+  if (!nav) return;
+
+  // Active state
+  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  nav.querySelectorAll("[data-route]").forEach(a => {
+    const route = a.getAttribute("data-route");
+    const hit =
+      (route === "index" && (path === "" || path === "index.html")) ||
+      (route === "favoritter" && path.includes("favoritter")) ||
+      (route === "brands" && path.includes("brands"));
+    if (hit) a.classList.add("is-active");
+  });
+
+  nav.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.getAttribute("data-action");
+
+    if (action === "focus-search") {
+      const input = document.getElementById("search-input");
+      if (input) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => input.focus({ preventScroll: true }), 250);
+      }
+    }
+
+    if (action === "open-menu") {
+      document.querySelector(".mobile-menu-btn")?.click();
+    }
+  });
+})();
