@@ -1,1 +1,208 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrandRadar | Søk</title>
 
+  <!-- Desktop base (uendret) + mobil overrides -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css" />
+</head>
+<body class="is-search-page">
+
+  <!-- SEARCH HEADER (mobil screen) -->
+  <header class="m-search-header">
+    <div class="m-search-top">
+      <button class="m-back-btn" type="button" aria-label="Tilbake">←</button>
+      <div class="m-search-wrap" id="site-search">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Søk produkter eller merker…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Søk"
+        />
+
+        <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+
+        <div class="search-dropdown" id="search-dropdown" hidden>
+          <div class="search-section" data-section="products">
+            <p class="search-section-title">Produkter</p>
+            <div class="search-results" id="search-results-products"></div>
+          </div>
+
+          <div class="search-section" data-section="brands">
+            <p class="search-section-title">Brands</p>
+            <div class="search-results" id="search-results-brands"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Drawer + overlay (for A: "Se alle kategorier") -->
+  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+
+  <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
+    <div class="mobile-drawer-header">
+      <p class="mobile-drawer-title">Søk etter kategori</p>
+      <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
+    </div>
+
+    <div class="m-topcats" role="tablist" aria-label="Hovedkategorier">
+      <button class="m-chip is-active" data-cat="clothing" type="button">Klær</button>
+      <button class="m-chip" data-cat="shoes" type="button">Sko</button>
+      <button class="m-chip" data-cat="gymcorner" type="button">Gymcorner</button>
+      <button class="m-chip" data-cat="accessories" type="button">Tilbehør</button>
+      <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
+    </div>
+
+    <div class="m-segments" role="tablist" aria-label="Segment">
+      <button class="m-seg is-active" data-seg="Dame" type="button">Dame</button>
+      <button class="m-seg" data-seg="Herre" type="button">Herre</button>
+      <button class="m-seg" data-seg="Barn" type="button">Barn</button>
+    </div>
+
+    <div class="m-results">
+      <div class="m-subcats">
+        <h3 class="m-section-title">Kategorier</h3>
+        <div class="m-grid" id="mSubcatGrid"></div>
+      </div>
+
+      <div class="m-brands">
+        <h3 class="m-section-title">Toppmerker</h3>
+        <div class="m-brand-row" id="mBrandRow"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="m-search-main">
+
+    <!-- Kategorier: ikon-chips (alle) -->
+    <section class="m-search-block">
+      <div class="m-search-block-head">
+        <h2>Kategorier</h2>
+        <button class="m-allcats-btn" type="button">Se alle</button>
+      </div>
+
+      <div class="m-cat-chips" aria-label="Kategorier hurtigvalg">
+        <a class="m-cat-chip" href="category.html?category=Clothing">
+          <span class="m-cat-ico" aria-hidden="true">👕</span>
+          <span>Klær</span>
+        </a>
+        <a class="m-cat-chip" href="category.html?category=Shoes">
+          <span class="m-cat-ico" aria-hidden="true">👟</span>
+          <span>Sko</span>
+        </a>
+        <a class="m-cat-chip" href="category.html?category=Gymcorner">
+          <span class="m-cat-ico" aria-hidden="true">🏋️</span>
+          <span>Gym</span>
+        </a>
+        <a class="m-cat-chip" href="category.html?category=Accessories">
+          <span class="m-cat-ico" aria-hidden="true">🧢</span>
+          <span>Tilbehør</span>
+        </a>
+        <a class="m-cat-chip" href="category.html?category=Selfcare">
+          <span class="m-cat-ico" aria-hidden="true">🧴</span>
+          <span>Selfcare</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 4 featured tiles (2x2) -->
+    <section class="m-search-block">
+      <div class="m-search-block-head">
+        <h2>Populært nå</h2>
+      </div>
+
+      <div class="m-feature-grid">
+        <a class="m-feature-tile" href="luxury.html" style="--bg:url('assets/img/luxury-1.jpg')">
+          <span class="m-feature-title">Luxury Corner</span>
+          <span class="m-feature-sub">Eksklusivt utvalg</span>
+        </a>
+
+        <a class="m-feature-tile" href="category.html?category=Clothing" style="--bg:url('assets/img/cat-clothing.jpg')">
+          <span class="m-feature-title">Klær</span>
+          <span class="m-feature-sub">Trending styles</span>
+        </a>
+
+        <a class="m-feature-tile" href="category.html?category=Shoes" style="--bg:url('assets/img/cat-shoes.jpg')">
+          <span class="m-feature-title">Sko</span>
+          <span class="m-feature-sub">Nyheter & bestselgere</span>
+        </a>
+
+        <a class="m-feature-tile" href="news.html" style="--bg:url('assets/img/trends.jpg')">
+          <span class="m-feature-title">Trender</span>
+          <span class="m-feature-sub">Drops & kampanjer</span>
+        </a>
+      </div>
+
+      <p class="m-feature-note">Tips: bytt bildene i <code>assets/img/</code> når du vil gi dette premium-looken.</p>
+    </section>
+
+    <!-- Toppmerker (horisontal) -->
+    <section class="m-search-block">
+      <div class="m-search-block-head">
+        <h2>Toppmerker</h2>
+        <a class="m-link" href="brands.html">Se alle</a>
+      </div>
+
+      <div class="m-brand-row m-brand-row--search" id="mBrandRowSearch">
+        <!-- kan fylles dynamisk senere. foreløpig: legg inn noen statiske -->
+        <a class="m-brand-pill" href="brands.html">Nike</a>
+        <a class="m-brand-pill" href="brands.html">Adidas</a>
+        <a class="m-brand-pill" href="brands.html">Gymshark</a>
+        <a class="m-brand-pill" href="brands.html">Puma</a>
+        <a class="m-brand-pill" href="brands.html">Asics</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <!-- Lim inn SVG-bottom-nav her (samme som index) -->
+  <!-- Viktig: Søk peker til search-mobile.html og Luxury er m-lux -->
+
+  <!-- Scripts (minimalt) -->
+  <script src="search.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // Kun for denne siden (mobil search screen)
+    (function () {
+      const back = document.querySelector(".m-back-btn");
+      back?.addEventListener("click", () => history.length > 1 ? history.back() : (location.href = "index.html"));
+
+      // "Se alle" skal åpne drawer (A)
+      const openAll = document.querySelector(".m-allcats-btn");
+      openAll?.addEventListener("click", () => document.querySelector(".mobile-menu-btn")?.click());
+
+      // Fallback: hvis du ikke har mobile-menu-btn på denne siden, åpner vi drawer direkte
+      const overlay = document.getElementById("mobileOverlay");
+      const drawer = document.getElementById("mobileDrawer");
+      function openDrawer() {
+        if (!overlay || !drawer) return;
+        overlay.hidden = false;
+        drawer.hidden = false;
+        overlay.classList.add("is-open");
+        drawer.classList.add("is-open");
+        document.body.classList.add("is-locked");
+      }
+      openAll?.addEventListener("click", (e) => {
+        if (!document.querySelector(".mobile-menu-btn")) {
+          e.preventDefault();
+          openDrawer();
+        }
+      });
+
+      // Sett aktiv bottom-nav til "Søk"
+      document.querySelectorAll(".m-bottom-nav [data-route]").forEach(el => el.classList.remove("is-active"));
+      document.querySelector('.m-bottom-nav [data-route="search"]')?.classList.add("is-active");
+    })();
+  </script>
+</body>
+</html>
