@@ -160,25 +160,45 @@
 
 
 <nav class="m-bottom-nav" aria-label="Bunnmeny">
-  <a class="m-nav-item" href="index.html" data-route="index">
-    <span class="m-ico">🏠</span><span class="m-txt">Hjem</span>
+  <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>
+    <span class="m-txt">Hjem</span>
   </a>
 
-  <button class="m-nav-item" type="button" data-action="focus-search">
-    <span class="m-ico">🔎</span><span class="m-txt">Søk</span>
-  </button>
-
-  <a class="m-nav-item" href="favoritter.html" data-route="favoritter">
-    <span class="m-ico">❤️</span><span class="m-txt">Favoritter</span>
+  <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="m-txt">Søk</span>
   </a>
 
-  <a class="m-nav-item" href="brands.html" data-route="brands">
-    <span class="m-ico">🏷️</span><span class="m-txt">Brands</span>
+  <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
+            stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>
+    <span class="m-txt">Favoritter</span>
   </a>
 
-  <button class="m-nav-item" type="button" data-action="open-menu">
-    <span class="m-ico">☰</span><span class="m-txt">Meny</span>
-  </button>
+  <a class="m-nav-item" href="brands.html" data-route="brands" aria-label="Brands">
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 12V7a2 2 0 0 0-2-2h-5L4 14l6 6 9-9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M14 7h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span class="m-txt">Brands</span>
+  </a>
+
+  <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
+    </svg>
+    <span class="m-txt">Luxury</span>
+  </a>
 </nav>
 
 </body>
