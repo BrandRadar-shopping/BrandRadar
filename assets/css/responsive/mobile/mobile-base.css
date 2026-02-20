@@ -1,50 +1,71 @@
-/* =========================
-   BrandRadar – Mobile Overrides
+/* =====================================================
+   BrandRadar – Mobile Base
+   Site-wide mobilregler, failsafes, og felles UI (bottom-nav)
    Breakpoint: <= 768px
-   ========================= */
-
-/* (Tom foreløpig)
-   Dette er plassen for globale mobil-failsafes og “site-wide” mobilregler
-   som ikke tilhører header/drawer/tiles. */
+   ===================================================== */
 
 @media (max-width: 768px) {
 
-  /* === Mobile anti-overflow firewall === */
+  /* --- Global layout safety --- */
   html, body {
     width: 100%;
     max-width: 100%;
-    min-width: 0 !important;
     overflow-x: hidden;
   }
 
-  /* Hindrer klassisk “100vw + padding” overflow */
   *, *::before, *::after {
     box-sizing: border-box;
-    max-width: 100%;
   }
 
-  /* Grid/flex barn må få lov til å krympe */
-  .nav-container,
+  /* La grid/flex barn få krympe */
+  .nav-container > *,
   .search-box,
   #search-input,
   .top-links,
-  .category-bar {
-    min-width: 0 !important;
-    max-width: 100% !important;
+  .hero-slider,
+  .slides,
+  .trending-grid,
+  .product-grid,
+  .premium-grid {
+    min-width: 0;
   }
 
-  /* Nøytraliser typiske fullbredde-triks fra desktop */
-  .main-header,
-  .nav-container,
-  .category-bar {
-    width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+  /* --- Bottom navigation (mobil) --- */
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
 
-  /* Hvis category-bar/sections bruker “bleed” (negative margins), stopp det */
-  .category-bar {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+  .m-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(255,255,255,0.96);
+    border-top: 1px solid rgba(0,0,0,0.10);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    z-index: 11000; /* under overlay(12000) og drawer(13000) */
+    backdrop-filter: blur(10px);
+  }
+
+  .m-nav-item {
+    border: 0;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: #111;
+    gap: 2px;
+    padding: 8px 6px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .m-ico { font-size: 18px; line-height: 1; }
+  .m-txt { font-size: 11px; font-weight: 800; opacity: 0.75; line-height: 1; }
+
+  .m-nav-item.is-active .m-txt {
+    opacity: 1;
   }
 }
