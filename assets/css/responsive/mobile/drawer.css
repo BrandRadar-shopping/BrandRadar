@@ -1,12 +1,19 @@
-/* =========================
-   MOBILE: DRAWER MENU (Zalando-style fullscreen)
-   ========================= */
+/* =====================================================
+   BrandRadar – Mobile Drawer + Overlay
+   ===================================================== */
+
 @media (max-width: 768px) {
 
-  /* Safety: aldri la drawer-content lage horisontal scroll */
+  /* Safety */
   .mobile-drawer,
   .mobile-drawer * {
     box-sizing: border-box;
+  }
+
+  /* Hard-hide når hidden-attributtet er på (ID-sikkert) */
+  #mobileOverlay[hidden],
+  #mobileDrawer[hidden] {
+    display: none !important;
   }
 
   .mobile-overlay {
@@ -18,29 +25,31 @@
     pointer-events: none;
     transition: opacity 180ms ease;
   }
+
   .mobile-overlay.is-open {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Fullscreen drawer (slide in from right) */
+  /* Fullscreen drawer */
   .mobile-drawer {
     position: fixed;
     top: 0;
     right: 0;
-    left: auto;
     height: 100dvh;
-    width: 100vw;
+    width: 100%;          /* <= viktig: ikke 100vw (kan gi overflow på mobil) */
+    max-width: 100%;
     background: #fff;
     z-index: 13000;
     transform: translateX(102%);
     transition: transform 220ms ease;
     overflow-y: auto;
-    overflow-x: hidden; /* ✅ kritisk */
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 14px 14px 22px;
     border-radius: 0;
   }
+
   .mobile-drawer.is-open {
     transform: translateX(0);
   }
@@ -55,7 +64,7 @@
     min-height: 44px;
   }
 
-  /* Drawer header */
+  /* Header */
   .mobile-drawer-header {
     display: flex;
     align-items: center;
@@ -65,11 +74,13 @@
     border-bottom: 1px solid rgba(0,0,0,0.08);
     margin-bottom: 10px;
   }
+
   .mobile-drawer-title {
     margin: 0;
     font-weight: 800;
     font-size: 20px;
   }
+
   .mobile-drawer-close {
     width: 44px;
     height: 44px;
@@ -81,33 +92,15 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-/* Hard-hide når hidden-attributtet er på */
-.mobile-overlay[hidden],
-.mobile-drawer[hidden] {
-  display: none !important;
-}
-
-/* Failsafe: overlay skal være helt transparent når ikke open */
-.mobile-overlay {
-  opacity: 0;
-  pointer-events: none;
-}
-.mobile-overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
-}
-   
-  /* =========================
-     Linje 1: hovedkategorier (chips)
-     ========================= */
+  /* Linje 1: hovedkategorier */
   .m-topcats {
     display: flex;
     gap: 10px;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 0 6px;   /* ✅ fjernet negative margin-fellen */
-    margin: 4px 0 6px;     /* ✅ fjernet negative margin-fellen */
+    padding: 10px 0 6px;
+    margin: 4px 0 6px;
     max-width: 100%;
   }
   .m-topcats::-webkit-scrollbar { display: none; }
@@ -124,13 +117,10 @@
     -webkit-tap-highlight-color: transparent;
     white-space: nowrap;
   }
-  .m-chip.is-active {
-    border-color: #0070f3;
-  }
 
-  /* =========================
-     Linje 2: segment tabs (Dame/Herre/Barn)
-     ========================= */
+  .m-chip.is-active { border-color: #0070f3; }
+
+  /* Linje 2: segment */
   .m-segments {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -149,6 +139,7 @@
     position: relative;
     -webkit-tap-highlight-color: transparent;
   }
+
   .m-seg.is-active::after {
     content: "";
     position: absolute;
@@ -160,15 +151,13 @@
     border-radius: 999px;
   }
 
-  /* =========================
-     Linje 3: results
-     ========================= */
+  /* Linje 3: results */
   .m-results,
   .m-subcats,
   .m-brands {
     max-width: 100%;
-    overflow-x: hidden; /* ✅ */
-    min-width: 0;       /* ✅ */
+    overflow-x: hidden;
+    min-width: 0;
   }
 
   .m-results {
@@ -184,7 +173,6 @@
     opacity: 0.75;
   }
 
-  /* ✅ Subcategory tiles: 1 kolonne (stabilt for 320–430px) */
   .m-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -197,7 +185,7 @@
   .m-tile {
     display: block;
     width: 100%;
-    min-width: 0;             /* ✅ viktig i grid */
+    min-width: 0;
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.10);
@@ -208,16 +196,13 @@
     box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   }
 
-  /* Tiles skal ikke se ut som blå lenker */
   .m-tile,
   .m-tile:visited,
   .m-tile:hover,
-  .m-tile:active {
-    color: inherit;
-  }
+  .m-tile:active { color: inherit; }
 
   .m-tile-img {
-    height: 110px; /* litt mer “premium” i 1 kolonne */
+    height: 110px;
     min-width: 0;
     position: relative;
     background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
@@ -241,10 +226,9 @@
     color: #111;
     letter-spacing: -0.2px;
     min-width: 0;
-    word-break: break-word; /* ✅ failsafe */
+    word-break: break-word;
   }
 
-  /* Brands row (horizontal scroll) */
   .m-brand-row {
     display: flex;
     gap: 10px;
