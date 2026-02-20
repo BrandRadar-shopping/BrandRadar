@@ -1,37 +1,53 @@
-/* =========================
-   BrandRadar – Mobile Tiles / Grids
-   ========================= */
+/* =====================================================
+   BrandRadar – Mobile Tiles / Sliders / Grids
+   ===================================================== */
 
 @media (max-width: 768px) {
 
-  /* Stopper all horisontal overflow fra cards */
+  /* --- Hero slider: hindre overlay-lag og sikre at ingenting lekker --- */
+  .hero-slider {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Mange hero-slidere bruker ::before/::after som dark overlay */
+  .hero-slider::before,
+  .hero-slider::after,
+  .hero-slider .slide::before,
+  .hero-slider .slide::after {
+    content: none !important;
+    opacity: 0 !important;
+  }
+
+  /* --- Cards: aldri fixed width på mobil (fixer 320 overflow) --- */
   .product-card,
   .product-image-wrapper,
   .product-info {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    box-sizing: border-box;
   }
 
-  /* Hvis et slider/grid-wrapper bruker flex og kortene har fast bredde */
+  /* Grids/wrappers */
   .slides,
   .trending-grid,
   .product-grid,
   .premium-grid {
+    width: 100%;
     max-width: 100%;
+    min-width: 0;
   }
 
-  /* Viktig: grids/flex-barn må få krympe */
   .slides > *,
   .trending-grid > *,
   .product-grid > *,
   .premium-grid > * {
     min-width: 0;
   }
-}
 
-@media (max-width: 768px) {
+  /* Hero slides: mobil swipe */
   .hero-slider .slides {
     display: flex;
     overflow-x: auto;
@@ -39,8 +55,35 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .hero-slider .product-card {
+  .hero-slider .slide {
     flex: 0 0 100%;
     scroll-snap-align: center;
   }
+
+  /* Nav-knapper: sørg for at de ikke ligger utenfor viewport */
+  .hero-slider .nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+  .hero-slider .nav.prev { left: 10px; }
+  .hero-slider .nav.next { right: 10px; }
+
+  /* Dots: sentrer */
+  .hero-slider .dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 6;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-slider .nav.prev { left: 8px; }
+  .hero-slider .nav.next { right: 8px; }
 }
