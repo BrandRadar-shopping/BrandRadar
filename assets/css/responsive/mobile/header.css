@@ -1,10 +1,9 @@
-/* =========================
-   BrandRadar – MOBILE HEADER (Clean)
-   ========================= */
+/* =====================================================
+   BrandRadar – Mobile Header
+   ===================================================== */
 
 @media (max-width: 768px) {
 
-  /* Header sticky + stacking */
   .main-header {
     position: sticky;
     top: 0;
@@ -13,14 +12,8 @@
     isolation: isolate;
     border-bottom: 1px solid rgba(0,0,0,0.08);
     width: 100%;
-    max-width: 100%;
   }
 
-/* Category bar er redundant på mobil når vi har drawer */
-.category-bar {
-  display: none !important;
-}
-   
   /* Viktig: søk-dropdown må ikke klippes */
   .main-header,
   .nav-container,
@@ -28,11 +21,11 @@
     overflow: visible !important;
   }
 
-  /* Mobil layout: 2 rader (top row + search) */
+  /* Mobil layout: 2 rader */
   .nav-container {
     position: relative;
     display: grid;
-    grid-template-columns: 44px 1fr 44px;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     grid-template-areas:
       "menu logo fav"
       "search search search";
@@ -40,11 +33,7 @@
     padding: 10px 12px;
     align-items: center;
     width: 100%;
-    max-width: 100%;
   }
-
-  /* La grid-barn krympe (kritisk på små skjermer) */
-  .nav-container > * { min-width: 0; }
 
   /* Hamburger */
   .mobile-menu-btn {
@@ -83,7 +72,6 @@
     justify-self: end;
     display: flex;
     justify-content: flex-end;
-    min-width: 0;
   }
 
   .top-links a:not(.favorites-link) { display: none !important; }
@@ -124,22 +112,20 @@
     color: #fff;
   }
 
-  /* Search full width */
+  /* Search */
   .search-box {
     position: relative;
     grid-area: search;
     width: 100%;
     display: block;
-    min-width: 0;
   }
 
   #search-input {
     width: 100%;
-    min-width: 0;
     height: 44px;
     border-radius: 12px;
-    padding-left: 40px;  /* plass til 🔍 */
-    padding-right: 40px; /* plass til ✕ */
+    padding-left: 40px;
+    padding-right: 40px;
     background: #f3f4f6;
     border: 1px solid rgba(0,0,0,0.12);
     color: #111;
@@ -192,37 +178,19 @@
 
   .search-dropdown[hidden] { display: none !important; }
 
-  /* Category bar: horisontal scroll */
-  .category-bar {
-    display: flex;
-    gap: 10px;
-    padding: 8px 12px 12px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-    margin: 0;
-    list-style: none;
-    background: #111; /* matcher det du ser i screenshot */
-  }
-  .category-bar::-webkit-scrollbar { display: none; }
+  /* Category-bar: skjules på mobil (drawer + bottom-nav overtar) */
+  .category-bar { display: none !important; }
 
-  .category-item {
-    flex: 0 0 auto;
-    color: #fff;
-    font-weight: 900;
-  }
-
-  /* Skjul mega-menu container på mobil */
+  /* Mega-menu container skjules */
   nav.mega-menu { display: none !important; }
 }
 
-/* Tight mode: små skjermer (iPhone SE / 320px) */
+/* Tight mode: små skjermer */
 @media (max-width: 360px) {
-
   .nav-container {
     padding: 8px 10px;
     gap: 8px;
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
   }
 
   .mobile-menu-btn,
@@ -254,13 +222,6 @@
     right: 8px;
   }
 }
-
-@media (max-width: 360px) {
-  .nav-container {
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
-  }
-}
-
 
 
 
