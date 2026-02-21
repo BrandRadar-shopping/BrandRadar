@@ -1,6 +1,6 @@
 /* =====================================================
    BrandRadar – Mobile Base
-   Site-wide mobilregler, failsafes, og felles UI (bottom-nav)
+   Site-wide mobilregler, failsafes, bottom-nav, og search-screen layout
    Breakpoint: <= 768px
    ===================================================== */
 
@@ -17,30 +17,7 @@
     box-sizing: border-box;
   }
 
-@media (max-width: 768px) {
-  .m-ico {
-    width: 22px;
-    height: 22px;
-    color: #111;
-  }
-
-  /* Luxury: sort bakgrunn + gull ikon/tekst */
-  .m-nav-item.m-lux {
-    background: #0b0b0c;
-    border-radius: 14px;
-    margin: 8px 10px;           /* gjør den “chip”-aktig */
-    height: calc(64px - 16px);
-    align-content: center;
-  }
-
-  .m-nav-item.m-lux .m-ico,
-  .m-nav-item.m-lux .m-txt {
-    color: #d8b24c;             /* “gold” */
-    opacity: 1;
-  }
-}
-   
-  /* La grid/flex barn få krympe */
+  /* La grid/flex barn få krympe (kritisk på 320px) */
   .nav-container > *,
   .search-box,
   #search-input,
@@ -53,7 +30,9 @@
     min-width: 0;
   }
 
-  /* --- Bottom navigation (mobil) --- */
+  /* =====================================================
+     Bottom navigation (mobil)
+     ===================================================== */
   body {
     padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
@@ -85,24 +64,49 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .m-ico { font-size: 18px; line-height: 1; }
-  .m-txt { font-size: 11px; font-weight: 800; opacity: 0.75; line-height: 1; }
+  .m-ico {
+    width: 22px;
+    height: 22px;
+    color: #111;
+    line-height: 1;
+  }
+
+  .m-txt {
+    font-size: 11px;
+    font-weight: 800;
+    opacity: 0.75;
+    line-height: 1;
+  }
 
   .m-nav-item.is-active .m-txt {
     opacity: 1;
   }
-}
 
-@media (max-width: 768px) {
+  /* Luxury: sort bakgrunn + gull ikon/tekst */
+  .m-nav-item.m-lux {
+    background: #0b0b0c;
+    border-radius: 14px;
+    margin: 8px 10px; /* gjør den “chip”-aktig */
+    height: calc(64px - 16px);
+    align-content: center;
+  }
 
-  /* Search screen layout */
+  .m-nav-item.m-lux .m-ico,
+  .m-nav-item.m-lux .m-txt {
+    color: #d8b24c;
+    opacity: 1;
+  }
+
+  /* =====================================================
+     Search screen layout
+     ===================================================== */
   .m-search-header {
     position: sticky;
     top: 0;
     z-index: 10001; /* over innhold, under drawer */
     background: #fff;
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 10px 12px 12px;
+    padding: 10px 12px;
   }
 
   .m-search-top {
@@ -131,11 +135,11 @@
   }
 
   .m-search-main {
-    padding: 14px 12px 18px;
+    padding: 10px 12px 18px;
   }
 
   .m-search-block {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .m-search-block-head {
@@ -143,7 +147,7 @@
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .m-search-block h2 {
@@ -205,14 +209,14 @@
   .m-feature-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
 
   .m-feature-tile {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    min-height: 128px;
+    min-height: 110px;
     text-decoration: none;
     color: #fff;
     background: #111;
@@ -258,32 +262,7 @@
     font-weight: 800;
   }
 
-  .m-feature-note {
-    margin: 10px 2px 0;
-    font-size: 12px;
-    opacity: 0.7;
-  }
-
-  /* Toppmerker rad (gjenbruker m-brand-row/m-brand-pill fra drawer.css) */
   .m-brand-row--search {
     padding-bottom: 2px;
-  }
-}
-
-@media (max-width: 768px) {
-  .m-search-main {
-    padding-top: 10px;
-  }
-
-  .m-search-block {
-    margin-bottom: 14px;
-  }
-
-  .m-feature-grid {
-    gap: 10px;
-  }
-
-  .m-feature-tile {
-    min-height: 110px;
   }
 }
