@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BrandRadar | Søk</title>
 
-  <!-- Desktop base (uendret) + mobil overrides -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=7" />
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=9" />
 </head>
+
 <body class="is-search-page">
 
-  <!-- SEARCH HEADER (mobil screen) -->
+  <!-- SEARCH HEADER -->
   <header class="m-search-header">
     <div class="m-search-top">
       <button class="m-back-btn" type="button" aria-label="Tilbake">←</button>
+
       <div class="m-search-wrap" id="site-search">
         <span class="search-icon" aria-hidden="true">🔍</span>
 
@@ -44,7 +45,7 @@
     </div>
   </header>
 
-  <!-- Drawer + overlay (for A: "Se alle kategorier") -->
+  <!-- Overlay + drawer (Se alle kategorier) -->
   <div class="mobile-overlay" id="mobileOverlay" hidden></div>
 
   <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
@@ -80,9 +81,10 @@
     </div>
   </nav>
 
+  <!-- MAIN -->
   <main class="m-search-main">
 
-    <!-- Kategorier: ikon-chips (alle) -->
+    <!-- Kategorier -->
     <section class="m-search-block">
       <div class="m-search-block-head">
         <h2>Kategorier</h2>
@@ -90,61 +92,44 @@
       </div>
 
       <div class="m-cat-chips" aria-label="Kategorier hurtigvalg">
-        <a class="m-cat-chip" href="category.html?category=Clothing">
-          <span class="m-cat-ico" aria-hidden="true">👕</span>
-          <span>Klær</span>
-        </a>
-        <a class="m-cat-chip" href="category.html?category=Shoes">
-          <span class="m-cat-ico" aria-hidden="true">👟</span>
-          <span>Sko</span>
-        </a>
-        <a class="m-cat-chip" href="category.html?category=Gymcorner">
-          <span class="m-cat-ico" aria-hidden="true">🏋️</span>
-          <span>Gym</span>
-        </a>
-        <a class="m-cat-chip" href="category.html?category=Accessories">
-          <span class="m-cat-ico" aria-hidden="true">🧢</span>
-          <span>Tilbehør</span>
-        </a>
-        <a class="m-cat-chip" href="category.html?category=Selfcare">
-          <span class="m-cat-ico" aria-hidden="true">🧴</span>
-          <span>Selfcare</span>
-        </a>
+        <a class="m-cat-chip" href="category.html?category=Clothing"><span class="m-cat-ico">👕</span><span>Klær</span></a>
+        <a class="m-cat-chip" href="category.html?category=Shoes"><span class="m-cat-ico">👟</span><span>Sko</span></a>
+        <a class="m-cat-chip" href="category.html?category=Gymcorner"><span class="m-cat-ico">🏋️</span><span>Gym</span></a>
+        <a class="m-cat-chip" href="category.html?category=Accessories"><span class="m-cat-ico">🧢</span><span>Tilbehør</span></a>
+        <a class="m-cat-chip" href="category.html?category=Selfcare"><span class="m-cat-ico">🧴</span><span>Selfcare</span></a>
       </div>
     </section>
 
-    <!-- 4 featured tiles (2x2) -->
+    <!-- Populært nå -->
     <section class="m-search-block">
       <div class="m-search-block-head">
         <h2>Populært nå</h2>
       </div>
 
       <div class="m-feature-grid">
-        <a class="m-feature-tile" href="luxury.html" style="--bg:url('assets/img/luxury-1.jpg')">
+        <a class="m-feature-tile" href="luxury.html" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
           <span class="m-feature-title">Luxury Corner</span>
           <span class="m-feature-sub">Eksklusivt utvalg</span>
         </a>
 
-        <a class="m-feature-tile" href="category.html?category=Clothing" style="--bg:url('assets/img/cat-clothing.jpg')">
+        <a class="m-feature-tile" href="category.html?category=Clothing" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
           <span class="m-feature-title">Klær</span>
           <span class="m-feature-sub">Trending styles</span>
         </a>
 
-        <a class="m-feature-tile" href="category.html?category=Shoes" style="--bg:url('assets/img/cat-shoes.jpg')">
+        <a class="m-feature-tile" href="category.html?category=Shoes" style="--bg:url('/BrandRadar/assets/img/tiles/default-shoes.jpg')">
           <span class="m-feature-title">Sko</span>
           <span class="m-feature-sub">Nyheter & bestselgere</span>
         </a>
 
-        <a class="m-feature-tile" href="news.html" style="--bg:url('assets/img/trends.jpg')">
+        <a class="m-feature-tile" href="news.html" style="--bg:url('/BrandRadar/assets/img/tiles/default-gymcorner.jpg')">
           <span class="m-feature-title">Trender</span>
           <span class="m-feature-sub">Drops & kampanjer</span>
         </a>
       </div>
-
-      <p class="m-feature-note">Tips: bytt bildene i <code>assets/img/</code> når du vil gi dette premium-looken.</p>
     </section>
 
-    <!-- Toppmerker (horisontal) -->
+    <!-- Toppmerker -->
     <section class="m-search-block">
       <div class="m-search-block-head">
         <h2>Toppmerker</h2>
@@ -152,7 +137,6 @@
       </div>
 
       <div class="m-brand-row m-brand-row--search" id="mBrandRowSearch">
-        <!-- kan fylles dynamisk senere. foreløpig: legg inn noen statiske -->
         <a class="m-brand-pill" href="brands.html">Nike</a>
         <a class="m-brand-pill" href="brands.html">Adidas</a>
         <a class="m-brand-pill" href="brands.html">Gymshark</a>
@@ -163,93 +147,58 @@
 
   </main>
 
-  <!-- Bottom nav -->
-  <!-- Lim inn SVG-bottom-nav her (samme som index) -->
-  <!-- Viktig: Søk peker til search-mobile.html og Luxury er m-lux -->
+  <!-- Bottom nav: lim inn samme SVG-bottom-nav som på index -->
 
-  <!-- Scripts (minimalt) -->
   <script src="search.js"></script>
   <script src="script.js"></script>
 
   <script>
-    // Kun for denne siden (mobil search screen)
     (function () {
-      const back = document.querySelector(".m-back-btn");
-      back?.addEventListener("click", () => history.length > 1 ? history.back() : (location.href = "index.html"));
+      const backBtn  = document.querySelector(".m-back-btn");
+      const openBtn  = document.querySelector(".m-allcats-btn");
+      const overlay  = document.getElementById("mobileOverlay");
+      const drawer   = document.getElementById("mobileDrawer");
+      const closeBtn = document.querySelector(".mobile-drawer-close");
 
-      // "Se alle" skal åpne drawer (A)
-      const openAll = document.querySelector(".m-allcats-btn");
-      openAll?.addEventListener("click", () => document.querySelector(".mobile-menu-btn")?.click());
-
-      // Fallback: hvis du ikke har mobile-menu-btn på denne siden, åpner vi drawer direkte
-      const overlay = document.getElementById("mobileOverlay");
-      const drawer = document.getElementById("mobileDrawer");
-      function openDrawer() {
-        if (!overlay || !drawer) return;
-        overlay.hidden = false;
-        drawer.hidden = false;
-        overlay.classList.add("is-open");
-        drawer.classList.add("is-open");
-        document.body.classList.add("is-locked");
-      }
-      openAll?.addEventListener("click", (e) => {
-        if (!document.querySelector(".mobile-menu-btn")) {
-          e.preventDefault();
-          openDrawer();
-        }
+      // Back
+      backBtn?.addEventListener("click", () => {
+        if (history.length > 1) history.back();
+        else location.href = "index.html";
       });
 
-      // Sett aktiv bottom-nav til "Søk"
-      document.querySelectorAll(".m-bottom-nav [data-route]").forEach(el => el.classList.remove("is-active"));
-      document.querySelector('.m-bottom-nav [data-route="search"]')?.classList.add("is-active");
+      // Drawer helpers
+      if (overlay && drawer) {
+        const openDrawer = () => {
+          overlay.hidden = false;
+          drawer.hidden = false;
+          overlay.classList.add("is-open");
+          drawer.classList.add("is-open");
+          document.body.classList.add("is-locked");
+        };
+
+        const closeDrawer = () => {
+          overlay.classList.remove("is-open");
+          drawer.classList.remove("is-open");
+          document.body.classList.remove("is-locked");
+          setTimeout(() => {
+            overlay.hidden = true;
+            drawer.hidden = true;
+          }, 250);
+        };
+
+        openBtn?.addEventListener("click", (e) => { e.preventDefault(); openDrawer(); });
+        closeBtn?.addEventListener("click", closeDrawer);
+        overlay.addEventListener("click", closeDrawer);
+        window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+      }
+
+      // Bottom-nav active state (hvis den finnes)
+      const bottom = document.querySelector(".m-bottom-nav");
+      if (bottom) {
+        bottom.querySelectorAll("[data-route]").forEach(el => el.classList.remove("is-active"));
+        bottom.querySelector('[data-route="search"]')?.classList.add("is-active");
+      }
     })();
-
-    
-(function () {
-  const overlay = document.getElementById("mobileOverlay");
-  const drawer  = document.getElementById("mobileDrawer");
-  const closeBtn = document.querySelector(".mobile-drawer-close");
-
-  if (!overlay || !drawer) return;
-
-  function openDrawer() {
-    overlay.hidden = false;
-    drawer.hidden = false;
-    overlay.classList.add("is-open");
-    drawer.classList.add("is-open");
-    document.body.classList.add("is-locked");
-  }
-
-  function closeDrawer() {
-    overlay.classList.remove("is-open");
-    drawer.classList.remove("is-open");
-    document.body.classList.remove("is-locked");
-
-    // Vent til animasjonen er ferdig før hidden (matcher CSS transition)
-    window.setTimeout(() => {
-      overlay.hidden = true;
-      drawer.hidden = true;
-    }, 250);
-  }
-
-  // "Se alle" åpner drawer
-  document.querySelector(".m-allcats-btn")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    openDrawer();
-  });
-
-  // X lukker
-  closeBtn?.addEventListener("click", closeDrawer);
-
-  // Klikk på overlay lukker
-  overlay.addEventListener("click", closeDrawer);
-
-  // ESC lukker (dev/desktop testing)
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeDrawer();
-  });
-})();
-
   </script>
 </body>
 </html>
