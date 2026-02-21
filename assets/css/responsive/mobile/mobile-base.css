@@ -269,3 +269,21 @@
     padding-bottom: 2px;
   }
 }
+
+@media (max-width: 768px) {
+  .m-search-main {
+    padding-top: 10px;
+  }
+
+  .m-search-block {
+    margin-bottom: 14px;
+  }
+
+  .m-feature-grid {
+    gap: 10px;
+  }
+
+  .m-feature-tile {
+    min-height: 110px;
+  }
+}
