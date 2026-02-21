@@ -1,5 +1,6 @@
 /* =====================================================
    BrandRadar – Mobile Drawer + Overlay
+   Breakpoint: <= 768px
    ===================================================== */
 
 @media (max-width: 768px) {
@@ -10,12 +11,13 @@
     box-sizing: border-box;
   }
 
-  /* Hard-hide når hidden-attributtet er på (ID-sikkert) */
+  /* Hard-hide når hidden-attributtet er på */
   #mobileOverlay[hidden],
   #mobileDrawer[hidden] {
     display: none !important;
   }
 
+  /* Overlay */
   .mobile-overlay {
     position: fixed;
     inset: 0;
@@ -31,21 +33,25 @@
     pointer-events: auto;
   }
 
-  /* Fullscreen drawer */
+  /* Drawer (fullscreen) */
   .mobile-drawer {
     position: fixed;
     top: 0;
     right: 0;
     height: 100dvh;
-    width: 100%;          /* <= viktig: ikke 100vw (kan gi overflow på mobil) */
+    width: 100%;          /* ikke 100vw (hindrer overflow) */
     max-width: 100%;
     background: #fff;
     z-index: 13000;
+
     transform: translateX(102%);
     transition: transform 220ms ease;
+
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+
     padding: 14px 14px 22px;
     border-radius: 0;
   }
@@ -54,6 +60,7 @@
     transform: translateX(0);
   }
 
+  /* Lås body når drawer er åpen */
   body.is-locked {
     overflow: hidden;
     touch-action: none;
@@ -151,7 +158,7 @@
     border-radius: 999px;
   }
 
-  /* Linje 3: results */
+  /* Linje 3: resultater */
   .m-results,
   .m-subcats,
   .m-brands {
@@ -173,6 +180,7 @@
     opacity: 0.75;
   }
 
+  /* Subcategory tiles (1 kolonne) */
   .m-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -199,7 +207,9 @@
   .m-tile,
   .m-tile:visited,
   .m-tile:hover,
-  .m-tile:active { color: inherit; }
+  .m-tile:active {
+    color: inherit;
+  }
 
   .m-tile-img {
     height: 110px;
@@ -229,6 +239,7 @@
     word-break: break-word;
   }
 
+  /* Brands row */
   .m-brand-row {
     display: flex;
     gap: 10px;
@@ -256,4 +267,3 @@
     white-space: nowrap;
   }
 }
-
