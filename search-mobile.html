@@ -203,6 +203,53 @@
       document.querySelectorAll(".m-bottom-nav [data-route]").forEach(el => el.classList.remove("is-active"));
       document.querySelector('.m-bottom-nav [data-route="search"]')?.classList.add("is-active");
     })();
+
+    
+(function () {
+  const overlay = document.getElementById("mobileOverlay");
+  const drawer  = document.getElementById("mobileDrawer");
+  const closeBtn = document.querySelector(".mobile-drawer-close");
+
+  if (!overlay || !drawer) return;
+
+  function openDrawer() {
+    overlay.hidden = false;
+    drawer.hidden = false;
+    overlay.classList.add("is-open");
+    drawer.classList.add("is-open");
+    document.body.classList.add("is-locked");
+  }
+
+  function closeDrawer() {
+    overlay.classList.remove("is-open");
+    drawer.classList.remove("is-open");
+    document.body.classList.remove("is-locked");
+
+    // Vent til animasjonen er ferdig før hidden (matcher CSS transition)
+    window.setTimeout(() => {
+      overlay.hidden = true;
+      drawer.hidden = true;
+    }, 250);
+  }
+
+  // "Se alle" åpner drawer
+  document.querySelector(".m-allcats-btn")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openDrawer();
+  });
+
+  // X lukker
+  closeBtn?.addEventListener("click", closeDrawer);
+
+  // Klikk på overlay lukker
+  overlay.addEventListener("click", closeDrawer);
+
+  // ESC lukker (dev/desktop testing)
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+  });
+})();
+
   </script>
 </body>
 </html>
