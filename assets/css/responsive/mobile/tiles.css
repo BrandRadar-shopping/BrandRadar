@@ -1,10 +1,11 @@
 /* =====================================================
    BrandRadar – Mobile Tiles / Sliders / Grids
+   Breakpoint: <= 768px
    ===================================================== */
 
 @media (max-width: 768px) {
 
-  /* --- Hero slider: hindre overlay-lag og sikre at ingenting lekker --- */
+  /* --- Hero slider: stabil mobil swipe + ingen “mystisk overlay” --- */
   .hero-slider {
     width: 100%;
     max-width: 100%;
@@ -12,25 +13,31 @@
     position: relative;
   }
 
-  /* Mange hero-slidere bruker ::before/::after som dark overlay */
+  /* Fjerner mørke overlay-lag hvis de kommer fra hero-slider pseudo */
   .hero-slider::before,
-  .hero-slider::after,
-  .hero-slider .slide::before,
-  .hero-slider .slide::after {
-    content: none !important;
-    opacity: 0 !important;
+  .hero-slider::after {
+    content: "" !important;
+    display: none !important;
   }
 
-  /* --- Cards: aldri fixed width på mobil (fixer 320 overflow) --- */
+  /* Hvis enkelt-slides har pseudo-overlay (begrenset scope) */
+  .hero-slider .slide::before,
+  .hero-slider .slide::after {
+    content: "" !important;
+    display: none !important;
+  }
+
+  /* --- Cards/grids: aldri fixed width på mobil --- */
   .product-card,
   .product-image-wrapper,
   .product-info {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
+    box-sizing: border-box;
   }
 
-  /* Grids/wrappers */
+  /* Wrappers */
   .slides,
   .trending-grid,
   .product-grid,
@@ -60,7 +67,7 @@
     scroll-snap-align: center;
   }
 
-  /* Nav-knapper: sørg for at de ikke ligger utenfor viewport */
+  /* Nav-knapper: holde de inne i viewport */
   .hero-slider .nav {
     position: absolute;
     top: 50%;
