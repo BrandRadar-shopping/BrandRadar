@@ -1,5 +1,7 @@
+@charset "UTF-8";
 /* =====================================================
    BrandRadar Mobile – Entry File
+   Breakpoint styles for <= 768px live in the imported files.
    ===================================================== */
 
 @import url("./mobile/mobile-base.css");
