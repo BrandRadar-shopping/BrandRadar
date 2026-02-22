@@ -40,8 +40,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 64px;
+
+    /* ✅ viktig: høyden må inkludere safe-area, ellers kan innhold klippes */
+    height: calc(64px + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
+
     background: rgba(255,255,255,0.96);
     border-top: 1px solid rgba(0,0,0,0.10);
     display: grid;
@@ -53,14 +56,16 @@
   .m-nav-item {
     border: 0;
     background: transparent;
-    display: grid;
-    place-items: center;
     text-decoration: none;
     color: #111;
-    gap: 3px;
-    padding: 8px 6px;
     -webkit-tap-highlight-color: transparent;
     min-width: 0;
+
+    /* stabil layout for alle */
+    display: grid;
+    place-items: center;
+    gap: 3px;
+    padding: 8px 6px;
   }
 
   .m-ico {
@@ -80,18 +85,35 @@
 
   .m-nav-item.is-active .m-txt { opacity: 1; }
 
-  /* Luxury: sort bakgrunn + gull ikon/tekst */
-  .m-nav-item.m-lux {
+  /* Luxury: sort bakgrunn + gull ikon/tekst (robust “pill”) */
+  .m-bottom-nav .m-nav-item.m-lux{
     background: #0b0b0c;
     border-radius: 14px;
-    margin: 8px 10px;
-    height: calc(64px - 16px);
-    align-content: center;
+
+    /* litt mindre margin så den ikke presses ut/klippes */
+    margin: 6px 8px;
+    padding: 6px 8px;
+
+    min-height: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
   }
-  .m-nav-item.m-lux .m-ico,
-  .m-nav-item.m-lux .m-txt {
+
+  .m-bottom-nav .m-nav-item.m-lux .m-ico,
+  .m-bottom-nav .m-nav-item.m-lux .m-txt {
     color: #d8b24c;
     opacity: 1;
+  }
+
+  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+    font-size: 10px;
+    letter-spacing: -0.1px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* -----------------------------------------------------
@@ -258,33 +280,3 @@
   .m-feature-grid { gap: 10px; }
   .m-feature-tile { min-height: 110px; }
 }
-
-
-/* --- Bottom nav: Luxury-pill (fix width + text overflow) --- */
-.m-bottom-nav .m-nav-item.m-lux{
-  margin: 8px 10px;          /* beholder chip-look */
-  padding: 8px 10px;         /* gir plass til tekst */
-  height: auto;              /* ikke lås høyde */
-  min-height: calc(64px - 16px);
-  border-radius: 14px;
-  display: flex;             /* mer robust enn grid her */
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-}
-
-.m-bottom-nav .m-nav-item.m-lux .m-txt{
-  opacity: 1;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;   /* safety */
-}
-
-/* Litt mindre tekst akkurat på Luxury så den alltid får plass */
-.m-bottom-nav .m-nav-item.m-lux .m-txt{
-  font-size: 10px;
-  letter-spacing: -0.1px;
-}
-
-.m-bottom-nav .m-nav-item.m-lux{ min-width: 74px; }
