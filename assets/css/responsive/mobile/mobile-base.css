@@ -286,3 +286,5 @@
   font-size: 10px;
   letter-spacing: -0.1px;
 }
+
+.m-bottom-nav .m-nav-item.m-lux{ min-width: 74px; }
