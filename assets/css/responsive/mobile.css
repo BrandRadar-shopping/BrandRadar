@@ -4,7 +4,7 @@
    Breakpoint styles for <= 768px live in the imported files.
    ===================================================== */
 
-@import url("./mobile/mobile-base.css");
-@import url("./mobile/header.css");
-@import url("./mobile/drawer.css");
-@import url("./mobile/tiles.css");
+@import url("./mobile/mobile-base.css?v=3");
+@import url("./mobile/header.css?v=3");
+@import url("./mobile/drawer.css?v=3");
+@import url("./mobile/tiles.css?v=3");
