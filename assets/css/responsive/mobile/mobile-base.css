@@ -78,9 +78,7 @@
     line-height: 1;
   }
 
-  .m-nav-item.is-active .m-txt {
-    opacity: 1;
-  }
+  .m-nav-item.is-active .m-txt { opacity: 1; }
 
   /* Luxury: sort bakgrunn + gull ikon/tekst */
   .m-nav-item.m-lux {
@@ -265,4 +263,36 @@
   .m-brand-row--search {
     padding-bottom: 2px;
   }
+
+  /* =====================================================
+     Index spacing (mobil) – strammer og sentrerer alt uten desktop-impact
+     ===================================================== */
+  .hero-slider { margin: 10px 0 0; }
+  .hero { padding: 18px 12px; }
+  .partner-banner,
+  .intro,
+  .universes,
+  .trending-section,
+  .top-brands,
+  .giveaway,
+  .featured-products,
+  .footer-cta {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .partner-banner { padding-top: 14px; padding-bottom: 10px; }
+  .intro,
+  .universes,
+  .trending-section,
+  .top-brands,
+  .giveaway,
+  .featured-products,
+  .footer-cta {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  /* Unngå “desktop store gap” */
+  .section-sub { margin-top: 6px; }
 }
