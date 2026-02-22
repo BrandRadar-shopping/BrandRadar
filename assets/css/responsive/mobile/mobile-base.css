@@ -302,4 +302,97 @@
   }
 }
 
+@media (max-width: 768px) {
+
+  /* --- Bottom-nav: gjør layout stabil --- */
+  .m-bottom-nav{
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .m-bottom-nav .m-nav-item{
+    min-width: 0;
+    width: 100%;
+    padding: 8px 4px;
+  }
+
+  /* --- Luxury pill: bakgrunn via ::before (ikke margin) --- */
+  .m-bottom-nav .m-nav-item.m-lux{
+    position: relative !important;
+    background: transparent !important; /* bakgrunn flyttes til ::before */
+    border-radius: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    display: grid !important;
+    place-items: center !important;
+    align-content: center !important;
+  }
+
+  .m-bottom-nav .m-nav-item.m-lux::before{
+    content: "" !important;
+    position: absolute !important;
+    inset: 6px 6px !important;         /* “chip look” uten å gjøre den smal */
+    background: #0b0b0c !important;
+    border-radius: 14px !important;
+    z-index: 0 !important;
+  }
+
+  .m-bottom-nav .m-nav-item.m-lux .m-ico,
+  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+    position: relative !important;
+    z-index: 1 !important;
+    color: #d8b24c !important;
+    opacity: 1 !important;
+  }
+
+  /* Tekst: aldri ellipsis/kutt på Luxury */
+  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: 1.05 !important;
+    font-size: 10px !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Søkesiden: mer kontroll på spacing + plass til bottom-nav */
+  body.is-search-page{
+    padding-bottom: calc(64px + 16px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .m-search-main{
+    padding: 12px 12px 0 !important;
+  }
+
+  .m-search-block{
+    margin: 0 0 16px !important;
+  }
+
+  .m-search-block-head{
+    margin: 0 0 10px !important;
+  }
+
+  /* Chips: litt mer kompakt */
+  .m-cat-chips{
+    padding-bottom: 2px !important;
+    gap: 8px !important;
+  }
+
+  /* Populært nå (tiles): sørg for at de ikke “spiser” høyde visuelt */
+  .m-feature-grid{
+    gap: 10px !important;
+  }
+
+  .m-feature-tile{
+    min-height: 118px !important; /* litt lavere = mindre “luft” */
+  }
+}
+
+@media (max-width: 360px){
+  .m-feature-tile{ min-height: 108px !important; }
+}
 
