@@ -286,3 +286,30 @@
 @media (max-width: 360px) {
   body.is-search-page .m-feature-tile { min-height: 108px; }
 }
+
+/* =====================================================
+   SEARCH-MOBILE: hard reset av desktop "section padding"
+   (style.css har typisk: section { padding: 60px 0; })
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Fjerner 60px fra style.css på søkesiden */
+  body.is-search-page section.m-search-block {
+    padding: 0 !important;
+  }
+
+  /* Kontroller spacing mellom blokkene */
+  body.is-search-page section.m-search-block {
+    margin: 0 0 14px !important;
+  }
+
+  /* Litt tighter head */
+  body.is-search-page .m-search-block-head {
+    margin: 0 0 10px !important;
+  }
+
+  /* Hvis du vil ha enda mindre luft mellom header og første blokk */
+  body.is-search-page .m-search-main {
+    padding-top: 10px !important;
+  }
+}
