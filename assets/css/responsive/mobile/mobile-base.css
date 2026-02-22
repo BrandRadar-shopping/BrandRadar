@@ -305,3 +305,37 @@
     .m-feature-tile { min-height: 108px; }
   }
 }
+
+
+/* ================================
+   Search-mobile: tighter vertical spacing
+   (legg helt nederst i mobile-base.css)
+================================= */
+@media (max-width: 768px) {
+  /* mindre luft rett under search-header */
+  body.is-search-page .m-search-main{
+    padding-top: 6px !important;
+  }
+
+  /* mindre luft mellom "Kategorier" og innholdet */
+  body.is-search-page .m-search-block-head{
+    margin-bottom: 6px !important;
+  }
+
+  /* mindre luft mellom seksjonene (Selfcare -> Populært nå) */
+  body.is-search-page .m-search-block{
+    margin-bottom: 10px !important;
+  }
+
+  /* chips: ingen ekstra bunnluft */
+  body.is-search-page .m-cat-chips{
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* ekstra tight på veldig små skjermer */
+@media (max-width: 360px) {
+  body.is-search-page .m-search-main{ padding-top: 4px !important; }
+  body.is-search-page .m-search-block{ margin-bottom: 8px !important; }
+}
