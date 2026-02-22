@@ -280,3 +280,26 @@
   .m-feature-grid { gap: 10px; }
   .m-feature-tile { min-height: 110px; }
 }
+
+@media (max-width: 768px) {
+
+  /* Luxury i bottom-nav: tillat 2 linjer + litt mer plass */
+  .m-bottom-nav .m-nav-item.m-lux{
+    margin: 6px 6px;          /* litt mindre side-margin = mer bredde */
+    padding: 6px 8px;
+    min-height: 52px;
+  }
+
+  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+    white-space: normal;      /* ✅ allow wrap */
+    line-height: 1.05;
+    max-width: 100%;
+    text-align: center;
+    display: -webkit-box;     /* ✅ clamp til 2 linjer */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}
+
+
