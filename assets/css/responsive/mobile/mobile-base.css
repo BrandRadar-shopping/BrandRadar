@@ -339,3 +339,30 @@
   body.is-search-page .m-search-main{ padding-top: 4px !important; }
   body.is-search-page .m-search-block{ margin-bottom: 8px !important; }
 }
+
+
+/* =====================================================
+   FIX: Search-mobile spacing (override desktop main padding)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Desktop setter ofte padding:60 på main. Null den på søkesiden. */
+  body.is-search-page main {
+    padding: 0 !important;
+  }
+
+  /* Dette er din faktiske wrapper på siden */
+  body.is-search-page main.m-search-main {
+    padding: 12px 12px calc(16px + 64px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Mindre luft mellom blokker */
+  body.is-search-page .m-search-block {
+    margin: 0 0 14px !important;
+  }
+
+  /* Siste blokk skal ikke legge på ekstra luft */
+  body.is-search-page .m-search-block:last-child {
+    margin-bottom: 0 !important;
+  }
+}
