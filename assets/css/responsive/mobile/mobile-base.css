@@ -46,11 +46,8 @@
 
     background: rgba(255,255,255,0.96);
     border-top: 1px solid rgba(0,0,0,0.10);
-
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0;
-
     z-index: 11000;
     backdrop-filter: blur(10px);
   }
@@ -61,21 +58,19 @@
     text-decoration: none;
     color: #111;
     -webkit-tap-highlight-color: transparent;
-
     min-width: 0;
-    width: 100%;
-    padding: 8px 4px;
 
     display: grid;
     place-items: center;
     gap: 3px;
+    padding: 8px 6px;
   }
 
   .m-ico {
     width: 22px;
     height: 22px;
+    color: #111;
     display: block;
-    color: currentColor;
   }
 
   .m-txt {
@@ -88,73 +83,72 @@
 
   .m-nav-item.is-active .m-txt { opacity: 1; }
 
-  /* Luxury: robust “pill” via ::before */
-  .m-bottom-nav .m-nav-item.m-lux {
-    position: relative !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
-
-    height: 100% !important;
-    display: grid !important;
-    place-items: center !important;
-    align-content: center !important;
+  /* Luxury-pill */
+  .m-bottom-nav .m-nav-item.m-lux{
+    position: relative;
+    background: transparent;
+    height: 100%;
+    display: grid;
+    place-items: center;
   }
 
   .m-bottom-nav .m-nav-item.m-lux::before{
-    content: "" !important;
-    position: absolute !important;
-    inset: 6px 6px !important;
-    background: #0b0b0c !important;
-    border-radius: 14px !important;
-    z-index: 0 !important;
+    content: "";
+    position: absolute;
+    inset: 6px 6px;
+    background: #0b0b0c;
+    border-radius: 14px;
+    z-index: 0;
   }
 
   .m-bottom-nav .m-nav-item.m-lux .m-ico,
-  .m-bottom-nav .m-nav-item.m-lux .m-txt {
-    position: relative !important;
-    z-index: 1 !important;
-    color: #d8b24c !important;
-    opacity: 1 !important;
+  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+    position: relative;
+    z-index: 1;
+    color: #d8b24c;
+    opacity: 1;
   }
 
   .m-bottom-nav .m-nav-item.m-lux .m-txt{
-    font-size: 10px !important;
-    letter-spacing: -0.1px;
-    text-align: center !important;
-
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    line-height: 1.05 !important;
-
-    max-width: 100% !important;
+    white-space: normal;
+    line-height: 1.05;
+    font-size: 10px;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    max-width: 100%;
   }
 
   /* -----------------------------------------------------
-     Search-mobile page spacing/layout
+     Search-mobile page: FIX den globale main-paddingen fra style.css
   ----------------------------------------------------- */
-  body.is-search-page{
-    padding-bottom: calc(64px + 16px + env(safe-area-inset-bottom)) !important;
+
+  /* 1) Dette er “magien”: style.css har ofte main{padding:60px} */
+  body.is-search-page main {
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  .m-search-header {
+  /* 2) Kontroller selve søke-layouten */
+  body.is-search-page .m-search-header {
     position: sticky;
     top: 0;
     z-index: 10001;
     background: #fff;
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 10px 12px 12px;
+    padding: 10px 12px 10px; /* litt mindre bunn */
   }
 
-  .m-search-top {
+  body.is-search-page .m-search-top {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr);
     gap: 10px;
     align-items: center;
   }
 
-  .m-back-btn {
+  body.is-search-page .m-back-btn {
     width: 44px;
     height: 44px;
     border: 0;
@@ -166,34 +160,37 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .m-search-wrap {
+  body.is-search-page .m-search-wrap {
     position: relative;
     min-width: 0;
     width: 100%;
   }
 
-  .m-search-main {
-    padding: 12px 12px 0;
+  /* Viktig: her setter vi “riktig” spacing – ikke 60/80 */
+  body.is-search-page .m-search-main {
+    padding: 10px 12px 14px !important; /* <- dette er den du vil føle */
   }
 
-  .m-search-block { margin: 0 0 16px; }
+  body.is-search-page .m-search-block {
+    margin: 0 0 14px !important; /* mindre tomrom mellom seksjoner */
+  }
 
-  .m-search-block-head {
+  body.is-search-page .m-search-block-head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin: 0 0 10px;
+    margin: 0 0 10px !important;
   }
 
-  .m-search-block h2 {
-    margin: 0;
+  body.is-search-page .m-search-block h2 {
+    margin: 0 !important;
     font-size: 16px;
     font-weight: 900;
     letter-spacing: -0.2px;
   }
 
-  .m-allcats-btn {
+  body.is-search-page .m-allcats-btn {
     border: 1px solid rgba(0,0,0,0.10);
     background: #fff;
     border-radius: 999px;
@@ -201,32 +198,27 @@
     font-weight: 900;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    flex: 0 0 auto;
   }
 
-  /* ✅ ONCE-AND-FOR-ALL: chips skal wrappe pent (ikke horisontal scroll) */
+  /* Chips */
   body.is-search-page .m-cat-chips {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-
-    overflow: visible !important;
-    padding-bottom: 0 !important;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 2px !important;
   }
+  body.is-search-page .m-cat-chips::-webkit-scrollbar { display: none; }
 
-  /* 3 per rad som standard */
   body.is-search-page .m-cat-chip {
-    flex: 1 1 calc(33.333% - 10px) !important;
-    justify-content: center !important;
-
-    padding: 10px 10px !important;
-    gap: 8px !important;
-
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     border: 1px solid rgba(0,0,0,0.12);
     background: #fff;
     border-radius: 999px;
-
+    padding: 10px 12px;
     text-decoration: none;
     color: #111;
     font-weight: 900;
@@ -234,26 +226,24 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  body.is-search-page .m-cat-ico { font-size: 16px; line-height: 1; }
-
-  /* Tiles */
-  .m-feature-grid {
+  /* Populært nå tiles */
+  body.is-search-page .m-feature-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 10px;
+    gap: 10px; /* litt tighter */
   }
 
-  .m-feature-tile {
+  body.is-search-page .m-feature-tile {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    min-height: 118px;
+    min-height: 118px; /* litt lavere */
     text-decoration: none;
     color: #fff;
     background: #111;
   }
 
-  .m-feature-tile::before {
+  body.is-search-page .m-feature-tile::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -263,123 +253,36 @@
     transform: scale(1.02);
   }
 
-  .m-feature-tile::after {
+  body.is-search-page .m-feature-tile::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.62));
   }
 
-  .m-feature-title,
-  .m-feature-sub {
+  body.is-search-page .m-feature-title,
+  body.is-search-page .m-feature-sub {
     position: relative;
     z-index: 1;
     display: block;
     padding: 0 12px;
   }
 
-  .m-feature-title {
+  body.is-search-page .m-feature-title {
     padding-top: 12px;
     font-size: 15px;
     font-weight: 900;
     letter-spacing: -0.2px;
   }
 
-  .m-feature-sub {
+  body.is-search-page .m-feature-sub {
     padding-top: 4px;
     font-size: 12px;
     opacity: 0.88;
     font-weight: 800;
   }
-
-  .m-brand-row--search { padding-bottom: 2px; }
 }
 
-/* Små skjermer: 2 per rad for chips */
 @media (max-width: 360px) {
-  body.is-search-page .m-cat-chip {
-    flex: 1 1 calc(50% - 10px) !important;
-  }
-
-  @media (max-width: 768px) {
-    .m-feature-tile { min-height: 108px; }
-  }
-}
-
-
-/* ================================
-   Search-mobile: tighter vertical spacing
-   (legg helt nederst i mobile-base.css)
-================================= */
-@media (max-width: 768px) {
-  /* mindre luft rett under search-header */
-  body.is-search-page .m-search-main{
-    padding-top: 6px !important;
-  }
-
-  /* mindre luft mellom "Kategorier" og innholdet */
-  body.is-search-page .m-search-block-head{
-    margin-bottom: 6px !important;
-  }
-
-  /* mindre luft mellom seksjonene (Selfcare -> Populært nå) */
-  body.is-search-page .m-search-block{
-    margin-bottom: 10px !important;
-  }
-
-  /* chips: ingen ekstra bunnluft */
-  body.is-search-page .m-cat-chips{
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-}
-
-/* ekstra tight på veldig små skjermer */
-@media (max-width: 360px) {
-  body.is-search-page .m-search-main{ padding-top: 4px !important; }
-  body.is-search-page .m-search-block{ margin-bottom: 8px !important; }
-}
-
-
-/* =====================================================
-   FIX: Search-mobile spacing (override desktop main padding)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Desktop setter ofte padding:60 på main. Null den på søkesiden. */
-  body.is-search-page main {
-    padding: 0 !important;
-  }
-
-  /* Dette er din faktiske wrapper på siden */
-  body.is-search-page main.m-search-main {
-    padding: 12px 12px calc(16px + 64px + env(safe-area-inset-bottom)) !important;
-  }
-
-  /* Mindre luft mellom blokker */
-  body.is-search-page .m-search-block {
-    margin: 0 0 14px !important;
-  }
-
-  /* Siste blokk skal ikke legge på ekstra luft */
-  body.is-search-page .m-search-block:last-child {
-    margin-bottom: 0 !important;
-  }
-}
-
-@media (max-width: 768px){
-  /* Kill desktop main padding on search page */
-  body.is-search-page main,
-  body.is-search-page main.m-search-main{
-    padding: 0 !important;
-  }
-
-  /* Apply the real spacing you want */
-  body.is-search-page main.m-search-main{
-    padding: 12px 12px calc(16px + 64px + env(safe-area-inset-bottom)) !important;
-  }
-
-  body.is-search-page .m-search-block{
-    margin: 0 0 14px !important;
-  }
+  body.is-search-page .m-feature-tile { min-height: 108px; }
 }
