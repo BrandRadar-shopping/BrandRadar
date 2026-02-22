@@ -1,38 +1,36 @@
 /* =====================================================
    BrandRadar – Mobile Base
-   Site-wide mobilregler, failsafes, bottom-nav, og search-screen layout
+   Site-wide mobilregler, failsafes, og felles UI (bottom-nav)
    Breakpoint: <= 768px
    ===================================================== */
 
 @media (max-width: 768px) {
 
-  /* --- Global layout safety --- */
+  /* --- Global layout safety (anti horizontal overflow) --- */
   html, body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
   }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
 
-  /* La grid/flex barn få krympe (kritisk på 320px) */
+  /* La grid/flex-barn få krympe (kritisk for 320px) */
   .nav-container > *,
   .search-box,
+  #site-search,
   #search-input,
   .top-links,
-  .hero-slider,
   .slides,
   .trending-grid,
   .product-grid,
   .premium-grid {
-    min-width: 0;
+    min-width: 0 !important;
   }
 
-  /* =====================================================
+  /* -----------------------------------------------------
      Bottom navigation (mobil)
-     ===================================================== */
+  ----------------------------------------------------- */
   body {
     padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
@@ -47,7 +45,7 @@
     background: rgba(255,255,255,0.96);
     border-top: 1px solid rgba(0,0,0,0.10);
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     z-index: 11000; /* under overlay(12000) og drawer(13000) */
     backdrop-filter: blur(10px);
   }
@@ -59,16 +57,17 @@
     place-items: center;
     text-decoration: none;
     color: #111;
-    gap: 2px;
+    gap: 3px;
     padding: 8px 6px;
     -webkit-tap-highlight-color: transparent;
+    min-width: 0;
   }
 
   .m-ico {
     width: 22px;
     height: 22px;
     color: #111;
-    line-height: 1;
+    display: block;
   }
 
   .m-txt {
@@ -76,6 +75,7 @@
     font-weight: 800;
     opacity: 0.75;
     line-height: 1;
+    white-space: nowrap;
   }
 
   .m-nav-item.is-active .m-txt { opacity: 1; }
@@ -84,27 +84,26 @@
   .m-nav-item.m-lux {
     background: #0b0b0c;
     border-radius: 14px;
-    margin: 8px 10px; /* gjør den “chip”-aktig */
+    margin: 8px 10px;
     height: calc(64px - 16px);
     align-content: center;
   }
-
   .m-nav-item.m-lux .m-ico,
   .m-nav-item.m-lux .m-txt {
     color: #d8b24c;
     opacity: 1;
   }
 
-  /* =====================================================
-     Search screen layout
-     ===================================================== */
+  /* -----------------------------------------------------
+     Search-mobile page spacing/layout
+  ----------------------------------------------------- */
   .m-search-header {
     position: sticky;
     top: 0;
     z-index: 10001; /* over innhold, under drawer */
     background: #fff;
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 10px 12px;
+    padding: 10px 12px 12px;
   }
 
   .m-search-top {
@@ -133,19 +132,17 @@
   }
 
   .m-search-main {
-    padding: 10px 12px 18px;
+    padding: 14px 12px 18px;
   }
 
-  .m-search-block {
-    margin-bottom: 14px;
-  }
+  .m-search-block { margin-bottom: 18px; }
 
   .m-search-block-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .m-search-block h2 {
@@ -172,7 +169,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Category icon chips */
   .m-cat-chips {
     display: flex;
     gap: 10px;
@@ -198,23 +194,19 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .m-cat-ico {
-    font-size: 16px;
-    line-height: 1;
-  }
+  .m-cat-ico { font-size: 16px; line-height: 1; }
 
-  /* Featured tiles 2x2 */
   .m-feature-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 10px;
+    gap: 12px;
   }
 
   .m-feature-tile {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    min-height: 110px;
+    min-height: 128px;
     text-decoration: none;
     color: #fff;
     background: #111;
@@ -227,7 +219,6 @@
     background-image: var(--bg);
     background-size: cover;
     background-position: center;
-    filter: saturate(1.05);
     transform: scale(1.02);
   }
 
@@ -235,15 +226,15 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.60));
+    background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.62));
   }
 
   .m-feature-title,
   .m-feature-sub {
     position: relative;
+    z-index: 1;
     display: block;
     padding: 0 12px;
-    z-index: 1;
   }
 
   .m-feature-title {
@@ -256,43 +247,14 @@
   .m-feature-sub {
     padding-top: 4px;
     font-size: 12px;
-    opacity: 0.85;
+    opacity: 0.88;
     font-weight: 800;
   }
 
-  .m-brand-row--search {
-    padding-bottom: 2px;
-  }
+  .m-brand-row--search { padding-bottom: 2px; }
+}
 
-  /* =====================================================
-     Index spacing (mobil) – strammer og sentrerer alt uten desktop-impact
-     ===================================================== */
-  .hero-slider { margin: 10px 0 0; }
-  .hero { padding: 18px 12px; }
-  .partner-banner,
-  .intro,
-  .universes,
-  .trending-section,
-  .top-brands,
-  .giveaway,
-  .featured-products,
-  .footer-cta {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .partner-banner { padding-top: 14px; padding-bottom: 10px; }
-  .intro,
-  .universes,
-  .trending-section,
-  .top-brands,
-  .giveaway,
-  .featured-products,
-  .footer-cta {
-    padding-top: 22px;
-    padding-bottom: 22px;
-  }
-
-  /* Unngå “desktop store gap” */
-  .section-sub { margin-top: 6px; }
+@media (max-width: 360px) {
+  .m-feature-grid { gap: 10px; }
+  .m-feature-tile { min-height: 110px; }
 }
