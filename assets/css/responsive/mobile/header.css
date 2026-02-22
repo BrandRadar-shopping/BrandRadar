@@ -5,6 +5,10 @@
 
 @media (max-width: 768px) {
 
+.nav-container > * { min-width: 0; }
+.top-links { min-width: 0; }
+.search-box, #site-search { min-width: 0; max-width: 100%; }
+   
   /* Header sticky + stacking */
   .main-header {
     position: sticky;
