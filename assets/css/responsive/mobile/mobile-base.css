@@ -281,10 +281,41 @@
     opacity: 0.88;
     font-weight: 800;
   }
+
+  /* =========================================
+     SEARCH-MOBILE: ALL CATEGORIES (2 kolonner + mindre tiles)
+     Forutsetter at "Se alle kategorier" bruker .m-grid/.m-tile
+     ========================================= */
+  body.is-search-page .m-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.is-search-page .m-tile {
+    min-height: 0;
+    border-radius: 16px;
+  }
+
+  body.is-search-page .m-tile-img {
+    height: 86px;
+  }
+
+  body.is-search-page .m-tile-label {
+    font-size: 14px;
+    padding: 10px 10px 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
 }
 
 @media (max-width: 360px) {
   body.is-search-page .m-feature-tile { min-height: 108px; }
+
+  /* All categories: enda litt tighter på små skjermer */
+  body.is-search-page .m-tile-img { height: 78px; }
+  body.is-search-page .m-tile-label { font-size: 13px; }
 }
 
 /* =====================================================
