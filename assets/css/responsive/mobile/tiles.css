@@ -90,6 +90,82 @@
   }
 }
 
+/* =========================================
+   INDEX: Hero-slider som "single hero" på mobil
+   ========================================= */
+@media (max-width: 768px) {
+
+  /* Skjul den andre heroen på mobil (forhindrer dobbel-hero) */
+  section.hero {
+    display: none !important;
+  }
+
+  /* Hero slider spacing */
+  section.hero-slider {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* Stabil høyde (tilpass gjerne tallene senere) */
+  .hero-slider .slide {
+    min-height: 360px;
+  }
+
+  /* Swipe + snap (du har mye av dette allerede) */
+  .hero-slider .slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    /* Viktig: hindrer “bouncy” side-scroll */
+    overscroll-behavior-x: contain;
+
+    /* Litt “luft” så første/ siste slide ikke føles klemt */
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  /* Gjør slides litt “kort-stil” med padding-snap */
+  .hero-slider .slide {
+    flex: 0 0 calc(100% - 24px);
+    scroll-snap-align: center;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  /* Piler: skjul på touch (swipe er nok på mobil) */
+  .hero-slider .nav {
+    display: none !important;
+  }
+
+  /* Dots: sticky/trygg plassering */
+  .hero-slider .dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 6;
+    pointer-events: none; /* hindrer rare taps */
+  }
+
+  /* Hvis dots er knapper og må klikkes: bytt til auto */
+  /* .hero-slider .dots { pointer-events: auto; } */
+
+  /* Skjul scrollbar */
+  .hero-slider .slides::-webkit-scrollbar { display: none; }
+  .hero-slider .slides { scrollbar-width: none; }
+}
+
+@media (max-width: 360px) {
+  .hero-slider .slide { min-height: 320px; }
+}
+
 @media (max-width: 360px) {
   .hero-slider .nav.prev { left: 8px; }
   .hero-slider .nav.next { right: 8px; }
