@@ -5,12 +5,12 @@
 
 @media (max-width: 768px) {
 
-  /* --- Hero slider: stabil mobil swipe + ingen “mystisk overlay” --- */
+  /* --- Hero slider: stabil mobil + ingen “mystisk overlay” --- */
   .hero-slider {
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
   }
 
   /* Fjerner mørke overlay-lag hvis de kommer fra hero-slider pseudo */
@@ -25,6 +25,38 @@
   .hero-slider .slide::after {
     content: "" !important;
     display: none !important;
+  }
+
+  /* =========================================
+     INDEX: Hero-slider som "single hero" på mobil
+     (skjul den andre heroen)
+     ========================================= */
+  section.hero {
+    display: none !important;
+  }
+
+  section.hero-slider {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* Piler: skjul på mobil (swipe er nok på touch) */
+  .hero-slider .nav {
+    display: none !important;
+  }
+
+  /* Dots: trygg plassering */
+  .hero-slider .dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 6;
+    pointer-events: none;
   }
 
   /* --- Cards/grids: aldri fixed width på mobil --- */
@@ -53,66 +85,18 @@
   .premium-grid > * {
     min-width: 0;
   }
-
-  /* Hero slides: mobil swipe */
-  .hero-slider .slides {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .hero-slider .slide {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-  }
-
-  /* Nav-knapper: holde de inne i viewport */
-  .hero-slider .nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 5;
-  }
-  .hero-slider .nav.prev { left: 10px; }
-  .hero-slider .nav.next { right: 10px; }
-
-  /* Dots: sentrer */
-  .hero-slider .dots {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 6;
-  }
 }
 
 /* =========================================
-   INDEX: Hero-slider som "single hero" på mobil
+   Hero swipe/snap: kun på touch-enheter
+   (fikser "må scrolle 6-7 ganger" på desktop)
    ========================================= */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
 
-  /* Skjul den andre heroen på mobil (forhindrer dobbel-hero) */
-  section.hero {
-    display: none !important;
-  }
-
-  /* Hero slider spacing */
-  section.hero-slider {
-    margin: 0 !important;
-    padding: 0 !important;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-  }
-
-  /* Stabil høyde (tilpass gjerne tallene senere) */
   .hero-slider .slide {
     min-height: 360px;
   }
 
-  /* Swipe + snap (du har mye av dette allerede) */
   .hero-slider .slides {
     display: flex;
     overflow-x: auto;
@@ -120,52 +104,24 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 
-    /* Viktig: hindrer “bouncy” side-scroll */
     overscroll-behavior-x: contain;
 
-    /* Litt “luft” så første/ siste slide ikke føles klemt */
     padding: 0 12px;
     gap: 12px;
+
+    scrollbar-width: none;
   }
 
-  /* Gjør slides litt “kort-stil” med padding-snap */
+  .hero-slider .slides::-webkit-scrollbar { display: none; }
+
   .hero-slider .slide {
     flex: 0 0 calc(100% - 24px);
     scroll-snap-align: center;
     border-radius: 18px;
     overflow: hidden;
   }
-
-  /* Piler: skjul på touch (swipe er nok på mobil) */
-  .hero-slider .nav {
-    display: none !important;
-  }
-
-  /* Dots: sticky/trygg plassering */
-  .hero-slider .dots {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 6;
-    pointer-events: none; /* hindrer rare taps */
-  }
-
-  /* Hvis dots er knapper og må klikkes: bytt til auto */
-  /* .hero-slider .dots { pointer-events: auto; } */
-
-  /* Skjul scrollbar */
-  .hero-slider .slides::-webkit-scrollbar { display: none; }
-  .hero-slider .slides { scrollbar-width: none; }
 }
 
-
-
-@media (max-width: 360px) {
+@media (max-width: 360px) and (hover: none) and (pointer: coarse) {
   .hero-slider .slide { min-height: 320px; }
-  .hero-slider .nav.prev { left: 8px; }
-  .hero-slider .nav.next { right: 8px; }
 }
