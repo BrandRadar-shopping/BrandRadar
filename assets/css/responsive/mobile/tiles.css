@@ -84,6 +84,51 @@
   .premium-grid > * {
     min-width: 0;
   }
+
+  /* =========================================
+     STORE PRODUKTLISTER: 2 kolonner (oversikt)
+     (category/brand/search results m.m.)
+     ========================================= */
+  .product-grid,
+  .premium-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* Ikke tving trending til 2-kolonne her – den kan være slider/preview */
+  /* (vi lar .trending-grid styres av sin egen logikk) */
+
+  /* Mer kompakt info-del */
+  .product-info {
+    padding: 10px 10px 12px !important;
+  }
+
+  /* Tittel – maks 2 linjer */
+  .product-info h3,
+  .product-title {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin: 0 0 6px !important;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  /* Pris */
+  .product-price,
+  .price {
+    font-size: 13px !important;
+  }
+
+  /* Bilde: Zalando-ish “square” */
+  .product-image-wrapper {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 16px;
+  }
 }
 
 /* =========================================
@@ -123,15 +168,11 @@
 @media (max-width: 768px) and (hover: hover) and (pointer: fine) {
 
   .hero-slider .slides {
-    /* Dette er nøkkelen: fjerner horisontal scroll-capture */
     overflow-x: hidden !important;
     scroll-snap-type: none !important;
-
-    /* Valgfritt: sørg for at flex-layout ikke lokker wheel */
     display: block !important;
   }
 
-  /* Hvis style.css gjør slides flex uansett */
   .hero-slider .slide {
     flex: none !important;
   }
@@ -139,4 +180,11 @@
 
 @media (max-width: 360px) and (hover: none) and (pointer: coarse) {
   .hero-slider .slide { min-height: 320px; }
+}
+
+@media (max-width: 360px) {
+  .product-grid,
+  .premium-grid {
+    gap: 10px !important;
+  }
 }
