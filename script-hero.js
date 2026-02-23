@@ -1,6 +1,7 @@
 // ===============================================
-// BrandRadar – Hero Slider v4
+// BrandRadar – Hero Slider v4 (patched)
 // Henter slides fra Google Sheet + premium animasjon
+// Fix: unngå "scroll-heng" på mobil/devtools + disable heavy effects på touch/reduced motion
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -13,6 +14,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   const nextBtn = slider.querySelector(".nav.next");
 
   if (!slidesContainer || !dotsContainer) return;
+
+  // Device / motion flags
+  const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches; // typisk touch
+  const isHoverCapable = window.matchMedia("(hover: hover)").matches;     // typisk desktop
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Only enable parallax on true desktop (hover + fine pointer) and not reduced motion
+  const enableParallax = isHoverCapable && !isCoarsePointer && !reduceMotion;
+
+  // Scroll-fade can be slightly heavy; disable only when reduced motion is requested
+  const enableScrollFade = !reduceMotion;
 
   const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
   const SHEET_NAME = "HeroSlides";
@@ -65,10 +77,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     dotsContainer.innerHTML = "";
     slides.forEach((slide, idx) => {
       const dot = document.createElement("span");
-      dot.dataset.index = idx;
-      if (slide.classList.contains("active")) {
-        dot.classList.add("active");
-      }
+      dot.dataset.index = String(idx);
+      if (slide.classList.contains("active")) dot.classList.add("active");
       dotsContainer.appendChild(dot);
     });
 
@@ -98,13 +108,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (dots[current]) dots[current].classList.add("active");
     }
 
-    function next() {
-      goTo(current + 1);
-    }
-
-    function prev() {
-      goTo(current - 1);
-    }
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
 
     function startAuto() {
       stopAuto();
@@ -140,46 +145,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
 
-    // 🧊 Pause på hover
-    slider.addEventListener("mouseenter", stopAuto);
-    slider.addEventListener("mouseleave", startAuto);
-
-    // 🎮 Parallax
-    slider.addEventListener("mousemove", (e) => {
-      const rect = slider.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width - 0.5;
-      const relY = (e.clientY - rect.top) / rect.height - 0.5;
-
-      const maxMoveX = 12;
-      const maxMoveY = 8;
-
-      slider.style.setProperty("--parallax-x", `${relX * maxMoveX}px`);
-      slider.style.setProperty("--parallax-y", `${relY * maxMoveY}px`);
-    });
-
-    slider.addEventListener("mouseleave", () => {
-      slider.style.setProperty("--parallax-x", "0px");
-      slider.style.setProperty("--parallax-y", "0px");
-    });
-
-    // 🌫 Scroll-fade
-    function handleScroll() {
-      const rect = slider.getBoundingClientRect();
-      const windowH = window.innerHeight || document.documentElement.clientHeight;
-      const visible = Math.min(
-        Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5),
-        1
-      );
-      slider.style.opacity = visible;
+    // 🧊 Pause på hover (kun desktop)
+    if (isHoverCapable && !isCoarsePointer) {
+      slider.addEventListener("mouseenter", stopAuto);
+      slider.addEventListener("mouseleave", startAuto);
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // 🎮 Parallax (kun desktop + ikke reduced motion)
+    if (enableParallax) {
+      slider.addEventListener("mousemove", (e) => {
+        const rect = slider.getBoundingClientRect();
+        const relX = (e.clientX - rect.left) / rect.width - 0.5;
+        const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const maxMoveX = 12;
+        const maxMoveY = 8;
+
+        slider.style.setProperty("--parallax-x", `${relX * maxMoveX}px`);
+        slider.style.setProperty("--parallax-y", `${relY * maxMoveY}px`);
+      });
+
+      slider.addEventListener("mouseleave", () => {
+        slider.style.setProperty("--parallax-x", "0px");
+        slider.style.setProperty("--parallax-y", "0px");
+      });
+    } else {
+      // Ensure neutral values when disabled
+      slider.style.setProperty("--parallax-x", "0px");
+      slider.style.setProperty("--parallax-y", "0px");
+    }
+
+    // 🌫 Scroll-fade (disable on reduced motion)
+    if (enableScrollFade) {
+      function handleScroll() {
+        const rect = slider.getBoundingClientRect();
+        const windowH = window.innerHeight || document.documentElement.clientHeight;
+
+        const visible = Math.min(
+          Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5),
+          1
+        );
+
+        slider.style.opacity = String(visible);
+      }
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      handleScroll();
+    } else {
+      slider.style.opacity = "1";
+    }
 
     // Start
     slides[current].classList.add("active");
     if (dots[current]) dots[current].classList.add("active");
     startAuto();
-    handleScroll();
 
     console.log("✅ Hero slider klar.");
   } catch (err) {
