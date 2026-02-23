@@ -162,11 +162,10 @@
   .hero-slider .slides { scrollbar-width: none; }
 }
 
-@media (max-width: 360px) {
-  .hero-slider .slide { min-height: 320px; }
-}
+
 
 @media (max-width: 360px) {
+  .hero-slider .slide { min-height: 320px; }
   .hero-slider .nav.prev { left: 8px; }
   .hero-slider .nav.next { right: 8px; }
 }
