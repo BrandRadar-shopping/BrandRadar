@@ -676,3 +676,74 @@
     height: 40px !important;
   }
 }
+
+/* =====================================================
+   Partner banner – Premium CTA + spacing (MOBIL)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Litt strammere rytme */
+  section.partner-banner .partner-tag { margin: 0 0 10px !important; }
+
+  section.partner-banner .partner-banner-text h2 {
+    margin: 0 0 10px !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.2px !important;
+  }
+
+  section.partner-banner .partner-sub {
+    margin: 0 0 14px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    opacity: 0.85 !important;
+  }
+
+  /* CTA: clean / premium (IKKE blå) */
+  section.partner-banner a.partner-cta {
+    width: fit-content !important;
+    max-width: 100% !important;
+
+    background: rgba(255,255,255,0.92) !important;
+    color: #111 !important;
+
+    border: 1px solid rgba(0,0,0,0.14) !important;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08) !important;
+
+    padding: 12px 14px !important;
+    min-height: 42px !important;
+    border-radius: 999px !important;
+
+    font-weight: 900 !important;
+    text-decoration: none !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    /* Fjerner “desktop-knapp”-look */
+    letter-spacing: -0.1px !important;
+    line-height: 1 !important;
+  }
+
+  section.partner-banner a.partner-cta::after {
+    content: "→";
+    font-weight: 900;
+    opacity: 0.75;
+  }
+
+  section.partner-banner a.partner-cta:active {
+    transform: translateY(1px);
+  }
+
+  /* Logo-badge litt roligere */
+  section.partner-banner .partner-banner-image img {
+    background: rgba(255,255,255,0.88) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  section.partner-banner .partner-banner-text h2 { font-size: 17px !important; }
+}
