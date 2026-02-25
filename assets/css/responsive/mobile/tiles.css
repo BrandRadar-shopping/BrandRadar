@@ -5,7 +5,10 @@
 
 @media (max-width: 768px) {
 
-  /* --- Hero slider: stabil mobil + ingen “mystisk overlay” --- */
+  /* -----------------------------------------
+     HERO
+  ----------------------------------------- */
+
   .hero-slider {
     width: 100%;
     max-width: 100%;
@@ -13,23 +16,14 @@
     overflow: hidden;
   }
 
-  /* Fjerner mørke overlay-lag hvis de kommer fra hero-slider pseudo */
   .hero-slider::before,
-  .hero-slider::after {
-    content: "" !important;
-    display: none !important;
-  }
-
-  /* Hvis enkelt-slides har pseudo-overlay (begrenset scope) */
+  .hero-slider::after,
   .hero-slider .slide::before,
   .hero-slider .slide::after {
     content: "" !important;
     display: none !important;
   }
 
-  /* =========================================
-     INDEX: Hero-slider som "single hero" på mobil
-     ========================================= */
   section.hero {
     display: none !important;
   }
@@ -40,12 +34,10 @@
     border-bottom: 1px solid rgba(0,0,0,0.06);
   }
 
-  /* Piler: skjul på mobil (swipe er nok på touch) */
   .hero-slider .nav {
     display: none !important;
   }
 
-  /* Dots: trygg plassering */
   .hero-slider .dots {
     position: absolute;
     left: 0;
@@ -58,37 +50,10 @@
     pointer-events: none;
   }
 
-  /* --- Cards/grids: aldri fixed width på mobil --- */
-  .product-card,
-  .product-image-wrapper,
-  .product-info {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-  }
+  /* -----------------------------------------
+     GENERELLE PRODUKTLISTER (category, brand)
+  ----------------------------------------- */
 
-  /* Wrappers */
-  .slides,
-  .trending-grid,
-  .product-grid,
-  .premium-grid {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  .slides > *,
-  .trending-grid > *,
-  .product-grid > *,
-  .premium-grid > * {
-    min-width: 0;
-  }
-
-  /* =========================================
-     STORE PRODUKTLISTER: 2 kolonner (oversikt)
-     (category/brand/search results m.m.)
-     ========================================= */
   .product-grid,
   .premium-grid {
     display: grid !important;
@@ -96,15 +61,16 @@
     gap: 12px !important;
   }
 
-  /* Ikke tving trending til 2-kolonne her – den kan være slider/preview */
-  /* (vi lar .trending-grid styres av sin egen logikk) */
+  .product-image-wrapper {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 16px;
+  }
 
-  /* Mer kompakt info-del */
   .product-info {
     padding: 10px 10px 12px !important;
   }
 
-  /* Tittel – maks 2 linjer */
   .product-info h3,
   .product-title {
     font-size: 13px !important;
@@ -117,23 +83,78 @@
     overflow: hidden;
   }
 
-  /* Pris */
   .product-price,
   .price {
     font-size: 13px !important;
   }
 
-  /* Bilde: Zalando-ish “square” */
-  .product-image-wrapper {
+  /* -----------------------------------------
+     FAVORITTER – PRODUKTER (KOMPAKT)
+  ----------------------------------------- */
+
+  body.is-favorites-page .favorites-grid,
+  body.is-favorites-page #favorites-product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.is-favorites-page .product-image-wrapper {
     aspect-ratio: 1 / 1;
+    border-radius: 14px;
+  }
+
+  body.is-favorites-page .product-info {
+    padding: 8px 8px 10px !important;
+  }
+
+  body.is-favorites-page .product-info h3,
+  body.is-favorites-page .product-title {
+    font-size: 12.5px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* -----------------------------------------
+     FAVORITTER – BRANDS (2 KOLONNER)
+  ----------------------------------------- */
+
+  body.is-favorites-page .brand-grid,
+  body.is-favorites-page #favorites-brand-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.is-favorites-page .brand-grid > *,
+  body.is-favorites-page #favorites-brand-grid > * {
+    border-radius: 14px;
     overflow: hidden;
-    border-radius: 16px;
+  }
+
+  body.is-favorites-page .brand-grid img,
+  body.is-favorites-page #favorites-brand-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  body.is-favorites-page .brand-grid h3,
+  body.is-favorites-page #favorites-brand-grid h3 {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin: 6px 0 0 0 !important;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
-/* =========================================
-   HERO SWIPE: kun touch-enheter
-   ========================================= */
+/* -----------------------------------------
+   HERO SWIPE – KUN TOUCH
+----------------------------------------- */
+
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
 
   .hero-slider .slide { min-height: 360px; }
@@ -142,15 +163,13 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
-
     padding: 0 12px;
     gap: 12px;
-
     scrollbar-width: none;
   }
+
   .hero-slider .slides::-webkit-scrollbar { display: none; }
 
   .hero-slider .slide {
@@ -161,10 +180,10 @@
   }
 }
 
-/* =========================================
-   FIX: Desktop/DevTools (mus/trackpad) skal ikke "henge"
-   når du scroller forbi slideren i mobilbredde
-   ========================================= */
+/* -----------------------------------------
+   DEVTOOLS SCROLL FIX
+----------------------------------------- */
+
 @media (max-width: 768px) and (hover: hover) and (pointer: fine) {
 
   .hero-slider .slides {
@@ -178,57 +197,18 @@
   }
 }
 
-/* =========================================
-   FAVORITTER (MOBIL): mer oversikt (2 kolonner)
-   ========================================= */
-@media (max-width: 768px) {
-
-  body.is-favorites-page .product-grid,
-  body.is-favorites-page .favorites-grid,
-  body.is-favorites-page #favorites-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  body.is-favorites-page .product-image-wrapper {
-    aspect-ratio: 1 / 1;
-    border-radius: 14px;
-    overflow: hidden;
-  }
-
-  body.is-favorites-page .product-info {
-    padding: 8px 9px 10px !important;
-  }
-
-  body.is-favorites-page .product-info h3,
-  body.is-favorites-page .product-title {
-    font-size: 13px !important;
-    line-height: 1.15 !important;
-    margin: 0 0 5px !important;
-
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-}
+/* -----------------------------------------
+   SMALL DEVICES
+----------------------------------------- */
 
 @media (max-width: 360px) {
-  body.is-favorites-page .product-grid,
+
+  .product-grid,
+  .premium-grid,
   body.is-favorites-page .favorites-grid,
-  body.is-favorites-page #favorites-grid {
+  body.is-favorites-page .brand-grid {
     gap: 8px !important;
   }
-}
 
-@media (max-width: 360px) and (hover: none) and (pointer: coarse) {
   .hero-slider .slide { min-height: 320px; }
-}
-
-@media (max-width: 360px) {
-  .product-grid,
-  .premium-grid {
-    gap: 10px !important;
-  }
 }
