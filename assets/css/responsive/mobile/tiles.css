@@ -178,6 +178,50 @@
   }
 }
 
+/* =========================================
+   FAVORITTER (MOBIL): mer oversikt (2 kolonner)
+   ========================================= */
+@media (max-width: 768px) {
+
+  body.is-favorites-page .product-grid,
+  body.is-favorites-page .favorites-grid,
+  body.is-favorites-page #favorites-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.is-favorites-page .product-image-wrapper {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  body.is-favorites-page .product-info {
+    padding: 8px 9px 10px !important;
+  }
+
+  body.is-favorites-page .product-info h3,
+  body.is-favorites-page .product-title {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin: 0 0 5px !important;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 360px) {
+  body.is-favorites-page .product-grid,
+  body.is-favorites-page .favorites-grid,
+  body.is-favorites-page #favorites-grid {
+    gap: 8px !important;
+  }
+}
+
 @media (max-width: 360px) and (hover: none) and (pointer: coarse) {
   .hero-slider .slide { min-height: 320px; }
 }
