@@ -676,3 +676,57 @@
     opacity: 0.9;
   }
 }
+
+/* =====================================================
+   INDEX – Partner banner (MOBIL): tving slim logo ved siden av tekst
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Tving wrapperen til grid uansett hva style.css gjør */
+  section#partner-banner-section.partner-banner #partner-banner-content {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 96px !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  /* Sørg for at teksten faktisk kan krympe */
+  section#partner-banner-section.partner-banner #partner-banner-content .partner-text {
+    min-width: 0 !important;
+  }
+
+  /* Gjør logoen til en liten "chip" */
+  section#partner-banner-section.partner-banner #partner-banner-img {
+    width: 96px !important;
+    height: 46px !important;
+    object-fit: contain !important;
+
+    background: #fff !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+
+    display: block !important;
+    justify-self: end !important;
+    align-self: center !important;
+  }
+
+  /* CTA knapp fullbredde */
+  section#partner-banner-section.partner-banner #partner-link.btn-primary {
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  section#partner-banner-section.partner-banner #partner-banner-content {
+    grid-template-columns: minmax(0, 1fr) 86px !important;
+  }
+  section#partner-banner-section.partner-banner #partner-banner-img {
+    width: 86px !important;
+    height: 40px !important;
+  }
+}
+
