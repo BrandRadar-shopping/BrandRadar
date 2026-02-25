@@ -382,3 +382,199 @@
     font-weight: 900;
   }
 }
+
+/* =====================================================
+   INDEX / HOME – Mobile Polish Pass
+   Breakpoint: <= 768px
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Generell section-spacing på mobil */
+  body:not(.is-search-page) section {
+    padding: 18px 12px !important;
+  }
+
+  /* Strammere overskrifter */
+  body:not(.is-search-page) section h2 {
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    margin: 0 0 6px !important;
+    letter-spacing: -0.2px;
+  }
+
+  body:not(.is-search-page) .section-sub {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    margin: 0 0 12px !important;
+    opacity: 0.85;
+  }
+
+  /* -----------------------------------------------------
+     Partner banner – stack på mobil
+  ----------------------------------------------------- */
+  #partner-banner-section.partner-banner {
+    padding: 14px 12px !important;
+  }
+
+  #partner-banner-content {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    align-items: start !important;
+  }
+
+  #partner-banner-img {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 16px !important;
+    display: block !important;
+  }
+
+  #partner-banner-section .btn-primary {
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+  }
+
+  /* -----------------------------------------------------
+     Intro – 1 kolonne, kompakt
+  ----------------------------------------------------- */
+  .intro .intro-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .intro .intro-card {
+    border-radius: 16px !important;
+    padding: 14px !important;
+  }
+
+  .intro .intro-card h3 {
+    margin: 8px 0 6px !important;
+    font-size: 16px !important;
+  }
+
+  .intro .intro-card p {
+    margin: 0 !important;
+    font-size: 13px !important;
+    opacity: 0.9;
+  }
+
+  /* -----------------------------------------------------
+     Universes – 2 kolonner (som du ønsket)
+  ----------------------------------------------------- */
+  .universes .universe-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .universes .u-card {
+    border-radius: 18px !important;
+    padding: 14px !important;
+    min-height: 140px !important;
+  }
+
+  .universes .u-card h3 {
+    font-size: 14px !important;
+    margin: 0 0 6px !important;
+  }
+
+  .universes .u-card p {
+    font-size: 12.5px !important;
+    margin: 0 !important;
+    opacity: 0.9;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* -----------------------------------------------------
+     Trending Right Now
+     (Lar deg beholde slider/preview – bare strammer UI)
+  ----------------------------------------------------- */
+  .trending-section {
+    position: relative;
+  }
+
+  .trending-section .trending-nav {
+    top: 44px; /* litt lavere på mobil */
+  }
+
+  /* Om trending-grid er horisontal scroller i JS, hjelper dette på */
+  #trending-grid.trending-grid {
+    gap: 12px !important;
+  }
+
+  /* -----------------------------------------------------
+     Top Brands – 2 kolonner (oversikt)
+  ----------------------------------------------------- */
+  .top-brands .brands-grid,
+  #topbrands-grid.brands-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  /* -----------------------------------------------------
+     Giveaway – komprimer (mindre "banner-høyde")
+  ----------------------------------------------------- */
+  .giveaway {
+    padding: 16px 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .giveaway h2 {
+    font-size: 18px !important;
+    margin: 0 0 6px !important;
+  }
+
+  .giveaway p {
+    margin: 0 0 10px !important;
+    font-size: 13px !important;
+    opacity: 0.9;
+  }
+
+  .giveaway .cta-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* -----------------------------------------------------
+     Footer CTA / newsletter – full bredde
+  ----------------------------------------------------- */
+  .footer-cta .newsletter {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .footer-cta .newsletter input,
+  .footer-cta .newsletter button {
+    width: 100% !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* Små skjermer: litt tighter */
+@media (max-width: 360px) {
+
+  body:not(.is-search-page) section {
+    padding: 16px 10px !important;
+  }
+
+  .universes .u-card {
+    min-height: 130px !important;
+    padding: 12px !important;
+  }
+
+  .universes .u-card p {
+    -webkit-line-clamp: 2;
+  }
+}
+
