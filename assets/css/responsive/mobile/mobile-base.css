@@ -4,6 +4,9 @@
    Breakpoint: <= 768px
    ===================================================== */
 
+/* =========================
+   <= 768px
+========================= */
 @media (max-width: 768px) {
 
   /* --- Global layout safety (anti horizontal overflow) --- */
@@ -84,7 +87,7 @@
   .m-nav-item.is-active .m-txt { opacity: 1; }
 
   /* Luxury-pill */
-  .m-bottom-nav .m-nav-item.m-lux{
+  .m-bottom-nav .m-nav-item.m-lux {
     position: relative;
     background: transparent;
     height: 100%;
@@ -92,7 +95,7 @@
     place-items: center;
   }
 
-  .m-bottom-nav .m-nav-item.m-lux::before{
+  .m-bottom-nav .m-nav-item.m-lux::before {
     content: "";
     position: absolute;
     inset: 6px 6px;
@@ -102,14 +105,14 @@
   }
 
   .m-bottom-nav .m-nav-item.m-lux .m-ico,
-  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+  .m-bottom-nav .m-nav-item.m-lux .m-txt {
     position: relative;
     z-index: 1;
     color: #d8b24c;
     opacity: 1;
   }
 
-  .m-bottom-nav .m-nav-item.m-lux .m-txt{
+  .m-bottom-nav .m-nav-item.m-lux .m-txt {
     white-space: normal;
     line-height: 1.05;
     font-size: 10px;
@@ -121,24 +124,24 @@
     max-width: 100%;
   }
 
-  /* -----------------------------------------------------
-     Search-mobile page: FIX den globale main-paddingen fra style.css
-  ----------------------------------------------------- */
+  /* =====================================================
+     SEARCH-MOBILE
+  ===================================================== */
 
-  /* 1) Dette er “magien”: style.css har ofte main{padding:60px} */
+  /* “Magien”: style.css har ofte main{padding:60px} */
   body.is-search-page main {
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  /* 2) Kontroller selve søke-layouten */
+  /* Kontroller selve søke-layouten */
   body.is-search-page .m-search-header {
     position: sticky;
     top: 0;
     z-index: 10001;
     background: #fff;
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 10px 12px 10px; /* litt mindre bunn */
+    padding: 10px 12px 10px;
   }
 
   body.is-search-page .m-search-top {
@@ -166,13 +169,12 @@
     width: 100%;
   }
 
-  /* Viktig: her setter vi “riktig” spacing – ikke 60/80 */
   body.is-search-page .m-search-main {
-    padding: 10px 12px 14px !important; /* <- dette er den du vil føle */
+    padding: 10px 12px 14px !important;
   }
 
   body.is-search-page .m-search-block {
-    margin: 0 0 14px !important; /* mindre tomrom mellom seksjoner */
+    margin: 0 0 14px !important;
   }
 
   body.is-search-page .m-search-block-head {
@@ -230,14 +232,14 @@
   body.is-search-page .m-feature-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 10px; /* litt tighter */
+    gap: 10px;
   }
 
   body.is-search-page .m-feature-tile {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    min-height: 118px; /* litt lavere */
+    min-height: 118px;
     text-decoration: none;
     color: #fff;
     background: #111;
@@ -282,10 +284,13 @@
     font-weight: 800;
   }
 
-  /* =========================================
-     SEARCH-MOBILE: ALL CATEGORIES (2 kolonner + mindre tiles)
-     Forutsetter at "Se alle kategorier" bruker .m-grid/.m-tile
-     ========================================= */
+  /* Hard reset av desktop section-padding på søkesiden */
+  body.is-search-page section.m-search-block {
+    padding: 0 !important;
+    margin: 0 0 14px !important;
+  }
+
+  /* ALL CATEGORIES: 2 kolonner + mindre tiles */
   body.is-search-page .m-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
@@ -308,47 +313,10 @@
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
-}
 
-@media (max-width: 360px) {
-  body.is-search-page .m-feature-tile { min-height: 108px; }
-
-  /* All categories: enda litt tighter på små skjermer */
-  body.is-search-page .m-tile-img { height: 78px; }
-  body.is-search-page .m-tile-label { font-size: 13px; }
-}
-
-/* =====================================================
-   SEARCH-MOBILE: hard reset av desktop "section padding"
-   (style.css har typisk: section { padding: 60px 0; })
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Fjerner 60px fra style.css på søkesiden */
-  body.is-search-page section.m-search-block {
-    padding: 0 !important;
-  }
-
-  /* Kontroller spacing mellom blokkene */
-  body.is-search-page section.m-search-block {
-    margin: 0 0 14px !important;
-  }
-
-  /* Litt tighter head */
-  body.is-search-page .m-search-block-head {
-    margin: 0 0 10px !important;
-  }
-
-  /* Hvis du vil ha enda mindre luft mellom header og første blokk */
-  body.is-search-page .m-search-main {
-    padding-top: 10px !important;
-  }
-}
-
-/* =========================================
-   FAVORITTER (MOBIL): Sticky tabs (robust)
-   ========================================= */
-@media (max-width: 768px) {
+  /* =====================================================
+     FAVORITTER (MOBIL): Sticky tabs
+  ===================================================== */
 
   /* Viktig: ingen ancestor må klippe sticky */
   body.is-favorites-page,
@@ -358,10 +326,9 @@
     overflow: visible !important;
   }
 
-  /* Sticky bar */
   body.is-favorites-page .fav-tabs {
     position: sticky !important;
-    top: 128px; /* juster ved behov (typisk 80–110) */
+    top: 128px;
     z-index: 10005;
 
     background: rgba(255,255,255,0.96);
@@ -381,20 +348,16 @@
     border-radius: 12px;
     font-weight: 900;
   }
-}
 
-/* =====================================================
-   INDEX / HOME – Mobile Polish Pass
-   Breakpoint: <= 768px
-   ===================================================== */
-@media (max-width: 768px) {
+  /* =====================================================
+     INDEX / HOME – Polish (mobil)
+  ===================================================== */
 
-  /* Generell section-spacing på mobil */
+  /* Generell section-spacing på mobil (ikke søk) */
   body:not(.is-search-page) section {
     padding: 18px 12px !important;
   }
 
-  /* Strammere overskrifter */
   body:not(.is-search-page) section h2 {
     font-size: 18px !important;
     line-height: 1.15 !important;
@@ -409,62 +372,95 @@
     opacity: 0.85;
   }
 
-  /* -----------------------------------------------------
-     Partner banner – stack på mobil
-  ----------------------------------------------------- */
-  #partner-banner-section.partner-banner {
+  /* ----------------------------
+     Partner Banner: SLIM LOGO (fikser DOM-rekkefølge med grid-areas)
+  ---------------------------- */
+  section#partner-banner-section.partner-banner {
     padding: 14px 12px !important;
   }
 
-  #partner-banner-content {
+  section#partner-banner-section.partner-banner #partner-banner-content {
     display: grid !important;
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) 96px !important;
+    grid-template-areas: "text logo" !important;
     gap: 12px !important;
-    align-items: start !important;
+    align-items: center !important;
   }
 
-  #partner-banner-img {
-    width: 100% !important;
-    height: auto !important;
-    border-radius: 16px !important;
+  /* Uansett at img ligger først i HTML, plasser den til høyre */
+  section#partner-banner-section.partner-banner #partner-banner-img {
+    grid-area: logo !important;
+    width: 96px !important;
+    height: 46px !important;
+    object-fit: contain !important;
+
+    background: #fff !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+
     display: block !important;
+    justify-self: end !important;
+    align-self: center !important;
   }
 
-  #partner-banner-section .btn-primary {
+  section#partner-banner-section.partner-banner .partner-text {
+    grid-area: text !important;
+    min-width: 0 !important;
+  }
+
+  section#partner-banner-section.partner-banner .partner-text h3 {
+    margin: 0 0 6px !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+  }
+
+  section#partner-banner-section.partner-banner .partner-text p {
+    margin: 0 0 10px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    opacity: 0.9;
+  }
+
+  section#partner-banner-section.partner-banner #partner-link.btn-primary {
     display: inline-flex !important;
     width: 100% !important;
     justify-content: center !important;
     min-height: 44px !important;
+    border-radius: 12px !important;
   }
 
-  /* -----------------------------------------------------
-     Intro – 1 kolonne, kompakt
-  ----------------------------------------------------- */
+  /* Intro – kompakt cards */
+  .intro {
+    padding: 16px 12px !important;
+  }
+
   .intro .intro-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 10px !important;
   }
 
   .intro .intro-card {
+    padding: 12px 12px !important;
     border-radius: 16px !important;
-    padding: 14px !important;
+  }
+
+  .intro .intro-card .icon {
+    transform: scale(0.92);
   }
 
   .intro .intro-card h3 {
+    font-size: 15px !important;
     margin: 8px 0 6px !important;
-    font-size: 16px !important;
   }
 
   .intro .intro-card p {
-    margin: 0 !important;
     font-size: 13px !important;
+    margin: 0 !important;
     opacity: 0.9;
   }
 
-  /* -----------------------------------------------------
-     Universes – 2 kolonner (som du ønsket)
-  ----------------------------------------------------- */
+  /* Universes – 2 kolonner */
   .universes .universe-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -492,26 +488,7 @@
     overflow: hidden;
   }
 
-  /* -----------------------------------------------------
-     Trending Right Now
-     (Lar deg beholde slider/preview – bare strammer UI)
-  ----------------------------------------------------- */
-  .trending-section {
-    position: relative;
-  }
-
-  .trending-section .trending-nav {
-    top: 44px; /* litt lavere på mobil */
-  }
-
-  /* Om trending-grid er horisontal scroller i JS, hjelper dette på */
-  #trending-grid.trending-grid {
-    gap: 12px !important;
-  }
-
-  /* -----------------------------------------------------
-     Top Brands – 2 kolonner (oversikt)
-  ----------------------------------------------------- */
+  /* Top Brands – 2 kolonner */
   .top-brands .brands-grid,
   #topbrands-grid.brands-grid {
     display: grid !important;
@@ -519,9 +496,7 @@
     gap: 10px !important;
   }
 
-  /* -----------------------------------------------------
-     Giveaway – komprimer (mindre "banner-høyde")
-  ----------------------------------------------------- */
+  /* Giveaway – komprimert */
   .giveaway {
     padding: 16px 12px !important;
     border-radius: 18px !important;
@@ -544,9 +519,7 @@
     min-height: 44px;
   }
 
-  /* -----------------------------------------------------
-     Footer CTA / newsletter – full bredde
-  ----------------------------------------------------- */
+  /* Footer CTA / newsletter – full bredde */
   .footer-cta .newsletter {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -561,13 +534,21 @@
   }
 }
 
-/* Små skjermer: litt tighter */
+/* =========================
+   <= 360px
+========================= */
 @media (max-width: 360px) {
 
   body:not(.is-search-page) section {
     padding: 16px 10px !important;
   }
 
+  /* Search tiles tighter */
+  body.is-search-page .m-feature-tile { min-height: 108px; }
+  body.is-search-page .m-tile-img { height: 78px; }
+  body.is-search-page .m-tile-label { font-size: 13px; }
+
+  /* Universes litt tighter */
   .universes .u-card {
     min-height: 130px !important;
     padding: 12px !important;
@@ -576,154 +557,12 @@
   .universes .u-card p {
     -webkit-line-clamp: 2;
   }
-}
 
-
-/* =====================================================
-   INDEX – Partner banner: slim logo + kompakt layout (mobil)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  #partner-banner-section.partner-banner {
-    padding: 14px 12px !important;
-  }
-
-  #partner-banner-content {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 92px !important; /* tekst + slim logo */
-    gap: 12px !important;
-    align-items: center !important;
-  }
-
-  /* Logoen blir en liten "badge" */
-  #partner-banner-img {
-    width: 92px !important;
-    height: 44px !important;
-    object-fit: contain !important;
-    background: #fff !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-  }
-
-  /* Tekst-delen */
-  #partner-banner-section .partner-text {
-    min-width: 0;
-  }
-
-  #partner-banner-section .partner-text h3 {
-    margin: 0 0 6px !important;
-    font-size: 18px !important;
-    line-height: 1.15 !important;
-  }
-
-  #partner-banner-section .partner-text p {
-    margin: 0 0 10px !important;
-    font-size: 13px !important;
-    line-height: 1.35 !important;
-    opacity: 0.9;
-  }
-
-  #partner-banner-section .btn-primary {
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    border-radius: 12px !important;
-  }
-}
-
-@media (max-width: 360px) {
-  #partner-banner-content {
-    grid-template-columns: minmax(0, 1fr) 82px !important;
-  }
-  #partner-banner-img {
-    width: 82px !important;
-    height: 40px !important;
-  }
-}
-
-/* =====================================================
-   INDEX – Intro ("Hva er BrandRadar?"): kompakt cards på mobil
-   ===================================================== */
-@media (max-width: 768px) {
-
-  .intro {
-    padding: 16px 12px !important;
-  }
-
-  .intro .intro-grid {
-    gap: 10px !important;
-  }
-
-  .intro .intro-card {
-    padding: 12px 12px !important;
-    border-radius: 16px !important;
-  }
-
-  .intro .intro-card .icon {
-    transform: scale(0.92);
-  }
-
-  .intro .intro-card h3 {
-    font-size: 15px !important;
-    margin: 8px 0 6px !important;
-  }
-
-  .intro .intro-card p {
-    font-size: 13px !important;
-    margin: 0 !important;
-    opacity: 0.9;
-  }
-}
-
-/* =====================================================
-   INDEX – Partner banner (MOBIL): tving slim logo ved siden av tekst
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Tving wrapperen til grid uansett hva style.css gjør */
-  section#partner-banner-section.partner-banner #partner-banner-content {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 96px !important;
-    gap: 12px !important;
-    align-items: center !important;
-  }
-
-  /* Sørg for at teksten faktisk kan krympe */
-  section#partner-banner-section.partner-banner #partner-banner-content .partner-text {
-    min-width: 0 !important;
-  }
-
-  /* Gjør logoen til en liten "chip" */
-  section#partner-banner-section.partner-banner #partner-banner-img {
-    width: 96px !important;
-    height: 46px !important;
-    object-fit: contain !important;
-
-    background: #fff !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
-
-    display: block !important;
-    justify-self: end !important;
-    align-self: center !important;
-  }
-
-  /* CTA knapp fullbredde */
-  section#partner-banner-section.partner-banner #partner-link.btn-primary {
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    border-radius: 12px !important;
-  }
-}
-
-@media (max-width: 360px) {
+  /* Partner logo litt mindre */
   section#partner-banner-section.partner-banner #partner-banner-content {
     grid-template-columns: minmax(0, 1fr) 86px !important;
   }
+
   section#partner-banner-section.partner-banner #partner-banner-img {
     width: 86px !important;
     height: 40px !important;
