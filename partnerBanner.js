@@ -1,4 +1,5 @@
-// partnerBanner.js – Index partner banner (news-style markup)
+// partnerBanner.js – Index partner banner (clean editorial structure)
+
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
 
@@ -18,7 +19,7 @@ async function fetchPartnerBanner() {
   }
 }
 
-// Enkel CSV-parser som håndterer "..." med komma inni (good enough for sheets)
+// Enkel CSV-parser
 function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/);
   if (!lines.length) return [];
@@ -40,7 +41,6 @@ function splitCsvLine(line) {
   for (let i = 0; i < line.length; i++) {
     const ch = line[i];
     if (ch === '"') {
-      // håndter "" inni quotes
       const next = line[i + 1];
       if (inQuotes && next === '"') {
         cur += '"';
@@ -63,19 +63,23 @@ function renderPartnerBanner(item) {
   const bannerSection = document.querySelector(".partner-banner");
   if (!bannerSection) return;
 
-  const campaign = item.campaign_name || "Ukens partner";
   const desc = item.description || "";
-  const alt = item.alt_text || campaign;
+  const alt = item.alt_text || "Partner";
   const ctaText = item.cta_text || "Se kampanjen";
   const link = item.link || "#";
   const img = item.image_url || "";
+
+  // 🔥 Del description i headline + subtekst
+  const parts = desc.split("!");
+  const headline = parts[0] ? parts[0].trim() + "!" : desc;
+  const sub = parts[1] ? parts[1].trim() : "";
 
   bannerSection.innerHTML = `
     <div class="partner-banner-inner">
       <div class="partner-banner-text">
         <p class="partner-tag">Ukens partner</p>
-        <h2>${escapeHtml(campaign)}</h2>
-        <p class="partner-sub">${escapeHtml(desc)}</p>
+        <h2>${escapeHtml(headline)}</h2>
+        ${sub ? `<p class="partner-sub">${escapeHtml(sub)}</p>` : ""}
         ${link && link !== "#"
           ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText)}</a>`
           : ""}
@@ -90,7 +94,6 @@ function renderPartnerBanner(item) {
   `;
 }
 
-// Minimal HTML-escape for trygg rendering
 function escapeHtml(str) {
   return String(str)
     .replaceAll("&", "&amp;")
