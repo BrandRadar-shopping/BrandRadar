@@ -372,24 +372,58 @@
     opacity: 0.85;
   }
 
-  /* ----------------------------
-     Partner Banner: SLIM LOGO (fikser DOM-rekkefølge med grid-areas)
-  ---------------------------- */
-  section#partner-banner-section.partner-banner {
-    padding: 14px 12px !important;
-  }
-
-  section#partner-banner-section.partner-banner #partner-banner-content {
+  /* -----------------------------------------------------
+     Partner banner (JS markup): slim logo + kompakt mobil
+     Markup fra partnerBanner.js:
+     .partner-banner-inner / .partner-banner-text / .partner-banner-image img
+  ----------------------------------------------------- */
+  section.partner-banner .partner-banner-inner {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 96px !important;
-    grid-template-areas: "text logo" !important;
     gap: 12px !important;
     align-items: center !important;
   }
 
-  /* Uansett at img ligger først i HTML, plasser den til høyre */
-  section#partner-banner-section.partner-banner #partner-banner-img {
-    grid-area: logo !important;
+  section.partner-banner .partner-banner-text {
+    min-width: 0 !important;
+  }
+
+  section.partner-banner .partner-tag {
+    margin: 0 0 6px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    opacity: 0.85 !important;
+  }
+
+  section.partner-banner .partner-banner-text h2 {
+    margin: 0 0 6px !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.2px !important;
+  }
+
+  section.partner-banner .partner-sub {
+    margin: 0 0 10px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    opacity: 0.9 !important;
+  }
+
+  section.partner-banner .partner-cta {
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+
+  section.partner-banner .partner-banner-image {
+    display: grid !important;
+    place-items: center !important;
+    justify-self: end !important;
+  }
+
+  section.partner-banner .partner-banner-image img {
     width: 96px !important;
     height: 46px !important;
     object-fit: contain !important;
@@ -399,37 +433,11 @@
     padding: 8px !important;
 
     display: block !important;
-    justify-self: end !important;
-    align-self: center !important;
   }
 
-  section#partner-banner-section.partner-banner .partner-text {
-    grid-area: text !important;
-    min-width: 0 !important;
-  }
-
-  section#partner-banner-section.partner-banner .partner-text h3 {
-    margin: 0 0 6px !important;
-    font-size: 18px !important;
-    line-height: 1.15 !important;
-  }
-
-  section#partner-banner-section.partner-banner .partner-text p {
-    margin: 0 0 10px !important;
-    font-size: 13px !important;
-    line-height: 1.35 !important;
-    opacity: 0.9;
-  }
-
-  section#partner-banner-section.partner-banner #partner-link.btn-primary {
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    border-radius: 12px !important;
-  }
-
-  /* Intro – kompakt cards */
+  /* -----------------------------------------------------
+     Intro – kompakt cards
+  ----------------------------------------------------- */
   .intro {
     padding: 16px 12px !important;
   }
@@ -460,7 +468,9 @@
     opacity: 0.9;
   }
 
-  /* Universes – 2 kolonner */
+  /* -----------------------------------------------------
+     Universes – 2 kolonner
+  ----------------------------------------------------- */
   .universes .universe-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -488,7 +498,9 @@
     overflow: hidden;
   }
 
-  /* Top Brands – 2 kolonner */
+  /* -----------------------------------------------------
+     Top Brands – 2 kolonner
+  ----------------------------------------------------- */
   .top-brands .brands-grid,
   #topbrands-grid.brands-grid {
     display: grid !important;
@@ -496,7 +508,9 @@
     gap: 10px !important;
   }
 
-  /* Giveaway – komprimert */
+  /* -----------------------------------------------------
+     Giveaway – komprimert
+  ----------------------------------------------------- */
   .giveaway {
     padding: 16px 12px !important;
     border-radius: 18px !important;
@@ -519,7 +533,9 @@
     min-height: 44px;
   }
 
-  /* Footer CTA / newsletter – full bredde */
+  /* -----------------------------------------------------
+     Footer CTA / newsletter – full bredde
+  ----------------------------------------------------- */
   .footer-cta .newsletter {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -558,64 +574,13 @@
     -webkit-line-clamp: 2;
   }
 
-  /* Partner logo litt mindre */
-  section#partner-banner-section.partner-banner #partner-banner-content {
+  /* Partner banner litt mindre */
+  section.partner-banner .partner-banner-inner {
     grid-template-columns: minmax(0, 1fr) 86px !important;
   }
 
-  section#partner-banner-section.partner-banner #partner-banner-img {
+  section.partner-banner .partner-banner-image img {
     width: 86px !important;
-    height: 40px !important;
-  }
-}
-
-/* =====================================================
-   INDEX – Partner banner: FORCE slim logo (flex + order)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Tving layout */
-  #partner-banner-section.partner-banner #partner-banner-content {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
-  }
-
-  /* Tving rekkefølge uansett DOM */
-  #partner-banner-section.partner-banner #partner-banner-img {
-    order: 2 !important;
-    width: 92px !important;
-    height: 44px !important;
-    object-fit: contain !important;
-
-    background: #fff !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
-
-    flex: 0 0 auto !important;
-  }
-
-  #partner-banner-section.partner-banner .partner-text {
-    order: 1 !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-  }
-
-  /* CTA full bredde (inne i teksten) */
-  #partner-banner-section.partner-banner #partner-link.btn-primary {
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    border-radius: 12px !important;
-  }
-}
-
-@media (max-width: 360px) {
-  #partner-banner-section.partner-banner #partner-banner-img {
-    width: 82px !important;
     height: 40px !important;
   }
 }
