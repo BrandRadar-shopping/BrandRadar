@@ -372,29 +372,45 @@
     opacity: 0.85;
   }
 
-  /* -----------------------------------------------------
-     Partner banner (JS markup): slim logo + kompakt mobil
-     Markup fra partnerBanner.js:
-     .partner-banner-inner / .partner-banner-text / .partner-banner-image img
-  ----------------------------------------------------- */
+/* -----------------------------------------------------
+   Partner banner (JS markup): slim logo + kompakt mobil
+   Markup fra partnerBanner.js:
+   .partner-banner-inner / .partner-banner-text / .partner-banner-image img
+----------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* Hele kortet litt tighter */
+  section.partner-banner {
+    padding: 14px 12px !important;
+  }
+
   section.partner-banner .partner-banner-inner {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 96px !important;
-    gap: 12px !important;
-    align-items: center !important;
+    grid-template-columns: minmax(0, 1fr) 78px !important; /* mindre logo-kolonne */
+    gap: 10px !important;
+    align-items: start !important; /* viktig: logo + tekst starter øverst */
   }
 
   section.partner-banner .partner-banner-text {
     min-width: 0 !important;
   }
 
+  /* Tag (Ukens partner) */
   section.partner-banner .partner-tag {
-    margin: 0 0 6px !important;
+    margin: 0 0 8px !important;
     font-size: 12px !important;
     font-weight: 900 !important;
     opacity: 0.85 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 6px 10px !important;
+    border-radius: 999px !important;
+    background: rgba(0,112,243,0.08) !important;
+    color: #0b4fcf !important;
   }
 
+  /* Overskrift */
   section.partner-banner .partner-banner-text h2 {
     margin: 0 0 6px !important;
     font-size: 18px !important;
@@ -402,38 +418,58 @@
     letter-spacing: -0.2px !important;
   }
 
+  /* Beskrivelse (klamp 3 linjer så det holder seg ryddig) */
   section.partner-banner .partner-sub {
-    margin: 0 0 10px !important;
+    margin: 0 0 12px !important;
     font-size: 13px !important;
     line-height: 1.35 !important;
     opacity: 0.9 !important;
+
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
   }
 
+  /* CTA: fortsatt full bredde, men litt mer elegant */
   section.partner-banner .partner-cta {
     display: inline-flex !important;
     width: 100% !important;
     justify-content: center !important;
-    min-height: 44px !important;
+    min-height: 42px !important;
     border-radius: 12px !important;
+    font-weight: 900 !important;
   }
 
+  /* Logo: mindre, øverst til høyre, mer “badge” enn “boks” */
   section.partner-banner .partner-banner-image {
     display: grid !important;
-    place-items: center !important;
-    justify-self: end !important;
+    place-items: start end !important; /* top-right */
   }
 
   section.partner-banner .partner-banner-image img {
-    width: 96px !important;
-    height: 46px !important;
+    width: 78px !important;
+    height: 34px !important;
     object-fit: contain !important;
 
     background: #fff !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
+    border-radius: 10px !important;
+    padding: 6px !important;
 
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04) !important;
     display: block !important;
   }
+}
+
+@media (max-width: 360px) {
+  section.partner-banner .partner-banner-inner {
+    grid-template-columns: minmax(0, 1fr) 72px !important;
+  }
+  section.partner-banner .partner-banner-image img {
+    width: 72px !important;
+    height: 32px !important;
+  }
+}
 
   /* -----------------------------------------------------
      Intro – kompakt cards
