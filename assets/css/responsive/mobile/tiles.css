@@ -212,3 +212,56 @@
 
   .hero-slider .slide { min-height: 320px; }
 }
+
+/* =====================================================
+   INDEX – Trending: mindre kort på mobil (oversiktlig preview)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Hvis trending-grid er en container (ofte flex/slider via JS) */
+  #trending-grid.trending-grid {
+    padding: 0 12px !important;
+    gap: 12px !important;
+  }
+
+  /* Gjør selve kortet mindre i trending (uten å påvirke andre grids) */
+  .trending-section .product-card {
+    max-width: 320px;
+    border-radius: 16px;
+  }
+
+  /* Hvis kortene ligger i horisontal scroller: gi fast "card width" */
+  .trending-section .trending-grid > * {
+    flex: 0 0 78% !important;   /* viser litt av neste kort */
+    max-width: 320px !important;
+    min-width: 260px !important;
+  }
+
+  /* Bilde lavere så kortet ikke blir gigantisk */
+  .trending-section .product-image-wrapper {
+    aspect-ratio: 4 / 3 !important; /* litt lavere enn square */
+    border-radius: 16px;
+  }
+
+  .trending-section .product-info {
+    padding: 10px 10px 12px !important;
+  }
+
+  .trending-section .product-info h3,
+  .trending-section .product-title {
+    font-size: 13px !important;
+    margin: 0 0 6px !important;
+  }
+
+  .trending-section .product-price,
+  .trending-section .price {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .trending-section .trending-grid > * {
+    flex-basis: 86% !important;
+    min-width: 240px !important;
+  }
+}
