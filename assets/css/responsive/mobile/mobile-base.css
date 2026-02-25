@@ -344,3 +344,38 @@
     padding-top: 10px !important;
   }
 }
+
+/* =========================================
+   FAVORITTER (MOBIL): Sticky tabs
+   ========================================= */
+@media (max-width: 768px) {
+
+  body.is-favorites-page .favorites-section {
+    padding-top: 10px;
+  }
+
+  body.is-favorites-page .fav-tabs {
+    position: sticky;
+    top: 74px; /* under header + litt luft (justeres ved behov) */
+    z-index: 10005;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    padding: 10px 12px;
+    margin: 0 -12px 10px; /* gjør at den går kant-til-kant hvis section har padding */
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  /* Tab-buttons litt mer "mobile" */
+  body.is-favorites-page .fav-tabs .tab-btn {
+    flex: 1;
+    min-height: 44px;
+    border-radius: 12px;
+    font-weight: 900;
+  }
+
+  /* Hvis .fav-tabs ikke er flex fra før */
+  body.is-favorites-page .fav-tabs {
+    display: flex;
+    gap: 10px;
+  }
+}
