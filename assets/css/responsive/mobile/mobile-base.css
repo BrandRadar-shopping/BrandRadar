@@ -578,3 +578,67 @@
   }
 }
 
+
+/* =====================================================
+   INDEX – Partner banner: slim logo + kompakt layout (mobil)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  #partner-banner-section.partner-banner {
+    padding: 14px 12px !important;
+  }
+
+  #partner-banner-content {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 92px !important; /* tekst + slim logo */
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  /* Logoen blir en liten "badge" */
+  #partner-banner-img {
+    width: 92px !important;
+    height: 44px !important;
+    object-fit: contain !important;
+    background: #fff !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+
+  /* Tekst-delen */
+  #partner-banner-section .partner-text {
+    min-width: 0;
+  }
+
+  #partner-banner-section .partner-text h3 {
+    margin: 0 0 6px !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+  }
+
+  #partner-banner-section .partner-text p {
+    margin: 0 0 10px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    opacity: 0.9;
+  }
+
+  #partner-banner-section .btn-primary {
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #partner-banner-content {
+    grid-template-columns: minmax(0, 1fr) 82px !important;
+  }
+  #partner-banner-img {
+    width: 82px !important;
+    height: 40px !important;
+  }
+}
