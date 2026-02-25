@@ -569,3 +569,53 @@
   }
 }
 
+/* =====================================================
+   INDEX – Partner banner: FORCE slim logo (flex + order)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Tving layout */
+  #partner-banner-section.partner-banner #partner-banner-content {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+  }
+
+  /* Tving rekkefølge uansett DOM */
+  #partner-banner-section.partner-banner #partner-banner-img {
+    order: 2 !important;
+    width: 92px !important;
+    height: 44px !important;
+    object-fit: contain !important;
+
+    background: #fff !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+
+    flex: 0 0 auto !important;
+  }
+
+  #partner-banner-section.partner-banner .partner-text {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* CTA full bredde (inne i teksten) */
+  #partner-banner-section.partner-banner #partner-link.btn-primary {
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #partner-banner-section.partner-banner #partner-banner-img {
+    width: 82px !important;
+    height: 40px !important;
+  }
+}
