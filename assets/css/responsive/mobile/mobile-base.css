@@ -642,3 +642,37 @@
     height: 40px !important;
   }
 }
+
+/* =====================================================
+   INDEX – Intro ("Hva er BrandRadar?"): kompakt cards på mobil
+   ===================================================== */
+@media (max-width: 768px) {
+
+  .intro {
+    padding: 16px 12px !important;
+  }
+
+  .intro .intro-grid {
+    gap: 10px !important;
+  }
+
+  .intro .intro-card {
+    padding: 12px 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .intro .intro-card .icon {
+    transform: scale(0.92);
+  }
+
+  .intro .intro-card h3 {
+    font-size: 15px !important;
+    margin: 8px 0 6px !important;
+  }
+
+  .intro .intro-card p {
+    font-size: 13px !important;
+    margin: 0 !important;
+    opacity: 0.9;
+  }
+}
