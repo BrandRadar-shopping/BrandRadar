@@ -361,7 +361,7 @@
   /* Sticky bar */
   body.is-favorites-page .fav-tabs {
     position: sticky !important;
-    top: 115px; /* juster ved behov (typisk 80–110) */
+    top: 130px; /* juster ved behov (typisk 80–110) */
     z-index: 10005;
 
     background: rgba(255,255,255,0.96);
