@@ -412,6 +412,88 @@
     font-weight: 900 !important;
   }
 }
+
+/* =====================================================
+   Trending – FIX overlap i 2-kolonne grid (mobil)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  #trending-grid.trending-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-items: start !important;
+  }
+
+  /* Tving kort til normal layout (ingen absolute tricks) */
+  #trending-grid .product-card {
+    position: relative !important;
+    transform: none !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Bildeområdet må også være normal flow */
+  #trending-grid .product-image-wrapper {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+
+    /* Zalando-ish: kvadrat */
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  /* Selve bildet: ikke absolute, ikke translate */
+  #trending-grid .product-image-wrapper img,
+  #trending-grid img {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* Info må ligge under bildet, ikke flyte over */
+  #trending-grid .product-info {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    padding: 10px 10px 12px !important;
+  }
+
+  /* Favoritt-ikon: lås til topp/høyre inni kortet */
+  #trending-grid .favorite-btn,
+  #trending-grid .favorite-icon,
+  #trending-grid .heart-icon {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 5 !important;
+  }
+
+  /* Litt mindre typografi */
+  #trending-grid .product-title,
+  #trending-grid .product-info h3 {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin: 0 0 6px !important;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  #trending-grid .product-price,
+  #trending-grid .price {
+    font-size: 13px !important;
+  }
+}
    
 /* -----------------------------------------------------
    Partner banner (JS markup): slim logo + kompakt mobil
