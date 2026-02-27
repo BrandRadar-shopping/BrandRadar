@@ -434,6 +434,46 @@
     display: none !important;
   }
 }
+
+   /* =====================================================
+   TRENDING – Premium glass heart (mobil)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  section.trending-section #trending-grid .fav-icon,
+  section.trending-section #trending-grid .favorite-btn {
+    width: 34px !important;
+    height: 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    /* Glass look */
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+
+    border: 1px solid rgba(255,255,255,0.6) !important;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15) !important;
+
+    transition: all 0.2s ease !important;
+  }
+
+  /* Hover / active */
+  section.trending-section #trending-grid .fav-icon:active,
+  section.trending-section #trending-grid .favorite-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Når aktiv (rødt hjerte) */
+  section.trending-section #trending-grid .fav-icon.active,
+  section.trending-section #trending-grid .favorite-btn.active {
+    background: rgba(255, 255, 255, 0.85) !important;
+  }
+}
    
 /* -----------------------------------------------------
    Partner banner (JS markup): slim logo + kompakt mobil
