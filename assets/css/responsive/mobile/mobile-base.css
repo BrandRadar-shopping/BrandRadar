@@ -882,3 +882,96 @@
     display: none !important;
   }
 }
+
+/* =====================================================
+   TRENDING (MOBIL) – Rydd opp tekst/price layout
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Info-wrapper: stabil spacing */
+  section.trending-section #trending-grid.trending-grid .product-info{
+    padding: 10px 10px 12px !important;
+    display: grid !important;
+    gap: 6px !important;
+  }
+
+  /* Brand (ofte en liten label over title) */
+  section.trending-section #trending-grid.trending-grid .product-brand,
+  section.trending-section #trending-grid.trending-grid .brand,
+  section.trending-section #trending-grid.trending-grid .product-info .brand,
+  section.trending-section #trending-grid.trending-grid .product-info .product-brand{
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    opacity: 0.65 !important;
+    margin: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Tittel: maks 2 linjer */
+  section.trending-section #trending-grid.trending-grid .product-info h3,
+  section.trending-section #trending-grid.trending-grid .product-title{
+    font-size: 13px !important;
+    line-height: 1.18 !important;
+    margin: 0 !important;
+    font-weight: 900 !important;
+
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+
+  /* Prisrad: gjør den til en egen "row" */
+  section.trending-section #trending-grid.trending-grid .price-row,
+  section.trending-section #trending-grid.trending-grid .product-price-wrap,
+  section.trending-section #trending-grid.trending-grid .product-prices,
+  section.trending-section #trending-grid.trending-grid .product-price{
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    margin: 0 !important;
+  }
+
+  /* Ny pris */
+  section.trending-section #trending-grid.trending-grid .price,
+  section.trending-section #trending-grid.trending-grid .current-price,
+  section.trending-section #trending-grid.trending-grid .new-price,
+  section.trending-section #trending-grid.trending-grid .product-price strong{
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Gammel pris */
+  section.trending-section #trending-grid.trending-grid .old-price,
+  section.trending-section #trending-grid.trending-grid .price-old,
+  section.trending-section #trending-grid.trending-grid del{
+    font-size: 12px !important;
+    opacity: 0.55 !important;
+    text-decoration: line-through !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Rabatt badge: lås til "chip" */
+  section.trending-section #trending-grid.trending-grid .discount-badge,
+  section.trending-section #trending-grid.trending-grid .badge,
+  section.trending-section #trending-grid.trending-grid .discount{
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 22px !important;
+    padding: 0 8px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hvis noen elementer får rar center-align, tving venstre */
+  section.trending-section #trending-grid.trending-grid .product-info *{
+    text-align: left !important;
+  }
+}
