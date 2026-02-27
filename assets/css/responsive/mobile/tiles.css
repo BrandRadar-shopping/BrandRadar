@@ -3,17 +3,20 @@
    Breakpoint: <= 768px
    ===================================================== */
 
+/* =====================================================
+   <= 768px – Core
+   ===================================================== */
 @media (max-width: 768px) {
 
   /* -----------------------------------------
-     HERO
+     HERO (index)
   ----------------------------------------- */
 
   .hero-slider {
     width: 100%;
     max-width: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* sørger for at ingenting stikker utenfor */
   }
 
   .hero-slider::before,
@@ -24,9 +27,8 @@
     display: none !important;
   }
 
-  section.hero {
-    display: none !important;
-  }
+  /* Skjul den andre heroen på mobil */
+  section.hero { display: none !important; }
 
   section.hero-slider {
     margin: 0 !important;
@@ -34,55 +36,33 @@
     border-bottom: 1px solid rgba(0,0,0,0.06);
   }
 
-  .hero-slider .nav {
-    display: none !important;
-  }
+  /* Piler skjules på mobil (swipe + dots) */
+  .hero-slider .nav { display: none !important; }
 
-  .hero-slider .dots {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 6;
-    pointer-events: none;
-  }
-
-   /* =====================================================
-   HERO DOTS – clamp + click (mobil)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  .hero-slider {
-    overflow: hidden; /* sørger for at ingenting stikker utenfor */
-  }
-
+  /* HERO DOTS – clamp + click */
   .hero-slider .dots {
     position: absolute;
     left: 50%;
     bottom: 10px;
     transform: translateX(-50%);
 
-    width: calc(100% - 24px);     /* matcher slide padding (12px + 12px) */
-    max-width: 520px;             /* optional: gjør det “tight” og pent */
+    width: calc(100% - 24px);  /* matcher slide padding (12+12) */
+    max-width: 520px;
+
     display: flex;
     justify-content: center;
     gap: 8px;
+
     z-index: 6;
+    pointer-events: auto !important;
 
-    pointer-events: auto !important; /* <-- gjør dots klikkbare */
     padding: 6px 10px;
-
-    /* litt “glass” bak dots så de alltid er synlige */
     background: rgba(0,0,0,0.18);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 999px;
   }
 
-  /* Hvis du bruker span eller button, dette funker på begge */
   .hero-slider .dots > * {
     width: 8px;
     height: 8px;
@@ -97,10 +77,9 @@
     background: rgba(255,255,255,0.95);
     transform: scale(1.15);
   }
-}
 
   /* -----------------------------------------
-     GENERELLE PRODUKTLISTER (category, brand)
+     GENERELLE PRODUKTLISTER (category, brand, featured)
   ----------------------------------------- */
 
   .product-grid,
@@ -108,6 +87,11 @@
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 12px !important;
+    align-items: stretch;
+  }
+
+  .product-card {
+    min-width: 0;
   }
 
   .product-image-wrapper {
@@ -138,6 +122,40 @@
   }
 
   /* -----------------------------------------
+     RADAR PICKS (index) – liten “premium polish”
+     (safe: påvirker kun featured-products)
+  ----------------------------------------- */
+
+  .featured-products .product-info {
+    padding: 10px 10px 12px !important;
+  }
+
+  /* Litt mer kontroll på prislinje hvis du har ny/gammel pris/badge */
+  .featured-products .price-row,
+  .featured-products .product-prices {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .featured-products .old-price,
+  .featured-products .product-old-price {
+    font-size: 12px !important;
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+
+  .featured-products .discount-badge,
+  .featured-products .badge-discount {
+    font-size: 11px !important;
+    font-weight: 900;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* -----------------------------------------
      FAVORITTER – PRODUKTER (KOMPAKT)
   ----------------------------------------- */
 
@@ -146,6 +164,7 @@
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
+    align-items: stretch;
   }
 
   body.is-favorites-page .product-image-wrapper {
@@ -172,12 +191,14 @@
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
+    align-items: stretch;
   }
 
   body.is-favorites-page .brand-grid > *,
   body.is-favorites-page #favorites-brand-grid > * {
     border-radius: 14px;
     overflow: hidden;
+    min-width: 0;
   }
 
   body.is-favorites-page .brand-grid img,
@@ -198,95 +219,28 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
 
-/* -----------------------------------------
-   HERO SWIPE – KUN TOUCH
------------------------------------------ */
+  /* -----------------------------------------
+     INDEX – Trending: mindre kort på mobil (oversiktlig preview)
+  ----------------------------------------- */
 
-@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
-
-  .hero-slider .slide { min-height: 360px; }
-
-  .hero-slider .slides {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    padding: 0 12px;
-    gap: 12px;
-    scrollbar-width: none;
-  }
-
-  .hero-slider .slides::-webkit-scrollbar { display: none; }
-
-  .hero-slider .slide {
-    flex: 0 0 calc(100% - 24px);
-    scroll-snap-align: center;
-    border-radius: 18px;
-    overflow: hidden;
-  }
-}
-
-/* -----------------------------------------
-   DEVTOOLS SCROLL FIX
------------------------------------------ */
-
-@media (max-width: 768px) and (hover: hover) and (pointer: fine) {
-
-  .hero-slider .slides {
-    overflow-x: hidden !important;
-    scroll-snap-type: none !important;
-    display: block !important;
-  }
-
-  .hero-slider .slide {
-    flex: none !important;
-  }
-}
-
-/* -----------------------------------------
-   SMALL DEVICES
------------------------------------------ */
-
-@media (max-width: 360px) {
-
-  .product-grid,
-  .premium-grid,
-  body.is-favorites-page .favorites-grid,
-  body.is-favorites-page .brand-grid {
-    gap: 8px !important;
-  }
-
-  .hero-slider .slide { min-height: 320px; }
-}
-
-/* =====================================================
-   INDEX – Trending: mindre kort på mobil (oversiktlig preview)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Hvis trending-grid er en container (ofte flex/slider via JS) */
   #trending-grid.trending-grid {
     padding: 0 12px !important;
     gap: 12px !important;
   }
 
-  /* Gjør selve kortet mindre i trending (uten å påvirke andre grids) */
   .trending-section .product-card {
     max-width: 320px;
     border-radius: 16px;
   }
 
-  /* Hvis kortene ligger i horisontal scroller: gi fast "card width" */
+  /* Hvis kortene ligger i horisontal scroller: fast card width */
   .trending-section .trending-grid > * {
     flex: 0 0 78% !important;   /* viser litt av neste kort */
     max-width: 320px !important;
     min-width: 260px !important;
   }
 
-  /* Bilde lavere så kortet ikke blir gigantisk */
   .trending-section .product-image-wrapper {
     aspect-ratio: 4 / 3 !important; /* litt lavere enn square */
     border-radius: 16px;
@@ -308,7 +262,66 @@
   }
 }
 
+/* =====================================================
+   HERO SWIPE – KUN TOUCH
+   ===================================================== */
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+
+  .hero-slider .slide { min-height: 360px; }
+
+  .hero-slider .slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+
+    padding: 0 12px;
+    gap: 12px;
+
+    scrollbar-width: none;
+  }
+
+  .hero-slider .slides::-webkit-scrollbar { display: none; }
+
+  .hero-slider .slide {
+    flex: 0 0 calc(100% - 24px);
+    scroll-snap-align: center;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+}
+
+/* =====================================================
+   DEVTOOLS SCROLL FIX (mus/trackpad i mobilbredde)
+   ===================================================== */
+@media (max-width: 768px) and (hover: hover) and (pointer: fine) {
+
+  .hero-slider .slides {
+    overflow-x: hidden !important;
+    scroll-snap-type: none !important;
+    display: block !important;
+  }
+
+  .hero-slider .slide {
+    flex: none !important;
+  }
+}
+
+/* =====================================================
+   SMALL DEVICES
+   ===================================================== */
 @media (max-width: 360px) {
+
+  .product-grid,
+  .premium-grid,
+  body.is-favorites-page .favorites-grid,
+  body.is-favorites-page .brand-grid {
+    gap: 8px !important;
+  }
+
+  .hero-slider .slide { min-height: 320px; }
+
   .trending-section .trending-grid > * {
     flex-basis: 86% !important;
     min-width: 240px !important;
