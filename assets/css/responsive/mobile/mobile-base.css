@@ -810,3 +810,75 @@
 @media (max-width: 360px) {
   section.partner-banner .partner-banner-text h2 { font-size: 17px !important; }
 }
+
+
+/* =====================================================
+   TRENDING (MOBIL) – NUCLEAR FIX (ingen overlap)
+   Legg denne HELT NEDERST i mobile-base.css
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* 1) Grid wrapper */
+  section.trending-section #trending-grid.trending-grid{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+
+    /* viktig: ikke horisontal scroller */
+    overflow: visible !important;
+  }
+
+  /* 2) Kill all slider sizing */
+  section.trending-section #trending-grid.trending-grid > *{
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  /* 3) Kortet må være normal block */
+  section.trending-section #trending-grid.trending-grid .product-card{
+    display: block !important;
+    position: relative !important;
+    height: auto !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+  }
+
+  /* 4) Bilde-wrapper: tving kvadrat og lås høyde */
+  section.trending-section #trending-grid.trending-grid .product-image-wrapper{
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+  }
+
+  /* 5) Bildet fyller wrapperen */
+  section.trending-section #trending-grid.trending-grid .product-image-wrapper img{
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    transform: none !important;
+  }
+
+  /* 6) Info under bildet */
+  section.trending-section #trending-grid.trending-grid .product-info{
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    padding: 10px 10px 12px !important;
+  }
+
+  /* 7) Skjul pilene på mobil */
+  section.trending-section .trending-nav{
+    display: none !important;
+  }
+}
