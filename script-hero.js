@@ -1,7 +1,7 @@
 // ===============================================
-// BrandRadar – Hero Slider v4 (patched)
-// Henter slides fra Google Sheet + premium animasjon
-// Fix: unngå "scroll-heng" på mobil/devtools + disable heavy effects på touch/reduced motion
+// BrandRadar – Hero Slider v5
+// Touch: horizontal scroll + dots scrollTo()
+// Desktop: active class + optional arrows
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -15,24 +15,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!slidesContainer || !dotsContainer) return;
 
-  // Device / motion flags
-  const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches; // typisk touch
-  const isHoverCapable = window.matchMedia("(hover: hover)").matches;     // typisk desktop
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Only enable parallax on true desktop (hover + fine pointer) and not reduced motion
-  const enableParallax = isHoverCapable && !isCoarsePointer && !reduceMotion;
-
-  // Scroll-fade can be slightly heavy; disable only when reduced motion is requested
-  const enableScrollFade = !reduceMotion;
-
   const SHEET_ID = "1NmFQi5tygEvjmsfqxtOuo5mgCOXzniF5GtTKXoGpNEY";
   const SHEET_NAME = "HeroSlides";
+
+  const isTouchMode = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
   try {
     const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
     const raw = await res.json();
-    console.log("✅ HeroSlides rådata:", raw);
 
     const slidesData = raw
       .filter(row => row.image_url && row.image_url.trim().startsWith("http"))
@@ -45,26 +35,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         active: String(row.active || "").toLowerCase() === "true"
       }));
 
-    console.log("✅ HeroSlides normalisert:", slidesData);
-
     if (!slidesData.length) {
       slidesContainer.innerHTML =
-        "<p style='color:white;text-align:center;padding:4rem 1rem;'>Ingen hero-slides er konfigurert ennå.</p>";
+        "<p style='text-align:center;padding:4rem 1rem;'>Ingen hero-slides er konfigurert ennå.</p>";
       return;
     }
 
     const anyActive = slidesData.some(s => s.active);
 
-    // 🧱 Bygg HTML for slides
+    // Build slides
     slidesContainer.innerHTML = slidesData
       .map((s, idx) => `
         <div class="slide${
           (anyActive && s.active) || (!anyActive && idx === 0) ? " active" : ""
         }" style="background-image:url('${s.image_url}');">
           <div class="slide-content">
-            ${s.title ? `<h1>${s.title}</h1>` : ""}
-            ${s.subtitle ? `<p>${s.subtitle}</p>` : ""}
-            ${s.link ? `<a href="${s.link}" class="btn">${s.button_text}</a>` : ""}
+            ${s.title ? `<h1>${escapeHtml(s.title)}</h1>` : ""}
+            ${s.subtitle ? `<p>${escapeHtml(s.subtitle)}</p>` : ""}
+            ${s.link ? `<a href="${s.link}" class="btn">${escapeHtml(s.button_text)}</a>` : ""}
           </div>
         </div>
       `)
@@ -73,43 +61,85 @@ document.addEventListener("DOMContentLoaded", async () => {
     const slides = Array.from(slider.querySelectorAll(".slide"));
     if (!slides.length) return;
 
-    // 🔘 Bygg dots
+    // Build dots (buttons)
     dotsContainer.innerHTML = "";
-    slides.forEach((slide, idx) => {
-      const dot = document.createElement("span");
-      dot.dataset.index = String(idx);
-      if (slide.classList.contains("active")) dot.classList.add("active");
-      dotsContainer.appendChild(dot);
+    slides.forEach((_, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "dot";
+      btn.dataset.index = String(idx);
+      btn.setAttribute("aria-label", `Gå til slide ${idx + 1}`);
+      dotsContainer.appendChild(btn);
     });
 
-    const dots = Array.from(dotsContainer.querySelectorAll("span"));
-    if (!dots.some(d => d.classList.contains("active")) && dots[0]) {
-      dots[0].classList.add("active");
-      slides[0].classList.add("active");
-    }
+    const dots = Array.from(dotsContainer.querySelectorAll("button.dot"));
 
+    // Current index from active
     let current = slides.findIndex(s => s.classList.contains("active"));
     if (current === -1) current = 0;
 
-    let autoTimer = null;
-    const AUTO_TIME = 7000; // 7 sekunder
-
-    function goTo(index) {
-      if (!slides.length) return;
+    // --- helpers ---
+    function setActive(index) {
       index = (index + slides.length) % slides.length;
-      if (index === current) return;
-
-      slides[current].classList.remove("active");
-      if (dots[current]) dots[current].classList.remove("active");
-
       current = index;
+
+      slides.forEach(s => s.classList.remove("active"));
+      dots.forEach(d => d.classList.remove("active"));
 
       slides[current].classList.add("active");
       if (dots[current]) dots[current].classList.add("active");
     }
 
-    function next() { goTo(current + 1); }
-    function prev() { goTo(current - 1); }
+    function scrollToSlide(index) {
+      index = (index + slides.length) % slides.length;
+
+      const target = slides[index];
+      if (!target) return;
+
+      // Scroll container so that target aligns nicely.
+      // Works best with your CSS where slides are “card-style” in a horizontal scroller.
+      const left = target.offsetLeft - 12; // matcher padding: 12px
+      slidesContainer.scrollTo({ left, behavior: "smooth" });
+
+      setActive(index);
+    }
+
+    // Determine initial active
+    setActive(current);
+
+    // --- Dots click ---
+    dots.forEach(dot => {
+      dot.addEventListener("click", () => {
+        const idx = Number(dot.dataset.index || 0);
+        if (isTouchMode) {
+          scrollToSlide(idx);
+        } else {
+          // Desktop: simple active switch
+          setActive(idx);
+        }
+        startAuto();
+      });
+    });
+
+    // --- Arrows ---
+    function next() {
+      const idx = current + 1;
+      if (isTouchMode) scrollToSlide(idx);
+      else setActive(idx);
+    }
+
+    function prev() {
+      const idx = current - 1;
+      if (isTouchMode) scrollToSlide(idx);
+      else setActive(idx);
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", () => { prev(); startAuto(); });
+    if (nextBtn) nextBtn.addEventListener("click", () => { next(); startAuto(); });
+
+    // --- Auto play ---
+    let autoTimer = null;
+    const AUTO_TIME = 7000;
 
     function startAuto() {
       stopAuto();
@@ -121,90 +151,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       autoTimer = null;
     }
 
-    // 🎯 Piler
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        prev();
-        startAuto();
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        next();
-        startAuto();
-      });
-    }
-
-    // 🎯 Dots klikk
-    dots.forEach(dot => {
-      dot.addEventListener("click", () => {
-        const idx = Number(dot.dataset.index || 0);
-        goTo(idx);
-        startAuto();
-      });
-    });
-
-    // 🧊 Pause på hover (kun desktop)
-    if (isHoverCapable && !isCoarsePointer) {
+    // Pause on hover (desktop only)
+    if (!isTouchMode) {
       slider.addEventListener("mouseenter", stopAuto);
       slider.addEventListener("mouseleave", startAuto);
     }
 
-    // 🎮 Parallax (kun desktop + ikke reduced motion)
-    if (enableParallax) {
-      slider.addEventListener("mousemove", (e) => {
-        const rect = slider.getBoundingClientRect();
-        const relX = (e.clientX - rect.left) / rect.width - 0.5;
-        const relY = (e.clientY - rect.top) / rect.height - 0.5;
+    // --- Sync active dot when user swipes/scrolls (touch only) ---
+    if (isTouchMode) {
+      let rafId = null;
 
-        const maxMoveX = 12;
-        const maxMoveY = 8;
+      const onScroll = () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const containerRect = slidesContainer.getBoundingClientRect();
+          const centerX = containerRect.left + containerRect.width / 2;
 
-        slider.style.setProperty("--parallax-x", `${relX * maxMoveX}px`);
-        slider.style.setProperty("--parallax-y", `${relY * maxMoveY}px`);
-      });
+          // Find slide whose center is closest to container center
+          let bestIdx = 0;
+          let bestDist = Infinity;
 
-      slider.addEventListener("mouseleave", () => {
-        slider.style.setProperty("--parallax-x", "0px");
-        slider.style.setProperty("--parallax-y", "0px");
-      });
-    } else {
-      // Ensure neutral values when disabled
-      slider.style.setProperty("--parallax-x", "0px");
-      slider.style.setProperty("--parallax-y", "0px");
-    }
+          slides.forEach((slide, idx) => {
+            const r = slide.getBoundingClientRect();
+            const slideCenter = r.left + r.width / 2;
+            const dist = Math.abs(slideCenter - centerX);
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestIdx = idx;
+            }
+          });
 
-    // 🌫 Scroll-fade (disable on reduced motion)
-    if (enableScrollFade) {
-      function handleScroll() {
-        const rect = slider.getBoundingClientRect();
-        const windowH = window.innerHeight || document.documentElement.clientHeight;
+          if (bestIdx !== current) setActive(bestIdx);
+        });
+      };
 
-        const visible = Math.min(
-          Math.max(1 - (Math.max(rect.top, 0) / windowH) * 0.5, 0.5),
-          1
-        );
-
-        slider.style.opacity = String(visible);
-      }
-
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      handleScroll();
-    } else {
-      slider.style.opacity = "1";
+      slidesContainer.addEventListener("scroll", onScroll, { passive: true });
     }
 
     // Start
-    slides[current].classList.add("active");
-    if (dots[current]) dots[current].classList.add("active");
     startAuto();
 
-    console.log("✅ Hero slider klar.");
+    // --- Util ---
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    console.log("✅ Hero slider v5 klar.");
   } catch (err) {
     console.error("❌ Klarte ikke laste HeroSlides:", err);
   }
 });
-
 
 
