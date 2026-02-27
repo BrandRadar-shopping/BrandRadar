@@ -262,6 +262,70 @@
   }
 }
 
+@media (max-width: 768px) {
+
+  /* =========================
+     TRENDING – Text cleanup (premium)
+     ========================= */
+
+  .trending-section .product-card .product-info{
+    display: grid;
+    gap: 6px;
+    padding: 10px 10px 12px !important;
+  }
+
+  /* Brand-linje (hvis den finnes) */
+  .trending-section .product-card .product-info :is(.brand, .product-brand, .brand-name){
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin: 0 !important;
+  }
+
+  /* Tittel */
+  .trending-section .product-card .product-info :is(h3, .product-title){
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  /* Prisrad – gjør den stabil og ryddig */
+  .trending-section .product-card .product-info :is(.price-row, .product-prices, .price-wrap){
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+
+  .trending-section .product-card .product-info :is(.price, .product-price){
+    font-size: 14px !important;
+    font-weight: 900;
+  }
+
+  .trending-section .product-card .product-info :is(.old-price, .product-old-price){
+    font-size: 12px !important;
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+
+  /* Rabatt “pill” (hvis den finnes) */
+  .trending-section .product-card .product-info :is(.discount-badge, .badge-discount, .discount){
+    font-size: 11px !important;
+    font-weight: 900;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.06);
+    opacity: 0.95;
+  }
+}
+
 /* =====================================================
    HERO SWIPE – KUN TOUCH
    ===================================================== */
