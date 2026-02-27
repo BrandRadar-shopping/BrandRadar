@@ -50,6 +50,55 @@
     pointer-events: none;
   }
 
+   /* =====================================================
+   HERO DOTS – clamp + click (mobil)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  .hero-slider {
+    overflow: hidden; /* sørger for at ingenting stikker utenfor */
+  }
+
+  .hero-slider .dots {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+
+    width: calc(100% - 24px);     /* matcher slide padding (12px + 12px) */
+    max-width: 520px;             /* optional: gjør det “tight” og pent */
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 6;
+
+    pointer-events: auto !important; /* <-- gjør dots klikkbare */
+    padding: 6px 10px;
+
+    /* litt “glass” bak dots så de alltid er synlige */
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 999px;
+  }
+
+  /* Hvis du bruker span eller button, dette funker på begge */
+  .hero-slider .dots > * {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.55);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .hero-slider .dots > *.active {
+    background: rgba(255,255,255,0.95);
+    transform: scale(1.15);
+  }
+}
+
   /* -----------------------------------------
      GENERELLE PRODUKTLISTER (category, brand)
   ----------------------------------------- */
