@@ -373,125 +373,65 @@
   }
 
 /* =====================================================
-   Trending – 2 kolonne grid (mobil)
+   Trending – FULL RESET til 2-kolonne grid (mobil)
    ===================================================== */
 @media (max-width: 768px) {
 
-  .trending-section {
-    position: relative;
-  }
-
-  /* Skru av slider-nav på mobil */
-  .trending-section .trending-nav {
-    display: none !important;
-  }
-
-  #trending-grid.trending-grid {
+  /* Slå av slider/flex */
+  #trending-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 12px !important;
+    gap: 14px !important;
+
+    overflow: visible !important;
   }
 
-  /* Litt mer kompakte kort */
+  /* Fjern alle flex-regler fra desktop */
   #trending-grid .product-card {
-    border-radius: 16px !important;
-  }
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
 
-  #trending-grid .product-card img {
-    aspect-ratio: 1 / 1 !important;
-    object-fit: cover !important;
-  }
-
-  #trending-grid .product-card .product-title {
-    font-size: 13px !important;
-    line-height: 1.25 !important;
-  }
-
-  #trending-grid .product-card .product-price {
-    font-size: 14px !important;
-    font-weight: 900 !important;
-  }
-}
-
-/* =====================================================
-   Trending – FIX overlap i 2-kolonne grid (mobil)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  #trending-grid.trending-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 12px !important;
-    align-items: start !important;
-  }
-
-  /* Tving kort til normal layout (ingen absolute tricks) */
-  #trending-grid .product-card {
     position: relative !important;
-    transform: none !important;
     margin: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
+    transform: none !important;
   }
 
-  /* Bildeområdet må også være normal flow */
+  /* Bilde-wrapper */
   #trending-grid .product-image-wrapper {
     position: relative !important;
-    height: auto !important;
-    min-height: 0 !important;
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
     overflow: hidden !important;
     border-radius: 16px !important;
-
-    /* Zalando-ish: kvadrat */
-    aspect-ratio: 1 / 1 !important;
   }
 
-  /* Selve bildet: ikke absolute, ikke translate */
-  #trending-grid .product-image-wrapper img,
-  #trending-grid img {
-    position: static !important;
-    transform: none !important;
+  /* Selve bildet */
+  #trending-grid .product-image-wrapper img {
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    display: block !important;
   }
 
-  /* Info må ligge under bildet, ikke flyte over */
+  /* Info */
   #trending-grid .product-info {
     position: relative !important;
-    inset: auto !important;
-    transform: none !important;
-    padding: 10px 10px 12px !important;
+    padding: 10px 6px 0 !important;
   }
 
-  /* Favoritt-ikon: lås til topp/høyre inni kortet */
-  #trending-grid .favorite-btn,
-  #trending-grid .favorite-icon,
-  #trending-grid .heart-icon {
+  /* Favorittikon */
+  #trending-grid .fav-icon {
     position: absolute !important;
     top: 10px !important;
     right: 10px !important;
-    z-index: 5 !important;
+    z-index: 3 !important;
   }
 
-  /* Litt mindre typografi */
-  #trending-grid .product-title,
-  #trending-grid .product-info h3 {
-    font-size: 13px !important;
-    line-height: 1.15 !important;
-    margin: 0 0 6px !important;
-
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-
-  #trending-grid .product-price,
-  #trending-grid .price {
-    font-size: 13px !important;
+  /* Skru av navigasjonsknapper */
+  .trending-section .trending-nav {
+    display: none !important;
   }
 }
    
