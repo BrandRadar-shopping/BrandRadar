@@ -391,3 +391,51 @@
     min-width: 240px !important;
   }
 }
+
+@media (max-width: 768px) {
+
+  /* =========================================
+     RADAR PICKS – Premium tighten
+     ========================================= */
+
+  #featured-grid .product-card {
+    border-radius: 18px;
+  }
+
+  #featured-grid .product-image-wrapper {
+    border-radius: 18px;
+  }
+
+  /* Strammere info spacing */
+  #featured-grid .product-info {
+    padding: 8px 10px 10px !important;
+    display: grid;
+    gap: 4px;
+  }
+
+  #featured-grid .product-info .brand,
+  #featured-grid .product-info .product-brand {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  #featured-grid .product-title {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+  }
+
+  #featured-grid .price {
+    font-size: 14px !important;
+    font-weight: 900;
+  }
+
+  /* Favoritt-ikon – mer presis */
+  #featured-grid .fav-icon {
+    top: 8px !important;
+    right: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
