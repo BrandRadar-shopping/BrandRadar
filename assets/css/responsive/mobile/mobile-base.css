@@ -1015,3 +1015,30 @@
     text-align: left !important;
   }
 }
+
+@media (max-width: 768px) {
+
+  /* Wrapper for order */
+  main.page{
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* Fjern intro på mobil */
+  main.page .intro{
+    display:none !important;
+  }
+
+  /* Mobil-first rekkefølge */
+  main.page #partner-banner-section{ order: 5; }
+  main.page .trending-section{ order: 10; }
+  main.page .featured-products{ order: 12; }
+  main.page .top-brands{ order: 14; }
+  main.page .giveaway{ order: 16; }
+
+  /* Universes langt ned, men ikke fjernet */
+  main.page .universes{ order: 40; }
+
+  /* Footer alltid sist */
+  main.page .footer-cta{ order: 90; }
+}
