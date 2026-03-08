@@ -156,49 +156,58 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐️ RADAR PICKS (OpenSheet JSON – ingen CSV)
-  // ======================================================
+// ⭐️ RADAR PICKS (OpenSheet JSON – robust)
+// ======================================================
 
-  async function loadFeaturedPicks() {
-    const grid = document.getElementById("featured-grid");
-    if (!grid) return;
+async function loadFeaturedPicks() {
+  const grid = document.getElementById("featured-grid");
+  if (!grid) return;
 
-    try {
-      const items = await (await fetch(PICKS_URL)).json();
+  try {
+    const res = await fetch(PICKS_URL);
+    if (!res.ok) {
+      throw new Error(`Radar Picks fetch failed: ${res.status}`);
+    }
 
-      const featured = items.filter(
-        p => (p.featured || "").toLowerCase() === "true"
-      );
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : [];
 
-      grid.innerHTML = "";
-      const orderedProducts = [];
+    const featured = items.filter(
+      p => String(p.featured || "").toLowerCase() === "true"
+    );
 
-      featured.forEach(p => {
-        const product = {
-          ...p,
-          id: p.id || p.product_name,
-          product_name: p.product_name,
-          brand: p.brand,
-          image_url: p.image_url,
-          price: p.price,
-          discount: p.discount,
-          old_price: p.old_price,
-          rating: p.rating
-        };
+    grid.innerHTML = "";
+    const orderedProducts = [];
 
-        const wrap = document.createElement("div");
-        wrap.innerHTML = buildProductCardMarkup(product);
+    featured.forEach(p => {
+      const product = {
+        ...p,
+        id: p.id || p.product_name,
+        product_name: p.product_name,
+        brand: p.brand,
+        image_url: p.image_url,
+        price: p.price,
+        discount: p.discount,
+        old_price: p.old_price,
+        rating: p.rating
+      };
 
+      const wrap = document.createElement("div");
+      wrap.innerHTML = buildProductCardMarkup(product);
+
+      if (wrap.firstElementChild) {
         grid.appendChild(wrap.firstElementChild);
         orderedProducts.push(product);
-      });
+      }
+    });
 
-      attachProductCardNavigation(grid, orderedProducts);
+    attachProductCardNavigation(grid, orderedProducts);
 
-    } catch (err) {
-      console.error("❌ Klarte ikke laste Radar Picks:", err);
-    }
+  } catch (err) {
+    console.error("❌ Klarte ikke laste Radar Picks:", err);
+    grid.innerHTML = "";
   }
+}
 
   // ======================================================
   // ⭐ TRENDING NOW
