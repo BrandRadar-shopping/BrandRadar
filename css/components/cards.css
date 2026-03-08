@@ -278,7 +278,89 @@
   color: #fff;
 }
 
+/* ============================================
+   BRAND CARD – brukes i favoritter + andre brand grids
+============================================ */
 
+.brand-card {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 18px 16px 16px;
+  min-height: 210px;
+}
+
+.brand-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+}
+
+.brand-card .brand-logo {
+  width: 100%;
+  max-width: 120px;
+  height: 90px;
+  object-fit: contain;
+  display: block;
+  margin: 24px auto 14px;
+}
+
+.brand-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.brand-card .remove-brand-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.75rem;
+  background: #ff2d55;
+  color: #fff;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  z-index: 3;
+  font-weight: 700;
+}
+
+/* Grid for favoritt-brands */
+#favorites-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 28px;
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .brand-card {
+    border-radius: 16px;
+    min-height: 170px;
+    padding: 14px 12px 12px;
+  }
+
+  .brand-card .brand-logo {
+    max-width: 96px;
+    height: 72px;
+    margin: 22px auto 10px;
+  }
+
+  .brand-card h3 {
+    font-size: 0.95rem;
+  }
+}
 
 
 
