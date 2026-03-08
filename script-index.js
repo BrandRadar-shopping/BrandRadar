@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- KONSTANTER ----------
   const PICKS_URL =
-    "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks";
+  "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks_sheet";
 
   const BRAND_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const BRAND_TAB = "BrandRadarProdukter";
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ======================================================
+ // ======================================================
 // ⭐️ RADAR PICKS (OpenSheet JSON – robust)
 // ======================================================
 
@@ -208,7 +208,6 @@ async function loadFeaturedPicks() {
     grid.innerHTML = "";
   }
 }
-
   // ======================================================
   // ⭐ TRENDING NOW
   // ======================================================
