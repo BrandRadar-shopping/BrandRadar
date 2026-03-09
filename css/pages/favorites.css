@@ -151,7 +151,19 @@
   }
 }
 
+/* ---------- Brands grid ---------- */
+#favorites-brand-grid.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
 
+#favorites-brand-grid .brand-card {
+  width: 100%;
+  max-width: 100%;
+  min-height: 210px;
+}
 
 
 
