@@ -108,7 +108,7 @@ function loadFavoriteProducts() {
 
   if (emptyMsg) emptyMsg.style.display = "none";
 
-  favorites.forEach((product) => {
+  for (const product of favorites) {
     const card = document.createElement("div");
     card.classList.add("product-card");
 
@@ -221,8 +221,8 @@ card.appendChild(info);
       updateFavoriteTabsCount();
     });
 
-    grid.appendChild(card);
-  });
+   grid.appendChild(card);
+}
 }
 
 // ===============================
