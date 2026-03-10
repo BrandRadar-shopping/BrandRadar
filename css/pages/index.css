@@ -58,12 +58,41 @@ html, body {
   text-align: center;
 }
 
-/* Sørg for at CTA ikke “klippes” */
 .hero .cta-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.9rem;
+  margin-top: 1.2rem;
+
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+
+  background: #0b0b0b;
+  color: #e6c78b;
+
+  border: 1px solid rgba(230,199,139,0.55);
+
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.2px;
+
+  text-decoration: none;
+
+  transition: all 0.22s ease;
+}
+
+/* Hover – subtle luxury glow */
+.hero .cta-btn:hover {
+  transform: translateY(-2px);
+  border-color: #e6c78b;
+  box-shadow: 0 8px 28px rgba(230,199,139,0.25);
+  color: #f3d9a5;
+}
+
+/* Active click feel */
+.hero .cta-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 14px rgba(230,199,139,0.18);
 }
 
 .hero .radar-bg {
