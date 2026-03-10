@@ -191,8 +191,14 @@
   stroke: #ef4444;
 }
 
-/* Gold heart til luxury hvis du bruker egen klasse */
+/* Gold heart til luxury */
 .product-card .heart-icon.gold-heart {
+  fill: none;
+  stroke: #fbbf24;
+}
+
+/* Aktiv luxury-favoritt skal forbli gull – ikke bli rød */
+.product-card .fav-icon.active .heart-icon.gold-heart {
   fill: #facc15;
   stroke: #fbbf24;
 }
