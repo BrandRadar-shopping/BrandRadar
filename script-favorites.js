@@ -87,7 +87,7 @@ window.updateFavoriteTabsCount = updateFavoriteTabsCount;
 // ⭐ RENDER PRODUKT-FAVORITTER
 // ===============================
 
-function loadFavoriteProducts() {
+async function loadFavoriteProducts() {
   if (!window.getFavorites) {
     console.warn("⚠️ getFavorites ikke tilgjengelig (favorites-core.js mangler?)");
     return;
@@ -164,38 +164,44 @@ function loadFavoriteProducts() {
       : `<span style="color:#ccc;">–</span>`;
 
     const priceLine = document.createElement("div");
-priceLine.classList.add("price-line");
+    priceLine.classList.add("price-line");
 
-let priceText = product.price || "";
-if (priceText && !/kr/i.test(priceText)) {
-  priceText = `${priceText} kr`;
-}
-
-const newPrice = document.createElement("span");
-newPrice.classList.add("new-price");
-newPrice.textContent = priceText;
-priceLine.appendChild(newPrice);
-
-// ✅ Offer summary (fra offers-engine)
-const offerMeta = document.createElement("div");
-offerMeta.classList.add("offer-meta");
-offerMeta.textContent = "";
-
-if (window.BrandRadarOffersEngine && product.id != null) {
-  try {
-    const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(String(product.id));
-
-    if (summary?.hasOffers) {
-      newPrice.textContent = `Fra ${summary.lowestPriceFormatted}`;
-      offerMeta.textContent = `${summary.storeCount} butikker`;
+    let priceText = product.price || "";
+    if (priceText && !/kr/i.test(priceText)) {
+      priceText = `${priceText} kr`;
     }
-  } catch (err) {
-    console.warn("⚠️ Klarte ikke hente offer summary for produkt:", product.id, err);
-  }
-}
 
-info.append(brandEl, nameEl, ratingEl, priceLine, offerMeta);
-card.appendChild(info);
+    const newPrice = document.createElement("span");
+    newPrice.classList.add("new-price");
+    newPrice.textContent = priceText;
+    priceLine.appendChild(newPrice);
+
+    // ✅ Offer summary (fra offers-engine)
+    const offerMeta = document.createElement("div");
+    offerMeta.classList.add("offer-meta");
+    offerMeta.textContent = "";
+
+    if (window.BrandRadarOffersEngine && product.id != null) {
+      try {
+        const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(
+          String(product.id)
+        );
+
+        if (summary?.hasOffers) {
+          newPrice.textContent = `Fra ${summary.lowestPriceFormatted}`;
+          offerMeta.textContent = `${summary.storeCount} butikker`;
+        }
+      } catch (err) {
+        console.warn(
+          "⚠️ Klarte ikke hente offer summary for produkt:",
+          product.id,
+          err
+        );
+      }
+    }
+
+    info.append(brandEl, nameEl, ratingEl, priceLine, offerMeta);
+    card.appendChild(info);
 
     // ✅ Klikk på kort → product.html
     card.addEventListener("click", () => {
@@ -221,8 +227,8 @@ card.appendChild(info);
       updateFavoriteTabsCount();
     });
 
-   grid.appendChild(card);
-}
+    grid.appendChild(card);
+  }
 }
 
 // ===============================
@@ -307,14 +313,14 @@ function loadFavoriteBrands() {
 // ⭐ INIT – KUN PÅ favoritter.html
 // ===============================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Header-teller (fra favorites-core)
   if (window.updateFavoriteCounter) {
     window.updateFavoriteCounter();
   }
 
   // Render produkter
-  loadFavoriteProducts();
+  await loadFavoriteProducts();
 
   // Tabs
   const tabBtns = document.querySelectorAll(".tab-btn");
