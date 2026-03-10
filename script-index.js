@@ -1,5 +1,6 @@
 // ======================================================
-// ✅ BrandRadar – Forside (Radar Picks + Trending Now + Top Brands)
+// ✅ BrandRadar – Forside
+// Bruker Product Card Engine + Offers Engine
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -16,8 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const TRENDING_TAB = "TrendingNow";
 
   // ---------- FORMATTERING ----------
-  const nbFormatter = new Intl.NumberFormat("nb-NO");
-
   function parseNumber(val) {
     if (val == null) return null;
     const s = String(val)
@@ -28,138 +27,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number.isFinite(n) ? n : null;
   }
 
-  function formatPrice(n) {
-    if (n == null) return "";
-    return `${nbFormatter.format(Math.round(n))} kr`;
-  }
-
-  function getPriceInfo(p) {
-    let price = parseNumber(p.price);
-    let oldPrice = parseNumber(p.old_price);
-    let discount = parseNumber(p.discount);
-
-    if (!price && oldPrice && discount) price = oldPrice * (1 - discount / 100);
-    if (price && !oldPrice && discount) oldPrice = price / (1 - discount / 100);
-    if (price && oldPrice && !discount && oldPrice > price) {
-      discount = ((oldPrice - price) / oldPrice) * 100;
-    }
-
-    if (discount != null) discount = Math.round(discount);
-
-    if (oldPrice && price && oldPrice <= price) {
-      oldPrice = null;
-      discount = null;
-    }
-
-    return { price, oldPrice, discount };
-  }
-
-  function buildPriceBlock(p) {
-    const { price, oldPrice, discount } = getPriceInfo(p);
-    const mainPrice = price ? formatPrice(price) : null;
-
-    let html = `<div class="price-row">`;
-    if (mainPrice) html += `<span class="price-main">${mainPrice}</span>`;
-    if (oldPrice) html += `<span class="old-price">${formatPrice(oldPrice)}</span>`;
-    html += `</div>`;
-
-    if (discount) {
-      html =
-        `<div class="price-wrapper">` +
-        html +
-        `<span class="discount-pill">-${discount}%</span>` +
-        `</div>`;
-    }
-
-    return html;
-  }
-
-  function buildOfferSummaryMarkup(summary) {
-    if (!summary?.hasOffers) return "";
-
-    const storeLabel = summary.storeCount === 1 ? "1 butikk" : `${summary.storeCount} butikker`;
-
-    return `
-      <div class="offer-summary">
-        <div class="offer-summary-price">Fra ${summary.lowestPriceFormatted}</div>
-        <div class="offer-summary-count">${storeLabel}</div>
-      </div>
-    `;
-  }
-
   // ======================================================
-  // ⭐ PRODUKTKORT (ELITE DESIGN – FELLES FOR INDEX)
-  // ======================================================
-
-  function buildProductCardMarkup(p) {
-    const name = getProductName(p);
-    const id = resolveProductId(p);
-    const priceBlock = buildPriceBlock(p);
-    const offerSummaryMarkup = buildOfferSummaryMarkup(p.offer_summary);
-
-    const rawImg = (p.image_url || "").trim();
-
-    const fallbackSvg =
-      "data:image/svg+xml;utf8," +
-      encodeURIComponent(`
-        <svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'>
-          <rect width='100%' height='100%' fill='#f3f4f6'/>
-          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
-                font-family='Arial' font-size='32' fill='#9ca3af'>
-            Bilde kommer
-          </text>
-        </svg>
-      `);
-
-    const imgSrc = rawImg ? rawImg : fallbackSvg;
-
-    return `
-      <div class="product-card ${rawImg ? "" : "no-image"}" data-id="${id}">
-        <div class="fav-icon" data-id="${id}">
-          <svg class="heart-icon" viewBox="0 0 24 24">
-            <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
-          </svg>
-        </div>
-
-        <div class="product-image-wrapper">
-          <img src="${imgSrc}" alt="${name}" loading="lazy">
-        </div>
-
-        <div class="product-info">
-          <p class="brand">${p.brand || ""}</p>
-          <h3 class="product-title">${name}</h3>
-          ${p.offer_summary?.hasOffers ? offerSummaryMarkup : priceBlock}
-        </div>
-      </div>
-    `;
-  }
-
-  // ======================================================
-  // ⭐ NAVIGASJON + FAVORITTHJERTE
+  // ⭐ FAVORITT/NAVIGASJON FOR KORT
   // ======================================================
 
   function attachProductCardNavigation(container, productsInOrder) {
     const cards = container.querySelectorAll(".product-card");
-    const favorites = getFavorites();
-    const favIdSet = new Set(favorites.map(f => String(f.id)));
 
     cards.forEach((card, idx) => {
       const product = productsInOrder[idx];
       if (!product) return;
 
-      const pid = resolveProductId(product);
-      const favEl = card.querySelector(".fav-icon");
+      const pid = typeof resolveProductId === "function"
+        ? resolveProductId(product)
+        : (product.id || product.product_id || "");
 
-      if (favEl && favIdSet.has(String(pid))) {
-        favEl.classList.add("active");
-      }
-
-      card.addEventListener("click", e => {
+      card.addEventListener("click", (e) => {
         const fav = e.target.closest(".fav-icon");
 
         if (fav) {
           e.stopPropagation();
-          toggleFavorite(product, fav);
+          if (typeof toggleFavorite === "function") {
+            const cleanProduct = {
+              id: pid,
+              product_name: product.title || product.product_name || product.name || "Uten navn",
+              title: product.title || product.product_name || product.name || "Uten navn",
+              brand: product.brand || "",
+              price: product.price,
+              discount: product.discount,
+              image_url: product.image_url,
+              product_url: product.product_url,
+              category: product.category || "",
+              rating: product.rating,
+              luxury: false
+            };
+            toggleFavorite(cleanProduct, fav);
+          }
           return;
         }
 
@@ -170,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐️ RADAR PICKS (OpenSheet JSON – robust)
+  // ⭐️ RADAR PICKS
   // ======================================================
 
   async function loadFeaturedPicks() {
@@ -211,13 +114,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       const orderedProducts = [];
 
       enrichedProducts.forEach(product => {
-        const wrap = document.createElement("div");
-        wrap.innerHTML = buildProductCardMarkup(product);
+        const card = window.BrandRadarProductCardEngine.createCard(product, {
+          isLuxury: false,
+          showBrand: true,
+          showRating: false,
+          enableFavorite: true,
+          onNavigate: (p) => {
+            const id = typeof resolveProductId === "function"
+              ? resolveProductId(p)
+              : (p.id || p.product_id || "");
+            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+          },
+          favoriteProductFactory: (p) => ({
+            id: p.id || p.product_id || "",
+            title: p.title || p.product_name || p.name || "Uten navn",
+            product_name: p.title || p.product_name || p.name || "Uten navn",
+            brand: p.brand || "",
+            price: p.price,
+            discount: p.discount || "",
+            image_url: p.image_url || "",
+            product_url: p.product_url || "",
+            category: p.category || "",
+            rating: p.rating,
+            luxury: false
+          })
+        });
 
-        if (wrap.firstElementChild) {
-          grid.appendChild(wrap.firstElementChild);
-          orderedProducts.push(product);
-        }
+        grid.appendChild(card);
+        orderedProducts.push(product);
       });
 
       attachProductCardNavigation(grid, orderedProducts);
@@ -271,8 +195,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const baseProducts = limited.map(({ row, product }) => ({
         ...product,
-        product_name: getProductName(product),
-        id: resolveProductId(product),
+        product_name: product.title || product.product_name || product.name || "Uten navn",
+        id: product.id || product.product_id || "",
         highlight_reason: row.highlight_reason
       }));
 
@@ -285,14 +209,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
 
       enrichedProducts.forEach(product => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(product);
-        const cardEl = wrapper.firstElementChild;
+        const card = window.BrandRadarProductCardEngine.createCard(product, {
+          isLuxury: false,
+          showBrand: true,
+          showRating: false,
+          enableFavorite: true,
+          onNavigate: (p) => {
+            const id = typeof resolveProductId === "function"
+              ? resolveProductId(p)
+              : (p.id || p.product_id || "");
+            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+          },
+          favoriteProductFactory: (p) => ({
+            id: p.id || p.product_id || "",
+            title: p.title || p.product_name || p.name || "Uten navn",
+            product_name: p.title || p.product_name || p.name || "Uten navn",
+            brand: p.brand || "",
+            price: p.price,
+            discount: p.discount || "",
+            image_url: p.image_url || "",
+            product_url: p.product_url || "",
+            category: p.category || "",
+            rating: p.rating,
+            luxury: false
+          })
+        });
 
-        if (cardEl) {
-          container.appendChild(cardEl);
-          orderedProducts.push(product);
-        }
+        container.appendChild(card);
+        orderedProducts.push(product);
       });
 
       attachProductCardNavigation(container, orderedProducts);
@@ -328,7 +272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================================================
-  // ⭐ TOP BRANDS (fra BrandRadar_Brands – Ark 1)
+  // ⭐ TOP BRANDS
   // ======================================================
 
   async function loadTopBrands() {
