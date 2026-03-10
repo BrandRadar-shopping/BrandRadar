@@ -1,5 +1,6 @@
 // ======================================================
-// ⭐ BrandRadar – Favoritter-side (bruker favorites-core.js)
+// ⭐ BrandRadar – Favoritter-side
+// Bruker favorites-core.js + offers-engine.js + product-card-engine.js
 // ======================================================
 
 // Vi gjenbruker cleanRating fra favorites-core hvis den finnes
@@ -51,18 +52,15 @@ function toggleBrandFavorite(brand) {
 
   setFavoriteBrands(current);
 
-  // Oppdater global teller (produkter + brands)
   if (window.updateFavoriteCounter) {
     window.updateFavoriteCounter();
   }
 
-  // Oppdater tabs hvis vi står på favoritter.html
   if (typeof updateFavoriteTabsCount === "function") {
     updateFavoriteTabsCount();
   }
 }
 
-// Eksponer globalt slik at script-brands.js kan bruke dem
 window.getFavoriteBrands = getFavoriteBrands;
 window.toggleBrandFavorite = toggleBrandFavorite;
 
@@ -108,20 +106,38 @@ async function loadFavoriteProducts() {
 
   if (emptyMsg) emptyMsg.style.display = "none";
 
-  for (const product of favorites) {
-    const card = document.createElement("div");
-    card.classList.add("product-card");
+  const enrichedFavorites = window.BrandRadarOffersEngine
+    ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(favorites)
+    : favorites;
 
+  for (const product of enrichedFavorites) {
     const id = product.id || "";
-    const title = product.title || window.getProductName?.(product) || "";
-    const brand = product.brand || "";
-    const imgUrl = product.image_url || "";
-    const isLuxury = !!product.luxury;
 
-    const ratingValue =
-      typeof product.rating === "number"
-        ? product.rating
-        : cleanRatingRef(product.rating);
+    const card = window.BrandRadarProductCardEngine.createCard(product, {
+      isLuxury: !!product.luxury,
+      showBrand: true,
+      showRating: true,
+      enableFavorite: true,
+      onNavigate: (p) => {
+        const pid = p.id || "";
+        if (!pid) return;
+        const luxuryParam = p.luxury ? "&luxury=true" : "";
+        window.location.href = `product.html?id=${encodeURIComponent(pid)}${luxuryParam}`;
+      },
+      favoriteProductFactory: (p) => ({
+        id: p.id || "",
+        product_name: p.title || p.product_name || p.name || "",
+        title: p.title || p.product_name || p.name || "",
+        brand: p.brand || "",
+        price: p.price,
+        discount: p.discount || "",
+        image_url: p.image_url || "",
+        product_url: p.product_url || "",
+        category: p.category || "",
+        rating: p.rating,
+        luxury: !!p.luxury
+      })
+    });
 
     // ✅ Fjern-knapp
     const removeTag = document.createElement("span");
@@ -130,87 +146,6 @@ async function loadFavoriteProducts() {
     removeTag.dataset.id = id;
     card.appendChild(removeTag);
 
-    // ✅ Rabattmerke
-    if (product.discount) {
-      const discountBadge = document.createElement("div");
-      discountBadge.classList.add("discount-badge");
-      discountBadge.textContent = `-${product.discount}%`;
-      card.appendChild(discountBadge);
-    }
-
-    // ✅ Bilde
-    const img = document.createElement("img");
-    img.src = imgUrl;
-    img.alt = title;
-    img.loading = "lazy";
-    card.appendChild(img);
-
-    // ✅ Info-seksjon
-    const info = document.createElement("div");
-    info.classList.add("product-info");
-
-    const brandEl = document.createElement("p");
-    brandEl.classList.add("brand");
-    brandEl.textContent = brand;
-
-    const nameEl = document.createElement("h3");
-    nameEl.classList.add("product-name");
-    nameEl.textContent = title;
-
-    const ratingEl = document.createElement("p");
-    ratingEl.classList.add("rating");
-    ratingEl.innerHTML = ratingValue
-      ? `⭐ ${ratingValue.toFixed(1)}`
-      : `<span style="color:#ccc;">–</span>`;
-
-    const priceLine = document.createElement("div");
-    priceLine.classList.add("price-line");
-
-    let priceText = product.price || "";
-    if (priceText && !/kr/i.test(priceText)) {
-      priceText = `${priceText} kr`;
-    }
-
-    const newPrice = document.createElement("span");
-    newPrice.classList.add("new-price");
-    newPrice.textContent = priceText;
-    priceLine.appendChild(newPrice);
-
-    // ✅ Offer summary (fra offers-engine)
-    const offerMeta = document.createElement("div");
-    offerMeta.classList.add("offer-meta");
-    offerMeta.textContent = "";
-
-    if (window.BrandRadarOffersEngine && product.id != null) {
-      try {
-        const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(
-          String(product.id)
-        );
-
-        if (summary?.hasOffers) {
-          newPrice.textContent = `Fra ${summary.lowestPriceFormatted}`;
-          offerMeta.textContent = `${summary.storeCount} butikker`;
-        }
-      } catch (err) {
-        console.warn(
-          "⚠️ Klarte ikke hente offer summary for produkt:",
-          product.id,
-          err
-        );
-      }
-    }
-
-    info.append(brandEl, nameEl, ratingEl, priceLine, offerMeta);
-    card.appendChild(info);
-
-    // ✅ Klikk på kort → product.html
-    card.addEventListener("click", () => {
-      if (!id) return;
-      const luxuryParam = isLuxury ? "&luxury=true" : "";
-      window.location.href = `product.html?id=${encodeURIComponent(id)}${luxuryParam}`;
-    });
-
-    // ✅ Fjern favoritt
     removeTag.addEventListener("click", (e) => {
       e.stopPropagation();
 
@@ -314,15 +249,12 @@ function loadFavoriteBrands() {
 // ===============================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Header-teller (fra favorites-core)
   if (window.updateFavoriteCounter) {
     window.updateFavoriteCounter();
   }
 
-  // Render produkter
   await loadFavoriteProducts();
 
-  // Tabs
   const tabBtns = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
 
@@ -341,7 +273,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
 
-    // Brand-favoritter + tab-teller
     loadFavoriteBrands();
     updateFavoriteTabsCount();
   }
