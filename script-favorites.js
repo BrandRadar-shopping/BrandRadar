@@ -15,6 +15,20 @@ const cleanRatingRef = window.cleanRating || function (value) {
 };
 
 // ===============================
+// ⭐ HJELPERE
+// ===============================
+
+function isTruthyLuxury(value) {
+  if (value === true) return true;
+  if (value === 1) return true;
+  if (typeof value === "string") {
+    const v = value.trim().toLowerCase();
+    return v === "true" || v === "1" || v === "yes" || v === "luxury";
+  }
+  return false;
+}
+
+// ===============================
 // ⭐ FAVORITT-BRANDS (global)
 // ===============================
 
@@ -110,18 +124,24 @@ async function loadFavoriteProducts() {
     ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(favorites)
     : favorites;
 
-  for (const product of enrichedFavorites) {
+  for (const rawProduct of enrichedFavorites) {
+    const product = {
+      ...rawProduct,
+      luxury: isTruthyLuxury(rawProduct.luxury)
+    };
+
     const id = product.id || "";
+    const isLuxury = !!product.luxury;
 
     const card = window.BrandRadarProductCardEngine.createCard(product, {
-      isLuxury: !!product.luxury,
+      isLuxury,
       showBrand: true,
       showRating: true,
       enableFavorite: true,
       onNavigate: (p) => {
         const pid = p.id || "";
         if (!pid) return;
-        const luxuryParam = p.luxury ? "&luxury=true" : "";
+        const luxuryParam = isTruthyLuxury(p.luxury) ? "&luxury=true" : "";
         window.location.href = `product.html?id=${encodeURIComponent(pid)}${luxuryParam}`;
       },
       favoriteProductFactory: (p) => ({
@@ -135,15 +155,23 @@ async function loadFavoriteProducts() {
         product_url: p.product_url || "",
         category: p.category || "",
         rating: p.rating,
-        luxury: !!p.luxury
+        luxury: isTruthyLuxury(p.luxury)
       })
     });
 
-const favIcon = card.querySelector(".fav-icon");
-if (favIcon) {
-  favIcon.classList.add("active");
-}
-    
+    // ✅ Favorittsiden viser kun favoritter → tving aktiv state
+    const favIcon = card.querySelector(".fav-icon");
+    const heartIcon = card.querySelector(".heart-icon");
+
+    if (favIcon) {
+      favIcon.classList.add("active");
+    }
+
+    // ✅ Tving luxury-hjerte på favorittsiden
+    if (isLuxury && heartIcon) {
+      heartIcon.classList.add("gold-heart");
+    }
+
     // ✅ Fjern-knapp
     const removeTag = document.createElement("span");
     removeTag.classList.add("remove-tag");
