@@ -1,9 +1,11 @@
 // ======================================================
 // ✅ BrandRadar – Category Page FINAL + Filter Tags
-//    (Oppdatert til nytt favorittsystem via favorites-core.js)
+//    OPPDATERT med offers-engine for:
+//    - Fra X kr
+//    - Y butikker
 // ======================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // ✅ Google Sheets config
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
@@ -51,13 +53,89 @@ document.addEventListener("DOMContentLoaded", () => {
   if (genderSlug === "barn") genderSlug = "kids";
   const subSlug = normalize(subParam);
 
+  // ======================================================
+  // ✅ PRICE HELPERS
+  // ======================================================
+
+  function parseNumber(val) {
+    if (val == null) return null;
+    const s = String(val)
+      .replace(/\s/g, "")
+      .replace(/[^\d,.\-]/g, "")
+      .replace(",", ".");
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function formatPrice(n) {
+    if (n == null) return "";
+    return `${Math.round(n)} kr`;
+  }
+
+  function getPriceInfo(p) {
+    let price = parseNumber(p.price);
+    let oldPrice = parseNumber(p.old_price);
+    let discount = parseNumber(p.discount);
+
+    if (!price && oldPrice && discount) price = oldPrice * (1 - discount / 100);
+    if (price && !oldPrice && discount) oldPrice = price / (1 - discount / 100);
+    if (price && oldPrice && !discount && oldPrice > price) {
+      discount = ((oldPrice - price) / oldPrice) * 100;
+    }
+
+    if (discount != null) discount = Math.round(discount);
+
+    if (oldPrice && price && oldPrice <= price) {
+      oldPrice = null;
+      discount = null;
+    }
+
+    return { price, oldPrice, discount };
+  }
+
+  function buildFallbackPriceMarkup(product) {
+    const { price, oldPrice, discount } = getPriceInfo(product);
+    const priceText = price ? formatPrice(price) : "";
+    const oldPriceText = oldPrice ? formatPrice(oldPrice) : "";
+
+    if (discount && priceText) {
+      return `
+        <div class="price-wrapper">
+          <div class="price-line">
+            <span class="new-price">${priceText}</span>
+            ${oldPriceText ? `<span class="old-price">${oldPriceText}</span>` : ""}
+          </div>
+          <span class="discount-pill">-${discount}%</span>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="price-line">
+        <span class="new-price">${priceText}</span>
+        ${oldPriceText ? `<span class="old-price">${oldPriceText}</span>` : ""}
+      </div>
+    `;
+  }
+
+  function buildOfferSummaryMarkup(summary) {
+    if (!summary?.hasOffers) return "";
+    const storeLabel = summary.storeCount === 1 ? "1 butikk" : `${summary.storeCount} butikker`;
+
+    return `
+      <div class="offer-summary">
+        <div class="offer-summary-price">Fra ${summary.lowestPriceFormatted}</div>
+        <div class="offer-summary-count">${storeLabel}</div>
+      </div>
+    `;
+  }
+
   // ✅ Fetch Data
   Promise.all([
     fetch(mappingUrl).then(r => r.json()),
     fetch(productUrl).then(r => r.json())
   ])
-    .then(([mapRows, products]) => {
-
+    .then(async ([mapRows, products]) => {
       // ✅ Mapping match
       const match = mapRows.find(row =>
         normalize(row.main_category) === categorySlug &&
@@ -125,18 +203,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
       // ======================================================
-      // ✅ Render products – OPPDATERT til nytt favorittsystem
+      // ✅ Render products – OPPDATERT med offers
       // ======================================================
-      function renderProducts(list) {
+      async function renderProducts(list) {
         productGrid.innerHTML = "";
 
-        list.forEach(p => {
-          // Bruk global ID-resolver fra favorites-core.js
+        const enrichedList =
+          window.BrandRadarOffersEngine
+            ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(list)
+            : list;
+
+        enrichedList.forEach(p => {
           const pid = typeof resolveProductId === "function"
             ? resolveProductId(p)
             : (p.id || p.product_id || "");
 
-          // Rating – samme rens som ellers
           let ratingValue = null;
           if (p.rating) {
             const parsed = parseFloat(
@@ -147,40 +228,31 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isNaN(parsed)) ratingValue = parsed;
           }
 
-          // Ny pris ved rabatt
-          let newPriceValue = p.price;
-          if (p.discount && p.price) {
-            const numericPrice = parseFloat(
-              String(p.price).replace(/[^\d.,]/g, "").replace(",", ".")
-            );
-            if (!isNaN(numericPrice)) {
-              const discountNum = parseFloat(p.discount);
-              const factor = isNaN(discountNum)
-                ? null
-                : (discountNum > 1 ? discountNum / 100 : discountNum);
-              if (factor !== null) {
-                newPriceValue = (numericPrice * (1 - factor)).toFixed(0);
-              }
-            }
-          }
-
-          // Sjekk favoritt-status via global isProductFavorite
           const isFav = (typeof isProductFavorite === "function")
             ? isProductFavorite(pid)
             : false;
+
+          const priceMarkup = p.offer_summary?.hasOffers
+            ? buildOfferSummaryMarkup(p.offer_summary)
+            : buildFallbackPriceMarkup(p);
+
+          const discountBadgeMarkup =
+            !p.offer_summary?.hasOffers && getPriceInfo(p).discount
+              ? `<div class="discount-badge">-${getPriceInfo(p).discount}%</div>`
+              : "";
 
           const card = document.createElement("div");
           card.classList.add("product-card");
 
           card.innerHTML = `
-            ${p.discount ? `<div class="discount-badge">-${p.discount}%</div>` : ""}
+            ${discountBadgeMarkup}
 
             <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
               <svg viewBox="0 0 24 24" class="heart-icon">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 
-                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 
-                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 
-                16.5 3 19.58 3 22 5.42 22 8.5c0 
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2
+                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
+                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3
+                16.5 3 19.58 3 22 5.42 22 8.5c0
                 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </div>
@@ -190,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="product-info">
               <p class="brand">${p.brand || ""}</p>
 
-              <h3 class="product-name">${p.title}</h3>
+              <h3 class="product-name">${p.title || ""}</h3>
 
               <p class="rating">
                 ${
@@ -200,20 +272,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
               </p>
 
-              <div class="price-line">
-                <span class="new-price">
-                  ${newPriceValue ? `${newPriceValue} kr` : ""}
-                </span>
-                ${
-                  p.discount && p.price
-                    ? `<span class="old-price">${p.price} kr</span>`
-                    : ""
-                }
-              </div>
+              ${priceMarkup}
             </div>
           `;
 
-          // ✅ Product click -> open product page (ikke trigge på hjertet)
+          // ✅ Product click -> open product page
           card.addEventListener("click", e => {
             if (!e.target.closest(".fav-icon")) {
               if (pid) {
@@ -222,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
 
-          // ✅ Toggle favorite via global toggleFavorite
+          // ✅ Toggle favorite
           const favIconEl = card.querySelector(".fav-icon");
           favIconEl.addEventListener("click", e => {
             e.stopPropagation();
@@ -300,45 +363,47 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // ✅ Filters & sorting combined
-      function applyFiltersAndSort() {
+      async function applyFiltersAndSort() {
         let result = [...filtered];
 
-        const getPrice = v =>
+        const getFilterPrice = v =>
           parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
         const getRating = v =>
           parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-        if (brandFilter.value !== "all")
+        if (brandFilter.value !== "all") {
           result = result.filter(p => p.brand === brandFilter.value);
+        }
 
         if (priceFilter.value !== "all") {
-          if (priceFilter.value === "1000+")
-            result = result.filter(p => getPrice(p.price) >= 1000);
-          else {
+          if (priceFilter.value === "1000+") {
+            result = result.filter(p => getFilterPrice(p.price) >= 1000);
+          } else {
             const [min, max] = priceFilter.value.split("-").map(Number);
             result = result.filter(p => {
-              const price = getPrice(p.price);
+              const price = getFilterPrice(p.price);
               return price >= min && price <= max;
             });
           }
         }
 
-        if (discountFilter.checked)
+        if (discountFilter.checked) {
           result = result.filter(p => parseFloat(p.discount) > 0);
+        }
 
         switch (sortSelect.value) {
           case "price-asc":
-            result.sort((a,b) => getPrice(a.price) - getPrice(b.price));
+            result.sort((a, b) => getFilterPrice(a.price) - getFilterPrice(b.price));
             break;
           case "price-desc":
-            result.sort((a,b) => getPrice(b.price) - getPrice(a.price));
+            result.sort((a, b) => getFilterPrice(b.price) - getFilterPrice(a.price));
             break;
           case "rating-desc":
-            result.sort((a,b) => getRating(b.rating) - getRating(a.rating));
+            result.sort((a, b) => getRating(b.rating) - getRating(a.rating));
             break;
         }
 
-        renderProducts(result);
+        await renderProducts(result);
         updateFilterTags();
       }
 
@@ -349,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sortSelect.addEventListener("change", applyFiltersAndSort);
 
       // ✅ First render
-      applyFiltersAndSort();
+      await applyFiltersAndSort();
 
       // Oppdater global teller etter at kort er rendret
       setTimeout(() => {
