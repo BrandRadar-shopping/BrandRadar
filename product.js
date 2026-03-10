@@ -1,5 +1,6 @@
 // ======================================================
 // ✅ Product page — Felles for vanlige + Luxury produkter
+// Bruker Offers Engine + Product Card Engine
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const LUXURY_SHEET_NAME = "LuxuryProducts";
 
   // ======================================================
-  // 🔍 Finn produkt (string-sammenligning, ikke Number)
+  // 🔍 Finn produkt
   // ======================================================
 
   let products = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
@@ -138,10 +139,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
   // ⭐ Relaterte produkter
   // ======================================================
-  loadRecommendations(products, product);
+  await loadRecommendations(products, product);
 
   // ======================================================
-  // ⭐ Favorittknapp — string-basert ID
+  // ⭐ Favorittknapp
   // ======================================================
   setupFavoriteButton(product);
 
@@ -271,7 +272,7 @@ async function renderPriceComparison(product) {
 }
 
 // ======================================================
-// ⭐ Relaterte produkter – Premium Cards
+// ⭐ Relaterte produkter – via Product Card Engine
 // ======================================================
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
@@ -303,48 +304,35 @@ async function loadRecommendations(products, currentProduct) {
     return;
   }
 
+  if (window.BrandRadarOffersEngine) {
+    matches = await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(matches);
+  }
+
   slider.innerHTML = "";
 
   matches.forEach(p => {
-    const ratingValue = cleanRating(p.rating);
-
-    let newPriceValue = p.price;
-    let oldPriceValue = "";
-
-    const discountNum = parseFloat(String(p.discount || "").replace(",", "."));
-    const hasDiscount = !isNaN(discountNum) && discountNum > 0;
-
-    if (hasDiscount && p.price) {
-      const numericPrice = parseFloat(String(p.price).replace(/[^\d.,]/g, "").replace(",", "."));
-      if (!isNaN(numericPrice)) {
-        newPriceValue = (numericPrice * (1 - discountNum / 100)).toFixed(0);
-        oldPriceValue = `${numericPrice} kr`;
-      }
-    }
-
-    const card = document.createElement("div");
-    card.className = "product-card";
-
-    card.innerHTML = `
-      ${hasDiscount ? `<div class="discount-badge">-${discountNum.toFixed(0)}%</div>` : ""}
-      <img src="${p.image_url}" alt="${p.title}" loading="lazy">
-      <div class="product-info">
-        <p class="brand">${p.brand || ""}</p>
-        <h3 class="product-name">${p.title || ""}</h3>
-        <p class="rating">
-          ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
-        </p>
-        <div class="price-line">
-          <span class="new-price">${newPriceValue ? `${newPriceValue} kr` : ""}</span>
-          ${hasDiscount && p.price ? `<span class="old-price">${p.price} kr</span>` : ""}
-        </div>
-      </div>
-    `;
-
-    const luxuryParam = currentProduct.sheet_source === "luxury" ? "&luxury=true" : "";
-
-    card.addEventListener("click", () => {
-      window.location.href = `product.html?id=${p.id}${luxuryParam}`;
+    const card = window.BrandRadarProductCardEngine.createCard(p, {
+      isLuxury: currentProduct.sheet_source === "luxury",
+      showBrand: true,
+      showRating: true,
+      enableFavorite: true,
+      onNavigate: (product) => {
+        const luxuryParam = currentProduct.sheet_source === "luxury" ? "&luxury=true" : "";
+        window.location.href = `product.html?id=${product.id}${luxuryParam}`;
+      },
+      favoriteProductFactory: (product) => ({
+        id: product.id || "",
+        title: product.title || product.product_name || product.name || "Uten navn",
+        product_name: product.title || product.product_name || product.name || "Uten navn",
+        brand: product.brand || "",
+        price: product.price,
+        discount: product.discount || "",
+        image_url: product.image_url || "",
+        product_url: product.product_url || "",
+        category: product.category || "",
+        rating: product.rating,
+        luxury: currentProduct.sheet_source === "luxury"
+      })
     });
 
     slider.appendChild(card);
@@ -354,7 +342,7 @@ async function loadRecommendations(products, currentProduct) {
 }
 
 // ======================================================
-// ⭐ Favoritt-knapp — bruker global toggleFavorite()
+// ⭐ Favoritt-knapp
 // ======================================================
 function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
@@ -412,4 +400,3 @@ document.getElementById("back-btn")?.addEventListener("click", () => {
   if (ref && !ref.includes("product.html")) window.history.back();
   else window.location.href = "index.html";
 });
-
