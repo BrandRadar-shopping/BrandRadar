@@ -1,8 +1,9 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page (vanlig + Luxury + refined UI)
+// ✅ BrandRadar – Brand Page (med offers-engine støtte)
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+
   const brandName = new URLSearchParams(window.location.search).get("brand");
   if (!brandName) return;
 
@@ -13,26 +14,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const cleanRating = v =>
     parseFloat(String(v ?? "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
 
-  // Kalkuler %-rabatt hvis discount mangler men old_price finnes
-  const computeDiscountText = p => {
-    const d = (p.discount ?? "").toString().trim();
-    if (d) return d; // allerede oppgitt i arket
-    const price = cleanPrice(p.price);
-    const old = cleanPrice(p.old_price || p.compare_at_price || p.before_price);
-    if (old > 0 && price > 0 && price < old) {
-      const pct = Math.round(((old - price) / old) * 100);
-      return pct > 0 ? `-${pct}%` : "";
+  const getEffectivePrice = p => {
+    if (p?.offer_summary?.hasOffers) {
+      return Number(p.offer_summary.lowestPrice);
     }
-    return "";
+    return cleanPrice(p.price);
   };
 
   // --- Google Sheets Sources
   const MAIN_BRAND_URL =
     "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+
   const MAIN_PRODUCTS_URL =
     "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
+
   const LUXURY_BRAND_URL =
     "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryBrands";
+
   const LUXURY_PRODUCTS_URL =
     "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryProducts";
 
@@ -52,20 +50,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
+
   function toggleFavBrand() {
     let favs = getFavBrands();
-    if (favs.includes(brandName)) favs = favs.filter(b => b !== brandName);
-    else favs.push(brandName);
+
+    if (favs.includes(brandName))
+      favs = favs.filter(b => b !== brandName);
+    else
+      favs.push(brandName);
+
     localStorage.setItem("favoriteBrands", JSON.stringify(favs));
+
     updateFavUI();
-    updateFavoriteCount?.();
   }
+
   function updateFavUI() {
     if (!favBtn) return;
+
     const isFav = getFavBrands().includes(brandName);
+
     favBtn.classList.toggle("active", isFav);
-    favBtn.textContent = isFav ? "♥ I dine favoritter" : "♡ Favoritt-brand";
+    favBtn.textContent = isFav
+      ? "♥ I dine favoritter"
+      : "♡ Favoritt-brand";
   }
+
   favBtn?.addEventListener("click", toggleFavBrand);
 
   // --- Hent brands
@@ -75,29 +84,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   ]);
 
   const allBrands = [...mainBrands, ...luxuryBrands];
+
   const brand = allBrands.find(
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
   );
+
   const isLuxury = luxuryBrands.some(
     b => b.brand?.toLowerCase().trim() === brandName.toLowerCase()
   );
 
   // --- Sett brandinfo
   if (brand) {
-    if (titleEl) titleEl.textContent = brand.brand || brandName;
+
+    if (titleEl)
+      titleEl.textContent = brand.brand || brandName;
+
     if (descEl)
       descEl.textContent =
-        brand.about || brand.description || "Ingen informasjon tilgjengelig.";
+        brand.about ||
+        brand.description ||
+        "Ingen informasjon tilgjengelig.";
+
     if (logoEl) {
+
       logoEl.src = brand.logo || brand.image_url || "";
+
       if (isLuxury && logoEl.parentElement) {
+
         const badge = document.createElement("div");
         badge.className = "luxury-badge-under";
         badge.textContent = "Luxury Brand ✨";
+
         logoEl.parentElement.appendChild(badge);
       }
     }
-    if (siteBtn) siteBtn.href = brand.homepage_url || brand.link || "#";
+
+    if (siteBtn)
+      siteBtn.href = brand.homepage_url || brand.link || "#";
   }
 
   updateFavUI();
@@ -107,52 +130,96 @@ document.addEventListener("DOMContentLoaded", async () => {
     fetch(MAIN_PRODUCTS_URL).then(r => r.json()).catch(() => []),
     fetch(LUXURY_PRODUCTS_URL).then(r => r.json()).catch(() => [])
   ]);
+
   const allProducts = [...mainProducts, ...luxuryProducts];
+
   let brandProducts = allProducts.filter(
     p =>
       p.brand &&
       p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
   );
 
+  // --------------------------------------------------
+  // ⭐ ENRICH MED OFFERS ENGINE
+  // --------------------------------------------------
+
+  if (window.BrandRadarOffersEngine) {
+
+    await window.BrandRadarOffersEngine.init();
+
+    brandProducts =
+      await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(
+        brandProducts
+      );
+  }
+
   if (!brandProducts.length) {
+
     emptyMsg && (emptyMsg.style.display = "block");
     resultCount && (resultCount.textContent = "0 produkter");
+
   } else {
+
     applyFiltersAndSort();
   }
 
-  // --- Filter & sort
+  // --------------------------------------------------
+  // ⭐ FILTER + SORT
+  // --------------------------------------------------
+
   function applyFiltersAndSort() {
+
     let list = [...brandProducts];
+
     if (categorySelect && categorySelect.value !== "all") {
+
       list = list.filter(
         p => (p.category || "").trim() === categorySelect.value
       );
     }
+
     if (sortSelect) {
+
       switch (sortSelect.value) {
+
         case "price-asc":
-          list.sort((a, b) => cleanPrice(a.price) - cleanPrice(b.price));
+          list.sort(
+            (a, b) => getEffectivePrice(a) - getEffectivePrice(b)
+          );
           break;
+
         case "price-desc":
-          list.sort((a, b) => cleanPrice(b.price) - cleanPrice(a.price));
+          list.sort(
+            (a, b) => getEffectivePrice(b) - getEffectivePrice(a)
+          );
           break;
+
         case "rating-desc":
-          list.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
+          list.sort(
+            (a, b) => cleanRating(b.rating) - cleanRating(a.rating)
+          );
           break;
       }
     }
+
     renderProducts(list);
   }
 
-  // --- Render cards
+  // --------------------------------------------------
+  // ⭐ RENDER CARDS
+  // --------------------------------------------------
+
   function renderProducts(list) {
+
     if (!grid) return;
 
     grid.innerHTML = "";
+
     if (!list.length) {
+
       emptyMsg && (emptyMsg.style.display = "block");
       resultCount && (resultCount.textContent = "0 produkter");
+
       return;
     }
 
@@ -160,47 +227,62 @@ document.addEventListener("DOMContentLoaded", async () => {
     resultCount && (resultCount.textContent = `${list.length} produkter`);
 
     list.forEach(p => {
-      const id = p.id || p.product_id || Math.floor(Math.random() * 100000);
+
+      const id = p.id || p.product_id;
+
       const ratingNum = cleanRating(p.rating);
       const rating = ratingNum ? ratingNum.toFixed(1) : null;
-      const img = p.image_url || p.image || p.img || "";
+
+      const img = p.image_url || "";
       const name = p.title || p.product_name || p.name || "Uten navn";
-      if (!img) return;
 
-      // Disse antas å finnes globalt fra prosjektet (ikke rør funksjonaliteten)
-      const isFav = getFavorites().some(f => Number(f.id) === Number(id));
-      const heartColor = isLuxury ? "heart-icon gold-heart" : "heart-icon";
+      const isFav =
+        getFavorites().some(f => String(f.id) === String(id));
 
-      const ratingHTML = rating ? `<p class="rating">⭐ ${rating}</p>` : "";
-      const priceHTML = p.price ? `<p class="price">${p.price} kr</p>` : "";
+      const heartColor =
+        isLuxury ? "heart-icon gold-heart" : "heart-icon";
 
-     let discountText = computeDiscountText(p)?.trim();
+      const ratingHTML =
+        rating ? `<p class="rating">⭐ ${rating}</p>` : "";
 
-// Hvis det er et tall uten %, legg til %
-if (discountText && /^\d+$/.test(discountText)) {
-  discountText += "%";
-}
+      // ------------------------------------------
+      // ⭐ PRICE / OFFERS
+      // ------------------------------------------
 
-// Hvis den bare sier "-15", legg til % etter tallet
-if (discountText && /^-\d+$/.test(discountText)) {
-  discountText = discountText + "%";
-}
+      let priceHTML = "";
 
-// Hvis det er tall + %, men ingen tekst, legg til " discount"
-if (discountText && /%$/.test(discountText) && !/discount/i.test(discountText)) {
-  discountText = `${discountText} discount`;
-}
+      if (p.offer_summary?.hasOffers) {
 
-const discountHTML = discountText
-  ? `<div class="discount-badge">${discountText}</div>`
-  : "";
+        const storeLabel =
+          p.offer_summary.storeCount === 1
+            ? "1 butikk"
+            : `${p.offer_summary.storeCount} butikker`;
 
+        priceHTML = `
+          <div class="offer-summary">
+            <div class="offer-summary-price">
+              Fra ${p.offer_summary.lowestPriceFormatted}
+            </div>
+            <div class="offer-summary-count">
+              ${storeLabel}
+            </div>
+          </div>
+        `;
+
+      } else {
+
+        if (p.price) {
+
+          priceHTML = `<p class="price">${p.price} kr</p>`;
+        }
+      }
 
       const card = document.createElement("div");
+
       card.className = "product-card";
+
       card.innerHTML = `
-        ${discountHTML}
-        <div class="fav-icon ${isFav ? "active" : ""}" title="Legg til i favoritter">
+        <div class="fav-icon ${isFav ? "active" : ""}">
           <svg viewBox="0 0 24 24" class="${heartColor}">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
             2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
@@ -208,7 +290,9 @@ const discountHTML = discountText
             6.86-8.55 11.54L12 21.35z"/>
           </svg>
         </div>
+
         <img src="${img}" alt="${name}">
+
         <div class="product-info">
           <h3>${name}</h3>
           ${ratingHTML}
@@ -218,26 +302,34 @@ const discountHTML = discountText
 
       // Klikk for produkt
       card.addEventListener("click", e => {
+
         if (e.target.closest(".fav-icon")) return;
+
         window.location.href = `product.html?id=${id}`;
       });
 
       // Favoritt
       card.querySelector(".fav-icon").addEventListener("click", e => {
+
         e.stopPropagation();
+
         const cleanProduct = {
+
           id,
           title: name,
           brand: p.brand,
           price: p.price,
-          discount: discountText || p.discount || "",
           image_url: img,
           product_url: p.product_url || p.link,
           category: p.category,
           rating: p.rating
         };
-        const exists = getFavorites().some(f => Number(f.id) === Number(id));
+
+        const exists =
+          getFavorites().some(f => String(f.id) === String(id));
+
         toggleFavorite(cleanProduct);
+
         e.currentTarget.classList.toggle("active", !exists);
       });
 
@@ -247,6 +339,7 @@ const discountHTML = discountText
 
   categorySelect?.addEventListener("change", applyFiltersAndSort);
   sortSelect?.addEventListener("change", applyFiltersAndSort);
+
 });
 
 
