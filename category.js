@@ -1,19 +1,17 @@
 // ======================================================
 // ✅ BrandRadar – Category Page
 // Bruker Product Card Engine + Offers Engine
-// - Fra X kr
-// - Y butikker
+// - støtter category uten gender
+// - støtter kidtype for barn
 // - korrekt prisfilter + sortering basert på laveste offer-pris
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // ✅ Google Sheets config
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
   const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/BrandRadarProdukter`;
   const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
 
-  // ✅ DOM Elements
   const titleEl = document.getElementById("category-title");
   const productGrid = document.querySelector(".product-grid");
   const emptyMessage = document.querySelector(".empty-message");
@@ -25,38 +23,41 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sortSelect = document.getElementById("sort-select");
   const filterTagsContainer = document.querySelector(".filter-tags");
 
-  // ✅ URL Params
   const params = new URLSearchParams(window.location.search);
   const genderParam = params.get("gender");
   const categoryParam = params.get("category");
   const subParam = params.get("subcategory");
+  const kidtypeParam = params.get("kidtype");
 
-  if (!genderParam || !categoryParam) {
+  if (!categoryParam) {
     titleEl.textContent = "Ugyldig kategori";
     emptyMessage.style.display = "block";
     return;
   }
 
-  // ✅ Slug Normalization
   const normalize = txt =>
     (txt || "")
       .toLowerCase()
+      .replace(/æ/g, "a")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .replace(/&/g, " ")
+      .replace(/\//g, " ")
+      .replace(/\bog\b/g, " ")
+      .replace(/\band\b/g, " ")
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/&/g, "and")
       .replace(/[^\w\d]+/g, "-")
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "");
 
   const categorySlug = normalize(categoryParam);
-  let genderSlug = normalize(genderParam);
+  let genderSlug = genderParam ? normalize(genderParam) : "";
   if (genderSlug === "herre") genderSlug = "men";
   if (genderSlug === "dame") genderSlug = "women";
   if (genderSlug === "barn") genderSlug = "kids";
-  const subSlug = normalize(subParam);
 
-  // ======================================================
-  // ✅ PRICE / SORT HELPERS
-  // ======================================================
+  const subSlug = normalize(subParam);
+  const kidtypeSlug = normalize(kidtypeParam);
 
   function parseNumber(val) {
     if (val == null) return null;
@@ -105,19 +106,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // ✅ Fetch data
     const [mapRows, products] = await Promise.all([
       fetch(mappingUrl).then(r => r.json()),
       fetch(productUrl).then(r => r.json())
     ]);
 
-    // ✅ Mapping match
-    const match = mapRows.find(row =>
-      normalize(row.main_category) === categorySlug &&
-      (!row.gender || normalize(row.gender) === genderSlug)
-    );
+    const match = mapRows.find(row => {
+      const mainOk = normalize(row.main_category) === categorySlug;
+      const genderOk = genderSlug
+        ? normalize(row.gender) === genderSlug
+        : !row.gender || normalize(row.gender) === "";
+      const kidtypeOk = kidtypeSlug
+        ? normalize(row.kidtype) === kidtypeSlug
+        : true;
+
+      return mainOk && genderOk && kidtypeOk;
+    });
 
     if (!match) {
+      titleEl.textContent = "Ugyldig kategori";
       emptyMessage.style.display = "block";
       return;
     }
@@ -125,40 +132,69 @@ document.addEventListener("DOMContentLoaded", async () => {
     const norskGender =
       genderSlug === "men" ? "Herre" :
       genderSlug === "women" ? "Dame" :
-      genderSlug === "kids" ? "Barn" : genderParam;
+      genderSlug === "kids" ? "Barn" : "";
 
     let subNameNo = null;
+
     if (subSlug) {
-      const subMatch = mapRows.find(row =>
-        normalize(row.url_slug) === subSlug &&
-        normalize(row.main_category) === categorySlug
-      );
+      const subMatch = mapRows.find(row => {
+        const mainOk = normalize(row.main_category) === categorySlug;
+        const subOk = normalize(row.url_slug) === subSlug;
+        const genderOk = genderSlug
+          ? normalize(row.gender) === genderSlug
+          : !row.gender || normalize(row.gender) === "";
+        const kidtypeOk = kidtypeSlug
+          ? normalize(row.kidtype) === kidtypeSlug
+          : true;
+
+        return mainOk && subOk && genderOk && kidtypeOk;
+      });
+
       if (subMatch) subNameNo = subMatch.display_name;
     }
 
-    // ✅ Update title + breadcrumb
-    titleEl.textContent = subNameNo
-      ? `${subNameNo} – ${norskGender}`
-      : `${match.display_name} – ${norskGender}`;
+    if (subNameNo && norskGender) {
+      titleEl.textContent = `${subNameNo} – ${norskGender}`;
+    } else if (subNameNo) {
+      titleEl.textContent = subNameNo;
+    } else if (match.display_name && norskGender) {
+      titleEl.textContent = `${match.display_name} – ${norskGender}`;
+    } else {
+      titleEl.textContent = match.display_name || categoryParam;
+    }
 
     document.title = `${titleEl.textContent} | BrandRadar`;
 
-    breadcrumbEl.innerHTML = `
-      <a href="index.html">Hjem</a> ›
-      <a href="category.html?gender=${genderParam}&category=${categoryParam}">
-        ${norskGender}
-      </a> ›
-      ${subNameNo || match.display_name}
-    `;
+    let breadcrumbHtml = `<a href="index.html">Hjem</a> › `;
 
-    // ✅ Base filtered products
+    if (norskGender) {
+      breadcrumbHtml += `
+        <a href="category.html?gender=${encodeURIComponent(genderParam || norskGender)}&category=${encodeURIComponent(categoryParam)}">
+          ${norskGender}
+        </a> ›
+      `;
+    } else {
+      breadcrumbHtml += `
+        <a href="category.html?category=${encodeURIComponent(categoryParam)}">
+          ${match.display_name || categoryParam}
+        </a> ›
+      `;
+    }
+
+    breadcrumbHtml += `${subNameNo || match.display_name || categoryParam}`;
+    breadcrumbEl.innerHTML = breadcrumbHtml;
+
     const filteredBase = products.filter(p => {
-      const pGender = normalize(p.gender);
-      return (
-        normalize(p.category) === categorySlug &&
-        (!subSlug || normalize(p.subcategory) === subSlug) &&
-        (pGender === genderSlug || pGender === "unisex" || pGender === "")
-      );
+      const categoryOk = normalize(p.category) === categorySlug;
+      const subOk = !subSlug || normalize(p.subcategory) === subSlug;
+
+      let genderOk = true;
+      if (genderSlug) {
+        const pGender = normalize(p.gender);
+        genderOk = pGender === genderSlug || pGender === "unisex" || pGender === "";
+      }
+
+      return categoryOk && subOk && genderOk;
     });
 
     const filtered = window.BrandRadarOffersEngine
@@ -172,7 +208,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     emptyMessage.style.display = "none";
 
-    // ✅ Populate Brand dropdown
     [...new Set(filtered.map(p => p.brand).filter(Boolean))]
       .sort()
       .forEach(b => {
@@ -182,9 +217,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         brandFilter.appendChild(opt);
       });
 
-    // ======================================================
-    // ✅ Render products – via Product Card Engine
-    // ======================================================
     function renderProducts(list) {
       productGrid.innerHTML = "";
 
@@ -228,7 +260,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (resultEl) resultEl.textContent = `${list.length} produkter`;
     }
 
-    // ✅ Create filter tags dynamically
     function updateFilterTags() {
       filterTagsContainer.innerHTML = "";
       const tags = [];
@@ -274,7 +305,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // ✅ Filters & sorting combined
     function applyFiltersAndSort() {
       let result = [...filtered];
 
@@ -317,22 +347,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       updateFilterTags();
     }
 
-    // ✅ Hook up change events
     brandFilter.addEventListener("change", applyFiltersAndSort);
     priceFilter.addEventListener("change", applyFiltersAndSort);
     discountFilter.addEventListener("change", applyFiltersAndSort);
     sortSelect.addEventListener("change", applyFiltersAndSort);
 
-    // ✅ First render
     applyFiltersAndSort();
 
-    // ✅ Oppdater global teller etter render
     setTimeout(() => {
       if (typeof updateFavoriteCounter === "function") {
         updateFavoriteCounter();
       }
     }, 50);
-
   } catch (err) {
     console.error("❌ Category error:", err);
   }
