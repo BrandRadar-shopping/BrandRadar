@@ -82,31 +82,37 @@
   align-items: stretch;
 }
 
+/* La global .product-card style vinne, men sørg for riktig grid-bredde */
 #favorites-product-grid .product-card {
   width: 100%;
   max-width: 320px;
   height: 100%;
 }
 
-/* ---------- Remove tag ---------- */
+/* ---------- "Fjern" tag (ALLTID liten pill, aldri full bredde) ---------- */
 #favorites-product-grid .product-card .remove-tag,
 #tab-products .product-card .remove-tag {
   position: absolute !important;
   top: 10px !important;
   left: 10px !important;
   right: auto !important;
+
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
+
   width: auto !important;
   max-width: max-content !important;
   padding: 0.22rem 0.65rem !important;
+
   border-radius: 999px !important;
   background: rgba(239, 68, 68, 0.92) !important;
   color: #fff !important;
+
   font-size: 0.78rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em;
+
   z-index: 6 !important;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(239, 68, 68, 0.25);
@@ -118,6 +124,7 @@
   background: rgba(220, 38, 38, 0.95) !important;
 }
 
+/* Sikring hvis "remove-tag" tilfeldigvis er en <button> */
 #favorites-product-grid .product-card button.remove-tag,
 #tab-products .product-card button.remove-tag {
   border: 0 !important;
@@ -139,7 +146,7 @@
   box-sizing: border-box;
 }
 
-/* ---------- Tablet / smaller desktop ---------- */
+/* ---------- Tablet / small desktop ---------- */
 @media (max-width: 900px) {
   .favorites-section {
     margin-top: 2rem;
@@ -167,12 +174,6 @@
     max-width: 88px;
     height: 64px;
     margin: 18px auto 0;
-  }
-
-  #favorites-brand-grid .brand-card h3,
-  #favorites-brand-grid .brand-card .brand-name,
-  #favorites-brand-grid .brand-card .brand-title {
-    display: none !important;
   }
 
   #favorites-brand-grid .brand-card .remove-brand-tag {
