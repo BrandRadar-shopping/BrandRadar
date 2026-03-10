@@ -5,9 +5,11 @@
 // Vi gjenbruker cleanRating fra favorites-core hvis den finnes
 const cleanRatingRef = window.cleanRating || function (value) {
   if (!value) return null;
+
   const n = parseFloat(
     value.toString().replace(",", ".").replace(/[^0-9.\-]/g, "")
   );
+
   return Number.isFinite(n) ? n : null;
 };
 
@@ -34,6 +36,7 @@ function toggleBrandFavorite(brand) {
 
   const current = getFavoriteBrands();
   const idx = current.indexOf(brand);
+
   if (idx >= 0) {
     current.splice(idx, 1);
     if (window.showFavoriteToast) {
@@ -52,6 +55,7 @@ function toggleBrandFavorite(brand) {
   if (window.updateFavoriteCounter) {
     window.updateFavoriteCounter();
   }
+
   // Oppdater tabs hvis vi står på favoritter.html
   if (typeof updateFavoriteTabsCount === "function") {
     updateFavoriteTabsCount();
@@ -89,20 +93,22 @@ function loadFavoriteProducts() {
     return;
   }
 
-  const favorites = window.getFavorites(); // fra favorites-core.js
+  const favorites = window.getFavorites();
   const grid = document.getElementById("favorites-product-grid");
   const emptyMsg = document.getElementById("empty-products");
 
   if (!grid) return;
+
   grid.innerHTML = "";
 
   if (!Array.isArray(favorites) || favorites.length === 0) {
     if (emptyMsg) emptyMsg.style.display = "block";
     return;
   }
+
   if (emptyMsg) emptyMsg.style.display = "none";
 
-  favorites.forEach(product => {
+  favorites.forEach((product) => {
     const card = document.createElement("div");
     card.classList.add("product-card");
 
@@ -111,6 +117,7 @@ function loadFavoriteProducts() {
     const brand = product.brand || "";
     const imgUrl = product.image_url || "";
     const isLuxury = !!product.luxury;
+
     const ratingValue =
       typeof product.rating === "number"
         ? product.rating
@@ -123,7 +130,7 @@ function loadFavoriteProducts() {
     removeTag.dataset.id = id;
     card.appendChild(removeTag);
 
-    // ✅ Rabattmerke (hvis vi har discount)
+    // ✅ Rabattmerke
     if (product.discount) {
       const discountBadge = document.createElement("div");
       discountBadge.classList.add("discount-badge");
@@ -144,11 +151,11 @@ function loadFavoriteProducts() {
 
     const brandEl = document.createElement("p");
     brandEl.classList.add("brand");
-    brandEl.textContent = brand || "";
+    brandEl.textContent = brand;
 
     const nameEl = document.createElement("h3");
     nameEl.classList.add("product-name");
-    nameEl.textContent = title || "";
+    nameEl.textContent = title;
 
     const ratingEl = document.createElement("p");
     ratingEl.classList.add("rating");
@@ -166,7 +173,7 @@ function loadFavoriteProducts() {
 
     const newPrice = document.createElement("span");
     newPrice.classList.add("new-price");
-    newPrice.textContent = priceText || "";
+    newPrice.textContent = priceText;
     priceLine.appendChild(newPrice);
 
     info.append(brandEl, nameEl, ratingEl, priceLine);
@@ -182,15 +189,16 @@ function loadFavoriteProducts() {
     // ✅ Fjern favoritt
     removeTag.addEventListener("click", (e) => {
       e.stopPropagation();
+
       if (window.toggleFavorite) {
-        window.toggleFavorite(product); // bruker favorites-core.js
+        window.toggleFavorite(product);
       } else {
-        // fallback: manuelt
         const current = window.getFavorites ? window.getFavorites() : [];
-        const idx = current.findIndex(f => String(f.id) === String(id));
+        const idx = current.findIndex((f) => String(f.id) === String(id));
         if (idx >= 0) current.splice(idx, 1);
         localStorage.setItem("favorites", JSON.stringify(current));
       }
+
       loadFavoriteProducts();
       updateFavoriteTabsCount();
     });
@@ -205,7 +213,17 @@ function loadFavoriteProducts() {
 
 function loadFavoriteBrands() {
   const favBrands = getFavoriteBrands();
-  const allBrandsData = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
+
+  let allBrandsData = [];
+  try {
+    allBrandsData = JSON.parse(localStorage.getItem("allBrandsData") || "[]");
+    if (!Array.isArray(allBrandsData)) {
+      allBrandsData = [];
+    }
+  } catch (e) {
+    console.warn("⚠️ Klarte ikke lese allBrandsData:", e);
+    allBrandsData = [];
+  }
 
   const grid = document.getElementById("favorites-brand-grid");
   const emptyMsg = document.getElementById("empty-brands");
@@ -213,28 +231,46 @@ function loadFavoriteBrands() {
   if (!grid) return;
 
   grid.innerHTML = "";
+
   if (!favBrands.length) {
     if (emptyMsg) emptyMsg.style.display = "block";
     return;
   }
+
   if (emptyMsg) emptyMsg.style.display = "none";
 
-  favBrands.forEach(brand => {
+  const showBrandTitle = window.innerWidth > 768;
+
+  favBrands.forEach((brand) => {
     const brandData = allBrandsData.find(
-      b => (b.brand || "").trim() === (brand || "").trim()
+      (b) => (b.brand || "").trim() === (brand || "").trim()
     );
 
     const card = document.createElement("div");
     card.classList.add("brand-card");
 
-    const logo = brandData?.logo || "";
-    card.innerHTML = `
-      <span class="remove-brand-tag" data-brand="${brand}">Fjern</span>
-      <img class="brand-logo" src="${logo}" alt="${brand}">
-      <h3>${brand}</h3>
-    `;
+    const removeTag = document.createElement("span");
+    removeTag.classList.add("remove-brand-tag");
+    removeTag.dataset.brand = brand;
+    removeTag.textContent = "Fjern";
 
-    card.querySelector(".remove-brand-tag").addEventListener("click", (e) => {
+    const logo = document.createElement("img");
+    logo.classList.add("brand-logo");
+    logo.src = brandData?.logo || "";
+    logo.alt = brand;
+    logo.loading = "lazy";
+
+    card.appendChild(removeTag);
+    card.appendChild(logo);
+
+    if (showBrandTitle) {
+      const title = document.createElement("h3");
+      title.classList.add("brand-title");
+      title.textContent = brand;
+      card.appendChild(title);
+    }
+
+    removeTag.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleBrandFavorite(brand);
       loadFavoriteBrands();
@@ -267,14 +303,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabContents = document.querySelectorAll(".tab-content");
 
   if (tabBtns.length > 0) {
-    tabBtns.forEach(btn => {
+    tabBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const showTab = btn.dataset.tab;
 
-        tabBtns.forEach(b => b.classList.remove("active"));
+        tabBtns.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
 
-        tabContents.forEach(c => c.classList.remove("active"));
+        tabContents.forEach((c) => c.classList.remove("active"));
+
         const activeTab = document.getElementById(`tab-${showTab}`);
         if (activeTab) activeTab.classList.add("active");
       });
