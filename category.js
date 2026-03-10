@@ -3,6 +3,7 @@
 //    OPPDATERT med offers-engine for:
 //    - Fra X kr
 //    - Y butikker
+//    - korrekt prisfilter + sortering basert på laveste offer-pris
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -93,6 +94,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     return { price, oldPrice, discount };
   }
 
+  function getEffectivePrice(product) {
+    if (product?.offer_summary?.hasOffers && product.offer_summary.lowestPrice != null) {
+      return Number(product.offer_summary.lowestPrice);
+    }
+
+    const { price } = getPriceInfo(product);
+    return price ?? 0;
+  }
+
   function buildFallbackPriceMarkup(product) {
     const { price, oldPrice, discount } = getPriceInfo(product);
     const priceText = price ? formatPrice(price) : "";
@@ -120,6 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function buildOfferSummaryMarkup(summary) {
     if (!summary?.hasOffers) return "";
+
     const storeLabel = summary.storeCount === 1 ? "1 butikk" : `${summary.storeCount} butikker`;
 
     return `
@@ -130,299 +141,303 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  // ✅ Fetch Data
-  Promise.all([
-    fetch(mappingUrl).then(r => r.json()),
-    fetch(productUrl).then(r => r.json())
-  ])
-    .then(async ([mapRows, products]) => {
-      // ✅ Mapping match
-      const match = mapRows.find(row =>
-        normalize(row.main_category) === categorySlug &&
-        (!row.gender || normalize(row.gender) === genderSlug)
+  try {
+    // ✅ Fetch data
+    const [mapRows, products] = await Promise.all([
+      fetch(mappingUrl).then(r => r.json()),
+      fetch(productUrl).then(r => r.json())
+    ]);
+
+    // ✅ Mapping match
+    const match = mapRows.find(row =>
+      normalize(row.main_category) === categorySlug &&
+      (!row.gender || normalize(row.gender) === genderSlug)
+    );
+
+    if (!match) {
+      emptyMessage.style.display = "block";
+      return;
+    }
+
+    const norskGender =
+      genderSlug === "men" ? "Herre" :
+      genderSlug === "women" ? "Dame" :
+      genderSlug === "kids" ? "Barn" : genderParam;
+
+    let subNameNo = null;
+    if (subSlug) {
+      const subMatch = mapRows.find(row =>
+        normalize(row.url_slug) === subSlug &&
+        normalize(row.main_category) === categorySlug
       );
+      if (subMatch) subNameNo = subMatch.display_name;
+    }
 
-      if (!match) {
-        emptyMessage.style.display = "block";
-        return;
-      }
+    // ✅ Update page title + breadcrumb
+    titleEl.textContent = subNameNo
+      ? `${subNameNo} – ${norskGender}`
+      : `${match.display_name} – ${norskGender}`;
 
-      const norskGender =
-        genderSlug === "men" ? "Herre" :
-        genderSlug === "women" ? "Dame" :
-        genderSlug === "kids" ? "Barn" : genderParam;
+    document.title = `${titleEl.textContent} | BrandRadar`;
 
-      let subNameNo = null;
-      if (subSlug) {
-        const subMatch = mapRows.find(row =>
-          normalize(row.url_slug) === subSlug &&
-          normalize(row.main_category) === categorySlug
-        );
-        if (subMatch) subNameNo = subMatch.display_name;
-      }
+    breadcrumbEl.innerHTML = `
+      <a href="index.html">Hjem</a> ›
+      <a href="category.html?gender=${genderParam}&category=${categoryParam}">
+        ${norskGender}
+      </a> ›
+      ${subNameNo || match.display_name}
+    `;
 
-      // ✅ Update page title + breadcrumb
-      titleEl.textContent = subNameNo
-        ? `${subNameNo} – ${norskGender}`
-        : `${match.display_name} – ${norskGender}`;
+    // ✅ Base filtered products
+    const filteredBase = products.filter(p => {
+      const pGender = normalize(p.gender);
+      return (
+        normalize(p.category) === categorySlug &&
+        (!subSlug || normalize(p.subcategory) === subSlug) &&
+        (pGender === genderSlug || pGender === "unisex" || pGender === "")
+      );
+    });
 
-      document.title = `${titleEl.textContent} | BrandRadar`;
+    const filtered = window.BrandRadarOffersEngine
+      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(filteredBase)
+      : filteredBase;
 
-      breadcrumbEl.innerHTML = `
-        <a href="index.html">Hjem</a> ›
-        <a href="category.html?gender=${genderParam}&category=${categoryParam}">
-          ${norskGender}
-        </a> ›
-        ${subNameNo || match.display_name}
-      `;
+    if (!filtered.length) {
+      emptyMessage.style.display = "block";
+      return;
+    }
 
-      // ✅ Filter Data
-      const filtered = products.filter(p => {
-        const pGender = normalize(p.gender);
-        return (
-          normalize(p.category) === categorySlug &&
-          (!subSlug || normalize(p.subcategory) === subSlug) &&
-          (pGender === genderSlug || pGender === "unisex" || pGender === "")
-        );
+    emptyMessage.style.display = "none";
+
+    // ✅ Populate Brand dropdown
+    [...new Set(filtered.map(p => p.brand).filter(Boolean))]
+      .sort()
+      .forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b;
+        opt.textContent = b;
+        brandFilter.appendChild(opt);
       });
 
-      if (!filtered.length) {
-        emptyMessage.style.display = "block";
-        return;
-      }
-      emptyMessage.style.display = "none";
+    // ======================================================
+    // ✅ Render products – med offers
+    // ======================================================
+    async function renderProducts(list) {
+      productGrid.innerHTML = "";
 
-      // ✅ Populate Brand dropdown
-      [...new Set(filtered.map(p => p.brand).filter(Boolean))]
-        .sort()
-        .forEach(b => {
-          const opt = document.createElement("option");
-          opt.value = b;
-          opt.textContent = b;
-          brandFilter.appendChild(opt);
-        });
+      list.forEach(p => {
+        const pid = typeof resolveProductId === "function"
+          ? resolveProductId(p)
+          : (p.id || p.product_id || "");
 
-      // ======================================================
-      // ✅ Render products – OPPDATERT med offers
-      // ======================================================
-      async function renderProducts(list) {
-        productGrid.innerHTML = "";
+        let ratingValue = null;
+        if (p.rating) {
+          const parsed = parseFloat(
+            String(p.rating)
+              .replace(",", ".")
+              .replace(/[^0-9.]/g, "")
+          );
+          if (!isNaN(parsed)) ratingValue = parsed;
+        }
 
-        const enrichedList =
-          window.BrandRadarOffersEngine
-            ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(list)
-            : list;
+        const isFav = (typeof isProductFavorite === "function")
+          ? isProductFavorite(pid)
+          : false;
 
-        enrichedList.forEach(p => {
-          const pid = typeof resolveProductId === "function"
-            ? resolveProductId(p)
-            : (p.id || p.product_id || "");
+        const priceMarkup = p.offer_summary?.hasOffers
+          ? buildOfferSummaryMarkup(p.offer_summary)
+          : buildFallbackPriceMarkup(p);
 
-          let ratingValue = null;
-          if (p.rating) {
-            const parsed = parseFloat(
-              String(p.rating)
-                .replace(",", ".")
-                .replace(/[^0-9.]/g, "")
-            );
-            if (!isNaN(parsed)) ratingValue = parsed;
-          }
+        const { discount } = getPriceInfo(p);
+        const discountBadgeMarkup =
+          !p.offer_summary?.hasOffers && discount
+            ? `<div class="discount-badge">-${discount}%</div>`
+            : "";
 
-          const isFav = (typeof isProductFavorite === "function")
-            ? isProductFavorite(pid)
-            : false;
+        const card = document.createElement("div");
+        card.classList.add("product-card");
 
-          const priceMarkup = p.offer_summary?.hasOffers
-            ? buildOfferSummaryMarkup(p.offer_summary)
-            : buildFallbackPriceMarkup(p);
+        card.innerHTML = `
+          ${discountBadgeMarkup}
 
-          const discountBadgeMarkup =
-            !p.offer_summary?.hasOffers && getPriceInfo(p).discount
-              ? `<div class="discount-badge">-${getPriceInfo(p).discount}%</div>`
-              : "";
+          <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
+            <svg viewBox="0 0 24 24" class="heart-icon">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2
+              12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
+              0 3.41.81 4.5 2.09C13.09 3.81 14.76 3
+              16.5 3 19.58 3 22 5.42 22 8.5c0
+              3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
 
-          const card = document.createElement("div");
-          card.classList.add("product-card");
+          <img src="${p.image_url}" alt="${p.title}">
 
-          card.innerHTML = `
-            ${discountBadgeMarkup}
+          <div class="product-info">
+            <p class="brand">${p.brand || ""}</p>
 
-            <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
-              <svg viewBox="0 0 24 24" class="heart-icon">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2
-                12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74
-                0 3.41.81 4.5 2.09C13.09 3.81 14.76 3
-                16.5 3 19.58 3 22 5.42 22 8.5c0
-                3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
-            </div>
+            <h3 class="product-name">${p.title || ""}</h3>
 
-            <img src="${p.image_url}" alt="${p.title}">
-
-            <div class="product-info">
-              <p class="brand">${p.brand || ""}</p>
-
-              <h3 class="product-name">${p.title || ""}</h3>
-
-              <p class="rating">
-                ${
-                  ratingValue
-                    ? `⭐ ${ratingValue.toFixed(1)}`
-                    : `<span style="color:#ccc;">–</span>`
-                }
-              </p>
-
-              ${priceMarkup}
-            </div>
-          `;
-
-          // ✅ Product click -> open product page
-          card.addEventListener("click", e => {
-            if (!e.target.closest(".fav-icon")) {
-              if (pid) {
-                window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+            <p class="rating">
+              ${
+                ratingValue
+                  ? `⭐ ${ratingValue.toFixed(1)}`
+                  : `<span style="color:#ccc;">–</span>`
               }
+            </p>
+
+            ${priceMarkup}
+          </div>
+        `;
+
+        // ✅ Product click -> open product page
+        card.addEventListener("click", e => {
+          if (!e.target.closest(".fav-icon")) {
+            if (pid) {
+              window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
             }
-          });
-
-          // ✅ Toggle favorite
-          const favIconEl = card.querySelector(".fav-icon");
-          favIconEl.addEventListener("click", e => {
-            e.stopPropagation();
-
-            if (typeof toggleFavorite === "function") {
-              const productData = {
-                id: pid,
-                product_name: p.title || p.product_name || p.name,
-                title: p.title || p.product_name || p.name,
-                brand: p.brand || "",
-                price: p.price,
-                discount: p.discount,
-                image_url: p.image_url,
-                product_url: p.product_url,
-                category: p.category || p.main_category || "",
-                rating: p.rating,
-                luxury: false
-              };
-
-              toggleFavorite(productData, favIconEl);
-            }
-          });
-
-          productGrid.appendChild(card);
-        });
-
-        const resultEl = document.querySelector(".filter-bar .result-count");
-        if (resultEl) resultEl.textContent = `${list.length} produkter`;
-      }
-
-      // ✅ Create filter tags dynamically
-      function updateFilterTags() {
-        filterTagsContainer.innerHTML = "";
-        const tags = [];
-
-        if (brandFilter.value !== "all") {
-          tags.push({
-            label: brandFilter.value,
-            remove: () => {
-              brandFilter.value = "all";
-              applyFiltersAndSort();
-            }
-          });
-        }
-
-        if (priceFilter.value !== "all") {
-          tags.push({
-            label: `Pris: ${priceFilter.options[priceFilter.selectedIndex].text}`,
-            remove: () => {
-              priceFilter.value = "all";
-              applyFiltersAndSort();
-            }
-          });
-        }
-
-        if (discountFilter.checked) {
-          tags.push({
-            label: "Kun tilbud",
-            remove: () => {
-              discountFilter.checked = false;
-              applyFiltersAndSort();
-            }
-          });
-        }
-
-        filterTagsContainer.classList.toggle("hidden", tags.length === 0);
-
-        tags.forEach(tag => {
-          const el = document.createElement("div");
-          el.classList.add("filter-tag");
-          el.innerHTML = `${tag.label} <span class="close-tag">×</span>`;
-          el.addEventListener("click", tag.remove);
-          filterTagsContainer.appendChild(el);
-        });
-      }
-
-      // ✅ Filters & sorting combined
-      async function applyFiltersAndSort() {
-        let result = [...filtered];
-
-        const getFilterPrice = v =>
-          parseFloat(String(v).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-        const getRating = v =>
-          parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-
-        if (brandFilter.value !== "all") {
-          result = result.filter(p => p.brand === brandFilter.value);
-        }
-
-        if (priceFilter.value !== "all") {
-          if (priceFilter.value === "1000+") {
-            result = result.filter(p => getFilterPrice(p.price) >= 1000);
-          } else {
-            const [min, max] = priceFilter.value.split("-").map(Number);
-            result = result.filter(p => {
-              const price = getFilterPrice(p.price);
-              return price >= min && price <= max;
-            });
           }
-        }
+        });
 
-        if (discountFilter.checked) {
-          result = result.filter(p => parseFloat(p.discount) > 0);
-        }
+        // ✅ Toggle favorite
+        const favIconEl = card.querySelector(".fav-icon");
+        favIconEl.addEventListener("click", e => {
+          e.stopPropagation();
 
-        switch (sortSelect.value) {
-          case "price-asc":
-            result.sort((a, b) => getFilterPrice(a.price) - getFilterPrice(b.price));
-            break;
-          case "price-desc":
-            result.sort((a, b) => getFilterPrice(b.price) - getFilterPrice(a.price));
-            break;
-          case "rating-desc":
-            result.sort((a, b) => getRating(b.rating) - getRating(a.rating));
-            break;
-        }
+          if (typeof toggleFavorite === "function") {
+            const productData = {
+              id: pid,
+              product_name: p.title || p.product_name || p.name,
+              title: p.title || p.product_name || p.name,
+              brand: p.brand || "",
+              price: p.price,
+              discount: p.discount,
+              image_url: p.image_url,
+              product_url: p.product_url,
+              category: p.category || p.main_category || "",
+              rating: p.rating,
+              luxury: false
+            };
 
-        await renderProducts(result);
-        updateFilterTags();
+            toggleFavorite(productData, favIconEl);
+          }
+        });
+
+        productGrid.appendChild(card);
+      });
+
+      const resultEl = document.querySelector(".filter-bar .result-count");
+      if (resultEl) resultEl.textContent = `${list.length} produkter`;
+    }
+
+    // ✅ Create filter tags dynamically
+    function updateFilterTags() {
+      filterTagsContainer.innerHTML = "";
+      const tags = [];
+
+      if (brandFilter.value !== "all") {
+        tags.push({
+          label: brandFilter.value,
+          remove: () => {
+            brandFilter.value = "all";
+            applyFiltersAndSort();
+          }
+        });
       }
 
-      // ✅ Hook up change events
-      brandFilter.addEventListener("change", applyFiltersAndSort);
-      priceFilter.addEventListener("change", applyFiltersAndSort);
-      discountFilter.addEventListener("change", applyFiltersAndSort);
-      sortSelect.addEventListener("change", applyFiltersAndSort);
+      if (priceFilter.value !== "all") {
+        tags.push({
+          label: `Pris: ${priceFilter.options[priceFilter.selectedIndex].text}`,
+          remove: () => {
+            priceFilter.value = "all";
+            applyFiltersAndSort();
+          }
+        });
+      }
 
-      // ✅ First render
-      await applyFiltersAndSort();
+      if (discountFilter.checked) {
+        tags.push({
+          label: "Kun tilbud",
+          remove: () => {
+            discountFilter.checked = false;
+            applyFiltersAndSort();
+          }
+        });
+      }
 
-      // Oppdater global teller etter at kort er rendret
-      setTimeout(() => {
-        if (typeof updateFavoriteCounter === "function") {
-          updateFavoriteCounter();
+      filterTagsContainer.classList.toggle("hidden", tags.length === 0);
+
+      tags.forEach(tag => {
+        const el = document.createElement("div");
+        el.classList.add("filter-tag");
+        el.innerHTML = `${tag.label} <span class="close-tag">×</span>`;
+        el.addEventListener("click", tag.remove);
+        filterTagsContainer.appendChild(el);
+      });
+    }
+
+    // ✅ Filters & sorting combined
+    async function applyFiltersAndSort() {
+      let result = [...filtered];
+
+      const getRating = v =>
+        parseFloat(String(v).replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+
+      if (brandFilter.value !== "all") {
+        result = result.filter(p => p.brand === brandFilter.value);
+      }
+
+      if (priceFilter.value !== "all") {
+        if (priceFilter.value === "1000+") {
+          result = result.filter(p => getEffectivePrice(p) >= 1000);
+        } else {
+          const [min, max] = priceFilter.value.split("-").map(Number);
+          result = result.filter(p => {
+            const price = getEffectivePrice(p);
+            return price >= min && price <= max;
+          });
         }
-      }, 50);
-    })
-    .catch(err => console.error("❌ Category error:", err));
-});
+      }
 
+      if (discountFilter.checked) {
+        result = result.filter(p => {
+          if (p.offer_summary?.hasOffers) return true;
+          const { discount } = getPriceInfo(p);
+          return Number(discount) > 0;
+        });
+      }
+
+      switch (sortSelect.value) {
+        case "price-asc":
+          result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
+          break;
+        case "price-desc":
+          result.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
+          break;
+        case "rating-desc":
+          result.sort((a, b) => getRating(b.rating) - getRating(a.rating));
+          break;
+      }
+
+      await renderProducts(result);
+      updateFilterTags();
+    }
+
+    // ✅ Hook up change events
+    brandFilter.addEventListener("change", applyFiltersAndSort);
+    priceFilter.addEventListener("change", applyFiltersAndSort);
+    discountFilter.addEventListener("change", applyFiltersAndSort);
+    sortSelect.addEventListener("change", applyFiltersAndSort);
+
+    // ✅ First render
+    await applyFiltersAndSort();
+
+    // ✅ Oppdater global teller etter at kort er rendret
+    setTimeout(() => {
+      if (typeof updateFavoriteCounter === "function") {
+        updateFavoriteCounter();
+      }
+    }, 50);
+  } catch (err) {
+    console.error("❌ Category error:", err);
+  }
+});
