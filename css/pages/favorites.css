@@ -184,4 +184,10 @@
   }
 }
 
-
+/* ---------- Offer meta ---------- */
+#favorites-product-grid .product-card .offer-meta {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #2563eb;
+}
