@@ -164,20 +164,38 @@ function loadFavoriteProducts() {
       : `<span style="color:#ccc;">–</span>`;
 
     const priceLine = document.createElement("div");
-    priceLine.classList.add("price-line");
+priceLine.classList.add("price-line");
 
-    let priceText = product.price || "";
-    if (priceText && !/kr/i.test(priceText)) {
-      priceText = `${priceText} kr`;
+let priceText = product.price || "";
+if (priceText && !/kr/i.test(priceText)) {
+  priceText = `${priceText} kr`;
+}
+
+const newPrice = document.createElement("span");
+newPrice.classList.add("new-price");
+newPrice.textContent = priceText;
+priceLine.appendChild(newPrice);
+
+// ✅ Offer summary (fra offers-engine)
+const offerMeta = document.createElement("div");
+offerMeta.classList.add("offer-meta");
+offerMeta.textContent = "";
+
+if (window.BrandRadarOffersEngine && product.id != null) {
+  try {
+    const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(String(product.id));
+
+    if (summary?.hasOffers) {
+      newPrice.textContent = `Fra ${summary.lowestPriceFormatted}`;
+      offerMeta.textContent = `${summary.storeCount} butikker`;
     }
+  } catch (err) {
+    console.warn("⚠️ Klarte ikke hente offer summary for produkt:", product.id, err);
+  }
+}
 
-    const newPrice = document.createElement("span");
-    newPrice.classList.add("new-price");
-    newPrice.textContent = priceText;
-    priceLine.appendChild(newPrice);
-
-    info.append(brandEl, nameEl, ratingEl, priceLine);
-    card.appendChild(info);
+info.append(brandEl, nameEl, ratingEl, priceLine, offerMeta);
+card.appendChild(info);
 
     // ✅ Klikk på kort → product.html
     card.addEventListener("click", () => {
