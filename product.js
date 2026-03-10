@@ -54,25 +54,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
   // ⭐ Sett inn produktinfo
   // ======================================================
-  document.getElementById("product-title").textContent = product.title;
-  document.getElementById("product-brand").textContent = product.brand;
+  document.getElementById("product-title").textContent = product.title || "";
+  document.getElementById("product-brand").textContent = product.brand || "";
   document.getElementById("product-desc").textContent =
     product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
-  document.getElementById("buy-link").href = product.product_url;
 
   // ======================================================
-  // ⭐ Price Engine (premium)
+  // ⭐ Prisvisning (fallback / produktark)
   // ======================================================
   const newPriceEl = document.getElementById("new-price");
   const oldPriceEl = document.getElementById("old-price");
   const discountTagEl = document.getElementById("discount-tag");
+  const buyLinkEl = document.getElementById("buy-link");
 
   const rawPrice = product.price
     ? String(product.price).replace(/[^\d.,]/g, "").replace(",", ".")
     : null;
   const numericPrice = rawPrice ? parseFloat(rawPrice) : null;
 
-  let discount = parseFloat(String(product.discount).replace(",", "."));
+  let discount = parseFloat(String(product.discount || "").replace(",", "."));
   if (discount && discount < 1) discount *= 100;
 
   if (numericPrice && discount > 0) {
@@ -86,11 +86,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     discountTagEl.textContent = "";
   }
 
+  // Default kjøpslink fra produktarket
+  buyLinkEl.href = product.product_url || "#";
+
   // ======================================================
   // ⭐ Rating
   // ======================================================
   const ratingNum = parseFloat(
-    String(product.rating).replace(",", ".").replace(/[^0-9.]/g, "")
+    String(product.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")
   );
 
   document.getElementById("product-rating").textContent =
@@ -128,6 +131,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // ======================================================
+  // ⭐ Pris-sammenligning (offers engine)
+  // ======================================================
+  await renderPriceComparison(product);
+
+  // ======================================================
   // ⭐ Relaterte produkter
   // ======================================================
   loadRecommendations(products, product);
@@ -145,6 +153,122 @@ document.addEventListener("DOMContentLoaded", async () => {
     newPriceEl.style.color = "#d4af37";
   }
 });
+
+// ======================================================
+// 💸 Price comparison renderer
+// ======================================================
+async function renderPriceComparison(product) {
+  const section = document.getElementById("price-comparison");
+  const subtitle = document.getElementById("price-comparison-subtitle");
+  const list = document.getElementById("price-offers-list");
+  const buyLinkEl = document.getElementById("buy-link");
+  const newPriceEl = document.getElementById("new-price");
+  const oldPriceEl = document.getElementById("old-price");
+  const discountTagEl = document.getElementById("discount-tag");
+
+  if (!section || !subtitle || !list) return;
+  if (!window.BrandRadarOffersEngine || product?.id == null) return;
+
+  try {
+    const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(String(product.id));
+
+    if (!summary?.hasOffers || !Array.isArray(summary.offers) || !summary.offers.length) {
+      section.hidden = true;
+      return;
+    }
+
+    // Oppdater hovedpris til beste pris
+    newPriceEl.textContent = `Fra ${summary.lowestPriceFormatted}`;
+    oldPriceEl.textContent = "";
+    discountTagEl.textContent = "";
+
+    subtitle.textContent =
+      summary.storeCount === 1
+        ? "Vi fant 1 butikk med aktiv pris akkurat nå."
+        : `Vi fant ${summary.storeCount} butikker med aktive priser akkurat nå.`;
+
+    list.innerHTML = "";
+
+    summary.offers.forEach((offer, index) => {
+      const row = document.createElement("div");
+      row.className = "price-offer-row";
+
+      const left = document.createElement("div");
+      left.className = "price-offer-left";
+
+      const merchantName = document.createElement("div");
+      merchantName.className = "price-offer-merchant";
+      merchantName.textContent = offer.merchant_name || offer.merchant_slug || "Butikk";
+
+      const meta = document.createElement("div");
+      meta.className = "price-offer-meta";
+
+      const shippingLabel = offer.shipping_scope
+        ? offer.shipping_scope === "worldwide"
+          ? "Worldwide shipping"
+          : offer.shipping_scope
+        : "";
+
+      meta.textContent = shippingLabel || "Aktiv butikk";
+
+      left.appendChild(merchantName);
+      left.appendChild(meta);
+
+      if (index === 0) {
+        const badge = document.createElement("span");
+        badge.className = "best-price-badge";
+        badge.textContent = "Best price";
+        left.appendChild(badge);
+      }
+
+      const right = document.createElement("div");
+      right.className = "price-offer-right";
+
+      const priceWrap = document.createElement("div");
+      priceWrap.className = "price-offer-pricewrap";
+
+      const price = document.createElement("div");
+      price.className = "price-offer-price";
+      price.textContent = window.BrandRadarOffersEngine.formatPrice(offer.price, offer.currency);
+
+      priceWrap.appendChild(price);
+
+      if (offer.old_price) {
+        const oldPrice = document.createElement("div");
+        oldPrice.className = "price-offer-oldprice";
+        oldPrice.textContent = window.BrandRadarOffersEngine.formatPrice(offer.old_price, offer.currency);
+        priceWrap.appendChild(oldPrice);
+      }
+
+      const cta = document.createElement("a");
+      cta.className = "price-offer-cta";
+      cta.href = offer.affiliate_url || offer.store_url || "#";
+      cta.target = "_blank";
+      cta.rel = "noopener noreferrer";
+      cta.textContent = "Se tilbud";
+
+      right.appendChild(priceWrap);
+      right.appendChild(cta);
+
+      row.appendChild(left);
+      row.appendChild(right);
+
+      list.appendChild(row);
+    });
+
+    // Oppdater hoved CTA til billigste tilbud
+    const bestOffer = summary.offers[0];
+    if (bestOffer?.affiliate_url || bestOffer?.store_url) {
+      buyLinkEl.href = bestOffer.affiliate_url || bestOffer.store_url;
+      buyLinkEl.textContent = "Kjøp til beste pris";
+    }
+
+    section.hidden = false;
+  } catch (error) {
+    console.warn("⚠️ Klarte ikke rendre price comparison:", error);
+    section.hidden = true;
+  }
+}
 
 // ======================================================
 // ⭐ Relaterte produkter – Premium Cards
@@ -184,7 +308,6 @@ async function loadRecommendations(products, currentProduct) {
   matches.forEach(p => {
     const ratingValue = cleanRating(p.rating);
 
-    // Pris + discount
     let newPriceValue = p.price;
     let oldPriceValue = "";
 
@@ -200,22 +323,17 @@ async function loadRecommendations(products, currentProduct) {
     }
 
     const card = document.createElement("div");
-
-    // ✅ NØKKELEN: bruk global Elite v9
     card.className = "product-card";
 
     card.innerHTML = `
       ${hasDiscount ? `<div class="discount-badge">-${discountNum.toFixed(0)}%</div>` : ""}
-
       <img src="${p.image_url}" alt="${p.title}" loading="lazy">
-
       <div class="product-info">
         <p class="brand">${p.brand || ""}</p>
         <h3 class="product-name">${p.title || ""}</h3>
         <p class="rating">
           ${ratingValue ? `⭐ ${ratingValue.toFixed(1)}` : `<span style="color:#ccc;">–</span>`}
         </p>
-
         <div class="price-line">
           <span class="new-price">${newPriceValue ? `${newPriceValue} kr` : ""}</span>
           ${hasDiscount && p.price ? `<span class="old-price">${p.price} kr</span>` : ""}
@@ -223,7 +341,6 @@ async function loadRecommendations(products, currentProduct) {
       </div>
     `;
 
-    // Behold luxury-parameter hvis du er inne i luxury-modus
     const luxuryParam = currentProduct.sheet_source === "luxury" ? "&luxury=true" : "";
 
     card.addEventListener("click", () => {
@@ -271,7 +388,8 @@ const btnNext = document.querySelector(".slider-btn.next");
 function updateSliderNav() {
   if (!slider) return;
   const canScrollMore = slider.scrollWidth > slider.clientWidth + 10;
-  btnPrev.style.opacity = btnNext.style.opacity = canScrollMore ? "1" : "0";
+  if (btnPrev) btnPrev.style.opacity = canScrollMore ? "1" : "0";
+  if (btnNext) btnNext.style.opacity = canScrollMore ? "1" : "0";
 }
 
 btnPrev?.addEventListener("click", () => {
