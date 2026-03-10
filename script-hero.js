@@ -1,7 +1,9 @@
 // ===============================================
-// BrandRadar – Hero Slider v5
-// Touch: horizontal scroll + dots scrollTo()
-// Desktop: active class + optional arrows
+// BrandRadar – Hero Slider v6
+// Fix:
+// - CTA-knapp i aktiv slide er klikkbar
+// - bare aktiv slide mottar pointer events
+// - dots fungerer stabilt
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -52,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="slide-content">
             ${s.title ? `<h1>${escapeHtml(s.title)}</h1>` : ""}
             ${s.subtitle ? `<p>${escapeHtml(s.subtitle)}</p>` : ""}
-            ${s.link ? `<a href="${s.link}" class="btn">${escapeHtml(s.button_text)}</a>` : ""}
+            ${s.link ? `<a href="${escapeAttribute(s.link)}" class="btn">${escapeHtml(s.button_text)}</a>` : ""}
           </div>
         </div>
       `)
@@ -61,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const slides = Array.from(slider.querySelectorAll(".slide"));
     if (!slides.length) return;
 
-    // Build dots (buttons)
+    // Build dots
     dotsContainer.innerHTML = "";
     slides.forEach((_, idx) => {
       const btn = document.createElement("button");
@@ -72,56 +74,51 @@ document.addEventListener("DOMContentLoaded", async () => {
       dotsContainer.appendChild(btn);
     });
 
-    const dots = Array.from(dotsContainer.querySelectorAll("button.dot"));
+    const dots = Array.from(dotsContainer.querySelectorAll(".dot"));
 
-    // Current index from active
     let current = slides.findIndex(s => s.classList.contains("active"));
     if (current === -1) current = 0;
 
-    // --- helpers ---
     function setActive(index) {
       index = (index + slides.length) % slides.length;
       current = index;
 
-      slides.forEach(s => s.classList.remove("active"));
-      dots.forEach(d => d.classList.remove("active"));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === current);
+      });
 
-      slides[current].classList.add("active");
-      if (dots[current]) dots[current].classList.add("active");
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === current);
+      });
     }
 
     function scrollToSlide(index) {
       index = (index + slides.length) % slides.length;
-
       const target = slides[index];
       if (!target) return;
 
-      // Scroll container so that target aligns nicely.
-      // Works best with your CSS where slides are “card-style” in a horizontal scroller.
-      const left = target.offsetLeft - 12; // matcher padding: 12px
+      const left = target.offsetLeft - 12;
       slidesContainer.scrollTo({ left, behavior: "smooth" });
-
       setActive(index);
     }
 
-    // Determine initial active
     setActive(current);
 
-    // --- Dots click ---
+    // Dots click
     dots.forEach(dot => {
       dot.addEventListener("click", () => {
         const idx = Number(dot.dataset.index || 0);
+
         if (isTouchMode) {
           scrollToSlide(idx);
         } else {
-          // Desktop: simple active switch
           setActive(idx);
         }
+
         startAuto();
       });
     });
 
-    // --- Arrows ---
     function next() {
       const idx = current + 1;
       if (isTouchMode) scrollToSlide(idx);
@@ -134,10 +131,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       else setActive(idx);
     }
 
-    if (prevBtn) prevBtn.addEventListener("click", () => { prev(); startAuto(); });
-    if (nextBtn) nextBtn.addEventListener("click", () => { next(); startAuto(); });
+    if (prevBtn) prevBtn.addEventListener("click", () => {
+      prev();
+      startAuto();
+    });
 
-    // --- Auto play ---
+    if (nextBtn) nextBtn.addEventListener("click", () => {
+      next();
+      startAuto();
+    });
+
+    // Auto play
     let autoTimer = null;
     const AUTO_TIME = 7000;
 
@@ -151,23 +155,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       autoTimer = null;
     }
 
-    // Pause on hover (desktop only)
     if (!isTouchMode) {
       slider.addEventListener("mouseenter", stopAuto);
       slider.addEventListener("mouseleave", startAuto);
     }
 
-    // --- Sync active dot when user swipes/scrolls (touch only) ---
+    // Sync active dot on touch scroll
     if (isTouchMode) {
       let rafId = null;
 
       const onScroll = () => {
         if (rafId) cancelAnimationFrame(rafId);
+
         rafId = requestAnimationFrame(() => {
           const containerRect = slidesContainer.getBoundingClientRect();
           const centerX = containerRect.left + containerRect.width / 2;
 
-          // Find slide whose center is closest to container center
           let bestIdx = 0;
           let bestDist = Infinity;
 
@@ -175,6 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const r = slide.getBoundingClientRect();
             const slideCenter = r.left + r.width / 2;
             const dist = Math.abs(slideCenter - centerX);
+
             if (dist < bestDist) {
               bestDist = dist;
               bestIdx = idx;
@@ -188,10 +192,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       slidesContainer.addEventListener("scroll", onScroll, { passive: true });
     }
 
-    // Start
     startAuto();
 
-    // --- Util ---
     function escapeHtml(str) {
       return String(str)
         .replaceAll("&", "&amp;")
@@ -201,10 +203,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         .replaceAll("'", "&#039;");
     }
 
-    console.log("✅ Hero slider v5 klar.");
+    function escapeAttribute(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    console.log("✅ Hero slider v6 klar.");
   } catch (err) {
     console.error("❌ Klarte ikke laste HeroSlides:", err);
   }
 });
-
 
