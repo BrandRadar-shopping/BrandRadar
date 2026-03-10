@@ -139,6 +139,11 @@ async function loadFavoriteProducts() {
       })
     });
 
+const favIcon = card.querySelector(".fav-icon");
+if (favIcon) {
+  favIcon.classList.add("active");
+}
+    
     // ✅ Fjern-knapp
     const removeTag = document.createElement("span");
     removeTag.classList.add("remove-tag");
