@@ -34,6 +34,52 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================================================
+   Felles slugify – matcher CategoryMapping bedre
+   ========================================================= */
+function slugifyBrandRadar(txt) {
+  return (txt || "")
+    .toLowerCase()
+    .replace(/æ/g, "a")
+    .replace(/ø/g, "o")
+    .replace(/å/g, "a")
+    .replace(/&/g, " ")
+    .replace(/\//g, " ")
+    .replace(/\bog\b/g, " ")
+    .replace(/\band\b/g, " ")
+    .replace(/[^\w\d]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .trim();
+}
+
+function mapHeadingToGender(headerText) {
+  const lower = String(headerText || "").trim().toLowerCase();
+  if (lower === "herre") return "Men";
+  if (lower === "dame") return "Women";
+  if (lower === "barn") return "Kids";
+  return null;
+}
+
+function getKidtypeFromLink(link, genderSlug) {
+  if (genderSlug !== "Kids") return null;
+
+  const ul = link.closest("ul");
+  if (!ul) return null;
+
+  let prev = ul.previousElementSibling;
+  while (prev) {
+    if (prev.classList && prev.classList.contains("menu-subtitle")) {
+      const txt = prev.textContent.trim();
+      if (txt === "Jente" || txt === "Gutt") return txt;
+      return null;
+    }
+    prev = prev.previousElementSibling;
+  }
+
+  return null;
+}
+
+/* =========================================================
    DESKTOP: Mega-menu hover/click (category-bar -> panels)
    ========================================================= */
 function initDesktopMegaMenuHover() {
@@ -50,7 +96,7 @@ function initDesktopMegaMenuHover() {
 
   const showPanel = (key) => {
     hideAll();
-    const id = String(key || "").toLowerCase(); // Clothing -> clothing
+    const id = String(key || "").toLowerCase();
     const panel = document.getElementById(id);
     if (panel) panel.style.display = "flex";
   };
@@ -70,48 +116,50 @@ function initDesktopMegaMenuHover() {
 }
 
 /* =========================================================
-   DESKTOP: Slug routing for mega-menu links
+   DESKTOP: Routing for mega-menu links
+   - Kategorier -> category.html
+   - Toppmerker -> brand-page.html
    ========================================================= */
 function initDesktopMegaMenuRoutingSlugs() {
-  function slugify(txt) {
-    return (txt || "")
-      .toLowerCase()
-      .replace(/æ/g, "a")
-      .replace(/ø/g, "o")
-      .replace(/å/g, "a")
-      .replace(/&/g, "og")
-      .replace(/[^\w\d]+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "")
-      .trim();
-  }
-
   document.querySelectorAll("nav.mega-menu .menu-panel").forEach((panel) => {
-    const panelId = panel.id; // clothing/shoes/...
-    const categorySlug = slugify(panelId);
+    const panelId = panel.id;
+    const categorySlug = slugifyBrandRadar(panelId);
 
     panel.querySelectorAll("li a").forEach((link) => {
-      const sub = link.textContent.trim();
-      const subSlug = slugify(sub);
+      const text = link.textContent.trim();
+      const textSlug = slugifyBrandRadar(text);
 
       const section = link.closest(".menu-section");
       const headerText = section?.querySelector("h4")?.textContent.trim() || "";
-      const lower = headerText.toLowerCase();
+      const genderSlug = mapHeadingToGender(headerText);
+      const isBrandLink = section?.classList.contains("brands");
+      const kidtype = getKidtypeFromLink(link, genderSlug);
 
-      let genderSlug = null;
-      if (lower === "herre") genderSlug = "Men";
-      else if (lower === "dame") genderSlug = "Women";
-      else if (lower === "barn") genderSlug = "Kids";
+      // ✅ Toppmerker skal til brand-page
+      if (isBrandLink) {
+        link.href = `brand-page.html?brand=${encodeURIComponent(text)}`;
+        return;
+      }
 
       let url = `category.html?category=${encodeURIComponent(categorySlug)}`;
-      if (genderSlug) url += `&gender=${encodeURIComponent(genderSlug)}`;
-      if (subSlug && subSlug !== categorySlug) url += `&subcategory=${encodeURIComponent(subSlug)}`;
+
+      if (genderSlug) {
+        url += `&gender=${encodeURIComponent(genderSlug)}`;
+      }
+
+      if (kidtype) {
+        url += `&kidtype=${encodeURIComponent(kidtype)}`;
+      }
+
+      if (textSlug && textSlug !== categorySlug) {
+        url += `&subcategory=${encodeURIComponent(textSlug)}`;
+      }
 
       link.href = url;
     });
   });
 
-  console.log("✅ Desktop mega-menu routing slugs enabled");
+  console.log("✅ Desktop mega-menu routing fixed");
 }
 
 /* =========================
@@ -173,8 +221,7 @@ function initMobileDrawer() {
 }
 
 /* =========================
-   MOBILE BROWSE MENU (Zalando-style)
-   + Static tile images (default per main category)
+   MOBILE BROWSE MENU
    ========================= */
 function initMobileBrowseMenu() {
   const drawer = document.getElementById("mobileDrawer");
@@ -192,7 +239,6 @@ function initMobileBrowseMenu() {
   let currentCat = "clothing";
   let currentSeg = "Dame";
 
-  // ✅ Static images (one per main category) — fast + stable + cache-friendly
   const DEFAULT_CAT_IMAGE = {
     clothing: "assets/img/tiles/default-clothing.jpg",
     shoes: "assets/img/tiles/default-shoes.jpg",
@@ -231,6 +277,13 @@ function initMobileBrowseMenu() {
     `;
   }
 
+  function mapSegmentToGender(seg) {
+    if (seg === "Herre") return "Men";
+    if (seg === "Dame") return "Women";
+    if (seg === "Barn") return "Kids";
+    return null;
+  }
+
   function getBestSectionForSegment(panel, segment) {
     const blocks = [...panel.querySelectorAll(".menu-block")];
     for (const b of blocks) {
@@ -240,20 +293,27 @@ function initMobileBrowseMenu() {
     return blocks[0] || panel;
   }
 
-  function collectSubLinks(segmentBlock) {
+  function collectSubLinks(segmentBlock, genderSlug) {
     const nonBrandSections = [...segmentBlock.querySelectorAll(".menu-section:not(.brands)")];
     const sectionsToUse = nonBrandSections.length ? nonBrandSections : [segmentBlock];
     const links = sectionsToUse.flatMap((sec) => [...sec.querySelectorAll("ul li a")]);
 
     const seen = new Set();
     const unique = [];
+
     for (const a of links) {
-      const t = a.textContent.trim();
-      if (!t) continue;
-      if (seen.has(t)) continue;
-      seen.add(t);
-      unique.push(t);
+      const label = a.textContent.trim();
+      if (!label) continue;
+
+      const kidtype = getKidtypeFromLink(a, genderSlug);
+      const key = `${label}__${kidtype || ""}`;
+
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      unique.push({ label, kidtype });
     }
+
     return unique;
   }
 
@@ -280,16 +340,26 @@ function initMobileBrowseMenu() {
     if (!panel) return;
 
     const segmentBlock = getBestSectionForSegment(panel, currentSeg);
-    const subcats = collectSubLinks(segmentBlock);
+    const genderSlug = mapSegmentToGender(currentSeg);
+    const subcats = collectSubLinks(segmentBlock, genderSlug);
     const brands = collectBrandLinks(segmentBlock);
 
     subcatGrid.innerHTML = subcats
       .slice(0, 20)
-      .map((label) => {
-        const href =
-          `category.html?category=${encodeURIComponent(currentCat)}` +
-          `&segment=${encodeURIComponent(currentSeg)}` +
-          `&sub=${encodeURIComponent(label)}`;
+      .map(({ label, kidtype }) => {
+        let href =
+          `category.html?category=${encodeURIComponent(currentCat)}`;
+
+        if (genderSlug) {
+          href += `&gender=${encodeURIComponent(genderSlug)}`;
+        }
+
+        if (kidtype) {
+          href += `&kidtype=${encodeURIComponent(kidtype)}`;
+        }
+
+        href += `&subcategory=${encodeURIComponent(slugifyBrandRadar(label))}`;
+
         return tileHTML(label, href);
       })
       .join("");
@@ -297,7 +367,7 @@ function initMobileBrowseMenu() {
     brandRow.innerHTML = brands
       .slice(0, 12)
       .map((brand) => {
-        const href = `brands.html?brand=${encodeURIComponent(brand)}`;
+        const href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
         return `<a class="m-brand-pill" href="${href}">${escapeHtml(brand)}</a>`;
       })
       .join("");
@@ -350,8 +420,8 @@ function initMobileBrowseMenu() {
   const nav = document.querySelector(".m-bottom-nav");
   if (!nav) return;
 
-  // Active state
   const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+
   nav.querySelectorAll("[data-route]").forEach(a => {
     const route = a.getAttribute("data-route");
     const hit =
@@ -380,3 +450,4 @@ function initMobileBrowseMenu() {
     }
   });
 })();
+
