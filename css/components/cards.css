@@ -362,7 +362,28 @@
   }
 }
 
+/* ============================================
+   OFFER SUMMARY – index / featured / trending
+============================================ */
 
+.product-card .offer-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.25rem;
+}
+
+.product-card .offer-summary-price {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.product-card .offer-summary-count {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #2563eb;
+}
 
 
 
