@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- KONSTANTER ----------
   const PICKS_URL =
-  "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks";
+    "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks";
 
   const BRAND_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const BRAND_TAB = "BrandRadarProdukter";
@@ -40,8 +40,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!price && oldPrice && discount) price = oldPrice * (1 - discount / 100);
     if (price && !oldPrice && discount) oldPrice = price / (1 - discount / 100);
-    if (price && oldPrice && !discount && oldPrice > price)
+    if (price && oldPrice && !discount && oldPrice > price) {
       discount = ((oldPrice - price) / oldPrice) * 100;
+    }
 
     if (discount != null) discount = Math.round(discount);
 
@@ -73,52 +74,65 @@ document.addEventListener("DOMContentLoaded", async () => {
     return html;
   }
 
+  function buildOfferSummaryMarkup(summary) {
+    if (!summary?.hasOffers) return "";
+
+    const storeLabel = summary.storeCount === 1 ? "1 butikk" : `${summary.storeCount} butikker`;
+
+    return `
+      <div class="offer-summary">
+        <div class="offer-summary-price">Fra ${summary.lowestPriceFormatted}</div>
+        <div class="offer-summary-count">${storeLabel}</div>
+      </div>
+    `;
+  }
+
   // ======================================================
   // ⭐ PRODUKTKORT (ELITE DESIGN – FELLES FOR INDEX)
   // ======================================================
 
   function buildProductCardMarkup(p) {
-  const name = getProductName(p);
-  const id = resolveProductId(p);
-  const priceBlock = buildPriceBlock(p);
+    const name = getProductName(p);
+    const id = resolveProductId(p);
+    const priceBlock = buildPriceBlock(p);
+    const offerSummaryMarkup = buildOfferSummaryMarkup(p.offer_summary);
 
-  const rawImg = (p.image_url || "").trim();
+    const rawImg = (p.image_url || "").trim();
 
-  // ✅ Fallback image (hindrer “broken image”-ikon + rare kort)
-  const fallbackSvg =
-    "data:image/svg+xml;utf8," +
-    encodeURIComponent(`
-      <svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'>
-        <rect width='100%' height='100%' fill='#f3f4f6'/>
-        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
-              font-family='Arial' font-size='32' fill='#9ca3af'>
-          Bilde kommer
-        </text>
-      </svg>
-    `);
-
-  const imgSrc = rawImg ? rawImg : fallbackSvg;
-
-  return `
-    <div class="product-card ${rawImg ? "" : "no-image"}" data-id="${id}">
-      <div class="fav-icon" data-id="${id}">
-        <svg class="heart-icon" viewBox="0 0 24 24">
-          <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+    const fallbackSvg =
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`
+        <svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'>
+          <rect width='100%' height='100%' fill='#f3f4f6'/>
+          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+                font-family='Arial' font-size='32' fill='#9ca3af'>
+            Bilde kommer
+          </text>
         </svg>
-      </div>
+      `);
 
-      <div class="product-image-wrapper">
-        <img src="${imgSrc}" alt="${name}" loading="lazy">
-      </div>
+    const imgSrc = rawImg ? rawImg : fallbackSvg;
 
-      <div class="product-info">
-        <p class="brand">${p.brand || ""}</p>
-        <h3 class="product-title">${name}</h3>
-        ${priceBlock}
+    return `
+      <div class="product-card ${rawImg ? "" : "no-image"}" data-id="${id}">
+        <div class="fav-icon" data-id="${id}">
+          <svg class="heart-icon" viewBox="0 0 24 24">
+            <path d="M12.1 21.35l-1.1-.99C5.14 15.36 2 12.54 2 8.9 2 6.08 4.08 4 6.9 4c1.54 0 3.04.72 4 1.86C11.96 4.72 13.46 4 15 4c2.82 0 4.9 2.08 4.9 4.9 0 3.64-3.14 6.46-8.99 11.46l-1.81 1z"></path>
+          </svg>
+        </div>
+
+        <div class="product-image-wrapper">
+          <img src="${imgSrc}" alt="${name}" loading="lazy">
+        </div>
+
+        <div class="product-info">
+          <p class="brand">${p.brand || ""}</p>
+          <h3 class="product-title">${name}</h3>
+          ${p.offer_summary?.hasOffers ? offerSummaryMarkup : priceBlock}
+        </div>
       </div>
-    </div>
-  `;
-}
+    `;
+  }
 
   // ======================================================
   // ⭐ NAVIGASJON + FAVORITTHJERTE
@@ -155,32 +169,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
- // ======================================================
-// ⭐️ RADAR PICKS (OpenSheet JSON – robust)
-// ======================================================
+  // ======================================================
+  // ⭐️ RADAR PICKS (OpenSheet JSON – robust)
+  // ======================================================
 
-async function loadFeaturedPicks() {
-  const grid = document.getElementById("featured-grid");
-  if (!grid) return;
+  async function loadFeaturedPicks() {
+    const grid = document.getElementById("featured-grid");
+    if (!grid) return;
 
-  try {
-    const res = await fetch(PICKS_URL);
-    if (!res.ok) {
-      throw new Error(`Radar Picks fetch failed: ${res.status}`);
-    }
+    try {
+      const res = await fetch(PICKS_URL);
+      if (!res.ok) {
+        throw new Error(`Radar Picks fetch failed: ${res.status}`);
+      }
 
-    const data = await res.json();
-    const items = Array.isArray(data) ? data : [];
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : [];
 
-    const featured = items.filter(
-      p => String(p.featured || "").toLowerCase() === "true"
-    );
+      const featured = items.filter(
+        p => String(p.featured || "").toLowerCase() === "true"
+      );
 
-    grid.innerHTML = "";
-    const orderedProducts = [];
-
-    featured.forEach(p => {
-      const product = {
+      const baseProducts = featured.map(p => ({
         ...p,
         id: p.id || p.product_name,
         product_name: p.product_name,
@@ -190,24 +200,33 @@ async function loadFeaturedPicks() {
         discount: p.discount,
         old_price: p.old_price,
         rating: p.rating
-      };
+      }));
 
-      const wrap = document.createElement("div");
-      wrap.innerHTML = buildProductCardMarkup(product);
+      const enrichedProducts =
+        window.BrandRadarOffersEngine
+          ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
+          : baseProducts;
 
-      if (wrap.firstElementChild) {
-        grid.appendChild(wrap.firstElementChild);
-        orderedProducts.push(product);
-      }
-    });
+      grid.innerHTML = "";
+      const orderedProducts = [];
 
-    attachProductCardNavigation(grid, orderedProducts);
+      enrichedProducts.forEach(product => {
+        const wrap = document.createElement("div");
+        wrap.innerHTML = buildProductCardMarkup(product);
 
-  } catch (err) {
-    console.error("❌ Klarte ikke laste Radar Picks:", err);
-    grid.innerHTML = "";
+        if (wrap.firstElementChild) {
+          grid.appendChild(wrap.firstElementChild);
+          orderedProducts.push(product);
+        }
+      });
+
+      attachProductCardNavigation(grid, orderedProducts);
+    } catch (err) {
+      console.error("❌ Klarte ikke laste Radar Picks:", err);
+      grid.innerHTML = "";
+    }
   }
-}
+
   // ======================================================
   // ⭐ TRENDING NOW
   // ======================================================
@@ -249,24 +268,31 @@ async function loadFeaturedPicks() {
       });
 
       const limited = active.slice(0, 10);
-      const orderedProducts = [];
 
+      const baseProducts = limited.map(({ row, product }) => ({
+        ...product,
+        product_name: getProductName(product),
+        id: resolveProductId(product),
+        highlight_reason: row.highlight_reason
+      }));
+
+      const enrichedProducts =
+        window.BrandRadarOffersEngine
+          ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
+          : baseProducts;
+
+      const orderedProducts = [];
       container.innerHTML = "";
 
-      limited.forEach(({ row, product }) => {
-        const enriched = {
-          ...product,
-          product_name: getProductName(product),
-          id: resolveProductId(product),
-          highlight_reason: row.highlight_reason
-        };
-
+      enrichedProducts.forEach(product => {
         const wrapper = document.createElement("div");
-        wrapper.innerHTML = buildProductCardMarkup(enriched);
+        wrapper.innerHTML = buildProductCardMarkup(product);
         const cardEl = wrapper.firstElementChild;
 
-        container.appendChild(cardEl);
-        orderedProducts.push(enriched);
+        if (cardEl) {
+          container.appendChild(cardEl);
+          orderedProducts.push(product);
+        }
       });
 
       attachProductCardNavigation(container, orderedProducts);
@@ -312,12 +338,10 @@ async function loadFeaturedPicks() {
       const res = await fetch(url);
       const data = await res.json();
 
-      // 1. Filtrer highlight
       const highlights = data.filter(
         b => (b.highlight || "").toLowerCase() === "yes"
       );
 
-      // 2. Sortering
       highlights.sort((a, b) =>
         a.brand.localeCompare(b.brand, "no", { sensitivity: "base" })
       );
@@ -356,11 +380,10 @@ async function loadFeaturedPicks() {
   // RUN EVERYTHING
   // ======================================================
 
-  loadFeaturedPicks();
-  loadTrendingNow();
-  loadTopBrands();
+  await loadFeaturedPicks();
+  await loadTrendingNow();
+  await loadTopBrands();
 });
-
 
 
 
