@@ -16,7 +16,7 @@
   overflow: hidden;
   padding: 0;
   margin: 0;
-  isolation: isolate; /* nødvendig for lagdeling */
+  isolation: isolate;
   --parallax-x: 0px;
   --parallax-y: 0px;
 }
@@ -30,7 +30,7 @@
   background:
     radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.45) 70%),
     linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 40%);
-  z-index: 2; /* Ligger over bildene, men under tekst/arrows */
+  z-index: 2;
 }
 
 /* --- Radar pulse --- */
@@ -48,6 +48,7 @@
   animation: radarWave 6s ease-out infinite;
   opacity: 0.6;
   z-index: 2;
+  pointer-events: none;
 }
 
 @keyframes radarWave {
@@ -60,9 +61,9 @@
 .hero-slider .slides {
   position: relative;
   width: 100%;
-  height: 100%;        /* 🧱 Arver nå høyden fra hero-slider */
-  min-height: inherit; /* ekstra sikkerhet */
-  z-index: 0;          /* slides nederst */
+  height: 100%;
+  min-height: inherit;
+  z-index: 0;
 }
 
 /* --- Enkelt-slide --- */
@@ -73,23 +74,25 @@
   background-position: center center;
   background-repeat: no-repeat;
   opacity: 0;
-  transform: scale(1.03)
-    translate(var(--parallax-x), var(--parallax-y));
+  pointer-events: none;
+  transform: scale(1.03) translate(var(--parallax-x), var(--parallax-y));
   transition:
     opacity 0.9s ease-in-out,
     transform 8s ease-out;
-  z-index: 0; /* eksplisitt: ligger bak overlay */
+  z-index: 0;
 }
 
 .hero-slider .slide.active {
   opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 /* --- Glassmorphism content --- */
 .hero-slider .slide-content {
   position: absolute;
   left: 50%;
-  top: 52%;  /* litt høyere, så den ikke “kolliderer” visuelt med header */
+  top: 52%;
   transform: translate(-50%, -50%);
   text-align: center;
   max-width: 520px;
@@ -99,7 +102,12 @@
   border: 1px solid rgba(255,255,255,0.28);
   backdrop-filter: blur(18px);
   box-shadow: 0 18px 60px rgba(0,0,0,0.45);
-  z-index: 3; /* ligger over vignette + bilde */
+  z-index: 3;
+}
+
+.hero-slider .slide-content,
+.hero-slider .slide-content * {
+  pointer-events: auto;
 }
 
 .hero-slider .slide-content h1 {
@@ -127,9 +135,13 @@
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.22s ease, box-shadow 0.22s ease,
-              background-position 0.4s ease;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background-position 0.4s ease;
   background-size: 200% auto;
+  position: relative;
+  z-index: 4;
 }
 
 .hero-slider .slide-content .btn:hover {
@@ -154,11 +166,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 4; /* øverst */
+  z-index: 4;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
-  transition: transform 0.2s ease, background 0.2s ease,
-              border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .hero-slider .nav.prev { left: 24px; }
@@ -180,24 +195,26 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  z-index: 4; /* helt øverst */
+  z-index: 4;
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(0,0,0,0.35);
   backdrop-filter: blur(10px);
 }
 
-.hero-slider .dots span {
+.hero-slider .dots .dot {
   width: 8px;
   height: 8px;
   border-radius: 999px;
+  border: 0;
   background: rgba(255,255,255,0.45);
   transition: width 0.25s ease, background 0.25s ease, opacity 0.25s ease;
   opacity: 0.6;
   cursor: pointer;
+  padding: 0;
 }
 
-.hero-slider .dots span.active {
+.hero-slider .dots .dot.active {
   width: 18px;
   background: #fff;
   opacity: 1;
@@ -209,10 +226,12 @@
     height: 70vh;
     min-height: 380px;
   }
+
   .hero-slider .slide-content {
     width: 90%;
     padding: 1.6rem 1.8rem;
   }
+
   .hero-slider .slide-content h1 {
     font-size: 1.9rem;
   }
@@ -225,6 +244,7 @@
     font-size: 1.2rem;
     top: 52%;
   }
+
   .hero-slider .slide-content {
     top: 55%;
     padding: 1.4rem 1.5rem;
