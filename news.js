@@ -1,9 +1,9 @@
 // ======================================================
-// 📰 BrandRadar – News page (MASTER-driven, Elite cards)
+// 📰 BrandRadar – News page (MASTER-driven, Editorial + Elite cards)
 //  - Partner banner
 //  - Ukens Deals (1 rad slider + piler)
 //  - Radar Picks (1 rad slider + piler)
-//  - Ukens Spotlight (stor slider + piler)
+//  - Ukens Spotlight (stor editorial slider + piler)
 //  - Nye Produkter & Trender (grid)
 // ======================================================
 
@@ -29,10 +29,19 @@
   // ---------- DOM ----------
   const partnerBannerEl = document.querySelector(".partner-banner");
 
-  const dealsTrack = document.getElementById("deals-track") || document.querySelector(".deals-grid");
-  const picksTrack = document.getElementById("picks-track") || document.querySelector(".picks-grid");
-  const spotlightTrack = document.getElementById("spotlight-track") || document.querySelector("#featured-news .featured-wrapper");
-  const newsGridEl = document.querySelector("#news-grid");
+  const dealsTrack =
+    document.getElementById("deals-track") ||
+    document.querySelector(".deals-grid");
+
+  const picksTrack =
+    document.getElementById("picks-track") ||
+    document.querySelector(".picks-grid");
+
+  const spotlightTrack =
+    document.getElementById("spotlight-track") ||
+    document.querySelector("#featured-news .featured-wrapper");
+
+  const newsGridEl = document.getElementById("news-grid");
 
   // ---------- HELPERS ----------
   const nb = new Intl.NumberFormat("nb-NO");
@@ -40,14 +49,21 @@
   const cleanRatingFn =
     window.cleanRating ||
     function (value) {
-      if (!value) return null;
-      const n = parseFloat(String(value).replace(",", ".").replace(/[^0-9.\-]/g, ""));
+      if (!value && value !== 0) return null;
+      const n = parseFloat(
+        String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
+      );
       return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : null;
     };
 
   function parseNum(v) {
     if (v == null || v === "") return null;
-    const n = Number(String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", "."));
+    const n = Number(
+      String(v)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,\-]/g, "")
+        .replace(",", ".")
+    );
     return Number.isFinite(n) ? n : null;
   }
 
@@ -62,11 +78,34 @@
     return s === "true" || s === "1" || s === "ja" || s === "yes";
   }
 
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   async function fetchJson(sheetId, tab) {
     const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Feil ved henting av ${tab}: ${res.status}`);
+    if (!res.ok) {
+      throw new Error(`Feil ved henting av ${tab}: ${res.status}`);
+    }
     return res.json();
+  }
+
+  function resolveProductIdSafe(productLike) {
+    if (typeof window.resolveProductId === "function") {
+      return window.resolveProductId(productLike);
+    }
+    return (
+      productLike?.id ||
+      productLike?.product_id ||
+      productLike?.productId ||
+      ""
+    );
   }
 
   function createProductBaseFromMaster(masterRow) {
@@ -82,14 +121,11 @@
       product_url: masterRow.product_url || "",
       category: masterRow.category || masterRow.main_category || "",
       rating: masterRow.rating || "",
-      luxury: false,
+      luxury: parseBool(masterRow.luxury),
       sheet_source: masterRow.sheet_source || "master"
     };
 
-    if (typeof window.resolveProductId === "function") {
-      base.id = window.resolveProductId(base);
-    }
-
+    base.id = resolveProductIdSafe(base);
     return base;
   }
 
@@ -113,9 +149,7 @@
   function buildRatingMarkup(ratingValue) {
     const rating = cleanRatingFn(ratingValue);
 
-    if (rating == null) {
-      return "";
-    }
+    if (rating == null) return "";
 
     const stars = Array.from({ length: 5 }, (_, index) => {
       const fill = Math.max(0, Math.min(1, rating - index)) * 100;
@@ -132,18 +166,7 @@
     `;
   }
 
-  // ---------- ELITE CARD ----------
-  function buildEliteCard(prod, options = {}) {
-    const { showExcerpt = false, excerpt = "", tag = "", extraClasses = "" } = options;
-
-    const pid =
-      typeof window.resolveProductId === "function"
-        ? window.resolveProductId(prod)
-        : prod.id || prod.product_id || "";
-
-    prod.id = pid;
-
-    const ratingMarkup = buildRatingMarkup(prod.rating);
+  function getPriceState(prod) {
     const priceNum = parseNum(prod.price);
     const discountNum = prod.discount ? parseNum(prod.discount) : null;
 
@@ -160,6 +183,47 @@
       newPriceNum = priceNum;
     }
 
+    return {
+      priceNum,
+      discountNum,
+      newPriceNum,
+      oldPriceNum,
+      discountPct
+    };
+  }
+
+  function buildFavoritePayload(prod, pid) {
+    return {
+      id: pid,
+      title: prod.title || "",
+      product_name: prod.title || "",
+      brand: prod.brand || "",
+      price: prod.price || "",
+      discount: prod.discount || "",
+      image_url: prod.image_url || "",
+      product_url: prod.product_url || "",
+      category: prod.category || "",
+      rating: prod.rating ?? "",
+      luxury: !!prod.luxury
+    };
+  }
+
+  // ---------- ELITE CARD ----------
+  function buildEliteCard(prod, options = {}) {
+    const {
+      showExcerpt = false,
+      excerpt = "",
+      tag = "",
+      extraClasses = "",
+      onCardClick = null
+    } = options;
+
+    const pid = resolveProductIdSafe(prod);
+    prod.id = pid;
+
+    const ratingMarkup = buildRatingMarkup(prod.rating);
+    const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
+
     const isFav =
       typeof window.isProductFavorite === "function" && pid
         ? window.isProductFavorite(pid)
@@ -167,6 +231,7 @@
 
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
+    card.setAttribute("data-product-id", pid || "");
 
     card.innerHTML = `
       ${discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
@@ -174,7 +239,7 @@
       <button
         type="button"
         class="favorite-toggle ${isFav ? "active" : ""}"
-        aria-label="Legg til favoritt"
+        aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
       >
         <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
@@ -184,14 +249,14 @@
         </svg>
       </button>
 
-      <img src="${prod.image_url || ""}" alt="${prod.title || ""}" loading="lazy">
+      <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
 
       <div class="product-info">
-        <p class="brand">${prod.brand || ""}</p>
-        <h3 class="product-name">${prod.title || ""}</h3>
+        <p class="brand">${escapeHtml(prod.brand || "")}</p>
+        <h3 class="product-name">${escapeHtml(prod.title || "")}</h3>
 
-        ${showExcerpt && excerpt ? `<p class="tagline">${excerpt}</p>` : ""}
-        ${tag ? `<p class="product-tag">${tag}</p>` : ""}
+        ${showExcerpt && excerpt ? `<p class="tagline">${escapeHtml(excerpt)}</p>` : ""}
+        ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
 
         ${ratingMarkup}
 
@@ -202,50 +267,145 @@
       </div>
     `;
 
-    const navigateToProduct = () => {
+    const defaultNavigateToProduct = () => {
       if (!pid) return;
       window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
     };
 
     card.addEventListener("click", (e) => {
       if (e.target.closest(".favorite-toggle")) return;
-      navigateToProduct();
+
+      if (typeof onCardClick === "function") {
+        onCardClick(prod, card, e);
+        return;
+      }
+
+      defaultNavigateToProduct();
     });
 
     const favButton = card.querySelector(".favorite-toggle");
     favButton?.addEventListener("click", (e) => {
       e.stopPropagation();
 
-      if (typeof window.toggleFavorite !== "function") return;
-
-      const favoritePayload = {
-        id: pid,
-        title: prod.title || "",
-        product_name: prod.title || "",
-        brand: prod.brand || "",
-        price: prod.price || "",
-        discount: prod.discount || "",
-        image_url: prod.image_url || "",
-        product_url: prod.product_url || "",
-        category: prod.category || "",
-        rating: prod.rating ?? "",
-        luxury: !!prod.luxury
-      };
+      if (typeof window.toggleFavorite !== "function" || !pid) return;
 
       const existsBefore =
-        typeof window.isProductFavorite === "function" && pid
+        typeof window.isProductFavorite === "function"
           ? window.isProductFavorite(pid)
           : false;
 
-      window.toggleFavorite(favoritePayload, favButton);
-      favButton.classList.toggle("active", !existsBefore);
+      window.toggleFavorite(buildFavoritePayload(prod, pid), favButton);
+
+      const existsAfter =
+        typeof window.isProductFavorite === "function"
+          ? window.isProductFavorite(pid)
+          : !existsBefore;
+
+      favButton.classList.toggle("active", existsAfter);
+      favButton.setAttribute(
+        "aria-label",
+        existsAfter ? "Fjern fra favoritter" : "Legg til favoritt"
+      );
     });
 
     return card;
   }
 
+  // ---------- SPOTLIGHT CARD ----------
+  function buildSpotlightCard(prod, options = {}) {
+    const {
+      excerpt = "",
+      tag = "Spotlight",
+      secondaryTag = "",
+      ctaText = "Se produkt",
+      extraClasses = "",
+      onCardClick = null
+    } = options;
+
+    const pid = resolveProductIdSafe(prod);
+    prod.id = pid;
+
+    const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
+    const ratingMarkup = buildRatingMarkup(prod.rating);
+
+    const article = document.createElement("article");
+    article.className = `spotlight-feature ${extraClasses}`.trim();
+    article.setAttribute("data-product-id", pid || "");
+
+    article.innerHTML = `
+      <div class="spotlight-media">
+        <span class="spotlight-overlay-badge">Spotlight</span>
+        <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
+      </div>
+
+      <div class="spotlight-content">
+        <div class="spotlight-meta">
+          ${tag ? `<span class="spotlight-chip">${escapeHtml(tag)}</span>` : ""}
+          ${secondaryTag ? `<span class="spotlight-chip">${escapeHtml(secondaryTag)}</span>` : ""}
+        </div>
+
+        <h3>${escapeHtml(prod.title || "Ukens Spotlight")}</h3>
+
+        ${
+          excerpt
+            ? `<p>${escapeHtml(excerpt)}</p>`
+            : `<p>Et håndplukket fokuspunkt fra BrandRadar denne uken.</p>`
+        }
+
+        ${ratingMarkup ? `<div class="spotlight-rating">${ratingMarkup}</div>` : ""}
+
+        <div class="spotlight-price-row">
+          ${
+            newPriceNum != null
+              ? `<span class="spotlight-price">${formatPrice(newPriceNum)}</span>`
+              : ""
+          }
+          ${
+            oldPriceNum != null
+              ? `<span class="spotlight-old-price">${formatPrice(oldPriceNum)}</span>`
+              : ""
+          }
+          ${
+            discountPct
+              ? `<span class="spotlight-discount">-${discountPct}%</span>`
+              : ""
+          }
+        </div>
+
+        <div class="spotlight-actions">
+          <button type="button" class="spotlight-btn spotlight-btn--primary js-spotlight-cta">
+            ${escapeHtml(ctaText)}
+          </button>
+          ${
+            prod.brand
+              ? `<span class="spotlight-brand">${escapeHtml(prod.brand)}</span>`
+              : ""
+          }
+        </div>
+      </div>
+    `;
+
+    const triggerOpen = (event) => {
+      if (typeof onCardClick === "function") {
+        onCardClick(prod, article, event);
+        return;
+      }
+
+      if (!pid) return;
+      window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+    };
+
+    article.addEventListener("click", triggerOpen);
+    article.querySelector(".js-spotlight-cta")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      triggerOpen(e);
+    });
+
+    return article;
+  }
+
   // ---------- ARROW SLIDER ----------
-  function initArrowSlider(trackEl) {
+  function initArrowSlider(trackEl, options = {}) {
     if (!trackEl) return;
 
     const wrapper = trackEl.closest(".slider-wrapper");
@@ -253,23 +413,44 @@
 
     const btnPrev = wrapper.querySelector(".slider-btn.prev");
     const btnNext = wrapper.querySelector(".slider-btn.next");
+    const stepOverride = options.step || null;
+
+    function getFirstSlide() {
+      return (
+        trackEl.firstElementChild ||
+        trackEl.querySelector(".product-card") ||
+        trackEl.querySelector(".spotlight-feature")
+      );
+    }
 
     function getStep() {
-      const first = trackEl.querySelector(".product-card");
-      if (!first) return 320;
+      if (typeof stepOverride === "number" && stepOverride > 0) {
+        return stepOverride;
+      }
+
+      const first = getFirstSlide();
+      if (!first) return Math.max(280, Math.round(trackEl.clientWidth * 0.9));
+
       const rect = first.getBoundingClientRect();
-      return Math.max(260, Math.round(rect.width + 18));
+      const styles = window.getComputedStyle(trackEl);
+      const gap = parseFloat(styles.columnGap || styles.gap || "18") || 18;
+
+      return Math.max(260, Math.round(rect.width + gap));
     }
 
     function updateButtons() {
       const canScroll = trackEl.scrollWidth > trackEl.clientWidth + 8;
+
+      if (!btnPrev || !btnNext) return;
+
       if (!canScroll) {
-        if (btnPrev) btnPrev.style.display = "none";
-        if (btnNext) btnNext.style.display = "none";
+        btnPrev.style.display = "none";
+        btnNext.style.display = "none";
         return;
       }
-      if (btnPrev) btnPrev.style.display = "";
-      if (btnNext) btnNext.style.display = "";
+
+      btnPrev.style.display = "";
+      btnNext.style.display = "";
     }
 
     btnPrev?.addEventListener("click", () => {
@@ -281,7 +462,8 @@
     });
 
     window.addEventListener("resize", updateButtons);
-    setTimeout(updateButtons, 150);
+    setTimeout(updateButtons, 120);
+    setTimeout(updateButtons, 350);
   }
 
   // ======================================================
@@ -292,20 +474,25 @@
 
     try {
       const rows = await fetchJson(PARTNER_SHEET_ID, PARTNER_TAB);
-      const row = rows[0];
-      if (!row) return;
+      const row = rows?.[0];
+
+      if (!row) {
+        partnerBannerEl.classList.remove("loading");
+        partnerBannerEl.textContent = "Ingen partnerkampanje akkurat nå.";
+        return;
+      }
 
       partnerBannerEl.classList.remove("loading");
       partnerBannerEl.innerHTML = `
         <div class="partner-banner-inner">
           <div class="partner-banner-text">
-            <p class="partner-tag">${row.campaign_name || "Ukens partner"}</p>
-            <h2>${row.description || ""}</h2>
-            <p class="partner-sub">${row.alt_text || ""}</p>
+            <p class="partner-tag">${escapeHtml(row.campaign_name || "Ukens partner")}</p>
+            <h2>${escapeHtml(row.description || "")}</h2>
+            <p class="partner-sub">${escapeHtml(row.alt_text || "")}</p>
             ${
               row.link
-                ? `<a href="${row.link}" target="_blank" class="partner-cta">
-                    ${row.cta_text || "Se kampanjen"}
+                ? `<a href="${escapeHtml(row.link)}" target="_blank" rel="noopener noreferrer" class="partner-cta">
+                    ${escapeHtml(row.cta_text || "Se kampanjen")}
                    </a>`
                 : ""
             }
@@ -313,7 +500,7 @@
           ${
             row.image_url
               ? `<div class="partner-banner-image">
-                   <img src="${row.image_url}" alt="${row.alt_text || row.campaign_name || ""}">
+                   <img src="${escapeHtml(row.image_url)}" alt="${escapeHtml(row.alt_text || row.campaign_name || "")}">
                  </div>`
               : ""
           }
@@ -321,6 +508,7 @@
       `;
     } catch (err) {
       console.error("❌ Partner banner error:", err);
+      partnerBannerEl.classList.remove("loading");
       partnerBannerEl.textContent = "Kunne ikke laste partnerkampanjen.";
     }
   }
@@ -333,6 +521,7 @@
 
     try {
       const rows = await fetchJson(DEALS_SHEET_ID, DEALS_TAB);
+
       dealsTrack.classList.remove("loading");
       dealsTrack.innerHTML = "";
 
@@ -345,30 +534,36 @@
         const oldPrice = parseNum(d.old_price);
         const newPrice = parseNum(d.new_price);
         const discount =
-          oldPrice && newPrice ? Math.round(((oldPrice - newPrice) / oldPrice) * 100) : null;
+          oldPrice && newPrice
+            ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
+            : null;
 
         const prod = {
           id: d.id || d.product_id || `deal_${index}`,
-          title: d.product_name || "",
+          title: d.product_name || d.title || "",
           brand: d.brand || "",
           price: newPrice != null ? newPrice : oldPrice,
           discount,
           image_url: d.image_url || "",
-          product_url: d.link || "",
-          rating: null,
+          product_url: d.link || d.product_url || "",
+          rating: d.rating || "",
           luxury: false,
           category: d.category || ""
         };
 
-        if (typeof window.resolveProductId === "function") {
-          prod.id = window.resolveProductId(prod);
-        }
+        prod.id = resolveProductIdSafe(prod);
 
-        const card = buildEliteCard(prod, { extraClasses: "deal-card" });
-
-        card.addEventListener("click", (e) => {
-          if (e.target.closest(".favorite-toggle")) return;
-          if (prod.product_url) window.open(prod.product_url, "_blank");
+        const card = buildEliteCard(prod, {
+          extraClasses: "deal-card",
+          onCardClick: (product) => {
+            if (product.product_url) {
+              window.open(product.product_url, "_blank", "noopener");
+              return;
+            }
+            if (product.id) {
+              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+            }
+          }
         });
 
         dealsTrack.appendChild(card);
@@ -377,6 +572,7 @@
       initArrowSlider(dealsTrack);
     } catch (err) {
       console.error("❌ Deals error:", err);
+      dealsTrack.classList.remove("loading");
       dealsTrack.textContent = "Kunne ikke laste deals.";
     }
   }
@@ -389,6 +585,7 @@
 
     try {
       const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
+
       picksTrack.classList.remove("loading");
       picksTrack.innerHTML = "";
 
@@ -400,30 +597,32 @@
       rows.forEach((p, index) => {
         const prod = {
           id: p.id || p.product_id || `pick_${index}`,
-          title: p.product_name || "",
+          title: p.product_name || p.title || "",
           brand: p.brand || "",
           price: p.price || "",
           discount: p.discount || "",
           image_url: p.image_url || "",
-          product_url: p.link || "",
+          product_url: p.link || p.product_url || "",
           rating: p.rating || "",
-          luxury: false,
+          luxury: parseBool(p.luxury),
           category: p.category || ""
         };
 
-        if (typeof window.resolveProductId === "function") {
-          prod.id = window.resolveProductId(prod);
-        }
+        prod.id = resolveProductIdSafe(prod);
 
         const card = buildEliteCard(prod, {
           showExcerpt: false,
           tag: p.reason || "",
-          extraClasses: "pick-card"
-        });
-
-        card.addEventListener("click", (e) => {
-          if (e.target.closest(".favorite-toggle")) return;
-          if (prod.product_url) window.open(prod.product_url, "_blank");
+          extraClasses: "pick-card",
+          onCardClick: (product) => {
+            if (product.product_url) {
+              window.open(product.product_url, "_blank", "noopener");
+              return;
+            }
+            if (product.id) {
+              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+            }
+          }
         });
 
         picksTrack.appendChild(card);
@@ -432,6 +631,7 @@
       initArrowSlider(picksTrack);
     } catch (err) {
       console.error("❌ Picks error:", err);
+      picksTrack.classList.remove("loading");
       picksTrack.textContent = "Kunne ikke laste picks.";
     }
   }
@@ -448,13 +648,17 @@
         fetchJson(MASTER_SHEET_ID, MASTER_TAB)
       ]);
 
+      const masterById = new Map(
+        masterRows.map((row) => [String(row.id || "").trim(), row])
+      );
+
       const merged = [];
 
       newsRows.forEach((row) => {
         const id = String(row.id || "").trim();
         if (!id) return;
 
-        const master = masterRows.find((p) => String(p.id || "").trim() === id);
+        const master = masterById.get(id);
         if (!master) return;
 
         const base = createProductBaseFromMaster(master);
@@ -464,13 +668,16 @@
           product: base,
           spotlight: parseBool(row.spotlight),
           showInFeed: parseBool(row.show_in_feed),
-          excerpt: row.excerpt || "",
+          excerpt: row.excerpt || row.description || "",
           tag: row.tag || "",
           priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
         });
       });
 
-      const spotlightItems = merged.filter((m) => m.spotlight);
+      const spotlightItems = merged
+        .filter((m) => m.spotlight)
+        .sort((a, b) => a.priority - b.priority);
+
       const feedItems = merged
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
@@ -483,13 +690,18 @@
           spotlightTrack.textContent = "Ingen spotlight-produkter akkurat nå.";
         } else {
           spotlightItems.forEach((item) => {
-            const card = buildEliteCard(item.product, {
-              showExcerpt: true,
+            const spotlightCard = buildSpotlightCard(item.product, {
               excerpt: item.excerpt,
               tag: item.tag || "Spotlight",
-              extraClasses: "featured-card featured-large"
+              secondaryTag: item.product.brand || item.product.category || "",
+              ctaText: "Explore spotlight",
+              onCardClick: (product) => {
+                if (!product?.id) return;
+                window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+              }
             });
-            spotlightTrack.appendChild(card);
+
+            spotlightTrack.appendChild(spotlightCard);
           });
 
           initArrowSlider(spotlightTrack);
@@ -512,16 +724,28 @@
             tag: item.tag || "",
             extraClasses: "news-card"
           });
+
           newsGridEl.appendChild(card);
         });
       }
     } catch (err) {
       console.error("❌ News sections error:", err);
-      if (spotlightTrack) spotlightTrack.textContent = "Kunne ikke laste spotlight.";
-      if (newsGridEl) newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
+
+      if (spotlightTrack) {
+        spotlightTrack.classList.remove("loading");
+        spotlightTrack.textContent = "Kunne ikke laste spotlight.";
+      }
+
+      if (newsGridEl) {
+        newsGridEl.classList.remove("loading");
+        newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
+      }
     }
   }
 
+  // ======================================================
+  // INIT
+  // ======================================================
   document.addEventListener("DOMContentLoaded", () => {
     loadPartnerBanner();
     loadDeals();
