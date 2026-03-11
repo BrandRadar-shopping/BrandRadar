@@ -28,6 +28,63 @@ function isTruthyLuxury(value) {
   return false;
 }
 
+function normalizeText(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isLuxuryBrand(brand) {
+  const luxuryBrands = [
+    "louis vuitton",
+    "gucci",
+    "prada",
+    "dior",
+    "hermès",
+    "hermes",
+    "chanel",
+    "saint laurent",
+    "ysl",
+    "balenciaga",
+    "givenchy",
+    "fendi",
+    "burberry",
+    "valentino",
+    "versace",
+    "bottega veneta",
+    "loewe",
+    "celine",
+    "cartier",
+    "rolex",
+    "omega",
+    "tag heuer",
+    "patek philippe",
+    "audemars piguet",
+    "richard mille",
+    "hublot"
+  ];
+
+  return luxuryBrands.includes(normalizeText(brand));
+}
+
+function inferLuxury(product) {
+  if (!product || typeof product !== "object") return false;
+
+  if (isTruthyLuxury(product.luxury)) return true;
+  if (isTruthyLuxury(product.is_luxury)) return true;
+
+  const tier = normalizeText(product.tier);
+  if (tier === "luxury" || tier === "premium") return true;
+
+  const sheetSource = normalizeText(product.sheet_source);
+  if (sheetSource === "luxury") return true;
+
+  const collection = normalizeText(product.collection);
+  if (collection === "luxury") return true;
+
+  if (isLuxuryBrand(product.brand)) return true;
+
+  return false;
+}
+
 // ===============================
 // ⭐ FAVORITT-BRANDS (global)
 // ===============================
@@ -125,13 +182,14 @@ async function loadFavoriteProducts() {
     : favorites;
 
   for (const rawProduct of enrichedFavorites) {
+    const isLuxury = inferLuxury(rawProduct);
+
     const product = {
       ...rawProduct,
-      luxury: isTruthyLuxury(rawProduct.luxury)
+      luxury: isLuxury
     };
 
     const id = product.id || "";
-    const isLuxury = !!product.luxury;
 
     const card = window.BrandRadarProductCardEngine.createCard(product, {
       isLuxury,
@@ -141,22 +199,29 @@ async function loadFavoriteProducts() {
       onNavigate: (p) => {
         const pid = p.id || "";
         if (!pid) return;
-        const luxuryParam = isTruthyLuxury(p.luxury) ? "&luxury=true" : "";
+
+        const productIsLuxury = inferLuxury(p);
+        const luxuryParam = productIsLuxury ? "&luxury=true" : "";
+
         window.location.href = `product.html?id=${encodeURIComponent(pid)}${luxuryParam}`;
       },
-      favoriteProductFactory: (p) => ({
-        id: p.id || "",
-        product_name: p.title || p.product_name || p.name || "",
-        title: p.title || p.product_name || p.name || "",
-        brand: p.brand || "",
-        price: p.price,
-        discount: p.discount || "",
-        image_url: p.image_url || "",
-        product_url: p.product_url || "",
-        category: p.category || "",
-        rating: p.rating,
-        luxury: isTruthyLuxury(p.luxury)
-      })
+      favoriteProductFactory: (p) => {
+        const productIsLuxury = inferLuxury(p);
+
+        return {
+          id: p.id || "",
+          product_name: p.title || p.product_name || p.name || "",
+          title: p.title || p.product_name || p.name || "",
+          brand: p.brand || "",
+          price: p.price,
+          discount: p.discount || "",
+          image_url: p.image_url || "",
+          product_url: p.product_url || "",
+          category: p.category || "",
+          rating: cleanRatingRef(p.rating),
+          luxury: productIsLuxury
+        };
+      }
     });
 
     // ✅ Favorittsiden viser kun favoritter → tving aktiv state
