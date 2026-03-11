@@ -155,8 +155,11 @@
   z-index: 2;
 }
 
-/* Favoritt-ikon (global posisjon) */
-.product-card .fav-icon {
+/* ============================================
+   FAVORITT-KNAPP – GLOBALT PRODUKTKORT
+============================================ */
+
+.product-card .favorite-toggle {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -164,21 +167,23 @@
   height: 30px;
   border-radius: 999px;
   background: rgba(255,255,255,0.92);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 10px rgba(15,23,42,0.18);
   z-index: 3;
+  cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.product-card .fav-icon:hover {
+.product-card .favorite-toggle:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 18px rgba(15,23,42,0.25);
   background: #ffffff;
 }
 
-.product-card .heart-icon {
+.product-card .favorite-toggle .heart-icon {
   width: 17px;
   height: 17px;
   fill: none;
@@ -186,19 +191,18 @@
   stroke-width: 1.8;
 }
 
-.product-card .fav-icon.active .heart-icon {
+.product-card .favorite-toggle.active .heart-icon {
   fill: #ef4444;
   stroke: #ef4444;
 }
 
-/* Gold heart til luxury */
-.product-card .heart-icon.gold-heart {
+/* Luxury-variant */
+.product-card .favorite-toggle.is-luxury .heart-icon {
   fill: none;
   stroke: #fbbf24;
 }
 
-/* Aktiv luxury-favoritt skal forbli gull – ikke bli rød */
-.product-card .fav-icon.active .heart-icon.gold-heart {
+.product-card .favorite-toggle.is-luxury.active .heart-icon {
   fill: #facc15;
   stroke: #fbbf24;
 }
@@ -390,6 +394,5 @@
   font-weight: 700;
   color: #2563eb;
 }
-
 
 
