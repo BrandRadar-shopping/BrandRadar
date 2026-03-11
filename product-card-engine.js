@@ -6,6 +6,7 @@
 // - fallback-pris
 // - favorittikon
 // - luxury heart
+// - SVG rating stars
 // ======================================================
 
 (function () {
@@ -16,9 +17,11 @@
   }
 
   function cleanRating(value) {
-    return parseFloat(
+    const parsed = parseFloat(
       String(value ?? "").replace(",", ".").replace(/[^0-9.]/g, "")
-    ) || 0;
+    );
+    if (!Number.isFinite(parsed)) return null;
+    return Math.max(0, Math.min(5, parsed));
   }
 
   function formatPrice(value) {
@@ -109,6 +112,60 @@
     `;
   }
 
+  function buildStarIcon(fillPercent = 0) {
+    const safeFill = Math.max(0, Math.min(100, fillPercent));
+
+    return `
+      <span class="rating-star" style="--fill:${safeFill}%;" aria-hidden="true">
+        <svg class="rating-star-svg rating-star-outline" viewBox="0 0 24 24" focusable="false">
+          <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
+        </svg>
+        <span class="rating-star-fill-wrap">
+          <svg class="rating-star-svg rating-star-fill" viewBox="0 0 24 24" focusable="false">
+            <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
+          </svg>
+        </span>
+      </span>
+    `;
+  }
+
+  function buildRatingMarkup(ratingValue, options = {}) {
+    const {
+      showValue = true,
+      emptyMode = "hide"
+    } = options;
+
+    const rating = cleanRating(ratingValue);
+
+    if (rating === null) {
+      if (emptyMode === "muted") {
+        return `
+          <div class="rating-stars is-empty" aria-label="Ingen rating">
+            <div class="rating-stars-row">
+              ${Array.from({ length: 5 }, () => buildStarIcon(0)).join("")}
+            </div>
+            ${showValue ? `<span class="rating-value rating-value-empty">Ingen rating</span>` : ""}
+          </div>
+        `;
+      }
+      return "";
+    }
+
+    const stars = Array.from({ length: 5 }, (_, index) => {
+      const fill = Math.max(0, Math.min(1, rating - index)) * 100;
+      return buildStarIcon(fill);
+    }).join("");
+
+    return `
+      <div class="rating-stars" aria-label="Rating ${rating.toFixed(1)} av 5">
+        <div class="rating-stars-row">
+          ${stars}
+        </div>
+        ${showValue ? `<span class="rating-value">${rating.toFixed(1)}</span>` : ""}
+      </div>
+    `;
+  }
+
   function createCard(product, options = {}) {
     const {
       isLuxury = false,
@@ -123,13 +180,9 @@
     const name = product.title || product.product_name || product.name || "Uten navn";
     const brand = product.brand || "";
     const img = product.image_url || product.image || product.img || "";
-    const ratingNum = cleanRating(product.rating);
-    const ratingHTML =
-      showRating && ratingNum
-        ? `<p class="rating">⭐ ${ratingNum.toFixed(1)}</p>`
-        : showRating
-          ? `<p class="rating"><span style="color:#ccc;">–</span></p>`
-          : "";
+    const ratingHTML = showRating
+      ? buildRatingMarkup(product.rating, { showValue: true, emptyMode: "hide" })
+      : "";
 
     const offerMarkup = buildOfferMarkup(product);
     const fallbackPriceMarkup = buildFallbackPriceMarkup(product);
@@ -214,6 +267,8 @@
   }
 
   window.BrandRadarProductCardEngine = {
-    createCard
+    createCard,
+    buildRatingMarkup,
+    cleanRating
   };
 })();
