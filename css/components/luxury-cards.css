@@ -31,7 +31,6 @@
   margin-top: 6px;
 }
 
-
 /* ✅ Seksjoner (Gold Picks, Filter, Produkter) */
 .luxury-section {
   max-width: 1200px;
@@ -45,7 +44,6 @@
   font-weight: 800;
   color: #d4af37;
 }
-
 
 /* ✅ Filterbar midtstilt */
 .luxury-filter-bar {
@@ -190,13 +188,13 @@
 ============================================ */
 .fav-btn {
   position: absolute;
-  top: 42px;      /* ✅ flyttet ned for å unngå Gold Pick */
-  right: 14px;    /* ✅ litt lenger ut fra kanten */
+  top: 42px;
+  right: 14px;
   background: none;
   border: none;
   padding: 4px;
   cursor: pointer;
-  z-index: 20;    /* ✅ over badge */
+  z-index: 20;
   transition: transform 0.2s ease, filter 0.3s ease;
   pointer-events: auto;
 }
@@ -206,7 +204,7 @@
   filter: drop-shadow(0 0 4px rgba(212,175,55,0.5));
 }
 
-.fav-icon {
+.luxury-page .fav-icon {
   width: 22px;
   height: 22px;
   fill: none;
@@ -217,7 +215,7 @@
 }
 
 /* ✅ Når aktiv (favoritt) → Gullfyll + lett glød */
-.fav-btn.active .fav-icon {
+.luxury-page .fav-btn.active .fav-icon {
   fill: url(#goldGradient);
   stroke: none;
   filter: drop-shadow(0 0 4px rgba(212,175,55,0.6));
@@ -233,7 +231,7 @@ svg#gold-gradient-defs {
 
 .luxury-product-card img,
 .luxury-hero-card img {
-  margin-top: 10px; /* Gir lik visuell spacing som index */
+  margin-top: 10px;
 }
 
 /* 🔒 Sørg for at gull-badge kun brukes på luxury.html */
@@ -247,7 +245,6 @@ svg#gold-gradient-defs {
   background: #e63946;
   color: #fff;
 }
-
 
 /* ============================================
    💎 Luxury Hero Banner – Fade variant
@@ -333,7 +330,7 @@ svg#gold-gradient-defs {
 ============================================ */
 .luxury-hero {
   width: 100vw;
-  margin-left: calc(50% - 50vw); /* tvinger full bredde */
+  margin-left: calc(50% - 50vw);
   background: linear-gradient(to bottom, #0a0a0a, #1a1a1a 90%);
   color: #fff;
   text-align: center;
