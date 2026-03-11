@@ -6,66 +6,60 @@
   <title>BrandRadar | Nyheter & Ukens Picks</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="assets/css/responsive/mobile.css">
-
-
-
 </head>
 <body>
-  <!-- ✅ NY HEADER -->
+  <!-- ✅ HEADER -->
   <header class="main-header">
     <div class="nav-container">
-<button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
-  ☰
-</button>
+      <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
+        ☰
+      </button>
 
       <a href="index.html" class="logo">BRANDRADAR</a>
 
       <div class="search-box" id="site-search">
-  <span class="search-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
-    <circle cx="11" cy="11" r="6.5"></circle>
-    <path d="M16 16L21 21"></path>
-  </svg>
-</span>
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="M16 16L21 21"></path>
+          </svg>
+        </span>
 
-  <input
-    id="search-input"
-    type="search"
-    placeholder="Søk produkter eller merker…"
-    autocomplete="off"
-    spellcheck="false"
-    aria-label="Søk"
-  />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Søk produkter eller merker…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Søk"
+        />
 
-  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+        <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
 
-  <div class="search-dropdown" id="search-dropdown" hidden>
-    <div class="search-section" data-section="products">
-      <p class="search-section-title">Produkter</p>
-      <div class="search-results" id="search-results-products"></div>
-    </div>
+        <div class="search-dropdown" id="search-dropdown" hidden>
+          <div class="search-section" data-section="products">
+            <p class="search-section-title">Produkter</p>
+            <div class="search-results" id="search-results-products"></div>
+          </div>
 
-    <div class="search-section" data-section="brands">
-      <p class="search-section-title">Brands</p>
-      <div class="search-results" id="search-results-brands"></div>
-    </div>
-  </div>
-</div>
+          <div class="search-section" data-section="brands">
+            <p class="search-section-title">Brands</p>
+            <div class="search-results" id="search-results-brands"></div>
+          </div>
+        </div>
+      </div>
 
-
-      <!-- Toppmeny -->
       <nav class="top-links">
         <a href="index.html">Hjem</a>
-        <a href="news.html">Nyheter</a>
+        <a href="news.html" aria-current="page">Nyheter</a>
         <a href="brands.html">Brands</a>
         <a href="favoritter.html" class="favorites-link">
-  Favoritter <span id="favorites-count">0</span>
-</a>
+          Favoritter <span id="favorites-count">0</span>
+        </a>
         <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
       </nav>
     </div>
 
-    <!-- 🔽 Kategorier som åpner megamenu -->
     <ul class="category-bar">
       <li class="category-item" data-category="Clothing">Klær</li>
       <li class="category-item" data-category="Shoes">Sko</li>
@@ -77,86 +71,163 @@
 
   <div class="mobile-overlay" id="mobileOverlay" hidden></div>
 
-<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
-  <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Meny</p>
-    <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
-  </div>
+  <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
+    <div class="mobile-drawer-header">
+      <p class="mobile-drawer-title">Meny</p>
+      <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
+    </div>
 
-  <div class="mobile-drawer-section">
-    <a href="index.html">Hjem</a>
-    <a href="news.html">Nyheter</a>
-    <a href="brands.html">Brands</a>
-    <a href="favoritter.html">Favoritter</a>
-    <a href="luxury.html">Luxury Corner ✨</a>
-  </div>
+    <div class="mobile-drawer-section">
+      <a href="index.html">Hjem</a>
+      <a href="news.html" aria-current="page">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter</a>
+      <a href="luxury.html">Luxury Corner ✨</a>
+    </div>
 
-  <div class="mobile-drawer-section">
-    <p class="mobile-drawer-subtitle">Kategorier</p>
-    <a href="category.html?category=Clothing">Klær</a>
-    <a href="category.html?category=Shoes">Sko</a>
-    <a href="category.html?category=Gymcorner">Gymcorner</a>
-    <a href="category.html?category=Accessories">Tilbehør</a>
-    <a href="category.html?category=Selfcare">Selfcare</a>
-  </div>
-</nav>
+    <div class="mobile-drawer-section">
+      <p class="mobile-drawer-subtitle">Kategorier</p>
+      <a href="category.html?category=Clothing">Klær</a>
+      <a href="category.html?category=Shoes">Sko</a>
+      <a href="category.html?category=Gymcorner">Gymcorner</a>
+      <a href="category.html?category=Accessories">Tilbehør</a>
+      <a href="category.html?category=Selfcare">Selfcare</a>
+    </div>
+  </nav>
 
-  <!-- ✅ MEGA-MENYEN LASTES HER -->
+  <!-- ✅ MEGA-MENY -->
   <nav class="mega-menu"></nav>
 
-  <!-- 🔽 MAIN INNHOLD -->
+  <!-- 🔽 MAIN -->
   <main class="news-page">
-    <!-- 🧩 1. Partner Banner -->
-    <section class="partner-banner section-padding loading">
-      Laster partnerkampanje...
+    <!-- Intro / editorial top -->
+    <section class="news-intro section-padding">
+      <div class="container">
+        <div class="news-intro__eyebrow">BrandRadar News</div>
+        <h1>Curated drops, deals & spotlight picks</h1>
+        <p>
+          Oppdag ukens kampanjer, håndplukkede favoritter og nye produkter i en
+          mer editorial BrandRadar-opplevelse.
+        </p>
+      </div>
     </section>
 
-    <!-- 🔥 2. Ukens Deals -->
-<section id="deals-section" class="section-padding">
-  <h2>Ukens Deals 🔥</h2>
+    <!-- ✨ Spotlight først: tydelig hovedanker -->
+    <section id="featured-news" class="section-padding news-section news-section--spotlight">
+      <div class="container">
+        <div class="section-heading section-heading--editorial">
+          <div>
+            <span class="section-kicker">Editorial Spotlight</span>
+            <h2>Ukens Spotlight ✨</h2>
+            <p>
+              Hovedhistorien denne uken — løftet frem med større plass, tydeligere fokus og sterkere visuell identitet.
+            </p>
+          </div>
+        </div>
 
-  <div class="slider-wrapper" data-slider="deals">
-    <button type="button" class="slider-btn prev" aria-label="Forrige deals">❮</button>
+        <div class="slider-wrapper slider-wrapper--spotlight" data-slider="spotlight">
+          <button type="button" class="slider-btn prev" aria-label="Forrige spotlight">❮</button>
 
-    <div class="deals-grid loading" id="deals-track">Laster deals...</div>
+          <div class="featured-wrapper loading" id="spotlight-track">Laster spotlight...</div>
 
-    <button type="button" class="slider-btn next" aria-label="Neste deals">❯</button>
-  </div>
-</section>
+          <button type="button" class="slider-btn next" aria-label="Neste spotlight">❯</button>
+        </div>
+      </div>
+    </section>
 
+    <!-- 🧩 Partner Banner -->
+    <section class="news-section news-section--partner section-padding">
+      <div class="container">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <span class="section-kicker">Campaign Partner</span>
+            <h2>Ukens partnerkampanje</h2>
+          </div>
+        </div>
 
-<!-- 🛰️ 3. Radar Picks -->
-<section id="picks-section" class="section-padding">
-  <h2>Radar Picks 🛰️</h2>
+        <div class="partner-banner section-padding loading">
+          Laster partnerkampanje...
+        </div>
+      </div>
+    </section>
 
-  <div class="slider-wrapper" data-slider="picks">
-    <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
+    <!-- 🔥 Deals -->
+    <section id="deals-section" class="section-padding news-section news-section--deals">
+      <div class="container">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="section-kicker">This Week</span>
+            <h2>Ukens Deals 🔥</h2>
+            <p>
+              En mer energisk seksjon med kampanjer, tilbud og produkter som gir mye verdi akkurat nå.
+            </p>
+          </div>
 
-    <div class="picks-grid loading" id="picks-track">Laster picks...</div>
+          <a href="category.html?sort=discount" class="section-link">Se flere deals</a>
+        </div>
 
-    <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
-  </div>
-</section>
+        <div class="slider-wrapper slider-wrapper--deals" data-slider="deals">
+          <button type="button" class="slider-btn prev" aria-label="Forrige deals">❮</button>
 
+          <div class="deals-grid loading" id="deals-track">Laster deals...</div>
 
-<!-- ✨ 4. Ukens Spotlight -->
-<section id="featured-news" class="section-padding">
-  <h2>Ukens Spotlight ✨</h2>
+          <button type="button" class="slider-btn next" aria-label="Neste deals">❯</button>
+        </div>
+      </div>
+    </section>
 
-  <div class="slider-wrapper" data-slider="spotlight">
-    <button type="button" class="slider-btn prev" aria-label="Forrige spotlight">❮</button>
+    <!-- 🛰️ Radar Picks -->
+    <section id="picks-section" class="section-padding news-section news-section--picks">
+      <div class="container">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="section-kicker">Curated</span>
+            <h2>Radar Picks 🛰️</h2>
+            <p>
+              En roligere og mer premium presentasjon av håndplukkede favoritter fra BrandRadar.
+            </p>
+          </div>
 
-    <div class="featured-wrapper loading" id="spotlight-track">Laster spotlight...</div>
+          <a href="index.html#radar-picks" class="section-link">Se alle picks</a>
+        </div>
 
-    <button type="button" class="slider-btn next" aria-label="Neste spotlight">❯</button>
-  </div>
-</section>
+        <div class="news-picks-layout">
+          <aside class="news-picks-aside">
+            <div class="news-picks-aside__badge">Editor’s Selection</div>
+            <h3>Utvalgte picks med mer premium følelse</h3>
+            <p>
+              Denne seksjonen skal føles mer kuratert enn deal-seksjonen — mindre “salg”, mer stil, kvalitet og anbefaling.
+            </p>
+          </aside>
 
+          <div class="slider-wrapper slider-wrapper--picks" data-slider="picks">
+            <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
 
-    <!-- 🆕 5. Nye Produkter / Trender -->
-    <section id="news-feed" class="section-padding">
-      <h2>Nye Produkter & Trender</h2>
-      <div id="news-grid" class="news-grid loading">Laster produkter...</div>
+            <div class="picks-grid loading" id="picks-track">Laster picks...</div>
+
+            <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🆕 Nye Produkter / Trender -->
+    <section id="news-feed" class="section-padding news-section news-section--feed">
+      <div class="container">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="section-kicker">New & Trending</span>
+            <h2>Nye Produkter & Trender</h2>
+            <p>
+              En lettere feed-seksjon som gir rytme og variasjon i siden, og løfter frem nye drops og aktuelle produkter.
+            </p>
+          </div>
+
+          <a href="category.html?sort=newest" class="section-link">Utforsk nyheter</a>
+        </div>
+
+        <div id="news-grid" class="news-grid loading">Laster produkter...</div>
+      </div>
     </section>
   </main>
 
@@ -167,52 +238,48 @@
   <script src="news.js"></script>
   <script src="script-favorites.js"></script>
 
-<nav class="m-bottom-nav" aria-label="Bunnmeny">
-  <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Hjem</span>
-  </a>
+  <nav class="m-bottom-nav" aria-label="Bunnmeny">
+    <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="m-txt">Hjem</span>
+    </a>
 
-  <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Søk</span>
-  </a>
+    <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">Søk</span>
+    </a>
 
-  <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
-            stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Favoritter</span>
-  </a>
+    <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
+              stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      </svg>
+      <span class="m-txt">Favoritter</span>
+    </a>
 
-  <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
-  <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>
-  <span class="m-txt">News</span>
-</a>
+    <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter" aria-current="page">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">News</span>
+    </a>
 
-  <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Luxury</span>
-  </a>
-</nav>
-  
+    <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">Luxury</span>
+    </a>
+  </nav>
 </body>
 </html>
-
-
-
