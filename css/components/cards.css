@@ -85,10 +85,72 @@
 }
 
 /* Rating (stjerne + eller placeholder) */
-.product-card .rating {
-  font-size: 0.85rem;
+.product-card .rating,
+.product-card .rating-stars {
+  margin: 0.32rem 0 0.2rem;
+}
+
+.rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 20px;
+}
+
+.rating-stars-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+}
+
+.rating-star {
+  --fill: 0%;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  flex: 0 0 14px;
+}
+
+.rating-star-svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.rating-star-outline {
+  fill: none;
+  stroke: #111827;
+  stroke-width: 1.45;
+}
+
+.rating-star-fill-wrap {
+  position: absolute;
+  inset: 0;
+  width: var(--fill);
+  overflow: hidden;
+}
+
+.rating-star-fill {
+  fill: #111111;
+  stroke: none;
+}
+
+.rating-value {
+  font-size: 0.82rem;
+  line-height: 1;
+  font-weight: 700;
   color: #111827;
-  margin: 0.25rem 0 0.15rem;
+  letter-spacing: -0.01em;
+}
+
+.rating-stars.is-empty .rating-star-outline {
+  stroke: #cbd5e1;
+}
+
+.rating-value-empty {
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 /* Prislinje – index, news, category, favoritter */
