@@ -6,7 +6,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
 
-  // ❗ ID MÅ være string – hele systemet bruker string-ID
   const productId = String(params.get("id"));
   const isLuxuryParam = params.get("luxury") === "true";
 
@@ -15,16 +14,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 🟦 Google Sheets
   const MAIN_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const MAIN_SHEET_NAME = "BrandRadarProdukter";
 
   const LUXURY_SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
   const LUXURY_SHEET_NAME = "LuxuryProducts";
-
-  // ======================================================
-  // 🔍 Finn produkt
-  // ======================================================
 
   let products = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
     .then(r => r.json())
@@ -32,7 +26,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let product = products.find(p => String(p.id).trim() === productId);
 
-  // Prøv luxury-arket hvis ikke funnet
   if (!product) {
     const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
       .then(r => r.json())
@@ -52,17 +45,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
 
-  // ======================================================
-  // ⭐ Sett inn produktinfo
-  // ======================================================
   document.getElementById("product-title").textContent = product.title || "";
   document.getElementById("product-brand").textContent = product.brand || "";
   document.getElementById("product-desc").textContent =
     product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
 
-  // ======================================================
-  // ⭐ Prisvisning (fallback / produktark)
-  // ======================================================
   const newPriceEl = document.getElementById("new-price");
   const oldPriceEl = document.getElementById("old-price");
   const discountTagEl = document.getElementById("discount-tag");
@@ -87,22 +74,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     discountTagEl.textContent = "";
   }
 
-  // Default kjøpslink fra produktarket
   buyLinkEl.href = product.product_url || "#";
 
-  // ======================================================
-  // ⭐ Rating
-  // ======================================================
-  const ratingNum = parseFloat(
-    String(product.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")
-  );
+  renderProductRating(product);
 
-  document.getElementById("product-rating").textContent =
-    !isNaN(ratingNum) ? `⭐ ${ratingNum.toFixed(1)} / 5` : "⭐ Ingen rating";
-
-  // ======================================================
-  // ⭐ Bilder
-  // ======================================================
   const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
 
@@ -131,33 +106,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     thumbs.appendChild(img);
   });
 
-  // ======================================================
-  // ⭐ Pris-sammenligning (offers engine)
-  // ======================================================
   await renderPriceComparison(product);
-
-  // ======================================================
-  // ⭐ Relaterte produkter
-  // ======================================================
   await loadRecommendations(products, product);
-
-  // ======================================================
-  // ⭐ Favorittknapp
-  // ======================================================
   setupFavoriteButton(product);
 
-  // ======================================================
-  // ⭐ Luxury styling
-  // ======================================================
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
     newPriceEl.style.color = "#d4af37";
   }
 });
 
-// ======================================================
-// 💸 Price comparison renderer
-// ======================================================
+function renderProductRating(product) {
+  const ratingEl = document.getElementById("product-rating");
+  if (!ratingEl) return;
+
+  if (
+    window.BrandRadarProductCardEngine &&
+    typeof window.BrandRadarProductCardEngine.buildRatingMarkup === "function"
+  ) {
+    ratingEl.innerHTML = window.BrandRadarProductCardEngine.buildRatingMarkup(product.rating, {
+      showValue: true,
+      emptyMode: "muted"
+    });
+    return;
+  }
+
+  const ratingNum = parseFloat(
+    String(product.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")
+  );
+
+  ratingEl.textContent = Number.isFinite(ratingNum)
+    ? `${ratingNum.toFixed(1)} / 5`
+    : "Ingen rating";
+}
+
 async function renderPriceComparison(product) {
   const section = document.getElementById("price-comparison");
   const subtitle = document.getElementById("price-comparison-subtitle");
@@ -178,7 +160,6 @@ async function renderPriceComparison(product) {
       return;
     }
 
-    // Oppdater hovedpris til beste pris
     newPriceEl.textContent = `Fra ${summary.lowestPriceFormatted}`;
     oldPriceEl.textContent = "";
     discountTagEl.textContent = "";
@@ -257,7 +238,6 @@ async function renderPriceComparison(product) {
       list.appendChild(row);
     });
 
-    // Oppdater hoved CTA til billigste tilbud
     const bestOffer = summary.offers[0];
     if (bestOffer?.affiliate_url || bestOffer?.store_url) {
       buyLinkEl.href = bestOffer.affiliate_url || bestOffer.store_url;
@@ -271,9 +251,6 @@ async function renderPriceComparison(product) {
   }
 }
 
-// ======================================================
-// ⭐ Relaterte produkter – via Product Card Engine
-// ======================================================
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
   if (!slider) return;
@@ -341,9 +318,6 @@ async function loadRecommendations(products, currentProduct) {
   updateSliderNav();
 }
 
-// ======================================================
-// ⭐ Favoritt-knapp
-// ======================================================
 function setupFavoriteButton(product) {
   const btn = document.getElementById("favorite-btn");
   if (!btn) return;
@@ -366,9 +340,6 @@ function setupFavoriteButton(product) {
   });
 }
 
-// ======================================================
-// ⭐ Slider navigation
-// ======================================================
 const slider = document.getElementById("related-slider");
 const btnPrev = document.querySelector(".slider-btn.prev");
 const btnNext = document.querySelector(".slider-btn.next");
@@ -392,9 +363,6 @@ btnNext?.addEventListener("click", () => {
 
 slider?.addEventListener("scroll", updateSliderNav);
 
-// ======================================================
-// ⭐ Tilbake-knapp
-// ======================================================
 document.getElementById("back-btn")?.addEventListener("click", () => {
   const ref = document.referrer;
   if (ref && !ref.includes("product.html")) window.history.back();
