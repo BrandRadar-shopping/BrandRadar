@@ -6,57 +6,58 @@
   <title>Produktdetaljer | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="assets/css/responsive/mobile.css">
-
 </head>
 <body>
 
 <header class="main-header">
   <div class="nav-container">
-<button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
-  ☰
-</button>
+    <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
+      ☰
+    </button>
 
     <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box" id="site-search">
-  <span class="search-icon" aria-hidden="true">🔍</span>
+      <span class="search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="M16 16L21 21"></path>
+        </svg>
+      </span>
 
-  <input
-    id="search-input"
-    type="search"
-    placeholder="Søk produkter eller merker…"
-    autocomplete="off"
-    spellcheck="false"
-    aria-label="Søk"
-  />
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Søk produkter eller merker…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Søk"
+      />
 
-  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+      <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
 
-  <div class="search-dropdown" id="search-dropdown" hidden>
-    <div class="search-section" data-section="products">
-      <p class="search-section-title">Produkter</p>
-      <div class="search-results" id="search-results-products"></div>
+      <div class="search-dropdown" id="search-dropdown" hidden>
+        <div class="search-section" data-section="products">
+          <p class="search-section-title">Produkter</p>
+          <div class="search-results" id="search-results-products"></div>
+        </div>
+
+        <div class="search-section" data-section="brands">
+          <p class="search-section-title">Brands</p>
+          <div class="search-results" id="search-results-brands"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="search-section" data-section="brands">
-      <p class="search-section-title">Brands</p>
-      <div class="search-results" id="search-results-brands"></div>
-    </div>
-  </div>
-</div>
-
-
-    <!-- Toppmeny -->
     <nav class="top-links">
       <a href="index.html">Hjem</a>
       <a href="news.html">Nyheter</a>
       <a href="brands.html">Brands</a>
       <a href="favoritter.html" class="favorites-link">
-  Favoritter <span id="favorites-count">0</span>
-</a>
+        Favoritter <span id="favorites-count">0</span>
+      </a>
       <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
     </nav>
-
   </div>
 
   <ul class="category-bar">
@@ -68,7 +69,7 @@
   </ul>
 </header>
 
-  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+<div class="mobile-overlay" id="mobileOverlay" hidden></div>
 
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
   <div class="mobile-drawer-header">
@@ -97,33 +98,27 @@
 <nav class="mega-menu"></nav>
 
 <section class="product-detail">
-
   <div class="thumbnails" id="thumbnails"></div>
 
   <div class="image-gallery">
     <img id="main-image" src="" alt="Produktbilde" />
   </div>
 
-  <!-- ✅ Rename for å unngå kollisjon med product cards -->
   <div class="product-detail-info">
-
     <button id="back-btn">← Tilbake</button>
 
     <h1 id="product-title"></h1>
     <div id="product-brand" class="product-brand"></div>
-    <div id="product-rating" class="rating"></div>
+    <div id="product-rating" class="product-rating-block"></div>
 
-    <!-- 🔥 OPPDATERT PRIS-SEKSJON -->
     <div id="product-price-box">
       <span id="new-price"></span>
       <span id="old-price"></span>
       <span id="discount-tag"></span>
     </div>
-    <!-- 🔥 SLUTT OPPDATERT PRIS -->
 
-        <p id="product-desc" class="description"></p>
+    <p id="product-desc" class="description"></p>
 
-    <!-- 💸 Prisoversikt -->
     <section class="price-comparison" id="price-comparison" hidden>
       <div class="price-comparison-head">
         <h2>Beste priser akkurat nå</h2>
@@ -136,24 +131,19 @@
     <button id="favorite-btn">🤍 Legg til favoritter</button>
     <a id="buy-link" href="#" target="_blank">Kjøp produkt</a>
   </div>
-
 </section>
 
-<!-- RELATED PRODUCTS SLIDER -->
 <section class="related-section">
   <h2 class="related-title">Du vil kanskje like</h2>
 
   <div class="slider-wrapper">
     <button type="button" class="slider-btn prev" aria-label="Forrige produkter">❮</button>
 
-    <div class="related-slider" id="related-slider">
-      <!-- Dynamiske produktkort -->
-    </div>
+    <div class="related-slider" id="related-slider"></div>
 
     <button type="button" class="slider-btn next" aria-label="Neste produkter">❯</button>
   </div>
 </section>
-
 
 <script src="offers-engine.js"></script>
 <script src="favorites-core.js"></script>
@@ -162,7 +152,6 @@
 <script src="script-favorites.js"></script>
 <script src="product-card-engine.js"></script>
 <script src="product.js"></script>
-
 
 <nav class="m-bottom-nav" aria-label="Bunnmeny">
   <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
@@ -189,14 +178,14 @@
   </a>
 
   <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
-  <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>
-  <span class="m-txt">News</span>
-</a>
+    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="m-txt">News</span>
+  </a>
 
   <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
     <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -207,8 +196,7 @@
     <span class="m-txt">Luxury</span>
   </a>
 </nav>
-  
+
 </body>
 </html>
-
 
