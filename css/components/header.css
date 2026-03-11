@@ -112,8 +112,27 @@
 }
 
 .search-icon {
-  font-size: 16px;
-  opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.86);
+  opacity: 1;
+  flex: 0 0 auto;
+}
+
+.search-icon-svg {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+.search-icon-svg circle,
+.search-icon-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 #search-input {
