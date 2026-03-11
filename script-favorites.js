@@ -224,18 +224,15 @@ async function loadFavoriteProducts() {
       }
     });
 
-    // ✅ Favorittsiden viser kun favoritter → tving aktiv state
-    const favIcon = card.querySelector(".fav-icon");
-    const heartIcon = card.querySelector(".heart-icon");
+    const favButton = card.querySelector(".favorite-toggle");
 
-    if (favIcon) {
-      favIcon.classList.add("active");
-    }
+if (favButton) {
+  favButton.classList.add("active");
 
-    // ✅ Tving luxury-hjerte på favorittsiden
-    if (isLuxury && heartIcon) {
-      heartIcon.classList.add("gold-heart");
-    }
+  if (isLuxury) {
+    favButton.classList.add("is-luxury");
+  }
+}
 
     // ✅ Fjern-knapp
     const removeTag = document.createElement("span");
