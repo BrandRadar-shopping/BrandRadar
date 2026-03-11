@@ -3,7 +3,7 @@
 //  - Partner banner
 //  - Ukens Deals (1 rad slider + piler)
 //  - Radar Picks (1 rad slider + piler)
-//  - Ukens Spotlight (stor editorial slider + piler)
+//  - Ukens Spotlight (stor editorial slider + hover gallery)
 //  - Nye Produkter & Trender (grid)
 // ======================================================
 
@@ -118,6 +118,10 @@
       price: masterRow.price || "",
       discount: masterRow.discount || "",
       image_url: masterRow.image_url || "",
+      image_2: masterRow.image_2 || masterRow.image2 || masterRow.thumbnail_1 || "",
+      image_3: masterRow.image_3 || masterRow.image3 || masterRow.thumbnail_2 || "",
+      image_4: masterRow.image_4 || masterRow.image4 || masterRow.thumbnail_3 || "",
+      image_5: masterRow.image_5 || masterRow.image5 || masterRow.thumbnail_4 || "",
       product_url: masterRow.product_url || "",
       category: masterRow.category || masterRow.main_category || "",
       rating: masterRow.rating || "",
@@ -148,7 +152,6 @@
 
   function buildRatingMarkup(ratingValue) {
     const rating = cleanRatingFn(ratingValue);
-
     if (rating == null) return "";
 
     const stars = Array.from({ length: 5 }, (_, index) => {
@@ -206,6 +209,22 @@
       rating: prod.rating ?? "",
       luxury: !!prod.luxury
     };
+  }
+
+  function getSpotlightImages(prod) {
+    const rawImages = [
+      prod.image_url,
+      prod.image_2,
+      prod.image_3,
+      prod.image_4,
+      prod.image_5
+    ];
+
+    const cleaned = rawImages
+      .map((img) => String(img || "").trim())
+      .filter(Boolean);
+
+    return [...new Set(cleaned)].slice(0, 5);
   }
 
   // ---------- ELITE CARD ----------
@@ -325,6 +344,10 @@
     const pid = resolveProductIdSafe(prod);
     prod.id = pid;
 
+    const images = getSpotlightImages(prod);
+    const mainImage = images[0] || prod.image_url || "";
+    const thumbImages = images.slice(0, 4);
+
     const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
     const ratingMarkup = buildRatingMarkup(prod.rating);
 
@@ -335,7 +358,38 @@
     article.innerHTML = `
       <div class="spotlight-media">
         <span class="spotlight-overlay-badge">Spotlight</span>
-        <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
+
+        <div class="spotlight-main-image-wrap">
+          <img
+            src="${escapeHtml(mainImage)}"
+            alt="${escapeHtml(prod.title || "")}"
+            loading="lazy"
+            class="spotlight-main-image"
+          >
+        </div>
+
+        ${
+          thumbImages.length
+            ? `
+          <div class="spotlight-thumbs">
+            ${thumbImages
+              .map(
+                (img, index) => `
+                  <button
+                    type="button"
+                    class="spotlight-thumb ${index === 0 ? "is-active" : ""}"
+                    data-image="${escapeHtml(img)}"
+                    aria-label="Vis bilde ${index + 1} av ${escapeHtml(prod.title || "produkt")}"
+                  >
+                    <img src="${escapeHtml(img)}" alt="" loading="lazy">
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
       </div>
 
       <div class="spotlight-content">
@@ -349,7 +403,7 @@
         ${
           excerpt
             ? `<p>${escapeHtml(excerpt)}</p>`
-            : `<p>Et håndplukket fokuspunkt fra BrandRadar denne uken.</p>`
+            : `<p>Et håndplukket produkt denne uken.</p>`
         }
 
         ${ratingMarkup ? `<div class="spotlight-rating">${ratingMarkup}</div>` : ""}
@@ -395,10 +449,59 @@
       window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
     };
 
-    article.addEventListener("click", triggerOpen);
+    article.addEventListener("click", (e) => {
+      if (e.target.closest(".spotlight-thumb")) return;
+      if (e.target.closest(".js-spotlight-cta")) return;
+      triggerOpen(e);
+    });
+
     article.querySelector(".js-spotlight-cta")?.addEventListener("click", (e) => {
       e.stopPropagation();
       triggerOpen(e);
+    });
+
+    const mainImgEl = article.querySelector(".spotlight-main-image");
+    const thumbButtons = article.querySelectorAll(".spotlight-thumb");
+    const defaultMainImage = mainImage;
+
+    thumbButtons.forEach((btn) => {
+      btn.addEventListener("mouseenter", (e) => {
+        e.stopPropagation();
+
+        const nextImage = btn.dataset.image;
+        if (!nextImage || !mainImgEl) return;
+
+        mainImgEl.src = nextImage;
+
+        thumbButtons.forEach((thumb) => thumb.classList.remove("is-active"));
+        btn.classList.add("is-active");
+      });
+
+      btn.addEventListener("focus", (e) => {
+        e.stopPropagation();
+
+        const nextImage = btn.dataset.image;
+        if (!nextImage || !mainImgEl) return;
+
+        mainImgEl.src = nextImage;
+
+        thumbButtons.forEach((thumb) => thumb.classList.remove("is-active"));
+        btn.classList.add("is-active");
+      });
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    });
+
+    const thumbsWrap = article.querySelector(".spotlight-thumbs");
+    thumbsWrap?.addEventListener("mouseleave", () => {
+      if (!mainImgEl) return;
+      mainImgEl.src = defaultMainImage;
+
+      thumbButtons.forEach((thumb, index) => {
+        thumb.classList.toggle("is-active", index === 0);
+      });
     });
 
     return article;
