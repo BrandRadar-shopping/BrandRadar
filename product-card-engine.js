@@ -136,10 +136,9 @@
     const priceMarkup = offerMarkup || fallbackPriceMarkup;
 
     const isFav = enableFavorite ? isFavorite(id) : false;
-    const heartClass = isLuxury ? "heart-icon gold-heart" : "heart-icon";
 
     const card = document.createElement("div");
-    card.className = "product-card";
+    card.className = `product-card${isLuxury ? " is-luxury-card" : ""}`;
 
     card.innerHTML = `
       ${!product.offer_summary?.hasOffers && getPriceInfo(product).discountText
@@ -147,14 +146,18 @@
         : ""}
 
       ${enableFavorite ? `
-        <div class="fav-icon ${isFav ? "active" : ""}" aria-label="Legg til favoritt">
-          <svg viewBox="0 0 24 24" class="${heartClass}">
+        <button
+          type="button"
+          class="favorite-toggle ${isFav ? "active" : ""} ${isLuxury ? "is-luxury" : ""}"
+          aria-label="Legg til favoritt"
+        >
+          <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
             2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
             14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4
             6.86-8.55 11.54L12 21.35z"/>
           </svg>
-        </div>
+        </button>
       ` : ""}
 
       <img src="${img}" alt="${name}">
@@ -168,7 +171,7 @@
     `;
 
     card.addEventListener("click", e => {
-      if (enableFavorite && e.target.closest(".fav-icon")) return;
+      if (enableFavorite && e.target.closest(".favorite-toggle")) return;
 
       if (typeof onNavigate === "function") {
         onNavigate(product, card);
@@ -178,8 +181,9 @@
     });
 
     if (enableFavorite) {
-      const favIcon = card.querySelector(".fav-icon");
-      favIcon?.addEventListener("click", e => {
+      const favButton = card.querySelector(".favorite-toggle");
+
+      favButton?.addEventListener("click", e => {
         e.stopPropagation();
 
         if (typeof window.toggleFavorite !== "function") return;
@@ -201,8 +205,8 @@
             };
 
         const existsBefore = isFavorite(id);
-        window.toggleFavorite(cleanProduct, favIcon);
-        favIcon.classList.toggle("active", !existsBefore);
+        window.toggleFavorite(cleanProduct, favButton);
+        favButton.classList.toggle("active", !existsBefore);
       });
     }
 
