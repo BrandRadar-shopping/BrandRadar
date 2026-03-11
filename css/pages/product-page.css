@@ -2,7 +2,6 @@
    PRODUCT PAGE – CLEANED (samme output, mindre rot)
 ===================================================== */
 
-/* ✅ Layout: Produktdetaljer */
 .product-detail {
   display: grid;
   grid-template-columns: 120px 1fr 1fr;
@@ -17,12 +16,11 @@
   grid-template-columns: 1fr 1.2fr;
 }
 
-/* ✅ Thumbnails */
 .thumbnails {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-right: 10px; /* beholdt fra original */
+  margin-right: 10px;
 }
 
 .thumb {
@@ -35,12 +33,10 @@
   transition: 0.2s ease;
 }
 
-/* Viktig: du hadde denne som siste vinner */
 .thumb.active {
   border-color: #000 !important;
 }
 
-/* ✅ Hovedbilde (slutt-resultat fra original) */
 #main-image {
   width: 100%;
   max-width: 550px;
@@ -49,7 +45,6 @@
   object-fit: contain;
 }
 
-/* ✅ Produkt-info (detaljkolonnen) */
 .product-detail-info {
   display: flex;
   flex-direction: column;
@@ -66,18 +61,79 @@
   color: #444;
 }
 
-.rating {
+.product-rating-block {
+  margin-top: 0.15rem;
+  min-height: 24px;
+}
+
+.product-rating-block .rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.product-rating-block .rating-stars-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+}
+
+.product-rating-block .rating-star {
+  --fill: 0%;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  flex: 0 0 18px;
+}
+
+.product-rating-block .rating-star-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.product-rating-block .rating-star-outline {
+  fill: none;
+  stroke: #111827;
+  stroke-width: 1.35;
+}
+
+.product-rating-block .rating-star-fill-wrap {
+  position: absolute;
+  inset: 0;
+  width: var(--fill);
+  overflow: hidden;
+}
+
+.product-rating-block .rating-star-fill {
+  fill: #111111;
+  stroke: none;
+}
+
+.product-rating-block .rating-value {
+  font-size: 0.95rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+.product-rating-block .rating-stars.is-empty .rating-star-outline {
+  stroke: #cbd5e1;
+}
+
+.product-rating-block .rating-value-empty {
+  color: #94a3b8;
   font-weight: 600;
 }
 
-/* (Beholdt – i tilfelle den brukes et sted på produkt-siden) */
 .price {
   font-size: 1.6rem;
   font-weight: 800;
   color: #111;
 }
 
-/* ⚠️ Beholdt for å ikke endre nåværende output (du hadde denne globalt) */
 .discount-badge {
   background: #e60023;
   color: #fff;
@@ -87,7 +143,6 @@
   font-size: 0.85rem;
 }
 
-/* ✅ Knapper */
 #buy-link {
   width: 100%;
   background: #111;
@@ -118,7 +173,6 @@
 }
 #favorite-btn:hover { background: #e9e9e9; }
 
-/* ✅ Back button */
 #back-btn {
   color: #111;
   background: transparent;
@@ -133,7 +187,6 @@
 #back-btn::before { content: "←"; }
 #back-btn:hover { opacity: 0.7; }
 
-/* ✅ Pris-boks */
 #product-price-box {
   display: flex;
   flex-direction: column;
@@ -159,9 +212,6 @@
   color: #e60023;
 }
 
-/* =====================================================
-   RELATED PRODUCTS SLIDER
-===================================================== */
 .related-section {
   padding: 3rem 0;
   border-top: 1px solid #222;
@@ -198,14 +248,12 @@
   display: none;
 }
 
-/* ✅ Lås kortbredde (fixen du bekreftet) */
 .related-section .related-slider .product-card {
   flex: 0 0 260px;
   min-width: 260px;
   max-width: 260px;
 }
 
-/* ✅ Piler */
 .related-section .slider-btn {
   position: absolute;
   top: 40%;
@@ -221,7 +269,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 200; /* samlet her */
+  z-index: 200;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   transition: 0.25s ease;
 }
@@ -234,7 +282,6 @@
 .related-section .slider-btn.prev { left: -35px; }
 .related-section .slider-btn.next { right: -35px; }
 
-/* ✅ Fade */
 .related-section .slider-wrapper::before,
 .related-section .slider-wrapper::after {
   content: "";
@@ -256,15 +303,11 @@
   background: linear-gradient(to left, #fff, transparent);
 }
 
-/* ✅ Sørg for at kanten ikke kutter knappene */
 .slider-wrapper {
   overflow: visible !important;
   z-index: 1;
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
 @media (max-width: 1100px) {
   .product-detail {
     grid-template-columns: 100px 1fr;
@@ -300,6 +343,17 @@
     margin-top: 1rem;
   }
 
+  .product-rating-block .rating-star {
+    width: 16px;
+    height: 16px;
+    flex-basis: 16px;
+  }
+
+  .product-rating-block .rating-star-svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .related-section .slider-btn {
     display: none;
   }
@@ -311,16 +365,11 @@
   }
 }
 
-/* ✅ Sticky header */
 .main-header {
   position: sticky;
   top: 0;
   z-index: 5000;
 }
-
-/* =====================================================
-   PRICE COMPARISON
-===================================================== */
 
 .price-comparison {
   margin-top: 1.25rem;
@@ -458,4 +507,3 @@
     min-width: unset;
   }
 }
-
