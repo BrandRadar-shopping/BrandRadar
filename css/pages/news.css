@@ -305,8 +305,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-self: start;
-  padding: 4px 2px 0 4px;
-  min-height: 100%;
+  padding: 10px 4px 0 4px;
 }
 
 .spotlight-meta {
@@ -352,7 +351,7 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin: 4px 0 16px;
+  margin: 4px 0 14px;
 }
 
 .spotlight-price {
@@ -384,7 +383,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: auto;
+  margin-top: 0;
 }
 
 .spotlight-btn {
@@ -665,14 +664,6 @@
   .spotlight-main-image-wrap,
   .spotlight-main-image {
     min-height: 320px;
-  }
-
-  .spotlight-content {
-    min-height: auto;
-  }
-
-  .spotlight-actions {
-    margin-top: 8px;
   }
 
   .news-picks-layout {
