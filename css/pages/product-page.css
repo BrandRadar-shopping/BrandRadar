@@ -610,3 +610,52 @@
     max-width: 220px;
   }
 }
+
+/* =====================================================
+   PRODUCT INSIGHTS (under bilde)
+===================================================== */
+
+.product-insights {
+  margin-top: 1.4rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #ffffff;
+}
+
+.product-insights-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #111;
+  margin-bottom: 0.7rem;
+}
+
+.product-insights-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.product-insight-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #111;
+}
+
+.product-insight-summary {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #374151;
+  margin-bottom: 0.6rem;
+}
+
+.product-insight-meta {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
