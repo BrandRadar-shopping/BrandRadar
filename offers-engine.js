@@ -5,6 +5,13 @@
 // - billigste pris per produkt
 // - antall butikker per produkt
 // - full offer-liste til productsiden
+//
+// Oppgradert versjon:
+// - affiliate_url er ikke lenger påkrevd
+// - fallback til store_url og merchant_url
+// - mer robust cache-håndtering
+// - mer fleksibel shipping-logikk
+// - bedre brukeropplevelse selv uten affiliate-lenker
 // ======================================================
 
 (function () {
@@ -16,6 +23,12 @@
   const MERCHANTS_URL = `https://opensheet.elk.sh/${SHEET_ID}/${MERCHANTS_TAB}`;
 
   const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min
+  const CACHE_VERSION = "v2"; // øk denne hvis du vil tvinge ny cache etter kodeendringer
+
+  const CACHE_KEYS = {
+    offers: `brandradar_offers_cache_${CACHE_VERSION}`,
+    merchants: `brandradar_merchants_cache_${CACHE_VERSION}`
+  };
 
   const state = {
     offers: [],
@@ -34,9 +47,13 @@
 
   function toNumber(value) {
     if (value === null || value === undefined || value === "") return null;
+
     const parsed = parseFloat(
-      String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
+      String(value)
+        .replace(",", ".")
+        .replace(/[^0-9.\-]/g, "")
     );
+
     return Number.isFinite(parsed) ? parsed : null;
   }
 
@@ -44,12 +61,18 @@
     return String(value || "").trim();
   }
 
+  function normalizeSlug(value) {
+    return normalizeText(value).toLowerCase();
+  }
+
   function formatPrice(price, currency = "NOK") {
     const n = toNumber(price);
     if (n === null) return "";
+
     if (currency === "NOK") {
       return `${Math.round(n)} kr`;
     }
+
     return `${Math.round(n)} ${currency}`;
   }
 
@@ -82,10 +105,19 @@
     }
   }
 
+  function clearOffersEngineCache() {
+    try {
+      Object.values(CACHE_KEYS).forEach((key) => sessionStorage.removeItem(key));
+    } catch {
+      // ignore
+    }
+  }
+
   function buildMerchantMap(merchants) {
     const map = new Map();
+
     merchants.forEach((merchant) => {
-      const slug = normalizeText(merchant.merchant_slug);
+      const slug = normalizeSlug(merchant.merchant_slug);
       if (!slug) return;
 
       map.set(slug, {
@@ -99,14 +131,33 @@
         active: toBool(merchant.active)
       });
     });
+
     return map;
+  }
+
+  function resolveBuyUrl({ affiliate_url, store_url, merchant_url }) {
+    return (
+      normalizeText(affiliate_url) ||
+      normalizeText(store_url) ||
+      normalizeText(merchant_url) ||
+      ""
+    );
   }
 
   function normalizeOffers(rawOffers, merchantMap) {
     return rawOffers
       .map((offer) => {
-        const merchantSlug = normalizeText(offer.merchant_slug);
+        const merchantSlug = normalizeSlug(offer.merchant_slug);
         const merchant = merchantMap.get(merchantSlug) || null;
+
+        const affiliateUrl = normalizeText(offer.affiliate_url);
+        const storeUrl = normalizeText(offer.store_url);
+        const merchantUrl = merchant?.merchant_url || "";
+        const buyUrl = resolveBuyUrl({
+          affiliate_url: affiliateUrl,
+          store_url: storeUrl,
+          merchant_url: merchantUrl
+        });
 
         return {
           offer_id: normalizeText(offer.offer_id),
@@ -114,21 +165,27 @@
           merchant_slug: merchantSlug,
           merchant_name: merchant?.merchant_name || merchantSlug,
           merchant_logo: merchant?.logo_url || "",
-          merchant_url: merchant?.merchant_url || "",
+          merchant_url: merchantUrl,
           trusted: merchant ? merchant.trusted : false,
           worldwide_shipping: merchant ? merchant.worldwide_shipping : false,
           merchant_active: merchant ? merchant.active : false,
           affiliate_network: merchant?.affiliate_network || "",
+
           price: toNumber(offer.price),
           old_price: toNumber(offer.old_price),
           currency: normalizeText(offer.currency || "NOK") || "NOK",
-          affiliate_url: normalizeText(offer.affiliate_url),
-          store_url: normalizeText(offer.store_url),
-          availability: normalizeText(offer.availability || "in_stock"),
-          shipping_scope: normalizeText(offer.shipping_scope || ""),
+
+          affiliate_url: affiliateUrl,
+          store_url: storeUrl,
+          buy_url: buyUrl,
+
+          availability: normalizeText(offer.availability || "in_stock").toLowerCase(),
+          shipping_scope: normalizeText(offer.shipping_scope || "").toLowerCase(),
+
           source: normalizeText(offer.source),
           source_program: normalizeText(offer.source_program),
           last_updated: normalizeText(offer.last_updated),
+
           active: toBool(offer.active)
         };
       })
@@ -139,15 +196,12 @@
     if (!offer) return false;
     if (!offer.active) return false;
     if (!offer.merchant_active) return false;
-    if (!offer.trusted) return false;
-    if (!offer.affiliate_url) return false;
+    if (!offer.buy_url) return false;
     if (offer.availability === "out_of_stock") return false;
 
-    const shipping = offer.shipping_scope.toLowerCase();
-    if (shipping && !["worldwide", "europe", "global", "international"].includes(shipping)) {
-      return false;
-    }
-
+    // Ikke vær for streng på shipping_scope nå.
+    // Tomt felt skal være OK.
+    // Vi filtrerer bare bort helt eksplisitt utilgjengelige offers senere hvis ønskelig.
     return true;
   }
 
@@ -159,7 +213,7 @@
     const cached = getCache(cacheKey);
     if (cached) return cached;
 
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
       throw new Error(`Kunne ikke hente ${url} (${res.status})`);
     }
@@ -174,19 +228,30 @@
   // Init
   // ===============================
 
-  async function initOffersEngine() {
+  async function initOffersEngine(options = {}) {
+    const { forceRefresh = false } = options;
+
+    if (forceRefresh) {
+      clearOffersEngineCache();
+      state.initialized = false;
+      state.initPromise = null;
+      state.offers = [];
+      state.merchants = [];
+    }
+
     if (state.initialized) return state;
     if (state.initPromise) return state.initPromise;
 
     state.initPromise = (async () => {
       try {
         const [rawOffers, rawMerchants] = await Promise.all([
-          fetchJsonWithCache(OFFERS_URL, "brandradar_offers_cache"),
-          fetchJsonWithCache(MERCHANTS_URL, "brandradar_merchants_cache")
+          fetchJsonWithCache(OFFERS_URL, CACHE_KEYS.offers),
+          fetchJsonWithCache(MERCHANTS_URL, CACHE_KEYS.merchants)
         ]);
 
         state.merchants = Array.isArray(rawMerchants) ? rawMerchants : [];
         const merchantMap = buildMerchantMap(state.merchants);
+
         state.offers = normalizeOffers(
           Array.isArray(rawOffers) ? rawOffers : [],
           merchantMap
@@ -212,6 +277,7 @@
 
   async function getOffersForProduct(productId) {
     await initOffersEngine();
+
     const id = normalizeText(productId);
 
     return state.offers
@@ -264,12 +330,12 @@
     return enriched;
   }
 
-  // Eksponer globalt
   window.BrandRadarOffersEngine = {
     init: initOffersEngine,
     getOffersForProduct,
     getOfferSummaryForProduct,
     enrichProductsWithOfferSummary,
-    formatPrice
+    formatPrice,
+    clearCache: clearOffersEngineCache
   };
 })();
