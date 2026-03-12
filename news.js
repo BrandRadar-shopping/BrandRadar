@@ -797,7 +797,7 @@
               excerpt: item.excerpt,
               tag: item.tag || "Spotlight",
               secondaryTag: item.product.brand || item.product.category || "",
-              ctaText: "Explore spotlight",
+              ctaText: "Utforsk produkt",
               onCardClick: (product) => {
                 if (!product?.id) return;
                 window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
