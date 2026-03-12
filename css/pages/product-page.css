@@ -1,7 +1,6 @@
 /* =====================================================
-   PRODUCT PAGE – CLEANED + STABILIZED
-   Konsistent bildeflate, roligere layout og mer stabil
-   plassering av offers-seksjonen
+   PRODUCT PAGE – CLEANED + BALANCED
+   Låst, mer balansert bildeflate + ryddigere produktlayout
 ===================================================== */
 
 .product-detail {
@@ -10,7 +9,7 @@
   gap: 2rem;
   max-width: 1300px;
   margin: 2rem auto;
-  align-items: stretch;
+  align-items: flex-start;
   padding: 2rem 0;
 }
 
@@ -35,7 +34,7 @@
   border-radius: 10px;
   cursor: pointer;
   border: 2px solid transparent;
-  background: #f8fafc;
+  background: #f3f4f6;
   transition: 0.2s ease;
 }
 
@@ -50,10 +49,10 @@
 .image-gallery {
   width: 100%;
   max-width: 560px;
-  height: 560px;
+  height: 480px;
   border-radius: 14px;
   border: 2px solid #000;
-  background: #f8fafc;
+  background: linear-gradient(180deg, #e5e7eb 0%, #e2e5e9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,14 +68,13 @@
   border: 0;
   object-fit: contain;
   display: block;
+  background: transparent;
 }
 
 .product-detail-info {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  min-height: 560px;
-  height: 100%;
 }
 
 .product-detail-info h1 {
@@ -251,7 +249,7 @@
   font-size: 1rem;
   line-height: 1.62;
   color: #1f2937;
-  min-height: 104px;
+  min-height: 96px;
   max-width: 60ch;
 }
 
@@ -366,7 +364,7 @@
 ===================================================== */
 
 .price-comparison {
-  margin-top: auto;
+  margin-top: 1.25rem;
   padding: 1rem;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 16px;
@@ -498,12 +496,11 @@
 
   .image-gallery {
     max-width: 100%;
-    height: 500px;
+    height: 440px;
   }
 
   .product-detail-info {
     grid-column: 1 / -1;
-    min-height: unset;
     margin-top: 0.5rem;
   }
 
@@ -517,7 +514,7 @@
   }
 
   .price-comparison {
-    margin-top: 1.25rem;
+    margin-top: 1.15rem;
   }
 }
 
@@ -546,7 +543,7 @@
 
   .image-gallery {
     order: 1;
-    height: 360px;
+    height: 340px;
     max-width: 100%;
     border-radius: 12px;
   }
@@ -558,7 +555,6 @@
   .product-detail-info {
     order: 3;
     margin-top: 0.5rem;
-    min-height: unset;
     gap: 0.65rem;
   }
 
