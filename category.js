@@ -4,6 +4,8 @@
 // - støtter category uten gender
 // - støtter kidtype for barn
 // - korrekt prisfilter + sortering basert på laveste offer-pris
+// - mer robust kategori/subkategori-mapping
+// - støtter umbrella-kategorier som Gymcorner
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -49,6 +51,76 @@ document.addEventListener("DOMContentLoaded", async () => {
       .replace(/[^\w\d]+/g, "-")
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "");
+
+  const CATEGORY_ALIAS_MAP = {
+    gymcorner: [
+      "gymcorner",
+      "supplements",
+      "supplement",
+      "sportsnutrition",
+      "nutrition"
+    ],
+    shoes: ["shoes", "sko"],
+    clothing: ["clothing", "klaer"],
+    accessories: ["accessories", "tilbehor"],
+    selfcare: ["selfcare", "beauty", "hudpleie", "hygiene"]
+  };
+
+  const SUBCATEGORY_ALIAS_MAP = {
+    proteinbarer: [
+      "proteinbarer",
+      "proteinbar",
+      "proteinbars",
+      "protein-bar",
+      "protein-bars",
+      "bars",
+      "soft-bar",
+      "soft-bars"
+    ],
+    proteinpulver: [
+      "proteinpulver",
+      "protein-pulver",
+      "proteinpowder",
+      "protein-powder",
+      "whey",
+      "whey-protein",
+      "isolate"
+    ],
+    kreatin: [
+      "kreatin",
+      "creatine"
+    ],
+    pwo: [
+      "pwo",
+      "pre-workout",
+      "pre-workout",
+      "preworkout",
+      "pre-workout-pwo"
+    ],
+    vitaminer-mineraler: [
+      "vitaminer-mineraler",
+      "vitaminer",
+      "mineraler",
+      "vitamins",
+      "minerals",
+      "vitamins-minerals"
+    ],
+    drikke: [
+      "drikke",
+      "drink",
+      "drinks",
+      "beverage",
+      "beverages"
+    ],
+    aminosyrer: [
+      "aminosyrer",
+      "amino",
+      "amino-acids",
+      "aminoacids",
+      "bcaa",
+      "eaa"
+    ]
+  };
 
   const categorySlug = normalize(categoryParam);
   let genderSlug = genderParam ? normalize(genderParam) : "";
@@ -103,6 +175,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (price && oldPrice && oldPrice > price) return true;
 
     return false;
+  }
+
+  function getAliases(slug, map) {
+    return [...new Set([slug, ...(map[slug] || [])])];
+  }
+
+  function getProductSearchText(product) {
+    return [
+      product.category,
+      product.main_category,
+      product.subcategory,
+      product.title,
+      product.product_name,
+      product.name,
+      product.info,
+      product.description,
+      product.brand
+    ]
+      .filter(Boolean)
+      .map(normalize)
+      .join(" ");
+  }
+
+  function productMatchesCategory(product, targetCategorySlug) {
+    const aliases = getAliases(targetCategorySlug, CATEGORY_ALIAS_MAP);
+    const pCategory = normalize(product.category);
+    const pMainCategory = normalize(product.main_category);
+    const text = getProductSearchText(product);
+
+    return aliases.some(alias =>
+      pCategory === alias ||
+      pMainCategory === alias ||
+      text.includes(alias)
+    );
+  }
+
+  function productMatchesSubcategory(product, targetSubSlug) {
+    if (!targetSubSlug) return true;
+
+    const aliases = getAliases(targetSubSlug, SUBCATEGORY_ALIAS_MAP);
+    const pSub = normalize(product.subcategory);
+    const pCategory = normalize(product.category);
+    const text = getProductSearchText(product);
+
+    return aliases.some(alias =>
+      pSub === alias ||
+      pCategory === alias ||
+      text.includes(alias)
+    );
   }
 
   try {
@@ -185,8 +306,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     breadcrumbEl.innerHTML = breadcrumbHtml;
 
     const filteredBase = products.filter(p => {
-      const categoryOk = normalize(p.category) === categorySlug;
-      const subOk = !subSlug || normalize(p.subcategory) === subSlug;
+      const categoryOk = productMatchesCategory(p, categorySlug);
+      const subOk = productMatchesSubcategory(p, subSlug);
 
       let genderOk = true;
       if (genderSlug) {
