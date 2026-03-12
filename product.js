@@ -1,6 +1,7 @@
 // ======================================================
 // ✅ Product page — Felles for vanlige + Luxury produkter
 // Bruker Offers Engine + Product Card Engine
+// Inkluderer dynamisk BrandRadar Product Insights
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -106,7 +107,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     thumbs.appendChild(img);
   });
 
-  await renderPriceComparison(product);
+  const offerSummary = await renderPriceComparison(product);
+  renderProductInsights(product, offerSummary);
+
   await loadRecommendations(products, product);
   setupFavoriteButton(product);
 
@@ -140,6 +143,167 @@ function renderProductRating(product) {
     : "Ingen rating";
 }
 
+function normalizeText(value) {
+  return String(value || "").trim();
+}
+
+function normalizeCategory(value) {
+  return normalizeText(value).toLowerCase();
+}
+
+function getDiscountPercent(product, offerSummary) {
+  const productDiscount = parseFloat(String(product?.discount || "").replace(",", "."));
+  if (Number.isFinite(productDiscount) && productDiscount > 0) {
+    return productDiscount < 1 ? Math.round(productDiscount * 100) : Math.round(productDiscount);
+  }
+
+  const bestOffer = offerSummary?.offers?.[0];
+  if (bestOffer?.old_price && bestOffer?.price && bestOffer.old_price > bestOffer.price) {
+    return Math.round(((bestOffer.old_price - bestOffer.price) / bestOffer.old_price) * 100);
+  }
+
+  return null;
+}
+
+function buildInsightHighlights(product, offerSummary) {
+  const highlights = [];
+
+  if (offerSummary?.lowestPriceFormatted) {
+    highlights.push(`Laveste pris ${offerSummary.lowestPriceFormatted}`);
+  }
+
+  if (offerSummary?.storeCount) {
+    highlights.push(
+      offerSummary.storeCount === 1
+        ? "1 butikk aktiv"
+        : `${offerSummary.storeCount} butikker aktive`
+    );
+  }
+
+  if (product.brand) {
+    highlights.push(`Fra ${product.brand}`);
+  }
+
+  if (product.category) {
+    highlights.push(product.category);
+  }
+
+  const discountPercent = getDiscountPercent(product, offerSummary);
+  if (discountPercent && discountPercent > 0) {
+    highlights.push(`${discountPercent}% rabatt`);
+  }
+
+  return highlights.slice(0, 4);
+}
+
+function buildInsightMeta(product, offerSummary) {
+  const parts = [];
+
+  if (offerSummary?.storeCount) {
+    parts.push(
+      offerSummary.storeCount === 1
+        ? "Pris fra 1 butikk"
+        : `Pris fra ${offerSummary.storeCount} butikker`
+    );
+  } else {
+    parts.push("Produktdata tilgjengelig");
+  }
+
+  const offers = Array.isArray(offerSummary?.offers) ? offerSummary.offers : [];
+  const hasWorldwide = offers.some((offer) =>
+    ["worldwide", "global", "international"].includes(
+      String(offer.shipping_scope || "").toLowerCase()
+    )
+  );
+
+  if (hasWorldwide) {
+    parts.push("Worldwide shipping");
+  } else if (offers.length) {
+    parts.push("Aktive offers");
+  }
+
+  parts.push("Pris sammenlignes live");
+
+  return parts;
+}
+
+function buildRuleBasedSummary(product, offerSummary) {
+  const category = normalizeCategory(product.category);
+  const brand = normalizeText(product.brand);
+  const storeCount = offerSummary?.storeCount || 0;
+  const hasDiscount = !!getDiscountPercent(product, offerSummary);
+  const ratingNum = parseFloat(
+    String(product.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")
+  );
+  const hasStrongRating = Number.isFinite(ratingNum) && ratingNum >= 4.3;
+
+  if (category === "shoes") {
+    if (hasDiscount && storeCount >= 2) {
+      return `Et sterkt valg innen footwear akkurat nå, med aktiv prissammenligning${brand ? ` fra ${brand}` : ""} og flere butikker tilgjengelig.`;
+    }
+    if (hasStrongRating) {
+      return `Et solid shoe-valg${brand ? ` fra ${brand}` : ""} for deg som vil ha en modell som kombinerer tydelig uttrykk med god bruk i hverdagen.`;
+    }
+    return `Et aktuelt shoe-valg${brand ? ` fra ${brand}` : ""} med aktiv prisoversikt og flere tilgjengelige kjøpsmuligheter akkurat nå.`;
+  }
+
+  if (category === "clothing") {
+    if (hasDiscount) {
+      return `Et aktuelt plagg${brand ? ` fra ${brand}` : ""} med god verdi akkurat nå, støttet av aktiv prissammenligning på tvers av butikker.`;
+    }
+    return `Et sterkt plagg${brand ? ` fra ${brand}` : ""} for deg som vil ha en modell med tydelig stil og flere aktive kjøpsmuligheter samlet på ett sted.`;
+  }
+
+  if (category === "accessories") {
+    return `Et gjennomført accessory-valg${brand ? ` fra ${brand}` : ""} som fungerer godt som detaljprodukt, med aktiv prisoversikt og tilgjengelige butikker akkurat nå.`;
+  }
+
+  if (category === "selfcare") {
+    return `Et relevant selfcare-produkt${brand ? ` fra ${brand}` : ""} med aktiv prisinnhenting og flere tilgjengelige kjøpspunkter akkurat nå.`;
+  }
+
+  if (category === "gymcorner") {
+    return `Et aktuelt gym-produkt${brand ? ` fra ${brand}` : ""} med aktiv prisoversikt og flere butikker tilgjengelig for rask sammenligning.`;
+  }
+
+  return `Et interessant produkt${brand ? ` fra ${brand}` : ""} med aktiv prissammenligning og flere tilgjengelige kjøpsmuligheter akkurat nå.`;
+}
+
+function renderProductInsights(product, offerSummary) {
+  const container = document.getElementById("product-insights");
+  if (!container) return;
+
+  const manualNote = normalizeText(
+    product.editor_note ||
+    product.why_it_stands_out ||
+    product.brandradar_note
+  );
+
+  const highlights = buildInsightHighlights(product, offerSummary);
+  const metaParts = buildInsightMeta(product, offerSummary);
+
+  const summary = manualNote || buildRuleBasedSummary(product, offerSummary);
+
+  const highlightsHTML = highlights.length
+    ? `
+      <div class="product-insights-highlights">
+        ${highlights.map(item => `<span class="product-insight-chip">${item}</span>`).join("")}
+      </div>
+    `
+    : "";
+
+  const metaHTML = metaParts.length
+    ? `<div class="product-insight-meta">${metaParts.join(" • ")}</div>`
+    : "";
+
+  container.innerHTML = `
+    <div class="product-insights-title">Hvorfor dette produktet skiller seg ut</div>
+    ${highlightsHTML}
+    <div class="product-insight-summary">${summary}</div>
+    ${metaHTML}
+  `;
+}
+
 async function renderPriceComparison(product) {
   const section = document.getElementById("price-comparison");
   const subtitle = document.getElementById("price-comparison-subtitle");
@@ -149,15 +313,21 @@ async function renderPriceComparison(product) {
   const oldPriceEl = document.getElementById("old-price");
   const discountTagEl = document.getElementById("discount-tag");
 
-  if (!section || !subtitle || !list) return;
-  if (!window.BrandRadarOffersEngine || product?.id == null) return;
+  if (!section || !subtitle || !list) return null;
+  if (!window.BrandRadarOffersEngine || product?.id == null) return null;
 
   try {
     const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(String(product.id));
 
     if (!summary?.hasOffers || !Array.isArray(summary.offers) || !summary.offers.length) {
       section.hidden = true;
-      return;
+      return {
+        hasOffers: false,
+        lowestPrice: null,
+        lowestPriceFormatted: "",
+        storeCount: 0,
+        offers: []
+      };
     }
 
     newPriceEl.textContent = `Fra ${summary.lowestPriceFormatted}`;
@@ -224,7 +394,7 @@ async function renderPriceComparison(product) {
 
       const cta = document.createElement("a");
       cta.className = "price-offer-cta";
-      cta.href = offer.affiliate_url || offer.store_url || "#";
+      cta.href = offer.buy_url || offer.affiliate_url || offer.store_url || "#";
       cta.target = "_blank";
       cta.rel = "noopener noreferrer";
       cta.textContent = "Se tilbud";
@@ -239,15 +409,17 @@ async function renderPriceComparison(product) {
     });
 
     const bestOffer = summary.offers[0];
-    if (bestOffer?.affiliate_url || bestOffer?.store_url) {
-      buyLinkEl.href = bestOffer.affiliate_url || bestOffer.store_url;
+    if (bestOffer?.buy_url || bestOffer?.affiliate_url || bestOffer?.store_url) {
+      buyLinkEl.href = bestOffer.buy_url || bestOffer.affiliate_url || bestOffer.store_url;
       buyLinkEl.textContent = "Kjøp til beste pris";
     }
 
     section.hidden = false;
+    return summary;
   } catch (error) {
     console.warn("⚠️ Klarte ikke rendre price comparison:", error);
     section.hidden = true;
+    return null;
   }
 }
 
