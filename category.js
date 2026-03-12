@@ -93,11 +93,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     pwo: [
       "pwo",
       "pre-workout",
-      "pre-workout",
       "preworkout",
       "pre-workout-pwo"
     ],
-    vitaminer-mineraler: [
+    "vitaminer-mineraler": [
       "vitaminer-mineraler",
       "vitaminer",
       "mineraler",
