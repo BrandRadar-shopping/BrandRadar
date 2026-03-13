@@ -7,6 +7,7 @@
 // - mer robust kategori/subkategori-mapping
 // - støtter umbrella-kategorier som Gymcorner
 // - støtter collections som deals / picks / news
+// - deals får egen editorial landing + highlights
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const discountFilter = document.getElementById("discount-filter");
   const sortSelect = document.getElementById("sort-select");
   const filterTagsContainer = document.querySelector(".filter-tags");
+  const filterBar = document.querySelector(".filter-bar");
 
   const params = new URLSearchParams(window.location.search);
   const genderParam = params.get("gender");
@@ -61,75 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "");
 
-  const CATEGORY_ALIAS_MAP = {
-    gymcorner: [
-      "gymcorner",
-      "supplements",
-      "supplement",
-      "sportsnutrition",
-      "nutrition"
-    ],
-    shoes: ["shoes", "sko"],
-    clothing: ["clothing", "klaer"],
-    accessories: ["accessories", "tilbehor"],
-    selfcare: ["selfcare", "beauty", "hudpleie", "hygiene"]
-  };
-
-  const SUBCATEGORY_ALIAS_MAP = {
-    proteinbarer: [
-      "proteinbarer",
-      "proteinbar",
-      "proteinbars",
-      "protein-bar",
-      "protein-bars",
-      "bars",
-      "soft-bar",
-      "soft-bars"
-    ],
-    proteinpulver: [
-      "proteinpulver",
-      "protein-pulver",
-      "proteinpowder",
-      "protein-powder",
-      "whey",
-      "whey-protein",
-      "isolate"
-    ],
-    kreatin: [
-      "kreatin",
-      "creatine"
-    ],
-    pwo: [
-      "pwo",
-      "pre-workout",
-      "preworkout",
-      "pre-workout-pwo"
-    ],
-    "vitaminer-mineraler": [
-      "vitaminer-mineraler",
-      "vitaminer",
-      "mineraler",
-      "vitamins",
-      "minerals",
-      "vitamins-minerals"
-    ],
-    drikke: [
-      "drikke",
-      "drink",
-      "drinks",
-      "beverage",
-      "beverages"
-    ],
-    aminosyrer: [
-      "aminosyrer",
-      "amino",
-      "amino-acids",
-      "aminoacids",
-      "bcaa",
-      "eaa"
-    ]
-  };
-
   const categorySlug = normalize(categoryParam);
   let genderSlug = genderParam ? normalize(genderParam) : "";
   if (genderSlug === "herre") genderSlug = "men";
@@ -138,6 +71,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const subSlug = normalize(subParam);
   const kidtypeSlug = normalize(kidtypeParam);
+
+  const CATEGORY_ALIAS_MAP = {
+    gymcorner: ["gymcorner", "supplements", "supplement", "sportsnutrition", "nutrition"],
+    shoes: ["shoes", "sko"],
+    clothing: ["clothing", "klaer"],
+    accessories: ["accessories", "tilbehor"],
+    selfcare: ["selfcare", "beauty", "hudpleie", "hygiene"]
+  };
+
+  const SUBCATEGORY_ALIAS_MAP = {
+    proteinbarer: ["proteinbarer", "proteinbar", "proteinbars", "protein-bar", "protein-bars", "bars", "soft-bar", "soft-bars"],
+    proteinpulver: ["proteinpulver", "protein-pulver", "proteinpowder", "protein-powder", "whey", "whey-protein", "isolate"],
+    kreatin: ["kreatin", "creatine"],
+    pwo: ["pwo", "pre-workout", "preworkout", "pre-workout-pwo"],
+    "vitaminer-mineraler": ["vitaminer-mineraler", "vitaminer", "mineraler", "vitamins", "minerals", "vitamins-minerals"],
+    drikke: ["drikke", "drink", "drinks", "beverage", "beverages"],
+    aminosyrer: ["aminosyrer", "amino", "amino-acids", "aminoacids", "bcaa", "eaa"]
+  };
 
   function parseNumber(val) {
     if (val == null) return null;
@@ -157,6 +108,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!v && v !== 0) return false;
     const s = String(v).trim().toLowerCase();
     return s === "true" || s === "1" || s === "ja" || s === "yes";
+  }
+
+  function formatPrice(num) {
+    if (num == null || !Number.isFinite(Number(num))) return "";
+    return `${new Intl.NumberFormat("nb-NO").format(Math.round(Number(num)))} kr`;
   }
 
   function getFallbackPrice(product) {
@@ -400,6 +356,391 @@ document.addEventListener("DOMContentLoaded", async () => {
     sortSelect?.addEventListener("change", applyFiltersAndSort);
   }
 
+  function injectCollectionStyles() {
+    if (document.getElementById("collection-page-styles")) return;
+
+    const style = document.createElement("style");
+    style.id = "collection-page-styles";
+    style.textContent = `
+      .collection-hero {
+        margin: 10px 0 28px;
+        padding: 28px;
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at top right, rgba(0,112,243,0.12), transparent 30%),
+          linear-gradient(135deg, #f8fbff 0%, #ffffff 55%, #f4f7fb 100%);
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
+      }
+
+      .collection-hero__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #0070f3;
+        margin-bottom: 10px;
+      }
+
+      .collection-hero h2 {
+        margin: 0 0 10px;
+        font-size: clamp(2rem, 3vw, 3rem);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        color: #111827;
+      }
+
+      .collection-hero p {
+        margin: 0;
+        max-width: 760px;
+        color: #4b5563;
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      .collection-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .collection-meta__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(17,24,39,0.08);
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .deals-highlight-wrap {
+        margin: 0 0 28px;
+      }
+
+      .deals-highlight-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      .deals-highlight-head h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: #111827;
+      }
+
+      .deals-highlight-head p {
+        margin: 6px 0 0;
+        color: #6b7280;
+      }
+
+      .deals-highlight-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 18px;
+      }
+
+      .deal-highlight-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        background: #fff;
+        border: 1px solid rgba(17,24,39,0.08);
+        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .deal-highlight-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        border-color: rgba(0,112,243,0.18);
+      }
+
+      .deal-highlight-card--primary {
+        min-height: 100%;
+      }
+
+      .deal-highlight-card__media {
+        position: relative;
+        aspect-ratio: 1.08 / 1;
+        background: #f8fafc;
+      }
+
+      .deal-highlight-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        padding: 20px;
+      }
+
+      .deal-highlight-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(17,24,39,0.86);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .deal-highlight-discount {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 2;
+        min-width: 62px;
+        text-align: center;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: #ef4444;
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.95rem;
+        box-shadow: 0 10px 22px rgba(239, 68, 68, 0.28);
+      }
+
+      .deal-highlight-card__body {
+        padding: 20px 20px 22px;
+      }
+
+      .deal-highlight-brand {
+        margin: 0 0 6px;
+        color: #0070f3;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .deal-highlight-title {
+        margin: 0 0 10px;
+        color: #111827;
+        font-size: 1.18rem;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+      }
+
+      .deal-highlight-copy {
+        margin: 0 0 16px;
+        color: #6b7280;
+        line-height: 1.55;
+        font-size: 0.97rem;
+      }
+
+      .deal-highlight-pricing {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .deal-highlight-price {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .deal-highlight-oldprice {
+        font-size: 0.96rem;
+        color: #9ca3af;
+        text-decoration: line-through;
+      }
+
+      .deal-highlight-cta {
+        margin-top: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #0070f3;
+        font-weight: 700;
+      }
+
+      .collection-subhead {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 12px 0 16px;
+      }
+
+      .collection-subhead__text h3 {
+        margin: 0;
+        font-size: 1.28rem;
+        letter-spacing: -0.02em;
+      }
+
+      .collection-subhead__text p {
+        margin: 6px 0 0;
+        color: #6b7280;
+      }
+
+      .collection-page.collection-page--deals .filter-bar {
+        margin-top: 0;
+      }
+
+      @media (max-width: 980px) {
+        .deals-highlight-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .deal-highlight-card__media {
+          aspect-ratio: 1.2 / 1;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .collection-hero {
+          padding: 22px 18px;
+          border-radius: 20px;
+        }
+
+        .collection-hero h2 {
+          font-size: 1.8rem;
+        }
+
+        .deals-highlight-head,
+        .collection-subhead {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensurePageRootCollectionClass(slug) {
+    const mainEl = document.querySelector("main");
+    if (!mainEl) return;
+    mainEl.classList.add("collection-page");
+    if (slug) mainEl.classList.add(`collection-page--${slug}`);
+  }
+
+  function createCollectionHero({ eyebrow, title, text, metaPills = [] }) {
+    const hero = document.createElement("section");
+    hero.className = "collection-hero";
+    hero.innerHTML = `
+      <div class="collection-hero__eyebrow">${eyebrow}</div>
+      <h2>${title}</h2>
+      <p>${text}</p>
+      <div class="collection-meta">
+        ${metaPills.map(p => `<span class="collection-meta__pill">${p}</span>`).join("")}
+      </div>
+    `;
+    return hero;
+  }
+
+  function buildDealHighlights(products) {
+    if (!products.length) return null;
+
+    const sorted = [...products].sort((a, b) => {
+      const aDisc = parseNumber(a.discount) || 0;
+      const bDisc = parseNumber(b.discount) || 0;
+      if (bDisc !== aDisc) return bDisc - aDisc;
+      return getEffectivePrice(a) - getEffectivePrice(b);
+    });
+
+    const picks = sorted.slice(0, 3);
+    if (!picks.length) return null;
+
+    const wrap = document.createElement("section");
+    wrap.className = "deals-highlight-wrap";
+
+    const head = document.createElement("div");
+    head.className = "deals-highlight-head";
+    head.innerHTML = `
+      <div>
+        <h3>Utvalgte deals akkurat nå</h3>
+        <p>En rask oversikt over tilbudene som skiller seg mest ut akkurat nå.</p>
+      </div>
+    `;
+
+    const grid = document.createElement("div");
+    grid.className = "deals-highlight-grid";
+
+    picks.forEach((product, index) => {
+      const discount = parseNumber(product.discount) || 0;
+      const newPrice = parseNumber(product.price);
+      const oldPrice = parseNumber(product.old_price);
+      const label =
+        index === 0 ? "Beste deal" :
+        index === 1 ? "Mest interessant" :
+        "Verdt å sjekke";
+
+      const card = document.createElement("article");
+      card.className = `deal-highlight-card ${index === 0 ? "deal-highlight-card--primary" : ""}`.trim();
+      card.innerHTML = `
+        <div class="deal-highlight-card__media">
+          <span class="deal-highlight-badge">${label}</span>
+          ${discount ? `<span class="deal-highlight-discount">-${Math.round(discount)}%</span>` : ""}
+          <img src="${product.image_url || ""}" alt="${product.title || ""}" loading="lazy">
+        </div>
+        <div class="deal-highlight-card__body">
+          <p class="deal-highlight-brand">${product.brand || "BrandRadar"}</p>
+          <h3 class="deal-highlight-title">${product.title || "Produkt"}</h3>
+          <p class="deal-highlight-copy">
+            ${index === 0
+              ? "Et tilbud som kombinerer høy synlighet, tydelig rabatt og sterk kjøpsrelevans."
+              : index === 1
+                ? "Et produkt som skiller seg ut med god verdi og sterk merkeinteresse."
+                : "Et aktuelt funn som fortjener en nærmere titt før det forsvinner."}
+          </p>
+          <div class="deal-highlight-pricing">
+            ${newPrice != null ? `<span class="deal-highlight-price">${formatPrice(newPrice)}</span>` : ""}
+            ${oldPrice != null ? `<span class="deal-highlight-oldprice">${formatPrice(oldPrice)}</span>` : ""}
+          </div>
+          <div class="deal-highlight-cta">Se deal →</div>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        if (product.product_url) {
+          window.open(product.product_url, "_blank", "noopener");
+          return;
+        }
+        const id = product.id || product.product_id || "";
+        if (id) {
+          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+        }
+      });
+
+      grid.appendChild(card);
+    });
+
+    wrap.appendChild(head);
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function insertBeforeFilterBar(elements = []) {
+    if (!filterBar) return;
+    const parent = filterBar.parentNode;
+    if (!parent) return;
+
+    elements.filter(Boolean).forEach(el => {
+      parent.insertBefore(el, filterBar);
+    });
+  }
+
   try {
     // ======================================================
     // COLLECTION MODE
@@ -410,13 +751,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       let products = [];
       let pageTitle = "";
       let breadcrumbLabel = "";
+      let collectionHero = null;
+      let collectionIntroBlock = null;
 
       if (collectionSlug === "deals") {
+        injectCollectionStyles();
+        ensurePageRootCollectionClass("deals");
+
         const rows = await fetch(dealsUrl).then(r => r.json());
         products = rows.map(mapDealRowToProduct).filter(p => p.id || p.product_url);
         pageTitle = "Ukens Deals";
         breadcrumbLabel = "Deals";
+
+        collectionHero = createCollectionHero({
+          eyebrow: "Weekly Deals",
+          title: "Ukens beste tilbud samlet på ett sted",
+          text: "Dette er deal-siden for produkter vi mener er verdt å klikke på akkurat nå. Her kombinerer vi tydelig verdi, aktuelle kampanjer og en raskere vei til gode kjøp.",
+          metaPills: [
+            "Kuratert av BrandRadar",
+            "Oppdatert for aktuelle tilbud",
+            "Bygget for rask beslutning"
+          ]
+        });
       } else if (collectionSlug === "picks") {
+        ensurePageRootCollectionClass("picks");
+
         const [pickRows, masterRows] = await Promise.all([
           fetch(picksUrl).then(r => r.json()),
           fetch(productUrl).then(r => r.json())
@@ -455,6 +814,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         pageTitle = "Radar Picks";
         breadcrumbLabel = "Radar Picks";
       } else if (collectionSlug === "news") {
+        ensurePageRootCollectionClass("news");
+
         const [newsRows, masterRows] = await Promise.all([
           fetch(newsUrl).then(r => r.json()),
           fetch(productUrl).then(r => r.json())
@@ -501,6 +862,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       emptyMessage.style.display = "none";
       populateBrandFilter(enrichedProducts);
+
+      if (collectionSlug === "deals") {
+        const highlights = buildDealHighlights(enrichedProducts);
+
+        collectionIntroBlock = document.createElement("div");
+        collectionIntroBlock.className = "collection-subhead";
+        collectionIntroBlock.innerHTML = `
+          <div class="collection-subhead__text">
+            <h3>Alle deals</h3>
+            <p>Browse hele utvalget, filtrer smart og finn tilbudene som faktisk er relevante.</p>
+          </div>
+        `;
+
+        insertBeforeFilterBar([collectionHero, highlights, collectionIntroBlock]);
+      } else if (collectionHero) {
+        insertBeforeFilterBar([collectionHero]);
+      }
 
       function applyFiltersAndSort() {
         let result = [...enrichedProducts];
