@@ -390,11 +390,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const picks = sorted.slice(0, 3);
     if (!picks.length) return null;
 
-    const wrap = document.createElement("section");
-    wrap.className = "deals-top-zone";
-
-    const highlightsShell = document.createElement("div");
-    highlightsShell.className = "deals-highlight-wrap";
+    const shell = document.createElement("section");
+    shell.className = "deals-highlights-shell";
 
     const head = document.createElement("div");
     head.className = "deals-highlight-head";
@@ -457,16 +454,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       grid.appendChild(card);
     });
 
-    highlightsShell.appendChild(head);
-    highlightsShell.appendChild(grid);
+    shell.appendChild(head);
+    shell.appendChild(grid);
+    return shell;
+  }
+
+  function buildDealsTopZone(heroEl, highlightsEl) {
+    const section = document.createElement("section");
+    section.className = "deals-top-zone";
+
+    const inner = document.createElement("div");
+    inner.className = "deals-top-zone__inner";
+
+    if (heroEl) inner.appendChild(heroEl);
+    if (highlightsEl) inner.appendChild(highlightsEl);
 
     const divider = document.createElement("div");
     divider.className = "deals-top-zone-divider";
 
-    wrap.appendChild(highlightsShell);
-    wrap.appendChild(divider);
+    section.appendChild(inner);
+    section.appendChild(divider);
 
-    return wrap;
+    return section;
   }
 
   function insertBeforeFilterBar(elements = []) {
@@ -602,6 +611,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (collectionSlug === "deals") {
         const highlights = buildDealHighlights(enrichedProducts);
+        const topZone = buildDealsTopZone(collectionHero, highlights);
 
         collectionIntroBlock = document.createElement("div");
         collectionIntroBlock.className = "collection-subhead";
@@ -612,7 +622,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         `;
 
-        insertBeforeFilterBar([collectionHero, highlights, collectionIntroBlock]);
+        insertBeforeFilterBar([topZone, collectionIntroBlock]);
       } else if (collectionHero) {
         insertBeforeFilterBar([collectionHero]);
       }
