@@ -5,7 +5,7 @@
 
 .category-products .product-info .rating {
   font-size: 0.9rem;
-  color: #f5c518;          /* gullstjerne */
+  color: #f5c518;
   margin: 3px 0 6px;
 }
 
@@ -46,7 +46,6 @@
 }
 
 /* Tom kategori melding */
-
 .empty-message {
   text-align: center;
   font-size: 18px;
@@ -54,288 +53,6 @@
   margin: 30px 0;
 }
 
-
-/* =====================================================
-   DEALS COLLECTION PAGE – BRANDRADAR DESIGN UPGRADE
-   (kun aktiv når ?collection=deals brukes)
-   ===================================================== */
-
-.collection-page--deals {
-  background: #f6f8fb;
-}
-
-
-/* =============================
-   HERO / INTRO
-============================= */
-
-.collection-hero {
-  margin: 10px 0 40px;
-  padding: 36px 40px;
-  border-radius: 24px;
-
-  background:
-    radial-gradient(circle at top right, rgba(0,112,243,0.15), transparent 40%),
-    linear-gradient(135deg,#f8fbff 0%,#ffffff 55%,#eef3f9 100%);
-
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 18px 48px rgba(15,23,42,0.08);
-}
-
-.collection-hero__eyebrow{
-  font-size: 0.8rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #0070f3;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.collection-hero h2{
-  font-size: clamp(2.2rem,3vw,3.2rem);
-  letter-spacing:-0.04em;
-  margin-bottom: 12px;
-}
-
-.collection-hero p{
-  color:#555;
-  max-width:650px;
-  line-height:1.6;
-}
-
-.collection-meta{
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.collection-meta__pill{
-  background:#fff;
-  border:1px solid rgba(0,0,0,0.06);
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:.85rem;
-  color:#444;
-}
-
-
-/* =============================
-   HIGHLIGHT DEALS
-============================= */
-
-.deals-highlight-wrap{
-  background:white;
-  padding:32px;
-  border-radius:24px;
-  border:1px solid rgba(0,0,0,0.05);
-  box-shadow:0 14px 36px rgba(0,0,0,0.06);
-  margin-bottom:40px;
-}
-
-.deals-highlight-head{
-  margin-bottom:20px;
-}
-
-.deals-highlight-head h3{
-  font-size:1.3rem;
-  margin-bottom:5px;
-}
-
-.deals-highlight-head p{
-  color:#666;
-  font-size:.95rem;
-}
-
-.deals-highlight-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-
-
-/* =============================
-   HIGHLIGHT CARD
-============================= */
-
-.deal-highlight-card{
-  border-radius:20px;
-  overflow:hidden;
-  background:white;
-  border:1px solid rgba(0,0,0,0.06);
-  transition:all .25s ease;
-  cursor:pointer;
-}
-
-.deal-highlight-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 44px rgba(0,0,0,0.12);
-}
-
-.deal-highlight-card__media{
-  position:relative;
-  background:#f4f6f9;
-  aspect-ratio:4/3;
-  overflow:hidden;
-}
-
-.deal-highlight-card__media img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.deal-highlight-card__body{
-  padding:18px 20px 20px;
-}
-
-.deal-highlight-brand{
-  font-size:.8rem;
-  color:#0070f3;
-  font-weight:600;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-  margin-bottom:4px;
-}
-
-.deal-highlight-title{
-  font-size:1.1rem;
-  font-weight:600;
-  margin-bottom:6px;
-}
-
-.deal-highlight-copy{
-  font-size:.9rem;
-  color:#666;
-  margin-bottom:10px;
-}
-
-.deal-highlight-pricing{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-.deal-highlight-price{
-  font-weight:600;
-  font-size:1.1rem;
-}
-
-.deal-highlight-oldprice{
-  color:#999;
-  text-decoration:line-through;
-  font-size:.9rem;
-}
-
-.deal-highlight-cta{
-  margin-top:8px;
-  font-size:.9rem;
-  color:#0070f3;
-  font-weight:500;
-}
-
-
-/* =============================
-   DISCOUNT BADGE
-============================= */
-
-.deal-highlight-discount{
-  position:absolute;
-  top:14px;
-  right:14px;
-
-  padding:8px 12px;
-  border-radius:12px;
-
-  background:#dc2626;
-  color:white;
-  font-weight:700;
-  font-size:.85rem;
-
-  box-shadow:0 6px 18px rgba(220,38,38,0.3);
-}
-
-.deal-highlight-badge{
-  position:absolute;
-  top:14px;
-  left:14px;
-
-  background:#111;
-  color:white;
-  padding:6px 10px;
-  font-size:.75rem;
-  border-radius:8px;
-}
-
-
-/* =============================
-   FEED SECTION
-============================= */
-
-.collection-subhead{
-  margin-top:30px;
-  padding-top:20px;
-  border-top:1px solid rgba(0,0,0,0.06);
-  margin-bottom:10px;
-}
-
-.collection-subhead__text h3{
-  font-size:1.3rem;
-  margin-bottom:4px;
-}
-
-.collection-subhead__text p{
-  color:#666;
-  font-size:.9rem;
-}
-
-
-/* =============================
-   FILTER BAR UPGRADE
-============================= */
-
-.collection-page--deals .filter-bar{
-  background:white;
-  padding:18px 22px;
-  border-radius:16px;
-  border:1px solid rgba(0,0,0,0.06);
-  box-shadow:0 10px 24px rgba(0,0,0,0.05);
-  margin-bottom:20px;
-}
-
-
-/* =============================
-   PRODUCT GRID ADJUSTMENT
-============================= */
-
-.collection-page--deals .product-grid{
-  gap:32px;
-}
-
-
-/* =============================
-   MOBILE
-============================= */
-
-@media (max-width:900px){
-
-  .deals-highlight-grid{
-    grid-template-columns:1fr;
-  }
-
-  .collection-hero{
-    padding:28px;
-  }
-
-}
-
-@media (max-width:600px){
-
-  .collection-hero{
-    padding:24px;
-  }
-
-}
 
 /* =====================================================
    CATEGORY HEADER / COLLECTION INTRO
@@ -379,7 +96,7 @@
   color: #111827;
 }
 
-/* På deals: ton ned den separate tittelen for å unngå dobbel heading */
+/* På deals: skjul separat h1 så heroen blir hovedintro */
 .collection-page--deals .category-header h1 {
   font-size: 0;
   line-height: 0;
@@ -391,18 +108,101 @@
   margin-bottom: 14px;
 }
 
-/* Separator under hero for å skille intro fra innhold */
-.collection-page--deals .collection-hero {
-  position: relative;
-  margin-bottom: 54px;
+
+/* =====================================================
+   DEALS COLLECTION PAGE – BRANDRADAR DESIGN UPGRADE
+   ===================================================== */
+
+.collection-page--deals {
+  background: #f6f8fb;
 }
 
+
+/* =============================
+   HERO / INTRO
+============================= */
+
+.collection-hero {
+  margin: 10px 0 40px;
+  padding: 36px 40px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(0,112,243,0.15), transparent 40%),
+    linear-gradient(135deg, #f8fbff 0%, #ffffff 55%, #eef3f9 100%);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 18px 48px rgba(15,23,42,0.08);
+}
+
+.collection-hero__eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #0070f3;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.collection-hero h2 {
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+  line-height: 1.08;
+}
+
+.collection-hero p {
+  color: #555;
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+.collection-meta {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.collection-meta__pill {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: .85rem;
+  color: #444;
+}
+
+/* På deals: hero og highlights skal henge sammen */
+.collection-page--deals .collection-hero {
+  margin-bottom: 22px;
+  position: relative;
+}
+
+/* Fjern gammel separator under hero */
 .collection-page--deals .collection-hero::after {
+  content: none;
+}
+
+
+/* =====================================================
+   DEALS TOP ZONE – HERO + HIGHLIGHTS SAMLET
+   ===================================================== */
+
+.deals-top-zone {
+  margin-bottom: 34px;
+}
+
+.deals-top-zone-divider {
+  position: relative;
+  height: 1px;
+  margin: 28px 0 0;
+}
+
+.deals-top-zone-divider::before {
   content: "";
   position: absolute;
   left: 32px;
   right: 32px;
-  bottom: -28px;
+  top: 0;
   height: 1px;
   background: linear-gradient(
     90deg,
@@ -413,6 +213,267 @@
     rgba(15, 23, 42, 0) 100%
   );
   box-shadow: 0 0 14px rgba(0, 112, 243, 0.10);
-  pointer-events: none;
 }
 
+
+/* =============================
+   HIGHLIGHT DEALS
+============================= */
+
+.deals-highlight-wrap {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.deals-highlight-head {
+  margin-bottom: 20px;
+  padding-left: 4px;
+}
+
+.deals-highlight-head h3 {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+  letter-spacing: -0.03em;
+}
+
+.deals-highlight-head p {
+  color: #667085;
+  font-size: 1rem;
+}
+
+.deals-highlight-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 22px;
+}
+
+
+/* =============================
+   HIGHLIGHT CARD
+============================= */
+
+.deal-highlight-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+  transition: transform .25s ease, box-shadow .25s ease;
+  cursor: pointer;
+}
+
+.deal-highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+}
+
+.deal-highlight-card__media {
+  position: relative;
+  background: #f3f6fa;
+  aspect-ratio: 1.08 / 1;
+  overflow: hidden;
+}
+
+.deal-highlight-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deal-highlight-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 20px 20px;
+}
+
+.deal-highlight-brand {
+  font-size: .8rem;
+  color: #0070f3;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.deal-highlight-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.deal-highlight-copy {
+  font-size: .95rem;
+  color: #667085;
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+
+.deal-highlight-pricing {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.deal-highlight-price {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.deal-highlight-oldprice {
+  color: #999;
+  text-decoration: line-through;
+  font-size: .9rem;
+}
+
+.deal-highlight-cta {
+  margin-top: 12px;
+  font-size: .9rem;
+  color: #0070f3;
+  font-weight: 500;
+}
+
+
+/* =============================
+   DISCOUNT BADGE
+============================= */
+
+.deal-highlight-discount {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #dc2626;
+  color: white;
+  font-weight: 700;
+  font-size: .85rem;
+  box-shadow: 0 6px 18px rgba(220,38,38,0.3);
+}
+
+.deal-highlight-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #111;
+  color: white;
+  padding: 6px 10px;
+  font-size: .75rem;
+  border-radius: 8px;
+}
+
+
+/* =============================
+   FEED SECTION
+============================= */
+
+.collection-subhead {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  margin-bottom: 12px;
+}
+
+.collection-subhead__text h3 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+  letter-spacing: -0.03em;
+}
+
+.collection-subhead__text p {
+  color: #667085;
+  font-size: 1rem;
+}
+
+
+/* =============================
+   FILTER BAR UPGRADE
+============================= */
+
+.collection-page--deals .filter-bar {
+  background: white;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+
+/* =============================
+   FEED GRID – RYDDIGERE KORT
+============================= */
+
+.collection-page--deals .category-products .product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px;
+  align-items: stretch;
+}
+
+.collection-page--deals .category-products .product-card {
+  height: 100%;
+}
+
+.collection-page--deals .category-products .product-card img,
+.collection-page--deals .category-products .product-card .product-image,
+.collection-page--deals .category-products .product-card .card-image {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  object-fit: cover;
+}
+
+.collection-page--deals .category-products .product-card .product-info {
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+}
+
+
+/* =============================
+   MOBILE / RESPONSIVE
+============================= */
+
+@media (max-width: 1180px) {
+  .collection-page--deals .category-products .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .deals-highlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-hero {
+    padding: 28px;
+  }
+
+  .collection-page--deals .category-products .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .collection-hero {
+    padding: 24px;
+  }
+
+  .deals-top-zone-divider::before {
+    left: 18px;
+    right: 18px;
+  }
+
+  .collection-page--deals .category-products .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
