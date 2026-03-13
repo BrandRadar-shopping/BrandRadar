@@ -6,216 +6,205 @@
   <title>Kategori – BrandRadar</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="assets/css/responsive/mobile.css">
-
-
 </head>
 
 <body>
 
-<!-- ✅ NY HEADER -->
-<header class="main-header">
-  <div class="nav-container">
-<button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
-  ☰
-</button>
+  <!-- ✅ HEADER -->
+  <header class="main-header">
+    <div class="nav-container">
+      <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
+        ☰
+      </button>
 
-    <a href="index.html" class="logo">BRANDRADAR</a>
+      <a href="index.html" class="logo">BRANDRADAR</a>
 
-    <div class="search-box" id="site-search">
-  <span class="search-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
-    <circle cx="11" cy="11" r="6.5"></circle>
-    <path d="M16 16L21 21"></path>
-  </svg>
-</span>
+      <div class="search-box" id="site-search">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="M16 16L21 21"></path>
+          </svg>
+        </span>
 
-  <input
-    id="search-input"
-    type="search"
-    placeholder="Søk produkter eller merker…"
-    autocomplete="off"
-    spellcheck="false"
-    aria-label="Søk"
-  />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Søk produkter eller merker…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Søk"
+        />
 
-  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+        <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
 
-  <div class="search-dropdown" id="search-dropdown" hidden>
-    <div class="search-section" data-section="products">
-      <p class="search-section-title">Produkter</p>
-      <div class="search-results" id="search-results-products"></div>
+        <div class="search-dropdown" id="search-dropdown" hidden>
+          <div class="search-section" data-section="products">
+            <p class="search-section-title">Produkter</p>
+            <div class="search-results" id="search-results-products"></div>
+          </div>
+
+          <div class="search-section" data-section="brands">
+            <p class="search-section-title">Brands</p>
+            <div class="search-results" id="search-results-brands"></div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="top-links">
+        <a href="index.html">Hjem</a>
+        <a href="news.html">Nyheter</a>
+        <a href="brands.html">Brands</a>
+        <a href="favoritter.html" class="favorites-link">
+          Favoritter <span id="favorites-count">0</span>
+        </a>
+        <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
+      </nav>
     </div>
 
-    <div class="search-section" data-section="brands">
-      <p class="search-section-title">Brands</p>
-      <div class="search-results" id="search-results-brands"></div>
+    <ul class="category-bar">
+      <li class="category-item" data-category="Clothing">Klær</li>
+      <li class="category-item" data-category="Shoes">Sko</li>
+      <li class="category-item" data-category="Gymcorner">Gymcorner</li>
+      <li class="category-item" data-category="Accessories">Tilbehør</li>
+      <li class="category-item" data-category="Selfcare">Selfcare</li>
+    </ul>
+  </header>
+
+  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+
+  <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
+    <div class="mobile-drawer-header">
+      <p class="mobile-drawer-title">Meny</p>
+      <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
     </div>
-  </div>
-</div>
 
+    <div class="mobile-drawer-section">
+      <a href="index.html">Hjem</a>
+      <a href="news.html">Nyheter</a>
+      <a href="brands.html">Brands</a>
+      <a href="favoritter.html">Favoritter</a>
+      <a href="luxury.html">Luxury Corner ✨</a>
+    </div>
 
-     <!-- Toppmeny -->
-   <nav class="top-links">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html">Brands</a>
-  <a href="favoritter.html" class="favorites-link">
-  Favoritter <span id="favorites-count">0</span>
-</a>
-     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
-</nav>
+    <div class="mobile-drawer-section">
+      <p class="mobile-drawer-subtitle">Kategorier</p>
+      <a href="category.html?category=Clothing">Klær</a>
+      <a href="category.html?category=Shoes">Sko</a>
+      <a href="category.html?category=Gymcorner">Gymcorner</a>
+      <a href="category.html?category=Accessories">Tilbehør</a>
+      <a href="category.html?category=Selfcare">Selfcare</a>
+    </div>
+  </nav>
 
+  <nav class="mega-menu"></nav>
 
-  </div>
+  <!-- ✅ VIKTIG: ekte main-wrapper for collection classes -->
+  <main class="category-page">
+    <!-- ✅ Breadcrumb / page intro -->
+    <section class="category-header">
+      <div class="category-header__inner">
+        <nav class="breadcrumb"></nav>
+        <h1 id="category-title">Laster kategori...</h1>
+      </div>
+    </section>
 
-  <!-- 🔽 Kategorier som åpner megamenu -->
-  <ul class="category-bar">
-    <li class="category-item" data-category="Clothing">Klær</li>
-    <li class="category-item" data-category="Shoes">Sko</li>
-    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
-    <li class="category-item" data-category="Accessories">Tilbehør</li>
-    <li class="category-item" data-category="Selfcare">Selfcare</li>
-  </ul>
-</header>
-  
-<div class="mobile-overlay" id="mobileOverlay" hidden></div>
+    <!-- ✅ Filter + Sort Bar -->
+    <div class="filter-bar">
+      <div class="filters-left">
+        <label>Merke:</label>
+        <select id="brand-filter">
+          <option value="all">Alle</option>
+        </select>
 
-<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
-  <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Meny</p>
-    <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
-  </div>
+        <label>Pris:</label>
+        <select id="price-filter">
+          <option value="all">Alle</option>
+          <option value="0-299">0–299</option>
+          <option value="300-599">300–599</option>
+          <option value="600-999">600–999</option>
+          <option value="1000+">1000+</option>
+        </select>
 
-  <div class="mobile-drawer-section">
-    <a href="index.html">Hjem</a>
-    <a href="news.html">Nyheter</a>
-    <a href="brands.html">Brands</a>
-    <a href="favoritter.html">Favoritter</a>
-    <a href="luxury.html">Luxury Corner ✨</a>
-  </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="discount-filter" />
+          Kun tilbud
+        </label>
+      </div>
 
-  <div class="mobile-drawer-section">
-    <p class="mobile-drawer-subtitle">Kategorier</p>
-    <a href="category.html?category=Clothing">Klær</a>
-    <a href="category.html?category=Shoes">Sko</a>
-    <a href="category.html?category=Gymcorner">Gymcorner</a>
-    <a href="category.html?category=Accessories">Tilbehør</a>
-    <a href="category.html?category=Selfcare">Selfcare</a>
-  </div>
-</nav>
+      <div class="filters-right">
+        <span class="result-count">Laster...</span>
+        <select id="sort-select">
+          <option value="featured">Anbefalt</option>
+          <option value="price-asc">Pris: lav → høy</option>
+          <option value="price-desc">Pris: høy → lav</option>
+          <option value="rating-desc">Best vurdert</option>
+        </select>
+      </div>
+    </div>
 
-<!-- ✅ Manglet – MEGA-MENYEN LASTES HER -->
-<nav class="mega-menu"></nav>
+    <!-- ✅ Active Filter Tags -->
+    <div class="filter-tags"></div>
 
-<!-- ✅ Dynamisk breadcrumb + tittel -->
-<section class="category-header">
-  <nav class="breadcrumb"></nav>
-  <h1 id="category-title">Laster kategori...</h1>
-</section>
-  
- <!-- ✅ Filter + Sort Bar (Unified) -->
-<div class="filter-bar">
-  <div class="filters-left">
-    <label>Merke:</label>
-    <select id="brand-filter">
-      <option value="all">Alle</option>
-    </select>
+    <!-- ✅ Produktgrid -->
+    <section class="category-products">
+      <div class="product-grid"></div>
+      <p class="empty-message" style="display:none;">
+        Ingen produkter funnet i denne kategorien
+      </p>
+    </section>
+  </main>
 
-    <label>Pris:</label>
-    <select id="price-filter">
-      <option value="all">Alle</option>
-      <option value="0-299">0–299</option>
-      <option value="300-599">300–599</option>
-      <option value="600-999">600–999</option>
-      <option value="1000+">1000+</option>
-    </select>
+  <script src="offers-engine.js"></script>
+  <script src="favorites-core.js"></script>
+  <script src="script-favorites.js"></script>
+  <script src="script.js"></script>
+  <script src="search.js"></script>
+  <script src="product-card-engine.js"></script>
+  <script src="category.js"></script>
 
-    <label class="checkbox-label">
-      <input type="checkbox" id="discount-filter" />
-      Kun tilbud
-    </label>
-  </div>
+  <nav class="m-bottom-nav" aria-label="Bunnmeny">
+    <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="m-txt">Hjem</span>
+    </a>
 
-  <div class="filters-right">
-    <span class="result-count">Laster...</span>
-    <select id="sort-select">
-      <option value="featured">Anbefalt</option>
-      <option value="price-asc">Pris: lav → høy</option>
-      <option value="price-desc">Pris: høy → lav</option>
-      <option value="rating-desc">Best vurdert</option>
-    </select>
-  </div>
-</div>
+    <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">Søk</span>
+    </a>
 
-<!-- ✅ Active Filter Tags -->
-<div class="filter-tags"></div>
+    <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
+              stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      </svg>
+      <span class="m-txt">Favoritter</span>
+    </a>
 
+    <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">News</span>
+    </a>
 
-<!-- ✅ Produktgrid -->
-<section class="category-products">
-  <div class="product-grid"></div>
-  <p class="empty-message" style="display:none;">
-    Ingen produkter funnet i denne kategorien
-  </p>
-</section>
-
-
-
-<script src="offers-engine.js"></script>
-<script src="favorites-core.js"></script>
-<script src="script-favorites.js"></script>
-<script src="script.js"></script>
-<script src="search.js"></script>
-<script src="product-card-engine.js"></script>
-<script src="category.js"></script>
-
- <nav class="m-bottom-nav" aria-label="Bunnmeny">
-  <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Hjem</span>
-  </a>
-
-  <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Søk</span>
-  </a>
-
-  <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
-            stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Favoritter</span>
-  </a>
-
-  <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
-  <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>
-  <span class="m-txt">News</span>
-</a>
-
-  <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Luxury</span>
-  </a>
-</nav>
-
+    <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt">Luxury</span>
+    </a>
+  </nav>
 </body>
 </html>
-
-
-
-
