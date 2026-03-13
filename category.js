@@ -391,7 +391,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!picks.length) return null;
 
     const wrap = document.createElement("section");
-    wrap.className = "deals-highlight-wrap";
+    wrap.className = "deals-top-zone";
+
+    const highlightsShell = document.createElement("div");
+    highlightsShell.className = "deals-highlight-wrap";
 
     const head = document.createElement("div");
     head.className = "deals-highlight-head";
@@ -454,8 +457,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       grid.appendChild(card);
     });
 
-    wrap.appendChild(head);
-    wrap.appendChild(grid);
+    highlightsShell.appendChild(head);
+    highlightsShell.appendChild(grid);
+
+    const divider = document.createElement("div");
+    divider.className = "deals-top-zone-divider";
+
+    wrap.appendChild(highlightsShell);
+    wrap.appendChild(divider);
+
     return wrap;
   }
 
