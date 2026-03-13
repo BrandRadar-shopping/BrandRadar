@@ -116,7 +116,7 @@
 
 .collection-page--deals .collection-hero {
   margin: 0;
-  padding: 36px 40px 26px;
+  padding: 36px 40px 42px;
   border-radius: 28px 28px 0 0;
   background:
     radial-gradient(circle at top right, rgba(0,112,243,0.15), transparent 42%),
@@ -186,14 +186,14 @@
 }
 
 .deals-highlights-shell {
-  padding: 8px 28px 30px;
+  padding: 0 28px 34px;
   background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 18%);
 }
 
 .deals-top-zone-divider {
   position: relative;
   height: 1px;
-  margin: 26px 0 0;
+  margin: 0 0 34px;
 }
 
 .deals-top-zone-divider::before {
@@ -218,10 +218,10 @@
 /* =====================================================
    HIGHLIGHTS
    ===================================================== */
-
 .deals-highlight-head {
   margin-bottom: 18px;
   padding-left: 4px;
+  padding-top: 10px;
 }
 
 .deals-highlight-head h3 {
