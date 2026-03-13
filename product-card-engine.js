@@ -7,6 +7,7 @@
 // - favorittikon
 // - luxury heart
 // - SVG rating stars
+// - mer stabil markup for jevnere kort
 // ======================================================
 
 (function () {
@@ -22,6 +23,15 @@
     );
     if (!Number.isFinite(parsed)) return null;
     return Math.max(0, Math.min(5, parsed));
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function formatPrice(value) {
@@ -180,6 +190,9 @@
     const name = product.title || product.product_name || product.name || "Uten navn";
     const brand = product.brand || "";
     const img = product.image_url || product.image || product.img || "";
+    const safeName = escapeHtml(name);
+    const safeBrand = escapeHtml(brand);
+
     const ratingHTML = showRating
       ? buildRatingMarkup(product.rating, { showValue: true, emptyMode: "hide" })
       : "";
@@ -188,21 +201,24 @@
     const fallbackPriceMarkup = buildFallbackPriceMarkup(product);
     const priceMarkup = offerMarkup || fallbackPriceMarkup;
 
+    const priceInfo = getPriceInfo(product);
+    const hasDiscountBadge = !product.offer_summary?.hasOffers && priceInfo.discountText;
     const isFav = enableFavorite ? isFavorite(id) : false;
 
-    const card = document.createElement("div");
+    const card = document.createElement("article");
     card.className = `product-card${isLuxury ? " is-luxury-card" : ""}`;
+    card.setAttribute("data-product-id", id || "");
 
     card.innerHTML = `
-      ${!product.offer_summary?.hasOffers && getPriceInfo(product).discountText
-        ? `<div class="discount-badge">${getPriceInfo(product).discountText.replace(" discount", "")}</div>`
+      ${hasDiscountBadge
+        ? `<div class="discount-badge">${escapeHtml(priceInfo.discountText.replace(" discount", ""))}</div>`
         : ""}
 
       ${enableFavorite ? `
         <button
           type="button"
           class="favorite-toggle ${isFav ? "active" : ""} ${isLuxury ? "is-luxury" : ""}"
-          aria-label="Legg til favoritt"
+          aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
         >
           <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
@@ -213,13 +229,21 @@
         </button>
       ` : ""}
 
-      <img src="${img}" alt="${name}">
+      <div class="product-media">
+        ${
+          img
+            ? `<img src="${escapeHtml(img)}" alt="${safeName}" class="product-image" loading="lazy">`
+            : `<div class="product-image product-image--placeholder" aria-hidden="true"></div>`
+        }
+      </div>
 
       <div class="product-info">
-        ${showBrand ? `<p class="brand">${brand}</p>` : ""}
-        <h3 class="product-name">${name}</h3>
+        ${showBrand ? `<p class="brand">${safeBrand}</p>` : ""}
+        <h3 class="product-name">${safeName}</h3>
         ${ratingHTML}
-        ${priceMarkup}
+        <div class="product-meta-bottom">
+          ${priceMarkup}
+        </div>
       </div>
     `;
 
@@ -259,7 +283,13 @@
 
         const existsBefore = isFavorite(id);
         window.toggleFavorite(cleanProduct, favButton);
-        favButton.classList.toggle("active", !existsBefore);
+        const existsAfter = !existsBefore;
+
+        favButton.classList.toggle("active", existsAfter);
+        favButton.setAttribute(
+          "aria-label",
+          existsAfter ? "Fjern fra favoritter" : "Legg til favoritt"
+        );
       });
     }
 
