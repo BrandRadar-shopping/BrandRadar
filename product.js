@@ -175,6 +175,20 @@ function hasAnyKeyword(text, keywords = []) {
   return keywords.some(keyword => text.includes(keyword));
 }
 
+function getDiscountPercent(product, offerSummary) {
+  const productDiscount = parseFloat(String(product?.discount || "").replace(",", "."));
+  if (Number.isFinite(productDiscount) && productDiscount > 0) {
+    return productDiscount < 1 ? Math.round(productDiscount * 100) : Math.round(productDiscount);
+  }
+
+  const bestOffer = offerSummary?.offers?.[0];
+  if (bestOffer?.old_price && bestOffer?.price && bestOffer.old_price > bestOffer.price) {
+    return Math.round(((bestOffer.old_price - bestOffer.price) / bestOffer.old_price) * 100);
+  }
+
+  return null;
+}
+
 function extractProductSignals(product, offerSummary) {
   const text = getCombinedProductText(product);
   const category = normalizeCategory(product.category);
@@ -191,6 +205,57 @@ function extractProductSignals(product, offerSummary) {
   const discountPercent = getDiscountPercent(product, offerSummary);
   const hasDiscount = !!discountPercent;
 
+  const isFoodLike = hasAnyKeyword(text, [
+    "proteinbar", "protein bar", "proteinbars", "bar", "snack",
+    "hazelnut", "choco", "chocolate", "cookie", "caramel", "peanut", "soft bar"
+  ]);
+
+  const isSupplementLike = hasAnyKeyword(text, [
+    "whey", "protein", "creatine", "pre workout", "pre-workout", "bcaa",
+    "supplement", "mass gainer", "electrolyte", "isolate"
+  ]);
+
+  const isSneaker = hasAnyKeyword(text, [
+    "sneaker", "air max", "air jordan", "trainer", "pulse", "rm", "shoe", "sko"
+  ]);
+
+  const isBoot = hasAnyKeyword(text, [
+    "boot", "boots", "winter boot", "snow", "snowbae"
+  ]);
+
+  const isJacket = hasAnyKeyword(text, [
+    "jacket", "jakke", "shell", "beta", "outerwear", "anorak"
+  ]);
+
+  const isTechnicalOuterwear = hasAnyKeyword(text, [
+    "shell", "beta", "gore", "waterproof", "outdoor", "technical", "arc'teryx", "arcteryx"
+  ]);
+
+  const isLifestyleFootwear = hasAnyKeyword(text, [
+    "air max", "air jordan", "lifestyle", "street", "pulse", "rm", "casual"
+  ]);
+
+  const isPerformanceFootwear = hasAnyKeyword(text, [
+    "running",
+    "training",
+    "performance",
+    "sport",
+    "basketball",
+    "court",
+    "low basketball",
+    "anthony edwards",
+    "ae 1",
+    "ae1"
+  ]);
+
+  const isWinterStyle = hasAnyKeyword(text, [
+    "winter", "snow", "boot", "insulated"
+  ]);
+
+  const isFlavorFocused = hasAnyKeyword(text, [
+    "hazelnut", "choco", "chocolate", "cookie", "caramel", "peanut", "vanilla", "salted"
+  ]);
+
   return {
     text,
     category,
@@ -202,48 +267,16 @@ function extractProductSignals(product, offerSummary) {
     hasGoodRating,
     discountPercent,
     hasDiscount,
-
-    isFoodLike: hasAnyKeyword(text, [
-      "proteinbar", "protein bar", "bar", "snack", "hazelnut", "choco", "chocolate",
-      "cookie", "caramel", "peanut", "soft bar"
-    ]),
-
-    isSupplementLike: hasAnyKeyword(text, [
-      "whey", "protein", "creatine", "pre workout", "pre-workout", "bcaa",
-      "supplement", "mass gainer", "electrolyte", "isolate"
-    ]),
-
-    isSneaker: hasAnyKeyword(text, [
-      "sneaker", "air max", "air jordan", "trainer", "running", "pulse", "rm", "shoe"
-    ]),
-
-    isBoot: hasAnyKeyword(text, [
-      "boot", "boots", "winter boot", "snow", "snowbae"
-    ]),
-
-    isJacket: hasAnyKeyword(text, [
-      "jacket", "jakke", "shell", "beta", "outerwear", "anorak"
-    ]),
-
-    isTechnicalOuterwear: hasAnyKeyword(text, [
-      "shell", "beta", "gore", "waterproof", "outdoor", "technical", "arc'teryx", "arcteryx"
-    ]),
-
-    isLifestyleFootwear: hasAnyKeyword(text, [
-      "air max", "air jordan", "lifestyle", "street", "pulse", "rm", "casual"
-    ]),
-
-    isPerformanceFootwear: hasAnyKeyword(text, [
-      "running", "training", "performance", "sport"
-    ]),
-
-    isWinterStyle: hasAnyKeyword(text, [
-      "winter", "snow", "boot", "insulated"
-    ]),
-
-    isFlavorFocused: hasAnyKeyword(text, [
-      "hazelnut", "choco", "chocolate", "cookie", "caramel", "peanut", "vanilla", "salted"
-    ])
+    isFoodLike,
+    isSupplementLike,
+    isSneaker,
+    isBoot,
+    isJacket,
+    isTechnicalOuterwear,
+    isLifestyleFootwear,
+    isPerformanceFootwear,
+    isWinterStyle,
+    isFlavorFocused
   };
 }
 
@@ -270,20 +303,6 @@ function detectProductFamily(product, offerSummary) {
   if (s.category === "gymcorner") return "gym_general";
 
   return "fallback_general";
-}
-
-function getDiscountPercent(product, offerSummary) {
-  const productDiscount = parseFloat(String(product?.discount || "").replace(",", "."));
-  if (Number.isFinite(productDiscount) && productDiscount > 0) {
-    return productDiscount < 1 ? Math.round(productDiscount * 100) : Math.round(productDiscount);
-  }
-
-  const bestOffer = offerSummary?.offers?.[0];
-  if (bestOffer?.old_price && bestOffer?.price && bestOffer.old_price > bestOffer.price) {
-    return Math.round(((bestOffer.old_price - bestOffer.price) / bestOffer.old_price) * 100);
-  }
-
-  return null;
 }
 
 function buildInsightHighlights(product, offerSummary) {
@@ -328,8 +347,10 @@ function buildInsightHighlights(product, offerSummary) {
 
 function buildInsightMeta(product, offerSummary) {
   const parts = [];
+  const offers = Array.isArray(offerSummary?.offers) ? offerSummary.offers : [];
+  const hasOffers = !!offerSummary?.hasOffers;
 
-  if (offerSummary?.storeCount) {
+  if (hasOffers && offerSummary?.storeCount) {
     parts.push(
       offerSummary.storeCount === 1
         ? "Pris fra 1 butikk"
@@ -339,7 +360,6 @@ function buildInsightMeta(product, offerSummary) {
     parts.push("Produktdata tilgjengelig");
   }
 
-  const offers = Array.isArray(offerSummary?.offers) ? offerSummary.offers : [];
   const hasWorldwide = offers.some((offer) =>
     ["worldwide", "global", "international"].includes(
       String(offer.shipping_scope || "").toLowerCase()
@@ -348,11 +368,13 @@ function buildInsightMeta(product, offerSummary) {
 
   if (hasWorldwide) {
     parts.push("Worldwide shipping");
-  } else if (offers.length) {
+  } else if (hasOffers) {
     parts.push("Aktive offers");
   }
 
-  parts.push("Pris sammenlignes live");
+  if (hasOffers) {
+    parts.push("Pris sammenlignes live");
+  }
 
   return parts;
 }
@@ -414,21 +436,29 @@ function buildProteinBarSummary(ctx) {
         "En enkel og funksjonell proteinbar for deg som vil ha noe raskt tilgjengelig mellom økter, jobb eller andre planer."
       ]);
 
-  const priceTail = ctx.hasDiscount
-    ? " Aktiv prisoversikt gjør det også lettere å vurdere verdi akkurat nå."
-    : ctx.storeCount >= 2
-      ? " Flere tilgjengelige kjøpsmuligheter gjør den også lettere å sammenligne akkurat nå."
-      : " Produktdata er samlet på en ryddig måte slik at du raskt får oversikt.";
+  const priceTail = ctx.hasOffers
+    ? (
+        ctx.hasDiscount
+          ? " Aktiv prisoversikt gjør det også lettere å vurdere verdi akkurat nå."
+          : ctx.storeCount >= 2
+            ? " Flere tilgjengelige kjøpsmuligheter gjør den også lettere å sammenligne akkurat nå."
+            : " Aktiv produktoversikt gjør det enkelt å vurdere tilgjengelighet akkurat nå."
+      )
+    : " Her er det først og fremst smak, format og enkel bruk som gjør produktet relevant.";
 
   return `${flavorLead}${priceTail}`;
 }
 
 function buildSupplementSummary(ctx) {
   const base = pickVariantByHash(ctx.seed, [
-    "Et relevant supplementvalg for deg som vil ha enkel oversikt over pris og tilgjengelighet før kjøp.",
-    "Et aktuelt supplement for deg som vil sammenligne pris og tilgjengelighet uten å lete på tvers av flere butikker.",
-    "Et ryddig supplementvalg der fokus ligger på tilgjengelighet, prisoversikt og enkel sammenligning."
+    "Et relevant supplementvalg for deg som vil ha enkel oversikt over produkt og tilgjengelighet før kjøp.",
+    "Et aktuelt supplement for deg som vil vurdere produkt og tilgjengelighet uten å lete på tvers av flere butikker.",
+    "Et ryddig supplementvalg der fokus ligger på produktprofil, tilgjengelighet og enkel vurdering."
   ]);
+
+  if (!ctx.hasOffers) {
+    return `${base} Her er det selve produktprofilen som er mest relevant akkurat nå.`;
+  }
 
   const tail = ctx.hasDiscount
     ? " Rabatt gjør det også mer interessant akkurat nå."
@@ -440,20 +470,43 @@ function buildSupplementSummary(ctx) {
 }
 
 function buildSneakerSummary(ctx) {
+  if (ctx.isPerformanceFootwear) {
+    const performanceVariants = [
+      `Et mer performance-rettet shoe-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, godt egnet for deg som vil ha en modell med tydelig sporty profil og mer aktiv bruk i fokus.`,
+      `En modell med klarere sport-/performance-retning${ctx.brand ? ` fra ${ctx.brand}` : ""}, spesielt aktuell for deg som vil ha noe som føles mer retningsbestemt enn en vanlig everyday sneaker.`,
+      `Et mer atletisk shoe-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydeligere performance-profil, godt egnet når du vil ha noe mer sportslig og funksjonsrettet i uttrykket.`
+    ];
+
+    const base = pickVariantByHash(ctx.seed, performanceVariants);
+
+    if (!ctx.hasOffers) {
+      return `${base} Her er det først og fremst modellprofil, uttrykk og bruksretning som gjør produktet interessant.`;
+    }
+
+    return ctx.hasDiscount
+      ? `${base} Aktiv rabatt gjør den også ekstra aktuell akkurat nå.`
+      : base;
+  }
+
   if (ctx.isLifestyleFootwear) {
     const variant = pickVariantByHash(ctx.seed, [
       `Et solid sneaker-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med tydelig uttrykk og god bruk i hverdagen.`,
       `En mer lifestyle-orientert sneaker${ctx.brand ? ` fra ${ctx.brand}` : ""} som passer godt når du vil kombinere komfort, profil og daglig bruk.`,
       `Et sterkt valg innen sneakers akkurat nå, spesielt for deg som vil ha en modell som fungerer godt både visuelt og i vanlig hverdagsbruk.`
     ]);
+
+    if (!ctx.hasOffers) {
+      return `${variant} Her er det særlig modellens uttrykk og helhetsprofil som gjør den relevant.`;
+    }
+
     return ctx.hasDiscount ? `${variant} Aktiv rabatt gjør den ekstra aktuell akkurat nå.` : variant;
   }
 
-  if (ctx.isPerformanceFootwear) {
+  if (!ctx.hasOffers) {
     return pickVariantByHash(ctx.seed, [
-      `Et mer performance-rettet shoe-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med aktiv profil og tydelig funksjonelt uttrykk.`,
-      `Et aktuelt shoe-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med mer sporty retning, egnet når du vil ha noe som føles lett og funksjonelt.`,
-      `En modell med tydeligere sporty profil${ctx.brand ? ` fra ${ctx.brand}` : ""}, godt egnet for deg som vil ha noe aktivt og anvendelig.`
+      `En aktuell modell${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha et shoe-valg med tydelig profil og mer gjennomført uttrykk.`,
+      `Et solid shoe-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, særlig for deg som vil ha en modell som fungerer godt visuelt og i vanlig bruk.`,
+      `En modell${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig shoe-profil, godt egnet når du vil ha noe som føles gjennomført og anvendelig.`
     ]);
   }
 
@@ -472,10 +525,14 @@ function buildBootSummary(ctx) {
         `En boot med mer statement-preget uttrykk, godt egnet for deg som vil ha noe som skiller seg litt mer ut visuelt.`
       ])
     : pickVariantByHash(ctx.seed, [
-        `Et solid boot-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig profil og aktiv prisoversikt akkurat nå.`,
+        `Et solid boot-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig profil og aktiv produktoversikt akkurat nå.`,
         `Et aktuelt valg innen boots${ctx.brand ? ` fra ${ctx.brand}` : ""}, spesielt for deg som vil ha en modell med mer tyngde i uttrykket.`,
-        `En modell som gir et tydeligere og mer robust uttrykk, samtidig som prisbildet er lett å sammenligne akkurat nå.`
+        `En modell som gir et tydeligere og mer robust uttrykk, samtidig som produktbildet er lett å vurdere akkurat nå.`
       ]);
+
+  if (!ctx.hasOffers) {
+    return `${winterAngle} Her er det særlig modellens uttrykk og sesongprofil som trekker opp.`;
+  }
 
   const tail = ctx.storeCount >= 2
     ? " Flere butikker gjør den også enkel å vurdere på tvers av pris."
@@ -485,6 +542,14 @@ function buildBootSummary(ctx) {
 }
 
 function buildFootwearGeneralSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et aktuelt valg innen footwear${ctx.brand ? ` fra ${ctx.brand}` : ""}, med tydelig modellprofil og ryddig produktpresentasjon.`,
+      `Et relevant footwear-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en enkel oversikt over modell og uttrykk før kjøp.`,
+      `Et interessant footwear-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, presentert med fokus på produktprofil og anvendelighet.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et aktuelt valg innen footwear${ctx.brand ? ` fra ${ctx.brand}` : ""}, med aktiv prisoversikt og ryddig sammenligning akkurat nå.`,
     `Et relevant footwear-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha enkel oversikt over pris og tilgjengelighet før kjøp.`,
@@ -499,10 +564,22 @@ function buildTechnicalJacketSummary(ctx) {
     `En mer teknisk orientert jakke${ctx.brand ? ` fra ${ctx.brand}` : ""}, godt egnet når du vil ha noe lett, anvendelig og visuelt ryddig.`
   ]);
 
-  return ctx.hasStrongRating ? `${variant} Den sterke ratingen trekker også helhetsinntrykket opp.` : variant;
+  if (!ctx.hasOffers && ctx.hasStrongRating) {
+    return `${variant} Den sterke ratingen trekker også helhetsinntrykket opp.`;
+  }
+
+  return variant;
 }
 
 function buildJacketSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et sterkt plagg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med tydelig stil og mer gjennomført outerwear-profil.`,
+      `En aktuell jakke${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en mer gjennomført modell med fokus på uttrykk og bruk.`,
+      `Et godt jacket-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, spesielt når du vil ha noe som fungerer fint i hverdagen og samtidig ser gjennomført ut.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et sterkt plagg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med tydelig stil og flere aktive kjøpsmuligheter samlet på ett sted.`,
     `En aktuell jakke${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en mer gjennomført outerwear-modell med enkel prisoversikt.`,
@@ -511,6 +588,14 @@ function buildJacketSummary(ctx) {
 }
 
 function buildClothingSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et aktuelt plagg${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig stilprofil og ryddig produktpresentasjon.`,
+      `Et relevant clothing-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med tydelig stil og enkel oversikt.`,
+      `Et plagg som er lett å vurdere takket være samlet produktdata og et tydelig helhetsinntrykk.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et aktuelt plagg${ctx.brand ? ` fra ${ctx.brand}` : ""} med aktiv prisoversikt og enkel sammenligning på tvers av butikker.`,
     `Et relevant clothing-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha en modell med tydelig stil og ryddig prisbilde.`,
@@ -519,6 +604,14 @@ function buildClothingSummary(ctx) {
 }
 
 function buildAccessorySummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et gjennomført accessory-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med fokus på produktprofil og enkel vurdering akkurat nå.`,
+      `Et aktuelt accessory-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} som fungerer godt når du vil få rask oversikt over modell og uttrykk.`,
+      `Et relevant accessory-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, presentert med ryddig produktoversikt og enkel vurdering.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et gjennomført accessory-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} med fokus på enkel prisoversikt og tilgjengelighet akkurat nå.`,
     `Et aktuelt accessory-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} som fungerer godt når du vil sammenligne pris uten ekstra friksjon.`,
@@ -527,6 +620,14 @@ function buildAccessorySummary(ctx) {
 }
 
 function buildSelfcareSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et relevant selfcare-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig produktprofil og enkel vurdering akkurat nå.`,
+      `Et aktuelt selfcare-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil få rask oversikt over produkt og bruk.`,
+      `Et selfcare-produkt presentert med fokus på produktdata, tilgjengelighet og enkel vurdering.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et relevant selfcare-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med aktiv prisinnhenting og enkel oversikt akkurat nå.`,
     `Et aktuelt selfcare-valg${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil sammenligne pris og tilgjengelighet raskt og ryddig.`,
@@ -535,6 +636,14 @@ function buildSelfcareSummary(ctx) {
 }
 
 function buildGymSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et aktuelt gym-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig produktprofil og enkel oversikt akkurat nå.`,
+      `Et relevant gym-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, særlig for deg som vil forstå produkt og bruksområde uten ekstra støy.`,
+      `Et gym-relatert produkt presentert med fokus på produktdata, anvendelighet og enkel vurdering.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et aktuelt gym-produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med samlet prisoversikt og enkel vurdering på tvers av butikker.`,
     `Et relevant gym-valg${ctx.brand ? ` fra ${ctx.brand}` : ""}, særlig for deg som vil sammenligne pris og tilgjengelighet uten ekstra arbeid.`,
@@ -543,6 +652,14 @@ function buildGymSummary(ctx) {
 }
 
 function buildFallbackSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et interessant produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med tydelig produktprofil og ryddig oversikt akkurat nå.`,
+      `Et relevant produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha enkel oversikt over modell og tilgjengelighet før kjøp.`,
+      `Et aktuelt produkt${ctx.brand ? ` fra ${ctx.brand}` : ""}, presentert med fokus på produktdata og enkel vurdering.`
+    ]);
+  }
+
   return pickVariantByHash(ctx.seed, [
     `Et interessant produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} med aktiv prissammenligning og ryddig oversikt over tilgjengelige kjøpsmuligheter akkurat nå.`,
     `Et relevant produkt${ctx.brand ? ` fra ${ctx.brand}` : ""} for deg som vil ha enkel oversikt over pris og tilgjengelighet før kjøp.`,
