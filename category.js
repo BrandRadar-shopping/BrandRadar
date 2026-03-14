@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return hero;
   }
 
-  function buildDealHighlights(products) {
+ function buildDealHighlights(products) {
   if (!products.length) return null;
 
   const sorted = [...products].sort((a, b) => {
@@ -412,6 +412,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const discount = parseNumber(product.discount) || 0;
     const newPrice = parseNumber(product.price);
     const oldPrice = parseNumber(product.old_price);
+    const savings =
+      oldPrice != null && newPrice != null && oldPrice > newPrice
+        ? Math.round(oldPrice - newPrice)
+        : null;
 
     const label =
       index === 0 ? "Beste deal" :
@@ -419,11 +423,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       "Verdt å sjekke";
 
     const card = document.createElement("article");
-
     card.className =
       index === 0
         ? "deal-highlight-card deal-highlight-card--primary"
         : "deal-highlight-card";
+
+    const primaryEditorialBlock = index === 0
+      ? `
+        <div class="deal-why-block">
+          <p class="deal-why-title">Hvorfor denne dealen?</p>
+          <ul class="deal-why-list">
+            ${discount ? `<li>${Math.round(discount)}% rabatt akkurat nå</li>` : ""}
+            ${product.brand ? `<li>${product.brand} er et sterkt brand i denne kategorien</li>` : ""}
+            ${savings ? `<li>Du sparer ${formatPrice(savings)}</li>` : ""}
+          </ul>
+        </div>
+      `
+      : "";
+
+    const primaryValueBlock = index === 0 && (oldPrice != null || savings != null)
+      ? `
+        <div class="deal-value-row">
+          ${oldPrice != null ? `<span>Vanlig pris: <strong>${formatPrice(oldPrice)}</strong></span>` : ""}
+          ${savings != null ? `<span>Du sparer: <strong>${formatPrice(savings)}</strong></span>` : ""}
+        </div>
+      `
+      : "";
 
     card.innerHTML = `
       <div class="deal-highlight-card__media">
@@ -443,6 +468,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             : "Et aktuelt tilbud som skiller seg ut akkurat nå."}
         </p>
 
+        ${primaryEditorialBlock}
+        ${primaryValueBlock}
+
         <div class="deal-highlight-pricing">
           ${newPrice != null ? `<span class="deal-highlight-price">${formatPrice(newPrice)}</span>` : ""}
           ${oldPrice != null ? `<span class="deal-highlight-oldprice">${formatPrice(oldPrice)}</span>` : ""}
@@ -459,7 +487,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const id = product.id || product.product_id || "";
-
       if (id) {
         window.location.href = `product.html?id=${encodeURIComponent(id)}`;
       }
