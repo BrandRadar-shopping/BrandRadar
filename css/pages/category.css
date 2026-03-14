@@ -1061,3 +1061,41 @@
 .collection-page--deals .product-card .product-info {
   padding: 0.85rem 0.9rem 1rem;
 }
+
+/* ==========================================
+   DEALS CORNER RIBBON
+   ========================================== */
+
+.collection-page--deals .product-card::before {
+
+  content: "DEALS";
+
+  position: absolute;
+
+  top: 18px;
+  left: -40px;
+
+  width: 120px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #0f172a;
+  color: #ffffff;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  transform: rotate(-45deg);
+
+  z-index: 4;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+}
+
+.collection-page--deals .product-card .discount-badge {
+  display: none;
+}
