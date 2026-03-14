@@ -32,12 +32,12 @@
 
 .breadcrumb {
   font-size: 14px;
-  color: #7f8ba3;
+  color: #666;
   margin-bottom: 10px;
 }
 
 .breadcrumb a {
-  color: #4ea1ff;
+  color: #0070f3;
   text-decoration: none;
 }
 
@@ -107,25 +107,15 @@
 
 
 /* =====================================================
-   DEALS PAGE – ONE CONTINUOUS TOP ZONE
+   DEALS PAGE BASE
    ===================================================== */
 
 .collection-page--deals {
-  background:
-    linear-gradient(
-      180deg,
-      #071225 0%,
-      #0a1730 18%,
-      #0d1c38 36%,
-      #112341 52%,
-      #183053 66%,
-      #eff4fa 92%,
-      #f6f8fb 100%
-    );
+  background: #f6f8fb;
 }
 
 .collection-page--deals .category-header .breadcrumb {
-  color: rgba(255,255,255,0.62);
+  color: rgba(255,255,255,0.66);
 }
 
 .collection-page--deals .category-header .breadcrumb a {
@@ -134,12 +124,66 @@
 
 
 /* =====================================================
-   DEALS HERO – NO HARD BOX FEEL
+   DEALS TOP ZONE – THIS IS THE ONLY DARK AREA
+   ===================================================== */
+
+.deals-top-zone {
+  position: relative;
+  margin-bottom: 34px;
+  border-radius: 28px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #071225 0%,
+      #0a1730 20%,
+      #0e1d39 44%,
+      #132847 68%,
+      #1c3658 84%,
+      #233d61 100%
+    );
+  box-shadow:
+    0 20px 60px rgba(3, 10, 24, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.deals-top-zone::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 140px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.03) 34%,
+    rgba(246,248,251,0.92) 100%
+  );
+  pointer-events: none;
+}
+
+.deals-top-zone__inner {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  padding-bottom: 14px;
+}
+
+.deals-top-zone-divider {
+  display: none;
+}
+
+
+/* =====================================================
+   DEALS HERO – SAME VISUAL WORLD AS HIGHLIGHTS
    ===================================================== */
 
 .collection-page--deals .collection-hero {
   margin: 0;
-  padding: 24px 28px 18px;
+  padding: 24px 28px 12px;
   border-radius: 0;
   background:
     radial-gradient(circle at top right, rgba(255,255,255,0.06), transparent 26%),
@@ -203,34 +247,13 @@
 
 
 /* =====================================================
-   DEALS TOP ZONE – UNIFIED FLOW
+   HIGHLIGHTS WRAPPER
    ===================================================== */
-
-.deals-top-zone {
-  margin-bottom: 36px;
-}
-
-.deals-top-zone__inner {
-  border: 0;
-  border-radius: 0 0 28px 28px;
-  overflow: hidden;
-  background: transparent;
-  box-shadow: none;
-}
 
 .deals-highlights-shell {
-  padding: 12px 28px 34px;
+  padding: 10px 28px 30px;
   background: transparent;
 }
-
-.deals-top-zone-divider {
-  display: none;
-}
-
-
-/* =====================================================
-   HIGHLIGHTS HEAD
-   ===================================================== */
 
 .deals-highlight-head {
   margin-bottom: 16px;
@@ -243,7 +266,7 @@
 }
 
 .deals-highlight-head p {
-  color: rgba(226,232,240,0.62);
+  color: rgba(226,232,240,0.64);
   font-size: 0.98rem;
   margin: 0;
   max-width: 700px;
@@ -252,7 +275,7 @@
 
 
 /* =====================================================
-   HIGHLIGHTS GRID – SHORTER, CLEANER
+   HIGHLIGHTS GRID
    ===================================================== */
 
 .deals-highlight-grid {
@@ -584,24 +607,20 @@
 }
 
 @media (max-width: 980px) {
-  .collection-page--deals {
-    background:
-      linear-gradient(
-        180deg,
-        #071225 0%,
-        #0d1d39 28%,
-        #173152 55%,
-        #eef4fa 88%,
-        #f6f8fb 100%
-      );
+  .deals-top-zone {
+    border-radius: 24px;
+  }
+
+  .deals-top-zone::after {
+    height: 110px;
   }
 
   .collection-page--deals .collection-hero {
-    padding: 22px 22px 16px;
+    padding: 22px 22px 12px;
   }
 
   .deals-highlights-shell {
-    padding: 10px 22px 24px;
+    padding: 8px 22px 24px;
   }
 
   .deals-highlight-grid {
@@ -634,8 +653,16 @@
     width: min(100%, calc(100% - 28px));
   }
 
+  .deals-top-zone {
+    border-radius: 20px;
+  }
+
+  .deals-top-zone::after {
+    height: 90px;
+  }
+
   .collection-page--deals .collection-hero {
-    padding: 18px 18px 14px;
+    padding: 18px 18px 10px;
   }
 
   .collection-page--deals .collection-hero h2 {
@@ -661,7 +688,7 @@
     padding: 8px 18px 20px;
   }
 
-  .deals-highlight-card,
+  .deal-highlight-card,
   .deal-highlight-card--primary {
     grid-template-columns: 1fr;
     min-height: auto;
