@@ -593,8 +593,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.title = `${pageTitle} | BrandRadar`;
 
       if (breadcrumbEl) {
-        breadcrumbEl.innerHTML = `<a href="index.html">Hjem</a> › <a href="news.html">Nyheter</a> › ${breadcrumbLabel}`;
-      }
+  if (collectionSlug === "deals") {
+    breadcrumbEl.innerHTML = `<a href="index.html">Hjem</a> › ${breadcrumbLabel}`;
+  } else {
+    breadcrumbEl.innerHTML = `<a href="index.html">Hjem</a> › <a href="news.html">Nyheter</a> › ${breadcrumbLabel}`;
+  }
+}
 
       const enrichedProducts = window.BrandRadarOffersEngine
         ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(products)
