@@ -139,20 +139,20 @@
 .deals-top-zone::before {
   content: "";
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 500px;
+  inset: 0;
   background:
     linear-gradient(
       180deg,
-      #061121 0%,
-      #08162b 14%,
-      #0b1a33 30%,
-      #0f2240 52%,
-      #173050 72%,
-      rgba(23,48,80,0.82) 84%,
-      rgba(23,48,80,0.46) 92%,
-      rgba(23,48,80,0.10) 98%,
-      rgba(23,48,80,0.00) 100%
+      #05101f 0%,
+      #071528 12%,
+      #0a1a31 26%,
+      #0d213c 42%,
+      #123055 58%,
+      #193a64 72%,
+      #22436f 84%,
+      #31537d 92%,
+      #dfe8f4 98.5%,
+      #f6f8fb 100%
     );
   pointer-events: none;
   z-index: 0;
