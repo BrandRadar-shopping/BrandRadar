@@ -1057,3 +1057,7 @@
 
   letter-spacing: 0.04em;
 }
+
+.collection-page--deals .product-card .product-info {
+  padding: 0.85rem 0.9rem 1rem;
+}
