@@ -320,7 +320,7 @@
 }
 
 .deal-highlight-card--primary {
-  grid-template-columns: 44% 56%;
+  grid-template-columns: 60% 40%;
   min-height: 228px;
 }
 
@@ -1006,4 +1006,15 @@
     font-size: 0.84rem;
     gap: 8px 14px;
   }
+}
+
+/* =====================================================
+   BEST DEAL TEXT CONTROL
+   ===================================================== */
+
+.deal-highlight-card--primary .deal-highlight-copy {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
