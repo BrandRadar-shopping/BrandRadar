@@ -510,15 +510,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         breadcrumbLabel = "Deals";
 
         collectionHero = createCollectionHero({
-          eyebrow: "Weekly Deals",
-          title: "Ukens beste tilbud samlet på ett sted",
-          text: "Dette er deal-siden for produkter vi mener er verdt å klikke på akkurat nå. Her kombinerer vi tydelig verdi, aktuelle kampanjer og en raskere vei til gode kjøp.",
-          metaPills: [
-            "Kuratert av BrandRadar",
-            "Oppdatert for aktuelle tilbud",
-            "Bygget for rask beslutning"
-          ]
-        });
+  eyebrow: "BrandRadar Deals",
+  title: "De beste dealene, kuratert for raskere valg",
+  text: "Vi samler tilbudene som faktisk er verdt oppmerksomheten din — slik at du kan scanne raskt, sammenligne smartere og finne høy verdi uten støy.",
+  metaPills: [
+    "Kuratert av BrandRadar",
+    "Høy verdi, lavere støy",
+    "Bygget for rask scanning"
+  ]
+});
       } else if (collectionSlug === "picks") {
         ensurePageRootCollectionClass("picks");
 
