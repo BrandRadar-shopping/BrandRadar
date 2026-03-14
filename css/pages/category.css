@@ -687,42 +687,74 @@
    DEALS CORNER RIBBON
    ========================================== */
 
-.collection-page--deals .product-card::before {
+.collection-page--deals .category-products .product-card::before {
+
   content: "DEALS";
+
   position: absolute;
-  top: 16px;
-  left: -42px;
-  width: 120px;
-  height: 28px;
+
+  top: 20px;
+  left: -46px;
+
+  width: 130px;
+  height: 32px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 2px;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1f2937
+  );
+
   color: #ffffff;
-  font-size: 0.64rem;
+
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+
+  letter-spacing: 0.14em;
+
   transform: rotate(-45deg);
-  z-index: 4;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+
+  z-index: 6;
+
+  text-align: center;
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.22);
+
 }
 
-.collection-page--deals .product-card::after {
+/* subtle highlight for "fabric ribbon" feel */
+
+.collection-page--deals .category-products .product-card::after {
+
   content: "";
+
   position: absolute;
-  top: 16px;
-  left: -42px;
-  width: 120px;
-  height: 1px;
-  background: rgba(255,255,255,0.28);
-  transform: rotate(-45deg) translateY(-11px);
-  transform-origin: center;
-  z-index: 5;
+
+  top: 20px;
+  left: -46px;
+
+  width: 130px;
+  height: 32px;
+
+  transform: rotate(-45deg);
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.28),
+    rgba(255,255,255,0.04) 35%,
+    rgba(0,0,0,0.18) 100%
+  );
+
   pointer-events: none;
+
+  z-index: 7;
+
 }
-
-
 /* =====================================================
    RESPONSIVE
    ===================================================== */
