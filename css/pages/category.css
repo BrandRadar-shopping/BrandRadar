@@ -506,8 +506,13 @@
 
 .collection-page--deals .category-products .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
+
+  /* mindre kort = mer luft på sidene */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+
+  justify-content: center;
+  gap: 26px;
+
   align-items: stretch;
 }
 
@@ -1019,4 +1024,36 @@
   .collection-page--deals .category-products .product-card .price-main {
     font-size: 1.05rem;
   }
+}
+
+/* ==========================================
+   DEALS – CORNER DISCOUNT STYLE
+   ========================================== */
+
+.collection-page--deals .product-card .discount-badge {
+
+  top: 0;
+  left: 0;
+
+  padding: 6px 28px;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e3a8a
+  );
+
+  color: #fff;
+
+  border-radius: 0;
+
+  transform: rotate(-45deg) translate(-28px, 14px);
+
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.18);
+
+  letter-spacing: 0.04em;
 }
