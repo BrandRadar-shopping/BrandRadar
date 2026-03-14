@@ -252,13 +252,7 @@
 
 .deals-highlights-shell {
   padding: 6px 28px 18px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.008) 0%,
-      rgba(255,255,255,0.004) 38%,
-      rgba(255,255,255,0.00) 100%
-    );
+  background: transparent;
 }
 
 .deals-highlight-head {
