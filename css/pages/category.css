@@ -715,3 +715,266 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =====================================================
+   DEALS TOP ZONE – FINAL SURGICAL FIX
+   ===================================================== */
+
+/* Hele deals-siden skal være lys som base */
+.collection-page--deals {
+  background: #f6f8fb;
+}
+
+/* Selve top-zonen skal ikke eie en full mørk bakgrunn */
+.deals-top-zone {
+  position: relative;
+  margin-bottom: 26px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ÉN kontrollert mørk toppflate som stopper tidlig nok */
+.deals-top-zone::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 430px;
+  background:
+    linear-gradient(
+      180deg,
+      #071225 0%,
+      #0a1730 18%,
+      #0d1d39 42%,
+      #132847 68%,
+      #1c3658 84%,
+      rgba(28,54,88,0.72) 92%,
+      rgba(28,54,88,0.00) 100%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fjern gammel fade som dro mørket for langt ned */
+.deals-top-zone::after {
+  display: none;
+}
+
+.deals-top-zone__inner {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding-bottom: 0;
+}
+
+/* Hero og intro skal bo i samme toneverden */
+.collection-page--deals .collection-hero {
+  margin: 0;
+  padding: 24px 28px 10px;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 26%),
+    radial-gradient(circle at left center, rgba(0,112,243,0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0));
+  box-shadow: none;
+}
+
+.deals-highlights-shell {
+  padding: 6px 28px 18px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.02) 0%,
+      rgba(255,255,255,0.01) 30%,
+      rgba(255,255,255,0.00) 100%
+    );
+}
+
+/* Fjerner følelsen av egen "mellomseksjon" */
+.deals-highlight-head {
+  margin-bottom: 14px;
+  padding-top: 0;
+  padding-left: 2px;
+}
+
+.deals-highlight-head h3 {
+  display: none;
+}
+
+.deals-highlight-head p {
+  color: rgba(226,232,240,0.72);
+  font-size: 0.96rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Kortene litt strammere så de ikke drar høyden */
+.deals-highlight-grid {
+  display: grid;
+  grid-template-columns: 1.38fr 0.95fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.deal-highlight-card--primary {
+  grid-row: span 2;
+}
+
+.deal-highlight-card {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  min-height: 198px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.deal-highlight-card--primary {
+  grid-template-columns: 44% 56%;
+  min-height: 228px;
+}
+
+.deal-highlight-card__media {
+  min-height: 198px;
+}
+
+.deal-highlight-card--primary .deal-highlight-card__media {
+  min-height: 228px;
+}
+
+.deal-highlight-card__body {
+  padding: 18px 18px 16px;
+}
+
+.deal-highlight-title {
+  font-size: 1.08rem;
+  margin: 0 0 8px;
+}
+
+.deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-title {
+  font-size: 0.98rem;
+}
+
+.deal-highlight-copy {
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-copy {
+  font-size: 0.86rem;
+  margin-bottom: 10px;
+}
+
+.deal-highlight-price {
+  font-size: 1.08rem;
+}
+
+.deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-price {
+  font-size: 1rem;
+}
+
+.deal-highlight-cta {
+  margin-top: 10px;
+}
+
+/* Litt mindre luft før lys seksjon starter */
+.collection-subhead {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+/* Responsive */
+@media (max-width: 1180px) {
+  .deals-top-zone::before {
+    height: 400px;
+  }
+
+  .deals-highlight-grid {
+    grid-template-columns: 1.2fr 0.95fr;
+    gap: 14px;
+  }
+
+  .deal-highlight-card {
+    min-height: 188px;
+  }
+
+  .deal-highlight-card--primary {
+    min-height: 214px;
+  }
+
+  .deal-highlight-card__media {
+    min-height: 188px;
+  }
+
+  .deal-highlight-card--primary .deal-highlight-card__media {
+    min-height: 214px;
+  }
+}
+
+@media (max-width: 980px) {
+  .deals-top-zone::before {
+    height: 360px;
+  }
+
+  .collection-page--deals .collection-hero {
+    padding: 22px 22px 10px;
+  }
+
+  .deals-highlights-shell {
+    padding: 6px 22px 18px;
+  }
+
+  .deals-highlight-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .deal-highlight-card,
+  .deal-highlight-card--primary {
+    grid-template-columns: 36% 64%;
+    min-height: 170px;
+  }
+
+  .deal-highlight-card--primary {
+    grid-row: auto;
+  }
+
+  .deal-highlight-card__media,
+  .deal-highlight-card--primary .deal-highlight-card__media {
+    min-height: 170px;
+  }
+}
+
+@media (max-width: 640px) {
+  .deals-top-zone::before {
+    height: 320px;
+  }
+
+  .collection-page--deals .collection-hero {
+    padding: 18px 18px 8px;
+  }
+
+  .deals-highlights-shell {
+    padding: 6px 18px 16px;
+  }
+
+  .deal-highlight-card,
+  .deal-highlight-card--primary {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .deal-highlight-card__media,
+  .deal-highlight-card--primary .deal-highlight-card__media {
+    min-height: 160px;
+  }
+
+  .deal-highlight-card__body {
+    padding: 15px 15px 14px;
+  }
+}
