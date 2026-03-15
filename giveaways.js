@@ -51,13 +51,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const raw = String(url ?? "").trim();
     if (!raw) return "";
 
-    // Google Drive: /file/d/FILE_ID/view
     const driveFileMatch = raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
     if (driveFileMatch?.[1]) {
       return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
     }
 
-    // Google Drive: open?id=FILE_ID
     const driveOpenMatch = raw.match(/[?&]id=([^&]+)/i);
     if (/drive\.google\.com/i.test(raw) && driveOpenMatch?.[1]) {
       return `https://drive.google.com/uc?export=view&id=${driveOpenMatch[1]}`;
@@ -75,11 +73,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getCountdownState(endValue) {
     const end = new Date(endValue).getTime();
+
     if (!Number.isFinite(end)) {
       return {
-        valid: false,
-        expired: false,
-        text: "Kommer snart"
+        text: "Kommer snart",
+        urgency: false,
+        expired: false
       };
     }
 
@@ -88,33 +87,45 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (diff <= 0) {
       return {
-        valid: true,
-        expired: true,
-        text: "Giveaway avsluttet"
+        text: "Giveaway avsluttet",
+        urgency: false,
+        expired: true
       };
     }
 
     const totalSeconds = Math.floor(diff / 1000);
+    const totalDays = Math.floor(totalSeconds / 86400);
+    const totalHours = Math.floor(totalSeconds / 3600);
+
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    let text;
+
+    if (totalDays > 10) {
+      text = `Trekning om ${days}d ${hours}t ${minutes}m`;
+    } else if (totalDays > 2) {
+      text = `Trekning om ${days}d ${hours}t ${minutes}m ${seconds}s`;
+    } else {
+      text = `Trekning om ${totalHours}t ${minutes}m ${seconds}s`;
+    }
 
     return {
-      valid: true,
-      expired: false,
-      text: `Trekning om ${String(days).padStart(2, "0")}d ${String(hours).padStart(2, "0")}t ${String(minutes).padStart(2, "0")}m`
+      text,
+      urgency: totalHours <= 48,
+      expired: false
     };
   }
 
   function buildSponsorLabel(item) {
     const sponsorName = String(item.sponsor_name || "").trim();
     if (!sponsorName) return "";
-
     return `Sponset av ${sponsorName}`;
   }
 
   function normalizeRow(row) {
-    // Litt robusthet hvis enkelte kolonner er feil limt inn
     const fallbackCountdown = looksLikeDate(row.cta_text) ? row.cta_text : row.countdown_end;
     const fallbackCtaText = looksLikeDate(row.cta_text) ? "Delta nå" : (row.cta_text || "Delta nå");
 
@@ -152,7 +163,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       entry_steps: rawEntrySteps || "",
       extra_entries: row.extra_entries || "",
       legal_note: rawLegalNote || "",
-      secondary_note: row.secondary_note || ""
+      secondary_note: row.secondary_note || "",
+      product_id: String(row.product_id || "").trim(),
+      product_link_text: row.product_link_text || "Se produkt"
     };
   }
 
@@ -210,7 +223,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             <div class="giveaway-main-overlay"></div>
 
-            <div class="giveaway-main-countdown">
+            <div class="giveaway-main-countdown ${countdown.urgency ? "urgent" : ""}">
               ${sanitize(countdown.text)}
             </div>
 
@@ -270,6 +283,11 @@ document.addEventListener("DOMContentLoaded", async () => {
               : `<span class="giveaway-cta is-disabled">Kommer snart</span>`
             }
 
+            ${active.product_id
+              ? `<a href="product.html?id=${encodeURIComponent(active.product_id)}" class="giveaway-product-link">${sanitize(active.product_link_text || "Se produkt")}</a>`
+              : ""
+            }
+
             ${active.secondary_note ? `<span class="giveaway-secondary-note">${sanitize(active.secondary_note)}</span>` : ""}
           </div>
         </div>
@@ -312,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setInterval(() => {
       if (!document.body.contains(shell)) return;
       rerender();
-    }, 60000);
+    }, 1000);
 
   } catch (error) {
     console.error("Giveaways error:", error);
