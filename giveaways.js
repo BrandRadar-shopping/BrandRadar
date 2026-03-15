@@ -15,19 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function parseNumber(value) {
-    if (value == null) return null;
+    if (value == null || value === "") return null;
     const cleaned = String(value)
       .replace(/\s/g, "")
       .replace(/[^\d,.\-]/g, "")
       .replace(",", ".");
     const n = Number(cleaned);
     return Number.isFinite(n) ? n : null;
-  }
-
-  function formatPrice(value) {
-    const n = parseNumber(value);
-    if (n == null) return "";
-    return `${new Intl.NumberFormat("nb-NO").format(Math.round(n))} kr`;
   }
 
   function sanitize(text) {
@@ -39,17 +33,64 @@ document.addEventListener("DOMContentLoaded", async () => {
       .replace(/'/g, "&#039;");
   }
 
-  function getCountdownParts(endValue) {
+  function formatPrice(value) {
+    const n = parseNumber(value);
+    if (n == null) return "";
+    return `${new Intl.NumberFormat("nb-NO").format(Math.round(n))} kr`;
+  }
+
+  function looksLikeUrl(value) {
+    return /^https?:\/\//i.test(String(value ?? "").trim());
+  }
+
+  function looksLikeDate(value) {
+    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(String(value ?? "").trim());
+  }
+
+  function normalizeImageUrl(url) {
+    const raw = String(url ?? "").trim();
+    if (!raw) return "";
+
+    // Google Drive: /file/d/FILE_ID/view
+    const driveFileMatch = raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+    if (driveFileMatch?.[1]) {
+      return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
+    }
+
+    // Google Drive: open?id=FILE_ID
+    const driveOpenMatch = raw.match(/[?&]id=([^&]+)/i);
+    if (/drive\.google\.com/i.test(raw) && driveOpenMatch?.[1]) {
+      return `https://drive.google.com/uc?export=view&id=${driveOpenMatch[1]}`;
+    }
+
+    return raw;
+  }
+
+  function splitList(text) {
+    return String(text ?? "")
+      .split(/\||\n/)
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  function getCountdownState(endValue) {
     const end = new Date(endValue).getTime();
-    if (!Number.isFinite(end)) return null;
+    if (!Number.isFinite(end)) {
+      return {
+        valid: false,
+        expired: false,
+        text: "Kommer snart"
+      };
+    }
 
     const now = Date.now();
     const diff = end - now;
 
     if (diff <= 0) {
       return {
+        valid: true,
         expired: true,
-        text: "Trekningen er avsluttet"
+        text: "Giveaway avsluttet"
       };
     }
 
@@ -59,23 +100,60 @@ document.addEventListener("DOMContentLoaded", async () => {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
 
     return {
+      valid: true,
       expired: false,
       text: `Trekning om ${String(days).padStart(2, "0")}d ${String(hours).padStart(2, "0")}t ${String(minutes).padStart(2, "0")}m`
     };
   }
 
-  function splitRules(text) {
-    return String(text ?? "")
-      .split("|")
-      .map(item => item.trim())
-      .filter(Boolean);
+  function buildSponsorLabel(item) {
+    const sponsorName = String(item.sponsor_name || "").trim();
+    if (!sponsorName) return "";
+
+    return `Sponset av ${sponsorName}`;
   }
 
-  function sponsorLabel(item) {
-    const sponsor = String(item.sponsor_name || "").trim();
-    if (!sponsor) return "";
+  function normalizeRow(row) {
+    // Litt robusthet hvis enkelte kolonner er feil limt inn
+    const fallbackCountdown = looksLikeDate(row.cta_text) ? row.cta_text : row.countdown_end;
+    const fallbackCtaText = looksLikeDate(row.cta_text) ? "Delta nå" : (row.cta_text || "Delta nå");
 
-    return `Sponset av ${sponsor}`;
+    const rawEntrySteps =
+      looksLikeUrl(row.entry_steps) && row.legal_note
+        ? row.legal_note
+        : row.entry_steps;
+
+    const rawLegalNote =
+      looksLikeUrl(row.entry_steps) && row.legal_note
+        ? row.secondary_note
+        : row.legal_note;
+
+    const sponsorName =
+      String(row.sponsor_name || "").trim() ||
+      (String(row.sponsor_type || "").trim().toLowerCase() === "brandradar" ? "BrandRadar" : "");
+
+    return {
+      id: String(row.id || "").trim(),
+      active: parseBool(row.active),
+      sort_order: parseNumber(row.sort_order) ?? 999,
+      overline: row.overline || "BrandRadar Giveaway",
+      badge: row.badge || "",
+      title: row.title || "Giveaway",
+      description: row.description || "",
+      image_url: normalizeImageUrl(row.image_url),
+      thumb_url: normalizeImageUrl(row.thumb_url || row.image_url),
+      sponsor_name: sponsorName,
+      sponsor_type: row.sponsor_type || "",
+      giveaway_value: parseNumber(row.giveaway_value),
+      value_label: row.value_label || "",
+      countdown_end: fallbackCountdown || "",
+      cta_text: fallbackCtaText,
+      cta_link: row.cta_link || "",
+      entry_steps: rawEntrySteps || "",
+      extra_entries: row.extra_entries || "",
+      legal_note: rawLegalNote || "",
+      secondary_note: row.secondary_note || ""
+    };
   }
 
   function renderThumb(item, isActive, index) {
@@ -89,13 +167,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="giveaway-thumb-media">
           ${item.thumb_url
             ? `<img src="${sanitize(item.thumb_url)}" alt="${sanitize(item.title)}" loading="lazy">`
-            : item.image_url
-              ? `<img src="${sanitize(item.image_url)}" alt="${sanitize(item.title)}" loading="lazy">`
-              : `<div></div>`
+            : `<div class="giveaway-thumb-placeholder">BR</div>`
           }
         </div>
         <p class="giveaway-thumb-title">${sanitize(item.title)}</p>
-        <p class="giveaway-thumb-meta">${sanitize(item.value_label || "")}</p>
+        <p class="giveaway-thumb-meta">${sanitize(item.value_label || formatPrice(item.giveaway_value) || "")}</p>
       </button>
     `;
   }
@@ -104,26 +180,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     const active = items[activeIndex];
     if (!active) return "";
 
-    const countdown = getCountdownParts(active.countdown_end);
-    const rules = splitRules(active.entry_steps);
+    const countdown = getCountdownState(active.countdown_end);
+    const sponsorLabel = buildSponsorLabel(active);
+    const entrySteps = splitList(active.entry_steps);
+    const extraEntries = splitList(active.extra_entries);
+    const valueText = active.value_label || formatPrice(active.giveaway_value) || "Kommer snart";
     const hasMultiple = items.length > 1;
+    const isExternal = looksLikeUrl(active.cta_link);
 
     return `
       <div class="giveaway-module">
         <div class="giveaway-left">
           <div class="giveaway-topline">
-            <p class="giveaway-overline">${sanitize(active.overline || "BrandRadar Giveaway")}</p>
+            <p class="giveaway-overline">${sanitize(active.overline)}</p>
             ${active.badge ? `<span class="giveaway-status-badge">${sanitize(active.badge)}</span>` : ""}
           </div>
 
           <div class="giveaway-main-stage ${active.image_url ? "" : "is-placeholder"}">
             ${active.image_url
               ? `<img src="${sanitize(active.image_url)}" alt="${sanitize(active.title)}" loading="lazy">`
-              : `<span>Ingen giveaway-bilde tilgjengelig</span>`
+              : `
+                <div class="giveaway-main-placeholder">
+                  <span class="giveaway-main-placeholder-mark">BR</span>
+                  <p class="giveaway-main-placeholder-title">${sanitize(active.title)}</p>
+                  <p class="giveaway-main-placeholder-sub">Giveaway-bilde kommer snart</p>
+                </div>
+              `
             }
 
-            ${countdown ? `<div class="giveaway-main-countdown">${sanitize(countdown.text)}</div>` : ""}
-            ${active.value_label ? `<div class="giveaway-main-value">${sanitize(active.value_label)}</div>` : ""}
+            <div class="giveaway-main-overlay"></div>
+
+            <div class="giveaway-main-countdown">
+              ${sanitize(countdown.text)}
+            </div>
+
+            <div class="giveaway-main-value">
+              ${sanitize(valueText)}
+            </div>
           </div>
 
           <div class="giveaway-thumbs" ${hasMultiple ? "" : "hidden"}>
@@ -132,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div class="giveaway-right">
-          ${sponsorLabel(active) ? `<div class="giveaway-sponsor">${sanitize(sponsorLabel(active))}</div>` : ""}
+          ${sponsorLabel ? `<div class="giveaway-sponsor">${sanitize(sponsorLabel)}</div>` : ""}
 
           <h2 class="giveaway-title">${sanitize(active.title)}</h2>
 
@@ -141,31 +234,40 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="giveaway-meta-grid">
             <div class="giveaway-meta-card">
               <span class="giveaway-meta-label">Verdi</span>
-              <div class="giveaway-meta-value">${sanitize(active.value_label || formatPrice(active.giveaway_value) || "Kommer snart")}</div>
+              <div class="giveaway-meta-value">${sanitize(valueText)}</div>
             </div>
 
             <div class="giveaway-meta-card">
               <span class="giveaway-meta-label">Frist</span>
-              <div class="giveaway-meta-value">${countdown ? sanitize(countdown.text) : "Kommer snart"}</div>
+              <div class="giveaway-meta-value">${sanitize(countdown.text)}</div>
             </div>
           </div>
 
           <div class="giveaway-rules">
             <p class="giveaway-rules-title">Slik deltar du</p>
             <ul class="giveaway-rules-list">
-              ${rules.length
-                ? rules.map(rule => `<li>${sanitize(rule)}</li>`).join("")
+              ${entrySteps.length
+                ? entrySteps.map(rule => `<li>${sanitize(rule)}</li>`).join("")
                 : `<li>Detaljer kommer snart</li>`
               }
             </ul>
           </div>
 
+          ${extraEntries.length ? `
+            <div class="giveaway-bonus">
+              <p class="giveaway-bonus-title">Ekstra entries</p>
+              <div class="giveaway-bonus-list">
+                ${extraEntries.map(item => `<span class="giveaway-bonus-pill">${sanitize(item)}</span>`).join("")}
+              </div>
+            </div>
+          ` : ""}
+
           ${active.legal_note ? `<p class="giveaway-legal">${sanitize(active.legal_note)}</p>` : ""}
 
           <div class="giveaway-actions">
             ${active.cta_link
-              ? `<a href="${sanitize(active.cta_link)}" class="giveaway-cta" target="_blank" rel="noopener">${sanitize(active.cta_text || "Delta nå")}</a>`
-              : `<span class="giveaway-cta" aria-disabled="true">${sanitize(active.cta_text || "Kommer snart")}</span>`
+              ? `<a href="${sanitize(active.cta_link)}" class="giveaway-cta" ${isExternal ? `target="_blank" rel="noopener"` : ""}>${sanitize(active.cta_text || "Delta nå")}</a>`
+              : `<span class="giveaway-cta is-disabled">Kommer snart</span>`
             }
 
             ${active.secondary_note ? `<span class="giveaway-secondary-note">${sanitize(active.secondary_note)}</span>` : ""}
@@ -179,27 +281,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const rows = await fetch(giveawaysUrl).then(r => r.json());
 
     const giveaways = rows
-      .filter(row => parseBool(row.active))
-      .map(row => ({
-        id: String(row.id || "").trim(),
-        sort_order: parseNumber(row.sort_order) ?? 999,
-        overline: row.overline || "BrandRadar Giveaway",
-        badge: row.badge || "",
-        title: row.title || "Giveaway",
-        description: row.description || "",
-        image_url: row.image_url || "",
-        thumb_url: row.thumb_url || "",
-        sponsor_name: row.sponsor_name || "",
-        sponsor_type: row.sponsor_type || "",
-        giveaway_value: row.giveaway_value || "",
-        value_label: row.value_label || "",
-        countdown_end: row.countdown_end || "",
-        cta_text: row.cta_text || "Delta nå",
-        cta_link: row.cta_link || "",
-        entry_steps: row.entry_steps || "",
-        legal_note: row.legal_note || "",
-        secondary_note: row.secondary_note || ""
-      }))
+      .map(normalizeRow)
+      .filter(item => item.active)
       .sort((a, b) => a.sort_order - b.sort_order);
 
     shell.classList.remove("is-loading");
@@ -216,8 +299,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       shell.classList.remove("is-empty", "is-error");
       shell.innerHTML = renderModule(giveaways, activeIndex);
 
-      const thumbButtons = shell.querySelectorAll("[data-giveaway-index]");
-      thumbButtons.forEach(btn => {
+      shell.querySelectorAll("[data-giveaway-index]").forEach(btn => {
         btn.addEventListener("click", () => {
           activeIndex = Number(btn.dataset.giveawayIndex || 0);
           rerender();
