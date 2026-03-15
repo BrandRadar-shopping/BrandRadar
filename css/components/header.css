@@ -467,3 +467,7 @@ nav.mega-menu .menu-section a:hover {
   letter-spacing: 0.05em;
 
 }
+
+.top-links a.luxury-link:hover {
+  filter: brightness(1.15);
+}
