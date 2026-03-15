@@ -1139,3 +1139,60 @@ html, body {
   }
 }
 
+/* ===============================
+   GIVEAWAY PRODUCT LINK
+================================ */
+
+.giveaway-product-link {
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.65rem 1rem;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.18);
+
+  color: #fff;
+  text-decoration: none;
+
+  font-size: 0.88rem;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.giveaway-product-link:hover {
+
+  border-color: #8ec5ff;
+  background: rgba(142,197,255,0.08);
+}
+
+
+/* ===============================
+   URGENCY MODE
+================================ */
+
+.giveaway-main-countdown.urgent {
+
+  background: rgba(255,80,80,0.85);
+
+  font-weight: 800;
+
+  box-shadow:
+    0 0 0 2px rgba(255,80,80,0.35),
+    0 6px 20px rgba(0,0,0,0.35);
+
+  animation: countdownPulse 1.6s infinite;
+}
+
+@keyframes countdownPulse {
+
+  0% { transform: scale(1); }
+
+  50% { transform: scale(1.03); }
+
+  100% { transform: scale(1); }
+
+}
