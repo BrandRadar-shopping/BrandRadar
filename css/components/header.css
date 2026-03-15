@@ -6,6 +6,15 @@
    - Category bar
    - Mega menu
 ========================================================= */
+/* =========================================================
+   BRANDRADAR FONT SYSTEM
+========================================================= */
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+
 
 /* ---------------------------------------------------------
    HEADER CONTAINER
@@ -36,8 +45,10 @@
 
 .logo {
   color: #fff;
+  font-family: "Manrope", sans-serif;
   font-weight: 800;
   font-size: 1.65rem;
+  letter-spacing: -0.03em;
   text-decoration: none;
 }
 
