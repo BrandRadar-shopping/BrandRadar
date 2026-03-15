@@ -445,3 +445,25 @@ nav.mega-menu .menu-section a:hover {
   display: none;
 }
 
+/* =========================================================
+   LUXURY CORNER LINK
+========================================================= */
+
+.top-links a.luxury-link {
+
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+
+  background: linear-gradient(
+    120deg,
+    #c6a75d,
+    #e5cc84,
+    #b8963d
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: 0.05em;
+
+}
