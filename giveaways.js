@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const SHEET_GIVEAWAYS = "REPLACE_WITH_YOUR_GIVEAWAYS_SHEET_ID";
+  const SHEET_GIVEAWAYS = "1E7Fa82dSdgWzCCZ4M8zgodA565FXZvANxWT7RtdP1z8";
   const GIVEAWAYS_TAB = "giveaways";
   const giveawaysUrl = `https://opensheet.elk.sh/${SHEET_GIVEAWAYS}/${GIVEAWAYS_TAB}`;
 
