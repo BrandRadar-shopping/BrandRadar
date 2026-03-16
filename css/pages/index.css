@@ -48,7 +48,6 @@ html, body {
   max-width: none;
   margin: 0;
   padding: 0;
-  /* IKKE sett overflow hidden her – det kan “klippe” CTA */
 }
 
 .hero .hero-content {
@@ -75,7 +74,6 @@ html, body {
   transition: all 0.22s ease;
 }
 
-/* Hover – subtle luxury glow */
 .hero .cta-btn:hover {
   transform: translateY(-2px);
   border-color: #e6c78b;
@@ -83,7 +81,6 @@ html, body {
   color: #f3d9a5;
 }
 
-/* Active click feel */
 .hero .cta-btn:active {
   transform: translateY(0);
   box-shadow: 0 4px 14px rgba(230,199,139,0.18);
@@ -95,19 +92,15 @@ html, body {
 
 /* ==========================================================
    PARTNER BANNER (INDEX)
-   NB: INGEN egen styling her.
-   Alt ligger i components/partner.css.
-   Dette lar index + news bli 100% identiske.
 ========================================================== */
 
-/* Liten spacing-kontroll på seksjonen på index (trygt) */
 #partner-banner-section.partner-banner {
   margin-top: 1.7rem;
   margin-bottom: 2.6rem;
 }
 
 /* ==========================================================
-   INTRO: “Hva er BrandRadar?” — mer ryddig/premium
+   INTRO
 ========================================================== */
 .intro {
   padding: 3rem var(--index-pad) 2.2rem;
@@ -148,7 +141,6 @@ html, body {
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
 }
 
-/* Ikon mer “ordnet”: samme størrelse + fin bakgrunn */
 .intro-card .icon {
   width: 46px;
   height: 46px;
@@ -186,14 +178,13 @@ html, body {
 }
 
 /* ==========================================================
-   FEATURED: Ukens Radar Picks (grid)
+   FEATURED
 ========================================================== */
 .featured-products {
   padding-top: 2.6rem;
   padding-bottom: 3.4rem;
 }
 
-/* Viktig: gjør grid robust og hindrer “smale” kort */
 #featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -207,7 +198,6 @@ html, body {
   max-width: 100%;
 }
 
-/* Index-feel på bilder (valgfritt, men stabilt) */
 #featured-grid .product-card img {
   aspect-ratio: 1 / 1.1;
 }
@@ -220,11 +210,7 @@ html, body {
 }
 
 /* ==========================================================
-   TOP BRANDS — LOGO ONLY
-   Oppdatert for ny JS-render:
-   - kun logo i kortet
-   - ingen brand-navn / tagline
-   - klart for senere hover-CTA
+   TOP BRANDS — LOGO ONLY + HOVER CTA
 ========================================================== */
 
 .top-brands {
@@ -246,7 +232,7 @@ html, body {
   align-items: center;
   justify-content: center;
   min-height: 132px;
-  padding: 22px 18px;
+  padding: 22px 18px 34px;
   border-radius: 22px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   border: 1px solid rgba(15, 23, 42, 0.06);
@@ -296,24 +282,44 @@ html, body {
   transform: scale(1.02);
 }
 
-/* Skjul gammel tekstmarkup hvis noe fortsatt ligger igjen i DOM */
 .topbrand-name,
 .topbrand-tagline {
   display: none !important;
 }
 
-/* Klar for senere hover-CTA, men ikke i bruk nå */
-.topbrand-card::after {
-  content: "";
+.topbrand-hover-cta {
   position: absolute;
-  inset: auto 16px 14px auto;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%) translateY(8px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.82rem;
   font-weight: 700;
   color: #0070f3;
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  white-space: nowrap;
+}
+
+.topbrand-hover-arrow {
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+.topbrand-card:hover .topbrand-hover-cta,
+.topbrand-card:focus-visible .topbrand-hover-cta {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.topbrand-card:hover .topbrand-hover-arrow,
+.topbrand-card:focus-visible .topbrand-hover-arrow {
+  transform: translateX(2px);
 }
 
 @media (max-width: 768px) {
@@ -324,20 +330,23 @@ html, body {
 
   .topbrand-card {
     min-height: 112px;
-    padding: 18px 14px;
+    padding: 18px 14px 30px;
     border-radius: 18px;
   }
 
   .topbrand-logo img {
     max-height: 46px;
   }
+
+  .topbrand-hover-cta {
+    bottom: 12px;
+    font-size: 0.76rem;
+  }
 }
 
 /* ==========================================================
    BRANDRADAR GIVEAWAYS – FINAL MODULE
-   NB:
-   Denne blokken beholdes som aktiv versjon.
-   Tidligere giveaway-duplikater over er ikke rørt for å unngå risiko.
+   Beholdt aktiv final-versjon
 ========================================================== */
 
 .giveaway-section {
@@ -845,10 +854,6 @@ html, body {
   }
 }
 
-/* ===============================
-   GIVEAWAY PRODUCT LINK
-================================ */
-
 .giveaway-product-link {
   display: inline-flex;
   align-items: center;
@@ -866,10 +871,6 @@ html, body {
   border-color: #8ec5ff;
   background: rgba(142,197,255,0.08);
 }
-
-/* ===============================
-   URGENCY MODE
-================================ */
 
 .giveaway-main-countdown.urgent {
   background: rgba(255,80,80,0.85);
