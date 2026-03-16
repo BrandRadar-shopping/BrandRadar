@@ -311,6 +311,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="topbrand-logo">
               <img src="${b.logo || ""}" alt="${b.brand}" loading="lazy">
             </div>
+
+            <span class="topbrand-hover-cta" aria-hidden="true">
+              Explore brand <span class="topbrand-hover-arrow">→</span>
+            </span>
           </a>
         `;
       });
