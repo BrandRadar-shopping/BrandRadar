@@ -248,6 +248,72 @@
     return [...new Set(cleaned)].slice(0, 5);
   }
 
+  function ensureDealsRibbonStyles() {
+    if (document.getElementById("news-deals-ribbon-styles")) return;
+
+    const style = document.createElement("style");
+    style.id = "news-deals-ribbon-styles";
+    style.textContent = `
+      .news-section--deals .deal-card.product-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .news-section--deals .deal-card.product-card .discount-badge {
+        display: none !important;
+      }
+
+      .news-section--deals .deal-card .deals-corner-ribbon {
+        position: absolute;
+        top: 18px;
+        left: -44px;
+        width: 132px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a, #1f2937);
+        color: #ffffff;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        line-height: 1;
+        text-align: center;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        z-index: 7;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+        pointer-events: none;
+        padding-top: 1px;
+      }
+
+      .news-section--deals .deal-card .deals-corner-ribbon-gloss {
+        position: absolute;
+        top: 18px;
+        left: -44px;
+        width: 132px;
+        height: 32px;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.20) 0%,
+          rgba(255,255,255,0.05) 36%,
+          rgba(0,0,0,0.16) 100%
+        );
+        z-index: 6;
+        pointer-events: none;
+        opacity: 0.85;
+      }
+
+      .news-section--deals .deal-card.product-card .favorite-toggle {
+        z-index: 8;
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
   // ---------- ELITE CARD ----------
   function buildEliteCard(prod, options = {}) {
     const {
@@ -264,6 +330,8 @@
     const ratingMarkup = buildRatingMarkup(prod.rating);
     const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
 
+    const isDealCard = String(extraClasses || "").split(/\s+/).includes("deal-card");
+
     const isFav =
       typeof window.isProductFavorite === "function" && pid
         ? window.isProductFavorite(pid)
@@ -274,7 +342,8 @@
     card.setAttribute("data-product-id", pid || "");
 
     card.innerHTML = `
-      ${discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
+      ${isDealCard ? `<span class="deals-corner-ribbon">DEALS</span><span class="deals-corner-ribbon-gloss"></span>` : ""}
+      ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
 
       <button
         type="button"
@@ -873,6 +942,7 @@
   // INIT
   // ======================================================
   document.addEventListener("DOMContentLoaded", () => {
+    ensureDealsRibbonStyles();
     loadPartnerBanner();
     loadDeals();
     loadPicks();
