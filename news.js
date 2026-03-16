@@ -309,6 +309,38 @@
       .news-section--deals .deal-card.product-card .favorite-toggle {
         z-index: 8;
       }
+
+      .news-section--deals .deal-card.product-card .price-wrapper {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 0.25rem;
+        width: 100%;
+      }
+
+      .news-section--deals .deal-card.product-card .price-line {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+        min-width: 0;
+      }
+
+      .news-section--deals .deal-card.product-card .discount-pill {
+        flex: 0 0 auto;
+        align-self: flex-end;
+        white-space: nowrap;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: #ffffff;
+        background: linear-gradient(135deg, #0f172a, #1f2937);
+        padding: 0.34rem 0.62rem;
+        border-radius: 999px;
+        line-height: 1;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
+        margin-left: 0;
+      }
     `;
 
     document.head.appendChild(style);
@@ -336,6 +368,23 @@
       typeof window.isProductFavorite === "function" && pid
         ? window.isProductFavorite(pid)
         : false;
+
+    const priceMarkup = isDealCard && discountPct
+      ? `
+        <div class="price-wrapper">
+          <div class="price-line">
+            <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
+            ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
+          </div>
+          <span class="discount-pill">-${discountPct}%</span>
+        </div>
+      `
+      : `
+        <div class="price-line">
+          <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
+          ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
+        </div>
+      `;
 
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
@@ -368,11 +417,7 @@
         ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
 
         ${ratingMarkup}
-
-        <div class="price-line">
-          <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
-          ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
-        </div>
+        ${priceMarkup}
       </div>
     `;
 
