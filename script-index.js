@@ -291,6 +291,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
 
       const container = document.getElementById("topbrands-grid");
+      if (!container) return;
+
       container.innerHTML = "";
 
       if (highlights.length === 0) {
@@ -300,18 +302,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       highlights.forEach(b => {
         container.innerHTML += `
-          <a class="topbrand-card" href="brand-page.html?brand=${encodeURIComponent(
-            b.brand
-          )}">
+          <a
+            class="topbrand-card"
+            href="brand-page.html?brand=${encodeURIComponent(b.brand)}"
+            aria-label="Utforsk ${b.brand}"
+            title="${b.brand}"
+          >
             <div class="topbrand-logo">
-              <img src="${b.logo || ""}" alt="${b.brand}">
+              <img src="${b.logo || ""}" alt="${b.brand}" loading="lazy">
             </div>
-
-            <h3 class="topbrand-name">${b.brand}</h3>
-
-            <p class="topbrand-tagline">
-              ${b.description?.trim() || "Utforsk dette merket"}
-            </p>
           </a>
         `;
       });
