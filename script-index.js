@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
 
             <span class="topbrand-hover-cta" aria-hidden="true">
-              Explore brand <span class="topbrand-hover-arrow">→</span>
+              Explore brand
             </span>
           </a>
         `;
@@ -331,7 +331,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadTrendingNow();
   await loadTopBrands();
 });
-
 
 
 
