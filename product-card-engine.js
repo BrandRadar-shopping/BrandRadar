@@ -8,6 +8,7 @@
 // - luxury heart
 // - SVG rating stars
 // - mer stabil markup for jevnere kort
+// - image fallback / safety hvis bilde feiler
 // ======================================================
 
 (function () {
@@ -176,6 +177,52 @@
     `;
   }
 
+  function attachImageSafety(card, safeBrand, safeName) {
+    const media = card.querySelector(".product-media");
+    const image = card.querySelector(".product-image");
+    const fallback = card.querySelector(".product-image-fallback");
+
+    if (!media || !fallback) return;
+
+    const showFallback = () => {
+      media.classList.add("has-image-fallback");
+      if (image) image.style.display = "none";
+    };
+
+    const hideFallback = () => {
+      media.classList.remove("has-image-fallback");
+      if (image) image.style.display = "";
+    };
+
+    const fallbackLabel = fallback.querySelector(".product-image-fallback__label");
+    if (fallbackLabel && !fallbackLabel.textContent.trim()) {
+      fallbackLabel.textContent = safeBrand || safeName || "BrandRadar";
+    }
+
+    if (!image || !image.getAttribute("src")) {
+      showFallback();
+      return;
+    }
+
+    image.addEventListener("error", showFallback);
+
+    image.addEventListener("load", () => {
+      if (!image.naturalWidth || !image.naturalHeight) {
+        showFallback();
+        return;
+      }
+      hideFallback();
+    });
+
+    if (image.complete) {
+      if (!image.naturalWidth || !image.naturalHeight) {
+        showFallback();
+      } else {
+        hideFallback();
+      }
+    }
+  }
+
   function createCard(product, options = {}) {
     const {
       isLuxury = false,
@@ -233,8 +280,13 @@
         ${
           img
             ? `<img src="${escapeHtml(img)}" alt="${safeName}" class="product-image" loading="lazy">`
-            : `<div class="product-image product-image--placeholder" aria-hidden="true"></div>`
+            : ``
         }
+        <div class="product-image-fallback" aria-hidden="true">
+          <div class="product-image-fallback__inner">
+            <span class="product-image-fallback__label">${safeBrand || safeName || "BrandRadar"}</span>
+          </div>
+        </div>
       </div>
 
       <div class="product-info">
@@ -246,6 +298,8 @@
         </div>
       </div>
     `;
+
+    attachImageSafety(card, brand, name);
 
     card.addEventListener("click", e => {
       if (enableFavorite && e.target.closest(".favorite-toggle")) return;
