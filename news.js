@@ -170,6 +170,27 @@
   }
 
   function getPriceState(prod) {
+    const explicitOldPrice = parseNum(prod.old_price);
+    const explicitNewPrice = parseNum(prod.new_price);
+
+    if (
+      explicitOldPrice != null &&
+      explicitNewPrice != null &&
+      explicitOldPrice > explicitNewPrice
+    ) {
+      const discountPct = Math.round(
+        ((explicitOldPrice - explicitNewPrice) / explicitOldPrice) * 100
+      );
+
+      return {
+        priceNum: explicitOldPrice,
+        discountNum: discountPct,
+        newPriceNum: explicitNewPrice,
+        oldPriceNum: explicitOldPrice,
+        discountPct
+      };
+    }
+
     const priceNum = parseNum(prod.price);
     const discountNum = prod.discount ? parseNum(prod.discount) : null;
 
@@ -637,7 +658,7 @@
         const oldPrice = parseNum(d.old_price);
         const newPrice = parseNum(d.new_price);
         const discount =
-          oldPrice && newPrice
+          oldPrice && newPrice && oldPrice > newPrice
             ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
             : null;
 
@@ -645,7 +666,9 @@
           id: d.id || d.product_id || `deal_${index}`,
           title: d.product_name || d.title || "",
           brand: d.brand || "",
-          price: newPrice != null ? newPrice : oldPrice,
+          price: oldPrice != null ? oldPrice : newPrice,
+          old_price: oldPrice,
+          new_price: newPrice,
           discount,
           image_url: d.image_url || "",
           product_url: d.link || d.product_url || "",
@@ -856,8 +879,3 @@
     loadNewsSections();
   });
 })();
-
-
-
-
-
