@@ -457,4 +457,73 @@
   color: #2563eb;
 }
 
+/* ==========================================
+   NEWS – DEALS CORNER RIBBON
+   Samme ribbon som Category → Alle deals
+========================================== */
 
+.deal-card.product-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* DEALS tekstbånd */
+.deal-card.product-card::before {
+  content: "DEALS";
+  position: absolute;
+  top: 18px;
+  left: -44px;
+  width: 132px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #0f172a, #1f2937);
+  color: #ffffff;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-align: center;
+
+  transform: rotate(-45deg);
+  transform-origin: center;
+
+  z-index: 7;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+
+  padding-top: 1px;
+}
+
+/* subtle gloss layer */
+.deal-card.product-card::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: -44px;
+  width: 132px;
+  height: 32px;
+
+  transform: rotate(-45deg);
+  transform-origin: center;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.20) 0%,
+    rgba(255,255,255,0.05) 36%,
+    rgba(0,0,0,0.16) 100%
+  );
+
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* sørg for at favoritt-hjertet ligger over ribbon */
+.deal-card.product-card .favorite-toggle {
+  z-index: 8;
+}
