@@ -658,7 +658,7 @@
         const oldPrice = parseNum(d.old_price);
         const newPrice = parseNum(d.new_price);
         const discount =
-          oldPrice && newPrice && oldPrice > newPrice
+          oldPrice != null && newPrice != null && oldPrice > newPrice
             ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
             : null;
 
