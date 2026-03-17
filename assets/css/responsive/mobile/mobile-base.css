@@ -1053,3 +1053,173 @@
   /* Footer alltid sist */
   main.page .footer-cta{ order: 90; }
 }
+
+/* =====================================================
+   INDEX – MOBILE PARTNER BANNER (compact top sponsor rail)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Legg banneret helt øverst på index-flyten */
+  main.page #partner-banner-section {
+    order: -2 !important;
+    padding: 8px 12px 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Når brukeren har lukket banneret */
+  main.page #partner-banner-section.is-mobile-hidden {
+    display: none !important;
+  }
+
+  /* Desktop-varianten skal bort på mobil */
+  .partner-banner .partner-banner-desktop {
+    display: none !important;
+  }
+
+  /* Mobil-varianten skal vises */
+  .partner-banner .partner-banner-mobile {
+    display: block !important;
+  }
+
+  /* Selve seksjonen skal være helt ren */
+  section.partner-banner {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+  }
+
+  /* Kompakt sponsorkort */
+  .partner-mobile-inner {
+    border-radius: 16px;
+    background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    padding: 10px 12px 12px;
+  }
+
+  .partner-mobile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .partner-mobile-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(0,112,243,0.10);
+    color: #0b4fcf;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: -0.1px;
+    white-space: nowrap;
+  }
+
+  .partner-mobile-close {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.06);
+    color: #0f172a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .partner-mobile-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .partner-mobile-brand {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .partner-mobile-brand img {
+    max-width: 112px;
+    width: auto;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .partner-mobile-brand-text {
+    font-size: 16px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .partner-mobile-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.96);
+    border: 1px solid rgba(15,23,42,0.12);
+    color: #111827;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  }
+
+  .partner-mobile-cta::after {
+    content: "→";
+    margin-left: 7px;
+    font-weight: 900;
+    opacity: 0.72;
+  }
+
+  .partner-mobile-cta:active {
+    transform: translateY(1px);
+  }
+}
+
+@media (max-width: 360px) {
+  .partner-mobile-inner {
+    padding: 10px 10px 11px;
+  }
+
+  .partner-mobile-main {
+    gap: 8px;
+  }
+
+  .partner-mobile-brand img {
+    max-width: 96px;
+    height: 24px;
+  }
+
+  .partner-mobile-brand-text {
+    font-size: 14px;
+  }
+
+  .partner-mobile-cta {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
