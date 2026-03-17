@@ -125,3 +125,15 @@
 }
 
 .giveaway button:hover { background: #222; }
+
+/* =========================================
+   Partner banner variants
+========================================= */
+
+.partner-banner-desktop {
+  display: block;
+}
+
+.partner-banner-mobile {
+  display: none;
+}
