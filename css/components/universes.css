@@ -216,3 +216,114 @@
     font-size: 0.88rem;
   }
 }
+
+/* ===============================
+   UNIVERSE POLISH – DISTINCT FEEL
+   =============================== */
+
+.u-card-content {
+  padding: 18px 18px 17px;
+}
+
+.u-card-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+/* Brands – clean / airy */
+.u-card.brands .u-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15,23,42,0.02) 0%,
+      rgba(15,23,42,0.10) 34%,
+      rgba(15,23,42,0.66) 100%
+    );
+}
+
+.u-card.brands .u-card-kicker {
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #f8fafc;
+}
+
+/* Deals – stronger / more energetic */
+.u-card.deals .u-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(25,20,20,0.04) 0%,
+      rgba(25,20,20,0.14) 30%,
+      rgba(15,23,42,0.82) 100%
+    );
+}
+
+.u-card.deals .u-card-kicker {
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.95);
+  color: #0f172a;
+}
+
+/* Luxury – darker / premium */
+.u-card.luxury {
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.14),
+    0 0 0 1px rgba(230,199,139,0.12);
+}
+
+.u-card.luxury .u-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.10) 0%,
+      rgba(8,10,14,0.26) 34%,
+      rgba(5,7,10,0.88) 100%
+    );
+}
+
+.u-card.luxury .u-card-kicker {
+  background: rgba(230,199,139,0.14);
+  border: 1px solid rgba(230,199,139,0.30);
+  color: #f3d9a5;
+}
+
+/* Trends – editorial / cooler */
+.u-card.trends .u-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20,30,50,0.05) 0%,
+      rgba(20,30,50,0.14) 34%,
+      rgba(22,37,66,0.80) 100%
+    );
+}
+
+.u-card.trends .u-card-kicker {
+  background: rgba(0,112,243,0.16);
+  border: 1px solid rgba(120,190,255,0.28);
+  color: #eaf4ff;
+}
+
+/* hover – litt mer raffinert */
+.u-card:hover .u-card-overlay,
+.u-card:focus-visible .u-card-overlay {
+  filter: saturate(1.03);
+}
+
+.u-card:hover .u-card-content h3,
+.u-card:focus-visible .u-card-content h3 {
+  transform: translateY(-1px);
+}
+
+.u-card-content h3 {
+  transition: transform 0.22s ease;
+}
