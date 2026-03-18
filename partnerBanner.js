@@ -1,7 +1,7 @@
 // partnerBanner.js – Index partner banner
 // Desktop: behold dagens editorial banner
-// Mobile: kompakt sponsor-rail med close + CTA
-// Dismiss på mobil varer kun ut gjeldende nettleserøkt (sessionStorage)
+// Mobile: slim sponsor rail
+// Dismiss gjelder kun i gjeldende nettleserøkt
 
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
@@ -22,7 +22,6 @@ async function fetchPartnerBanner() {
 function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/);
   if (!lines.length) return [];
-
   const headers = splitCsvLine(lines[0]).map(h => h.trim());
 
   return lines.slice(1).map(line => {
@@ -135,11 +134,11 @@ function renderPartnerBanner(item) {
       <div class="partner-mobile-rail">
         <button type="button" class="partner-mobile-close" aria-label="Lukk partnerbanner">×</button>
 
-        <div class="partner-mobile-brand">
+        <div class="partner-mobile-center">
           ${
             img
               ? `<div class="partner-mobile-logo-wrap">
-                   <img src="${img}" alt="${escapeHtml(alt || partnerName)}" loading="lazy" class="partner-mobile-logo">
+                   <img src="${img}" alt="${escapeHtml(alt || partnerName)}" class="partner-mobile-logo" loading="lazy">
                  </div>`
               : ""
           }
@@ -197,7 +196,6 @@ function setupMobilePartnerDismiss(section, partnerKey) {
     }
 
     clearIfPartnerChanged();
-
     const dismissedKey = readDismissedKey();
     section.classList.toggle("is-mobile-hidden", dismissedKey === partnerKey);
   }
