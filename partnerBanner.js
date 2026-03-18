@@ -100,7 +100,7 @@ function renderPartnerBanner(item) {
 
   const desc = item.description || "";
   const alt = item.alt_text || "Partner";
-  const ctaText = item.cta_text || "Besøk siden";
+  const ctaText = item.cta_text || "Shop";
   const link = item.link || "#";
   const img = item.image_url || "";
   const partnerName = getPartnerName(item);
