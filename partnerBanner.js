@@ -1,6 +1,7 @@
 // partnerBanner.js – Index partner banner
 // Desktop: behold dagens editorial banner
 // Mobile: kompakt sponsor-rail med close + CTA
+// Dismiss på mobil varer kun ut gjeldende nettleserøkt (sessionStorage)
 
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
@@ -21,6 +22,7 @@ async function fetchPartnerBanner() {
 function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/);
   if (!lines.length) return [];
+
   const headers = splitCsvLine(lines[0]).map(h => h.trim());
 
   return lines.slice(1).map(line => {
@@ -80,6 +82,7 @@ function getPartnerName(item) {
       return url.hostname.replace(/^www\./, "");
     } catch (_) {}
   }
+
   return "Partner";
 }
 
@@ -119,6 +122,7 @@ function renderPartnerBanner(item) {
             ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText)}</a>`
             : ""}
         </div>
+
         ${img
           ? `<div class="partner-banner-image">
                <img src="${img}" alt="${escapeHtml(alt)}" loading="lazy">
@@ -159,21 +163,47 @@ function renderPartnerBanner(item) {
 }
 
 function setupMobilePartnerDismiss(section, partnerKey) {
-  const storageKey = "br_partner_banner_dismissed_key";
+  const storageKey = "br_partner_banner_dismissed_session";
   const closeBtn = section.querySelector(".partner-mobile-close");
   if (!closeBtn) return;
+
+  function readDismissedKey() {
+    try {
+      return sessionStorage.getItem(storageKey);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeDismissedKey() {
+    try {
+      sessionStorage.setItem(storageKey, partnerKey);
+    } catch (_) {}
+  }
+
+  function clearIfPartnerChanged() {
+    try {
+      const existing = sessionStorage.getItem(storageKey);
+      if (existing && existing !== partnerKey) {
+        sessionStorage.removeItem(storageKey);
+      }
+    } catch (_) {}
+  }
 
   function applyState() {
     if (!isMobileViewport()) {
       section.classList.remove("is-mobile-hidden");
       return;
     }
-    const dismissedKey = localStorage.getItem(storageKey);
+
+    clearIfPartnerChanged();
+
+    const dismissedKey = readDismissedKey();
     section.classList.toggle("is-mobile-hidden", dismissedKey === partnerKey);
   }
 
   closeBtn.addEventListener("click", () => {
-    localStorage.setItem(storageKey, partnerKey);
+    writeDismissedKey();
     section.classList.add("is-mobile-hidden");
   });
 
