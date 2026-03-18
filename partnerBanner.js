@@ -1,7 +1,7 @@
 // partnerBanner.js – Index partner banner
-// Desktop: behold dagens editorial banner
+// Desktop: editorial banner
 // Mobile: slim sponsor rail
-// Dismiss gjelder kun i gjeldende nettleserøkt
+// Mobile dismiss varer kun i gjeldende nettleserøkt
 
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
@@ -22,12 +22,15 @@ async function fetchPartnerBanner() {
 function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/);
   if (!lines.length) return [];
+
   const headers = splitCsvLine(lines[0]).map(h => h.trim());
 
   return lines.slice(1).map(line => {
     const cols = splitCsvLine(line);
     const obj = {};
-    headers.forEach((h, i) => (obj[h] = (cols[i] ?? "").trim()));
+    headers.forEach((h, i) => {
+      obj[h] = (cols[i] ?? "").trim();
+    });
     return obj;
   });
 }
@@ -39,6 +42,7 @@ function splitCsvLine(line) {
 
   for (let i = 0; i < line.length; i++) {
     const ch = line[i];
+
     if (ch === '"') {
       const next = line[i + 1];
       if (inQuotes && next === '"') {
@@ -54,6 +58,7 @@ function splitCsvLine(line) {
       cur += ch;
     }
   }
+
   out.push(cur);
   return out;
 }
@@ -71,15 +76,95 @@ function isMobileViewport() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
-function getPartnerName(item) {
-  if (item.campaign_name?.trim()) return item.campaign_name.trim();
-  if (item.alt_text?.trim()) return item.alt_text.trim();
+function normalizeText(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
 
-  if (item.link) {
-    try {
-      const url = new URL(item.link);
-      return url.hostname.replace(/^www\./, "");
-    } catch (_) {}
+function isGenericPartnerLabel(value) {
+  const v = normalizeText(value);
+  if (!v) return true;
+
+  const genericLabels = [
+    "ukens partner",
+    "partner",
+    "ukens partner 💎",
+    "ukens partner ✨",
+    "weekly partner",
+    "campaign partner",
+    "partner campaign"
+  ];
+
+  return genericLabels.includes(v);
+}
+
+function titleCaseDomainName(hostname) {
+  const cleaned = String(hostname || "")
+    .replace(/^www\./i, "")
+    .replace(/\.(com|no|net|org|co|io|shop|store)$/i, "");
+
+  if (!cleaned) return "Partner";
+
+  return cleaned
+    .split(/[-._]/g)
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function getDomainNameFromLink(link) {
+  try {
+    const url = new URL(link);
+    return titleCaseDomainName(url.hostname);
+  } catch (_) {
+    return "";
+  }
+}
+
+function getDesktopPartnerName(item) {
+  const candidates = [
+    item.campaign_name,
+    item.alt_text,
+    item.partner_name,
+    item.brand,
+    getDomainNameFromLink(item.link)
+  ];
+
+  for (const value of candidates) {
+    if (String(value || "").trim()) return String(value).trim();
+  }
+
+  return "Partner";
+}
+
+function getMobilePartnerName(item) {
+  const explicitCandidates = [
+    item.partner_name,
+    item.brand,
+    item.sponsor_name,
+    item.store_name
+  ];
+
+  for (const value of explicitCandidates) {
+    if (String(value || "").trim() && !isGenericPartnerLabel(value)) {
+      return String(value).trim();
+    }
+  }
+
+  const domainName = getDomainNameFromLink(item.link);
+  if (domainName) return domainName;
+
+  const fallbackCandidates = [
+    item.alt_text,
+    item.campaign_name
+  ];
+
+  for (const value of fallbackCandidates) {
+    if (String(value || "").trim() && !isGenericPartnerLabel(value)) {
+      return String(value).trim();
+    }
   }
 
   return "Partner";
@@ -100,14 +185,17 @@ function renderPartnerBanner(item) {
 
   const desc = item.description || "";
   const alt = item.alt_text || "Partner";
-  const ctaText = item.cta_text || "Shop";
+  const desktopCtaText = item.cta_text || "Se kampanjen";
+  const mobileCtaText = "Shop";
   const link = item.link || "#";
   const img = item.image_url || "";
-  const partnerName = getPartnerName(item);
+
+  const desktopPartnerName = getDesktopPartnerName(item);
+  const mobilePartnerName = getMobilePartnerName(item);
   const partnerKey = buildPartnerKey(item);
 
   const parts = desc.split("!");
-  const headline = parts[0] ? parts[0].trim() + "!" : desc;
+  const headline = parts[0] ? parts[0].trim() + "!" : desktopPartnerName;
   const sub = parts[1] ? parts[1].trim() : "";
 
   bannerSection.innerHTML = `
@@ -115,18 +203,22 @@ function renderPartnerBanner(item) {
       <div class="partner-banner-inner">
         <div class="partner-banner-text">
           <p class="partner-tag">Ukens partner</p>
-          <h2>${escapeHtml(headline || partnerName)}</h2>
+          <h2>${escapeHtml(headline || desktopPartnerName)}</h2>
           ${sub ? `<p class="partner-sub">${escapeHtml(sub)}</p>` : ""}
-          ${link && link !== "#"
-            ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText)}</a>`
-            : ""}
+          ${
+            link && link !== "#"
+              ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(desktopCtaText)}</a>`
+              : ""
+          }
         </div>
 
-        ${img
-          ? `<div class="partner-banner-image">
-               <img src="${img}" alt="${escapeHtml(alt)}" loading="lazy">
-             </div>`
-          : ""}
+        ${
+          img
+            ? `<div class="partner-banner-image">
+                 <img src="${img}" alt="${escapeHtml(alt)}" loading="lazy">
+               </div>`
+            : ""
+        }
       </div>
     </div>
 
@@ -138,20 +230,23 @@ function renderPartnerBanner(item) {
           ${
             img
               ? `<div class="partner-mobile-logo-wrap">
-                   <img src="${img}" alt="${escapeHtml(alt || partnerName)}" class="partner-mobile-logo" loading="lazy">
+                   <img
+                     src="${img}"
+                     alt="${escapeHtml(alt || mobilePartnerName)}"
+                     class="partner-mobile-logo"
+                     loading="lazy"
+                   >
                  </div>`
               : ""
           }
 
-          <div class="partner-mobile-copy">
-            <span class="partner-mobile-pill">Ukens partner</span>
-            <strong class="partner-mobile-name">${escapeHtml(partnerName)}</strong>
-          </div>
+          <span class="partner-mobile-pill">Ukens partner</span>
+          <strong class="partner-mobile-name">${escapeHtml(mobilePartnerName)}</strong>
         </div>
 
         ${
           link && link !== "#"
-            ? `<a class="partner-mobile-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText || "Besøk siden")}</a>`
+            ? `<a class="partner-mobile-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(mobileCtaText)}</a>`
             : ""
         }
       </div>
