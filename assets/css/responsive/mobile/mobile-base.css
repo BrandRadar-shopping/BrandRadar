@@ -1223,3 +1223,171 @@
     font-size: 12px;
   }
 }
+
+/* =====================================================
+   INDEX – MOBILE PARTNER RAIL
+   ===================================================== */
+@media (max-width: 768px) {
+  main.page #partner-banner-section {
+    order: -2 !important;
+    padding: 8px 12px 0 !important;
+    margin: 0 !important;
+  }
+
+  main.page #partner-banner-section.is-mobile-hidden {
+    display: none !important;
+  }
+
+  section.partner-banner {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+
+  .partner-banner .partner-banner-desktop {
+    display: none !important;
+  }
+
+  .partner-banner .partner-banner-mobile {
+    display: block !important;
+  }
+
+  .partner-mobile-rail {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  }
+
+  .partner-mobile-close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: #111827;
+    font-size: 24px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .partner-mobile-brand {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .partner-mobile-logo-wrap {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .partner-mobile-logo {
+    max-width: 40px;
+    max-height: 30px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .partner-mobile-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .partner-mobile-pill {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    min-height: 22px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(0,112,243,0.10);
+    color: #0b4fcf;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .partner-mobile-name {
+    display: block;
+    color: #0f172a;
+    font-size: 16px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .partner-mobile-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 12px;
+    background: #111111;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+  }
+
+  .partner-mobile-cta:active {
+    transform: translateY(1px);
+  }
+}
+
+@media (max-width: 420px) {
+  .partner-mobile-rail {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .partner-mobile-cta {
+    grid-column: 2;
+    width: fit-content;
+    margin-top: 2px;
+  }
+
+  .partner-mobile-logo-wrap {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+
+  .partner-mobile-logo {
+    max-width: 34px;
+    max-height: 26px;
+  }
+
+  .partner-mobile-name {
+    font-size: 15px;
+  }
+}
