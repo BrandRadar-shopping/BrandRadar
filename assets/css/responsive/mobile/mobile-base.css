@@ -373,7 +373,7 @@
     font-size: 18px !important;
     line-height: 1.15 !important;
     margin: 0 0 6px !important;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.2px !important;
   }
 
   body:not(.is-search-page) .section-sub {
@@ -382,6 +382,7 @@
     margin: 0 0 12px !important;
     opacity: 0.85;
   }
+}
 
 /* =====================================================
    Trending – FULL RESET til 2-kolonne grid (mobil)
@@ -393,7 +394,6 @@
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 14px !important;
-
     overflow: visible !important;
   }
 
@@ -402,7 +402,6 @@
     flex: none !important;
     width: 100% !important;
     max-width: 100% !important;
-
     position: relative !important;
     margin: 0 !important;
     transform: none !important;
@@ -446,7 +445,7 @@
   }
 }
 
-   /* =====================================================
+/* =====================================================
    TRENDING – Premium glass heart (mobil)
    ===================================================== */
 @media (max-width: 768px) {
@@ -455,11 +454,9 @@
   section.trending-section #trending-grid .favorite-btn {
     width: 34px !important;
     height: 34px !important;
-
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-
     border-radius: 50% !important;
 
     /* Glass look */
@@ -485,165 +482,11 @@
     background: rgba(255, 255, 255, 0.85) !important;
   }
 }
-   
+
 /* -----------------------------------------------------
-   Partner banner (JS markup): slim logo + kompakt mobil
-   Markup fra partnerBanner.js:
-   .partner-banner-inner / .partner-banner-text / .partner-banner-image img
+   Intro – kompakt cards
 ----------------------------------------------------- */
 @media (max-width: 768px) {
-
-  /* Hele kortet litt tighter */
-  section.partner-banner {
-    padding: 14px 12px !important;
-  }
-
-  section.partner-banner .partner-banner-inner {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 78px !important; /* mindre logo-kolonne */
-    gap: 10px !important;
-    align-items: start !important; /* viktig: logo + tekst starter øverst */
-  }
-
-  section.partner-banner .partner-banner-text {
-    min-width: 0 !important;
-  }
-
-  /* Tag (Ukens partner) */
-  section.partner-banner .partner-tag {
-    margin: 0 0 8px !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
-    opacity: 0.85 !important;
-
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 6px 10px !important;
-    border-radius: 999px !important;
-    background: rgba(0,112,243,0.08) !important;
-    color: #0b4fcf !important;
-  }
-
-  /* Overskrift */
-  section.partner-banner .partner-banner-text h2 {
-    margin: 0 0 6px !important;
-    font-size: 18px !important;
-    line-height: 1.15 !important;
-    letter-spacing: -0.2px !important;
-  }
-
-  /* Beskrivelse (klamp 3 linjer så det holder seg ryddig) */
-  section.partner-banner .partner-sub {
-    margin: 0 0 12px !important;
-    font-size: 13px !important;
-    line-height: 1.35 !important;
-    opacity: 0.9 !important;
-
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 3 !important;
-    overflow: hidden !important;
-  }
-
-  /* CTA: fortsatt full bredde, men litt mer elegant */
-  section.partner-banner .partner-cta {
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 42px !important;
-    border-radius: 12px !important;
-    font-weight: 900 !important;
-  }
-
-  /* Logo: mindre, øverst til høyre, mer “badge” enn “boks” */
-  section.partner-banner .partner-banner-image {
-    display: grid !important;
-    place-items: start end !important; /* top-right */
-  }
-
-  section.partner-banner .partner-banner-image img {
-    width: 78px !important;
-    height: 34px !important;
-    object-fit: contain !important;
-
-    background: #fff !important;
-    border-radius: 10px !important;
-    padding: 6px !important;
-
-    box-shadow: 0 1px 0 rgba(0,0,0,0.04) !important;
-    display: block !important;
-  }
-}
-
-@media (max-width: 360px) {
-  section.partner-banner .partner-banner-inner {
-    grid-template-columns: minmax(0, 1fr) 72px !important;
-  }
-  section.partner-banner .partner-banner-image img {
-    width: 72px !important;
-    height: 32px !important;
-  }
-}
-
-   @media (max-width: 768px) {
-
-  /* Card-finish: litt mer premium */
-  section.partner-banner .partner-banner-inner {
-    padding: 14px !important;
-    border-radius: 20px !important;
-    background: #f4f8ff !important; /* litt renere enn default */
-    border: 1px solid rgba(0,0,0,0.06) !important;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.06) !important;
-  }
-
-  /* Tag: mer “chip” + mindre visuell støy */
-  section.partner-banner .partner-tag {
-    background: rgba(0,112,243,0.10) !important;
-    color: #0b4fcf !important;
-    letter-spacing: -0.1px !important;
-  }
-
-  /* Tittel: litt strammere */
-  section.partner-banner .partner-banner-text h2 {
-    font-size: 17px !important;
-    margin-bottom: 6px !important;
-  }
-
-  /* Beskrivelse: litt roligere */
-  section.partner-banner .partner-sub {
-    opacity: 0.85 !important;
-  }
-
-  /* CTA: mindre “banner-knapp”, mer “premium action” */
-  section.partner-banner .partner-cta {
-    width: auto !important;             /* <-- ikke fullbredde */
-    padding: 12px 14px !important;
-    min-height: 40px !important;
-    border-radius: 999px !important;    /* pill */
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-
-  /* Valgfritt: legg til en liten pil uten å endre HTML */
-  section.partner-banner .partner-cta::after {
-    content: "→";
-    font-weight: 900;
-    opacity: 0.9;
-  }
-
-  /* Logo-badge: litt mer diskret */
-  section.partner-banner .partner-banner-image img {
-    background: rgba(255,255,255,0.85) !important;
-    border: 1px solid rgba(0,0,0,0.06) !important;
-    box-shadow: none !important;
-  }
-}
-
-  /* -----------------------------------------------------
-     Intro – kompakt cards
-  ----------------------------------------------------- */
   .intro {
     padding: 16px 12px !important;
   }
@@ -779,93 +622,10 @@
   .universes .u-card p {
     -webkit-line-clamp: 2;
   }
-
-  /* Partner banner litt mindre */
-  section.partner-banner .partner-banner-inner {
-    grid-template-columns: minmax(0, 1fr) 86px !important;
-  }
-
-  section.partner-banner .partner-banner-image img {
-    width: 86px !important;
-    height: 40px !important;
-  }
 }
-
-/* =====================================================
-   Partner banner – Premium CTA + spacing (MOBIL)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Litt strammere rytme */
-  section.partner-banner .partner-tag { margin: 0 0 10px !important; }
-
-  section.partner-banner .partner-banner-text h2 {
-    margin: 0 0 10px !important;
-    font-size: 18px !important;
-    line-height: 1.15 !important;
-    letter-spacing: -0.2px !important;
-  }
-
-  section.partner-banner .partner-sub {
-    margin: 0 0 14px !important;
-    font-size: 13px !important;
-    line-height: 1.35 !important;
-    opacity: 0.85 !important;
-  }
-
-  /* CTA: clean / premium (IKKE blå) */
-  section.partner-banner a.partner-cta {
-    width: fit-content !important;
-    max-width: 100% !important;
-
-    background: rgba(255,255,255,0.92) !important;
-    color: #111 !important;
-
-    border: 1px solid rgba(0,0,0,0.14) !important;
-    box-shadow: 0 10px 22px rgba(0,0,0,0.08) !important;
-
-    padding: 12px 14px !important;
-    min-height: 42px !important;
-    border-radius: 999px !important;
-
-    font-weight: 900 !important;
-    text-decoration: none !important;
-
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-
-    /* Fjerner “desktop-knapp”-look */
-    letter-spacing: -0.1px !important;
-    line-height: 1 !important;
-  }
-
-  section.partner-banner a.partner-cta::after {
-    content: "→";
-    font-weight: 900;
-    opacity: 0.75;
-  }
-
-  section.partner-banner a.partner-cta:active {
-    transform: translateY(1px);
-  }
-
-  /* Logo-badge litt roligere */
-  section.partner-banner .partner-banner-image img {
-    background: rgba(255,255,255,0.88) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: none !important;
-  }
-}
-
-@media (max-width: 360px) {
-  section.partner-banner .partner-banner-text h2 { font-size: 17px !important; }
-}
-
 
 /* =====================================================
    TRENDING (MOBIL) – NUCLEAR FIX (ingen overlap)
-   Legg denne HELT NEDERST i mobile-base.css
    ===================================================== */
 @media (max-width: 768px) {
 
@@ -1041,7 +801,6 @@
   }
 
   /* Mobil-first rekkefølge */
-  main.page #partner-banner-section{ order: 5; }
   main.page .trending-section{ order: 10; }
   main.page .featured-products{ order: 12; }
   main.page .top-brands{ order: 14; }
@@ -1052,176 +811,6 @@
 
   /* Footer alltid sist */
   main.page .footer-cta{ order: 90; }
-}
-
-/* =====================================================
-   INDEX – MOBILE PARTNER BANNER (compact top sponsor rail)
-   ===================================================== */
-@media (max-width: 768px) {
-
-  /* Legg banneret helt øverst på index-flyten */
-  main.page #partner-banner-section {
-    order: -2 !important;
-    padding: 8px 12px 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Når brukeren har lukket banneret */
-  main.page #partner-banner-section.is-mobile-hidden {
-    display: none !important;
-  }
-
-  /* Desktop-varianten skal bort på mobil */
-  .partner-banner .partner-banner-desktop {
-    display: none !important;
-  }
-
-  /* Mobil-varianten skal vises */
-  .partner-banner .partner-banner-mobile {
-    display: block !important;
-  }
-
-  /* Selve seksjonen skal være helt ren */
-  section.partner-banner {
-    background: transparent !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    max-width: 100% !important;
-  }
-
-  /* Kompakt sponsorkort */
-  .partner-mobile-inner {
-    border-radius: 16px;
-    background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-    padding: 10px 12px 12px;
-  }
-
-  .partner-mobile-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .partner-mobile-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 26px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(0,112,243,0.10);
-    color: #0b4fcf;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: -0.1px;
-    white-space: nowrap;
-  }
-
-  .partner-mobile-close {
-    width: 30px;
-    height: 30px;
-    border: 0;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.06);
-    color: #0f172a;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 900;
-    line-height: 1;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .partner-mobile-main {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .partner-mobile-brand {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-  }
-
-  .partner-mobile-brand img {
-    max-width: 112px;
-    width: auto;
-    height: 28px;
-    object-fit: contain;
-    display: block;
-  }
-
-  .partner-mobile-brand-text {
-    font-size: 16px;
-    line-height: 1.1;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .partner-mobile-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 38px;
-    padding: 0 12px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.96);
-    border: 1px solid rgba(15,23,42,0.12);
-    color: #111827;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 900;
-    line-height: 1;
-    white-space: nowrap;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
-  }
-
-  .partner-mobile-cta::after {
-    content: "→";
-    margin-left: 7px;
-    font-weight: 900;
-    opacity: 0.72;
-  }
-
-  .partner-mobile-cta:active {
-    transform: translateY(1px);
-  }
-}
-
-@media (max-width: 360px) {
-  .partner-mobile-inner {
-    padding: 10px 10px 11px;
-  }
-
-  .partner-mobile-main {
-    gap: 8px;
-  }
-
-  .partner-mobile-brand img {
-    max-width: 96px;
-    height: 24px;
-  }
-
-  .partner-mobile-brand-text {
-    font-size: 14px;
-  }
-
-  .partner-mobile-cta {
-    min-height: 36px;
-    padding: 0 10px;
-    font-size: 12px;
-  }
 }
 
 /* =====================================================
