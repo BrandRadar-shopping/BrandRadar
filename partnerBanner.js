@@ -1,6 +1,6 @@
 // partnerBanner.js – Index partner banner
-// Desktop: editorial banner
-// Mobile: kompakt toppbanner med close + sponsor-feel
+// Desktop: behold dagens editorial banner
+// Mobile: kompakt sponsor-rail med close + CTA
 
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
@@ -10,23 +10,19 @@ async function fetchPartnerBanner() {
     const res = await fetch(PARTNER_SHEET_URL);
     if (!res.ok) throw new Error(`Partner CSV fetch failed: ${res.status}`);
     const csvText = await res.text();
-
     const rows = parseCsv(csvText);
     if (!rows.length) return;
-
-    const banner = rows[0];
-    renderPartnerBanner(banner);
+    renderPartnerBanner(rows[0]);
   } catch (err) {
     console.error("Feil ved henting av partnerbanner:", err);
   }
 }
 
-// Enkel CSV-parser
 function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/);
   if (!lines.length) return [];
-
   const headers = splitCsvLine(lines[0]).map(h => h.trim());
+
   return lines.slice(1).map(line => {
     const cols = splitCsvLine(line);
     const obj = {};
@@ -75,13 +71,8 @@ function isMobileViewport() {
 }
 
 function getPartnerName(item) {
-  if (item.campaign_name && item.campaign_name.trim()) {
-    return item.campaign_name.trim();
-  }
-
-  if (item.alt_text && item.alt_text.trim()) {
-    return item.alt_text.trim();
-  }
+  if (item.campaign_name?.trim()) return item.campaign_name.trim();
+  if (item.alt_text?.trim()) return item.alt_text.trim();
 
   if (item.link) {
     try {
@@ -89,7 +80,6 @@ function getPartnerName(item) {
       return url.hostname.replace(/^www\./, "");
     } catch (_) {}
   }
-
   return "Partner";
 }
 
@@ -108,13 +98,12 @@ function renderPartnerBanner(item) {
 
   const desc = item.description || "";
   const alt = item.alt_text || "Partner";
-  const ctaText = item.cta_text || "Se kampanjen";
+  const ctaText = item.cta_text || "Besøk siden";
   const link = item.link || "#";
   const img = item.image_url || "";
   const partnerName = getPartnerName(item);
   const partnerKey = buildPartnerKey(item);
 
-  // Desktop: del description i headline + subtekst
   const parts = desc.split("!");
   const headline = parts[0] ? parts[0].trim() + "!" : desc;
   const sub = parts[1] ? parts[1].trim() : "";
@@ -130,7 +119,6 @@ function renderPartnerBanner(item) {
             ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText)}</a>`
             : ""}
         </div>
-
         ${img
           ? `<div class="partner-banner-image">
                <img src="${img}" alt="${escapeHtml(alt)}" loading="lazy">
@@ -140,27 +128,29 @@ function renderPartnerBanner(item) {
     </div>
 
     <div class="partner-banner-mobile" data-partner-key="${escapeHtml(partnerKey)}">
-      <div class="partner-mobile-inner">
-        <div class="partner-mobile-top">
-          <span class="partner-mobile-pill">Ukens partner</span>
-          <button type="button" class="partner-mobile-close" aria-label="Lukk partnerbanner">×</button>
-        </div>
+      <div class="partner-mobile-rail">
+        <button type="button" class="partner-mobile-close" aria-label="Lukk partnerbanner">×</button>
 
-        <div class="partner-mobile-main">
-          <div class="partner-mobile-brand">
-            ${
-              img
-                ? `<img src="${img}" alt="${escapeHtml(alt || partnerName)}" loading="lazy">`
-                : `<span class="partner-mobile-brand-text">${escapeHtml(partnerName)}</span>`
-            }
-          </div>
-
+        <div class="partner-mobile-brand">
           ${
-            link && link !== "#"
-              ? `<a class="partner-mobile-cta" href="${link}" target="_blank" rel="noopener">Besøk siden</a>`
+            img
+              ? `<div class="partner-mobile-logo-wrap">
+                   <img src="${img}" alt="${escapeHtml(alt || partnerName)}" loading="lazy" class="partner-mobile-logo">
+                 </div>`
               : ""
           }
+
+          <div class="partner-mobile-copy">
+            <span class="partner-mobile-pill">Ukens partner</span>
+            <strong class="partner-mobile-name">${escapeHtml(partnerName)}</strong>
+          </div>
         </div>
+
+        ${
+          link && link !== "#"
+            ? `<a class="partner-mobile-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(ctaText || "Besøk siden")}</a>`
+            : ""
+        }
       </div>
     </div>
   `;
@@ -169,24 +159,17 @@ function renderPartnerBanner(item) {
 }
 
 function setupMobilePartnerDismiss(section, partnerKey) {
-  const mobileBanner = section.querySelector(".partner-banner-mobile");
-  const closeBtn = section.querySelector(".partner-mobile-close");
-  if (!mobileBanner || !closeBtn) return;
-
   const storageKey = "br_partner_banner_dismissed_key";
+  const closeBtn = section.querySelector(".partner-mobile-close");
+  if (!closeBtn) return;
 
-  function applyDismissState() {
+  function applyState() {
     if (!isMobileViewport()) {
       section.classList.remove("is-mobile-hidden");
       return;
     }
-
     const dismissedKey = localStorage.getItem(storageKey);
-    if (dismissedKey && dismissedKey === partnerKey) {
-      section.classList.add("is-mobile-hidden");
-    } else {
-      section.classList.remove("is-mobile-hidden");
-    }
+    section.classList.toggle("is-mobile-hidden", dismissedKey === partnerKey);
   }
 
   closeBtn.addEventListener("click", () => {
@@ -194,8 +177,8 @@ function setupMobilePartnerDismiss(section, partnerKey) {
     section.classList.add("is-mobile-hidden");
   });
 
-  window.addEventListener("resize", applyDismissState);
-  applyDismissState();
+  window.addEventListener("resize", applyState);
+  applyState();
 }
 
 fetchPartnerBanner();
