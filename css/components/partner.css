@@ -137,3 +137,8 @@
 .partner-banner-mobile {
   display: none;
 }
+
+
+/* Partner variants */
+.partner-banner-desktop { display: block; }
+.partner-banner-mobile { display: none; }
