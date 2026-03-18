@@ -389,7 +389,6 @@
    ===================================================== */
 @media (max-width: 768px) {
 
-  /* Slå av slider/flex */
   #trending-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -397,7 +396,6 @@
     overflow: visible !important;
   }
 
-  /* Fjern alle flex-regler fra desktop */
   #trending-grid .product-card {
     flex: none !important;
     width: 100% !important;
@@ -407,7 +405,6 @@
     transform: none !important;
   }
 
-  /* Bilde-wrapper */
   #trending-grid .product-image-wrapper {
     position: relative !important;
     width: 100% !important;
@@ -416,7 +413,6 @@
     border-radius: 16px !important;
   }
 
-  /* Selve bildet */
   #trending-grid .product-image-wrapper img {
     position: absolute !important;
     inset: 0 !important;
@@ -425,13 +421,11 @@
     object-fit: cover !important;
   }
 
-  /* Info */
   #trending-grid .product-info {
     position: relative !important;
     padding: 10px 6px 0 !important;
   }
 
-  /* Favorittikon */
   #trending-grid .fav-icon {
     position: absolute !important;
     top: 10px !important;
@@ -439,7 +433,6 @@
     z-index: 3 !important;
   }
 
-  /* Skru av navigasjonsknapper */
   .trending-section .trending-nav {
     display: none !important;
   }
@@ -458,25 +451,19 @@
     align-items: center !important;
     justify-content: center !important;
     border-radius: 50% !important;
-
-    /* Glass look */
     background: rgba(255, 255, 255, 0.65) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
-
     border: 1px solid rgba(255,255,255,0.6) !important;
     box-shadow: 0 6px 14px rgba(0,0,0,0.15) !important;
-
     transition: all 0.2s ease !important;
   }
 
-  /* Hover / active */
   section.trending-section #trending-grid .fav-icon:active,
   section.trending-section #trending-grid .favorite-btn:active {
     transform: scale(0.95);
   }
 
-  /* Når aktiv (rødt hjerte) */
   section.trending-section #trending-grid .fav-icon.active,
   section.trending-section #trending-grid .favorite-btn.active {
     background: rgba(255, 255, 255, 0.85) !important;
@@ -517,9 +504,6 @@
     opacity: 0.9;
   }
 
-  /* -----------------------------------------------------
-     Universes – 2 kolonner
-  ----------------------------------------------------- */
   .universes .universe-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -547,9 +531,6 @@
     overflow: hidden;
   }
 
-  /* -----------------------------------------------------
-     Top Brands – 2 kolonner
-  ----------------------------------------------------- */
   .top-brands .brands-grid,
   #topbrands-grid.brands-grid {
     display: grid !important;
@@ -557,9 +538,6 @@
     gap: 10px !important;
   }
 
-  /* -----------------------------------------------------
-     Giveaway – komprimert
-  ----------------------------------------------------- */
   .giveaway {
     padding: 16px 12px !important;
     border-radius: 18px !important;
@@ -582,9 +560,6 @@
     min-height: 44px;
   }
 
-  /* -----------------------------------------------------
-     Footer CTA / newsletter – full bredde
-  ----------------------------------------------------- */
   .footer-cta .newsletter {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -608,12 +583,10 @@
     padding: 16px 10px !important;
   }
 
-  /* Search tiles tighter */
   body.is-search-page .m-feature-tile { min-height: 108px; }
   body.is-search-page .m-tile-img { height: 78px; }
   body.is-search-page .m-tile-label { font-size: 13px; }
 
-  /* Universes litt tighter */
   .universes .u-card {
     min-height: 130px !important;
     padding: 12px !important;
@@ -629,17 +602,13 @@
    ===================================================== */
 @media (max-width: 768px) {
 
-  /* 1) Grid wrapper */
   section.trending-section #trending-grid.trending-grid{
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 12px !important;
-
-    /* viktig: ikke horisontal scroller */
     overflow: visible !important;
   }
 
-  /* 2) Kill all slider sizing */
   section.trending-section #trending-grid.trending-grid > *{
     width: auto !important;
     max-width: none !important;
@@ -649,7 +618,6 @@
     margin: 0 !important;
   }
 
-  /* 3) Kortet må være normal block */
   section.trending-section #trending-grid.trending-grid .product-card{
     display: block !important;
     position: relative !important;
@@ -658,7 +626,6 @@
     border-radius: 16px !important;
   }
 
-  /* 4) Bilde-wrapper: tving kvadrat og lås høyde */
   section.trending-section #trending-grid.trending-grid .product-image-wrapper{
     display: block !important;
     position: relative !important;
@@ -669,7 +636,6 @@
     border-radius: 16px !important;
   }
 
-  /* 5) Bildet fyller wrapperen */
   section.trending-section #trending-grid.trending-grid .product-image-wrapper img{
     position: absolute !important;
     inset: 0 !important;
@@ -680,7 +646,6 @@
     transform: none !important;
   }
 
-  /* 6) Info under bildet */
   section.trending-section #trending-grid.trending-grid .product-info{
     position: relative !important;
     inset: auto !important;
@@ -688,7 +653,6 @@
     padding: 10px 10px 12px !important;
   }
 
-  /* 7) Skjul pilene på mobil */
   section.trending-section .trending-nav{
     display: none !important;
   }
@@ -699,14 +663,12 @@
    ===================================================== */
 @media (max-width: 768px) {
 
-  /* Info-wrapper: stabil spacing */
   section.trending-section #trending-grid.trending-grid .product-info{
     padding: 10px 10px 12px !important;
     display: grid !important;
     gap: 6px !important;
   }
 
-  /* Brand (ofte en liten label over title) */
   section.trending-section #trending-grid.trending-grid .product-brand,
   section.trending-section #trending-grid.trending-grid .brand,
   section.trending-section #trending-grid.trending-grid .product-info .brand,
@@ -719,21 +681,18 @@
     line-height: 1.1 !important;
   }
 
-  /* Tittel: maks 2 linjer */
   section.trending-section #trending-grid.trending-grid .product-info h3,
   section.trending-section #trending-grid.trending-grid .product-title{
     font-size: 13px !important;
     line-height: 1.18 !important;
     margin: 0 !important;
     font-weight: 900 !important;
-
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 2 !important;
     overflow: hidden !important;
   }
 
-  /* Prisrad: gjør den til en egen "row" */
   section.trending-section #trending-grid.trending-grid .price-row,
   section.trending-section #trending-grid.trending-grid .product-price-wrap,
   section.trending-section #trending-grid.trending-grid .product-prices,
@@ -745,7 +704,6 @@
     margin: 0 !important;
   }
 
-  /* Ny pris */
   section.trending-section #trending-grid.trending-grid .price,
   section.trending-section #trending-grid.trending-grid .current-price,
   section.trending-section #trending-grid.trending-grid .new-price,
@@ -755,7 +713,6 @@
     line-height: 1.1 !important;
   }
 
-  /* Gammel pris */
   section.trending-section #trending-grid.trending-grid .old-price,
   section.trending-section #trending-grid.trending-grid .price-old,
   section.trending-section #trending-grid.trending-grid del{
@@ -766,7 +723,6 @@
     white-space: nowrap !important;
   }
 
-  /* Rabatt badge: lås til "chip" */
   section.trending-section #trending-grid.trending-grid .discount-badge,
   section.trending-section #trending-grid.trending-grid .badge,
   section.trending-section #trending-grid.trending-grid .discount{
@@ -781,7 +737,6 @@
     white-space: nowrap !important;
   }
 
-  /* Hvis noen elementer får rar center-align, tving venstre */
   section.trending-section #trending-grid.trending-grid .product-info *{
     text-align: left !important;
   }
@@ -789,37 +744,31 @@
 
 @media (max-width: 768px) {
 
-  /* Wrapper for order */
   main.page{
     display:flex;
     flex-direction:column;
   }
 
-  /* Fjern intro på mobil */
   main.page .intro{
     display:none !important;
   }
 
-  /* Mobil-first rekkefølge */
   main.page .trending-section{ order: 10; }
   main.page .featured-products{ order: 12; }
   main.page .top-brands{ order: 14; }
   main.page .giveaway{ order: 16; }
-
-  /* Universes langt ned, men ikke fjernet */
   main.page .universes{ order: 40; }
-
-  /* Footer alltid sist */
   main.page .footer-cta{ order: 90; }
 }
 
 /* =====================================================
    INDEX – MOBILE PARTNER RAIL
+   Slim top rail, ikke kort
    ===================================================== */
 @media (max-width: 768px) {
   main.page #partner-banner-section {
     order: -2 !important;
-    padding: 8px 12px 0 !important;
+    padding: 0 !important;
     margin: 0 !important;
   }
 
@@ -832,6 +781,8 @@
     border-radius: 0 !important;
     box-shadow: none !important;
     margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
   }
 
   .partner-banner .partner-banner-desktop {
@@ -844,33 +795,37 @@
 
   .partner-mobile-rail {
     display: grid;
-    grid-template-columns: 32px minmax(0, 1fr) auto;
-    gap: 10px;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
     align-items: center;
+    gap: 10px;
 
-    padding: 10px 12px;
-    border-radius: 16px;
+    width: 100%;
+    min-height: 68px;
+    padding: 8px 12px;
+
     background: #ffffff;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: none;
+    border-radius: 0;
   }
 
   .partner-mobile-close {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border: 0;
     background: transparent;
     color: #111827;
-    font-size: 24px;
+    font-size: 28px;
     line-height: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    padding: 0;
   }
 
-  .partner-mobile-brand {
+  .partner-mobile-center {
     min-width: 0;
     display: flex;
     align-items: center;
@@ -878,20 +833,20 @@
   }
 
   .partner-mobile-logo-wrap {
-    width: 54px;
-    height: 54px;
-    flex: 0 0 54px;
-    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 12px;
     background: #f8fafc;
-    border: 1px solid rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.08);
     display: grid;
     place-items: center;
     overflow: hidden;
   }
 
   .partner-mobile-logo {
-    max-width: 40px;
-    max-height: 30px;
+    max-width: 36px;
+    max-height: 26px;
     width: auto;
     height: auto;
     object-fit: contain;
@@ -902,28 +857,27 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
 
   .partner-mobile-pill {
     display: inline-flex;
     width: fit-content;
     align-items: center;
-    min-height: 22px;
-    padding: 3px 8px;
+    min-height: 20px;
+    padding: 2px 8px;
     border-radius: 999px;
     background: rgba(0,112,243,0.10);
     color: #0b4fcf;
     font-size: 10px;
     font-weight: 900;
-    letter-spacing: 0.02em;
     white-space: nowrap;
   }
 
   .partner-mobile-name {
     display: block;
     color: #0f172a;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.1;
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -936,16 +890,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px;
+    min-height: 40px;
     padding: 0 14px;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #111111;
     color: #ffffff;
     text-decoration: none;
     font-size: 13px;
     font-weight: 900;
     white-space: nowrap;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.10);
   }
 
   .partner-mobile-cta:active {
@@ -955,28 +908,36 @@
 
 @media (max-width: 420px) {
   .partner-mobile-rail {
-    grid-template-columns: 28px minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px 10px;
+    min-height: 64px;
   }
 
-  .partner-mobile-cta {
-    grid-column: 2;
-    width: fit-content;
-    margin-top: 2px;
+  .partner-mobile-close {
+    width: 34px;
+    height: 34px;
+    font-size: 26px;
   }
 
   .partner-mobile-logo-wrap {
-    width: 48px;
-    height: 48px;
-    flex-basis: 48px;
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
   }
 
   .partner-mobile-logo {
-    max-width: 34px;
-    max-height: 26px;
+    max-width: 30px;
+    max-height: 22px;
   }
 
   .partner-mobile-name {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .partner-mobile-cta {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
   }
 }
