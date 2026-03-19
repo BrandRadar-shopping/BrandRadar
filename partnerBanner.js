@@ -226,21 +226,21 @@ function renderPartnerBanner(item) {
       <div class="partner-mobile-rail">
         <button type="button" class="partner-mobile-close" aria-label="Lukk partnerbanner">×</button>
 
-        <div class="partner-mobile-center">
-          ${
-            img
-              ? `<div class="partner-mobile-logo-wrap">
-                   <img
-                     src="${img}"
-                     alt="${escapeHtml(alt || mobilePartnerName)}"
-                     class="partner-mobile-logo"
-                     loading="lazy"
-                   >
-                 </div>`
-              : ""
-          }
+        ${
+          img
+            ? `<div class="partner-mobile-logo-wrap">
+                 <img
+                   src="${img}"
+                   alt="${escapeHtml(alt || mobilePartnerName)}"
+                   class="partner-mobile-logo"
+                   loading="lazy"
+                 >
+               </div>`
+            : ""
+        }
 
-          <span class="partner-mobile-pill">Ukens partner</span>
+        <div class="partner-mobile-copy">
+          <span class="partner-mobile-label">Ukens partner er</span>
           <strong class="partner-mobile-name">${escapeHtml(mobilePartnerName)}</strong>
         </div>
 
