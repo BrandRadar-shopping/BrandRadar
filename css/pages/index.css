@@ -889,3 +889,168 @@ html, body {
   50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
+
+/* Default: desktop viser full giveaway, mobil-shortcut er skjult */
+.giveaway-shortcut-section {
+  display: none;
+}
+
+/* Mobil: skjul tung giveaway-modul, vis shortcut i stedet */
+@media (max-width: 768px) {
+  .giveaway-section {
+    display: none;
+  }
+
+  .giveaway-shortcut-section {
+    display: block;
+    max-width: var(--index-max);
+    margin: 0 auto;
+    padding: 0 var(--index-pad) 2.2rem;
+  }
+}
+
+.giveaway-shortcut-card {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  text-decoration: none;
+  color: #fff;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(0, 180, 255, 0.16), transparent 24%),
+    linear-gradient(180deg, #091120 0%, #0d1729 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
+}
+
+.giveaway-shortcut-kicker {
+  margin: 0 0 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8ec5ff;
+}
+
+.giveaway-shortcut-copy h2 {
+  margin: 0 0 10px;
+  font-size: 1.42rem;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.giveaway-shortcut-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(226,232,240,0.82);
+}
+
+.giveaway-shortcut-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.giveaway-shortcut-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0070f3, #00b4ff);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  box-shadow: 0 12px 24px rgba(0,112,243,0.26);
+}
+
+.giveaway-shortcut-meta {
+  font-size: 0.82rem;
+  color: rgba(226,232,240,0.68);
+}
+
+.giveaway-shortcut-visual {
+  position: relative;
+  min-height: 140px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.giveaway-shortcut-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.giveaway-shortcut-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(6px);
+}
+
+.giveaway-shortcut-orb--1 {
+  width: 90px;
+  height: 90px;
+  top: 14px;
+  left: 16px;
+  background: rgba(0, 112, 243, 0.22);
+}
+
+.giveaway-shortcut-orb--2 {
+  width: 74px;
+  height: 74px;
+  right: 18px;
+  bottom: 20px;
+  background: rgba(0, 180, 255, 0.18);
+}
+
+.giveaway-shortcut-panel {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 13px 13px 12px;
+  border-radius: 16px;
+  background: rgba(8, 15, 26, 0.64);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.giveaway-shortcut-panel span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8ec5ff;
+}
+
+.giveaway-shortcut-panel strong {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #fff;
+}
