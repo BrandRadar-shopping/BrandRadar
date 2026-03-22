@@ -936,11 +936,11 @@ html, body {
 
 .giveaway-shortcut-copy h2 {
   margin: 0 0 7px;
-  max-width: 13ch;
-  font-size: 1.22rem;
+  font-size: clamp(1.1rem, 4.5vw, 1.22rem);
   line-height: 1.06;
   letter-spacing: -0.04em;
   color: #fff;
+  white-space: nowrap;
 }
 
 .giveaway-shortcut-text {
