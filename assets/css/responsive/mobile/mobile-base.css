@@ -733,21 +733,22 @@
 
 @media (max-width: 768px) {
 
-  main.page{
-    display:flex;
-    flex-direction:column;
+  main.page {
+    display: flex;
+    flex-direction: column;
   }
 
-  main.page .intro{
-    display:none !important;
+  main.page .intro {
+    display: none !important;
   }
 
-  main.page .trending-section{ order: 10; }
-  main.page .featured-products{ order: 12; }
-  main.page .top-brands{ order: 14; }
-  main.page .giveaway{ order: 16; }
-  main.page .universes{ order: 40; }
-  main.page .footer-cta{ order: 90; }
+  main.page .universes { order: 8; }
+  main.page .giveaway-section { order: 16; }
+  main.page .giveaway-shortcut-section { order: 16; }
+  main.page .trending-section { order: 20; }
+  main.page .featured-products { order: 30; }
+  main.page .top-brands { order: 40; }
+  main.page .footer-cta { order: 90; }
 }
 
 /* =====================================================
