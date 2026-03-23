@@ -744,8 +744,9 @@
 
   main.page .universes { order: 8; }
   main.page .trending-section { order: 20; }
-  main.page .featured-products { order: 30; }
-  main.page .top-brands { order: 40; }
+
+  main.page .top-brands { order: 30; }      /* 👈 flyttet opp */
+  main.page .featured-products { order: 40; } /* Radar Picks */
 
   main.page .giveaway-section { order: 50; }
   main.page .giveaway-shortcut-section { order: 50; }
