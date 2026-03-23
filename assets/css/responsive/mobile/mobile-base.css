@@ -743,14 +743,15 @@
   }
 
   main.page .universes { order: 8; }
-  main.page .giveaway-section { order: 16; }
-  main.page .giveaway-shortcut-section { order: 16; }
   main.page .trending-section { order: 20; }
   main.page .featured-products { order: 30; }
   main.page .top-brands { order: 40; }
+
+  main.page .giveaway-section { order: 50; }
+  main.page .giveaway-shortcut-section { order: 50; }
+
   main.page .footer-cta { order: 90; }
 }
-
 /* =====================================================
    INDEX – MOBILE PARTNER RAIL
    Slim top rail, ikke kort
