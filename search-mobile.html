@@ -6,7 +6,7 @@
   <title>BrandRadar | Søk</title>
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=10" />
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=11" />
 </head>
 
 <body class="is-search-page">
@@ -48,7 +48,8 @@
 
   <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
     <div class="mobile-drawer-header">
-      <p class="mobile-drawer-title">Søk etter kategori</p>
+      <button class="mobile-drawer-back" type="button" aria-label="Tilbake i navigasjon">←</button>
+      <p class="mobile-drawer-title" id="mobileDrawerTitle">Utforsk kategori</p>
       <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
     </div>
 
@@ -60,19 +61,15 @@
       <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
     </div>
 
-    <div class="m-segments" role="tablist" aria-label="Segment">
-      <button class="m-seg is-active" data-seg="Dame" type="button">Dame</button>
-      <button class="m-seg" data-seg="Herre" type="button">Herre</button>
-      <button class="m-seg" data-seg="Barn" type="button">Barn</button>
-    </div>
+    <div class="m-segments is-pickers" id="mDrawerLevelTwo" role="tablist" aria-label="Velg nivå to"></div>
 
-    <div class="m-results">
+    <div class="m-results" id="mDrawerResults" hidden>
       <div class="m-subcats">
-        <h3 class="m-section-title">Kategorier</h3>
+        <h3 class="m-section-title" id="mSubcatTitle">Kategorier</h3>
         <div class="m-grid" id="mSubcatGrid"></div>
       </div>
 
-      <div class="m-brands">
+      <div class="m-brands" id="mBrandsWrap">
         <h3 class="m-section-title">Toppmerker</h3>
         <div class="m-brand-row" id="mBrandRow"></div>
       </div>
@@ -88,11 +85,11 @@
       </div>
 
       <div class="m-cat-chips" aria-label="Kategorier hurtigvalg">
-        <a class="m-cat-chip" href="category.html?category=Clothing"><span class="m-cat-ico">👕</span><span>Klær</span></a>
-        <a class="m-cat-chip" href="category.html?category=Shoes"><span class="m-cat-ico">👟</span><span>Sko</span></a>
-        <a class="m-cat-chip" href="category.html?category=Gymcorner"><span class="m-cat-ico">🏋️</span><span>Gym</span></a>
-        <a class="m-cat-chip" href="category.html?category=Accessories"><span class="m-cat-ico">🧢</span><span>Tilbehør</span></a>
-        <a class="m-cat-chip" href="category.html?category=Selfcare"><span class="m-cat-ico">🧴</span><span>Selfcare</span></a>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="clothing"><span class="m-cat-ico">👕</span><span>Klær</span></button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="shoes"><span class="m-cat-ico">👟</span><span>Sko</span></button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="gymcorner"><span class="m-cat-ico">🏋️</span><span>Gym</span></button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="accessories"><span class="m-cat-ico">🧢</span><span>Tilbehør</span></button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="selfcare"><span class="m-cat-ico">🧴</span><span>Selfcare</span></button>
       </div>
     </section>
 
@@ -107,15 +104,15 @@
           <span class="m-feature-sub">Eksklusivt utvalg</span>
         </a>
 
-        <a class="m-feature-tile" href="category.html?category=Clothing" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
+        <button class="m-feature-tile m-feature-tile--button" type="button" data-open-drawer-cat="clothing" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
           <span class="m-feature-title">Klær</span>
           <span class="m-feature-sub">Trending styles</span>
-        </a>
+        </button>
 
-        <a class="m-feature-tile" href="category.html?category=Shoes" style="--bg:url('/BrandRadar/assets/img/tiles/default-shoes.jpg')">
+        <button class="m-feature-tile m-feature-tile--button" type="button" data-open-drawer-cat="shoes" style="--bg:url('/BrandRadar/assets/img/tiles/default-shoes.jpg')">
           <span class="m-feature-title">Sko</span>
           <span class="m-feature-sub">Nyheter & bestselgere</span>
-        </a>
+        </button>
 
         <a class="m-feature-tile" href="news.html" style="--bg:url('/BrandRadar/assets/img/tiles/default-gymcorner.jpg')">
           <span class="m-feature-title">Trender</span>
@@ -141,7 +138,6 @@
 
   </main>
 
-  <!-- Bottom nav (samme som index) -->
   <nav class="m-bottom-nav" aria-label="Bunnmeny">
     <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
       <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -189,38 +185,27 @@
 
   <script>
     (function () {
-      const backBtn  = document.querySelector(".m-back-btn");
-      const openBtn  = document.querySelector(".m-allcats-btn");
-      const overlay  = document.getElementById("mobileOverlay");
-      const drawer   = document.getElementById("mobileDrawer");
-      const closeBtn = document.querySelector(".mobile-drawer-close");
+      const backBtn = document.querySelector(".m-back-btn");
+      const openBtn = document.querySelector(".m-allcats-btn");
+      const quickOpenButtons = document.querySelectorAll("[data-open-drawer-cat]");
 
       backBtn?.addEventListener("click", () => {
         if (history.length > 1) history.back();
         else location.href = "index.html";
       });
 
-      if (overlay && drawer) {
-        const openDrawer = () => {
-          overlay.hidden = false;
-          drawer.hidden = false;
-          overlay.classList.add("is-open");
-          drawer.classList.add("is-open");
-          document.body.classList.add("is-locked");
-        };
+      openBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.BrandRadarDrawerAPI?.open();
+      });
 
-        const closeDrawer = () => {
-          overlay.classList.remove("is-open");
-          drawer.classList.remove("is-open");
-          document.body.classList.remove("is-locked");
-          setTimeout(() => { overlay.hidden = true; drawer.hidden = true; }, 250);
-        };
-
-        openBtn?.addEventListener("click", (e) => { e.preventDefault(); openDrawer(); });
-        closeBtn?.addEventListener("click", closeDrawer);
-        overlay.addEventListener("click", closeDrawer);
-        window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
-      }
+      quickOpenButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const cat = btn.getAttribute("data-open-drawer-cat");
+          window.BrandRadarDrawerAPI?.open(cat);
+        });
+      });
     })();
   </script>
 </body>
