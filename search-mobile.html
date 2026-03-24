@@ -200,12 +200,23 @@
       });
 
       quickOpenButtons.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          const cat = btn.getAttribute("data-open-drawer-cat");
-          window.BrandRadarDrawerAPI?.open(cat);
-        });
-      });
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const cat = btn.getAttribute("data-open-drawer-cat");
+
+    if (window.BrandRadarDrawerAPI) {
+      window.BrandRadarDrawerAPI.open();
+
+      setTimeout(() => {
+        document.dispatchEvent(
+          new CustomEvent("brandradar:drawer:set-category", {
+            detail: { cat }
+          })
+        );
+      }, 50);
+    }
+  });
+});
     })();
   </script>
 </body>
