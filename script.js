@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ script.js loaded");
 
-  // 1) Mobile drawer + browse UI (safe on pages without markup)
   initMobileDrawer();
   initMobileBrowseMenu();
 
-  // 2) Desktop mega-menu only
   if (window.innerWidth <= 768) {
     console.log("📱 Mobile detected — skipping desktop mega-menu init");
     return;
@@ -25,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((html) => {
       menuContainer.innerHTML = html;
       console.log("✅ Mega-menu loaded into DOM");
-
-      // Desktop behaviors
       initDesktopMegaMenuHover();
       initDesktopMegaMenuRoutingSlugs();
     })
@@ -135,7 +131,6 @@ function initDesktopMegaMenuRoutingSlugs() {
       const isBrandLink = section?.classList.contains("brands");
       const kidtype = getKidtypeFromLink(link, genderSlug);
 
-      // ✅ Toppmerker skal til brand-page
       if (isBrandLink) {
         link.href = `brand-page.html?brand=${encodeURIComponent(text)}`;
         return;
@@ -171,9 +166,15 @@ function initMobileDrawer() {
   const overlay = document.getElementById("mobileOverlay");
   const closeBtn = drawer ? drawer.querySelector(".mobile-drawer-close") : null;
 
-  if (!btn || !drawer || !overlay) return;
+  if (!drawer || !overlay) return;
 
-  function openMenu() {
+  function openMenu(cat = null) {
+    if (cat) {
+      document.dispatchEvent(
+        new CustomEvent("brandradar:drawer:set-category", { detail: { cat } })
+      );
+    }
+
     drawer.hidden = false;
     overlay.hidden = false;
 
@@ -183,7 +184,7 @@ function initMobileDrawer() {
     overlay.classList.add("is-open");
     document.body.classList.add("is-locked");
 
-    btn.setAttribute("aria-expanded", "true");
+    if (btn) btn.setAttribute("aria-expanded", "true");
   }
 
   function closeMenu() {
@@ -191,7 +192,7 @@ function initMobileDrawer() {
     overlay.classList.remove("is-open");
     document.body.classList.remove("is-locked");
 
-    btn.setAttribute("aria-expanded", "false");
+    if (btn) btn.setAttribute("aria-expanded", "false");
 
     setTimeout(() => {
       drawer.hidden = true;
@@ -199,15 +200,22 @@ function initMobileDrawer() {
     }, 220);
   }
 
-  btn.addEventListener("click", () => {
-    drawer.classList.contains("is-open") ? closeMenu() : openMenu();
-  });
+  window.BrandRadarDrawerAPI = {
+    open: (cat = null) => openMenu(cat),
+    close: closeMenu
+  };
+
+  if (btn) {
+    btn.addEventListener("click", () => {
+      drawer.classList.contains("is-open") ? closeMenu() : openMenu();
+    });
+  }
 
   overlay.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+    if (e.key === "Escape" && drawer.classList.contains("is-open")) closeMenu();
   });
 
   drawer.addEventListener("click", (e) => {
@@ -222,39 +230,32 @@ function initMobileDrawer() {
 
 /* =========================
    MOBILE BROWSE MENU
+   3 nivåer:
+   1) Kategori
+   2) Gruppe/segment
+   3) Underkategorier
    ========================= */
 function initMobileBrowseMenu() {
   const drawer = document.getElementById("mobileDrawer");
   if (!drawer) return;
 
+  const topcatButtons = drawer.querySelectorAll(".m-chip[data-cat]");
+  const levelTwoWrap = document.getElementById("mDrawerLevelTwo");
   const subcatGrid = document.getElementById("mSubcatGrid");
   const brandRow = document.getElementById("mBrandRow");
-  if (!subcatGrid || !brandRow) return;
+  const resultsWrap = document.getElementById("mDrawerResults");
+  const brandsWrap = document.getElementById("mBrandsWrap");
+  const titleEl = document.getElementById("mobileDrawerTitle");
+  const subcatTitleEl = document.getElementById("mSubcatTitle");
+  const backBtn = drawer.querySelector(".mobile-drawer-back");
 
-  const catButtons = drawer.querySelectorAll(".m-chip[data-cat]");
-  const segButtons = drawer.querySelectorAll(".m-seg[data-seg]");
-  if (!catButtons.length || !segButtons.length) return;
+  if (!topcatButtons.length || !levelTwoWrap || !subcatGrid || !brandRow || !resultsWrap || !brandsWrap || !titleEl || !subcatTitleEl || !backBtn) {
+    return;
+  }
 
   let megaDoc = null;
   let currentCat = "clothing";
-  let currentSeg = "Dame";
-
-  const DEFAULT_CAT_IMAGE = {
-    clothing: "assets/img/tiles/default-clothing.jpg",
-    shoes: "assets/img/tiles/default-shoes.jpg",
-    gymcorner: "assets/img/tiles/default-gymcorner.jpg",
-    accessories: "assets/img/tiles/default-accessories.jpg",
-    selfcare: "assets/img/tiles/default-selfcare.jpg"
-  };
-
-  function getTileImage(cat) {
-    return DEFAULT_CAT_IMAGE[cat] || "";
-  }
-
-  function setActive(nodeList, el) {
-    nodeList.forEach((b) => b.classList.remove("is-active"));
-    el.classList.add("is-active");
-  }
+  let currentGroupIndex = null;
 
   function escapeHtml(str) {
     return String(str)
@@ -265,38 +266,61 @@ function initMobileBrowseMenu() {
       .replace(/'/g, "&#039;");
   }
 
-  function tileHTML(label, href) {
-    const img = getTileImage(currentCat);
-    const bg = img ? ` style="background-image:url('${img}');"` : "";
+  function getCatLabel(cat) {
+    const btn = [...topcatButtons].find((b) => b.dataset.cat === cat);
+    return btn ? btn.textContent.trim() : cat;
+  }
 
+  function setActiveTopcat(cat) {
+    topcatButtons.forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.cat === cat);
+    });
+  }
+
+  function rowHTML(label, href) {
     return `
-      <a class="m-tile" href="${href}">
-        <div class="m-tile-img"${bg} aria-hidden="true"></div>
-        <div class="m-tile-label">${escapeHtml(label)}</div>
+      <a class="m-row" href="${href}">
+        <span class="m-row-label">${escapeHtml(label)}</span>
+        <span class="m-row-arrow" aria-hidden="true">›</span>
       </a>
     `;
   }
 
-  function mapSegmentToGender(seg) {
-    if (seg === "Herre") return "Men";
-    if (seg === "Dame") return "Women";
-    if (seg === "Barn") return "Kids";
-    return null;
+  function levelButtonHTML(label, index, isActive, tabsMode) {
+    return `
+      <button
+        class="m-level-btn ${isActive ? "is-active" : ""}"
+        type="button"
+        data-group-index="${index}"
+        aria-pressed="${isActive ? "true" : "false"}"
+      >
+        <span class="m-level-btn-label">${escapeHtml(label)}</span>
+        <span class="m-level-btn-arrow" aria-hidden="true">${tabsMode ? "" : "›"}</span>
+      </button>
+    `;
   }
 
-  function getBestSectionForSegment(panel, segment) {
-    const blocks = [...panel.querySelectorAll(".menu-block")];
-    for (const b of blocks) {
-      const h4 = b.querySelector(".menu-section h4");
-      if (h4 && h4.textContent.trim() === segment) return b;
-    }
-    return blocks[0] || panel;
+  function getPrimarySection(block) {
+    const nonBrand = block.querySelector(".menu-section:not(.brands)");
+    return nonBrand || block.querySelector(".menu-section");
   }
 
-  function collectSubLinks(segmentBlock, genderSlug) {
-    const nonBrandSections = [...segmentBlock.querySelectorAll(".menu-section:not(.brands)")];
-    const sectionsToUse = nonBrandSections.length ? nonBrandSections : [segmentBlock];
-    const links = sectionsToUse.flatMap((sec) => [...sec.querySelectorAll("ul li a")]);
+  function collectGroups(panel) {
+    return [...panel.querySelectorAll(".menu-block")]
+      .map((block, index) => {
+        const section = getPrimarySection(block);
+        const label = section?.querySelector("h4")?.textContent.trim() || `Valg ${index + 1}`;
+        return { index, label, block };
+      })
+      .filter((g) => g.label);
+  }
+
+  function collectSubLinks(group) {
+    const section = getPrimarySection(group.block);
+    if (!section) return [];
+
+    const links = [...section.querySelectorAll("ul li a")];
+    const genderSlug = mapHeadingToGender(group.label);
 
     const seen = new Set();
     const unique = [];
@@ -311,26 +335,46 @@ function initMobileBrowseMenu() {
       if (seen.has(key)) continue;
       seen.add(key);
 
-      unique.push({ label, kidtype });
+      unique.push({ label, kidtype, genderSlug });
     }
 
     return unique;
   }
 
-  function collectBrandLinks(segmentBlock) {
-    const links = [...segmentBlock.querySelectorAll(".menu-section.brands ul li a")].map((a) =>
-      a.textContent.trim()
-    );
+  function collectBrandLinks(group) {
+    return [...group.block.querySelectorAll(".menu-section.brands ul li a")]
+      .map((a) => a.textContent.trim())
+      .filter(Boolean)
+      .filter((brand, i, arr) => arr.indexOf(brand) === i);
+  }
 
-    const seen = new Set();
-    const unique = [];
-    for (const t of links) {
-      if (!t) continue;
-      if (seen.has(t)) continue;
-      seen.add(t);
-      unique.push(t);
+  function buildCategoryHref(cat, groupLabel, label, kidtype) {
+    let href = `category.html?category=${encodeURIComponent(cat)}`;
+
+    const genderSlug = mapHeadingToGender(groupLabel);
+    if (genderSlug) {
+      href += `&gender=${encodeURIComponent(genderSlug)}`;
     }
-    return unique;
+
+    if (kidtype) {
+      href += `&kidtype=${encodeURIComponent(kidtype)}`;
+    }
+
+    href += `&subcategory=${encodeURIComponent(slugifyBrandRadar(label))}`;
+    return href;
+  }
+
+  function renderLevelTwo(groups) {
+    const tabsMode = currentGroupIndex !== null;
+
+    levelTwoWrap.classList.remove("is-pickers", "is-tabs");
+    levelTwoWrap.classList.add(tabsMode ? "is-tabs" : "is-pickers");
+
+    levelTwoWrap.innerHTML = groups
+      .map((group, index) =>
+        levelButtonHTML(group.label, index, index === currentGroupIndex, tabsMode)
+      )
+      .join("");
   }
 
   function render() {
@@ -339,31 +383,45 @@ function initMobileBrowseMenu() {
     const panel = megaDoc.querySelector(`.menu-panel#${currentCat}`);
     if (!panel) return;
 
-    const segmentBlock = getBestSectionForSegment(panel, currentSeg);
-    const genderSlug = mapSegmentToGender(currentSeg);
-    const subcats = collectSubLinks(segmentBlock, genderSlug);
-    const brands = collectBrandLinks(segmentBlock);
+    const groups = collectGroups(panel);
+    if (!groups.length) return;
 
-    subcatGrid.innerHTML = subcats
-      .slice(0, 20)
-      .map(({ label, kidtype }) => {
-        let href =
-          `category.html?category=${encodeURIComponent(currentCat)}`;
+    if (currentGroupIndex != null && currentGroupIndex >= groups.length) {
+      currentGroupIndex = null;
+    }
 
-        if (genderSlug) {
-          href += `&gender=${encodeURIComponent(genderSlug)}`;
-        }
+    setActiveTopcat(currentCat);
+    renderLevelTwo(groups);
 
-        if (kidtype) {
-          href += `&kidtype=${encodeURIComponent(kidtype)}`;
-        }
+    if (currentGroupIndex === null) {
+      titleEl.textContent = getCatLabel(currentCat);
+      backBtn.classList.remove("is-visible");
+      resultsWrap.hidden = true;
+      subcatGrid.innerHTML = "";
+      brandRow.innerHTML = "";
+      brandsWrap.hidden = true;
+      return;
+    }
 
-        href += `&subcategory=${encodeURIComponent(slugifyBrandRadar(label))}`;
+    const group = groups[currentGroupIndex];
+    const subcats = collectSubLinks(group);
+    const brands = collectBrandLinks(group);
 
-        return tileHTML(label, href);
-      })
-      .join("");
+    titleEl.textContent = `${getCatLabel(currentCat)} · ${group.label}`;
+    backBtn.classList.add("is-visible");
+    subcatTitleEl.textContent = group.label;
+    resultsWrap.hidden = false;
 
+    subcatGrid.innerHTML = subcats.length
+      ? subcats
+          .map(({ label, kidtype }) => {
+            const href = buildCategoryHref(currentCat, group.label, label, kidtype);
+            return rowHTML(label, href);
+          })
+          .join("")
+      : `<div class="m-empty">Ingen underkategorier tilgjengelig.</div>`;
+
+    brandsWrap.hidden = !brands.length;
     brandRow.innerHTML = brands
       .slice(0, 12)
       .map((brand) => {
@@ -387,32 +445,57 @@ function initMobileBrowseMenu() {
       });
   }
 
-  catButtons.forEach((btn) => {
+  topcatButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
-      setActive(catButtons, btn);
       currentCat = btn.dataset.cat;
+      currentGroupIndex = null;
       await loadMegaOnce();
       render();
     });
   });
 
-  segButtons.forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      setActive(segButtons, btn);
-      currentSeg = btn.dataset.seg;
+  levelTwoWrap.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".m-level-btn[data-group-index]");
+    if (!btn) return;
+
+    const index = Number(btn.dataset.groupIndex);
+    if (Number.isNaN(index)) return;
+
+    currentGroupIndex = index;
+    await loadMegaOnce();
+    render();
+  });
+
+  backBtn.addEventListener("click", async () => {
+    if (currentGroupIndex !== null) {
+      currentGroupIndex = null;
       await loadMegaOnce();
       render();
-    });
+      return;
+    }
+
+    window.BrandRadarDrawerAPI?.close();
+  });
+
+  document.addEventListener("brandradar:drawer:set-category", async (e) => {
+    const nextCat = String(e.detail?.cat || "").toLowerCase().trim();
+    if (!nextCat) return;
+
+    currentCat = nextCat;
+    currentGroupIndex = null;
+    await loadMegaOnce();
+    render();
   });
 
   const activeCatBtn = drawer.querySelector(".m-chip.is-active[data-cat]");
-  const activeSegBtn = drawer.querySelector(".m-seg.is-active[data-seg]");
   if (activeCatBtn) currentCat = activeCatBtn.dataset.cat;
-  if (activeSegBtn) currentSeg = activeSegBtn.dataset.seg;
 
   loadMegaOnce().then(render).catch(console.error);
 }
 
+/* =========================
+   MOBILE BOTTOM NAV ACTIVE
+   ========================= */
 (function () {
   const mq = window.matchMedia("(max-width: 768px)");
   if (!mq.matches) return;
@@ -427,7 +510,8 @@ function initMobileBrowseMenu() {
     const hit =
       (route === "index" && (path === "" || path === "index.html")) ||
       (route === "favoritter" && path.includes("favoritter")) ||
-      (route === "brands" && path.includes("brands"));
+      (route === "brands" && path.includes("brands")) ||
+      (route === "search" && path.includes("search-mobile"));
     if (hit) a.classList.add("is-active");
   });
 
@@ -450,4 +534,3 @@ function initMobileBrowseMenu() {
     }
   });
 })();
-
