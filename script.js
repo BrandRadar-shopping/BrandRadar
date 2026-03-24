@@ -169,15 +169,10 @@ function initMobileDrawer() {
   if (!drawer || !overlay) return;
 
   function openMenu(cat = null) {
-    if (cat) {
-      document.dispatchEvent(
-        new CustomEvent("brandradar:drawer:set-category", { detail: { cat } })
-      );
-    }
-
     drawer.hidden = false;
     overlay.hidden = false;
 
+    // Force reflow before animation classes
     drawer.offsetHeight;
 
     drawer.classList.add("is-open");
@@ -185,6 +180,18 @@ function initMobileDrawer() {
     document.body.classList.add("is-locked");
 
     if (btn) btn.setAttribute("aria-expanded", "true");
+
+    // Category set AFTER drawer is open, so the browse menu
+    // always receives the state in a stable phase.
+    if (cat) {
+      requestAnimationFrame(() => {
+        document.dispatchEvent(
+          new CustomEvent("brandradar:drawer:set-category", {
+            detail: { cat }
+          })
+        );
+      });
+    }
   }
 
   function closeMenu() {
@@ -335,7 +342,7 @@ function initMobileBrowseMenu() {
       if (seen.has(key)) continue;
       seen.add(key);
 
-      unique.push({ label, kidtype, genderSlug });
+      unique.push({ label, kidtype });
     }
 
     return unique;
