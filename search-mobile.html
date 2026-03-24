@@ -6,7 +6,7 @@
   <title>BrandRadar | Søk</title>
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=11" />
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=12" />
 </head>
 
 <body class="is-search-page">
@@ -200,23 +200,12 @@
       });
 
       quickOpenButtons.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const cat = btn.getAttribute("data-open-drawer-cat");
-
-    if (window.BrandRadarDrawerAPI) {
-      window.BrandRadarDrawerAPI.open();
-
-      setTimeout(() => {
-        document.dispatchEvent(
-          new CustomEvent("brandradar:drawer:set-category", {
-            detail: { cat }
-          })
-        );
-      }, 50);
-    }
-  });
-});
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const cat = btn.getAttribute("data-open-drawer-cat");
+          window.BrandRadarDrawerAPI?.open(cat);
+        });
+      });
     })();
   </script>
 </body>
