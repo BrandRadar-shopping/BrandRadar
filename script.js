@@ -200,7 +200,6 @@ function initMobileDrawer() {
     }, 220);
   }
 
-  // 👉 ALLTID sett API – selv om DOM mangler
   window.BrandRadarDrawerAPI = {
     open: (cat = null) => openMenu(cat),
     close: closeMenu
@@ -212,10 +211,35 @@ function initMobileDrawer() {
   }
 
   const closeBtn = drawer.querySelector(".mobile-drawer-close");
+  const backBtn = drawer.querySelector(".mobile-drawer-back");
+  const drawerSearchInput = document.getElementById("mobileDrawerSearchInput");
 
   overlay.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  if (backBtn) backBtn.addEventListener("click", closeMenu);
+
+  if (drawerSearchInput) {
+    const routeToMainSearch = () => {
+      const mainSearchInput = document.getElementById("search-input");
+      const currentValue = drawerSearchInput.value || "";
+
+      closeMenu();
+
+      setTimeout(() => {
+        if (!mainSearchInput) return;
+        mainSearchInput.focus({ preventScroll: true });
+        if (currentValue.trim()) {
+          mainSearchInput.value = currentValue;
+          mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }, 240);
+    };
+
+    drawerSearchInput.addEventListener("focus", routeToMainSearch);
+    drawerSearchInput.addEventListener("click", routeToMainSearch);
+  }
 }
+
 /* =========================
    SEARCH PAGE TRIGGERS
    Én stabil triggerkilde for search-mobile
@@ -250,10 +274,7 @@ function initSearchMobilePageTriggers() {
 
 /* =========================
    MOBILE BROWSE MENU
-   3 nivåer:
-   1) Kategori
-   2) Gruppe/segment
-   3) Underkategorier
+   Kategori -> dynamiske tabs -> underkategoriliste
    ========================= */
 function initMobileBrowseMenu() {
   const drawer = document.getElementById("mobileDrawer");
@@ -265,17 +286,16 @@ function initMobileBrowseMenu() {
   const brandRow = document.getElementById("mBrandRow");
   const resultsWrap = document.getElementById("mDrawerResults");
   const brandsWrap = document.getElementById("mBrandsWrap");
-  const titleEl = document.getElementById("mobileDrawerTitle");
   const subcatTitleEl = document.getElementById("mSubcatTitle");
-  const backBtn = drawer.querySelector(".mobile-drawer-back");
+  const drawerSearchInput = document.getElementById("mobileDrawerSearchInput");
 
-  if (!topcatButtons.length || !levelTwoWrap || !subcatGrid || !brandRow || !resultsWrap || !brandsWrap || !titleEl || !subcatTitleEl || !backBtn) {
+  if (!topcatButtons.length || !levelTwoWrap || !subcatGrid || !brandRow || !resultsWrap || !brandsWrap || !subcatTitleEl) {
     return;
   }
 
   let megaDoc = null;
   let currentCat = "clothing";
-  let currentGroupIndex = null;
+  let currentGroupIndex = 0;
 
   function escapeHtml(str) {
     return String(str)
@@ -295,6 +315,10 @@ function initMobileBrowseMenu() {
     topcatButtons.forEach((btn) => {
       btn.classList.toggle("is-active", btn.dataset.cat === cat);
     });
+
+    if (drawerSearchInput) {
+      drawerSearchInput.placeholder = `Søk i ${getCatLabel(cat)}`;
+    }
   }
 
   function rowHTML(label, href) {
@@ -306,7 +330,7 @@ function initMobileBrowseMenu() {
     `;
   }
 
-  function levelButtonHTML(label, index, isActive, tabsMode) {
+  function levelButtonHTML(label, index, isActive) {
     return `
       <button
         class="m-level-btn ${isActive ? "is-active" : ""}"
@@ -315,7 +339,6 @@ function initMobileBrowseMenu() {
         aria-pressed="${isActive ? "true" : "false"}"
       >
         <span class="m-level-btn-label">${escapeHtml(label)}</span>
-        <span class="m-level-btn-arrow" aria-hidden="true">${tabsMode ? "" : "›"}</span>
       </button>
     `;
   }
@@ -385,14 +408,17 @@ function initMobileBrowseMenu() {
   }
 
   function renderLevelTwo(groups) {
-    const tabsMode = currentGroupIndex !== null;
+    if (!groups.length) {
+      levelTwoWrap.innerHTML = "";
+      levelTwoWrap.hidden = true;
+      return;
+    }
 
-    levelTwoWrap.classList.remove("is-pickers", "is-tabs");
-    levelTwoWrap.classList.add(tabsMode ? "is-tabs" : "is-pickers");
+    levelTwoWrap.hidden = groups.length <= 1;
 
     levelTwoWrap.innerHTML = groups
       .map((group, index) =>
-        levelButtonHTML(group.label, index, index === currentGroupIndex, tabsMode)
+        levelButtonHTML(group.label, index, index === currentGroupIndex)
       )
       .join("");
   }
@@ -406,29 +432,17 @@ function initMobileBrowseMenu() {
     const groups = collectGroups(panel);
     if (!groups.length) return;
 
-    if (currentGroupIndex != null && currentGroupIndex >= groups.length) {
-      currentGroupIndex = null;
+    if (currentGroupIndex == null || currentGroupIndex >= groups.length) {
+      currentGroupIndex = 0;
     }
 
     setActiveTopcat(currentCat);
     renderLevelTwo(groups);
 
-    if (currentGroupIndex === null) {
-      titleEl.textContent = getCatLabel(currentCat);
-      backBtn.classList.remove("is-visible");
-      resultsWrap.hidden = true;
-      subcatGrid.innerHTML = "";
-      brandRow.innerHTML = "";
-      brandsWrap.hidden = true;
-      return;
-    }
-
     const group = groups[currentGroupIndex];
     const subcats = collectSubLinks(group);
     const brands = collectBrandLinks(group);
 
-    titleEl.textContent = `${getCatLabel(currentCat)} · ${group.label}`;
-    backBtn.classList.add("is-visible");
     subcatTitleEl.textContent = group.label;
     resultsWrap.hidden = false;
 
@@ -470,7 +484,7 @@ function initMobileBrowseMenu() {
     if (!nextCat) return;
 
     currentCat = nextCat;
-    currentGroupIndex = null;
+    currentGroupIndex = 0;
     loadMegaOnce().then(render).catch(console.error);
   }
 
@@ -492,17 +506,6 @@ function initMobileBrowseMenu() {
     render();
   });
 
-  backBtn.addEventListener("click", async () => {
-    if (currentGroupIndex !== null) {
-      currentGroupIndex = null;
-      await loadMegaOnce();
-      render();
-      return;
-    }
-
-    window.BrandRadarDrawerAPI?.close();
-  });
-
   document.addEventListener("brandradar:drawer:set-category", (e) => {
     setCategory(e.detail?.cat);
   });
@@ -510,7 +513,10 @@ function initMobileBrowseMenu() {
   const activeCatBtn = drawer.querySelector(".m-chip.is-active[data-cat]");
   if (activeCatBtn) currentCat = activeCatBtn.dataset.cat;
 
-  loadMegaOnce().then(render).catch(console.error);
+  loadMegaOnce().then(() => {
+    currentGroupIndex = 0;
+    render();
+  }).catch(console.error);
 }
 
 /* =========================
