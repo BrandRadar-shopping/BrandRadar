@@ -182,31 +182,5 @@
 
   <script src="search.js"></script>
   <script src="script.js"></script>
-
-  <script>
-    (function () {
-      const backBtn = document.querySelector(".m-back-btn");
-      const openBtn = document.querySelector(".m-allcats-btn");
-      const quickOpenButtons = document.querySelectorAll("[data-open-drawer-cat]");
-
-      backBtn?.addEventListener("click", () => {
-        if (history.length > 1) history.back();
-        else location.href = "index.html";
-      });
-
-      openBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.BrandRadarDrawerAPI?.open();
-      });
-
-      quickOpenButtons.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          const cat = btn.getAttribute("data-open-drawer-cat");
-          window.BrandRadarDrawerAPI?.open(cat);
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
