@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initMobileDrawer();
   initMobileBrowseMenu();
+  initSearchMobilePageTriggers();
 
   if (window.innerWidth <= 768) {
     console.log("📱 Mobile detected — skipping desktop mega-menu init");
@@ -172,7 +173,6 @@ function initMobileDrawer() {
     drawer.hidden = false;
     overlay.hidden = false;
 
-    // Force reflow before animation classes
     drawer.offsetHeight;
 
     drawer.classList.add("is-open");
@@ -181,16 +181,12 @@ function initMobileDrawer() {
 
     if (btn) btn.setAttribute("aria-expanded", "true");
 
-    // Category set AFTER drawer is open, so the browse menu
-    // always receives the state in a stable phase.
     if (cat) {
-      requestAnimationFrame(() => {
-        document.dispatchEvent(
-          new CustomEvent("brandradar:drawer:set-category", {
-            detail: { cat }
-          })
-        );
-      });
+      document.dispatchEvent(
+        new CustomEvent("brandradar:drawer:set-category", {
+          detail: { cat }
+        })
+      );
     }
   }
 
@@ -232,6 +228,38 @@ function initMobileDrawer() {
 
   window.addEventListener("resize", () => {
     if (window.innerWidth > 768 && drawer.classList.contains("is-open")) closeMenu();
+  });
+}
+
+/* =========================
+   SEARCH PAGE TRIGGERS
+   Én stabil triggerkilde for search-mobile
+   ========================= */
+function initSearchMobilePageTriggers() {
+  if (!document.body.classList.contains("is-search-page")) return;
+
+  const backBtn = document.querySelector(".m-back-btn");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      if (history.length > 1) history.back();
+      else location.href = "index.html";
+    });
+  }
+
+  document.addEventListener("click", (e) => {
+    const openAllBtn = e.target.closest(".m-allcats-btn");
+    if (openAllBtn) {
+      e.preventDefault();
+      window.BrandRadarDrawerAPI?.open();
+      return;
+    }
+
+    const quickOpenBtn = e.target.closest("[data-open-drawer-cat]");
+    if (quickOpenBtn) {
+      e.preventDefault();
+      const cat = quickOpenBtn.getAttribute("data-open-drawer-cat");
+      window.BrandRadarDrawerAPI?.open(cat);
+    }
   });
 }
 
@@ -452,12 +480,18 @@ function initMobileBrowseMenu() {
       });
   }
 
+  function setCategory(cat) {
+    const nextCat = String(cat || "").toLowerCase().trim();
+    if (!nextCat) return;
+
+    currentCat = nextCat;
+    currentGroupIndex = null;
+    loadMegaOnce().then(render).catch(console.error);
+  }
+
   topcatButtons.forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      currentCat = btn.dataset.cat;
-      currentGroupIndex = null;
-      await loadMegaOnce();
-      render();
+    btn.addEventListener("click", () => {
+      setCategory(btn.dataset.cat);
     });
   });
 
@@ -484,14 +518,8 @@ function initMobileBrowseMenu() {
     window.BrandRadarDrawerAPI?.close();
   });
 
-  document.addEventListener("brandradar:drawer:set-category", async (e) => {
-    const nextCat = String(e.detail?.cat || "").toLowerCase().trim();
-    if (!nextCat) return;
-
-    currentCat = nextCat;
-    currentGroupIndex = null;
-    await loadMegaOnce();
-    render();
+  document.addEventListener("brandradar:drawer:set-category", (e) => {
+    setCategory(e.detail?.cat);
   });
 
   const activeCatBtn = drawer.querySelector(".m-chip.is-active[data-cat]");
