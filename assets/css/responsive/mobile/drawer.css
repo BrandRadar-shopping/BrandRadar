@@ -8,6 +8,7 @@
   .mobile-drawer {
     display: block;
   }
+
   .mobile-drawer,
   .mobile-drawer * {
     box-sizing: border-box;
@@ -62,7 +63,8 @@
   }
 
   .mobile-drawer a,
-  .mobile-drawer button {
+  .mobile-drawer button,
+  .mobile-drawer input {
     min-height: 44px;
   }
 
@@ -75,18 +77,6 @@
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0,0,0,0.08);
     margin-bottom: 10px;
-  }
-
-  .mobile-drawer-title {
-    margin: 0;
-    text-align: center;
-    font-weight: 900;
-    font-size: 18px;
-    letter-spacing: -0.2px;
-    color: #111;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .mobile-drawer-back,
@@ -105,14 +95,48 @@
   }
 
   .mobile-drawer-back {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 160ms ease;
-  }
-
-  .mobile-drawer-back.is-visible {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  .mobile-drawer-search {
+    position: relative;
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 14px;
+    min-height: 44px;
+    padding: 0 12px 0 38px;
+  }
+
+  .mobile-drawer-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .mobile-drawer-search input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+    padding: 0;
+  }
+
+  .mobile-drawer-search input::placeholder {
+    color: #64748b;
+    opacity: 1;
   }
 
   /* Top categories */
@@ -123,7 +147,7 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 8px 0 6px;
-    margin: 0 0 8px;
+    margin: 0 0 10px;
     max-width: 100%;
   }
 
@@ -152,74 +176,27 @@
     color: #fff;
   }
 
-  /* Level 2 wrapper */
+  /* Dynamic tabs */
   .m-segments {
     max-width: 100%;
     min-width: 0;
   }
 
-  /* Category -> segment/group picker */
-  .m-segments.is-pickers {
-    display: grid;
-    gap: 10px;
-    padding: 6px 0 4px;
-  }
-
-  .m-level-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: 58px;
-    padding: 0 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(15,23,42,0.10);
-    background: #fff;
-    color: #111;
-    cursor: pointer;
-    text-align: left;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
-  }
-
-  .m-level-btn:active {
-    transform: scale(0.99);
-    background: rgba(15,23,42,0.03);
-  }
-
-  .m-level-btn-label {
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: -0.2px;
-    line-height: 1.2;
-  }
-
-  .m-level-btn-arrow {
-    flex: 0 0 auto;
-    font-size: 28px;
-    line-height: 1;
-    color: #111;
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  /* Selected segment/group -> compact tabs */
   .m-segments.is-tabs {
     display: flex;
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 4px 0 4px;
-    margin: 2px 0 0;
+    padding: 0 0 6px;
+    margin: 0 0 4px;
   }
 
   .m-segments.is-tabs::-webkit-scrollbar {
     display: none;
   }
 
-  .m-segments.is-tabs .m-level-btn {
+  .m-level-btn {
     width: auto;
     flex: 0 0 auto;
     min-height: 38px;
@@ -227,25 +204,34 @@
     border-radius: 999px;
     border: 1px solid rgba(15,23,42,0.12);
     background: #fff;
+    color: #111;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
   }
 
-  .m-segments.is-tabs .m-level-btn.is-active {
+  .m-level-btn:active {
+    transform: scale(0.98);
+  }
+
+  .m-level-btn.is-active {
     border-color: #111;
     background: #111;
     color: #fff;
   }
 
-  .m-segments.is-tabs .m-level-btn.is-active .m-level-btn-label,
-  .m-segments.is-tabs .m-level-btn.is-active .m-level-btn-arrow {
-    color: #fff;
-  }
-
-  .m-segments.is-tabs .m-level-btn-label {
+  .m-level-btn-label {
     font-size: 14px;
     font-weight: 800;
+    letter-spacing: -0.15px;
+    line-height: 1;
   }
 
-  .m-segments.is-tabs .m-level-btn-arrow {
+  .m-level-btn-arrow {
     display: none;
   }
 
@@ -259,7 +245,7 @@
   }
 
   .m-results {
-    padding-top: 12px;
+    padding-top: 6px;
     display: grid;
     gap: 18px;
   }
