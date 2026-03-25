@@ -1044,3 +1044,25 @@
   }
 
 }
+
+@media (max-width: 768px) {
+  body.is-search-page .m-cat-chip,
+  body.is-search-page .m-feature-tile--button {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  body.is-search-page .m-feature-tile--button {
+    width: 100%;
+    padding: 0;
+  }
+
+  body.is-search-page .m-feature-tile--button::before,
+  body.is-search-page .m-feature-tile--button::after {
+    pointer-events: none;
+  }
+}
