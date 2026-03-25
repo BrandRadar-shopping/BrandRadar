@@ -162,24 +162,21 @@ function initDesktopMegaMenuRoutingSlugs() {
    MOBILE DRAWER
    ========================= */
 function initMobileDrawer() {
-  const btn = document.querySelector(".mobile-menu-btn");
   const drawer = document.getElementById("mobileDrawer");
   const overlay = document.getElementById("mobileOverlay");
-  const closeBtn = drawer ? drawer.querySelector(".mobile-drawer-close") : null;
-
-  if (!drawer || !overlay) return;
 
   function openMenu(cat = null) {
+    if (!drawer || !overlay) {
+      console.error("❌ Drawer elements missing");
+      return;
+    }
+
     drawer.hidden = false;
     overlay.hidden = false;
-
-    drawer.offsetHeight;
 
     drawer.classList.add("is-open");
     overlay.classList.add("is-open");
     document.body.classList.add("is-locked");
-
-    if (btn) btn.setAttribute("aria-expanded", "true");
 
     if (cat) {
       document.dispatchEvent(
@@ -191,11 +188,11 @@ function initMobileDrawer() {
   }
 
   function closeMenu() {
+    if (!drawer || !overlay) return;
+
     drawer.classList.remove("is-open");
     overlay.classList.remove("is-open");
     document.body.classList.remove("is-locked");
-
-    if (btn) btn.setAttribute("aria-expanded", "false");
 
     setTimeout(() => {
       drawer.hidden = true;
@@ -203,34 +200,22 @@ function initMobileDrawer() {
     }, 220);
   }
 
+  // 👉 ALLTID sett API – selv om DOM mangler
   window.BrandRadarDrawerAPI = {
     open: (cat = null) => openMenu(cat),
     close: closeMenu
   };
 
-  if (btn) {
-    btn.addEventListener("click", () => {
-      drawer.classList.contains("is-open") ? closeMenu() : openMenu();
-    });
+  if (!drawer || !overlay) {
+    console.warn("⚠️ Drawer initialized without DOM");
+    return;
   }
+
+  const closeBtn = drawer.querySelector(".mobile-drawer-close");
 
   overlay.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawer.classList.contains("is-open")) closeMenu();
-  });
-
-  drawer.addEventListener("click", (e) => {
-    const a = e.target.closest("a");
-    if (a) closeMenu();
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 768 && drawer.classList.contains("is-open")) closeMenu();
-  });
 }
-
 /* =========================
    SEARCH PAGE TRIGGERS
    Én stabil triggerkilde for search-mobile
