@@ -6,7 +6,7 @@
   <title>BrandRadar | Søk</title>
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=12" />
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=13" />
 </head>
 
 <body class="is-search-page">
@@ -48,8 +48,20 @@
 
   <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
     <div class="mobile-drawer-header">
-      <button class="mobile-drawer-back" type="button" aria-label="Tilbake i navigasjon">←</button>
-      <p class="mobile-drawer-title" id="mobileDrawerTitle">Utforsk kategori</p>
+      <button class="mobile-drawer-back is-visible" type="button" aria-label="Tilbake">←</button>
+
+      <div class="mobile-drawer-search">
+        <span class="mobile-drawer-search-icon" aria-hidden="true">🔍</span>
+        <input
+          id="mobileDrawerSearchInput"
+          type="search"
+          placeholder="Søk i BrandRadar"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Søk i BrandRadar"
+        />
+      </div>
+
       <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
     </div>
 
@@ -61,7 +73,7 @@
       <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
     </div>
 
-    <div class="m-segments is-pickers" id="mDrawerLevelTwo" role="tablist" aria-label="Velg nivå to"></div>
+    <div class="m-segments is-tabs" id="mDrawerLevelTwo" role="tablist" aria-label="Velg nivå to"></div>
 
     <div class="m-results" id="mDrawerResults" hidden>
       <div class="m-subcats">
