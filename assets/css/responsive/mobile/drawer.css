@@ -4,7 +4,10 @@
    ===================================================== */
 
 @media (max-width: 768px) {
-
+  .mobile-overlay,
+  .mobile-drawer {
+    display: block;
+  }
   .mobile-drawer,
   .mobile-drawer * {
     box-sizing: border-box;
