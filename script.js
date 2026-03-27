@@ -219,24 +219,25 @@ function initMobileDrawer() {
   if (backBtn) backBtn.addEventListener("click", closeMenu);
 
   if (drawerSearchInput) {
+    drawerSearchInput.setAttribute("readonly", "readonly");
+
     const routeToMainSearch = () => {
       const mainSearchInput = document.getElementById("search-input");
-      const currentValue = drawerSearchInput.value || "";
+      if (!mainSearchInput) return;
 
       closeMenu();
 
       setTimeout(() => {
-        if (!mainSearchInput) return;
         mainSearchInput.focus({ preventScroll: true });
-        if (currentValue.trim()) {
-          mainSearchInput.value = currentValue;
-          mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
-        }
+        mainSearchInput.dispatchEvent(new Event("focus", { bubbles: true }));
       }, 240);
     };
 
-    drawerSearchInput.addEventListener("focus", routeToMainSearch);
     drawerSearchInput.addEventListener("click", routeToMainSearch);
+    drawerSearchInput.addEventListener("focus", (e) => {
+      e.preventDefault();
+      routeToMainSearch();
+    });
   }
 }
 
@@ -317,7 +318,7 @@ function initMobileBrowseMenu() {
     });
 
     if (drawerSearchInput) {
-      drawerSearchInput.placeholder = `Søk i ${getCatLabel(cat)}`;
+      drawerSearchInput.placeholder = "Søk produkter eller merker";
     }
   }
 
