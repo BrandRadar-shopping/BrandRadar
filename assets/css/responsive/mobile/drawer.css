@@ -68,9 +68,7 @@
     min-height: 44px;
   }
 
-  /* =========================
-     Header
-  ========================= */
+  /* Header */
   .mobile-drawer-header {
     display: grid;
     grid-template-columns: 40px minmax(0, 1fr) 40px;
@@ -114,6 +112,7 @@
     border-radius: 14px;
     min-height: 46px;
     padding: 0 14px 0 40px;
+    cursor: pointer;
   }
 
   .mobile-drawer-search-icon {
@@ -136,6 +135,7 @@
     font-weight: 600;
     color: #111827;
     padding: 0;
+    cursor: pointer;
   }
 
   .mobile-drawer-search input::placeholder {
@@ -143,9 +143,7 @@
     opacity: 1;
   }
 
-  /* =========================
-     Top category pills
-  ========================= */
+  /* Top category pills */
   .m-topcats {
     display: flex;
     gap: 8px;
@@ -185,9 +183,7 @@
     color: #fff;
   }
 
-  /* =========================
-     Dynamic level-two tabs
-  ========================= */
+  /* Dynamic level-two tabs */
   .m-segments {
     max-width: 100%;
     min-width: 0;
@@ -247,9 +243,7 @@
     display: none;
   }
 
-  /* =========================
-     Results area
-  ========================= */
+  /* Results area */
   .m-results,
   .m-subcats,
   .m-brands {
@@ -274,14 +268,11 @@
     opacity: 1;
   }
 
-  /* =========================
-     Underkategori-liste
-     1 linje per kategori
-  ========================= */
-  .m-grid {
+  /* Underkategori-liste: 1 per linje */
+  body.is-search-page #mobileDrawer .m-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
     border-top: 1px solid rgba(15,23,42,0.08);
   }
 
@@ -312,7 +303,6 @@
     background: rgba(15, 23, 42, 0.035);
   }
 
-  /* enkel premium ikonmarkør */
   .m-row::before {
     content: "";
     width: 10px;
@@ -349,9 +339,7 @@
     color: #64748b;
   }
 
-  /* =========================
-     Brands
-  ========================= */
+  /* Brands */
   .m-brands {
     padding-top: 2px;
   }
@@ -387,9 +375,6 @@
     white-space: nowrap;
   }
 
-  /* =========================
-     Small screens
-  ========================= */
   @media (max-width: 360px) {
     .mobile-drawer {
       padding: 14px 12px 24px;
