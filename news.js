@@ -87,6 +87,14 @@
       .replace(/'/g, "&#039;");
   }
 
+  function makeSafeId(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/gi, "-")
+      .replace(/-+/g, "-");
+  }
+
   async function fetchJson(sheetId, tab) {
     const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
     const res = await fetch(url);
@@ -248,7 +256,120 @@
     return [...new Set(cleaned)].slice(0, 5);
   }
 
-         function ensureDealsRibbonStyles() {
+  // ---------- DEALS CORNER RIBBON (SVG) ----------
+  function buildDealsCornerRibbon(uid) {
+    const gradMain = `dealsRibbonGrad-${uid}`;
+    const gradGloss = `dealsRibbonGloss-${uid}`;
+    const gradSide = `dealsRibbonSide-${uid}`;
+    const gradShadow = `dealsRibbonShadow-${uid}`;
+
+    return `
+      <svg class="deals-corner-ribbon-svg__art" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="${gradMain}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0b1220"></stop>
+            <stop offset="18%" stop-color="#162133"></stop>
+            <stop offset="50%" stop-color="#334155"></stop>
+            <stop offset="78%" stop-color="#182335"></stop>
+            <stop offset="100%" stop-color="#0b1220"></stop>
+          </linearGradient>
+
+          <linearGradient id="${gradGloss}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.28)"></stop>
+            <stop offset="40%" stop-color="rgba(255,255,255,0.12)"></stop>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+          </linearGradient>
+
+          <linearGradient id="${gradSide}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#09111d"></stop>
+            <stop offset="55%" stop-color="#223047"></stop>
+            <stop offset="100%" stop-color="#101827"></stop>
+          </linearGradient>
+
+          <radialGradient id="${gradShadow}" cx="0%" cy="0%" r="100%">
+            <stop offset="0%" stop-color="rgba(0,0,0,0.28)"></stop>
+            <stop offset="45%" stop-color="rgba(0,0,0,0.14)"></stop>
+            <stop offset="100%" stop-color="rgba(0,0,0,0)"></stop>
+          </radialGradient>
+        </defs>
+
+        <!-- soft corner shadow -->
+        <path d="M0 0 L74 0 L0 74 Z" fill="url(#${gradShadow})"></path>
+
+        <!-- side flap -->
+        <path
+          d="M14 58
+             C14 51, 18 46, 24 42
+             L33 51
+             L26 105
+             C17 101, 14 94, 14 86
+             Z"
+          fill="url(#${gradSide})">
+        </path>
+
+        <!-- top rounded lip -->
+        <path
+          d="M68 14
+             C74 12, 82 13, 88 17
+             L104 33
+             C97 31, 89 31, 83 33
+             Z"
+          fill="rgba(255,255,255,0.14)">
+        </path>
+
+        <!-- main ribbon -->
+        <g transform="rotate(-45 64 64)">
+          <rect
+            x="8"
+            y="48"
+            rx="8"
+            ry="8"
+            width="118"
+            height="30"
+            fill="url(#${gradMain})">
+          </rect>
+
+          <!-- satin gloss -->
+          <rect
+            x="14"
+            y="51"
+            rx="8"
+            ry="8"
+            width="106"
+            height="9"
+            fill="url(#${gradGloss})"
+            opacity="0.95">
+          </rect>
+
+          <!-- bottom inner shade -->
+          <rect
+            x="8"
+            y="72"
+            rx="0"
+            ry="0"
+            width="118"
+            height="4"
+            fill="rgba(0,0,0,0.22)">
+          </rect>
+
+          <!-- text -->
+          <text
+            x="65"
+            y="68"
+            text-anchor="middle"
+            fill="#ffffff"
+            font-size="12"
+            font-weight="900"
+            letter-spacing="3"
+            font-family="Arial, Helvetica, sans-serif">
+            DEALS
+          </text>
+        </g>
+      </svg>
+    `;
+  }
+
+  function ensureDealsRibbonStyles() {
     if (document.getElementById("news-deals-ribbon-styles")) return;
 
     const style = document.createElement("style");
@@ -263,166 +384,26 @@
         display: none !important;
       }
 
-      .news-section--deals .deal-card .deals-corner-ribbon {
+      .news-section--deals .deal-card .deals-corner-ribbon-svg {
         position: absolute;
-        top: 14px;
-        left: -40px;
-        width: 126px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-top: 1px;
-        overflow: visible;
+        top: 0;
+        left: 0;
+        width: 86px;
+        height: 86px;
+        display: block;
         pointer-events: none;
-        z-index: 9;
-
-        color: #ffffff;
-        font-size: 0.64rem;
-        font-weight: 900;
-        letter-spacing: 0.15em;
-        line-height: 1;
-        text-align: center;
-        text-transform: uppercase;
-
-        transform: rotate(-45deg);
-        transform-origin: center;
-
-        background:
-          linear-gradient(
-            135deg,
-            #0b1220 0%,
-            #1b2638 20%,
-            #334155 50%,
-            #1e293b 76%,
-            #0b1220 100%
-          );
-
-        border-radius: 0 8px 0 8px;
-        box-shadow:
-          0 10px 18px rgba(0, 0, 0, 0.22),
-          0 2px 0 rgba(255,255,255,0.06) inset,
-          0 -2px 0 rgba(0,0,0,0.18) inset;
-      }
-
-      /* Gloss stripe on top face */
-      .news-section--deals .deal-card .deals-corner-ribbon::before {
-        content: "";
-        position: absolute;
-        left: 8px;
-        right: 6px;
-        top: 3px;
-        height: 9px;
-        border-radius: 999px;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.30) 0%,
-            rgba(255,255,255,0.12) 42%,
-            rgba(255,255,255,0.00) 100%
-          );
-        opacity: 0.9;
-        pointer-events: none;
-      }
-
-      /* Curved top roll */
-      .news-section--deals .deal-card .deals-corner-ribbon::after {
-        content: "";
-        position: absolute;
-        top: -4px;
-        right: 4px;
-        width: 28px;
-        height: 8px;
-        border-radius: 999px 999px 6px 6px;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.16) 0%,
-            rgba(255,255,255,0.05) 45%,
-            rgba(0,0,0,0.10) 100%
-          );
-        box-shadow:
-          0 1px 0 rgba(255,255,255,0.05) inset,
-          0 2px 4px rgba(0,0,0,0.10);
-        pointer-events: none;
-        opacity: 0.95;
-      }
-
-      /* Moving satin light */
-      .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-        position: absolute;
-        top: 14px;
-        left: -40px;
-        width: 126px;
-        height: 32px;
-        transform: rotate(-45deg);
-        transform-origin: center;
-        pointer-events: none;
-        z-index: 10;
-        opacity: 0.88;
-
-        background:
-          linear-gradient(
-            90deg,
-            rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.18) 14%,
-            rgba(255,255,255,0.04) 26%,
-            rgba(255,255,255,0) 42%,
-            rgba(0,0,0,0.08) 100%
-          );
-        border-radius: 0 8px 0 8px;
-      }
-
-      /* Rounded side flap / rolled side */
-      .news-section--deals .deal-card.product-card::before {
-        content: "";
-        position: absolute;
-        top: 33px;
-        left: 0px;
-        width: 16px;
-        height: 54px;
-        border-radius: 0 0 10px 0;
-        background:
-          linear-gradient(
-            180deg,
-            #0b1220 0%,
-            #1a2435 30%,
-            #273247 68%,
-            #101827 100%
-          );
-        box-shadow:
-          2px 6px 10px rgba(0,0,0,0.22),
-          1px 0 0 rgba(255,255,255,0.04) inset;
-        clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%);
         z-index: 8;
-        pointer-events: none;
       }
 
-      /* Small rounded lip at the very top end */
-      .news-section--deals .deal-card.product-card::after {
-        content: "";
-        position: absolute;
-        top: 13px;
-        left: 43px;
-        width: 26px;
-        height: 10px;
-        border-radius: 999px;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.12) 0%,
-            rgba(255,255,255,0.03) 48%,
-            rgba(0,0,0,0.10) 100%
-          );
-        transform: rotate(-45deg);
-        transform-origin: center;
-        z-index: 11;
-        pointer-events: none;
-        opacity: 0.95;
+      .news-section--deals .deal-card .deals-corner-ribbon-svg__art {
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: visible;
       }
 
       .news-section--deals .deal-card.product-card .favorite-toggle {
-        z-index: 12;
+        z-index: 10;
       }
 
       .news-section--deals .deal-card.product-card .price-wrapper {
@@ -446,18 +427,22 @@
         flex: 0 0 auto;
         align-self: flex-end;
         white-space: nowrap;
-        margin-left: 0;
-        padding: 0.36rem 0.64rem;
-        border-radius: 999px;
         font-size: 0.72rem;
         font-weight: 800;
-        line-height: 1;
         color: #ffffff;
-        background:
-          linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
-        box-shadow:
-          0 6px 14px rgba(15, 23, 42, 0.16),
-          0 1px 0 rgba(255,255,255,0.08) inset;
+        background: linear-gradient(135deg, #0f172a, #1f2937);
+        padding: 0.34rem 0.62rem;
+        border-radius: 999px;
+        line-height: 1;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
+        margin-left: 0;
+      }
+
+      @media (max-width: 768px) {
+        .news-section--deals .deal-card .deals-corner-ribbon-svg {
+          width: 80px;
+          height: 80px;
+        }
       }
     `;
 
@@ -504,12 +489,14 @@
         </div>
       `;
 
+    const ribbonUid = makeSafeId(pid || prod.title || Math.random().toString(36).slice(2, 10));
+
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
     card.setAttribute("data-product-id", pid || "");
 
     card.innerHTML = `
-      ${isDealCard ? `<span class="deals-corner-ribbon">DEALS</span><span class="deals-corner-ribbon-gloss"></span>` : ""}
+      ${isDealCard ? `<span class="deals-corner-ribbon-svg" aria-hidden="true">${buildDealsCornerRibbon(ribbonUid)}</span>` : ""}
       ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
 
       <button
@@ -822,81 +809,6 @@
     setTimeout(updateButtons, 350);
   }
 
-         function initMobileFocusCarousel(trackEl) {
-    if (!trackEl) return;
-    if (window.innerWidth > 768) return;
-
-    let ticking = false;
-
-    function getCards() {
-      return Array.from(trackEl.children).filter((el) =>
-        el.classList.contains("product-card")
-      );
-    }
-
-    function updateCards() {
-      const cards = getCards();
-      if (!cards.length) return;
-
-      const trackRect = trackEl.getBoundingClientRect();
-      const viewportCenter = trackRect.left + trackRect.width / 2;
-
-      let closestCard = null;
-      let closestDistance = Infinity;
-
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const distance = Math.abs(cardCenter - viewportCenter);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestCard = card;
-        }
-
-        const maxDistance = Math.max(trackRect.width * 0.58, 1);
-        const normalized = Math.min(distance / maxDistance, 1);
-        const focus = 1 - normalized;
-
-        const scale = 0.94 + focus * 0.06;
-        const opacity = 0.72 + focus * 0.28;
-        const saturate = 0.94 + focus * 0.06;
-        const lift = focus * 4;
-
-        card.style.setProperty("--deal-scale", scale.toFixed(3));
-        card.style.setProperty("--deal-opacity", opacity.toFixed(3));
-        card.style.setProperty("--deal-saturate", saturate.toFixed(3));
-        card.style.setProperty("--deal-lift", `${lift.toFixed(2)}px`);
-        card.style.setProperty("--deal-z", String(10 + Math.round(focus * 10)));
-      });
-
-      cards.forEach((card) => {
-        card.classList.remove("is-active");
-      });
-
-      if (closestCard) {
-        closestCard.classList.add("is-active");
-      }
-    }
-
-    function requestUpdate() {
-      if (ticking) return;
-      ticking = true;
-
-      requestAnimationFrame(() => {
-        updateCards();
-        ticking = false;
-      });
-    }
-
-    trackEl.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-
-    setTimeout(updateCards, 60);
-    setTimeout(updateCards, 180);
-    setTimeout(updateCards, 320);
-  }
-  
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
@@ -1002,8 +914,7 @@
         dealsTrack.appendChild(card);
       });
 
-           initArrowSlider(dealsTrack);
-      initMobileFocusCarousel(dealsTrack);
+      initArrowSlider(dealsTrack);
     } catch (err) {
       console.error("❌ Deals error:", err);
       dealsTrack.classList.remove("loading");
