@@ -414,7 +414,7 @@
   }
 
 
-      /* -------------------------------------------------
+       /* -------------------------------------------------
      Deals – overlapping focus carousel
   ------------------------------------------------- */
   .news-section--deals .section-heading {
@@ -457,7 +457,7 @@
     padding:
       8px
       calc(50vw - 37vw)
-      16px;
+      18px;
   }
 
   .deals-grid > * {
@@ -470,35 +470,28 @@
   }
 
   .deals-grid .product-card {
+    --deal-scale: 0.86;
+    --deal-opacity: 0.50;
+    --deal-saturate: 0.86;
+    --deal-lift: 0px;
+    --deal-z: 1;
+
     position: relative;
     border-radius: 20px;
-    opacity: 0.52;
-    transform: scale(0.86);
+    opacity: var(--deal-opacity);
+    transform: translateY(calc(var(--deal-lift) * -1)) scale(var(--deal-scale));
     transform-origin: center center;
-    transition:
-      transform 0.34s ease,
-      opacity 0.34s ease,
-      box-shadow 0.34s ease,
-      filter 0.34s ease;
-    filter: saturate(0.88);
+    filter: saturate(var(--deal-saturate));
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-    z-index: 1;
-  }
-
-  .deals-grid .product-card.is-prev,
-  .deals-grid .product-card.is-next {
-    opacity: 0.72;
-    transform: scale(0.9);
-    filter: saturate(0.94);
-    z-index: 2;
+    z-index: var(--deal-z);
+    will-change: transform, opacity, filter;
+    transition:
+      box-shadow 0.22s ease,
+      border-radius 0.22s ease;
   }
 
   .deals-grid .product-card.is-active {
-    opacity: 1;
-    transform: scale(1);
-    filter: saturate(1);
-    box-shadow: 0 20px 42px rgba(15, 23, 42, 0.14);
-    z-index: 5;
+    box-shadow: 0 22px 44px rgba(15, 23, 42, 0.16);
   }
 
   .deals-grid .product-card img,
