@@ -989,7 +989,8 @@
         dealsTrack.appendChild(card);
       });
 
-      initArrowSlider(dealsTrack);
+            initArrowSlider(dealsTrack);
+      initMobileFocusCarousel(dealsTrack);
     } catch (err) {
       console.error("❌ Deals error:", err);
       dealsTrack.classList.remove("loading");
