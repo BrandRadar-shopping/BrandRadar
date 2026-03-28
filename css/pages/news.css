@@ -1,6 +1,8 @@
 /* =========================================================
    BRANDRADAR – NEWS PAGE
    Editorial / Spotlight / Deals / Picks / Feed
+   Desktop + base styles
+   Mobil overrides flyttet til news-mobile.css
    ========================================================= */
 
 /* =========================================================
@@ -584,29 +586,6 @@
   pointer-events: none;
 }
 
-.slider-wrapper--deals .product-card .discount-badge,
-.deals-grid .product-card .discount-badge,
-.deals-grid .discount-badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 8;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 74px;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 18px 0 18px 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
-  pointer-events: none;
-}
-
 /* =========================================================
    PICKS
    ========================================================= */
@@ -757,134 +736,5 @@
 
   .news-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .section-heading,
-  .section-heading--split,
-  .section-heading--editorial {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 18px;
-  }
-
-  .news-intro {
-    padding: 28px 0 10px;
-  }
-
-  .news-intro h1 {
-    font-size: clamp(1.8rem, 7vw, 2.5rem);
-  }
-
-  .news-intro p {
-    font-size: 0.98rem;
-    line-height: 1.65;
-  }
-
-  .spotlight-feature {
-    padding: 16px;
-    border-radius: 22px;
-    gap: 18px;
-  }
-
-  .spotlight-feature::before {
-    inset: -12px;
-    border-radius: 28px;
-  }
-
-  .spotlight-media {
-    border-radius: 18px;
-  }
-
-  .spotlight-overlay-badge {
-    top: 12px;
-    left: 12px;
-    padding: 7px 11px;
-    font-size: 11px;
-  }
-
-  .spotlight-main-image-wrap {
-    height: 260px;
-  }
-
-  .spotlight-main-image {
-    height: 100%;
-  }
-
-  .spotlight-thumbs {
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .spotlight-content {
-    padding: 4px 2px 0;
-  }
-
-  .spotlight-content h3 {
-    font-size: 1.9rem;
-  }
-
-  .spotlight-content p {
-    font-size: 0.95rem;
-    line-height: 1.62;
-    margin-bottom: 16px;
-  }
-
-  .spotlight-actions {
-    margin-top: 12px;
-    padding-top: 0;
-  }
-
-  .deals-grid,
-  .picks-grid {
-    grid-auto-columns: minmax(78vw, 78vw);
-  }
-
-  .featured-wrapper {
-    grid-auto-columns: 100%;
-  }
-
-  .slider-btn {
-    display: none;
-  }
-
-  .news-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .news-grid .product-card:nth-child(1),
-  .news-grid .product-card:nth-child(5) {
-    grid-column: span 1;
-  }
-
-  .partner-banner {
-    border-radius: 22px;
-  }
-
-  .partner-banner-image,
-  .partner-banner-image img {
-    min-height: 200px;
-  }
-
-  .news-picks-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .news-picks-aside {
-    display: none;
-  }
-
-  .slider-wrapper--picks {
-    padding: 10px;
-    border-radius: 22px;
-  }
-
-  .slider-wrapper--deals .product-card .discount-badge,
-  .deals-grid .product-card .discount-badge,
-  .deals-grid .discount-badge {
-    min-width: 66px;
-    height: 30px;
-    font-size: 0.72rem;
   }
 }
