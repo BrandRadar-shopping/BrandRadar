@@ -704,7 +704,7 @@
     setTimeout(updateButtons, 350);
   }
 
-  function initMobileFocusCarousel(trackEl) {
+    function initMobileFocusCarousel(trackEl) {
     if (!trackEl) return;
     if (window.innerWidth > 768) return;
 
@@ -716,6 +716,12 @@
       );
     }
 
+    function clearStates(cards) {
+      cards.forEach((card) => {
+        card.classList.remove("is-active", "is-prev", "is-next");
+      });
+    }
+
     function updateActiveCard() {
       const cards = getCards();
       if (!cards.length) return;
@@ -723,23 +729,29 @@
       const trackRect = trackEl.getBoundingClientRect();
       const viewportCenter = trackRect.left + trackRect.width / 2;
 
-      let closestCard = null;
+      let closestIndex = 0;
       let closestDistance = Infinity;
 
-      cards.forEach((card) => {
+      cards.forEach((card, index) => {
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.left + rect.width / 2;
         const distance = Math.abs(cardCenter - viewportCenter);
 
         if (distance < closestDistance) {
           closestDistance = distance;
-          closestCard = card;
+          closestIndex = index;
         }
       });
 
-      cards.forEach((card) => {
-        card.classList.toggle("is-active", card === closestCard);
-      });
+      clearStates(cards);
+
+      const activeCard = cards[closestIndex];
+      const prevCard = cards[closestIndex - 1];
+      const nextCard = cards[closestIndex + 1];
+
+      if (activeCard) activeCard.classList.add("is-active");
+      if (prevCard) prevCard.classList.add("is-prev");
+      if (nextCard) nextCard.classList.add("is-next");
     }
 
     function requestUpdate() {
@@ -756,7 +768,8 @@
     window.addEventListener("resize", requestUpdate);
 
     setTimeout(updateActiveCard, 80);
-    setTimeout(updateActiveCard, 260);
+    setTimeout(updateActiveCard, 220);
+    setTimeout(updateActiveCard, 420);
   }
   
   // ======================================================
