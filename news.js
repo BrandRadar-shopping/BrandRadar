@@ -248,7 +248,7 @@
     return [...new Set(cleaned)].slice(0, 5);
   }
 
-        function ensureDealsRibbonStyles() {
+         function ensureDealsRibbonStyles() {
     if (document.getElementById("news-deals-ribbon-styles")) return;
 
     const style = document.createElement("style");
@@ -265,10 +265,10 @@
 
       .news-section--deals .deal-card .deals-corner-ribbon {
         position: absolute;
-        top: 16px;
-        left: -42px;
-        width: 132px;
-        height: 34px;
+        top: 14px;
+        left: -40px;
+        width: 126px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -278,9 +278,9 @@
         z-index: 9;
 
         color: #ffffff;
-        font-size: 0.7rem;
+        font-size: 0.64rem;
         font-weight: 900;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.15em;
         line-height: 1;
         text-align: center;
         text-transform: uppercase;
@@ -292,121 +292,133 @@
           linear-gradient(
             135deg,
             #0b1220 0%,
-            #172033 18%,
-            #2c374d 48%,
-            #182234 72%,
+            #1b2638 20%,
+            #334155 50%,
+            #1e293b 76%,
             #0b1220 100%
           );
 
-        border-top: 1px solid rgba(255,255,255,0.12);
-        border-bottom: 1px solid rgba(0,0,0,0.28);
-
+        border-radius: 0 8px 0 8px;
         box-shadow:
-          0 10px 18px rgba(0, 0, 0, 0.24),
+          0 10px 18px rgba(0, 0, 0, 0.22),
           0 2px 0 rgba(255,255,255,0.06) inset,
-          0 -2px 0 rgba(0,0,0,0.20) inset;
+          0 -2px 0 rgba(0,0,0,0.18) inset;
       }
 
-      /* Gloss / satin surface */
+      /* Gloss stripe on top face */
       .news-section--deals .deal-card .deals-corner-ribbon::before {
         content: "";
         position: absolute;
-        left: 4px;
-        right: 4px;
+        left: 8px;
+        right: 6px;
         top: 3px;
-        height: 10px;
+        height: 9px;
         border-radius: 999px;
         background:
           linear-gradient(
             to bottom,
-            rgba(255,255,255,0.28) 0%,
-            rgba(255,255,255,0.10) 45%,
+            rgba(255,255,255,0.30) 0%,
+            rgba(255,255,255,0.12) 42%,
             rgba(255,255,255,0.00) 100%
           );
-        opacity: 0.95;
+        opacity: 0.9;
         pointer-events: none;
       }
 
-      /* Fold / underside on outer end */
+      /* Curved top roll */
       .news-section--deals .deal-card .deals-corner-ribbon::after {
         content: "";
         position: absolute;
-        left: 2px;
-        bottom: -10px;
-        width: 18px;
-        height: 20px;
+        top: -4px;
+        right: 4px;
+        width: 28px;
+        height: 8px;
+        border-radius: 999px 999px 6px 6px;
         background:
-          linear-gradient(135deg, #08101c 0%, #1b2638 100%);
-        transform: skewY(-38deg);
-        transform-origin: top;
-        border-bottom-left-radius: 3px;
+          linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.16) 0%,
+            rgba(255,255,255,0.05) 45%,
+            rgba(0,0,0,0.10) 100%
+          );
         box-shadow:
-          2px 6px 10px rgba(0,0,0,0.24),
-          0 1px 0 rgba(255,255,255,0.05) inset;
-        opacity: 0.98;
+          0 1px 0 rgba(255,255,255,0.05) inset,
+          0 2px 4px rgba(0,0,0,0.10);
         pointer-events: none;
+        opacity: 0.95;
       }
 
-      /* Narrow moving light strip */
+      /* Moving satin light */
       .news-section--deals .deal-card .deals-corner-ribbon-gloss {
         position: absolute;
-        top: 16px;
-        left: -42px;
-        width: 132px;
-        height: 34px;
+        top: 14px;
+        left: -40px;
+        width: 126px;
+        height: 32px;
         transform: rotate(-45deg);
         transform-origin: center;
         pointer-events: none;
         z-index: 10;
-        opacity: 0.92;
+        opacity: 0.88;
 
         background:
           linear-gradient(
             90deg,
             rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.18) 18%,
-            rgba(255,255,255,0.04) 34%,
-            rgba(255,255,255,0) 46%,
+            rgba(255,255,255,0.18) 14%,
+            rgba(255,255,255,0.04) 26%,
+            rgba(255,255,255,0) 42%,
             rgba(0,0,0,0.08) 100%
           );
+        border-radius: 0 8px 0 8px;
       }
 
-      /* Shadow in the corner under the ribbon */
+      /* Rounded side flap / rolled side */
       .news-section--deals .deal-card.product-card::before {
         content: "";
         position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 64px;
-        height: 64px;
+        top: 33px;
+        left: 0px;
+        width: 16px;
+        height: 54px;
+        border-radius: 0 0 10px 0;
         background:
-          radial-gradient(
-            circle at top left,
-            rgba(0,0,0,0.26) 0%,
-            rgba(0,0,0,0.12) 42%,
-            rgba(0,0,0,0.00) 74%
+          linear-gradient(
+            180deg,
+            #0b1220 0%,
+            #1a2435 30%,
+            #273247 68%,
+            #101827 100%
           );
-        filter: blur(4px);
-        z-index: 5;
+        box-shadow:
+          2px 6px 10px rgba(0,0,0,0.22),
+          1px 0 0 rgba(255,255,255,0.04) inset;
+        clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%);
+        z-index: 8;
         pointer-events: none;
       }
 
-      /* Small metallic pin/highlight */
+      /* Small rounded lip at the very top end */
       .news-section--deals .deal-card.product-card::after {
         content: "";
         position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 8px;
-        height: 8px;
+        top: 13px;
+        left: 43px;
+        width: 26px;
+        height: 10px;
         border-radius: 999px;
         background:
-          radial-gradient(circle at 30% 30%, #f8fafc 0%, rgba(255,255,255,0.9) 35%, rgba(203,213,225,0.55) 70%, rgba(148,163,184,0.2) 100%);
-        box-shadow:
-          0 0 0 1px rgba(255,255,255,0.08),
-          0 2px 6px rgba(0,0,0,0.22);
+          linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.12) 0%,
+            rgba(255,255,255,0.03) 48%,
+            rgba(0,0,0,0.10) 100%
+          );
+        transform: rotate(-45deg);
+        transform-origin: center;
         z-index: 11;
         pointer-events: none;
+        opacity: 0.95;
       }
 
       .news-section--deals .deal-card.product-card .favorite-toggle {
@@ -437,48 +449,15 @@
         margin-left: 0;
         padding: 0.36rem 0.64rem;
         border-radius: 999px;
-
         font-size: 0.72rem;
         font-weight: 800;
         line-height: 1;
         color: #ffffff;
-
         background:
           linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
         box-shadow:
           0 6px 14px rgba(15, 23, 42, 0.16),
           0 1px 0 rgba(255,255,255,0.08) inset;
-      }
-
-      @media (max-width: 768px) {
-        .news-section--deals .deal-card .deals-corner-ribbon {
-          top: 14px;
-          left: -40px;
-          width: 124px;
-          height: 32px;
-          font-size: 0.64rem;
-          letter-spacing: 0.15em;
-        }
-
-        .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-          top: 14px;
-          left: -40px;
-          width: 124px;
-          height: 32px;
-        }
-
-        .news-section--deals .deal-card .deals-corner-ribbon::after {
-          width: 16px;
-          height: 18px;
-          bottom: -9px;
-        }
-
-        .news-section--deals .deal-card.product-card::after {
-          top: 18px;
-          left: 18px;
-          width: 7px;
-          height: 7px;
-        }
       }
     `;
 
