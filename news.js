@@ -790,61 +790,16 @@
     setTimeout(updateButtons, 350);
   }
 
-        function initMobileFocusCarousel(trackEl) {
+         function initMobileFocusCarousel(trackEl) {
     if (!trackEl) return;
     if (window.innerWidth > 768) return;
 
     let ticking = false;
-    let snapTimer = null;
-    let isSnapping = false;
 
     function getCards() {
       return Array.from(trackEl.children).filter((el) =>
         el.classList.contains("product-card")
       );
-    }
-
-    function getTrackCenter() {
-      const trackRect = trackEl.getBoundingClientRect();
-      return trackRect.left + trackRect.width / 2;
-    }
-
-    function getClosestCard(cards) {
-      const center = getTrackCenter();
-      let closestCard = null;
-      let closestDistance = Infinity;
-
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const distance = Math.abs(cardCenter - center);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestCard = card;
-        }
-      });
-
-      return closestCard;
-    }
-
-    function centerCard(card, behavior = "smooth") {
-      if (!card) return;
-
-      const cardLeft = card.offsetLeft;
-      const cardWidth = card.offsetWidth;
-      const targetScrollLeft =
-        cardLeft - (trackEl.clientWidth / 2) + (cardWidth / 2);
-
-      isSnapping = true;
-      trackEl.scrollTo({
-        left: targetScrollLeft,
-        behavior
-      });
-
-      window.setTimeout(() => {
-        isSnapping = false;
-      }, 260);
     }
 
     function updateCards() {
@@ -871,10 +826,10 @@
         const normalized = Math.min(distance / maxDistance, 1);
         const focus = 1 - normalized;
 
-        const scale = 0.9 + focus * 0.1;
-        const opacity = 0.62 + focus * 0.38;
-        const saturate = 0.9 + focus * 0.1;
-        const lift = focus * 8;
+        const scale = 0.94 + focus * 0.06;
+        const opacity = 0.72 + focus * 0.28;
+        const saturate = 0.94 + focus * 0.06;
+        const lift = focus * 4;
 
         card.style.setProperty("--deal-scale", scale.toFixed(3));
         card.style.setProperty("--deal-opacity", opacity.toFixed(3));
@@ -902,37 +857,12 @@
       });
     }
 
-    function scheduleSnap() {
-      if (snapTimer) {
-        clearTimeout(snapTimer);
-      }
+    trackEl.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
 
-      snapTimer = window.setTimeout(() => {
-        if (isSnapping) return;
-        const cards = getCards();
-        const closestCard = getClosestCard(cards);
-        centerCard(closestCard, "smooth");
-      }, 110);
-    }
-
-    trackEl.addEventListener("scroll", () => {
-      requestUpdate();
-      scheduleSnap();
-    }, { passive: true });
-
-    window.addEventListener("resize", () => {
-      requestUpdate();
-      const cards = getCards();
-      centerCard(getClosestCard(cards), "auto");
-    });
-
-    setTimeout(() => updateCards(), 60);
-    setTimeout(() => updateCards(), 180);
-    setTimeout(() => {
-      const cards = getCards();
-      centerCard(getClosestCard(cards), "auto");
-      updateCards();
-    }, 320);
+    setTimeout(updateCards, 60);
+    setTimeout(updateCards, 180);
+    setTimeout(updateCards, 320);
   }
   
   // ======================================================
