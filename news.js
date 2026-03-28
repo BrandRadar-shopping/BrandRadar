@@ -809,6 +809,81 @@
     setTimeout(updateButtons, 350);
   }
 
+  function initMobileFocusCarousel(trackEl) {
+    if (!trackEl) return;
+    if (window.innerWidth > 768) return;
+
+    let ticking = false;
+
+    function getCards() {
+      return Array.from(trackEl.children).filter((el) =>
+        el.classList.contains("product-card")
+      );
+    }
+
+    function updateCards() {
+      const cards = getCards();
+      if (!cards.length) return;
+
+      const trackRect = trackEl.getBoundingClientRect();
+      const viewportCenter = trackRect.left + trackRect.width / 2;
+
+      let closestCard = null;
+      let closestDistance = Infinity;
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestCard = card;
+        }
+
+        const maxDistance = Math.max(trackRect.width * 0.58, 1);
+        const normalized = Math.min(distance / maxDistance, 1);
+        const focus = 1 - normalized;
+
+        const scale = 0.94 + focus * 0.06;
+        const opacity = 0.72 + focus * 0.28;
+        const saturate = 0.94 + focus * 0.06;
+        const lift = focus * 4;
+
+        card.style.setProperty("--deal-scale", scale.toFixed(3));
+        card.style.setProperty("--deal-opacity", opacity.toFixed(3));
+        card.style.setProperty("--deal-saturate", saturate.toFixed(3));
+        card.style.setProperty("--deal-lift", `${lift.toFixed(2)}px`);
+        card.style.setProperty("--deal-z", String(10 + Math.round(focus * 10)));
+      });
+
+      cards.forEach((card) => {
+        card.classList.remove("is-active");
+      });
+
+      if (closestCard) {
+        closestCard.classList.add("is-active");
+      }
+    }
+
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        updateCards();
+        ticking = false;
+      });
+    }
+
+    trackEl.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    setTimeout(updateCards, 60);
+    setTimeout(updateCards, 180);
+    setTimeout(updateCards, 320);
+  }
+  
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
