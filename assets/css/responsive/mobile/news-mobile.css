@@ -447,7 +447,7 @@
   .deals-grid {
     display: flex;
     align-items: stretch;
-    gap: 4px;
+    gap: 0px;
     overflow-x: auto;
     overflow-y: visible;
     scroll-snap-type: none;
@@ -455,14 +455,14 @@
     -webkit-overflow-scrolling: touch;
     padding:
       8px
-      calc(50vw - 36vw)
+      calc(50vw - 36.5vw)
       18px;
   }
 
   .deals-grid > * {
-    flex: 0 0 72vw;
-    min-width: 72vw;
-    max-width: 72vw;
+    flex: 0 0 73vw;
+    min-width: 73vw;
+    max-width: 73vw;
     position: relative;
   }
 
