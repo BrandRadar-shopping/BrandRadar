@@ -257,105 +257,134 @@
   }
 
   // ---------- DEALS CORNER RIBBON (SVG) ----------
-    function buildDealsCornerRibbon(uid) {
-    const gradMain = `dealsRibbonGrad-${uid}`;
+  function buildDealsCornerRibbon(uid) {
+    const gradMain = `dealsRibbonMain-${uid}`;
     const gradGloss = `dealsRibbonGloss-${uid}`;
+    const gradCurl = `dealsRibbonCurl-${uid}`;
     const gradSide = `dealsRibbonSide-${uid}`;
-    const gradShadow = `dealsRibbonShadow-${uid}`;
+    const shadowBlur = `dealsRibbonShadowBlur-${uid}`;
 
     return `
-      <svg class="deals-corner-ribbon-svg__art" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+      <svg class="deals-corner-ribbon-svg__art" viewBox="0 0 132 132" aria-hidden="true" focusable="false">
         <defs>
-          <linearGradient id="${gradMain}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="${gradMain}" x1="8%" y1="8%" x2="92%" y2="92%">
             <stop offset="0%" stop-color="#0b1220"></stop>
-            <stop offset="20%" stop-color="#162133"></stop>
-            <stop offset="52%" stop-color="#334155"></stop>
-            <stop offset="80%" stop-color="#182335"></stop>
-            <stop offset="100%" stop-color="#0b1220"></stop>
+            <stop offset="24%" stop-color="#1b2538"></stop>
+            <stop offset="54%" stop-color="#3a475e"></stop>
+            <stop offset="76%" stop-color="#1d2940"></stop>
+            <stop offset="100%" stop-color="#0a111e"></stop>
           </linearGradient>
 
           <linearGradient id="${gradGloss}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"></stop>
-            <stop offset="42%" stop-color="#ffffff" stop-opacity="0.12"></stop>
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"></stop>
+            <stop offset="38%" stop-color="#ffffff" stop-opacity="0.18"></stop>
             <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
           </linearGradient>
 
-          <linearGradient id="${gradSide}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#09111d"></stop>
-            <stop offset="55%" stop-color="#223047"></stop>
-            <stop offset="100%" stop-color="#101827"></stop>
+          <linearGradient id="${gradCurl}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4a576e"></stop>
+            <stop offset="50%" stop-color="#1b2638"></stop>
+            <stop offset="100%" stop-color="#0a111d"></stop>
           </linearGradient>
 
-          <radialGradient id="${gradShadow}" cx="0%" cy="0%" r="100%">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0.22"></stop>
-            <stop offset="48%" stop-color="#000000" stop-opacity="0.10"></stop>
-            <stop offset="100%" stop-color="#000000" stop-opacity="0"></stop>
-          </radialGradient>
+          <linearGradient id="${gradSide}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0d1522"></stop>
+            <stop offset="58%" stop-color="#223149"></stop>
+            <stop offset="100%" stop-color="#0d1422"></stop>
+          </linearGradient>
+
+          <filter id="${shadowBlur}" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.20"></feDropShadow>
+          </filter>
         </defs>
 
-        <!-- corner shadow -->
-        <path d="M0 0 L56 0 L0 56 Z" fill="url(#${gradShadow})"></path>
-
-        <!-- side flap -->
+        <!-- Side flap -->
         <path
-          d="M8 32
-             C8 28, 11 24, 16 21
-             L24 29
-             L19 66
-             C11 63, 8 57, 8 50
+          d="M7 42
+             C7 35, 11 29, 17 24
+             L30 37
+             L23 88
+             C13 82, 7 73, 7 61
              Z"
-          fill="url(#${gradSide})">
+          fill="url(#${gradSide})"
+          filter="url(#${shadowBlur})">
         </path>
 
-        <!-- main ribbon -->
-        <g transform="rotate(-45 38 38)">
+        <!-- Main diagonal ribbon -->
+        <g transform="rotate(-45 56 39)" filter="url(#${shadowBlur})">
           <rect
-            x="4"
-            y="28"
-            rx="6"
-            ry="6"
-            width="86"
-            height="24"
-            fill="url(#${gradMain})">
+            x="12"
+            y="27"
+            rx="8"
+            ry="8"
+            width="96"
+            height="27"
+            fill="url(#${gradMain)">
           </rect>
 
+          <!-- Top satin highlight -->
           <rect
-            x="9"
-            y="31"
-            rx="6"
-            ry="6"
-            width="76"
-            height="7"
-            fill="url(#${gradGloss})"
-            opacity="0.96">
+            x="18"
+            y="30"
+            rx="7"
+            ry="7"
+            width="84"
+            height="8"
+            fill="url(#${gradGloss})">
           </rect>
 
+          <!-- Bottom inner shade -->
           <rect
-            x="4"
-            y="47"
-            width="86"
-            height="3"
+            x="12"
+            y="49"
+            width="96"
+            height="4"
             fill="#000000"
-            opacity="0.18">
+            opacity="0.16">
           </rect>
 
+          <!-- Text -->
           <text
-            x="47"
-            y="44"
+            x="60"
+            y="44.5"
             text-anchor="middle"
             fill="#ffffff"
-            font-size="10"
+            font-size="11"
             font-weight="900"
-            letter-spacing="2.1"
+            letter-spacing="2.3"
             font-family="Arial, Helvetica, sans-serif">
             DEALS
           </text>
         </g>
+
+        <!-- Rounded top curl -->
+        <path
+          d="M73 12
+             C81 10, 88 11, 95 16
+             L108 29
+             C101 27, 93 27, 86 29
+             C82 26, 77 21, 73 12
+             Z"
+          fill="url(#${gradCurl})"
+          opacity="0.98">
+        </path>
+
+        <!-- Curl highlight -->
+        <path
+          d="M76 14
+             C83 13, 89 14, 94 18
+             L101 25
+             C95 23, 89 23, 84 24
+             C81 22, 78 19, 76 14
+             Z"
+          fill="#ffffff"
+          opacity="0.16">
+        </path>
       </svg>
     `;
   }
 
-    function ensureDealsRibbonStyles() {
+  function ensureDealsRibbonStyles() {
     if (document.getElementById("news-deals-ribbon-styles")) return;
 
     const style = document.createElement("style");
@@ -374,8 +403,8 @@
         position: absolute;
         top: -2px;
         left: -2px;
-        width: 92px;
-        height: 92px;
+        width: 96px;
+        height: 96px;
         display: block;
         pointer-events: none;
         z-index: 8;
@@ -426,8 +455,8 @@
 
       @media (max-width: 768px) {
         .news-section--deals .deal-card .deals-corner-ribbon-svg {
-          width: 88px;
-          height: 88px;
+          width: 92px;
+          height: 92px;
         }
       }
     `;
@@ -475,7 +504,9 @@
         </div>
       `;
 
-    const ribbonUid = makeSafeId(pid || prod.title || Math.random().toString(36).slice(2, 10));
+    const ribbonUid = makeSafeId(
+      pid || prod.title || Math.random().toString(36).slice(2, 10)
+    );
 
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
@@ -869,7 +900,7 @@
     setTimeout(updateCards, 180);
     setTimeout(updateCards, 320);
   }
-  
+
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
@@ -975,7 +1006,7 @@
         dealsTrack.appendChild(card);
       });
 
-            initArrowSlider(dealsTrack);
+      initArrowSlider(dealsTrack);
       initMobileFocusCarousel(dealsTrack);
     } catch (err) {
       console.error("❌ Deals error:", err);
