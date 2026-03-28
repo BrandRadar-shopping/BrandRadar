@@ -1,0 +1,359 @@
+/* =====================================================
+   BrandRadar – News Mobile
+   Mobile-only overrides for news.html
+   Breakpoint: <= 768px
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  /* -------------------------------------------------
+     Page rhythm
+  ------------------------------------------------- */
+  .news-page {
+    background:
+      linear-gradient(180deg, #f8fbff 0%, #ffffff 22%, #f8fbff 100%);
+  }
+
+  .news-page .section-padding {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .news-section + .news-section {
+    margin-top: 0 !important;
+  }
+
+  .news-page .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* -------------------------------------------------
+     Intro
+  ------------------------------------------------- */
+  .news-intro {
+    padding: 22px 0 8px;
+  }
+
+  .news-intro__eyebrow {
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+  }
+
+  .news-intro h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2.1rem, 9vw, 2.8rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    max-width: 100%;
+  }
+
+  .news-intro p {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.62;
+    color: #55657f;
+  }
+
+  /* -------------------------------------------------
+     Headings / section intros
+  ------------------------------------------------- */
+  .section-heading,
+  .section-heading--split,
+  .section-heading--editorial {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .section-heading h2 {
+    margin: 4px 0 6px;
+    font-size: 1.9rem;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  .section-heading p {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.58;
+    color: #64748b;
+  }
+
+  .section-kicker {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    padding: 0;
+  }
+
+  .section-link {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 0.92rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  /* -------------------------------------------------
+     Spotlight
+  ------------------------------------------------- */
+  .news-section--spotlight {
+    padding-top: 2px !important;
+  }
+
+  .featured-wrapper {
+    grid-auto-columns: 100%;
+    gap: 14px;
+    padding: 2px 0 6px;
+  }
+
+  .spotlight-feature {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 22px;
+    box-shadow:
+      0 18px 40px rgba(15, 23, 42, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.52);
+  }
+
+  .spotlight-feature::before {
+    inset: -10px;
+    border-radius: 26px;
+  }
+
+  .spotlight-media {
+    border-radius: 18px;
+  }
+
+  .spotlight-overlay-badge {
+    top: 12px;
+    left: 12px;
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+
+  .spotlight-main-image-wrap {
+    height: 250px;
+  }
+
+  .spotlight-thumbs {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .spotlight-thumb {
+    border-radius: 10px;
+  }
+
+  .spotlight-content {
+    padding: 2px 2px 0;
+  }
+
+  .spotlight-meta {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .spotlight-chip {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .spotlight-content h3 {
+    font-size: clamp(2rem, 8vw, 2.45rem);
+    line-height: 0.98;
+    margin: 0 0 10px;
+  }
+
+  .spotlight-content p {
+    margin: 0 0 14px;
+    font-size: 0.98rem;
+    line-height: 1.58;
+    max-width: 100%;
+  }
+
+  .spotlight-rating {
+    margin-bottom: 12px;
+  }
+
+  .spotlight-price-row {
+    gap: 10px;
+    margin: 4px 0 14px;
+  }
+
+  .spotlight-price {
+    font-size: 1.22rem;
+  }
+
+  .spotlight-old-price {
+    font-size: 0.92rem;
+  }
+
+  .spotlight-discount {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+
+  .spotlight-actions {
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 0;
+  }
+
+  .spotlight-btn {
+    min-height: 42px;
+    padding: 0 15px;
+    font-size: 0.92rem;
+  }
+
+  .spotlight-brand {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 0.88rem;
+  }
+
+  /* -------------------------------------------------
+     Slider tracks
+  ------------------------------------------------- */
+  .deals-grid,
+  .picks-grid {
+    grid-auto-columns: minmax(82vw, 82vw);
+    gap: 14px;
+    padding: 2px 0 8px;
+  }
+
+  .slider-btn {
+    display: none !important;
+  }
+
+  /* -------------------------------------------------
+     Partner
+  ------------------------------------------------- */
+  .news-section--partner .section-heading {
+    margin-bottom: 12px;
+  }
+
+  .partner-banner {
+    border-radius: 22px;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+  }
+
+  .partner-banner.section-padding {
+    padding: 16px !important;
+  }
+
+  .partner-banner-inner {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .partner-tag {
+    margin: 0 0 10px;
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+
+  .partner-banner-text h2 {
+    margin: 0 0 10px;
+    font-size: 1.95rem;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  .partner-sub {
+    margin: 0 0 16px;
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.58;
+  }
+
+  .partner-cta {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 0.95rem;
+  }
+
+  .partner-banner-image {
+    min-height: 160px;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .partner-banner-image img {
+    min-height: 120px;
+    max-height: 150px;
+  }
+
+  /* -------------------------------------------------
+     Deals
+  ------------------------------------------------- */
+  .news-section--deals .section-heading {
+    margin-bottom: 12px;
+  }
+
+  .news-section--deals .section-link {
+    align-self: flex-start;
+  }
+
+  .slider-wrapper--deals .product-card .discount-badge,
+  .deals-grid .product-card .discount-badge,
+  .deals-grid .discount-badge {
+    min-width: 66px;
+    height: 30px;
+    font-size: 0.72rem;
+  }
+
+  /* -------------------------------------------------
+     Picks
+  ------------------------------------------------- */
+  .news-picks-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .news-picks-aside {
+    display: none;
+  }
+
+  .slider-wrapper--picks {
+    padding: 10px;
+    border-radius: 22px;
+  }
+
+  /* -------------------------------------------------
+     Feed
+  ------------------------------------------------- */
+  .news-section--feed .section-heading {
+    margin-bottom: 12px;
+  }
+
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .news-grid .product-card:nth-child(1),
+  .news-grid .product-card:nth-child(5) {
+    grid-column: span 1;
+  }
+
+  .news-grid .product-card img {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* -------------------------------------------------
+     Loading / empty
+  ------------------------------------------------- */
+  .partner-banner.loading,
+  .deals-grid.loading,
+  .picks-grid.loading,
+  .featured-wrapper.loading,
+  .news-grid.loading {
+    min-height: 150px;
+    border-radius: 18px;
+  }
+}
