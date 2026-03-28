@@ -414,8 +414,8 @@
   }
 
 
-        /* -------------------------------------------------
-     Deals – centered peek carousel
+         /* -------------------------------------------------
+     Deals – smooth native snap carousel
   ------------------------------------------------- */
   .news-section--deals .section-heading {
     margin-bottom: 10px;
@@ -447,29 +447,32 @@
   .deals-grid {
     display: flex;
     align-items: stretch;
-    gap: 0px;
+    gap: 4px;
     overflow-x: auto;
     overflow-y: visible;
-    scroll-snap-type: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: calc(50% - 36vw);
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
     padding:
       8px
-      calc(50vw - 36.5vw)
+      calc(50vw - 36vw)
       18px;
   }
 
   .deals-grid > * {
-    flex: 0 0 73vw;
-    min-width: 73vw;
-    max-width: 73vw;
+    flex: 0 0 72vw;
+    min-width: 72vw;
+    max-width: 72vw;
     position: relative;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
 
   .deals-grid .product-card {
-    --deal-scale: 0.9;
-    --deal-opacity: 0.62;
-    --deal-saturate: 0.9;
+    --deal-scale: 0.94;
+    --deal-opacity: 0.72;
+    --deal-saturate: 0.94;
     --deal-lift: 0px;
     --deal-z: 1;
 
@@ -484,10 +487,10 @@
     z-index: var(--deal-z);
     will-change: transform, opacity, filter;
     transition:
-      box-shadow 0.22s ease,
-      transform 0.12s linear,
-      opacity 0.12s linear,
-      filter 0.12s linear;
+      transform 0.18s linear,
+      opacity 0.18s linear,
+      filter 0.18s linear,
+      box-shadow 0.22s ease;
   }
 
   .deals-grid .product-card.is-active {
