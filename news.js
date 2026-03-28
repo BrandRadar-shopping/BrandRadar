@@ -773,7 +773,7 @@
     setTimeout(updateButtons, 350);
   }
 
-    function initMobileFocusCarousel(trackEl) {
+      function initMobileFocusCarousel(trackEl) {
     if (!trackEl) return;
     if (window.innerWidth > 768) return;
 
@@ -785,42 +785,49 @@
       );
     }
 
-    function clearStates(cards) {
-      cards.forEach((card) => {
-        card.classList.remove("is-active", "is-prev", "is-next");
-      });
-    }
-
-    function updateActiveCard() {
+    function updateCards() {
       const cards = getCards();
       if (!cards.length) return;
 
       const trackRect = trackEl.getBoundingClientRect();
       const viewportCenter = trackRect.left + trackRect.width / 2;
 
-      let closestIndex = 0;
+      let closestCard = null;
       let closestDistance = Infinity;
 
-      cards.forEach((card, index) => {
+      cards.forEach((card) => {
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.left + rect.width / 2;
         const distance = Math.abs(cardCenter - viewportCenter);
 
         if (distance < closestDistance) {
           closestDistance = distance;
-          closestIndex = index;
+          closestCard = card;
         }
+
+        const maxDistance = Math.max(trackRect.width * 0.58, 1);
+        const normalized = Math.min(distance / maxDistance, 1);
+        const focus = 1 - normalized;
+
+        const scale = 0.86 + focus * 0.14;
+        const opacity = 0.50 + focus * 0.50;
+        const saturate = 0.86 + focus * 0.14;
+        const lift = focus * 10;
+
+        card.style.setProperty("--deal-scale", scale.toFixed(3));
+        card.style.setProperty("--deal-opacity", opacity.toFixed(3));
+        card.style.setProperty("--deal-saturate", saturate.toFixed(3));
+        card.style.setProperty("--deal-lift", `${lift.toFixed(2)}px`);
+        card.style.setProperty("--deal-z", String(10 + Math.round(focus * 20)));
       });
 
-      clearStates(cards);
+      cards.forEach((card) => {
+        card.classList.remove("is-active");
+      });
 
-      const activeCard = cards[closestIndex];
-      const prevCard = cards[closestIndex - 1];
-      const nextCard = cards[closestIndex + 1];
-
-      if (activeCard) activeCard.classList.add("is-active");
-      if (prevCard) prevCard.classList.add("is-prev");
-      if (nextCard) nextCard.classList.add("is-next");
+      if (closestCard) {
+        closestCard.classList.add("is-active");
+      }
     }
 
     function requestUpdate() {
@@ -828,7 +835,7 @@
       ticking = true;
 
       requestAnimationFrame(() => {
-        updateActiveCard();
+        updateCards();
         ticking = false;
       });
     }
@@ -836,9 +843,9 @@
     trackEl.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
 
-    setTimeout(updateActiveCard, 80);
-    setTimeout(updateActiveCard, 220);
-    setTimeout(updateActiveCard, 420);
+    setTimeout(updateCards, 60);
+    setTimeout(updateCards, 180);
+    setTimeout(updateCards, 360);
   }
   
   // ======================================================
