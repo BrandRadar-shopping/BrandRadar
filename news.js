@@ -704,6 +704,61 @@
     setTimeout(updateButtons, 350);
   }
 
+  function initMobileFocusCarousel(trackEl) {
+    if (!trackEl) return;
+    if (window.innerWidth > 768) return;
+
+    let ticking = false;
+
+    function getCards() {
+      return Array.from(trackEl.children).filter((el) =>
+        el.classList.contains("product-card")
+      );
+    }
+
+    function updateActiveCard() {
+      const cards = getCards();
+      if (!cards.length) return;
+
+      const trackRect = trackEl.getBoundingClientRect();
+      const viewportCenter = trackRect.left + trackRect.width / 2;
+
+      let closestCard = null;
+      let closestDistance = Infinity;
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestCard = card;
+        }
+      });
+
+      cards.forEach((card) => {
+        card.classList.toggle("is-active", card === closestCard);
+      });
+    }
+
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        updateActiveCard();
+        ticking = false;
+      });
+    }
+
+    trackEl.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    setTimeout(updateActiveCard, 80);
+    setTimeout(updateActiveCard, 260);
+  }
+  
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
