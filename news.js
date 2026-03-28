@@ -319,7 +319,7 @@
             ry="8"
             width="96"
             height="27"
-            fill="url(#${gradMain)">
+            fill="url(#${gradMain})"
           </rect>
 
           <!-- Top satin highlight -->
