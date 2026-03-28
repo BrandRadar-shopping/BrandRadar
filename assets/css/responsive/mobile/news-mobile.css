@@ -413,15 +413,23 @@
     padding: 14px;
   }
 
-  /* -------------------------------------------------
-     Deals – more energetic / app-like focus rail
+
+    /* -------------------------------------------------
+     Deals – focused mobile carousel
   ------------------------------------------------- */
   .news-section--deals .section-heading {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .news-section--deals .section-heading h2 {
-    font-size: 1.62rem;
+    font-size: 1.58rem;
+    line-height: 1.03;
+  }
+
+  .news-section--deals .section-heading p {
+    font-size: 0.92rem;
+    line-height: 1.48;
+    max-width: 34ch;
   }
 
   .news-section--deals .section-link {
@@ -432,63 +440,126 @@
     position: relative;
     margin-left: -14px;
     margin-right: -14px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: visible;
   }
 
   .deals-grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 84vw;
+    display: flex;
     gap: 12px;
     overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: calc(50vw - 38vw);
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
     padding:
-      4px
-      calc((100vw - 84vw) / 2 - 14px)
-      10px;
+      6px
+      calc(50vw - 38vw)
+      14px;
+  }
+
+  .deals-grid > * {
+    scroll-snap-align: center;
+    flex: 0 0 76vw;
+    min-width: 76vw;
+    max-width: 76vw;
   }
 
   .deals-grid .product-card {
-    transform: scale(0.97);
-    transform-origin: center;
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    position: relative;
+    border-radius: 20px;
+    opacity: 0.64;
+    transform: scale(0.9);
+    transform-origin: center center;
+    transition:
+      transform 0.28s ease,
+      opacity 0.28s ease,
+      box-shadow 0.28s ease,
+      filter 0.28s ease;
+    filter: saturate(0.92);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   }
 
-  .deals-grid .product-card:active {
-    transform: scale(0.985);
+  .deals-grid .product-card.is-active {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.14);
   }
 
-  .slider-wrapper--deals .product-card .discount-badge,
-  .deals-grid .product-card .discount-badge,
-  .deals-grid .discount-badge {
-    min-width: 66px;
-    height: 30px;
-    font-size: 0.72rem;
+  .deals-grid .product-card img,
+  .deals-grid .product-card .product-image,
+  .deals-grid .product-card .product-media {
+    aspect-ratio: 4 / 4.7;
+  }
+
+  .deals-grid .product-card .product-info {
+    padding: 0.82rem 0.92rem 0.95rem;
+  }
+
+  .deals-grid .product-card .brand {
+    font-size: 0.7rem;
+    margin-bottom: 0.08rem;
+  }
+
+  .deals-grid .product-card .product-name,
+  .deals-grid .product-card .product-title,
+  .deals-grid .product-card h3 {
+    font-size: 0.92rem;
+    line-height: 1.28;
+    margin: 0 0 0.12rem;
+  }
+
+  .deals-grid .product-card .rating-stars {
+    margin: 0.22rem 0 0.15rem;
+  }
+
+  .deals-grid .product-card .price-wrapper {
+    margin-top: 0.16rem;
+    gap: 8px;
+  }
+
+  .deals-grid .product-card .new-price,
+  .deals-grid .product-card .price-main,
+  .deals-grid .product-card .price {
+    font-size: 0.95rem;
+  }
+
+  .deals-grid .product-card .old-price {
+    font-size: 0.79rem;
   }
 
   .news-section--deals .deal-card .deals-corner-ribbon {
-    top: 16px;
-    left: -42px;
-    width: 124px;
-    height: 30px;
-    font-size: 0.64rem;
+    top: 15px;
+    left: -41px;
+    width: 120px;
+    height: 29px;
+    font-size: 0.62rem;
     letter-spacing: 0.16em;
   }
 
   .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-    top: 16px;
-    left: -42px;
-    width: 124px;
-    height: 30px;
-  }
-
-  .news-section--deals .deal-card.product-card .price-wrapper {
-    gap: 10px;
+    top: 15px;
+    left: -41px;
+    width: 120px;
+    height: 29px;
   }
 
   .news-section--deals .deal-card.product-card .discount-pill {
-    font-size: 0.7rem;
-    padding: 0.32rem 0.58rem;
+    font-size: 0.68rem;
+    padding: 0.32rem 0.56rem;
+  }
+
+  .deals-grid .product-card .favorite-toggle {
+    width: 31px;
+    height: 31px;
+  }
+
+  .deals-grid .product-card .favorite-toggle .heart-icon {
+    width: 16px;
+    height: 16px;
   }
 
   /* -------------------------------------------------
