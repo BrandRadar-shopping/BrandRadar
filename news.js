@@ -257,27 +257,27 @@
   }
 
   // ---------- DEALS CORNER RIBBON (SVG) ----------
-  function buildDealsCornerRibbon(uid) {
+    function buildDealsCornerRibbon(uid) {
     const gradMain = `dealsRibbonGrad-${uid}`;
     const gradGloss = `dealsRibbonGloss-${uid}`;
     const gradSide = `dealsRibbonSide-${uid}`;
     const gradShadow = `dealsRibbonShadow-${uid}`;
 
     return `
-      <svg class="deals-corner-ribbon-svg__art" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+      <svg class="deals-corner-ribbon-svg__art" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id="${gradMain}" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#0b1220"></stop>
-            <stop offset="18%" stop-color="#162133"></stop>
-            <stop offset="50%" stop-color="#334155"></stop>
-            <stop offset="78%" stop-color="#182335"></stop>
+            <stop offset="20%" stop-color="#162133"></stop>
+            <stop offset="52%" stop-color="#334155"></stop>
+            <stop offset="80%" stop-color="#182335"></stop>
             <stop offset="100%" stop-color="#0b1220"></stop>
           </linearGradient>
 
           <linearGradient id="${gradGloss}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.28)"></stop>
-            <stop offset="40%" stop-color="rgba(255,255,255,0.12)"></stop>
-            <stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"></stop>
+            <stop offset="42%" stop-color="#ffffff" stop-opacity="0.12"></stop>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
           </linearGradient>
 
           <linearGradient id="${gradSide}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -287,80 +287,66 @@
           </linearGradient>
 
           <radialGradient id="${gradShadow}" cx="0%" cy="0%" r="100%">
-            <stop offset="0%" stop-color="rgba(0,0,0,0.28)"></stop>
-            <stop offset="45%" stop-color="rgba(0,0,0,0.14)"></stop>
-            <stop offset="100%" stop-color="rgba(0,0,0,0)"></stop>
+            <stop offset="0%" stop-color="#000000" stop-opacity="0.22"></stop>
+            <stop offset="48%" stop-color="#000000" stop-opacity="0.10"></stop>
+            <stop offset="100%" stop-color="#000000" stop-opacity="0"></stop>
           </radialGradient>
         </defs>
 
-        <!-- soft corner shadow -->
-        <path d="M0 0 L74 0 L0 74 Z" fill="url(#${gradShadow})"></path>
+        <!-- corner shadow -->
+        <path d="M0 0 L56 0 L0 56 Z" fill="url(#${gradShadow})"></path>
 
         <!-- side flap -->
         <path
-          d="M14 58
-             C14 51, 18 46, 24 42
-             L33 51
-             L26 105
-             C17 101, 14 94, 14 86
+          d="M8 32
+             C8 28, 11 24, 16 21
+             L24 29
+             L19 66
+             C11 63, 8 57, 8 50
              Z"
           fill="url(#${gradSide})">
         </path>
 
-        <!-- top rounded lip -->
-        <path
-          d="M68 14
-             C74 12, 82 13, 88 17
-             L104 33
-             C97 31, 89 31, 83 33
-             Z"
-          fill="rgba(255,255,255,0.14)">
-        </path>
-
         <!-- main ribbon -->
-        <g transform="rotate(-45 64 64)">
+        <g transform="rotate(-45 38 38)">
           <rect
-            x="8"
-            y="48"
-            rx="8"
-            ry="8"
-            width="118"
-            height="30"
+            x="4"
+            y="28"
+            rx="6"
+            ry="6"
+            width="86"
+            height="24"
             fill="url(#${gradMain})">
           </rect>
 
-          <!-- satin gloss -->
           <rect
-            x="14"
-            y="51"
-            rx="8"
-            ry="8"
-            width="106"
-            height="9"
+            x="9"
+            y="31"
+            rx="6"
+            ry="6"
+            width="76"
+            height="7"
             fill="url(#${gradGloss})"
-            opacity="0.95">
+            opacity="0.96">
           </rect>
 
-          <!-- bottom inner shade -->
           <rect
-            x="8"
-            y="72"
-            rx="0"
-            ry="0"
-            width="118"
-            height="4"
-            fill="rgba(0,0,0,0.22)">
+            x="4"
+            y="47"
+            width="86"
+            height="3"
+            fill="#000000"
+            opacity="0.18">
           </rect>
 
-          <!-- text -->
           <text
-            x="65"
-            y="68"
+            x="47"
+            y="44"
             text-anchor="middle"
             fill="#ffffff"
-            font-size="12"
+            font-size="10"
             font-weight="900"
-            letter-spacing="3"
+            letter-spacing="2.1"
             font-family="Arial, Helvetica, sans-serif">
             DEALS
           </text>
@@ -369,7 +355,7 @@
     `;
   }
 
-  function ensureDealsRibbonStyles() {
+    function ensureDealsRibbonStyles() {
     if (document.getElementById("news-deals-ribbon-styles")) return;
 
     const style = document.createElement("style");
@@ -386,10 +372,10 @@
 
       .news-section--deals .deal-card .deals-corner-ribbon-svg {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 86px;
-        height: 86px;
+        top: -2px;
+        left: -2px;
+        width: 92px;
+        height: 92px;
         display: block;
         pointer-events: none;
         z-index: 8;
@@ -440,8 +426,8 @@
 
       @media (max-width: 768px) {
         .news-section--deals .deal-card .deals-corner-ribbon-svg {
-          width: 80px;
-          height: 80px;
+          width: 88px;
+          height: 88px;
         }
       }
     `;
