@@ -359,8 +359,8 @@
     scroll-snap-align: center;
   }
 
-    /* -------------------------------------------------
-     Partner section – full-width premium campaign
+      /* -------------------------------------------------
+     Partner section – slim mobile campaign strip
   ------------------------------------------------- */
   .news-section--partner {
     padding-left: 0 !important;
@@ -375,19 +375,13 @@
   }
 
   .news-section--partner .section-heading {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .news-section--partner .section-heading h2 {
-    font-size: 1.22rem;
-    line-height: 1.05;
+    font-size: 1.16rem;
+    line-height: 1.04;
     letter-spacing: -0.02em;
-  }
-
-  .news-section--partner .section-heading p {
-    font-size: 0.9rem;
-    line-height: 1.45;
-    max-width: 34ch;
   }
 
   .partner-banner {
@@ -396,22 +390,22 @@
     border-radius: 18px;
     background:
       linear-gradient(135deg, #f3f7ff 0%, #eef4ff 58%, #f8fbff 100%);
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
     overflow: hidden;
   }
 
   .partner-banner.section-padding {
-    padding: 16px !important;
+    padding: 14px !important;
   }
 
   .partner-banner::after {
     content: "";
     position: absolute;
-    inset: auto -42px -62px auto;
-    width: 118px;
-    height: 118px;
+    inset: auto -36px -58px auto;
+    width: 108px;
+    height: 108px;
     border-radius: 999px;
-    background: rgba(0, 112, 243, 0.05);
+    background: rgba(0, 112, 243, 0.045);
     filter: blur(12px);
     pointer-events: none;
   }
@@ -419,14 +413,14 @@
   .partner-banner-inner {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
     align-items: start;
   }
 
   .partner-banner-text {
     display: flex;
     flex-direction: column;
-    gap: 0.48rem;
+    gap: 0.42rem;
   }
 
   .partner-tag {
@@ -446,9 +440,9 @@
 
   .partner-banner-text h2 {
     margin: 0;
-    max-width: 24ch;
-    font-size: 1.08rem;
-    line-height: 1.16;
+    max-width: 25ch;
+    font-size: 1rem;
+    line-height: 1.14;
     letter-spacing: -0.02em;
     color: #0f172a;
   }
@@ -456,34 +450,34 @@
   .partner-sub {
     margin: 0;
     max-width: 100%;
-    font-size: 0.9rem;
-    line-height: 1.42;
+    font-size: 0.88rem;
+    line-height: 1.38;
     color: #5c708d;
   }
 
   .partner-cta {
     align-self: flex-start;
-    min-height: 38px;
+    min-height: 36px;
     margin-top: 4px;
-    padding: 0 14px;
-    border-radius: 13px;
-    font-size: 0.88rem;
+    padding: 0 13px;
+    border-radius: 12px;
+    font-size: 0.86rem;
     font-weight: 700;
     box-shadow: 0 6px 14px rgba(15, 23, 42, 0.10);
   }
 
   .partner-banner-image {
-    margin-top: 2px;
+    margin-top: 0;
     border-radius: 14px;
     overflow: hidden;
   }
 
   .partner-banner-image img {
     width: 100%;
-    height: 74px;
+    height: 56px;
     object-fit: contain;
     background: transparent;
-    padding: 8px 0;
+    padding: 4px 0 0;
     border-radius: 0;
     box-shadow: none;
   }
