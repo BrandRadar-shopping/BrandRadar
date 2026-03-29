@@ -359,135 +359,134 @@
     scroll-snap-align: center;
   }
 
-   /* -------------------------------------------------
-   Partner section – full-width campaign feel
-------------------------------------------------- */
+    /* -------------------------------------------------
+     Partner section – full-width premium campaign
+  ------------------------------------------------- */
+  .news-section--partner {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
-.news-section--partner {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
+  .news-section--partner .container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
 
-.news-section--partner .container {
-  padding-left: 14px;
-  padding-right: 14px;
-}
+  .news-section--partner .section-heading {
+    margin-bottom: 10px;
+  }
 
-/* heading litt roligere */
-.news-section--partner .section-heading {
-  margin-bottom: 10px;
-}
+  .news-section--partner .section-heading h2 {
+    font-size: 1.22rem;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
 
-.news-section--partner .section-heading h2 {
-  font-size: 1.24rem;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
+  .news-section--partner .section-heading p {
+    font-size: 0.9rem;
+    line-height: 1.45;
+    max-width: 34ch;
+  }
 
-/* selve campaign-flaten */
-.partner-banner {
-  position: relative;
-  border-radius: 18px;
-  margin: 0;
-  background:
-    linear-gradient(135deg, #f3f7ff 0%, #edf3ff 60%, #f8fbff 100%);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
-  overflow: hidden;
-}
+  .partner-banner {
+    position: relative;
+    margin: 0;
+    border-radius: 18px;
+    background:
+      linear-gradient(135deg, #f3f7ff 0%, #eef4ff 58%, #f8fbff 100%);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+  }
 
-.partner-banner.section-padding {
-  padding: 16px !important;
-}
+  .partner-banner.section-padding {
+    padding: 16px !important;
+  }
 
-/* subtil glow */
-.partner-banner::after {
-  content: "";
-  position: absolute;
-  inset: auto -40px -60px auto;
-  width: 120px;
-  height: 120px;
-  border-radius: 999px;
-  background: rgba(0, 112, 243, 0.05);
-  filter: blur(12px);
-  pointer-events: none;
-}
+  .partner-banner::after {
+    content: "";
+    position: absolute;
+    inset: auto -42px -62px auto;
+    width: 118px;
+    height: 118px;
+    border-radius: 999px;
+    background: rgba(0, 112, 243, 0.05);
+    filter: blur(12px);
+    pointer-events: none;
+  }
 
-/* layout */
-.partner-banner-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+  .partner-banner-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: start;
+  }
 
-/* tekstblokk */
-.partner-banner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
+  .partner-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.48rem;
+  }
 
-/* tag */
-.partner-tag {
-  width: fit-content;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #0f6fe8;
-  background: rgba(0, 112, 243, 0.08);
-}
+  .partner-tag {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 2px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0f6fe8;
+    background: rgba(0, 112, 243, 0.08);
+  }
 
-/* 🔥 viktig: headline mer kontrollert */
-.partner-banner-text h2 {
-  margin: 0;
-  font-size: 1.12rem;
-  line-height: 1.18;
-  letter-spacing: -0.02em;
-  color: #0f172a;
+  .partner-banner-text h2 {
+    margin: 0;
+    max-width: 24ch;
+    font-size: 1.08rem;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+  }
 
-  max-width: 22ch;   /* 👈 dette er nøkkelen */
-}
+  .partner-sub {
+    margin: 0;
+    max-width: 100%;
+    font-size: 0.9rem;
+    line-height: 1.42;
+    color: #5c708d;
+  }
 
-/* subtekst */
-.partner-sub {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: #5f718a;
-}
+  .partner-cta {
+    align-self: flex-start;
+    min-height: 38px;
+    margin-top: 4px;
+    padding: 0 14px;
+    border-radius: 13px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.10);
+  }
 
-/* CTA */
-.partner-cta {
-  align-self: flex-start;
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
-}
+  .partner-banner-image {
+    margin-top: 2px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
 
-/* 🔥 logo som en clean "rail" */
-.partner-banner-image {
-  margin-top: 6px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.partner-banner-image img {
-  width: 100%;
-  height: 84px;                 /* 👈 lavere = mer moderne */
-  object-fit: contain;
-  background: rgba(255,255,255,0.85);
-  padding: 10px 12px;
-  border-radius: 14px;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    0 6px 14px rgba(15, 23, 42, 0.05);
-}
+  .partner-banner-image img {
+    width: 100%;
+    height: 74px;
+    object-fit: contain;
+    background: transparent;
+    padding: 8px 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 
          /* -------------------------------------------------
      Deals – smooth native snap carousel
