@@ -519,19 +519,19 @@
     overflow-x: auto;
     overflow-y: visible;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: calc(50% - 36vw);
+    scroll-padding-inline: calc(50% - 32vw);
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
     padding:
       8px
-      calc(50vw - 36vw)
+      calc(50vw - 32vw)
       18px;
   }
 
-  .deals-grid > * {
-    flex: 0 0 72vw;
-    min-width: 72vw;
-    max-width: 72vw;
+    .deals-grid > * {
+    flex: 0 0 64vw;
+    min-width: 64vw;
+    max-width: 64vw;
     position: relative;
     scroll-snap-align: center;
     scroll-snap-stop: always;
@@ -565,10 +565,10 @@
     box-shadow: 0 22px 44px rgba(15, 23, 42, 0.16);
   }
 
-  .deals-grid .product-card img,
+    .deals-grid .product-card img,
   .deals-grid .product-card .product-image,
   .deals-grid .product-card .product-media {
-    aspect-ratio: 4 / 4.75;
+    aspect-ratio: 4 / 4.35;
   }
 
   .deals-grid .product-card .product-info {
