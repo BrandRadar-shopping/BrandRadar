@@ -635,11 +635,11 @@
     padding: 0 14px;
   }
 
-  .picks-grid {
+    .picks-grid {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 76vw;
-    gap: 12px;
+    grid-auto-columns: 64vw;
+    gap: 10px;
     overflow-x: auto;
     padding: 4px 0 10px 0;
   }
@@ -670,12 +670,12 @@
     border-radius: 18px;
   }
 
-  .news-grid .product-card img {
-    aspect-ratio: 4 / 3;
+    .news-grid .product-card img {
+    aspect-ratio: 4 / 2.9;
   }
 
   .news-grid .product-card .product-info {
-    padding: 0.85rem 0.95rem 1rem;
+    padding: 0.74rem 0.82rem 0.88rem;
   }
 
   .news-grid .product-card .tagline {
