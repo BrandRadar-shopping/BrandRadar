@@ -660,8 +660,8 @@
     width: 120px !important;
     height: 28px !important;
   }
-  /* -------------------------------------------------
-     Picks – cleaner curated rail
+    /* -------------------------------------------------
+     Picks – same rail, hard downscale only
   ------------------------------------------------- */
   .news-picks-layout {
     display: grid;
@@ -676,22 +676,112 @@
   .slider-wrapper--picks {
     margin-left: -14px;
     margin-right: -14px;
-    padding: 0 14px;
+    padding: 0;
+    overflow: visible;
   }
 
-      .picks-grid {
+  .picks-grid {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 54vw;
+    grid-auto-columns: 48vw;
     gap: 8px;
     overflow-x: auto;
-    padding: 4px 0 10px 0;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: calc(50% - 24vw);
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding:
+      6px
+      calc(50vw - 24vw)
+      14px;
   }
 
-  .slider-wrapper--picks .product-card {
-    border-radius: 18px;
+  .picks-grid > .product-card {
+    flex: 0 0 48vw !important;
+    width: 48vw !important;
+    min-width: 48vw !important;
+    max-width: 48vw !important;
+    scroll-snap-align: center;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07) !important;
   }
 
+  .picks-grid > .product-card img,
+  .picks-grid > .product-card .product-image,
+  .picks-grid > .product-card .product-media {
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  .picks-grid > .product-card .product-info {
+    padding: 10px 10px 11px !important;
+    gap: 2px !important;
+  }
+
+  .picks-grid > .product-card .brand {
+    font-size: 11px !important;
+    letter-spacing: 0.08em !important;
+    margin-bottom: 1px !important;
+  }
+
+  .picks-grid > .product-card .product-name,
+  .picks-grid > .product-card .product-title,
+  .picks-grid > .product-card h3 {
+    font-size: 13px !important;
+    line-height: 1.18 !important;
+    margin: 0 0 2px !important;
+  }
+
+  .picks-grid > .product-card .product-tag {
+    font-size: 10px !important;
+    padding: 3px 7px !important;
+    margin: 3px 0 4px !important;
+  }
+
+  .picks-grid > .product-card .rating-stars {
+    margin: 2px 0 2px !important;
+    gap: 5px !important;
+    min-height: 14px !important;
+  }
+
+  .picks-grid > .product-card .rating-star,
+  .picks-grid > .product-card .rating-star-svg {
+    width: 11px !important;
+    height: 11px !important;
+    flex: 0 0 11px !important;
+  }
+
+  .picks-grid > .product-card .rating-value {
+    font-size: 11px !important;
+  }
+
+  .picks-grid > .product-card .price-line {
+    gap: 5px !important;
+    margin-top: 4px !important;
+  }
+
+  .picks-grid > .product-card .new-price,
+  .picks-grid > .product-card .price-main,
+  .picks-grid > .product-card .price {
+    font-size: 14px !important;
+    line-height: 1.08 !important;
+  }
+
+  .picks-grid > .product-card .old-price {
+    font-size: 12px !important;
+  }
+
+  .picks-grid > .product-card .favorite-toggle {
+    top: 8px !important;
+    right: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .picks-grid > .product-card .favorite-toggle .heart-icon {
+    width: 14px !important;
+    height: 14px !important;
+  }
   /* -------------------------------------------------
      Feed – simplest / easiest to scan
   ------------------------------------------------- */
