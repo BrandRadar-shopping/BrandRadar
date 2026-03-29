@@ -359,19 +359,12 @@
     scroll-snap-align: center;
   }
 
-      /* -------------------------------------------------
-     Partner section – slim mobile campaign strip
+        /* -------------------------------------------------
+     Partner section – compact sponsored campaign card
   ------------------------------------------------- */
   .news-section--partner {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .news-section--partner .container {
-    width: 100%;
-    max-width: 100%;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-top: 10px !important;
+    padding-bottom: 14px !important;
   }
 
   .news-section--partner .section-heading {
@@ -379,40 +372,47 @@
   }
 
   .news-section--partner .section-heading h2 {
-    font-size: 1.16rem;
+    font-size: 1.08rem;
     line-height: 1.04;
     letter-spacing: -0.02em;
+  }
+
+  .news-section--partner .section-heading p {
+    font-size: 0.84rem;
+    line-height: 1.38;
+    max-width: 30ch;
   }
 
   .partner-banner {
     position: relative;
     margin: 0;
-    border-radius: 18px;
+    border-radius: 16px;
     background:
-      linear-gradient(135deg, #f3f7ff 0%, #eef4ff 58%, #f8fbff 100%);
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+      linear-gradient(135deg, #f5f8ff 0%, #eef4ff 58%, #f8fbff 100%);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
     overflow: hidden;
   }
 
   .partner-banner.section-padding {
-    padding: 14px !important;
+    padding: 12px !important;
   }
 
   .partner-banner::after {
     content: "";
     position: absolute;
-    inset: auto -36px -58px auto;
-    width: 108px;
-    height: 108px;
+    right: -28px;
+    bottom: -44px;
+    width: 88px;
+    height: 88px;
     border-radius: 999px;
     background: rgba(0, 112, 243, 0.045);
-    filter: blur(12px);
+    filter: blur(10px);
     pointer-events: none;
   }
 
   .partner-banner-inner {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
     align-items: start;
   }
@@ -420,7 +420,7 @@
   .partner-banner-text {
     display: flex;
     flex-direction: column;
-    gap: 0.42rem;
+    gap: 0.36rem;
   }
 
   .partner-tag {
@@ -428,11 +428,11 @@
     align-items: center;
     width: fit-content;
     margin: 0 0 2px;
-    padding: 6px 10px;
+    padding: 5px 9px;
     border-radius: 999px;
     font-size: 9px;
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #0f6fe8;
     background: rgba(0, 112, 243, 0.08);
@@ -440,30 +440,29 @@
 
   .partner-banner-text h2 {
     margin: 0;
-    max-width: 25ch;
-    font-size: 1rem;
+    max-width: 26ch;
+    font-size: 0.98rem;
     line-height: 1.14;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     color: #0f172a;
   }
 
   .partner-sub {
     margin: 0;
-    max-width: 100%;
-    font-size: 0.88rem;
-    line-height: 1.38;
-    color: #5c708d;
+    font-size: 0.82rem;
+    line-height: 1.36;
+    color: #61748f;
   }
 
   .partner-cta {
     align-self: flex-start;
-    min-height: 36px;
+    min-height: 34px;
     margin-top: 4px;
-    padding: 0 13px;
-    border-radius: 12px;
-    font-size: 0.86rem;
+    padding: 0 12px;
+    border-radius: 11px;
+    font-size: 0.8rem;
     font-weight: 700;
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.10);
+    box-shadow: 0 5px 12px rgba(15, 23, 42, 0.09);
   }
 
   .partner-banner-image {
@@ -474,10 +473,10 @@
 
   .partner-banner-image img {
     width: 100%;
-    height: 56px;
+    height: 52px;
     object-fit: contain;
     background: transparent;
-    padding: 4px 0 0;
+    padding: 2px 0 0;
     border-radius: 0;
     box-shadow: none;
   }
