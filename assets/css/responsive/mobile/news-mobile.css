@@ -359,119 +359,135 @@
     scroll-snap-align: center;
   }
 
-    /* -------------------------------------------------
-     Partner section – compact / premium mobile campaign
-  ------------------------------------------------- */
-  .news-section--partner .section-heading {
-    margin-bottom: 10px;
-  }
+   /* -------------------------------------------------
+   Partner section – full-width campaign feel
+------------------------------------------------- */
 
-  .news-section--partner .section-heading h2 {
-    font-size: 1.28rem;
-    line-height: 1.04;
-    letter-spacing: -0.03em;
-  }
+.news-section--partner {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
-  .partner-banner {
-    position: relative;
-    margin: 0;
-    border-radius: 20px;
-    background:
-      linear-gradient(135deg, #f3f7ff 0%, #edf3ff 58%, #f8fbff 100%);
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-    overflow: hidden;
-  }
+.news-section--partner .container {
+  padding-left: 14px;
+  padding-right: 14px;
+}
 
-  .partner-banner.section-padding {
-    padding: 14px !important;
-  }
+/* heading litt roligere */
+.news-section--partner .section-heading {
+  margin-bottom: 10px;
+}
 
-  .partner-banner::after {
-    content: "";
-    position: absolute;
-    inset: auto -34px -58px auto;
-    width: 112px;
-    height: 112px;
-    border-radius: 999px;
-    background: rgba(0, 112, 243, 0.05);
-    filter: blur(10px);
-    pointer-events: none;
-  }
+.news-section--partner .section-heading h2 {
+  font-size: 1.24rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
 
-  .partner-banner-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    align-items: stretch;
-  }
+/* selve campaign-flaten */
+.partner-banner {
+  position: relative;
+  border-radius: 18px;
+  margin: 0;
+  background:
+    linear-gradient(135deg, #f3f7ff 0%, #edf3ff 60%, #f8fbff 100%);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+}
 
-  .partner-banner-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.42rem;
-  }
+.partner-banner.section-padding {
+  padding: 16px !important;
+}
 
-  .partner-tag {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    margin: 0 0 4px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #0f6fe8;
-    background: rgba(0, 112, 243, 0.08);
-  }
+/* subtil glow */
+.partner-banner::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -60px auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: rgba(0, 112, 243, 0.05);
+  filter: blur(12px);
+  pointer-events: none;
+}
 
-  .partner-banner-text h2 {
-    margin: 0;
-    font-size: 1.08rem;
-    line-height: 1.13;
-    letter-spacing: -0.03em;
-    color: #0f172a;
-    max-width: 16ch;
-  }
+/* layout */
+.partner-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .partner-sub {
-    max-width: 100%;
-    margin: 2px 0 0;
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: #58708f;
-  }
+/* tekstblokk */
+.partner-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-  .partner-cta {
-    min-height: 40px;
-    margin-top: 6px;
-    padding: 0 14px;
-    border-radius: 14px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14);
-  }
+/* tag */
+.partner-tag {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0f6fe8;
+  background: rgba(0, 112, 243, 0.08);
+}
 
-  .partner-banner-image {
-    min-height: 0;
-    padding: 0;
-    border-radius: 16px;
-  }
+/* 🔥 viktig: headline mer kontrollert */
+.partner-banner-text h2 {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #0f172a;
 
-  .partner-banner-image img {
-    width: 100%;
-    min-height: 92px;
-    max-height: 112px;
-    object-fit: contain;
-    background: rgba(255,255,255,0.82);
-    border-radius: 16px;
-    padding: 12px 14px;
-    box-shadow:
-      0 8px 18px rgba(15, 23, 42, 0.06),
-      inset 0 1px 0 rgba(255,255,255,0.55);
-  }
+  max-width: 22ch;   /* 👈 dette er nøkkelen */
+}
 
+/* subtekst */
+.partner-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #5f718a;
+}
+
+/* CTA */
+.partner-cta {
+  align-self: flex-start;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+/* 🔥 logo som en clean "rail" */
+.partner-banner-image {
+  margin-top: 6px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.partner-banner-image img {
+  width: 100%;
+  height: 84px;                 /* 👈 lavere = mer moderne */
+  object-fit: contain;
+  background: rgba(255,255,255,0.85);
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    0 6px 14px rgba(15, 23, 42, 0.05);
+}
 
          /* -------------------------------------------------
      Deals – smooth native snap carousel
