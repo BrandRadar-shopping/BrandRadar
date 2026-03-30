@@ -481,6 +481,27 @@
     box-shadow: none;
   }
 
+   /* -------------------------------------------------
+   FORCE smaller partner logo (mobile)
+------------------------------------------------- */
+@media (max-width: 768px) {
+
+  .news-section--partner .partner-banner-image {
+    padding: 6px 0 !important;
+    min-height: auto !important;
+  }
+
+  .news-section--partner .partner-banner-image img {
+    height: 36px !important;
+    max-height: 42px !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+    object-fit: contain !important;
+  }
+
+}
+
            /* -------------------------------------------------
      Deals – same slider, hard downscale only
   ------------------------------------------------- */
