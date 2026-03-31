@@ -1169,7 +1169,7 @@
         .filter((m) => m.showInFeed)
         .sort((a, b) => a.priority - b.priority);
 
-      if (spotlightTrack) {
+            if (spotlightTrack) {
         spotlightTrack.classList.remove("loading");
         spotlightTrack.innerHTML = "";
 
@@ -1192,6 +1192,7 @@
           });
 
           initArrowSlider(spotlightTrack);
+          initMobileSpotlightDots(spotlightTrack);
         }
       }
 
