@@ -1048,36 +1048,76 @@
     border-radius: 18px;
   }
 
-  /* -------------------------------------------------
-     Bottom nav active state on News
-     Scoped to this page only
+   /* -------------------------------------------------
+     Bottom nav active state – cleaner system
   ------------------------------------------------- */
-  .m-bottom-nav .m-nav-item[aria-current="page"] {
+  .m-bottom-nav .m-nav-item {
     position: relative;
+    border-radius: 14px;
+    transition:
+      color 0.18s ease,
+      transform 0.18s ease,
+      opacity 0.18s ease;
+  }
+
+  .m-bottom-nav .m-nav-item .m-ico,
+  .m-bottom-nav .m-nav-item .m-txt {
+    transition:
+      color 0.18s ease,
+      opacity 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .m-bottom-nav .m-nav-item[aria-current="page"] {
     color: #0f172a;
+  }
+
+  .m-bottom-nav .m-nav-item[aria-current="page"] .m-ico,
+  .m-bottom-nav .m-nav-item[aria-current="page"] .m-txt {
+    color: #0f172a;
+    opacity: 1;
   }
 
   .m-bottom-nav .m-nav-item[aria-current="page"] .m-txt {
     font-weight: 800;
   }
 
-  .m-bottom-nav .m-nav-item[aria-current="page"] .m-ico {
-    transform: translateY(-1px);
-  }
-
   .m-bottom-nav .m-nav-item[aria-current="page"]::before {
     content: "";
     position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    background: rgba(0, 112, 243, 0.10);
+    inset: 6px 8px 8px;
+    border-radius: 14px;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.06) 0%,
+      rgba(15, 23, 42, 0.035) 100%
+    );
     z-index: -1;
   }
-}
+
+  .m-bottom-nav .m-nav-item[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 3px;
+    border-radius: 999px;
+    background: #0f172a;
+    opacity: 0.9;
+  }
+
+  /* behold Luxury egen stil */
+  .m-bottom-nav .m-nav-item.m-lux[aria-current="page"]::before {
+    inset: 6px 6px;
+    background: #0b0b0c;
+    border-radius: 14px;
+  }
+
+  .m-bottom-nav .m-nav-item.m-lux[aria-current="page"]::after {
+    background: #d8b24c;
+  }
 
 @media (max-width: 768px) {
   .news-page .news-section--partner .partner-banner .partner-banner-inner {
