@@ -150,7 +150,7 @@
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
   }
 
-    /* -------------------------------------------------
+  /* -------------------------------------------------
      Spotlight section – compact mobile teaser
   ------------------------------------------------- */
   .news-section--spotlight {
@@ -232,7 +232,6 @@
     letter-spacing: 0.12em;
   }
 
-  /* skjul thumbs på mobil for å korte ned seksjonen */
   .spotlight-thumbs {
     display: none !important;
   }
@@ -268,7 +267,6 @@
     font-size: 0.88rem;
     line-height: 1.42;
     color: #5c6b81;
-
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -339,6 +337,7 @@
     border-radius: 999px;
     font-size: 0.78rem;
   }
+
   /* -------------------------------------------------
      Spotlight dots
   ------------------------------------------------- */
@@ -369,6 +368,7 @@
     width: 18px;
     background: #0f172a;
   }
+
   /* -------------------------------------------------
      Shared slider behavior
   ------------------------------------------------- */
@@ -388,7 +388,7 @@
     scroll-snap-align: center;
   }
 
-        /* -------------------------------------------------
+  /* -------------------------------------------------
      Partner section – compact sponsored campaign card
   ------------------------------------------------- */
   .news-section--partner {
@@ -498,40 +498,57 @@
     margin-top: 0;
     border-radius: 14px;
     overflow: hidden;
-  }
-
-  .partner-banner-image img {
-    width: 100%;
-    height: 52px;
-    object-fit: contain;
-    background: transparent;
-    padding: 2px 0 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-   /* -------------------------------------------------
-   FORCE smaller partner logo (mobile)
-------------------------------------------------- */
-@media (max-width: 768px) {
-
-  .news-section--partner .partner-banner-image {
     padding: 6px 0 !important;
     min-height: auto !important;
   }
 
-  .news-section--partner .partner-banner-image img {
-    height: 20px !important;
-    max-height: 42px !important;
+  .partner-banner-image img {
     width: auto !important;
-    margin: 0 auto !important;
-    display: block !important;
+    max-width: 100% !important;
+    height: 35px !important;
+    max-height: 35px !important;
+    min-height: 35px !important;
     object-fit: contain !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    display: block !important;
   }
 
-}
+  .news-page .news-section--partner .partner-banner .partner-banner-inner {
+    gap: 8px !important;
+  }
 
-           /* -------------------------------------------------
+  .news-page .news-section--partner .partner-banner .partner-banner-image {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  .news-page .news-section--partner .partner-banner .partner-banner-image img {
+    width: auto !important;
+    max-width: 100% !important;
+    height: 35px !important;
+    max-height: 35px !important;
+    min-height: 35px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  /* -------------------------------------------------
      Deals – same slider, hard downscale only
   ------------------------------------------------- */
   .news-section--deals .section-heading {
@@ -598,7 +615,6 @@
     --deal-saturate: 0.94;
     --deal-lift: 0px;
     --deal-z: 1;
-
     border-radius: 16px !important;
     opacity: var(--deal-opacity);
     transform: translateY(calc(var(--deal-lift) * -1)) scale(var(--deal-scale));
@@ -709,7 +725,8 @@
     width: 120px !important;
     height: 28px !important;
   }
-    /* -------------------------------------------------
+
+  /* -------------------------------------------------
      Picks – same rail, hard downscale only
   ------------------------------------------------- */
   .news-picks-layout {
@@ -831,7 +848,8 @@
     width: 14px !important;
     height: 14px !important;
   }
-    /* -------------------------------------------------
+
+  /* -------------------------------------------------
      Feed – compact scan-friendly cards
   ------------------------------------------------- */
   .news-section--feed .section-heading {
@@ -877,7 +895,6 @@
     font-size: 13px !important;
     line-height: 1.18 !important;
     margin: 0 0 2px !important;
-
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -889,7 +906,6 @@
     line-height: 1.34 !important;
     margin: 3px 0 2px !important;
     color: #556274;
-
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -947,7 +963,7 @@
     height: 14px !important;
   }
 
-    /* -------------------------------------------------
+  /* -------------------------------------------------
      Global product-card tuning on news mobile
      Matchet tettere mot index mobile scale
   ------------------------------------------------- */
@@ -992,7 +1008,6 @@
     line-height: 1.34;
     margin: 0.1rem 0 0.04rem;
     color: #556274;
-
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -1036,6 +1051,7 @@
   .news-page .rating-value {
     font-size: 0.72rem;
   }
+
   /* -------------------------------------------------
      Loading / empty states
   ------------------------------------------------- */
@@ -1048,7 +1064,7 @@
     border-radius: 18px;
   }
 
-   /* -------------------------------------------------
+  /* -------------------------------------------------
      Bottom nav active state – cleaner system
   ------------------------------------------------- */
   .m-bottom-nav .m-nav-item {
@@ -1108,7 +1124,6 @@
     opacity: 0.9;
   }
 
-  /* behold Luxury egen stil */
   .m-bottom-nav .m-nav-item.m-lux[aria-current="page"]::before {
     inset: 6px 6px;
     background: #0b0b0c;
@@ -1117,37 +1132,5 @@
 
   .m-bottom-nav .m-nav-item.m-lux[aria-current="page"]::after {
     background: #d8b24c;
-  }
-
-@media (max-width: 768px) {
-  .news-page .news-section--partner .partner-banner .partner-banner-inner {
-    gap: 8px !important;
-  }
-
-  .news-page .news-section--partner .partner-banner .partner-banner-image {
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 0 !important;
-    margin-top: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    border-radius: 0 !important;
-    overflow: visible !important;
-  }
-
-  .news-page .news-section--partner .partner-banner .partner-banner-image img {
-    width: auto !important;
-    max-width: 100% !important;
-    height: 35px !important;
-    max-height: 35px !important;
-    min-height: 35px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    object-fit: contain !important;
-    display: block !important;
   }
 }
