@@ -338,37 +338,51 @@
     font-size: 0.78rem;
   }
 
-  /* -------------------------------------------------
+    /* -------------------------------------------------
      Spotlight dots
   ------------------------------------------------- */
-  .spotlight-dots {
+  .slider-wrapper--spotlight {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .slider-wrapper--spotlight .featured-wrapper {
+    width: 100%;
+  }
+
+  .slider-wrapper--spotlight .spotlight-dots {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 8px;
     margin-top: 10px;
     padding-bottom: 2px;
   }
 
-  .spotlight-dot {
-    width: 7px;
-    height: 7px;
+  .slider-wrapper--spotlight .spotlight-dot {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    padding: 0;
+    margin: 0;
     border: 0;
     border-radius: 999px;
-    background: rgba(148, 163, 184, 0.45);
-    padding: 0;
+    background: #cbd5e1;
+    box-shadow: none;
     cursor: pointer;
-    transition:
-      width 0.18s ease,
-      background 0.18s ease,
-      transform 0.18s ease;
+    flex: 0 0 auto;
+    transition: background 0.18s ease, transform 0.18s ease;
   }
 
-  .spotlight-dot.is-active {
-    width: 18px;
+  .slider-wrapper--spotlight .spotlight-dot.is-active {
     background: #0f172a;
+    transform: scale(1.05);
   }
-
   /* -------------------------------------------------
      Shared slider behavior
   ------------------------------------------------- */
