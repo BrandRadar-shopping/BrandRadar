@@ -23,7 +23,7 @@
   const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
   const PICKS_TAB = "picks";
 
-  const PARTNER_SHEET_ID = "166anlag430W7Kl1UKCrkVGd585PldREW7fC8JQ5g7WK4";
+  const PARTNER_SHEET_ID = "166anlag430W7K1lUKCrkVGd585PldREW7fC8JQ5g7WK4";
   const PARTNER_TAB = "partner_banner";
 
   // ---------- DOM ----------
