@@ -872,7 +872,84 @@
     setTimeout(updateCards, 180);
     setTimeout(updateCards, 320);
   }
+  function initMobileSpotlightDots(trackEl) {
+    if (!trackEl) return;
+    if (window.innerWidth > 768) return;
 
+    const wrapper = trackEl.closest(".slider-wrapper--spotlight");
+    if (!wrapper) return;
+
+    let dotsWrap = wrapper.querySelector(".spotlight-dots");
+
+    if (!dotsWrap) {
+      dotsWrap = document.createElement("div");
+      dotsWrap.className = "spotlight-dots";
+      dotsWrap.setAttribute("aria-label", "Spotlight navigasjon");
+      wrapper.appendChild(dotsWrap);
+    }
+
+    const slides = Array.from(trackEl.children).filter((el) =>
+      el.classList.contains("spotlight-feature")
+    );
+
+    dotsWrap.innerHTML = "";
+
+    if (slides.length <= 1) {
+      dotsWrap.hidden = true;
+      return;
+    }
+
+    dotsWrap.hidden = false;
+
+    const dots = slides.map((_, index) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "spotlight-dot";
+      btn.setAttribute("aria-label", `Gå til spotlight ${index + 1}`);
+      btn.addEventListener("click", () => {
+        const slide = slides[index];
+        if (!slide) return;
+
+        trackEl.scrollTo({
+          left: slide.offsetLeft,
+          behavior: "smooth"
+        });
+      });
+
+      dotsWrap.appendChild(btn);
+      return btn;
+    });
+
+    function updateActiveDot() {
+      const trackLeft = trackEl.scrollLeft;
+      let activeIndex = 0;
+      let closestDistance = Infinity;
+
+      slides.forEach((slide, index) => {
+        const distance = Math.abs(slide.offsetLeft - trackLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          activeIndex = index;
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        const isActive = index === activeIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-current", isActive ? "true" : "false");
+      });
+    }
+
+    trackEl.addEventListener("scroll", () => {
+      requestAnimationFrame(updateActiveDot);
+    }, { passive: true });
+
+    window.addEventListener("resize", updateActiveDot);
+
+    setTimeout(updateActiveDot, 60);
+    setTimeout(updateActiveDot, 180);
+    setTimeout(updateActiveDot, 320);
+  }
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
