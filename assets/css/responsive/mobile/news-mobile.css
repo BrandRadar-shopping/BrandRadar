@@ -339,7 +339,36 @@
     border-radius: 999px;
     font-size: 0.78rem;
   }
+  /* -------------------------------------------------
+     Spotlight dots
+  ------------------------------------------------- */
+  .spotlight-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 10px;
+    padding-bottom: 2px;
+  }
 
+  .spotlight-dot {
+    width: 7px;
+    height: 7px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.45);
+    padding: 0;
+    cursor: pointer;
+    transition:
+      width 0.18s ease,
+      background 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .spotlight-dot.is-active {
+    width: 18px;
+    background: #0f172a;
+  }
   /* -------------------------------------------------
      Shared slider behavior
   ------------------------------------------------- */
