@@ -1134,3 +1134,54 @@
     background: #d8b24c;
   }
 }
+
+  /* -------------------------------------------------
+     Spotlight dots – force proper placement
+  ------------------------------------------------- */
+  .slider-wrapper--spotlight {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .slider-wrapper--spotlight .featured-wrapper {
+    width: 100%;
+  }
+
+  .slider-wrapper--spotlight .spotlight-dots {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 10px;
+    padding-bottom: 2px;
+  }
+
+  .slider-wrapper--spotlight .spotlight-dot {
+    flex: 0 0 auto;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    min-height: 7px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.45);
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    box-shadow: none;
+    transition:
+      width 0.18s ease,
+      background 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .slider-wrapper--spotlight .spotlight-dot.is-active {
+    width: 18px;
+    min-width: 18px;
+    background: #0f172a;
+  }
