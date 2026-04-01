@@ -338,7 +338,7 @@
     font-size: 0.78rem;
   }
 
-    /* -------------------------------------------------
+      /* -------------------------------------------------
      Spotlight dots
   ------------------------------------------------- */
   .slider-wrapper--spotlight {
@@ -380,8 +380,10 @@
   }
 
   .slider-wrapper--spotlight .spotlight-dot.is-active {
+    width: 8px;
+    min-width: 8px;
     background: #0f172a;
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
   /* -------------------------------------------------
      Shared slider behavior
