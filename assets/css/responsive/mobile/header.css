@@ -33,9 +33,9 @@
   .nav-container {
     position: relative;
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 44px 1fr;
     grid-template-areas:
-      "menu logo"
+      "menu topspacer"
       "search search";
     gap: 10px;
     padding: 10px 12px;
@@ -63,19 +63,25 @@
     font-size: 20px;
     line-height: 1;
     color: #111;
+    z-index: 2;
   }
 
-  /* Logo */
+  /* Logo – ekte sentrert i hele headeren */
   .logo {
-    grid-area: logo;
-    justify-self: center;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     text-decoration: none;
-    line-height: 1;
+    line-height: 44px;
+    height: 44px;
     color: #111;
     font-weight: 900;
     font-size: 18px;
     letter-spacing: -0.3px;
     white-space: nowrap;
+    z-index: 1;
+    pointer-events: auto;
   }
 
   /* Top-links skjules i mobil-header
@@ -171,11 +177,18 @@
   .nav-container {
     padding: 8px 10px;
     gap: 8px;
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: 40px 1fr;
   }
 
   .mobile-menu-btn {
     width: 40px;
+    height: 40px;
+  }
+
+  .logo {
+    top: 8px;
+    font-size: 17px;
+    line-height: 40px;
     height: 40px;
   }
 
@@ -186,7 +199,6 @@
     padding-right: 34px;
   }
 
-  .search_clear,
   .search-clear {
     width: 32px;
     height: 32px;
