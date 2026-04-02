@@ -106,36 +106,56 @@
       </div>
     </section>
 
-    <div class="filter-bar">
-      <div class="filters-left">
-        <label>Merke:</label>
-        <select id="brand-filter">
-          <option value="all">Alle</option>
-        </select>
+        <div class="filter-bar">
+      <button
+        type="button"
+        class="filter-toggle"
+        aria-expanded="false"
+        aria-controls="categoryFiltersPanel"
+      >
+        <span class="filter-toggle__left">
+          <span class="filter-toggle__title">Filtrering og sortering</span>
+          <span class="filter-toggle-meta">Vis filtre</span>
+        </span>
 
-        <label>Pris:</label>
-        <select id="price-filter">
-          <option value="all">Alle</option>
-          <option value="0-299">0–299</option>
-          <option value="300-599">300–599</option>
-          <option value="600-999">600–999</option>
-          <option value="1000+">1000+</option>
-        </select>
+        <span class="filter-toggle__right" aria-hidden="true">
+          <svg class="filter-toggle__icon" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
 
-        <label class="checkbox-label">
-          <input type="checkbox" id="discount-filter" />
-          Kun tilbud
-        </label>
-      </div>
+      <div class="filter-panel" id="categoryFiltersPanel">
+        <div class="filters-left">
+          <label>Merke:</label>
+          <select id="brand-filter">
+            <option value="all">Alle</option>
+          </select>
 
-      <div class="filters-right">
-        <span class="result-count">Laster...</span>
-        <select id="sort-select">
-          <option value="featured">Anbefalt</option>
-          <option value="price-asc">Pris: lav → høy</option>
-          <option value="price-desc">Pris: høy → lav</option>
-          <option value="rating-desc">Best vurdert</option>
-        </select>
+          <label>Pris:</label>
+          <select id="price-filter">
+            <option value="all">Alle</option>
+            <option value="0-299">0–299</option>
+            <option value="300-599">300–599</option>
+            <option value="600-999">600–999</option>
+            <option value="1000+">1000+</option>
+          </select>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="discount-filter" />
+            Kun tilbud
+          </label>
+        </div>
+
+        <div class="filters-right">
+          <span class="result-count">Laster...</span>
+          <select id="sort-select">
+            <option value="featured">Anbefalt</option>
+            <option value="price-asc">Pris: lav → høy</option>
+            <option value="price-desc">Pris: høy → lav</option>
+            <option value="rating-desc">Best vurdert</option>
+          </select>
+        </div>
       </div>
     </div>
 
