@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sortSelect = document.getElementById("sort-select");
   const filterTagsContainer = document.querySelector(".filter-tags");
   const filterBar = document.querySelector(".filter-bar");
+  const filterToggle = document.querySelector(".filter-toggle");
+  const filterToggleMeta = document.querySelector(".filter-toggle-meta");
+  const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
+  const filterStorageKey = `br_category_filters_collapsed:${window.location.pathname}${window.location.search}`;
 
   const params = new URLSearchParams(window.location.search);
   const genderParam = params.get("gender");
