@@ -5,10 +5,11 @@
 
 @media (max-width: 768px) {
 
-.nav-container > * { min-width: 0; }
-.top-links { min-width: 0; }
-.search-box, #site-search { min-width: 0; max-width: 100%; }
-   
+  .nav-container > * { min-width: 0; }
+  .top-links { min-width: 0; }
+  .search-box,
+  #site-search { min-width: 0; max-width: 100%; }
+
   /* Header sticky + stacking */
   .main-header {
     position: sticky;
@@ -28,7 +29,7 @@
     overflow: visible !important;
   }
 
-    /* Mobil layout: 2 rader */
+  /* Mobil layout: 2 rader */
   .nav-container {
     position: relative;
     display: grid;
@@ -39,11 +40,11 @@
     gap: 10px;
     padding: 10px 12px;
     align-items: center;
-
     width: 100%;
     max-width: 100%;
     margin: 0;
   }
+
   /* Grid-barn må kunne krympe */
   .nav-container > * { min-width: 0; }
 
@@ -77,51 +78,14 @@
     white-space: nowrap;
   }
 
-  /* Favoritter: kun ikon på mobil */
+  /* Top-links skjules i mobil-header
+     Navigasjon håndteres av drawer + bottom-nav */
   .top-links {
-    grid-area: fav;
-    justify-self: end;
-    display: flex;
-    justify-content: flex-end;
-    min-width: 0;
-  }
-
-  .top-links a:not(.favorites-link) { display: none !important; }
-
-  .top-links .favorites-link {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    position: relative;
-    text-decoration: none;
-    font-size: 0;
-    -webkit-tap-highlight-color: transparent;
-    background: rgba(0,0,0,0.04);
-  }
-
-  .top-links .favorites-link::before {
-    content: "❤️";
-    font-size: 18px;
-    line-height: 1;
-    color: #111;
+    display: none !important;
   }
 
   #favorites-count {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 999px;
-    font-size: 12px;
-    line-height: 18px;
-    text-align: center;
-    background: #0070f3;
-    color: #fff;
+    display: none !important;
   }
 
   /* Search */
@@ -140,8 +104,8 @@
     min-width: 0;
     height: 44px;
     border-radius: 12px;
-    padding-left: 40px;   /* plass til 🔍 */
-    padding-right: 40px;  /* plass til ✕ */
+    padding-left: 40px;
+    padding-right: 40px;
     background: #f3f4f6;
     border: 1px solid rgba(0,0,0,0.12);
     color: #111;
@@ -192,7 +156,9 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .search-dropdown[hidden] { display: none !important; }
+  .search-dropdown[hidden] {
+    display: none !important;
+  }
 
   /* Mobil: category-bar + mega-menu skjules (drawer + bottom-nav overtar) */
   .category-bar { display: none !important; }
@@ -205,23 +171,12 @@
   .nav-container {
     padding: 8px 10px;
     gap: 8px;
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    grid-template-columns: 40px minmax(0, 1fr);
   }
 
-  .mobile-menu-btn,
-  .top-links .favorites-link {
+  .mobile-menu-btn {
     width: 40px;
     height: 40px;
-  }
-
-  #favorites-count {
-    top: 4px;
-    right: 4px;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
-    font-size: 11px;
-    line-height: 16px;
   }
 
   #search-input {
@@ -231,14 +186,10 @@
     padding-right: 34px;
   }
 
+  .search_clear,
   .search-clear {
     width: 32px;
     height: 32px;
     right: 8px;
   }
 }
-
-
-
-
-
