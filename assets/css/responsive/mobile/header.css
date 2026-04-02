@@ -28,14 +28,14 @@
     overflow: visible !important;
   }
 
-  /* Mobil layout: 2 rader */
+    /* Mobil layout: 2 rader */
   .nav-container {
     position: relative;
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    grid-template-columns: 44px minmax(0, 1fr);
     grid-template-areas:
-      "menu logo fav"
-      "search search search";
+      "menu logo"
+      "search search";
     gap: 10px;
     padding: 10px 12px;
     align-items: center;
@@ -44,7 +44,6 @@
     max-width: 100%;
     margin: 0;
   }
-
   /* Grid-barn må kunne krympe */
   .nav-container > * { min-width: 0; }
 
