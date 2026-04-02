@@ -810,7 +810,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       bindFilterEvents(applyFiltersAndSort);
-
+      setupMobileFilterToggle();
+      
       if (collectionSlug === "deals") {
         if (sortSelect) sortSelect.value = "price-asc";
         if (discountFilter) discountFilter.checked = true;
@@ -976,6 +977,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     bindFilterEvents(applyFiltersAndSort);
+    setupMobileFilterToggle();
     applyFiltersAndSort();
 
     setTimeout(() => {
