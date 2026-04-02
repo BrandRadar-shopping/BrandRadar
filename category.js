@@ -353,13 +353,103 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+    function getActiveFilterCount() {
+    let count = 0;
+
+    if (brandFilter && brandFilter.value !== "all") count += 1;
+    if (priceFilter && priceFilter.value !== "all") count += 1;
+    if (discountFilter && discountFilter.checked) count += 1;
+    if (sortSelect && sortSelect.value !== "featured") count += 1;
+
+    return count;
+  }
+
+  function updateMobileFilterToggleSummary() {
+    if (!filterToggleMeta || !filterBar) return;
+
+    const countText =
+      document.querySelector(".filter-bar .result-count")?.textContent?.trim() || "";
+
+    const activeCount = getActiveFilterCount();
+    const isCollapsed = filterBar.classList.contains("is-collapsed");
+
+    if (isCollapsed) {
+      const parts = [];
+      if (countText) parts.push(countText);
+      parts.push(
+        activeCount > 0
+          ? `${activeCount} aktiv${activeCount === 1 ? "t filter" : "e filtre"}`
+          : "Vis filtre"
+      );
+      filterToggleMeta.textContent = parts.join(" • ");
+      return;
+    }
+
+    filterToggleMeta.textContent =
+      activeCount > 0
+        ? `${activeCount} aktiv${activeCount === 1 ? "t filter" : "e filtre"}`
+        : "Skjul filtre";
+  }
+
+  function applyMobileFilterCollapsedState(shouldCollapse, persist = true) {
+    if (!filterBar || !filterToggle) return;
+
+    if (!mobileMediaQuery.matches) {
+      filterBar.classList.remove("is-collapsed");
+      filterToggle.setAttribute("aria-expanded", "true");
+      updateMobileFilterToggleSummary();
+      return;
+    }
+
+    filterBar.classList.toggle("is-collapsed", shouldCollapse);
+    filterToggle.setAttribute("aria-expanded", String(!shouldCollapse));
+
+    if (persist) {
+      sessionStorage.setItem(filterStorageKey, shouldCollapse ? "1" : "0");
+    }
+
+    updateMobileFilterToggleSummary();
+  }
+
+  function setupMobileFilterToggle() {
+    if (!filterBar || !filterToggle) return;
+
+    const stored = sessionStorage.getItem(filterStorageKey);
+    const initialCollapsed =
+      mobileMediaQuery.matches
+        ? (stored === null ? true : stored === "1")
+        : false;
+
+    applyMobileFilterCollapsedState(initialCollapsed, false);
+
+    filterToggle.addEventListener("click", () => {
+      const isCollapsed = filterBar.classList.contains("is-collapsed");
+      applyMobileFilterCollapsedState(!isCollapsed, true);
+    });
+
+    const handleViewportChange = () => {
+      const storedState = sessionStorage.getItem(filterStorageKey);
+      const shouldCollapse =
+        mobileMediaQuery.matches
+          ? (storedState === null ? true : storedState === "1")
+          : false;
+
+      applyMobileFilterCollapsedState(shouldCollapse, false);
+    };
+
+    if (typeof mobileMediaQuery.addEventListener === "function") {
+      mobileMediaQuery.addEventListener("change", handleViewportChange);
+    } else if (typeof mobileMediaQuery.addListener === "function") {
+      mobileMediaQuery.addListener(handleViewportChange);
+    }
+  }
+
   function bindFilterEvents(applyFiltersAndSort) {
     brandFilter?.addEventListener("change", applyFiltersAndSort);
     priceFilter?.addEventListener("change", applyFiltersAndSort);
     discountFilter?.addEventListener("change", applyFiltersAndSort);
     sortSelect?.addEventListener("change", applyFiltersAndSort);
   }
-
   function ensurePageRootCollectionClass(slug) {
     const mainEl = document.querySelector("main");
     if (!mainEl) return;
