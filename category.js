@@ -805,9 +805,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             break;
         }
 
-        renderProducts(result, collectionSlug);
+                renderProducts(result, collectionSlug);
         updateFilterTags(applyFiltersAndSort);
-      }
+        updateMobileFilterToggleSummary();
 
       bindFilterEvents(applyFiltersAndSort);
       setupMobileFilterToggle();
@@ -972,9 +972,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           break;
       }
 
-      renderProducts(result);
+           renderProducts(result);
       updateFilterTags(applyFiltersAndSort);
-    }
+      updateMobileFilterToggleSummary();
 
     bindFilterEvents(applyFiltersAndSort);
     setupMobileFilterToggle();
