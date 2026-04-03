@@ -938,3 +938,27 @@ document.getElementById("back-btn")?.addEventListener("click", () => {
   if (ref && !ref.includes("product.html")) window.history.back();
   else window.location.href = "index.html";
 });
+
+// ================================
+// Mobile: Insights toggle
+// ================================
+function setupInsightsToggle() {
+  const btn = document.querySelector(".insights-toggle");
+  const content = document.getElementById("product-insights");
+
+  if (!btn || !content) return;
+
+  btn.addEventListener("click", () => {
+    const isOpen = !content.hidden;
+
+    content.hidden = isOpen;
+    btn.classList.toggle("open", !isOpen);
+  });
+}
+
+// Kjør etter DOM er klar
+document.addEventListener("DOMContentLoaded", () => {
+  setupInsightsToggle();
+});
+
+
