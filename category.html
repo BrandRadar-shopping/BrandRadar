@@ -100,11 +100,21 @@
 
   <main class="category-page">
     <section class="category-header">
-      <div class="category-header__inner">
-        <nav class="breadcrumb"></nav>
-        <h1 id="category-title">Laster kategori...</h1>
-      </div>
-    </section>
+  <div class="category-header__inner">
+    <button
+      type="button"
+      class="category-back-btn"
+      aria-label="Gå tilbake"
+      onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.href='index.html'; }"
+    >
+      <span class="category-back-btn__icon" aria-hidden="true">←</span>
+      <span class="category-back-btn__text">Tilbake</span>
+    </button>
+
+    <nav class="breadcrumb"></nav>
+    <h1 id="category-title">Laster kategori...</h1>
+  </div>
+</section>
 
         <div class="filter-bar">
       <button
