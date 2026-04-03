@@ -210,6 +210,14 @@
     accent-color: #0070f3;
   }
 
+    body.is-category-page .filters-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 28px;
+  }
+
   body.is-category-page .filters-right .result-count {
     display: inline-flex;
     align-items: center;
@@ -218,6 +226,23 @@
     font-size: 13px;
     font-weight: 700;
     color: #64748b;
+  }
+
+  body.is-category-page .reset-filters-btn {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 800;
+    color: #0070f3;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body.is-category-page .reset-filters-btn[hidden] {
+    display: none !important;
   }
 
   /* -------------------------------------------------
