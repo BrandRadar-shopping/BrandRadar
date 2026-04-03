@@ -47,10 +47,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
 
-  document.getElementById("product-title").textContent = product.title || "";
+   document.getElementById("product-title").textContent = product.title || "";
   document.getElementById("product-brand").textContent = product.brand || "";
-  document.getElementById("product-desc").textContent =
-    product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
+
+  const productDescriptionEl =
+    document.getElementById("product-description") ||
+    document.getElementById("product-desc");
+
+  if (productDescriptionEl) {
+    productDescriptionEl.textContent =
+      product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
+  }
 
   const newPriceEl = document.getElementById("new-price");
   const oldPriceEl = document.getElementById("old-price");
