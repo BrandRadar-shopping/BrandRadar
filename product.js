@@ -943,11 +943,21 @@ btnNext?.addEventListener("click", () => {
 
 slider?.addEventListener("scroll", updateSliderNav);
 
-document.getElementById("back-btn")?.addEventListener("click", () => {
-  const ref = document.referrer;
-  if (ref && !ref.includes("product.html")) window.history.back();
-  else window.location.href = "index.html";
-});
+const backBtn = document.getElementById("back-btn");
+
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+
+    // Hvis det finnes historikk → gå tilbake
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      // fallback hvis brukeren åpner produkt direkte
+      window.location.href = "index.html";
+    }
+
+  });
+}
 
 // ================================
 // Mobile: Insights toggle
