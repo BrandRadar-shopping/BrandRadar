@@ -530,3 +530,15 @@
     padding-right: 12px;
   }
 }
+
+  body.is-category-page .filters-status-row {
+    align-items: center;
+  }
+
+  body.is-category-page .reset-filters-btn {
+    font-size: 11px;
+  }
+
+
+
+
