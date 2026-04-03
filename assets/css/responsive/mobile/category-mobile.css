@@ -560,6 +560,10 @@
     font-size: 11px;
   }
 
-
+  body.is-category-page .category-back-btn {
+    min-height: 32px;
+    padding: 0 10px;
+    margin-bottom: 7px;
+  }
 
 
