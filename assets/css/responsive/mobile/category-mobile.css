@@ -35,6 +35,27 @@
     padding-right: 14px;
   }
 
+  body.is-category-page .category-back-btn {
+    min-height: 34px;
+    margin: 0 0 8px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+  }
+
+  body.is-category-page .category-back-btn__icon {
+    font-size: 13px;
+  }
+
+  body.is-category-page .category-back-btn__text {
+    font-size: 12px;
+    line-height: 1;
+  }
+   
   body.is-category-page .breadcrumb {
     display: flex;
     align-items: center;
