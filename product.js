@@ -694,7 +694,9 @@ function renderProductInsights(product, offerSummary) {
     ? `<div class="product-insight-meta">${metaParts.join(" • ")}</div>`
     : "";
 
-  container.innerHTML = `
+  container.hidden = false;
+
+container.innerHTML = `
     <div class="product-insights-title">Hvorfor dette produktet skiller seg ut</div>
     ${highlightsHTML}
     <div class="product-insight-summary">${summary}</div>
