@@ -694,7 +694,6 @@ function renderProductInsights(product, offerSummary) {
     ? `<div class="product-insight-meta">${metaParts.join(" • ")}</div>`
     : "";
 
-  container.hidden = false;
 
 container.innerHTML = `
     <div class="product-insights-title">Hvorfor dette produktet skiller seg ut</div>
@@ -950,15 +949,22 @@ function setupInsightsToggle() {
 
   if (!btn || !content) return;
 
-  btn.addEventListener("click", () => {
-    const isOpen = !content.hidden;
+  content.hidden = true;
+  btn.classList.remove("open");
+  btn.setAttribute("aria-expanded", "false");
 
-    content.hidden = isOpen;
-    btn.classList.toggle("open", !isOpen);
+  const updateLabel = (isOpen) => {
+    btn.setAttribute("aria-expanded", String(isOpen));
+    btn.classList.toggle("open", isOpen);
+  };
+
+  btn.addEventListener("click", () => {
+    const willOpen = content.hidden;
+    content.hidden = !willOpen;
+    updateLabel(willOpen);
   });
 }
 
-// Kjør etter DOM er klar
 document.addEventListener("DOMContentLoaded", () => {
   setupInsightsToggle();
 });
