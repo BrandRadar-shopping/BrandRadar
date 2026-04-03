@@ -1086,4 +1086,115 @@ body.is-product-page .description {
   color: #334155;
 }
 
+/* =====================================================
+   Product Mobile – Unified Button System
+   Harmoniserer toggle + CTA-knapper
+===================================================== */
 
+@media (max-width: 768px) {
+
+  /* Felles knappe-DNA */
+  body.is-product-page .description-toggle,
+  body.is-product-page #favorite-btn,
+  body.is-product-page #buy-link,
+  body.is-product-page .insights-toggle {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 18px;
+    padding: 0 16px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.18s ease;
+  }
+
+  /* Nøytrale toggle-knapper */
+  body.is-product-page .description-toggle,
+  body.is-product-page .insights-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    text-align: left;
+  }
+
+  body.is-product-page .description-toggle::after,
+  body.is-product-page .insights-toggle::after {
+    content: "▾";
+    flex: 0 0 auto;
+    margin-left: 12px;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease;
+  }
+
+  body.is-product-page .description-toggle.open::after,
+  body.is-product-page .insights-toggle.open::after {
+    transform: rotate(180deg);
+  }
+
+  /* Sekundærknapp */
+  body.is-product-page #favorite-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #f8fafc;
+    color: #111827;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  }
+
+  body.is-product-page #favorite-btn:hover,
+  body.is-product-page #favorite-btn:active {
+    background: #f1f5f9;
+    transform: translateY(1px);
+  }
+
+  /* Primærknapp */
+  body.is-product-page #buy-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #0f172a;
+    background: #0f172a;
+    color: #ffffff !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+    text-decoration: none;
+  }
+
+  body.is-product-page #buy-link:hover,
+  body.is-product-page #buy-link:active {
+    background: #111827;
+    border-color: #111827;
+    transform: translateY(1px);
+  }
+
+  /* Litt bedre rytme mellom knappene */
+  body.is-product-page .description-wrapper,
+  body.is-product-page .product-insights-wrapper {
+    margin-top: 0;
+  }
+
+  body.is-product-page #favorite-btn {
+    margin-top: 0.65rem;
+  }
+
+  body.is-product-page #buy-link {
+    margin-top: 0.2rem;
+  }
+
+  /* Rydd opp i heart inni favorittknappen */
+  body.is-product-page #favorite-btn .heart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
