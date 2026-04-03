@@ -449,11 +449,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  function bindFilterEvents(applyFiltersAndSort) {
+    function bindFilterEvents(applyFiltersAndSort) {
     brandFilter?.addEventListener("change", applyFiltersAndSort);
     priceFilter?.addEventListener("change", applyFiltersAndSort);
     discountFilter?.addEventListener("change", applyFiltersAndSort);
     sortSelect?.addEventListener("change", applyFiltersAndSort);
+
+    resetFiltersBtn?.addEventListener("click", () => {
+      if (brandFilter) brandFilter.value = "all";
+      if (priceFilter) priceFilter.value = "all";
+      if (discountFilter) discountFilter.checked = false;
+      if (sortSelect) sortSelect.value = "featured";
+      applyFiltersAndSort();
+    });
   }
 
   function ensurePageRootCollectionClass(slug) {
