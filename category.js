@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return count;
   }
 
-  function updateMobileFilterToggleSummary() {
+    function updateMobileFilterToggleSummary() {
     if (!filterToggleMeta || !filterBar) return;
 
     const countText =
@@ -373,6 +373,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const activeCount = getActiveFilterCount();
     const isCollapsed = filterBar.classList.contains("is-collapsed");
+
+    if (resetFiltersBtn) {
+      resetFiltersBtn.hidden = activeCount === 0;
+    }
 
     if (isCollapsed) {
       const parts = [];
