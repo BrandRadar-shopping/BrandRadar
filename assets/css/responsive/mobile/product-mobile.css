@@ -415,3 +415,161 @@
     max-width: 72vw;
   }
 }
+
+/* =====================================================
+   BrandRadar – Product Mobile (FINAL)
+===================================================== */
+
+@media (max-width: 768px) {
+
+  body.is-product-page {
+    background:
+      radial-gradient(circle at top, rgba(0, 112, 243, 0.05), transparent 34%),
+      linear-gradient(180deg, #f8fbff 0%, #ffffff 24%, #f8fbff 100%);
+  }
+
+  body.is-product-page .product-detail {
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
+
+  /* BACK BUTTON */
+  body.is-product-page #back-btn {
+    order: -10;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: #fff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  body.is-product-page #back-btn::before {
+    content: "";
+  }
+
+  /* IMAGE + THUMBS FIX */
+  body.is-product-page .product-media-column {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.is-product-page .image-gallery {
+    order: 1;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+  }
+
+  body.is-product-page .thumbnails {
+    order: 2;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+  }
+
+  body.is-product-page .thumb {
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+  }
+
+  /* INFO */
+  body.is-product-page .product-detail-info {
+    order: 3;
+    gap: 0.55rem;
+  }
+
+  body.is-product-page .product-detail-info h1 {
+    font-size: 1.9rem;
+    line-height: 1;
+  }
+
+  body.is-product-page .product-brand {
+    font-size: 0.95rem;
+  }
+
+  /* PRICE */
+  body.is-product-page #product-price-box {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  body.is-product-page #new-price {
+    font-size: 1.6rem;
+  }
+
+  body.is-product-page #discount-tag {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(230,0,35,0.1);
+  }
+
+  /* CTA */
+  body.is-product-page #favorite-btn {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+
+  body.is-product-page #buy-link {
+    min-height: 50px;
+    border-radius: 12px;
+  }
+
+  /* PRICE COMPARISON */
+  body.is-product-page .price-offer-row {
+    flex-direction: column;
+  }
+
+  /* INSIGHTS TOGGLE */
+  body.is-product-page .product-insights-wrapper {
+    order: 6;
+  }
+
+  body.is-product-page .insights-toggle {
+    width: 100%;
+    min-height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0 14px;
+    text-align: left;
+  }
+
+  body.is-product-page .insights-toggle::after {
+    content: "▾";
+    float: right;
+  }
+
+  body.is-product-page .insights-toggle.open::after {
+    transform: rotate(180deg);
+  }
+
+  body.is-product-page .product-insights {
+    margin-top: 8px;
+  }
+
+  /* RELATED */
+  body.is-product-page .related-section {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+  }
+
+  body.is-product-page .related-slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  body.is-product-page .related-slider .product-card {
+    flex: 0 0 70%;
+  }
+
+}
