@@ -65,15 +65,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   let discount = parseFloat(String(product.discount || "").replace(",", "."));
   if (discount && discount < 1) discount *= 100;
 
-  if (numericPrice && discount > 0) {
+    if (numericPrice && discount > 0) {
     const newPrice = Math.round(numericPrice * (1 - discount / 100));
     newPriceEl.textContent = `${newPrice} kr`;
     oldPriceEl.textContent = `${numericPrice} kr`;
     discountTagEl.textContent = `-${discount.toFixed(0)}%`;
+    discountTagEl.style.display = "inline-flex";
   } else {
     newPriceEl.textContent = product.price ? `${product.price} kr` : "";
     oldPriceEl.textContent = "";
     discountTagEl.textContent = "";
+    discountTagEl.style.display = "none";
   }
 
   buyLinkEl.href = product.product_url || "#";
