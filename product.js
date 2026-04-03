@@ -969,4 +969,23 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInsightsToggle();
 });
 
+function setupDescriptionToggle() {
+  const btn = document.querySelector(".description-toggle");
+  const content = document.getElementById("product-description");
+
+  if (!btn || !content) return;
+
+  content.hidden = true;
+
+  btn.addEventListener("click", () => {
+    const willOpen = content.hidden;
+    content.hidden = !willOpen;
+    btn.classList.toggle("open", willOpen);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupDescriptionToggle();
+});
+
 
