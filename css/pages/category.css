@@ -158,6 +158,166 @@ body.is-category-page .filter-bar.is-collapsed .filter-panel {
 }
 
 /* =====================================================
+   DESKTOP: filter layout / controls
+   ===================================================== */
+
+body.is-category-page .filter-bar {
+  width: min(1400px, calc(100% - 48px));
+  margin: 14px auto 18px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.06),
+    0 1px 0 rgba(255,255,255,0.9) inset;
+}
+
+body.is-category-page .filter-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 22px;
+  align-items: end;
+}
+
+body.is-category-page .filters-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px 18px;
+  min-width: 0;
+}
+
+body.is-category-page .filters-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 14px 16px;
+  min-width: 0;
+}
+
+body.is-category-page .filters-left > label,
+body.is-category-page .filters-right > label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+}
+
+body.is-category-page #brand-filter,
+body.is-category-page #price-filter,
+body.is-category-page #sort-select {
+  min-width: 122px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+body.is-category-page .checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-size: 0.98rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.is-category-page .checkbox-label input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #0070f3;
+}
+
+body.is-category-page .filters-status-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 42px;
+}
+
+body.is-category-page .filters-right .result-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+
+body.is-category-page .reset-filters-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.is-category-page .reset-filters-btn:hover {
+  background: #f8fafc;
+}
+
+body.is-category-page .reset-filters-btn[hidden] {
+  display: none !important;
+}
+
+body.is-category-page .filter-tags {
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body.is-category-page .filter-tags.hidden {
+  display: none !important;
+}
+
+body.is-category-page .filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: #eef4ff;
+  border: 1px solid rgba(0, 112, 243, 0.12);
+  color: #184b8a;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+body.is-category-page .filter-tag .close-tag {
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* =====================================================
    DEALS PAGE BASE
    ===================================================== */
 
