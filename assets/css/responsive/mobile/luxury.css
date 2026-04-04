@@ -1,11 +1,11 @@
 /* =========================================
-   LUXURY MOBILE – STABLE + FULLWIDTH HERO
+   LUXURY MOBILE – PREMIUM POLISH
 ========================================= */
 
 @media (max-width: 768px) {
   .luxury-page {
     max-width: 100%;
-    padding: 0 10px 118px;
+    padding: 0 6px 118px;
   }
 
   .luxury-page,
@@ -18,19 +18,32 @@
     display: none;
   }
 
-  /* Fullbredde premium hero */
+  /* Premium hero */
   .luxury-hero {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: 0;
-    padding: 1.9rem 1.15rem 1.45rem;
+    padding: 2.2rem 1.1rem 1.55rem;
     background:
-      radial-gradient(circle at top center, rgba(212, 175, 55, 0.12), transparent 42%),
-      linear-gradient(180deg, #060606 0%, #111111 72%, #181818 100%);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
-    box-shadow: inset 0 -18px 30px rgba(255,255,255,0.03);
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.16), transparent 38%),
+      linear-gradient(180deg, #050505 0%, #0d0d0d 58%, #171717 100%);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.48);
+    box-shadow:
+      inset 0 -22px 38px rgba(255,255,255,0.03),
+      inset 0 1px 0 rgba(255,255,255,0.04);
     position: relative;
     text-align: center;
+    overflow: hidden;
+  }
+
+  .luxury-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.04), transparent 32%),
+      radial-gradient(circle at 50% 18%, rgba(255,255,255,0.06), transparent 28%);
+    pointer-events: none;
   }
 
   .luxury-hero::after {
@@ -45,42 +58,51 @@
   }
 
   .luxury-hero h1 {
-    font-size: clamp(2.05rem, 8.4vw, 2.75rem);
-    line-height: 0.94;
-    letter-spacing: -0.06em;
-    margin: 0 auto 0.55rem;
-    max-width: 9ch;
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1.72rem, 7.2vw, 2.3rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    margin: 0 auto 0.7rem;
+    max-width: 10.5ch;
+    text-wrap: balance;
+    text-shadow: 0 2px 14px rgba(212, 175, 55, 0.1);
   }
 
   .luxury-hero p {
+    position: relative;
+    z-index: 1;
     font-size: 0.98rem;
-    line-height: 1.5;
-    max-width: 19ch;
+    line-height: 1.48;
+    max-width: 20ch;
     margin: 0 auto;
-    color: rgba(255,255,255,0.82);
+    color: rgba(255,255,255,0.8);
+    text-wrap: balance;
   }
 
   /* Seksjoner */
   .luxury-section {
     margin: 0;
-    padding: 0.9rem 0 1.25rem;
+    padding: 0.8rem 0 1.2rem;
   }
 
   .luxury-section h2 {
-    margin: 0 0 10px;
-    font-size: 1.34rem;
-    line-height: 1.05;
+    margin: 0 0 12px;
+    font-size: 1.3rem;
+    line-height: 1.04;
     letter-spacing: -0.035em;
     text-align: left;
-    padding: 0 2px;
+    padding: 0 6px;
   }
 
-  /* Brand-grid */
+  /* Brand-grid: mindre sidekant, mer rom mellom kort */
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    column-gap: 14px;
+    row-gap: 12px;
     align-items: start;
+    padding: 0 4px;
   }
 
   .brand-card {
@@ -88,8 +110,8 @@
     max-width: 100%;
     margin: 0;
     min-height: 0;
-    aspect-ratio: 1 / 0.96;
-    padding: 10px 8px;
+    aspect-ratio: 1 / 0.94;
+    padding: 10px 8px 11px;
     border-radius: 16px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     display: flex;
@@ -102,8 +124,8 @@
   .brand-card .brand-logo,
   .brand-logo {
     width: 100%;
-    max-width: 112px;
-    height: 56px;
+    max-width: 118px;
+    height: 58px;
     object-fit: contain;
     display: block;
     margin: 0 auto 10px;
@@ -123,6 +145,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 12px;
+    padding: 0 2px;
   }
 
   .luxury-filter-bar select {
@@ -149,6 +172,7 @@
     max-width: 100%;
     justify-items: stretch;
     align-items: start;
+    padding: 0 2px;
   }
 
   .luxury-product-card,
@@ -291,7 +315,7 @@
 
 @media (max-width: 360px) {
   .luxury-page {
-    padding: 0 8px 116px;
+    padding: 0 6px 116px;
   }
 
   .brand-grid,
@@ -301,8 +325,22 @@
     gap: 8px;
   }
 
+  .brand-grid {
+    padding: 0 2px;
+  }
+
   .luxury-section h2 {
     font-size: 1.18rem;
+    padding: 0 4px;
+  }
+
+  .luxury-hero h1 {
+    font-size: clamp(1.58rem, 8vw, 2rem);
+    max-width: 11ch;
+  }
+
+  .luxury-hero p {
+    font-size: 0.92rem;
   }
 
   .luxury-info {
