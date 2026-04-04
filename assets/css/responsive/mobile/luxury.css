@@ -1,11 +1,11 @@
 /* =========================================
-   LUXURY MOBILE – STABLE RESET
+   LUXURY MOBILE – STABLE + FULLWIDTH HERO
 ========================================= */
 
 @media (max-width: 768px) {
   .luxury-page {
     max-width: 100%;
-    padding: 0 14px 118px;
+    padding: 0 10px 118px;
   }
 
   .luxury-page,
@@ -18,51 +18,68 @@
     display: none;
   }
 
+  /* Fullbredde premium hero */
   .luxury-hero {
-    width: 100%;
-    margin-left: 0;
-    padding: 1.6rem 1rem 1.35rem;
-    border-bottom-width: 1px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: 0;
+    padding: 1.9rem 1.15rem 1.45rem;
+    background:
+      radial-gradient(circle at top center, rgba(212, 175, 55, 0.12), transparent 42%),
+      linear-gradient(180deg, #060606 0%, #111111 72%, #181818 100%);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+    box-shadow: inset 0 -18px 30px rgba(255,255,255,0.03);
+    position: relative;
+    text-align: center;
   }
 
   .luxury-hero::after {
-    height: 24px;
-    bottom: -12px;
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    height: 28px;
+    background: linear-gradient(to bottom, rgba(17,17,17,1), rgba(255,255,255,0));
+    pointer-events: none;
   }
 
   .luxury-hero h1 {
-    font-size: clamp(1.95rem, 8vw, 2.4rem);
-    line-height: 0.96;
-    letter-spacing: -0.05em;
-    margin-bottom: 0.45rem;
+    font-size: clamp(2.05rem, 8.4vw, 2.75rem);
+    line-height: 0.94;
+    letter-spacing: -0.06em;
+    margin: 0 auto 0.55rem;
+    max-width: 9ch;
   }
 
   .luxury-hero p {
-    font-size: 0.94rem;
-    line-height: 1.45;
-    max-width: 22ch;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 19ch;
     margin: 0 auto;
+    color: rgba(255,255,255,0.82);
   }
 
+  /* Seksjoner */
   .luxury-section {
     margin: 0;
-    padding: 1.15rem 0 1.35rem;
+    padding: 0.9rem 0 1.25rem;
   }
 
   .luxury-section h2 {
-    margin: 0 0 12px;
-    font-size: 1.28rem;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
+    margin: 0 0 10px;
+    font-size: 1.34rem;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
     text-align: left;
     padding: 0 2px;
   }
 
-  /* Brand-kort tilbake til enkel, trygg form */
+  /* Brand-grid */
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
     align-items: start;
   }
 
@@ -71,8 +88,8 @@
     max-width: 100%;
     margin: 0;
     min-height: 0;
-    aspect-ratio: 1 / 1;
-    padding: 12px 10px;
+    aspect-ratio: 1 / 0.96;
+    padding: 10px 8px;
     border-radius: 16px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     display: flex;
@@ -85,8 +102,8 @@
   .brand-card .brand-logo,
   .brand-logo {
     width: 100%;
-    max-width: 96px;
-    height: 48px;
+    max-width: 112px;
+    height: 56px;
     object-fit: contain;
     display: block;
     margin: 0 auto 10px;
@@ -94,12 +111,13 @@
 
   .brand-card h3 {
     margin: 0;
-    font-size: 13px;
-    line-height: 1.18;
+    font-size: 12.5px;
+    line-height: 1.14;
     text-align: center;
     word-break: break-word;
   }
 
+  /* Filter bar */
   .luxury-filter-bar {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -122,6 +140,7 @@
     box-shadow: none;
   }
 
+  /* Product grids */
   #luxuryGoldPickGrid,
   #luxuryProductGrid {
     display: grid;
@@ -141,6 +160,7 @@
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     overflow: hidden;
     background: #fff;
+    position: relative;
   }
 
   .luxury-product-card img,
@@ -271,14 +291,14 @@
 
 @media (max-width: 360px) {
   .luxury-page {
-    padding: 0 10px 116px;
+    padding: 0 8px 116px;
   }
 
   .brand-grid,
   #luxuryGoldPickGrid,
   #luxuryProductGrid,
   .luxury-filter-bar {
-    gap: 10px;
+    gap: 8px;
   }
 
   .luxury-section h2 {
