@@ -26,6 +26,18 @@
     padding: 14px 14px 24px;
   }
 
+   /* Mobile: her skal toggle-knappene vises */
+body.is-product-page .description-toggle,
+body.is-product-page .insights-toggle {
+  display: flex;
+}
+
+/* Mobile: hidden skal faktisk skjule innhold */
+body.is-product-page #product-description[hidden],
+body.is-product-page #product-insights[hidden] {
+  display: none !important;
+}
+
   /* -------------------------------------------------
      Mobile back button
   ------------------------------------------------- */
