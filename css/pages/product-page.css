@@ -547,6 +547,19 @@
   z-index: 5000;
 }
 
+
+/* Desktop: disse toggle-knappene skal ikke vises */
+body.is-product-page .description-toggle,
+body.is-product-page .insights-toggle {
+  display: none;
+}
+
+/* Desktop: innholdet skal være åpent */
+body.is-product-page #product-description[hidden],
+body.is-product-page #product-insights[hidden] {
+  display: block !important;
+}
+
 /* =====================================================
    RESPONSIVE
 ===================================================== */
