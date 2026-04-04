@@ -53,7 +53,6 @@
   margin: 30px 0;
 }
 
-
 /* =====================================================
    CATEGORY HEADER / COLLECTION INTRO
    ===================================================== */
@@ -103,6 +102,7 @@
 .category-back-btn__text {
   line-height: 1;
 }
+
 .category-header .breadcrumb {
   margin-bottom: 8px;
 }
@@ -137,6 +137,25 @@
   margin: 0;
 }
 
+/* =====================================================
+   DESKTOP: skjul mobile filter-toggle
+   ===================================================== */
+
+body.is-category-page .filter-toggle {
+  display: none;
+}
+
+body.is-category-page .filter-toggle__icon {
+  display: none;
+}
+
+body.is-category-page .filter-panel {
+  display: grid;
+}
+
+body.is-category-page .filter-bar.is-collapsed .filter-panel {
+  display: grid;
+}
 
 /* =====================================================
    DEALS PAGE BASE
@@ -153,7 +172,6 @@
 .collection-page--deals .category-header .breadcrumb a {
   color: #5eb0ff;
 }
-
 
 /* =====================================================
    DEALS TOP ZONE – FINAL CLEAN VERSION
@@ -208,7 +226,6 @@
 .deals-top-zone-divider {
   display: none;
 }
-
 
 /* =====================================================
    DEALS HERO
@@ -277,7 +294,6 @@
   font-size: 0.92rem;
 }
 
-
 /* =====================================================
    HIGHLIGHTS WRAPPER
    ===================================================== */
@@ -305,7 +321,6 @@
   max-width: 700px;
 }
 
-
 /* =====================================================
    HIGHLIGHTS GRID
    ===================================================== */
@@ -321,7 +336,6 @@
 .deal-highlight-card--primary {
   grid-row: span 2;
 }
-
 
 /* =====================================================
    HIGHLIGHT CARDS
@@ -480,7 +494,6 @@
   z-index: 2;
 }
 
-
 /* =====================================================
    FEED START
    ===================================================== */
@@ -514,7 +527,6 @@
   line-height: 1.55;
 }
 
-
 /* =====================================================
    FILTER BAR
    ===================================================== */
@@ -530,7 +542,6 @@
   margin-bottom: 22px;
   backdrop-filter: blur(10px);
 }
-
 
 /* =====================================================
    FEED GRID – JEVNERE KORT
@@ -721,7 +732,6 @@
   height: 18px;
 }
 
-
 /* ==========================================
    DEALS CORNER RIBBON
    ========================================== */
@@ -733,28 +743,21 @@
   left: -44px;
   width: 132px;
   height: 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: linear-gradient(135deg, #0f172a, #1f2937);
   color: #ffffff;
-
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   line-height: 1;
   text-align: center;
-
   transform: rotate(-45deg);
   transform-origin: center;
-
   z-index: 7;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
   pointer-events: none;
-
-  /* optisk sentrering */
   padding-top: 1px;
 }
 
@@ -765,23 +768,19 @@
   left: -44px;
   width: 132px;
   height: 32px;
-
   transform: rotate(-45deg);
   transform-origin: center;
-
   background: linear-gradient(
     to bottom,
     rgba(255,255,255,0.20) 0%,
     rgba(255,255,255,0.05) 36%,
     rgba(0,0,0,0.16) 100%
   );
-
   z-index: 6;
   pointer-events: none;
-
-  /* gjør effekten mer subtil */
   opacity: 0.85;
 }
+
 /* =====================================================
    RESPONSIVE
    ===================================================== */
