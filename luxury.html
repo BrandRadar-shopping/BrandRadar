@@ -5,70 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Luxury Corner | BrandRadar</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css">
-
-
+  <link rel="stylesheet" href="assets/css/responsive/mobile.css" />
 </head>
 <body>
-  
 
 <header class="main-header">
   <div class="nav-container">
-<button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
-  ☰
-</button>
+    <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
+      ☰
+    </button>
 
     <a href="index.html" class="logo">BRANDRADAR</a>
 
     <div class="search-box" id="site-search">
-  <span class="search-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
-    <circle cx="11" cy="11" r="6.5"></circle>
-    <path d="M16 16L21 21"></path>
-  </svg>
-</span>
+      <span class="search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="M16 16L21 21"></path>
+        </svg>
+      </span>
 
-  <input
-    id="search-input"
-    type="search"
-    placeholder="Søk produkter eller merker…"
-    autocomplete="off"
-    spellcheck="false"
-    aria-label="Søk"
-  />
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Søk produkter eller merker…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Søk"
+      />
 
-  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+      <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
 
-  <div class="search-dropdown" id="search-dropdown" hidden>
-    <div class="search-section" data-section="products">
-      <p class="search-section-title">Produkter</p>
-      <div class="search-results" id="search-results-products"></div>
+      <div class="search-dropdown" id="search-dropdown" hidden>
+        <div class="search-section" data-section="products">
+          <p class="search-section-title">Produkter</p>
+          <div class="search-results" id="search-results-products"></div>
+        </div>
+
+        <div class="search-section" data-section="brands">
+          <p class="search-section-title">Brands</p>
+          <div class="search-results" id="search-results-brands"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="search-section" data-section="brands">
-      <p class="search-section-title">Brands</p>
-      <div class="search-results" id="search-results-brands"></div>
-    </div>
-  </div>
-</div>
-
-
-  
-
-    <!-- Toppmeny -->
     <nav class="top-links">
       <a href="index.html">Hjem</a>
       <a href="news.html">Nyheter</a>
       <a href="brands.html">Brands</a>
       <a href="favoritter.html" class="favorites-link">
-  Favoritter <span id="favorites-count">0</span>
-</a>
+        Favoritter <span id="favorites-count">0</span>
+      </a>
       <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
     </nav>
-
   </div>
 
-  <!-- 🔽 Kategorimenylinje -->
   <ul class="category-bar">
     <li class="category-item" data-category="Clothing">Klær</li>
     <li class="category-item" data-category="Shoes">Sko</li>
@@ -78,7 +69,7 @@
   </ul>
 </header>
 
-  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+<div class="mobile-overlay" id="mobileOverlay" hidden></div>
 
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
   <div class="mobile-drawer-header">
@@ -104,63 +95,35 @@
   </div>
 </nav>
 
-  <nav class="mega-menu"></nav>
+<nav class="mega-menu"></nav>
 
-  <!-- =========================================
-     💎 Luxury Hero Banner (fade variant)
-========================================= -->
-<section class="luxury-hero">
-  <div class="luxury-hero-slider">
-
-    <div class="hero-slide active" style="background-image: url('/assets/img/luxury/luxury-watch.jpg');"></div>
-    <div class="hero-slide" style="background-image: url('/assets/img/luxury/luxury-bag.jpg');"></div>
-    <div class="hero-slide" style="background-image: url('/assets/img/luxury/luxury-jewelry.jpg');"></div>
-    <div class="hero-slide" style="background-image: url('/assets/img/luxury/luxury-fashion.jpg');"></div>
-    <div class="hero-slide" style="background-image: url('/assets/img/luxury/luxury-texture.jpg');"></div>
-
-  </div>
-
-  <div class="hero-content">
-    <h1>Luksus håndplukket for deg.</h1>
-    <p>Premium produkter fra verdens mest eksklusive merker</p>
-  </div>
-</section>
-
-<!-- ============================= -->
-<!-- 🏆 HERO-SEKSJON -->
-<!-- ============================= -->
 <main class="luxury-page">
-
   <section class="luxury-hero">
-    <h1>Luksus håndplukket for deg.</h1>
-    <p>Premium produkter fra verdens mest eksklusive merker</p>
+    <div class="luxury-hero-slider">
+      <div class="hero-slide active" style="background-image: url('assets/img/luxury/luxury-watch.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('assets/img/luxury/luxury-bag.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('assets/img/luxury/luxury-jewelry.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('assets/img/luxury/luxury-fashion.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('assets/img/luxury/luxury-texture.jpg');"></div>
+    </div>
+
+    <div class="hero-content">
+      <h1>Luksus håndplukket for deg.</h1>
+      <p>Premium produkter fra verdens mest eksklusive merker</p>
+    </div>
   </section>
 
-
-  <!-- ============================= -->
-  <!-- 🌟 Eksklusive Brands -->
-  <!-- ============================= -->
   <section class="luxury-section">
     <h2>Eksklusive Brands</h2>
     <div class="brand-grid" id="luxuryBrandGrid"></div>
   </section>
 
-
-  <!-- ============================= -->
-  <!-- ✨ Gold Picks -->
-  <!-- ============================= -->
   <section class="luxury-section" id="goldPickSection">
     <h2>Gold Picks ✨</h2>
     <div class="luxury-product-grid" id="luxuryGoldPickGrid"></div>
   </section>
 
-
-  <!-- ============================= -->
-  <!-- 🛍 Premium Produkter -->
-  <!-- ============================= -->
   <section class="luxury-section">
-
-    <!-- ✅ Filterbar -->
     <div class="luxury-filter-bar">
       <select id="filterCategory">
         <option value="all">Alle kategorier</option>
@@ -184,9 +147,7 @@
     <p id="luxury-empty" class="empty-message" style="display:none;">
       Ingen produkter matcher valget ditt 🔍
     </p>
-
   </section>
-
 </main>
 
 <script src="favorites-core.js"></script>
@@ -196,8 +157,6 @@
 <script src="script.js"></script>
 <script src="search.js"></script>
 
-
-<!-- ✅ Gullgradient definisjon for favoritt-ikon -->
 <svg id="gold-gradient-defs" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -205,18 +164,17 @@
         <animate attributeName="stop-color"
                  values="#d4af37;#f5e29e;#d4af37"
                  dur="4s"
-                 repeatCount="indefinite"/>
+                 repeatCount="indefinite" />
       </stop>
       <stop offset="100%" stop-color="#f8e08e">
         <animate attributeName="stop-color"
                  values="#f8e08e;#fff5b8;#f8e08e"
                  dur="4s"
-                 repeatCount="indefinite"/>
+                 repeatCount="indefinite" />
       </stop>
     </linearGradient>
   </defs>
 </svg>
-
 
 <nav class="m-bottom-nav" aria-label="Bunnmeny">
   <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
@@ -261,6 +219,6 @@
     <span class="m-txt">Luxury</span>
   </a>
 </nav>
-  
+
 </body>
 </html>
