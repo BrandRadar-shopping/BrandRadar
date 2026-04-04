@@ -1,6 +1,6 @@
 // ============================================
-// 💎 Luxury Corner – Mobile/UX + shared rating system
-// Bruker samme rating-engine som resten av BrandRadar
+// 💎 Luxury Corner – stable version
+// Bruker delt rating-system fra Product Card Engine
 // ============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -35,12 +35,15 @@ function cleanRating(value) {
   return Math.max(0, Math.min(5, parsed));
 }
 
-function formatPrice(value) {
-  const n = parseFloat(
+function cleanPrice(value) {
+  return parseFloat(
     String(value ?? "").replace(/[^\d.,]/g, "").replace(",", ".")
-  );
-  if (!Number.isFinite(n) || n <= 0) return "";
-  return `${Math.round(n)} kr`;
+  ) || 0;
+}
+
+function formatPrice(value) {
+  const n = cleanPrice(value);
+  return n ? `${Math.round(n)} kr` : "";
 }
 
 function escapeHtml(value) {
@@ -50,6 +53,11 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function getResolvedLuxuryId(product) {
+  if (typeof resolveProductId === "function") return resolveProductId(product);
+  return String(product.id || product.product_id || "").trim();
 }
 
 function buildLuxuryRatingMarkup(ratingValue) {
@@ -65,13 +73,7 @@ function buildLuxuryRatingMarkup(ratingValue) {
 
   const rating = cleanRating(ratingValue);
   if (rating === null) return "";
-
   return `<div class="rating-stars"><span class="rating-value">${rating.toFixed(1)}</span></div>`;
-}
-
-function getResolvedLuxuryId(product) {
-  if (typeof resolveProductId === "function") return resolveProductId(product);
-  return String(product.id || product.product_id || "").trim();
 }
 
 // ============================================
@@ -91,22 +93,17 @@ function loadLuxuryBrands(sheetId, sheetName) {
       rows.forEach(b => {
         const card = document.createElement("div");
         card.classList.add("brand-card");
-
         card.innerHTML = `
           <img src="${escapeHtml(b.logo || "")}" class="brand-logo" alt="${escapeHtml(b.brand || "")}">
           <h3>${escapeHtml(b.brand || "")}</h3>
         `;
-
         card.addEventListener("click", () => {
           window.location.href = `brand-page.html?brand=${encodeURIComponent(b.brand || "")}`;
         });
-
         grid.appendChild(card);
       });
     })
-    .catch(err => {
-      console.error("❌ Luxury brands error:", err);
-    });
+    .catch(err => console.error("❌ Luxury brands error:", err));
 }
 
 // ============================================
@@ -136,9 +133,7 @@ function loadLuxuryProducts(sheetId, sheetName) {
       renderLuxuryProducts();
       setFilterEvents();
     })
-    .catch(err => {
-      console.error("❌ Luxury products error:", err);
-    });
+    .catch(err => console.error("❌ Luxury products error:", err));
 }
 
 function renderLuxuryProducts() {
@@ -148,7 +143,7 @@ function renderLuxuryProducts() {
   const filterEl = document.getElementById("filterCategory");
   const sortEl = document.getElementById("sortProducts");
 
-  if (!goldGrid || !prodGrid || !filterEl || !sortEl || !empty) return;
+  if (!goldGrid || !prodGrid || !empty || !filterEl || !sortEl) return;
 
   goldGrid.innerHTML = "";
   prodGrid.innerHTML = "";
@@ -163,22 +158,10 @@ function renderLuxuryProducts() {
 
   if (sortVal === "rating") {
     list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
-  }
-
-  if (sortVal === "highprice") {
-    list.sort((a, b) => {
-      const bPrice = parseFloat(String(b.price).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-      const aPrice = parseFloat(String(a.price).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-      return bPrice - aPrice;
-    });
-  }
-
-  if (sortVal === "lowprice") {
-    list.sort((a, b) => {
-      const aPrice = parseFloat(String(a.price).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-      const bPrice = parseFloat(String(b.price).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-      return aPrice - bPrice;
-    });
+  } else if (sortVal === "highprice") {
+    list.sort((a, b) => cleanPrice(b.price) - cleanPrice(a.price));
+  } else if (sortVal === "lowprice") {
+    list.sort((a, b) => cleanPrice(a.price) - cleanPrice(b.price));
   }
 
   empty.style.display = list.length ? "none" : "block";
@@ -217,13 +200,11 @@ function renderLuxuryProducts() {
         </svg>
       </button>
 
-      <div class="luxury-media">
-        <img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.title)}" class="luxury-img" loading="lazy">
-      </div>
+      <img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.title)}" class="luxury-img" loading="lazy">
 
       <div class="luxury-info">
-        <p class="brand">${escapeHtml(p.brand)}</p>
         <h4>${escapeHtml(p.title)}</h4>
+        <p class="brand">${escapeHtml(p.brand)}</p>
         ${ratingMarkup}
         <p class="price">${escapeHtml(priceText)}</p>
       </div>
@@ -234,10 +215,7 @@ function renderLuxuryProducts() {
 
       if (p.id) {
         window.location.href = `product.html?id=${encodeURIComponent(p.id)}&luxury=true`;
-        return;
-      }
-
-      if (p.product_url) {
+      } else if (p.product_url) {
         window.open(p.product_url, "_blank", "noopener");
       }
     });
@@ -286,15 +264,8 @@ function setFilterEvents() {
   const filter = document.getElementById("filterCategory");
   const sort = document.getElementById("sortProducts");
 
-  if (filter) {
-    filter.removeEventListener("change", renderLuxuryProducts);
-    filter.addEventListener("change", renderLuxuryProducts);
-  }
-
-  if (sort) {
-    sort.removeEventListener("change", renderLuxuryProducts);
-    sort.addEventListener("change", renderLuxuryProducts);
-  }
+  if (filter) filter.addEventListener("change", renderLuxuryProducts);
+  if (sort) sort.addEventListener("change", renderLuxuryProducts);
 }
 
 // ============================================
