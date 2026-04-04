@@ -962,31 +962,34 @@ if (backBtn) {
 // ================================
 // Mobile: Insights toggle
 // ================================
+function isMobileProductView() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
 function setupInsightsToggle() {
   const btn = document.querySelector(".insights-toggle");
   const content = document.getElementById("product-insights");
 
   if (!btn || !content) return;
 
+  if (!isMobileProductView()) {
+    content.hidden = false;
+    btn.classList.remove("open");
+    btn.setAttribute("aria-expanded", "true");
+    return;
+  }
+
   content.hidden = true;
   btn.classList.remove("open");
   btn.setAttribute("aria-expanded", "false");
 
-  const updateLabel = (isOpen) => {
-    btn.setAttribute("aria-expanded", String(isOpen));
-    btn.classList.toggle("open", isOpen);
-  };
-
   btn.addEventListener("click", () => {
     const willOpen = content.hidden;
     content.hidden = !willOpen;
-    updateLabel(willOpen);
+    btn.classList.toggle("open", willOpen);
+    btn.setAttribute("aria-expanded", String(willOpen));
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  setupInsightsToggle();
-});
 
 function setupDescriptionToggle() {
   const btn = document.querySelector(".description-toggle");
@@ -994,17 +997,27 @@ function setupDescriptionToggle() {
 
   if (!btn || !content) return;
 
+  if (!isMobileProductView()) {
+    content.hidden = false;
+    btn.classList.remove("open");
+    btn.setAttribute("aria-expanded", "true");
+    return;
+  }
+
   content.hidden = true;
+  btn.classList.remove("open");
+  btn.setAttribute("aria-expanded", "false");
 
   btn.addEventListener("click", () => {
     const willOpen = content.hidden;
     content.hidden = !willOpen;
     btn.classList.toggle("open", willOpen);
+    btn.setAttribute("aria-expanded", String(willOpen));
   });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupInsightsToggle();
   setupDescriptionToggle();
 });
-
 
