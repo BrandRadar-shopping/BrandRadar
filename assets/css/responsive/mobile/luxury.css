@@ -1,5 +1,5 @@
 /* =========================================
-   LUXURY MOBILE
+   LUXURY MOBILE – STABLE RESET
 ========================================= */
 
 @media (max-width: 768px) {
@@ -13,41 +13,25 @@
     min-width: 0;
   }
 
-  /* =========================
-     Hero banner
-  ========================= */
+  /* Bruk kun én hero på mobil */
   .luxury-hero-banner {
-    height: 24vh;
-    min-height: 160px;
-    max-height: 220px;
-  }
-
-  .luxury-hero-banner .hero-slide {
-    background-position: center center;
-  }
-
-  /* Skjul den problematiske overlay-teksten på mobil */
-  .luxury-hero-banner .hero-content {
     display: none;
   }
 
-  /* =========================
-     Main text hero
-  ========================= */
   .luxury-hero {
     width: 100%;
     margin-left: 0;
-    padding: 1.35rem 0.95rem 1.15rem;
+    padding: 1.6rem 1rem 1.35rem;
     border-bottom-width: 1px;
   }
 
   .luxury-hero::after {
-    height: 22px;
-    bottom: -11px;
+    height: 24px;
+    bottom: -12px;
   }
 
   .luxury-hero h1 {
-    font-size: clamp(1.9rem, 8vw, 2.35rem);
+    font-size: clamp(1.95rem, 8vw, 2.4rem);
     line-height: 0.96;
     letter-spacing: -0.05em;
     margin-bottom: 0.45rem;
@@ -60,9 +44,6 @@
     margin: 0 auto;
   }
 
-  /* =========================
-     Sections
-  ========================= */
   .luxury-section {
     margin: 0;
     padding: 1.15rem 0 1.35rem;
@@ -77,9 +58,7 @@
     padding: 0 2px;
   }
 
-  /* =========================
-     Brand grid
-  ========================= */
+  /* Brand-kort tilbake til enkel, trygg form */
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -90,37 +69,37 @@
   .brand-card {
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 1 / 1.02;
     margin: 0;
-    padding: 14px 10px 12px;
-    border-radius: 17px;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    padding: 12px 10px;
+    border-radius: 16px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: unset;
+    overflow: hidden;
   }
 
+  .brand-card .brand-logo,
   .brand-logo {
-    display: block;
     width: 100%;
-    max-width: 108px;
-    height: 54px;
+    max-width: 96px;
+    height: 48px;
     object-fit: contain;
-    margin: 0 auto 12px;
+    display: block;
+    margin: 0 auto 10px;
   }
 
   .brand-card h3 {
-    font-size: 13px;
-    line-height: 1.15;
     margin: 0;
+    font-size: 13px;
+    line-height: 1.18;
     text-align: center;
+    word-break: break-word;
   }
 
-  /* =========================
-     Filter bar
-  ========================= */
   .luxury-filter-bar {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -143,9 +122,6 @@
     box-shadow: none;
   }
 
-  /* =========================
-     Product grids
-  ========================= */
   #luxuryGoldPickGrid,
   #luxuryProductGrid {
     display: grid;
@@ -156,48 +132,34 @@
     align-items: start;
   }
 
-  .luxury-product-card {
+  .luxury-product-card,
+  .luxury-hero-card {
     width: 100%;
     max-width: 100%;
     margin: 0;
     border-radius: 17px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     overflow: hidden;
-    position: relative;
     background: #fff;
   }
 
-  .luxury-media {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
-  }
-
+  .luxury-product-card img,
+  .luxury-hero-card img,
   .luxury-img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: contain;
     background: #fff;
     padding: 8px;
-    margin-top: 0;
+    margin: 0;
     display: block;
+    border-radius: 0;
   }
 
   .luxury-info {
     padding: 9px 10px 10px;
     text-align: left;
-  }
-
-  .luxury-info .brand {
-    font-size: 11px;
-    line-height: 1.15;
-    margin: 0 0 2px;
-    opacity: 0.78;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #6b7280;
   }
 
   .luxury-info h4 {
@@ -212,38 +174,33 @@
     min-height: 2.36em;
   }
 
-  /* Samme rating-system-look som resten */
+  .luxury-info .brand {
+    font-size: 11px;
+    line-height: 1.15;
+    margin: 0 0 2px;
+    opacity: 0.78;
+    color: #6b7280;
+  }
+
   .luxury-product-card .rating-stars {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    min-height: 14px;
     margin: 2px 0 4px;
+    gap: 4px;
+    min-height: 12px;
   }
 
   .luxury-product-card .rating-stars-row {
-    display: inline-flex;
-    align-items: center;
     gap: 0.18rem;
   }
 
-  .luxury-product-card .rating-star {
+  .luxury-product-card .rating-star,
+  .luxury-product-card .rating-star-svg {
     width: 11px;
     height: 11px;
     flex: 0 0 11px;
   }
 
-  .luxury-product-card .rating-star-svg {
-    width: 11px;
-    height: 11px;
-    display: block;
-  }
-
   .luxury-product-card .rating-value {
     font-size: 11px;
-    line-height: 1;
-    font-weight: 700;
-    color: #111827;
   }
 
   .luxury-info .price {
@@ -254,11 +211,7 @@
     margin: 0;
   }
 
-  /* =========================
-     Badges / favorite
-  ========================= */
   .discount-badge {
-    position: absolute;
     top: 8px;
     left: 8px;
     font-size: 11px;
@@ -269,7 +222,6 @@
   }
 
   .gold-pick-badge {
-    position: absolute;
     top: 8px;
     right: 8px;
     font-size: 11px;
@@ -282,7 +234,6 @@
   }
 
   .fav-btn {
-    position: absolute;
     top: 36px;
     right: 8px;
     width: 28px;
