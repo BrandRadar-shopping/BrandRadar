@@ -5,12 +5,16 @@
 @media (max-width: 768px) {
   .luxury-page {
     max-width: 100%;
-    padding: 0 14px 100px;
+    padding: 0 14px 120px;
   }
 
+  /* =========================
+     Hero banner
+  ========================= */
   .luxury-hero-banner {
-    height: 42vh;
-    min-height: 280px;
+    height: 36vh;
+    min-height: 220px;
+    max-height: 320px;
   }
 
   .luxury-hero-banner .hero-slide {
@@ -20,105 +24,130 @@
   .hero-content {
     width: calc(100% - 28px);
     max-width: 100%;
-    padding: 1.1rem 1rem;
-    border-radius: 14px;
+    padding: 1rem 0.95rem;
+    border-radius: 16px;
     margin: 0 14px;
     backdrop-filter: blur(3px);
+    background: rgba(0, 0, 0, 0.5);
   }
 
   .hero-title {
-    font-size: 1.3rem;
-    line-height: 1.2;
-    margin-bottom: 0.4rem;
+    font-size: 1.22rem;
+    line-height: 1.18;
+    margin-bottom: 0.35rem;
   }
 
   .hero-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     line-height: 1.35;
   }
 
+  /* =========================
+     Secondary hero under banner
+  ========================= */
   .luxury-hero {
     width: 100%;
     margin-left: 0;
-    padding: 2.2rem 1rem 2.2rem;
+    padding: 1.5rem 1rem 1.35rem;
     border-bottom-width: 1px;
   }
 
+  .luxury-hero::after {
+    height: 36px;
+    bottom: -18px;
+  }
+
   .luxury-hero h1 {
-    font-size: 1.65rem;
-    line-height: 1.15;
+    font-size: 1.7rem;
+    line-height: 1.08;
     margin-bottom: 0.45rem;
   }
 
   .luxury-hero p {
     font-size: 0.95rem;
-    line-height: 1.45;
-    max-width: 28ch;
+    line-height: 1.4;
+    max-width: 24ch;
     margin: 0 auto;
   }
 
+  /* =========================
+     Sections
+  ========================= */
   .luxury-section {
     margin: 0;
-    padding: 2rem 0;
+    padding: 1.6rem 0;
   }
 
   .luxury-section h2 {
-    font-size: 1.2rem;
-    line-height: 1.2;
+    font-size: 1.55rem;
+    line-height: 1.12;
     margin-bottom: 1rem;
     text-align: left;
     padding: 0 2px;
   }
 
+  /* =========================
+     Brand grid
+  ========================= */
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 14px;
   }
 
   .brand-card {
-    border-radius: 14px;
-    padding: 14px 10px;
+    border-radius: 18px;
+    padding: 14px 10px 16px;
   }
 
   .brand-card h3 {
-    font-size: 0.9rem;
-    line-height: 1.25;
+    font-size: 0.95rem;
+    line-height: 1.2;
   }
 
   .brand-logo {
-    max-height: 42px;
+    max-height: 44px;
     object-fit: contain;
   }
 
+  /* =========================
+     Filter bar
+  ========================= */
   .luxury-filter-bar {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1.15rem;
   }
 
   .luxury-filter-bar select {
     width: 100%;
     min-width: 0;
-    height: 42px;
+    height: 44px;
     font-size: 14px;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 0 12px;
+    background: #fff;
   }
 
+  /* =========================
+     Product grids
+  ========================= */
   #luxuryGoldPickGrid,
   #luxuryProductGrid {
-    grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     max-width: 100%;
     justify-items: stretch;
+    align-items: start;
   }
 
   .luxury-product-card,
   .luxury-hero-card {
+    width: 100%;
     max-width: 100%;
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   }
@@ -126,21 +155,22 @@
   .luxury-product-card img,
   .luxury-hero-card img,
   .luxury-img {
-    height: 180px;
+    height: 150px;
     object-fit: contain;
-    border-radius: 16px 16px 0 0;
-    padding: 8px;
+    border-radius: 18px 18px 0 0;
+    padding: 10px;
     margin-top: 0;
+    background: #fff;
   }
 
   .luxury-info {
-    padding: 10px 10px 12px;
+    padding: 10px 12px 13px;
     text-align: left;
   }
 
   .luxury-info h4 {
     font-size: 0.9rem;
-    line-height: 1.3;
+    line-height: 1.28;
     margin-bottom: 4px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -150,7 +180,7 @@
   }
 
   .luxury-info .brand {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     margin-bottom: 4px;
   }
 
@@ -163,12 +193,16 @@
     font-size: 0.95rem;
   }
 
+  /* =========================
+     Badges / favorite
+  ========================= */
   .discount-badge {
     top: 10px;
     left: 10px;
     font-size: 11px;
-    padding: 4px 7px;
+    padding: 4px 8px;
     border-radius: 999px;
+    z-index: 12;
   }
 
   .gold-pick-badge {
@@ -179,12 +213,14 @@
     border-radius: 999px;
     max-width: calc(100% - 20px);
     white-space: nowrap;
+    z-index: 12;
   }
 
   .fav-btn {
-    top: 40px;
+    top: 38px;
     right: 10px;
     padding: 6px;
+    z-index: 13;
   }
 
   .luxury-page .fav-icon {
@@ -200,28 +236,29 @@
 
 @media (max-width: 520px) {
   .luxury-page {
-    padding: 0 12px 96px;
+    padding: 0 12px 122px;
   }
 
   .luxury-hero-banner {
-    height: 38vh;
-    min-height: 240px;
+    height: 31vh;
+    min-height: 190px;
+    max-height: 250px;
   }
 
   .hero-content {
-    padding: 1rem 0.9rem;
+    padding: 0.9rem 0.85rem;
   }
 
   .hero-title {
-    font-size: 1.15rem;
+    font-size: 1.08rem;
   }
 
   .hero-subtitle {
-    font-size: 0.86rem;
+    font-size: 0.84rem;
   }
 
   .luxury-hero {
-    padding: 2rem 0.9rem 2rem;
+    padding: 1.3rem 0.9rem 1.2rem;
   }
 
   .luxury-hero h1 {
@@ -241,7 +278,8 @@
   .luxury-product-card img,
   .luxury-hero-card img,
   .luxury-img {
-    height: 160px;
+    height: 138px;
+    padding: 8px;
   }
 
   .luxury-info h4 {
@@ -254,14 +292,10 @@
   }
 
   .luxury-info .price {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 
-  .gold-pick-badge {
-    font-size: 10px;
-    padding: 4px 7px;
-  }
-
+  .gold-pick-badge,
   .discount-badge {
     font-size: 10px;
   }
