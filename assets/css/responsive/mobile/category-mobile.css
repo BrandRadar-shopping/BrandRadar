@@ -745,3 +745,19 @@ body.is-category-page .checkbox-label {
     margin-bottom: 7px;
   }
 }
+
+body.is-category-page .collection-page--deals .deals-highlight-grid {
+  gap: 10px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary .deal-highlight-card__media {
+  min-height: 190px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-card__media {
+  min-height: 125px;
+}
+
+body.is-category-page .filters-left {
+  grid-template-columns: 1fr;
+}
