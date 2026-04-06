@@ -153,6 +153,161 @@ body.is-category-page .collection-page--deals .deal-highlight-discount {
   border-radius: 12px;
 }
 
+/* =====================================================
+   DEALS MOBILE – MOSAIC TOP SECTION
+===================================================== */
+
+body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
+  padding: 6px 16px 14px;
+}
+
+body.is-category-page .collection-page--deals .deals-highlight-head {
+  margin-bottom: 10px;
+}
+
+body.is-category-page .collection-page--deals .deals-highlight-head p {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(226,232,240,0.72);
+}
+
+body.is-category-page .collection-page--deals .deals-mosaic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #dbe3ec;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10);
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--hero {
+  grid-column: 1 / -1;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+  aspect-ratio: 1 / 0.78;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+  aspect-ratio: 1 / 1.08;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10,20,38,0.10) 0%,
+    rgba(10,20,38,0.20) 38%,
+    rgba(10,20,38,0.78) 100%
+  );
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(10,20,38,0.92);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-discount {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff4747, #ef2f2f);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(239,68,68,0.28);
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 14px 14px 15px;
+  color: #fff;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-brand {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.88);
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #fff;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-title {
+  font-size: 0.88rem;
+  line-height: 1.14;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-price {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-oldprice {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.72);
+  text-decoration: line-through;
+}
+   
    
   /* -------------------------------------------------
      Page shell
