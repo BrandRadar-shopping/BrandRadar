@@ -963,3 +963,11 @@ body.is-category-page .collection-page--deals .deal-mosaic-oldprice {
     margin-bottom: 7px;
   }
 }
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+  aspect-ratio: 1 / 0.7;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+  aspect-ratio: 1 / 1.02;
+}
