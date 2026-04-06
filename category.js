@@ -486,128 +486,89 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function buildDealHighlights(products) {
-    if (!products.length) return null;
+  if (!products.length) return null;
 
-    const sorted = [...products].sort((a, b) => {
-      const aDisc = parseNumber(a.discount) || 0;
-      const bDisc = parseNumber(b.discount) || 0;
+  const sorted = [...products].sort((a, b) => {
+    const aDisc = parseNumber(a.discount) || 0;
+    const bDisc = parseNumber(b.discount) || 0;
 
-      if (bDisc !== aDisc) return bDisc - aDisc;
+    if (bDisc !== aDisc) return bDisc - aDisc;
+    return getEffectivePrice(a) - getEffectivePrice(b);
+  });
 
-      return getEffectivePrice(a) - getEffectivePrice(b);
-    });
+  const picks = sorted.slice(0, 3);
+  if (!picks.length) return null;
 
-    const picks = sorted.slice(0, 3);
-    if (!picks.length) return null;
+  const shell = document.createElement("section");
+  shell.className = "deals-highlights-shell deals-highlights-shell--mosaic";
 
-    const shell = document.createElement("section");
-    shell.className = "deals-highlights-shell";
+  const head = document.createElement("div");
+  head.className = "deals-highlight-head";
+  head.innerHTML = `
+    <div>
+      <p>En rask oversikt over tilbudene som skiller seg mest ut akkurat nå.</p>
+    </div>
+  `;
 
-    const head = document.createElement("div");
-    head.className = "deals-highlight-head";
+  const grid = document.createElement("div");
+  grid.className = "deals-mosaic-grid";
 
-    head.innerHTML = `
-      <div>
-        <h3>Utvalgte deals akkurat nå</h3>
-        <p>En rask oversikt over tilbudene som skiller seg mest ut akkurat nå.</p>
+  picks.forEach((product, index) => {
+    const discount = parseNumber(product.discount) || 0;
+    const newPrice = parseNumber(product.price);
+    const oldPrice = parseNumber(product.old_price);
+
+    const label =
+      index === 0 ? "Beste deal" :
+      index === 1 ? "Sterkt tilbud" :
+      "Verdt å se";
+
+    const tile = document.createElement("article");
+    tile.className = `deal-mosaic-tile ${index === 0 ? "deal-mosaic-tile--hero" : "deal-mosaic-tile--mini"}`;
+
+    tile.innerHTML = `
+      <div class="deal-mosaic-media">
+        <img src="${product.image_url || ""}" alt="${product.title || ""}" loading="lazy">
+        <div class="deal-mosaic-overlay"></div>
+
+        <span class="deal-mosaic-badge">${label}</span>
+        ${discount ? `<span class="deal-mosaic-discount">-${Math.round(discount)}%</span>` : ""}
+
+        <div class="deal-mosaic-content">
+          <p class="deal-mosaic-brand">${product.brand || "BrandRadar"}</p>
+          <h3 class="deal-mosaic-title">${product.title || "Produkt"}</h3>
+          ${
+            index === 0
+              ? `<div class="deal-mosaic-meta">
+                   ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
+                   ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
+                 </div>`
+              : ``
+          }
+        </div>
       </div>
     `;
 
-    const grid = document.createElement("div");
-    grid.className = "deals-highlight-grid";
+    tile.addEventListener("click", () => {
+      if (product.product_url) {
+        window.open(product.product_url, "_blank", "noopener");
+        return;
+      }
 
-    picks.forEach((product, index) => {
-      const discount = parseNumber(product.discount) || 0;
-      const newPrice = parseNumber(product.price);
-      const oldPrice = parseNumber(product.old_price);
-      const savings =
-        oldPrice != null && newPrice != null && oldPrice > newPrice
-          ? Math.round(oldPrice - newPrice)
-          : null;
-
-      const label =
-        index === 0 ? "Beste deal" :
-        index === 1 ? "Sterkt tilbud" :
-        "Verdt å sjekke";
-
-      const card = document.createElement("article");
-      card.className =
-        index === 0
-          ? "deal-highlight-card deal-highlight-card--primary"
-          : "deal-highlight-card";
-
-      const primaryEditorialBlock = index === 0
-        ? `
-          <div class="deal-why-block">
-            <p class="deal-why-title">Hvorfor denne dealen?</p>
-            <ul class="deal-why-list">
-              ${discount ? `<li>${Math.round(discount)}% rabatt akkurat nå</li>` : ""}
-              ${product.brand ? `<li>${product.brand} er et sterkt brand i denne kategorien</li>` : ""}
-              ${savings ? `<li>Du sparer ${formatPrice(savings)}</li>` : ""}
-            </ul>
-          </div>
-        `
-        : "";
-
-      const primaryValueBlock = index === 0 && (oldPrice != null || savings != null)
-        ? `
-          <div class="deal-value-row">
-            ${oldPrice != null ? `<span>Vanlig pris: <strong>${formatPrice(oldPrice)}</strong></span>` : ""}
-            ${savings != null ? `<span>Du sparer: <strong>${formatPrice(savings)}</strong></span>` : ""}
-          </div>
-        `
-        : "";
-
-      card.innerHTML = `
-        <div class="deal-highlight-card__media">
-          <span class="deal-highlight-badge">${label}</span>
-          ${discount ? `<span class="deal-highlight-discount">-${Math.round(discount)}%</span>` : ""}
-          <img src="${product.image_url || ""}" alt="${product.title || ""}" loading="lazy">
-        </div>
-
-        <div class="deal-highlight-card__body">
-          <p class="deal-highlight-brand">${product.brand || "BrandRadar"}</p>
-
-          <h3 class="deal-highlight-title">${product.title || "Produkt"}</h3>
-
-          <p class="deal-highlight-copy">
-            ${index === 0
-              ? "Et tilbud som kombinerer høy rabatt, sterk merkeinteresse og tydelig verdi."
-              : "Et aktuelt tilbud som skiller seg ut akkurat nå."}
-          </p>
-
-          ${primaryEditorialBlock}
-          ${primaryValueBlock}
-
-          <div class="deal-highlight-pricing">
-            ${newPrice != null ? `<span class="deal-highlight-price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deal-highlight-oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-
-          <div class="deal-highlight-cta">Se deal →</div>
-        </div>
-      `;
-
-      card.addEventListener("click", () => {
-        if (product.product_url) {
-          window.open(product.product_url, "_blank", "noopener");
-          return;
-        }
-
-        const id = product.id || product.product_id || "";
-        if (id) {
-          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-        }
-      });
-
-      grid.appendChild(card);
+      const id = product.id || product.product_id || "";
+      if (id) {
+        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+      }
     });
 
-    shell.appendChild(head);
-    shell.appendChild(grid);
+    grid.appendChild(tile);
+  });
 
-    return shell;
-  }
+  shell.appendChild(head);
+  shell.appendChild(grid);
+
+  return shell;
+}
 
   function buildDealsTopZone(heroEl, highlightsEl) {
     const section = document.createElement("section");
