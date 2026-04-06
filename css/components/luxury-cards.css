@@ -247,116 +247,100 @@ svg#gold-gradient-defs {
 }
 
 /* ============================================
-   💎 Luxury Hero Banner – Fade variant
+   💎 Luxury Hero – Shared desktop/mobile slider base
 ============================================ */
-.luxury-hero-banner {
+
+.luxury-hero {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   position: relative;
-  width: 100%;
-  height: 70vh;
   overflow: hidden;
-  background: #111;
+  color: #fff;
+  text-align: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.42);
+  background: #0a0a0a;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5.5rem 2rem 4.8rem;
 }
 
-.luxury-hero-banner .hero-slide {
+.luxury-hero-slider {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.luxury-hero-slider .hero-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
   transition: opacity 1.2s ease-in-out;
   background-size: cover;
   background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-repeat: no-repeat;
 }
 
-.luxury-hero-banner .hero-slide.active {
+.luxury-hero-slider .hero-slide.active {
   opacity: 1;
 }
 
-.hero-content {
-  text-align: center;
-  color: white;
-  backdrop-filter: blur(4px);
-  background: rgba(0,0,0,0.35);
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-}
-
-.hero-title {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: #d4af37;
-  margin-bottom: 0.5rem;
-  animation: fadeInDown 1.5s ease;
-}
-
-.hero-subtitle {
-  font-size: 1rem;
-  opacity: 0.9;
-  color: #f2f2f2;
-  animation: fadeInUp 1.5s ease;
-}
-
-/* ✨ Fade inn animasjoner */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ✨ Gullrefleks-animasjon på hero-tittel */
-.hero-title {
-  position: relative;
-  display: inline-block;
-  background: linear-gradient(90deg, #d4af37, #fff8c9, #d4af37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200%;
-  animation: shineGold 8s linear infinite;
-}
-
-@keyframes shineGold {
-  0% { background-position: 200% center; }
-  50% { background-position: 0% center; }
-  100% { background-position: -200% center; }
-}
-
-/* ============================================
-   💎 Luxury Hero – Fullbredde mørk topp (v4)
-============================================ */
-.luxury-hero {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  background: linear-gradient(to bottom, #0a0a0a, #1a1a1a 90%);
-  color: #fff;
-  text-align: center;
-  padding: 5rem 2rem 4rem;
-  border-bottom: 2px solid #d4af37;
-  position: relative;
+/* Lett mørklegging over hele bildet – ikke for tung */
+.luxury-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.34) 55%,
+      rgba(0, 0, 0, 0.48) 100%
+    );
+  pointer-events: none;
+}
+
+/* Tekstboks */
+.luxury-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2.2rem 2.5rem;
+  border-radius: 28px;
+  background: rgba(8, 8, 8, 0.34);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .luxury-hero h1 {
-  font-size: 2.2rem;
+  margin: 0 0 0.8rem;
+  font-size: clamp(3rem, 4.6vw, 4.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.06em;
   font-weight: 800;
-  letter-spacing: -0.5px;
-  color: #fff;
-  margin-bottom: 0.5rem;
   background: linear-gradient(90deg, #f6e27a, #d4af37, #f6e27a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200%;
   animation: goldWave 8s linear infinite;
+  text-wrap: balance;
+  text-shadow: 0 6px 24px rgba(0,0,0,0.18);
 }
 
 .luxury-hero p {
-  color: #ddd;
-  font-size: 1rem;
-  opacity: 0.85;
+  margin: 0 auto;
+  max-width: 28ch;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  text-wrap: balance;
+  text-shadow: 0 3px 14px rgba(0,0,0,0.24);
 }
 
 @keyframes goldWave {
@@ -365,23 +349,24 @@ svg#gold-gradient-defs {
   100% { background-position: -200% center; }
 }
 
-/* Lys seksjon rett under hero */
+/* Seksjon under hero */
 .luxury-section {
   background-color: #fff;
   color: #111;
   padding: 3rem 0;
 }
 
-/* Myk overgang (fade) mellom hero og første hvite seksjon */
+/* Myk overgang ned */
 .luxury-hero::after {
   content: "";
   position: absolute;
-  bottom: -30px;
   left: 0;
-  width: 100%;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(26,26,26,1), rgba(255,255,255,0));
-  z-index: 0;
+  right: 0;
+  bottom: -32px;
+  height: 64px;
+  background: linear-gradient(to bottom, rgba(20,20,20,0.8), rgba(255,255,255,0));
+  z-index: 1;
+  pointer-events: none;
 }
 
 
