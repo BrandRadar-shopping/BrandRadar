@@ -89,8 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderProductRating(product);
 
-  const mainImg = document.getElementById("main-image");
+    const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
+  const imageGallery = document.querySelector(".image-gallery");
 
   const images = [
     product.image_url,
@@ -98,6 +99,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     product.image3,
     product.image4
   ].filter(Boolean);
+
+  let currentImageIndex = 0;
+
+  function renderActiveImage(index) {
+    if (!images.length || !mainImg) return;
+
+    currentImageIndex = Math.max(0, Math.min(index, images.length - 1));
+    mainImg.src = images[currentImageIndex];
+
+    document.querySelectorAll(".thumb").forEach((el, i) => {
+      el.classList.toggle("active", i === currentImageIndex);
+    });
+  }
 
   mainImg.src = images[0] || "https://via.placeholder.com/600x700?text=No+Image";
   thumbs.innerHTML = "";
@@ -109,13 +123,62 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (i === 0) img.classList.add("active");
 
     img.addEventListener("click", () => {
-      document.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-      img.classList.add("active");
-      mainImg.src = src;
+      renderActiveImage(i);
     });
 
     thumbs.appendChild(img);
   });
+
+  renderActiveImage(0);
+
+  function setupMobileImageSwipe() {
+    if (!imageGallery || images.length <= 1) return;
+
+    let startX = 0;
+    let startY = 0;
+    let deltaX = 0;
+    let deltaY = 0;
+    let isTouching = false;
+
+    imageGallery.addEventListener("touchstart", (e) => {
+      if (!window.matchMedia("(max-width: 768px)").matches) return;
+      if (!e.touches || !e.touches.length) return;
+
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      deltaX = 0;
+      deltaY = 0;
+      isTouching = true;
+    }, { passive: true });
+
+    imageGallery.addEventListener("touchmove", (e) => {
+      if (!isTouching || !e.touches || !e.touches.length) return;
+
+      const touch = e.touches[0];
+      deltaX = touch.clientX - startX;
+      deltaY = touch.clientY - startY;
+    }, { passive: true });
+
+    imageGallery.addEventListener("touchend", () => {
+      if (!isTouching) return;
+      isTouching = false;
+
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (absX < 35) return;
+      if (absY > absX) return;
+
+      if (deltaX < 0 && currentImageIndex < images.length - 1) {
+        renderActiveImage(currentImageIndex + 1);
+      } else if (deltaX > 0 && currentImageIndex > 0) {
+        renderActiveImage(currentImageIndex - 1);
+      }
+    });
+  }
+
+  setupMobileImageSwipe();
 
   const offerSummary = await renderPriceComparison(product);
   renderProductInsights(product, offerSummary);
