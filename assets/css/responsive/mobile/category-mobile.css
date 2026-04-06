@@ -328,14 +328,46 @@ body.is-category-page .collection-page--deals .deal-highlight-discount {
   }
 
   body.is-category-page .filters-left {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 10px;
+}
 
-  body.is-category-page .filters-right {
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-  }
+body.is-category-page .filters-right {
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 10px;
+}
+
+body.is-category-page .filters-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 28px;
+  flex-wrap: nowrap;
+}
+
+body.is-category-page .filters-right .result-count {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+body.is-category-page .reset-filters-btn {
+  flex: 0 0 auto;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+body.is-category-page #sort-select {
+  width: 100%;
+}
+
+body.is-category-page .checkbox-label {
+  grid-column: 1 / -1;
+}
 
   body.is-category-page .filters-left > label:not(.checkbox-label),
   body.is-category-page .filters-right > label {
