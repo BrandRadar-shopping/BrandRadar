@@ -90,6 +90,17 @@ body.is-product-page #product-insights[hidden] {
     padding: 12px;
   }
 
+     body.is-product-page .image-gallery {
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body.is-product-page #main-image {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
   /* -------------------------------------------------
      Thumbnails
   ------------------------------------------------- */
