@@ -5,7 +5,155 @@
    ===================================================== */
 
 @media (max-width: 768px) {
+/* =====================================================
+   DEALS MOBILE – EDITORIAL TOP SECTION
+   1 stort kort + 2 mindre under
+===================================================== */
 
+body.is-category-page .collection-page--deals .deals-top-zone {
+  margin: 0 14px 14px;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+body.is-category-page .collection-page--deals .collection-hero {
+  padding: 18px 16px 10px;
+}
+
+body.is-category-page .collection-page--deals .collection-hero h2 {
+  font-size: clamp(1.75rem, 7vw, 2.15rem);
+  line-height: 1.02;
+}
+
+body.is-category-page .collection-page--deals .collection-hero p {
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+body.is-category-page .collection-page--deals .collection-meta {
+  gap: 8px;
+  margin-top: 14px;
+}
+
+body.is-category-page .collection-page--deals .collection-meta__pill {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+
+body.is-category-page .collection-page--deals .deals-highlights-shell {
+  padding: 6px 16px 16px;
+}
+
+body.is-category-page .collection-page--deals .deals-highlight-head {
+  margin-bottom: 10px;
+}
+
+body.is-category-page .collection-page--deals .deals-highlight-head p {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+/* Viktig: 1 stor + 2 små */
+body.is-category-page .collection-page--deals .deals-highlight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary {
+  grid-column: 1 / -1;
+  grid-row: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary .deal-highlight-card__media {
+  min-height: 220px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary .deal-highlight-card__body {
+  padding: 15px 15px 14px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary .deal-highlight-title {
+  font-size: 1.1rem;
+  line-height: 1.18;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card--primary .deal-highlight-copy {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+
+/* De to mindre under */
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-card__media {
+  min-height: 145px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-card__body {
+  padding: 12px 12px 13px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-brand {
+  font-size: 0.68rem;
+  margin-bottom: 4px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-title {
+  font-size: 0.9rem;
+  line-height: 1.18;
+  margin-bottom: 6px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-copy,
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-why-block,
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-value-row {
+  display: none;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-pricing {
+  margin-top: 0;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-price {
+  font-size: 0.96rem;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-oldprice {
+  font-size: 0.78rem;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-card:not(.deal-highlight-card--primary) .deal-highlight-cta {
+  font-size: 0.82rem;
+  margin-top: 8px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-badge {
+  top: 10px;
+  left: 10px;
+  font-size: 0.66rem;
+  padding: 6px 9px;
+}
+
+body.is-category-page .collection-page--deals .deal-highlight-discount {
+  top: 10px;
+  right: 10px;
+  font-size: 0.76rem;
+  padding: 7px 10px;
+  border-radius: 12px;
+}
+
+   
   /* -------------------------------------------------
      Page shell
   ------------------------------------------------- */
