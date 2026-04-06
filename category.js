@@ -502,14 +502,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const shell = document.createElement("section");
   shell.className = "deals-highlights-shell deals-highlights-shell--mosaic";
 
-  const head = document.createElement("div");
-  head.className = "deals-highlight-head";
-  head.innerHTML = `
-    <div>
-      <p>En rask oversikt over tilbudene som skiller seg mest ut akkurat nå.</p>
-    </div>
-  `;
-
   const grid = document.createElement("div");
   grid.className = "deals-mosaic-grid";
 
@@ -537,14 +529,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="deal-mosaic-content">
           <p class="deal-mosaic-brand">${product.brand || "BrandRadar"}</p>
           <h3 class="deal-mosaic-title">${product.title || "Produkt"}</h3>
-          ${
-            index === 0
-              ? `<div class="deal-mosaic-meta">
-                   ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
-                   ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
-                 </div>`
-              : ``
-          }
+          <div class="deal-mosaic-meta">
+            ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
+            ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
+          </div>
         </div>
       </div>
     `;
@@ -564,12 +552,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.appendChild(tile);
   });
 
-  shell.appendChild(head);
   shell.appendChild(grid);
-
   return shell;
 }
-
   function buildDealsTopZone(heroEl, highlightsEl) {
     const section = document.createElement("section");
     section.className = "deals-top-zone";
