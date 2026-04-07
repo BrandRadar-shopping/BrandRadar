@@ -658,7 +658,7 @@
 }
 
 /* =====================================================
-   FINAL DEALS MOBILE FIX – PREMIUM PASS
+   FINAL DEALS MOBILE FIX – PREMIUM PASS v2
 ===================================================== */
 
 /* Nullstill desktop filter-grid som lekker inn */
@@ -703,8 +703,8 @@ body.is-category-page .checkbox-label {
    Deals top zone
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .deals-top-zone {
-  margin: 0 10px 12px;
-  border-radius: 24px;
+  margin: 0 6px 14px;
+  border-radius: 26px;
   overflow: hidden;
 }
 
@@ -726,7 +726,7 @@ body.is-category-page .collection-page--deals .deals-top-zone__inner {
 }
 
 /* -----------------------------------------
-   Hero intro – mer premium og strammere
+   Hero intro – strammere og mer premium
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .collection-hero {
   padding: 16px 14px 4px;
@@ -765,32 +765,33 @@ body.is-category-page .collection-page--deals .collection-meta__pill {
   border-radius: 999px;
 }
 
-/* Skjul tredje pill på mobil for renere uttrykk */
 body.is-category-page .collection-page--deals .collection-meta__pill:nth-child(3) {
   display: none;
 }
 
 /* -----------------------------------------
-   Mosaic – mer bredde, større tiles
+   Mosaic – større, bredere, mer premium
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
-  padding: 0 10px 14px;
+  padding: 2px 6px 16px;
 }
 
 body.is-category-page .collection-page--deals .deals-mosaic-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile {
   position: relative;
-  border-radius: 24px;
+  border-radius: 26px;
   overflow: hidden;
   cursor: pointer;
   background: #dbe3ec;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 0.16),
+    0 1px 0 rgba(255,255,255,0.08) inset;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--hero {
@@ -803,14 +804,12 @@ body.is-category-page .collection-page--deals .deal-mosaic-media {
   height: 100%;
 }
 
-/* Litt lavere hero, men fortsatt tydelig */
 body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
-  aspect-ratio: 1 / 0.56;
+  aspect-ratio: 1 / 0.64;
 }
 
-/* Mindre avlange mini-kort */
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
-  aspect-ratio: 1 / 0.92;
+  aspect-ratio: 1 / 1.08;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-media img {
@@ -825,9 +824,10 @@ body.is-category-page .collection-page--deals .deal-mosaic-overlay {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(10, 20, 38, 0.08) 0%,
-    rgba(10, 20, 38, 0.16) 34%,
-    rgba(10, 20, 38, 0.88) 100%
+    rgba(10, 20, 38, 0.02) 0%,
+    rgba(10, 20, 38, 0.10) 26%,
+    rgba(10, 20, 38, 0.42) 58%,
+    rgba(10, 20, 38, 0.92) 100%
   );
 }
 
@@ -877,7 +877,7 @@ body.is-category-page .collection-page--deals .deal-mosaic-content {
   right: 0;
   bottom: 0;
   z-index: 2;
-  padding: 12px 12px 13px;
+  padding: 14px 14px 15px;
   color: #fff;
 }
 
@@ -892,11 +892,12 @@ body.is-category-page .collection-page--deals .deal-mosaic-brand {
 
 body.is-category-page .collection-page--deals .deal-mosaic-title {
   margin: 0;
-  font-size: 1.04rem;
-  line-height: 1.08;
+  font-size: 1.12rem;
+  line-height: 1.02;
   font-weight: 800;
+  letter-spacing: -0.03em;
   color: #fff;
-  max-width: 12ch;
+  max-width: 11ch;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-meta {
@@ -919,10 +920,10 @@ body.is-category-page .collection-page--deals .deal-mosaic-oldprice {
 }
 
 /* -----------------------------------------
-   Mini cards – mindre info, mye renere
+   Mini cards – mindre støy, større kort
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-content {
-  padding: 10px 10px 11px;
+  padding: 12px 12px 12px;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-brand {
@@ -930,9 +931,10 @@ body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosa
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-title {
-  font-size: 0.82rem;
-  line-height: 1.08;
-  max-width: 9ch;
+  font-size: 0.94rem;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  max-width: 8.5ch;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -945,7 +947,8 @@ body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosa
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-price {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-oldprice {
