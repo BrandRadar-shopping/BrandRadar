@@ -1054,3 +1054,23 @@ body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosa
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
   aspect-ratio: 1 / 1.02;
 }
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+  aspect-ratio: 1 / 0.62;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+  aspect-ratio: 1 / 0.96;
+}
+
+body.is-category-page .collection-page--deals .deals-top-zone {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic,
+body.is-category-page .collection-page--deals .collection-hero {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
