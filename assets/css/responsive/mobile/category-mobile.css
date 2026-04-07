@@ -982,6 +982,8 @@ body.is-category-page .collection-page--deals .filter-bar {
 }
 
 @media (max-width: 360px) {
+
+  /* Base spacing */
   body.is-category-page .category-header__inner,
   body.is-category-page .category-products {
     padding-left: 10px;
@@ -998,41 +1000,10 @@ body.is-category-page .collection-page--deals .filter-bar {
     gap: 10px;
   }
 
-  body.is-category-page .filters-left {
-    grid-template-columns: 1fr;
-  }
-
+  /* Filters */
+  body.is-category-page .filters-left,
   body.is-category-page .filters-right {
     grid-template-columns: 1fr;
-  }
-
-  body.is-category-page .category-header h1 {
-    font-size: clamp(1.65rem, 8.8vw, 2rem);
-  }
-
-  body.is-category-page .category-products .product-card .product-info {
-    padding: 9px 9px 10px !important;
-  }
-
-  body.is-category-page .category-products .product-card .product-name,
-  body.is-category-page .category-products .product-card .product-title,
-  body.is-category-page .category-products .product-card h3 {
-    font-size: 12.5px !important;
-  }
-
-  body.is-category-page .collection-page--deals .deals-top-zone {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  body.is-category-page .collection-page--deals .collection-hero,
-  body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  body.is-category-page .collection-page--deals .deals-mosaic-grid {
-    gap: 10px;
   }
 
   body.is-category-page .filters-status-row {
@@ -1043,37 +1014,54 @@ body.is-category-page .collection-page--deals .filter-bar {
     font-size: 11px;
   }
 
+  /* Header */
+  body.is-category-page .category-header h1 {
+    font-size: clamp(1.65rem, 8.8vw, 2rem);
+  }
+
   body.is-category-page .category-back-btn {
     min-height: 32px;
     padding: 0 10px;
     margin-bottom: 7px;
   }
-}
 
-body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
-  aspect-ratio: 1 / 0.7;
-}
+  /* Product cards */
+  body.is-category-page .category-products .product-card .product-info {
+    padding: 9px 9px 10px !important;
+  }
 
-body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
-  aspect-ratio: 1 / 1.02;
-}
+  body.is-category-page .category-products .product-card .product-name,
+  body.is-category-page .category-products .product-card .product-title,
+  body.is-category-page .category-products .product-card h3 {
+    font-size: 12.5px !important;
+  }
 
-body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
-  aspect-ratio: 1 / 0.62;
-}
+  /* -----------------------------------------
+     DEALS – CLEAN & PREMIUM
+  ----------------------------------------- */
 
-body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
-  aspect-ratio: 1 / 0.96;
-}
+  body.is-category-page .collection-page--deals .deals-top-zone {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
 
-body.is-category-page .collection-page--deals .deals-top-zone {
-  margin-left: 8px;
-  margin-right: 8px;
-}
+  body.is-category-page .collection-page--deals .collection-hero,
+  body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
 
-body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic,
-body.is-category-page .collection-page--deals .collection-hero {
-  padding-left: 10px;
-  padding-right: 10px;
+  body.is-category-page .collection-page--deals .deals-mosaic-grid {
+    gap: 8px;
+  }
+
+  /* Viktigste: bedre bilde-ratio (mindre "langt og stygt") */
+  body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+    aspect-ratio: 1 / 0.62;
+  }
+
+  body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+    aspect-ratio: 1 / 0.96;
+  }
 }
 
