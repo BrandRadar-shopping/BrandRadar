@@ -658,8 +658,7 @@
 }
 
 /* =====================================================
-   FINAL DEALS MOBILE FIX
-   overgang + mosaic + filter
+   FINAL DEALS MOBILE FIX – PREMIUM PASS
 ===================================================== */
 
 /* Nullstill desktop filter-grid som lekker inn */
@@ -701,10 +700,10 @@ body.is-category-page .checkbox-label {
 }
 
 /* -----------------------------------------
-   Deals: renere top zone på mobil
+   Deals top zone
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .deals-top-zone {
-  margin: 0 14px 12px;
+  margin: 0 10px 12px;
   border-radius: 24px;
   overflow: hidden;
 }
@@ -714,65 +713,84 @@ body.is-category-page .collection-page--deals .deals-top-zone::before {
     linear-gradient(
       180deg,
       #061221 0%,
-      #0a1b33 22%,
-      #123055 58%,
-      #22436f 82%,
+      #0b1a30 18%,
+      #123055 52%,
+      #234674 82%,
       #31537d 100%
     ) !important;
 }
 
 body.is-category-page .collection-page--deals .deals-top-zone__inner {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
+/* -----------------------------------------
+   Hero intro – mer premium og strammere
+----------------------------------------- */
 body.is-category-page .collection-page--deals .collection-hero {
-  padding: 18px 16px 6px;
+  padding: 16px 14px 4px;
+}
+
+body.is-category-page .collection-page--deals .collection-hero .collection-hero__eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
 }
 
 body.is-category-page .collection-page--deals .collection-hero h2 {
-  font-size: clamp(1.7rem, 7vw, 2.05rem);
-  line-height: 1.03;
-  margin-bottom: 10px;
+  font-size: clamp(1.55rem, 6.8vw, 1.95rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  margin: 0 0 8px;
+  max-width: 11ch;
 }
 
 body.is-category-page .collection-page--deals .collection-hero p {
-  font-size: 0.95rem;
-  line-height: 1.52;
+  font-size: 0.9rem;
+  line-height: 1.48;
+  max-width: 31ch;
+  opacity: 0.94;
 }
 
 body.is-category-page .collection-page--deals .collection-meta {
-  margin-top: 14px;
+  margin-top: 12px;
   gap: 8px;
 }
 
 body.is-category-page .collection-page--deals .collection-meta__pill {
-  min-height: 32px;
-  padding: 6px 10px;
-  font-size: 0.78rem;
+  min-height: 30px;
+  padding: 5px 10px;
+  font-size: 0.76rem;
+  border-radius: 999px;
+}
+
+/* Skjul tredje pill på mobil for renere uttrykk */
+body.is-category-page .collection-page--deals .collection-meta__pill:nth-child(3) {
+  display: none;
 }
 
 /* -----------------------------------------
-   Mosaic helt uten mellomtekst
+   Mosaic – mer bredde, større tiles
 ----------------------------------------- */
 body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
-  padding: 0 16px 16px;
+  padding: 0 10px 14px;
 }
 
 body.is-category-page .collection-page--deals .deals-mosaic-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
   align-items: stretch;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile {
   position: relative;
-  border-radius: 22px;
+  border-radius: 24px;
   overflow: hidden;
   cursor: pointer;
   background: #dbe3ec;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-tile--hero {
@@ -785,12 +803,14 @@ body.is-category-page .collection-page--deals .deal-mosaic-media {
   height: 100%;
 }
 
+/* Litt lavere hero, men fortsatt tydelig */
 body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
-  aspect-ratio: 1 / 0.62;
+  aspect-ratio: 1 / 0.56;
 }
 
+/* Mindre avlange mini-kort */
 body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 0.92;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-media img {
@@ -805,12 +825,15 @@ body.is-category-page .collection-page--deals .deal-mosaic-overlay {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(10, 20, 38, 0.10) 0%,
-    rgba(10, 20, 38, 0.16) 35%,
-    rgba(10, 20, 38, 0.84) 100%
+    rgba(10, 20, 38, 0.08) 0%,
+    rgba(10, 20, 38, 0.16) 34%,
+    rgba(10, 20, 38, 0.88) 100%
   );
 }
 
+/* -----------------------------------------
+   Badges
+----------------------------------------- */
 body.is-category-page .collection-page--deals .deal-mosaic-badge {
   position: absolute;
   top: 12px;
@@ -823,8 +846,9 @@ body.is-category-page .collection-page--deals .deal-mosaic-badge {
   border-radius: 999px;
   background: rgba(10,20,38,0.92);
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-discount {
@@ -839,24 +863,27 @@ body.is-category-page .collection-page--deals .deal-mosaic-discount {
   border-radius: 14px;
   background: linear-gradient(135deg, #ff4747, #ef2f2f);
   color: #fff;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   box-shadow: 0 10px 24px rgba(239,68,68,0.28);
 }
 
+/* -----------------------------------------
+   Text content
+----------------------------------------- */
 body.is-category-page .collection-page--deals .deal-mosaic-content {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 2;
-  padding: 14px 14px 15px;
+  padding: 12px 12px 13px;
   color: #fff;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-brand {
-  margin: 0 0 4px;
-  font-size: 0.72rem;
+  margin: 0 0 3px;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -865,15 +892,11 @@ body.is-category-page .collection-page--deals .deal-mosaic-brand {
 
 body.is-category-page .collection-page--deals .deal-mosaic-title {
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.12;
+  font-size: 1.04rem;
+  line-height: 1.08;
   font-weight: 800;
   color: #fff;
-}
-
-body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-title {
-  font-size: 0.9rem;
-  line-height: 1.14;
+  max-width: 12ch;
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-meta {
@@ -884,7 +907,7 @@ body.is-category-page .collection-page--deals .deal-mosaic-meta {
 }
 
 body.is-category-page .collection-page--deals .deal-mosaic-price {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #fff;
 }
@@ -893,6 +916,66 @@ body.is-category-page .collection-page--deals .deal-mosaic-oldprice {
   font-size: 0.8rem;
   color: rgba(255,255,255,0.72);
   text-decoration: line-through;
+}
+
+/* -----------------------------------------
+   Mini cards – mindre info, mye renere
+----------------------------------------- */
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-content {
+  padding: 10px 10px 11px;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-brand {
+  display: none;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-title {
+  font-size: 0.82rem;
+  line-height: 1.08;
+  max-width: 9ch;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-meta {
+  margin-top: 6px;
+  gap: 6px;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-price {
+  font-size: 0.82rem;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-oldprice {
+  font-size: 0.72rem;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-badge {
+  font-size: 0.66rem;
+  min-height: 28px;
+  padding: 0 10px;
+}
+
+body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-discount {
+  font-size: 0.74rem;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 13px;
+}
+
+/* -----------------------------------------
+   Collection subhead / filter
+----------------------------------------- */
+body.is-category-page .collection-page--deals .collection-subhead {
+  width: calc(100% - 20px);
+  margin: 0 auto 12px;
+}
+
+body.is-category-page .collection-page--deals .filter-bar {
+  width: calc(100% - 20px);
+  margin-top: 4px;
 }
 
 @media (max-width: 360px) {
