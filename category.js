@@ -510,50 +510,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newPrice = parseNumber(product.price);
     const oldPrice = parseNumber(product.old_price);
 
-    const label =
-      index === 0 ? "Beste deal" :
-      index === 1 ? "Sterkt tilbud" :
-      "Verdt å se";
-
     const tile = document.createElement("article");
-    tile.className = `deal-mosaic-tile ${index === 0 ? "deal-mosaic-tile--hero" : "deal-mosaic-tile--mini"}`;
+tile.className = `deal-mosaic-tile ${index === 0 ? "deal-mosaic-tile--hero" : "deal-mosaic-tile--mini"}`;
 
-    tile.innerHTML = `
-      <div class="deal-mosaic-media">
-        <img src="${product.image_url || ""}" alt="${product.title || ""}" loading="lazy">
-        <div class="deal-mosaic-overlay"></div>
+const isHero = index === 0;
+const shortLabel =
+  index === 0 ? "Beste deal" :
+  index === 1 ? "Sterkt tilbud" :
+  "Verdt å se";
 
-        <span class="deal-mosaic-badge">${label}</span>
-        ${discount ? `<span class="deal-mosaic-discount">-${Math.round(discount)}%</span>` : ""}
+const safeBrand = product.brand || "BrandRadar";
+const safeTitle = product.title || "Produkt";
 
-        <div class="deal-mosaic-content">
-          <p class="deal-mosaic-brand">${product.brand || "BrandRadar"}</p>
-          <h3 class="deal-mosaic-title">${product.title || "Produkt"}</h3>
-          <div class="deal-mosaic-meta">
-            ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-        </div>
+tile.innerHTML = `
+  <div class="deal-mosaic-media">
+    <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+    <div class="deal-mosaic-overlay"></div>
+
+    <span class="deal-mosaic-badge">${shortLabel}</span>
+    ${discount ? `<span class="deal-mosaic-discount">-${Math.round(discount)}%</span>` : ""}
+
+    <div class="deal-mosaic-content">
+      ${isHero ? `<p class="deal-mosaic-brand">${safeBrand}</p>` : ""}
+      <h3 class="deal-mosaic-title">${safeTitle}</h3>
+
+      <div class="deal-mosaic-meta">
+        ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
+        ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
       </div>
-    `;
+    </div>
+  </div>
+`;
 
-    tile.addEventListener("click", () => {
-      if (product.product_url) {
-        window.open(product.product_url, "_blank", "noopener");
-        return;
-      }
+tile.addEventListener("click", () => {
+  if (product.product_url) {
+    window.open(product.product_url, "_blank", "noopener");
+    return;
+  }
 
-      const id = product.id || product.product_id || "";
-      if (id) {
-        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-      }
-    });
+  const id = product.id || product.product_id || "";
+  if (id) {
+    window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+  }
+});
 
-    grid.appendChild(tile);
-  });
+grid.appendChild(tile);
+});
 
-  shell.appendChild(grid);
-  return shell;
+shell.appendChild(grid);
+return shell;
 }
   function buildDealsTopZone(heroEl, highlightsEl) {
     const section = document.createElement("section");
