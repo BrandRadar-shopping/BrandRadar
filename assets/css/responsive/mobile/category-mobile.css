@@ -524,9 +524,9 @@
     color: rgba(226,232,240,0.78);
   }
 
-  body.is-category-page .collection-page--deals .collection-subhead {
+    body.is-category-page .collection-page--deals .collection-subhead {
     width: calc(100% - 20px);
-    margin: 0 auto 12px;
+    margin: 4px auto 12px;
     padding: 0;
   }
 
@@ -548,19 +548,19 @@
     width: calc(100% - 20px);
     margin-top: 4px;
   }
-
+  
     /* =====================================================
      DEALS MOBILE – MOSAIC TOP SECTION
      større kort, mindre sidepadding, mindre tekststøy
   ===================================================== */
-  body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
-    padding: 4px 2px 18px;
+   body.is-category-page .collection-page--deals .deals-highlights-shell--mosaic {
+    padding: 0 2px 6px;
   }
 
   body.is-category-page .collection-page--deals .deals-mosaic-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
     align-items: stretch;
   }
 
@@ -586,12 +586,12 @@
   }
 
   /* større visuell flate */
-  body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
-    aspect-ratio: 1 / 0.56;
+    body.is-category-page .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+    aspect-ratio: 1 / 0.54;
   }
 
   body.is-category-page .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
-    aspect-ratio: 1 / 0.86;
+    aspect-ratio: 1 / 0.82;
   }
 
   body.is-category-page .collection-page--deals .deal-mosaic-media img {
