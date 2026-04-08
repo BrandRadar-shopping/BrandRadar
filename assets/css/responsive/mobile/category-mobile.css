@@ -526,13 +526,13 @@
 
 /* =====================================================
    DEALS TOP – MOBILE PROMO GRID
-   Gjelder kun toppen på category.html?collection=deals
+   Strammere og mer kontrollert mobilversjon
    ===================================================== */
 
 @media (max-width: 768px) {
   body.is-category-page .collection-page--deals .deals-top-zone {
-    border-radius: 22px;
-    margin: 0 10px 14px;
+    border-radius: 20px;
+    margin: 0 10px 12px;
     overflow: hidden;
   }
 
@@ -541,61 +541,59 @@
       linear-gradient(
         180deg,
         #0a1b31 0%,
-        #132b4b 44%,
-        #2b4d78 78%,
+        #122947 42%,
+        #2a4b75 74%,
         #f6f8fb 100%
       );
   }
 
   body.is-category-page .collection-page--deals .collection-hero {
-    padding: 18px 16px 12px;
+    padding: 16px 16px 8px;
   }
 
   body.is-category-page .collection-page--deals .collection-hero .collection-hero__eyebrow {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     margin-bottom: 8px;
   }
 
   body.is-category-page .collection-page--deals .collection-hero h2 {
-    font-size: clamp(1.85rem, 8.2vw, 2.45rem);
-    line-height: 0.98;
-    letter-spacing: -0.05em;
-    max-width: 10ch;
-    margin-bottom: 10px;
+    font-size: clamp(1.58rem, 7vw, 2rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    max-width: 11ch;
+    margin: 0 0 10px;
   }
 
   body.is-category-page .collection-page--deals .collection-hero p {
-    font-size: 0.96rem;
+    font-size: 0.95rem;
     line-height: 1.42;
-    max-width: 34ch;
+    max-width: 30ch;
     color: rgba(226, 232, 240, 0.88);
+    margin: 0;
   }
 
+  /* Pillene: wrap i stedet for halv-klippet slider */
   body.is-category-page .collection-page--deals .collection-meta {
-    margin-top: 14px;
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-
-  body.is-category-page .collection-page--deals .collection-meta::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
+    padding-bottom: 0;
   }
 
   body.is-category-page .collection-page--deals .collection-meta__pill {
-    min-height: 32px;
-    padding: 0 11px;
-    font-size: 0.76rem;
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.74rem;
     white-space: nowrap;
     flex: 0 0 auto;
   }
 
+  /* Mindre luft før kortene */
   body.is-category-page .collection-page--deals .deals-promo-shell {
-    padding: 6px 16px 14px;
-    margin-top: 2px;
+    padding: 4px 16px 12px;
+    margin-top: 0;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-grid,
@@ -610,21 +608,21 @@
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card {
-    min-height: 178px;
+    min-height: 164px;
     border-radius: 18px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card--hero {
-    min-height: 258px;
+    min-height: 210px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__overlay {
     background:
       linear-gradient(
         180deg,
-        rgba(255,255,255,0.04) 0%,
-        rgba(15,23,42,0.06) 34%,
-        rgba(15,23,42,0.56) 100%
+        rgba(255,255,255,0.03) 0%,
+        rgba(15,23,42,0.08) 34%,
+        rgba(15,23,42,0.58) 100%
       );
   }
 
@@ -635,32 +633,32 @@
   body.is-category-page .collection-page--deals .deals-promo-card__eyebrow {
     min-height: 28px;
     padding: 0 10px;
-    margin-bottom: 9px;
-    font-size: 0.7rem;
+    margin-bottom: 8px;
+    font-size: 0.69rem;
     font-weight: 800;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__title {
-    font-size: 0.98rem;
+    font-size: 0.94rem;
     line-height: 1.08;
-    margin: 0 0 5px;
-    max-width: 13ch;
+    margin: 0 0 4px;
+    max-width: 12ch;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card--hero .deals-promo-card__title {
-    font-size: 1.52rem;
+    font-size: 1.18rem;
     line-height: 1.02;
     max-width: 9ch;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__meta {
-    margin: 0 0 10px;
-    font-size: 0.84rem;
-    line-height: 1.25;
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    line-height: 1.2;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__bottom {
-    gap: 10px;
+    gap: 8px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__pricing {
@@ -668,15 +666,15 @@
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__price {
-    font-size: 0.96rem;
+    font-size: 0.92rem;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card--hero .deals-promo-card__price {
-    font-size: 1.08rem;
+    font-size: 1rem;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__oldprice {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__cta-wrap {
@@ -685,38 +683,48 @@
 
   body.is-category-page .collection-page--deals .deals-promo-card__discount,
   body.is-category-page .collection-page--deals .deals-promo-card__cta {
-    min-height: 30px;
+    min-height: 28px;
     padding: 0 10px;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     border-radius: 999px;
   }
 }
 
 @media (max-width: 420px) {
+  body.is-category-page .collection-page--deals .deals-top-zone {
+    margin: 0 8px 12px;
+  }
+
   body.is-category-page .collection-page--deals .collection-hero {
-    padding: 16px 14px 10px;
+    padding: 14px 14px 8px;
   }
 
   body.is-category-page .collection-page--deals .collection-hero h2 {
-    font-size: 1.72rem;
-    max-width: 9ch;
+    font-size: 1.48rem;
+    max-width: 10ch;
   }
 
   body.is-category-page .collection-page--deals .collection-hero p {
-    font-size: 0.92rem;
-    max-width: 30ch;
+    font-size: 0.9rem;
+    max-width: 28ch;
+  }
+
+  body.is-category-page .collection-page--deals .collection-meta__pill {
+    min-height: 28px;
+    padding: 0 9px;
+    font-size: 0.7rem;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-shell {
-    padding: 6px 14px 12px;
+    padding: 4px 14px 12px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card--hero {
-    min-height: 236px;
+    min-height: 196px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card {
-    min-height: 168px;
+    min-height: 156px;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__content {
@@ -724,10 +732,10 @@
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card--hero .deals-promo-card__title {
-    font-size: 1.38rem;
+    font-size: 1.08rem;
   }
 
   body.is-category-page .collection-page--deals .deals-promo-card__title {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 }
