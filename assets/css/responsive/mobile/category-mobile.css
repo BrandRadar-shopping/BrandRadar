@@ -446,12 +446,13 @@
     margin-top: 10px;
   }
 
-  /* -------------------------------------------------
+   /* -------------------------------------------------
      Deals collection mobile shell
+     gjør hele toppblokken større som én samlet enhet
   ------------------------------------------------- */
   body.is-category-page .collection-page--deals .deals-top-zone {
-    margin: 0 8px 14px;
-    border-radius: 26px;
+    margin: -2px 2px 6px;
+    border-radius: 28px;
     overflow: hidden;
   }
 
@@ -469,11 +470,11 @@
 
   body.is-category-page .collection-page--deals .deals-top-zone__inner {
     display: grid;
-    gap: 8px;
+    gap: 2px;
   }
 
   body.is-category-page .collection-page--deals .collection-hero {
-    padding: 16px 14px 4px;
+    padding: 14px 12px 0;
   }
 
   body.is-category-page .collection-page--deals .collection-hero .collection-hero__eyebrow {
