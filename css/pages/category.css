@@ -1216,3 +1216,49 @@ body.is-category-page .filter-tag .close-tag {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* =====================================================
+   HARD DESKTOP FIX – DEALS CARD MEDIA
+   Hindrer at globale kort-/img-regler blåser opp bilder
+   ===================================================== */
+@media (min-width: 769px) {
+  body.is-category-page .collection-page--deals .category-products .product-grid {
+    align-items: start;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    overflow: hidden;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-media,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 1 / 1.12;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-media img,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image-wrapper img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
