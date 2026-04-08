@@ -353,21 +353,16 @@ body.is-category-page .filter-tag .close-tag {
   background:
     linear-gradient(
       180deg,
-      #05101f 0%,
-      #071528 12%,
-      #0a1a31 26%,
-      #0d213c 42%,
-      #123055 58%,
-      #193a64 72%,
-      #22436f 84%,
-      #31537d 92%,
-      #dfe8f4 98.5%,
+      #071528 0%,
+      #0a1c34 24%,
+      #11284a 48%,
+      #1b3a63 72%,
+      #9fb5d0 94%,
       #f6f8fb 100%
     );
   pointer-events: none;
   z-index: 0;
 }
-
 .deals-top-zone::after {
   display: none;
 }
@@ -393,12 +388,12 @@ body.is-category-page .filter-tag .close-tag {
 
 .collection-page--deals .collection-hero {
   margin: 0;
-  padding: 24px 28px 10px;
+  padding: 26px 28px 16px;
   border: 0;
   border-radius: 0;
   background:
-    radial-gradient(circle at top right, rgba(255,255,255,0.025), transparent 30%),
-    radial-gradient(circle at left center, rgba(0,112,243,0.05), transparent 42%);
+    radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 34%),
+    radial-gradient(circle at left center, rgba(96,165,250,0.06), transparent 44%);
   box-shadow: none;
   position: relative;
   overflow: visible;
@@ -426,10 +421,10 @@ body.is-category-page .filter-tag .close-tag {
 }
 
 .collection-page--deals .collection-hero p {
-  color: rgba(226,232,240,0.90);
+  color: rgba(226,232,240,0.84);
   max-width: 760px;
   line-height: 1.5;
-  font-size: 1.06rem;
+  font-size: 1.04rem;
   margin: 0;
 }
 
@@ -446,14 +441,17 @@ body.is-category-page .filter-tag .close-tag {
   min-height: 36px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #ebf3ff;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #edf4ff;
   backdrop-filter: blur(8px);
   white-space: nowrap;
   font-size: 0.92rem;
 }
 
+.collection-page--deals .deals-promo-shell {
+  margin-top: 6px;
+}
 /* =====================================================
    HIGHLIGHTS WRAPPER
    ===================================================== */
