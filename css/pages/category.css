@@ -1306,3 +1306,193 @@ body.is-category-page .filter-tag .close-tag {
   }
 }
 
+/* =====================================================
+   DEALS MOSAIC – DESKTOP FIX
+   Matcher buildDealHighlights() i category.js
+   ===================================================== */
+
+.collection-page--deals .deals-highlights-shell--mosaic {
+  padding: 6px 28px 18px;
+  background: transparent;
+}
+
+.collection-page--deals .deals-mosaic-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.92fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.collection-page--deals .deal-mosaic-tile {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 0;
+  background: #0f172a;
+  box-shadow:
+    0 14px 34px rgba(3, 10, 24, 0.18),
+    0 1px 0 rgba(255,255,255,0.06) inset;
+}
+
+.collection-page--deals .deal-mosaic-tile--hero {
+  min-height: 420px;
+}
+
+.collection-page--deals .deal-mosaic-tile--mini {
+  min-height: 202px;
+}
+
+.collection-page--deals .deal-mosaic-grid .deal-mosaic-tile--mini:first-of-type {
+  margin-bottom: 16px;
+}
+
+.collection-page--deals .deal-mosaic-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+  min-height: 420px;
+}
+
+.collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+  min-height: 202px;
+}
+
+.collection-page--deals .deal-mosaic-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+.collection-page--deals .deal-mosaic-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.06) 0%, rgba(2, 6, 23, 0.18) 36%, rgba(2, 6, 23, 0.78) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.collection-page--deals .deal-mosaic-badge,
+.collection-page--deals .deal-mosaic-discount,
+.collection-page--deals .deal-mosaic-content {
+  position: absolute;
+  z-index: 2;
+}
+
+.collection-page--deals .deal-mosaic-badge {
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(10, 20, 38, 0.88);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.collection-page--deals .deal-mosaic-discount {
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff4747, #ef2f2f);
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.28);
+}
+
+.collection-page--deals .deal-mosaic-content {
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  color: #fff;
+}
+
+.collection-page--deals .deal-mosaic-brand {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+}
+
+.collection-page--deals .deal-mosaic-title {
+  margin: 0 0 10px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+}
+
+.collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-title {
+  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  max-width: 14ch;
+}
+
+.collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-title {
+  font-size: 1rem;
+  max-width: 12ch;
+}
+
+.collection-page--deals .deal-mosaic-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.collection-page--deals .deal-mosaic-price {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.collection-page--deals .deal-mosaic-oldprice {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65);
+  text-decoration: line-through;
+}
+
+@media (max-width: 980px) {
+  .collection-page--deals .deals-mosaic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-page--deals .deal-mosaic-tile--hero {
+    min-height: 320px;
+  }
+
+  .collection-page--deals .deal-mosaic-tile--mini {
+    min-height: 220px;
+  }
+
+  .collection-page--deals .deal-mosaic-tile--hero .deal-mosaic-media {
+    min-height: 320px;
+  }
+
+  .collection-page--deals .deal-mosaic-tile--mini .deal-mosaic-media {
+    min-height: 220px;
+  }
+
+  .collection-page--deals .deal-mosaic-grid .deal-mosaic-tile--mini:first-of-type {
+    margin-bottom: 0;
+  }
+}
