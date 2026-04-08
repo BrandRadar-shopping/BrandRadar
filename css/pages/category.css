@@ -1219,7 +1219,7 @@ body.is-category-page .filter-tag .close-tag {
 
 /* =====================================================
    DEALS TOP – PROMO GRID
-   Ny toppseksjon for collection=deals
+   Perfekt 1 + 4 grid
    Matcher buildDealHighlights() i category.js
    ===================================================== */
 
@@ -1229,17 +1229,35 @@ body.is-category-page .filter-tag .close-tag {
 
 .collection-page--deals .deals-promo-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.45fr) repeat(2, minmax(0, 0.92fr));
+  grid-auto-rows: 235px;
   gap: 16px;
   align-items: stretch;
 }
 
 .collection-page--deals .deals-promo-grid--count-1 {
   grid-template-columns: 1fr;
+  grid-auto-rows: 420px;
 }
 
 .collection-page--deals .deals-promo-grid--count-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  grid-auto-rows: 280px;
+}
+
+.collection-page--deals .deals-promo-grid--count-3 {
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  grid-auto-rows: 220px;
+}
+
+.collection-page--deals .deals-promo-grid--count-4 {
+  grid-template-columns: minmax(0, 1.45fr) repeat(2, minmax(0, 0.92fr));
+  grid-auto-rows: 220px;
+}
+
+.collection-page--deals .deals-promo-grid--count-5 {
+  grid-template-columns: minmax(0, 1.45fr) repeat(2, minmax(0, 0.92fr));
+  grid-auto-rows: 220px;
 }
 
 .collection-page--deals .deals-promo-card {
@@ -1248,7 +1266,7 @@ body.is-category-page .filter-tag .close-tag {
   border-radius: 22px;
   background: #f3f5f8;
   min-width: 0;
-  min-height: 220px;
+  min-height: 0;
   cursor: pointer;
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1261,7 +1279,26 @@ body.is-category-page .filter-tag .close-tag {
 
 .collection-page--deals .deals-promo-card--hero {
   grid-row: span 2;
-  min-height: 456px;
+}
+
+.collection-page--deals .deals-promo-grid--count-1 .deals-promo-card--hero {
+  grid-row: auto;
+}
+
+.collection-page--deals .deals-promo-grid--count-2 .deals-promo-card--hero,
+.collection-page--deals .deals-promo-grid--count-3 .deals-promo-card--hero {
+  grid-row: span 2;
+}
+
+.collection-page--deals .deals-promo-grid--count-4 .deals-promo-card--hero,
+.collection-page--deals .deals-promo-grid--count-5 .deals-promo-card--hero {
+  grid-row: span 2;
+}
+
+/* viktig: 5. kort skal IKKE bli fullbredde */
+.collection-page--deals .deals-promo-grid--count-5 .deals-promo-card:last-child {
+  grid-column: auto;
+  min-height: 0;
 }
 
 .collection-page--deals .deals-promo-card__media {
@@ -1319,22 +1356,22 @@ body.is-category-page .filter-tag .close-tag {
 
 .collection-page--deals .deals-promo-card__title {
   margin: 0 0 6px;
-  font-size: 1.08rem;
+  font-size: 1.02rem;
   line-height: 1.12;
   font-weight: 800;
   letter-spacing: -0.03em;
-  max-width: 16ch;
+  max-width: 14ch;
   color: #ffffff;
 }
 
 .collection-page--deals .deals-promo-card--hero .deals-promo-card__title {
-  font-size: clamp(1.85rem, 2.8vw, 3rem);
-  max-width: 11ch;
+  font-size: clamp(1.9rem, 2.7vw, 3rem);
+  max-width: 10ch;
 }
 
 .collection-page--deals .deals-promo-card__meta {
   margin: 0 0 14px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.35;
   color: rgba(255,255,255,0.88);
 }
@@ -1355,7 +1392,7 @@ body.is-category-page .filter-tag .close-tag {
 }
 
 .collection-page--deals .deals-promo-card__price {
-  font-size: 1.02rem;
+  font-size: 1rem;
   line-height: 1;
   font-weight: 800;
   color: #ffffff;
@@ -1366,7 +1403,7 @@ body.is-category-page .filter-tag .close-tag {
 }
 
 .collection-page--deals .deals-promo-card__oldprice {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1;
   color: rgba(255,255,255,0.72);
   text-decoration: line-through;
@@ -1404,27 +1441,6 @@ body.is-category-page .filter-tag .close-tag {
   font-weight: 800;
 }
 
-/* 3 kort */
-.collection-page--deals .deals-promo-grid--count-3 .deals-promo-card--hero {
-  grid-row: span 2;
-}
-
-/* 4–5 kort */
-.collection-page--deals .deals-promo-grid--count-4,
-.collection-page--deals .deals-promo-grid--count-5 {
-  grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(0, 0.72fr));
-}
-
-.collection-page--deals .deals-promo-grid--count-4 .deals-promo-card--hero,
-.collection-page--deals .deals-promo-grid--count-5 .deals-promo-card--hero {
-  grid-row: span 2;
-}
-
-.collection-page--deals .deals-promo-grid--count-5 .deals-promo-card:last-child {
-  grid-column: span 2;
-  min-height: 220px;
-}
-
 /* =====================================================
    RESPONSIVE
    ===================================================== */
@@ -1437,34 +1453,34 @@ body.is-category-page .filter-tag .close-tag {
   .collection-page--deals .deals-promo-grid,
   .collection-page--deals .deals-promo-grid--count-4,
   .collection-page--deals .deals-promo-grid--count-5 {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 0.9fr));
+    grid-auto-rows: 205px;
   }
 
-  .collection-page--deals .deals-promo-card--hero {
-    min-height: 400px;
+  .collection-page--deals .deals-promo-grid--count-2 {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-auto-rows: 250px;
   }
 
-  .collection-page--deals .deals-promo-grid--count-5 .deals-promo-card:last-child {
-    grid-column: auto;
-    min-height: 220px;
+  .collection-page--deals .deals-promo-grid--count-3 {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-auto-rows: 205px;
   }
 }
 
 @media (max-width: 980px) {
   .collection-page--deals .deals-promo-grid,
+  .collection-page--deals .deals-promo-grid--count-2,
+  .collection-page--deals .deals-promo-grid--count-3,
   .collection-page--deals .deals-promo-grid--count-4,
   .collection-page--deals .deals-promo-grid--count-5 {
     grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 210px;
   }
 
   .collection-page--deals .deals-promo-card--hero {
     grid-column: 1 / -1;
     grid-row: auto;
-    min-height: 320px;
-  }
-
-  .collection-page--deals .deals-promo-card {
-    min-height: 210px;
   }
 
   .collection-page--deals .deals-promo-card--hero .deals-promo-card__title {
@@ -1479,9 +1495,12 @@ body.is-category-page .filter-tag .close-tag {
   }
 
   .collection-page--deals .deals-promo-grid,
+  .collection-page--deals .deals-promo-grid--count-2,
+  .collection-page--deals .deals-promo-grid--count-3,
   .collection-page--deals .deals-promo-grid--count-4,
   .collection-page--deals .deals-promo-grid--count-5 {
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
     gap: 14px;
   }
 
@@ -1534,3 +1553,5 @@ body.is-category-page .filter-tag .close-tag {
     font-size: 0.76rem;
   }
 }
+
+
