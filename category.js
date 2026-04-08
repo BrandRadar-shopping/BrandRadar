@@ -496,69 +496,80 @@ document.addEventListener("DOMContentLoaded", async () => {
     return getEffectivePrice(a) - getEffectivePrice(b);
   });
 
-  const picks = sorted.slice(0, 3);
+  const picks = sorted.slice(0, 5);
   if (!picks.length) return null;
 
   const shell = document.createElement("section");
-  shell.className = "deals-highlights-shell deals-highlights-shell--mosaic";
+  shell.className = "deals-promo-shell";
 
   const grid = document.createElement("div");
-  grid.className = "deals-mosaic-grid";
+  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
+
+  const labels = [
+    "Ukens beste deal",
+    "Sterkt tilbud",
+    "Mest verdi",
+    "Verdt å se",
+    "Flere deals"
+  ];
 
   picks.forEach((product, index) => {
     const discount = parseNumber(product.discount) || 0;
     const newPrice = parseNumber(product.price);
     const oldPrice = parseNumber(product.old_price);
+    const safeBrand = product.brand || "BrandRadar";
+    const safeTitle = product.title || "Produkt";
 
-    const tile = document.createElement("article");
-tile.className = `deal-mosaic-tile ${index === 0 ? "deal-mosaic-tile--hero" : "deal-mosaic-tile--mini"}`;
+    const card = document.createElement("article");
+    card.className = `deals-promo-card ${index === 0 ? "deals-promo-card--hero" : "deals-promo-card--small"}`;
 
-const isHero = index === 0;
-const shortLabel =
-  index === 0 ? "Beste deal" :
-  index === 1 ? "Sterkt tilbud" :
-  "Verdt å se";
-
-const safeBrand = product.brand || "BrandRadar";
-const safeTitle = product.title || "Produkt";
-
-tile.innerHTML = `
-  <div class="deal-mosaic-media">
-    <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-    <div class="deal-mosaic-overlay"></div>
-
-    <span class="deal-mosaic-badge">${shortLabel}</span>
-    ${discount ? `<span class="deal-mosaic-discount">-${Math.round(discount)}%</span>` : ""}
-
-    <div class="deal-mosaic-content">
-      ${isHero ? `<p class="deal-mosaic-brand">${safeBrand}</p>` : ""}
-      <h3 class="deal-mosaic-title">${safeTitle}</h3>
-
-      <div class="deal-mosaic-meta">
-        ${newPrice != null ? `<span class="deal-mosaic-price">${formatPrice(newPrice)}</span>` : ""}
-        ${oldPrice != null ? `<span class="deal-mosaic-oldprice">${formatPrice(oldPrice)}</span>` : ""}
+    card.innerHTML = `
+      <div class="deals-promo-card__media">
+        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
       </div>
-    </div>
-  </div>
-`;
 
-tile.addEventListener("click", () => {
-  if (product.product_url) {
-    window.open(product.product_url, "_blank", "noopener");
-    return;
-  }
+      <div class="deals-promo-card__overlay"></div>
 
-  const id = product.id || product.product_id || "";
-  if (id) {
-    window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-  }
-});
+      <div class="deals-promo-card__content">
+        <span class="deals-promo-card__eyebrow">${labels[index] || "Deal"}</span>
 
-grid.appendChild(tile);
-});
+        <h3 class="deals-promo-card__title">${safeTitle}</h3>
 
-shell.appendChild(grid);
-return shell;
+        <p class="deals-promo-card__meta">
+          ${safeBrand}
+        </p>
+
+        <div class="deals-promo-card__bottom">
+          <div class="deals-promo-card__pricing">
+            ${newPrice != null ? `<span class="deals-promo-card__price">${formatPrice(newPrice)}</span>` : ""}
+            ${oldPrice != null ? `<span class="deals-promo-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+          </div>
+
+          <div class="deals-promo-card__cta-wrap">
+            ${discount ? `<span class="deals-promo-card__discount">-${Math.round(discount)}%</span>` : ""}
+            <span class="deals-promo-card__cta">Shop now</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      if (product.product_url) {
+        window.open(product.product_url, "_blank", "noopener");
+        return;
+      }
+
+      const id = product.id || product.product_id || "";
+      if (id) {
+        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+      }
+    });
+
+    grid.appendChild(card);
+  });
+
+  shell.appendChild(grid);
+  return shell;
 }
   function buildDealsTopZone(heroEl, highlightsEl) {
     const section = document.createElement("section");
