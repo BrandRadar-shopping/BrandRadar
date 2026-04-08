@@ -22,19 +22,12 @@
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
 }
 
-/* Bilde */
-.product-card img {
-  width: 100%;
-  display: block;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-/* Wrapper som noen kort bruker (index) */
-.product-card .product-image-wrapper img {
+/* Bilde – IKKE style alle img globalt inni product-card */
+.product-card .product-media > .product-image,
+.product-card .product-image-wrapper > img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 4 / 5;
+  display: block;
   object-fit: cover;
 }
 
@@ -532,4 +525,22 @@
 .product-card .discount-pill {
   flex: 0 0 auto;
   white-space: nowrap;
+}
+
+/* ============================================
+   DEALS / CATEGORY SAFETY
+   Hindrer globale kortbilde-regler i å lekke
+============================================ */
+
+.collection-page--deals .product-card .product-media,
+body.is-category-page .collection-page--deals .product-card .product-media {
+  aspect-ratio: 1 / 1.12;
+  overflow: hidden;
+}
+
+.collection-page--deals .product-card .product-image,
+body.is-category-page .collection-page--deals .product-card .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
