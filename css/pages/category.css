@@ -1262,3 +1262,47 @@ body.is-category-page .filter-tag .close-tag {
     object-position: center !important;
   }
 }
+
+/* =====================================================
+   NUCLEAR DESKTOP FIX – DEALS PRODUCT MEDIA ONLY
+   Isolerer deals-kortene på category-siden fra globale kortregler
+   ===================================================== */
+@media (min-width: 769px) {
+  body.is-category-page .collection-page--deals .category-products .product-card {
+    overflow: hidden !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-media,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image-wrapper {
+    all: unset;
+    box-sizing: border-box;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    aspect-ratio: 1 / 1.12 !important;
+    padding: 14px !important;
+    overflow: hidden !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%) !important;
+    flex: 0 0 auto !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-media img,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image-wrapper img,
+  body.is-category-page .collection-page--deals .category-products .product-card img,
+  body.is-category-page .collection-page--deals .category-products .product-card .product-image {
+    all: unset;
+    box-sizing: border-box;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
