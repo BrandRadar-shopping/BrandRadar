@@ -500,6 +500,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const picks = sorted.slice(0, 5);
   if (!picks.length) return null;
 
+  const shell = document.createElement("section");
+  shell.className = "deals-promo-shell";
+
+  const grid = document.createElement("div");
+  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
+
   const labels = [
     "Ukens beste deal",
     "Sterkt tilbud",
@@ -508,21 +514,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Flere deals"
   ];
 
-  function attachCardNavigate(el, product) {
-    el.addEventListener("click", () => {
-      if (product.product_url) {
-        window.open(product.product_url, "_blank", "noopener");
-        return;
-      }
-
-      const id = product.id || product.product_id || "";
-      if (id) {
-        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-      }
-    });
-  }
-
-  function createPromoCard(product, index) {
+  picks.forEach((product, index) => {
     const discount = parseNumber(product.discount) || 0;
     const newPrice = parseNumber(product.price);
     const oldPrice = parseNumber(product.old_price);
@@ -560,82 +552,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
 
-    attachCardNavigate(card, product);
-    return card;
-  }
+    card.addEventListener("click", () => {
+      if (product.product_url) {
+        window.open(product.product_url, "_blank", "noopener");
+        return;
+      }
 
-  function createMobileRailCard(product, index) {
-    const discount = parseNumber(product.discount) || 0;
-    const newPrice = parseNumber(product.price);
-    const oldPrice = parseNumber(product.old_price);
-    const safeBrand = product.brand || "BrandRadar";
-    const safeTitle = product.title || "Produkt";
+      const id = product.id || product.product_id || "";
+      if (id) {
+        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+      }
+    });
 
-    const card = document.createElement("article");
-    card.className = "deals-mobile-rail-card";
-
-    card.innerHTML = `
-      <div class="deals-mobile-rail-card__media">
-        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-      </div>
-
-      <div class="deals-mobile-rail-card__overlay"></div>
-
-      <div class="deals-mobile-rail-card__content">
-        <span class="deals-mobile-rail-card__eyebrow">${labels[index] || "Deal"}</span>
-
-        <h3 class="deals-mobile-rail-card__title">${safeTitle}</h3>
-
-        <p class="deals-mobile-rail-card__meta">${safeBrand}</p>
-
-        <div class="deals-mobile-rail-card__bottom">
-          <div class="deals-mobile-rail-card__pricing">
-            ${newPrice != null ? `<span class="deals-mobile-rail-card__price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deals-mobile-rail-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-
-          <div class="deals-mobile-rail-card__cta-wrap">
-            ${discount ? `<span class="deals-mobile-rail-card__discount">-${Math.round(discount)}%</span>` : ""}
-            <span class="deals-mobile-rail-card__cta">Shop now</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    attachCardNavigate(card, product);
-    return card;
-  }
-
-  if (mobileMediaQuery.matches) {
-    const shell = document.createElement("section");
-    shell.className = "deals-promo-shell deals-promo-shell--mobile";
-
-    const hero = createPromoCard(picks[0], 0);
-    hero.classList.add("deals-promo-card--mobile-hero");
-    shell.appendChild(hero);
-
-    if (picks.length > 1) {
-      const rail = document.createElement("div");
-      rail.className = "deals-mobile-rail";
-
-      picks.slice(1).forEach((product, idx) => {
-        rail.appendChild(createMobileRailCard(product, idx + 1));
-      });
-
-      shell.appendChild(rail);
-    }
-
-    return shell;
-  }
-
-  const shell = document.createElement("section");
-  shell.className = "deals-promo-shell";
-
-  const grid = document.createElement("div");
-  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
-
-  picks.forEach((product, index) => {
-    grid.appendChild(createPromoCard(product, index));
+    grid.appendChild(card);
   });
 
   shell.appendChild(grid);
