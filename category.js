@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const filterToggleMeta = document.querySelector(".filter-toggle-meta");
   const resetFiltersBtn = document.querySelector(".reset-filters-btn");
   const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
+  const isMobileViewport = () => mobileMediaQuery.matches;
   const filterStorageKey = `br_category_filters_collapsed:${window.location.pathname}${window.location.search}`;
 
   const params = new URLSearchParams(window.location.search);
