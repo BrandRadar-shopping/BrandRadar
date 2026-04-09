@@ -500,12 +500,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const picks = sorted.slice(0, 5);
   if (!picks.length) return null;
 
-  const shell = document.createElement("section");
-  shell.className = "deals-promo-shell";
-
-  const grid = document.createElement("div");
-  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
-
   const labels = [
     "Ukens beste deal",
     "Sterkt tilbud",
@@ -514,7 +508,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Flere deals"
   ];
 
-  picks.forEach((product, index) => {
+  function attachNavigate(el, product) {
+    el.addEventListener("click", () => {
+      if (product.product_url) {
+        window.open(product.product_url, "_blank", "noopener");
+        return;
+      }
+
+      const id = product.id || product.product_id || "";
+      if (id) {
+        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+      }
+    });
+  }
+
+  function buildDesktopCard(product, index) {
     const discount = parseNumber(product.discount) || 0;
     const newPrice = parseNumber(product.price);
     const oldPrice = parseNumber(product.old_price);
@@ -533,9 +541,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       <div class="deals-promo-card__content">
         <span class="deals-promo-card__eyebrow">${labels[index] || "Deal"}</span>
-
         <h3 class="deals-promo-card__title">${safeTitle}</h3>
-
         <p class="deals-promo-card__meta">${safeBrand}</p>
 
         <div class="deals-promo-card__bottom">
@@ -552,19 +558,122 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
 
-    card.addEventListener("click", () => {
-      if (product.product_url) {
-        window.open(product.product_url, "_blank", "noopener");
-        return;
-      }
+    attachNavigate(card, product);
+    return card;
+  }
 
-      const id = product.id || product.product_id || "";
-      if (id) {
-        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-      }
-    });
+  function buildMobileHeroCard(product, index) {
+    const discount = parseNumber(product.discount) || 0;
+    const newPrice = parseNumber(product.price);
+    const oldPrice = parseNumber(product.old_price);
+    const safeBrand = product.brand || "BrandRadar";
+    const safeTitle = product.title || "Produkt";
 
-    grid.appendChild(card);
+    const card = document.createElement("article");
+    card.className = "deals-mobile-hero-card";
+
+    card.innerHTML = `
+      <div class="deals-mobile-hero-card__media">
+        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+      </div>
+
+      <div class="deals-mobile-hero-card__overlay"></div>
+
+      <div class="deals-mobile-hero-card__content">
+        <span class="deals-mobile-hero-card__eyebrow">${labels[index] || "Deal"}</span>
+        <h3 class="deals-mobile-hero-card__title">${safeTitle}</h3>
+        <p class="deals-mobile-hero-card__meta">${safeBrand}</p>
+
+        <div class="deals-mobile-hero-card__bottom">
+          <div class="deals-mobile-hero-card__pricing">
+            ${newPrice != null ? `<span class="deals-mobile-hero-card__price">${formatPrice(newPrice)}</span>` : ""}
+            ${oldPrice != null ? `<span class="deals-mobile-hero-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+          </div>
+
+          <div class="deals-mobile-hero-card__cta-wrap">
+            ${discount ? `<span class="deals-mobile-hero-card__discount">-${Math.round(discount)}%</span>` : ""}
+            <span class="deals-mobile-hero-card__cta">Shop now</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    attachNavigate(card, product);
+    return card;
+  }
+
+  function buildMobileRailCard(product, index) {
+    const discount = parseNumber(product.discount) || 0;
+    const newPrice = parseNumber(product.price);
+    const oldPrice = parseNumber(product.old_price);
+    const safeBrand = product.brand || "BrandRadar";
+    const safeTitle = product.title || "Produkt";
+
+    const card = document.createElement("article");
+    card.className = "deals-mobile-rail-card";
+
+    card.innerHTML = `
+      <div class="deals-mobile-rail-card__media">
+        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+      </div>
+
+      <div class="deals-mobile-rail-card__overlay"></div>
+
+      <div class="deals-mobile-rail-card__content">
+        <span class="deals-mobile-rail-card__eyebrow">${labels[index] || "Deal"}</span>
+        <h3 class="deals-mobile-rail-card__title">${safeTitle}</h3>
+        <p class="deals-mobile-rail-card__meta">${safeBrand}</p>
+
+        <div class="deals-mobile-rail-card__bottom">
+          <div class="deals-mobile-rail-card__pricing">
+            ${newPrice != null ? `<span class="deals-mobile-rail-card__price">${formatPrice(newPrice)}</span>` : ""}
+            ${oldPrice != null ? `<span class="deals-mobile-rail-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+          </div>
+
+          <div class="deals-mobile-rail-card__cta-wrap">
+            ${discount ? `<span class="deals-mobile-rail-card__discount">-${Math.round(discount)}%</span>` : ""}
+            <span class="deals-mobile-rail-card__cta">Shop now</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    attachNavigate(card, product);
+    return card;
+  }
+
+  // MOBILE ONLY
+  if (mobileMediaQuery.matches) {
+    const shell = document.createElement("section");
+    shell.className = "deals-mobile-top";
+
+    if (picks[0]) {
+      shell.appendChild(buildMobileHeroCard(picks[0], 0));
+    }
+
+    if (picks.length > 1) {
+      const rail = document.createElement("div");
+      rail.className = "deals-mobile-rail";
+
+      picks.slice(1).forEach((product, idx) => {
+        rail.appendChild(buildMobileRailCard(product, idx + 1));
+      });
+
+      shell.appendChild(rail);
+    }
+
+    return shell;
+  }
+
+  // DESKTOP – URØRT
+  const shell = document.createElement("section");
+  shell.className = "deals-promo-shell";
+
+  const grid = document.createElement("div");
+  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
+
+  picks.forEach((product, index) => {
+    grid.appendChild(buildDesktopCard(product, index));
   });
 
   shell.appendChild(grid);
