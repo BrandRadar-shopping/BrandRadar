@@ -1283,3 +1283,151 @@
     max-width: 8.5ch !important;
   }
 }
+
+/* =====================================================
+   DEALS MOBILE – HERO COPY + CARD QUALITY POLISH
+   Må stå helt nederst
+   ===================================================== */
+
+@media (max-width: 768px) {
+  /* HERO: bruk mer bredde og mindre “stiv” tekstblokk */
+  body.is-category-page .collection-page--deals .collection-hero h2 {
+    max-width: 12ch !important;
+    font-size: clamp(1.5rem, 6.7vw, 1.9rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  body.is-category-page .collection-page--deals .collection-hero p {
+    max-width: 34ch !important;
+    font-size: 0.94rem !important;
+    line-height: 1.46 !important;
+    color: rgba(226, 232, 240, 0.92) !important;
+  }
+
+  body.is-category-page .collection-page--deals .collection-meta {
+    gap: 7px !important;
+  }
+
+  body.is-category-page .collection-page--deals .collection-meta__pill {
+    background: rgba(255,255,255,0.16) !important;
+    border: 1px solid rgba(255,255,255,0.20) !important;
+    color: rgba(255,255,255,0.97) !important;
+    box-shadow: 0 8px 18px rgba(3, 10, 24, 0.12) !important;
+  }
+
+  /* HERO CARD: litt renere og mer premium */
+  body.is-category-page .collection-page--deals .deals-mobile-hero-card {
+    border-radius: 20px !important;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.14) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-hero-card__content {
+    padding: 15px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-hero-card__title {
+    max-width: 10ch !important;
+    font-size: 1.2rem !important;
+    line-height: 1.02 !important;
+  }
+
+  /* SLIDER-KORT: mer premium finish */
+  body.is-category-page .collection-page--deals .deals-mobile-rail {
+    gap: 14px !important;
+    padding-top: 14px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail > .deals-mobile-rail-card {
+    border-radius: 20px !important;
+    min-height: 174px !important;
+    background:
+      radial-gradient(circle at top, rgba(255,255,255,0.18), rgba(255,255,255,0) 42%),
+      linear-gradient(180deg, #f3f6fa 0%, #e5edf5 100%) !important;
+    border: 1px solid rgba(15, 23, 42, 0.07) !important;
+    box-shadow:
+      0 12px 24px rgba(15, 23, 42, 0.08),
+      0 1px 0 rgba(255,255,255,0.65) inset !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__content {
+    padding: 14px 10px 14px 14px !important;
+    background: linear-gradient(
+      90deg,
+      rgba(243, 246, 250, 0.98) 0%,
+      rgba(243, 246, 250, 0.94) 74%,
+      rgba(243, 246, 250, 0.00) 100%
+    ) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__eyebrow {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+    box-shadow: 0 6px 12px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__title {
+    max-width: 8.5ch !important;
+    font-size: 1rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.02em !important;
+    color: #111827 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__meta {
+    margin-bottom: 10px !important;
+    color: #5b6678 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__price {
+    font-size: 0.98rem !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__oldprice {
+    font-size: 0.78rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__discount {
+    background: linear-gradient(135deg, #ff5a5f, #ff4343) !important;
+    box-shadow: 0 8px 16px rgba(255, 77, 79, 0.18) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__cta {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__media {
+    padding-right: 8px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__media img {
+    object-position: center center !important;
+    filter: drop-shadow(0 10px 16px rgba(15, 23, 42, 0.10)) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.is-category-page .collection-page--deals .collection-hero h2 {
+    max-width: 11ch !important;
+    font-size: 1.42rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .collection-hero p {
+    max-width: 31ch !important;
+    font-size: 0.9rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail > .deals-mobile-rail-card {
+    min-height: 168px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-mobile-rail-card__title {
+    font-size: 0.94rem !important;
+    max-width: 8ch !important;
+  }
+}
