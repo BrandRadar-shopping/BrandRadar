@@ -442,3 +442,282 @@
     border-color: rgba(0, 112, 243, 0.16);
   }
 }
+
+/* =====================================================
+   MOBILE DRAWER – PREMIUM UI POLISH
+   Må stå helt nederst
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .mobile-drawer {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+    padding: 14px 14px 28px;
+  }
+
+  .mobile-drawer-header {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .mobile-drawer-title {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+  }
+
+  .mobile-drawer-close {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+  }
+
+  .mobile-drawer-close:hover,
+  .mobile-drawer-close:focus-visible {
+    background: #f8fafc;
+  }
+
+  /* Toppnavigasjon */
+  .mobile-drawer-section {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 14px;
+    border-radius: 14px;
+    text-decoration: none !important;
+    color: #0f172a !important;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    transition:
+      transform 0.16s ease,
+      background 0.16s ease,
+      border-color 0.16s ease,
+      box-shadow 0.16s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a:visited,
+  .mobile-drawer .mobile-drawer-section > a:hover,
+  .mobile-drawer .mobile-drawer-section > a:active {
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a:active {
+    transform: scale(0.99);
+    background: #f8fafc;
+  }
+
+  /* Brands-highlight */
+  .mobile-drawer .mobile-drawer-section > a[href="brands.html"] {
+    position: relative;
+    display: block;
+    padding: 12px 14px 11px;
+    min-height: auto;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    border: 1px solid rgba(0, 112, 243, 0.10);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  .mobile-drawer .mobile-drawer-section > a[href="brands.html"]::after {
+    content: "Utforsk alle brands";
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #5b6b82;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a[href="brands.html"]:active {
+    background: linear-gradient(180deg, #f3f8ff 0%, #e9f1ff 100%);
+    border-color: rgba(0, 112, 243, 0.16);
+  }
+
+  /* Browse-del */
+  .m-topcats {
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .m-chip {
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    background: #ffffff;
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 800;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
+  }
+
+  .m-chip.is-active {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.16);
+  }
+
+  .m-segments,
+  .m-segments.is-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 12px;
+    margin: 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .m-segments::-webkit-scrollbar,
+  .m-segments.is-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .m-seg,
+  .m-level-btn {
+    flex: 0 0 auto;
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    background: #ffffff;
+    color: #111827;
+    font-size: 0.9rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.03);
+  }
+
+  .m-seg.is-active,
+  .m-level-btn.is-active {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.14);
+  }
+
+  .m-results {
+    padding-top: 16px;
+    gap: 22px;
+  }
+
+  .m-section-title {
+    margin: 0 0 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  .m-row {
+    min-height: 60px;
+    padding: 0 4px 0 6px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+  }
+
+  .m-row::before {
+    width: 10px;
+    height: 10px;
+    opacity: 0.12;
+  }
+
+  .m-row-label {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+  }
+
+  .m-row-arrow {
+    font-size: 24px;
+    opacity: 0.8;
+  }
+
+  .m-brand-row {
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+
+  .m-brand-pill {
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.03);
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-decoration: none !important;
+  }
+
+  .m-brand-pill:visited,
+  .m-brand-pill:hover,
+  .m-brand-pill:active {
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-drawer {
+    padding: 12px 12px 24px;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a {
+    min-height: 50px;
+    padding: 0 13px;
+    font-size: 0.96rem;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a[href="brands.html"] {
+    padding: 11px 13px 10px;
+  }
+
+  .mobile-drawer .mobile-drawer-section > a[href="brands.html"]::after {
+    font-size: 0.76rem;
+  }
+
+  .m-chip {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 0.9rem;
+  }
+
+  .m-seg,
+  .m-level-btn {
+    min-height: 36px;
+    padding: 0 13px;
+    font-size: 0.86rem;
+  }
+
+  .m-row {
+    min-height: 56px;
+  }
+
+  .m-row-label {
+    font-size: 0.96rem;
+  }
+}
