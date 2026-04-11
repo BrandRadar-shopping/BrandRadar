@@ -210,9 +210,14 @@ function initMobileDrawer() {
     return;
   }
 
+   const openBtn = document.querySelector(".mobile-menu-btn");
   const closeBtn = drawer.querySelector(".mobile-drawer-close");
   const backBtn = drawer.querySelector(".mobile-drawer-back");
   const drawerSearchInput = document.getElementById("mobileDrawerSearchInput");
+
+  if (openBtn) {
+    openBtn.addEventListener("click", () => openMenu());
+  }
 
   overlay.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
