@@ -277,93 +277,80 @@
 }
 
 /* =====================================================
-   BrandRadar – Brands Mobile FINAL CARD SIZE FIX (TIGHT)
+   BrandRadar – Brands Mobile FINAL (BALANCED + CLEAN)
    ===================================================== */
 
 @media (max-width: 768px) {
-  /* Fremhevede brands */
-  .highlighted-brands .brand-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 12px !important;
-    overflow: visible !important;
-    padding-bottom: 0 !important;
-  }
 
-  .highlighted-brands .brand-card {
-    flex: none !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    min-height: 170px !important;
-    max-height: 170px !important;
-  }
-
-  /* Vanlige kort */
+  /* GRID */
+  .highlighted-brands .brand-grid,
   .all-brands .brand-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 12px !important;
   }
 
-  .all-brands .brand-card {
-    min-height: 170px !important;
-    max-height: 170px !important;
-  }
-
-  /* Felles kortstruktur */
+  /* CARD BASE */
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    padding: 12px 10px 10px !important;
+
+    min-height: 175px !important;
+    max-height: 175px !important;
+
+    padding: 10px 10px 14px !important; /* 👈 mer luft under */
     border-radius: 18px !important;
     overflow: hidden !important;
   }
 
-  /* Logo */
+  /* LOGO */
   .highlighted-brands .brand-card img,
   .all-brands .brand-card img {
     width: 100% !important;
-    max-width: 95px !important;
-    height: 42px !important;
+    max-width: 90px !important;
+    height: 38px !important;
+
     object-fit: contain !important;
     object-position: center !important;
+
+    margin: 4px auto 6px !important; /* 👈 mindre luft */
     display: block !important;
-    margin: 6px auto 8px !important;
-    flex: 0 0 auto !important;
   }
 
-  /* Brand-navn */
+  /* NAME */
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    margin: 0 0 8px !important;
-    font-size: 0.92rem !important;
-    line-height: 1.15 !important;
+    margin: 0 0 6px !important; /* 👈 mindre luft */
+    font-size: 0.9rem !important;
     font-weight: 800 !important;
     letter-spacing: -0.02em !important;
     color: #111827 !important;
   }
 
-  /* Knapp */
+  /* CTA */
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
-    margin-top: auto !important;
+    margin-top: auto !important; /* 👈 presser knappen ned */
+
     width: 100% !important;
-    min-height: 34px !important;
     height: 34px !important;
-    padding: 0 12px !important;
+    min-height: 34px !important;
+
     border-radius: 10px !important;
     font-size: 0.82rem !important;
     font-weight: 700 !important;
-    display: inline-flex !important;
+
+    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+
     line-height: 1 !important;
   }
 
-  /* Favoritt */
+  /* FAVORITE */
   .highlighted-brands .brand-card .fav-icon,
   .all-brands .brand-card .fav-icon {
     width: 32px !important;
@@ -373,37 +360,31 @@
   }
 }
 
+/* SMALL SCREENS */
 @media (max-width: 420px) {
-  .highlighted-brands .brand-grid,
-  .all-brands .brand-grid {
-    gap: 10px !important;
-  }
 
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
-    min-height: 160px !important;
-    max-height: 160px !important;
-    padding: 10px 8px 8px !important;
+    min-height: 165px !important;
+    max-height: 165px !important;
+    padding: 10px 8px 12px !important;
   }
 
   .highlighted-brands .brand-card img,
   .all-brands .brand-card img {
-    max-width: 85px !important;
-    height: 38px !important;
-    margin: 6px auto 6px !important;
+    max-width: 80px !important;
+    height: 34px !important;
+    margin-bottom: 5px !important;
   }
 
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    font-size: 0.88rem !important;
-    margin-bottom: 6px !important;
+    font-size: 0.85rem !important;
   }
 
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
-    min-height: 32px !important;
     height: 32px !important;
-    font-size: 0.8rem !important;
+    font-size: 0.78rem !important;
   }
 }
-
