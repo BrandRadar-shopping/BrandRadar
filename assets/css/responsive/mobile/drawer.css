@@ -721,3 +721,188 @@
     font-size: 0.96rem;
   }
 }
+
+/* =====================================================
+   MOBILE DRAWER – SIMPLE NAV VERSION
+   Må stå nederst
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .mobile-drawer {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+    padding: 14px 14px 28px;
+  }
+
+  .mobile-drawer-header {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .mobile-drawer-title {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+  }
+
+  .mobile-drawer-close {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+  }
+
+  .mobile-drawer-close:hover,
+  .mobile-drawer-close:focus-visible {
+    background: #f8fafc;
+  }
+
+  .mobile-drawer-section {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mobile-drawer-nav {
+    margin-bottom: 22px;
+  }
+
+  .mobile-drawer-nav > a {
+    display: flex;
+    align-items: center;
+    min-height: 54px;
+    padding: 0 15px;
+    border-radius: 16px;
+    text-decoration: none !important;
+    color: #0f172a !important;
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    transition:
+      transform 0.16s ease,
+      background 0.16s ease,
+      border-color 0.16s ease,
+      box-shadow 0.16s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-drawer-nav > a:visited,
+  .mobile-drawer-nav > a:hover,
+  .mobile-drawer-nav > a:active {
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+
+  .mobile-drawer-nav > a:active {
+    transform: scale(0.99);
+    background: #f8fafc;
+  }
+
+  .mobile-drawer-link--brands {
+    display: block !important;
+    padding: 12px 15px 11px !important;
+    min-height: auto !important;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%) !important;
+    border: 1px solid rgba(0, 112, 243, 0.10) !important;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05) !important;
+  }
+
+  .mobile-drawer-link--brands::after {
+    content: "Utforsk alle brands";
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #5b6b82;
+  }
+
+  .mobile-drawer-link--brands:active {
+    background: linear-gradient(180deg, #f3f8ff 0%, #e9f1ff 100%) !important;
+    border-color: rgba(0, 112, 243, 0.16) !important;
+  }
+
+  .mobile-drawer-cats {
+    padding-top: 2px;
+  }
+
+  .mobile-drawer-subtitle {
+    margin: 0 0 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  .mobile-drawer-catlist {
+    display: grid;
+    gap: 8px;
+  }
+
+  .mobile-drawer-catlist > a {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    padding: 0 15px;
+    border-radius: 14px;
+    text-decoration: none !important;
+    color: #111827 !important;
+    font-size: 0.98rem;
+    font-weight: 700;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.07);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.03);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-drawer-catlist > a:visited,
+  .mobile-drawer-catlist > a:hover,
+  .mobile-drawer-catlist > a:active {
+    color: #111827 !important;
+    text-decoration: none !important;
+  }
+
+  .mobile-drawer-catlist > a:active {
+    background: #f8fafc;
+  }
+
+  /* Skjul gammel browse-struktur hvis noe ligger igjen på andre sider */
+  .m-topcats,
+  .m-segments,
+  .m-results {
+    display: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-drawer {
+    padding: 12px 12px 24px;
+  }
+
+  .mobile-drawer-nav > a {
+    min-height: 52px;
+    padding: 0 14px;
+    font-size: 0.96rem;
+  }
+
+  .mobile-drawer-link--brands {
+    padding: 11px 14px 10px !important;
+  }
+
+  .mobile-drawer-link--brands::after {
+    font-size: 0.76rem;
+  }
+
+  .mobile-drawer-catlist > a {
+    min-height: 48px;
+    padding: 0 14px;
+    font-size: 0.94rem;
+  }
+}
