@@ -21,11 +21,11 @@
 
     <div class="search-box" id="site-search">
       <span class="search-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
-    <circle cx="11" cy="11" r="6.5"></circle>
-    <path d="M16 16L21 21"></path>
-  </svg>
-</span>
+        <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="M16 16L21 21"></path>
+        </svg>
+      </span>
 
       <input
         id="search-input"
@@ -75,44 +75,27 @@
 
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
   <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Søk etter kategori</p>
+    <p class="mobile-drawer-title">Meny</p>
     <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
   </div>
 
-<div class="mobile-drawer-section mobile-drawer-section--primary">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html" class="mobile-drawer-link mobile-drawer-link--brands">Brands</a>
-  <a href="favoritter.html">Favoritter</a>
-  <a href="luxury.html">Luxury Corner ✨</a>
-</div>
-  
-  <!-- Linje 1: hovedkategorier -->
-  <div class="m-topcats" role="tablist" aria-label="Hovedkategorier">
-    <button class="m-chip is-active" data-cat="clothing" type="button">Klær</button>
-    <button class="m-chip" data-cat="shoes" type="button">Sko</button>
-    <button class="m-chip" data-cat="gymcorner" type="button">Gymcorner</button>
-    <button class="m-chip" data-cat="accessories" type="button">Tilbehør</button>
-    <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
+  <div class="mobile-drawer-section mobile-drawer-nav">
+    <a href="index.html">Hjem</a>
+    <a href="news.html">Nyheter</a>
+    <a href="brands.html" class="mobile-drawer-link--brands">Brands</a>
+    <a href="favoritter.html">Favoritter</a>
+    <a href="luxury.html">Luxury Corner ✨</a>
   </div>
 
-  <!-- Linje 2: segment -->
-  <div class="m-segments" role="tablist" aria-label="Segment">
-    <button class="m-seg is-active" data-seg="Dame" type="button">Dame</button>
-    <button class="m-seg" data-seg="Herre" type="button">Herre</button>
-    <button class="m-seg" data-seg="Barn" type="button">Barn</button>
-  </div>
+  <div class="mobile-drawer-section mobile-drawer-cats">
+    <p class="mobile-drawer-subtitle">Utforsk kategorier</p>
 
-  <!-- Linje 3: resultater -->
-  <div class="m-results">
-    <div class="m-subcats">
-      <h3 class="m-section-title">Kategorier</h3>
-      <div class="m-grid" id="mSubcatGrid"></div>
-    </div>
-
-    <div class="m-brands">
-      <h3 class="m-section-title">Toppmerker</h3>
-      <div class="m-brand-row" id="mBrandRow"></div>
+    <div class="mobile-drawer-catlist">
+      <a href="category.html?category=Clothing">Klær</a>
+      <a href="category.html?category=Shoes">Sko</a>
+      <a href="category.html?category=Gymcorner">Gymcorner</a>
+      <a href="category.html?category=Accessories">Tilbehør</a>
+      <a href="category.html?category=Selfcare">Selfcare</a>
     </div>
   </div>
 </nav>
@@ -215,7 +198,7 @@
     </div>
   </section>
 
-    <!-- 🌐 UTFORSK BRANDRADAR-UNIVERSET -->
+  <!-- 🌐 UTFORSK BRANDRADAR-UNIVERSET -->
   <section class="universes">
     <h2>Utforsk BrandRadar-universet</h2>
     <p class="section-sub">
@@ -295,38 +278,38 @@
   </section>
 
   <!-- 🎁 BRANDRADAR GIVEAWAYS -->
-<section class="giveaway-section" id="giveaway-section">
-  <div class="giveaway-shell" id="giveaway-shell">
-    <!-- Dynamisk innhold fra giveaways.js -->
-  </div>
-</section>
-
-<section class="giveaway-shortcut-section" aria-label="Giveaway Hub shortcut">
-  <a href="giveaways.html" class="giveaway-shortcut-card">
-    <div class="giveaway-shortcut-copy">
-      <p class="giveaway-shortcut-kicker">Giveaway Hub</p>
-      <h2>Vinn utvalgte produkter</h2>
-      <p class="giveaway-shortcut-text">
-        Se aktive giveaways samlet på ett sted og følg konkurransene som er live nå.
-      </p>
-
-      <div class="giveaway-shortcut-actions">
-        <span class="giveaway-shortcut-cta">Se giveaways</span>
-        <span class="giveaway-shortcut-meta">Aktive giveaways · samlet oversikt</span>
-      </div>
+  <section class="giveaway-section" id="giveaway-section">
+    <div class="giveaway-shell" id="giveaway-shell">
+      <!-- Dynamisk innhold fra giveaways.js -->
     </div>
+  </section>
 
-    <div class="giveaway-shortcut-visual" aria-hidden="true">
-      <div class="giveaway-shortcut-badge">LIVE</div>
-      <div class="giveaway-shortcut-orb giveaway-shortcut-orb--1"></div>
-      <div class="giveaway-shortcut-orb giveaway-shortcut-orb--2"></div>
-      <div class="giveaway-shortcut-panel">
-        <span>Aktivt nå</span>
-        <strong>Giveaways samlet ett sted</strong>
+  <section class="giveaway-shortcut-section" aria-label="Giveaway Hub shortcut">
+    <a href="giveaways.html" class="giveaway-shortcut-card">
+      <div class="giveaway-shortcut-copy">
+        <p class="giveaway-shortcut-kicker">Giveaway Hub</p>
+        <h2>Vinn utvalgte produkter</h2>
+        <p class="giveaway-shortcut-text">
+          Se aktive giveaways samlet på ett sted og følg konkurransene som er live nå.
+        </p>
+
+        <div class="giveaway-shortcut-actions">
+          <span class="giveaway-shortcut-cta">Se giveaways</span>
+          <span class="giveaway-shortcut-meta">Aktive giveaways · samlet oversikt</span>
+        </div>
       </div>
-    </div>
-  </a>
-</section>
+
+      <div class="giveaway-shortcut-visual" aria-hidden="true">
+        <div class="giveaway-shortcut-badge">LIVE</div>
+        <div class="giveaway-shortcut-orb giveaway-shortcut-orb--1"></div>
+        <div class="giveaway-shortcut-orb giveaway-shortcut-orb--2"></div>
+        <div class="giveaway-shortcut-panel">
+          <span>Aktivt nå</span>
+          <strong>Giveaways samlet ett sted</strong>
+        </div>
+      </div>
+    </a>
+  </section>
   
   <!-- 🧭 UKENS RADAR PICKS -->
   <section class="featured-products">
@@ -392,7 +375,6 @@
   </a>
 </nav>
 
-
 <script src="offers-engine.js"></script>
 <script src="favorites-core.js"></script>
 <script src="product-card-engine.js"></script>
@@ -406,30 +388,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
