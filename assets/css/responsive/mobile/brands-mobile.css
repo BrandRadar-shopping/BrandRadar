@@ -3,6 +3,12 @@
    BRAND PAGE (brand-page.html)
    ============================ */
 
+@media (max-width: 768px) {
+  body {
+    background: red !important;
+  }
+}
+
 /* --- Brand Info Card Layout (rebalansert grid) --- */
 .brand-info-card {
   display: grid;
