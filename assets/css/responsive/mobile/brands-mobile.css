@@ -1,5 +1,5 @@
 /* =====================================================
-   BrandRadar – Brands Mobile (CLEAN FINAL)
+   BrandRadar – Brands Mobile (FINAL CLEAN)
    Scoped kun til brands.html
    ===================================================== */
 
@@ -9,9 +9,7 @@
     background: #f8fafc;
   }
 
-  /* ---------------------------------
-     Search
-  --------------------------------- */
+  /* SEARCH */
   body.is-brands-page .brand-search {
     padding: 12px 14px 8px;
   }
@@ -22,17 +20,12 @@
     padding: 0 16px;
     border-radius: 14px;
     border: 1px solid rgba(15, 23, 42, 0.10);
-    background: #ffffff;
-    color: #111827;
+    background: #fff;
     font-size: 0.98rem;
     font-weight: 600;
-    outline: none;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
   }
 
-  /* ---------------------------------
-     A–Å filter
-  --------------------------------- */
+  /* A–Å */
   body.is-brands-page .brand-alphabet {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -47,7 +40,7 @@
     height: 40px;
     border-radius: 12px;
     border: 1px solid rgba(15, 23, 42, 0.08);
-    background: #ffffff;
+    background: #fff;
     font-size: 0.92rem;
     font-weight: 700;
     color: #4b5563;
@@ -55,17 +48,14 @@
 
   body.is-brands-page .brand-alphabet span.active {
     background: #0070f3;
-    color: #ffffff;
+    color: #fff;
     border-color: #0070f3;
   }
 
-  /* ---------------------------------
-     Sections
-  --------------------------------- */
+  /* SECTIONS */
   body.is-brands-page .highlighted-brands,
   body.is-brands-page .all-brands {
-    padding-left: 14px;
-    padding-right: 14px;
+    padding: 0 14px;
   }
 
   body.is-brands-page .highlighted-brands h2,
@@ -75,69 +65,60 @@
     margin-bottom: 14px;
   }
 
-  /* ---------------------------------
-     Grid (samme for begge)
-  --------------------------------- */
+  /* GRID */
   body.is-brands-page .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
-  /* ---------------------------------
-     CARD – GRID LAYOUT (FIXER ALT)
-  --------------------------------- */
+  /* CARD */
   body.is-brands-page .brand-card {
-    display: grid;
-    grid-template-rows: 50px auto 38px;
-    justify-items: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    row-gap: 6px;
+    justify-content: flex-start;
 
-    min-height: 185px;
-    max-height: 185px;
+    min-height: 180px;
+    max-height: 180px;
 
-    padding: 14px 10px 14px;
+    padding: 14px 12px 12px;
     border-radius: 18px;
     background: #fff;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-    overflow: hidden;
     text-align: center;
+    overflow: hidden;
   }
 
-  /* Highlight style */
+  /* Highlight border */
   body.is-brands-page .highlighted-brands .brand-card {
     border: 1.5px solid rgba(0,112,243,0.7);
   }
 
-  /* ---------------------------------
-     LOGO (SENKET + SENTRERT)
-  --------------------------------- */
+  /* LOGO (senket riktig) */
   body.is-brands-page .brand-card img {
     width: 100%;
-    max-width: 90px;
-    height: 36px;
+    max-width: 96px;
+    height: 40px;
     object-fit: contain;
     object-position: center;
 
-    margin-top: 8px;
+    margin: 16px auto 8px;
   }
 
-  /* ---------------------------------
-     TITLE
-  --------------------------------- */
+  /* TITLE */
   body.is-brands-page .brand-card h3 {
-    margin: 0;
+    margin: 0 0 8px;
     font-size: 0.9rem;
     font-weight: 800;
   }
 
-  /* ---------------------------------
-     BUTTON (LØFTET OG IKKE KLIPPES)
-  --------------------------------- */
+  /* BUTTON (riktig posisjon) */
   body.is-brands-page .brand-btn {
+    margin-top: auto;
     width: 100%;
-    max-width: 120px;
+    max-width: 124px;
     height: 36px;
 
     border-radius: 10px;
@@ -150,13 +131,9 @@
 
     font-size: 0.82rem;
     font-weight: 700;
-
-    margin-top: 2px;
   }
 
-  /* ---------------------------------
-     FAVORITT
-  --------------------------------- */
+  /* FAVORITT */
   body.is-brands-page .brand-card .fav-icon {
     position: absolute;
     top: 10px;
@@ -166,9 +143,10 @@
   }
 }
 
-/* =====================================================
+
+/* ==============================
    SMALL DEVICES
-   ===================================================== */
+============================== */
 
 @media (max-width: 420px) {
 
@@ -178,19 +156,23 @@
   }
 
   body.is-brands-page .brand-card {
-    grid-template-rows: 46px auto 34px;
     min-height: 170px;
     max-height: 170px;
-    padding: 12px 8px;
+    padding: 12px 10px 10px;
   }
 
   body.is-brands-page .brand-card img {
-    max-width: 82px;
-    height: 32px;
+    max-width: 88px;
+    height: 36px;
+    margin: 14px auto 6px;
+  }
+
+  body.is-brands-page .brand-card h3 {
+    font-size: 0.88rem;
   }
 
   body.is-brands-page .brand-btn {
     height: 34px;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
   }
 }
