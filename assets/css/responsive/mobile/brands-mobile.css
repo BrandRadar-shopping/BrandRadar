@@ -1,14 +1,17 @@
 /* =====================================================
-   BrandRadar – Brands Mobile
+   BrandRadar – Brands Mobile (CLEAN FINAL)
    Scoped kun til brands.html
    ===================================================== */
 
 @media (max-width: 768px) {
+
   body.is-brands-page {
     background: #f8fafc;
   }
 
-  /* Search */
+  /* ---------------------------------
+     Search
+  --------------------------------- */
   body.is-brands-page .brand-search {
     padding: 12px 14px 8px;
   }
@@ -27,220 +30,167 @@
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
   }
 
-  body.is-brands-page .brand-search input::placeholder {
-    color: #7b8798;
-    opacity: 1;
-  }
-
-  /* A–Å filter */
+  /* ---------------------------------
+     A–Å filter
+  --------------------------------- */
   body.is-brands-page .brand-alphabet {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(7, 1fr);
     gap: 8px;
     margin: 6px 14px 18px;
-    padding: 0;
-    max-width: none;
   }
 
   body.is-brands-page .brand-alphabet span {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 0;
     height: 40px;
-    padding: 0;
     border-radius: 12px;
     border: 1px solid rgba(15, 23, 42, 0.08);
     background: #ffffff;
-    color: #4b5563;
     font-size: 0.92rem;
     font-weight: 700;
-    opacity: 1;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+    color: #4b5563;
   }
 
   body.is-brands-page .brand-alphabet span.active {
     background: #0070f3;
     color: #ffffff;
     border-color: #0070f3;
-    box-shadow: 0 8px 18px rgba(0, 112, 243, 0.18);
   }
 
-  /* Sections */
+  /* ---------------------------------
+     Sections
+  --------------------------------- */
   body.is-brands-page .highlighted-brands,
   body.is-brands-page .all-brands {
     padding-left: 14px;
     padding-right: 14px;
   }
 
-  body.is-brands-page .highlighted-brands {
-    background: transparent;
-    padding-top: 0;
-    padding-bottom: 14px;
-    border-bottom: 0;
-  }
-
-  body.is-brands-page .all-brands {
-    padding-top: 4px;
-    padding-bottom: 92px;
-  }
-
   body.is-brands-page .highlighted-brands h2,
   body.is-brands-page .all-brands h2 {
-    margin: 0 0 14px;
-    font-size: 1.8rem;
-    line-height: 1.02;
-    letter-spacing: -0.04em;
-    color: #111827;
     text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 14px;
   }
 
-  /* Grid */
-  body.is-brands-page .highlighted-brands .brand-grid,
-  body.is-brands-page .all-brands .brand-grid {
+  /* ---------------------------------
+     Grid (samme for begge)
+  --------------------------------- */
+  body.is-brands-page .brand-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
-  /* Cards */
+  /* ---------------------------------
+     CARD – GRID LAYOUT (FIXER ALT)
+  --------------------------------- */
   body.is-brands-page .brand-card {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 50px auto 38px;
+    justify-items: center;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 170px;
-    max-height: 170px;
-    padding: 14px 10px 12px;
+    row-gap: 6px;
+
+    min-height: 185px;
+    max-height: 185px;
+
+    padding: 14px 10px 14px;
     border-radius: 18px;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+    background: #fff;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-    text-align: center;
     overflow: hidden;
+    text-align: center;
   }
 
+  /* Highlight style */
   body.is-brands-page .highlighted-brands .brand-card {
-    border: 1.5px solid rgba(0, 112, 243, 0.78);
-    box-shadow:
-      0 10px 22px rgba(15, 23, 42, 0.07),
-      0 0 0 1px rgba(0, 112, 243, 0.05) inset;
+    border: 1.5px solid rgba(0,112,243,0.7);
   }
 
-  body.is-brands-page .brand-card:hover {
-    transform: none;
-    box-shadow: inherit;
-  }
-
-  /* Logo */
+  /* ---------------------------------
+     LOGO (SENKET + SENTRERT)
+  --------------------------------- */
   body.is-brands-page .brand-card img {
     width: 100%;
-    max-width: 92px;
-    height: 38px;
+    max-width: 90px;
+    height: 36px;
     object-fit: contain;
     object-position: center;
-    display: block;
-    margin: 18px auto 6px;
-    flex: 0 0 auto;
+
+    margin-top: 8px;
   }
 
-  /* Title */
+  /* ---------------------------------
+     TITLE
+  --------------------------------- */
   body.is-brands-page .brand-card h3 {
-    margin: 0 0 8px;
+    margin: 0;
     font-size: 0.9rem;
-    line-height: 1.12;
     font-weight: 800;
-    letter-spacing: -0.02em;
-    color: #111827;
-    text-align: center;
   }
 
-  /* Button */
+  /* ---------------------------------
+     BUTTON (LØFTET OG IKKE KLIPPES)
+  --------------------------------- */
   body.is-brands-page .brand-btn {
-    margin-top: 6px;
     width: 100%;
-    max-width: 126px;
-    min-height: 34px;
-    height: 34px;
-    padding: 0 12px;
+    max-width: 120px;
+    height: 36px;
+
     border-radius: 10px;
-    border: 1px solid #111827;
     background: #111827;
-    color: #ffffff;
-    font-size: 0.82rem;
-    font-weight: 700;
-    display: inline-flex;
+    color: #fff;
+
+    display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    line-height: 1;
-    box-shadow: none;
-    flex: 0 0 auto;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    margin-top: 2px;
   }
 
-  body.is-brands-page .brand-btn:hover,
-  body.is-brands-page .brand-btn:active {
-    background: #111827;
-    color: #ffffff;
-    transform: none;
-  }
-
-  /* Favorite */
+  /* ---------------------------------
+     FAVORITT
+  --------------------------------- */
   body.is-brands-page .brand-card .fav-icon {
+    position: absolute;
     top: 10px;
     right: 10px;
     width: 32px;
     height: 32px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.10);
-  }
-
-  body.is-brands-page .brand-card .fav-icon .heart-icon {
-    width: 16px;
-    height: 16px;
   }
 }
 
+/* =====================================================
+   SMALL DEVICES
+   ===================================================== */
+
 @media (max-width: 420px) {
+
   body.is-brands-page .brand-alphabet {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(6, 1fr);
     gap: 7px;
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-
-  body.is-brands-page .brand-alphabet span {
-    height: 38px;
-    font-size: 0.88rem;
-    border-radius: 11px;
-  }
-
-  body.is-brands-page .highlighted-brands h2,
-  body.is-brands-page .all-brands h2 {
-    font-size: 1.68rem;
   }
 
   body.is-brands-page .brand-card {
-    min-height: 160px;
-    max-height: 160px;
-    padding: 12px 8px 10px;
+    grid-template-rows: 46px auto 34px;
+    min-height: 170px;
+    max-height: 170px;
+    padding: 12px 8px;
   }
 
   body.is-brands-page .brand-card img {
-    max-width: 84px;
-    height: 34px;
-    margin: 16px auto 6px;
-  }
-
-  body.is-brands-page .brand-card h3 {
-    font-size: 0.86rem;
-    margin-bottom: 8px;
+    max-width: 82px;
+    height: 32px;
   }
 
   body.is-brands-page .brand-btn {
-    max-width: 118px;
-    min-height: 32px;
-    height: 32px;
+    height: 34px;
     font-size: 0.78rem;
   }
 }
