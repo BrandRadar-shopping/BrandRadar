@@ -149,3 +149,79 @@
   transform: scale(1.14);
 }
 
+/* ======================================
+   DESKTOP FIXES – brands.html
+   Gjelder kun desktop så mobil ikke påvirkes
+====================================== */
+@media (min-width: 769px) {
+  body.is-brands-page .highlighted-brands,
+  body.is-brands-page .all-brands {
+    padding-left: clamp(24px, 4vw, 56px);
+    padding-right: clamp(24px, 4vw, 56px);
+  }
+
+  body.is-brands-page .highlighted-brands h2,
+  body.is-brands-page .all-brands h2 {
+    max-width: 1180px;
+    margin: 0 auto 1.4rem;
+    padding: 0;
+    text-align: left;
+  }
+
+  body.is-brands-page .highlighted-brands .brand-grid,
+  body.is-brands-page .all-brands .brand-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Desktop: gi kortene tilbake riktig luft og proporsjoner */
+  body.is-brands-page .brand-card {
+    border-radius: 16px;
+    padding: 18px 18px 18px;
+    min-height: 228px;
+    justify-content: flex-start;
+  }
+
+  body.is-brands-page .brand-card img,
+  body.is-brands-page .brand-card .brand-logo {
+    width: 100%;
+    max-width: 132px;
+    height: 96px;
+    object-fit: contain;
+    margin: 28px auto 16px;
+  }
+
+  body.is-brands-page .brand-card h3 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    line-height: 1.25;
+    min-height: 2.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Knappen skal ikke dominere kortet */
+  body.is-brands-page .brand-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    width: auto;
+    min-width: 142px;
+    max-width: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+    margin-top: auto;
+  }
+
+  /* Litt bedre plass rundt favorittikonet */
+  body.is-brands-page .brand-card .fav-icon {
+    top: 12px;
+    right: 12px;
+  }
+}
