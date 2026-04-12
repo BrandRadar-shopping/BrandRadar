@@ -1,215 +1,178 @@
-<!DOCTYPE html>
-<html lang="no">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrandRadar – Brands</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile.css?v=8" />
-  <link rel="stylesheet" href="assets/css/responsive/mobile/brands-mobile.css?v=2" />
-</head>
-<body class="is-brands-page">
-  
- <!-- ✅ NY HEADER -->
-<header class="main-header">
-  <div class="nav-container">
-<button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
-  ☰
-</button>
+/* =====================================================
+   BrandRadar – Brands Mobile (FINAL CLEAN)
+   Scoped kun til brands.html
+   ===================================================== */
 
-    <a href="index.html" class="logo">BRANDRADAR</a>
+@media (max-width: 768px) {
 
-    <div class="search-box" id="site-search">
-  <span class="search-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" class="search-icon-svg" focusable="false">
-    <circle cx="11" cy="11" r="6.5"></circle>
-    <path d="M16 16L21 21"></path>
-  </svg>
-</span>
+  body.is-brands-page {
+    background: #f8fafc;
+  }
 
-  <input
-    id="search-input"
-    type="search"
-    placeholder="Søk produkter eller merker…"
-    autocomplete="off"
-    spellcheck="false"
-    aria-label="Søk"
-  />
+  /* SEARCH */
+  body.is-brands-page .brand-search {
+    padding: 12px 14px 8px;
+  }
 
-  <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
+  body.is-brands-page .brand-search input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    background: #fff;
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
 
-  <div class="search-dropdown" id="search-dropdown" hidden>
-    <div class="search-section" data-section="products">
-      <p class="search-section-title">Produkter</p>
-      <div class="search-results" id="search-results-products"></div>
-    </div>
+  /* A–Å */
+  body.is-brands-page .brand-alphabet {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin: 6px 14px 18px;
+  }
 
-    <div class="search-section" data-section="brands">
-      <p class="search-section-title">Brands</p>
-      <div class="search-results" id="search-results-brands"></div>
-    </div>
-  </div>
-</div>
+  body.is-brands-page .brand-alphabet span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #fff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #4b5563;
+  }
 
+  body.is-brands-page .brand-alphabet span.active {
+    background: #0070f3;
+    color: #fff;
+    border-color: #0070f3;
+  }
 
-     <!-- Toppmeny -->
-   <nav class="top-links">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html">Brands</a>
-  <a href="favoritter.html" class="favorites-link">
-  Favoritter <span id="favorites-count">0</span>
-</a>
-     <a href="luxury.html" class="luxury-link">Luxury Corner ✨</a>
-</nav>
+  /* SECTIONS */
+  body.is-brands-page .highlighted-brands,
+  body.is-brands-page .all-brands {
+    padding: 0 14px;
+  }
 
-  </div>
+  body.is-brands-page .highlighted-brands h2,
+  body.is-brands-page .all-brands h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+  }
 
-  <!-- 🔽 Kategorier som åpner megamenu -->
-  <ul class="category-bar">
-    <li class="category-item" data-category="Clothing">Klær</li>
-    <li class="category-item" data-category="Shoes">Sko</li>
-    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
-    <li class="category-item" data-category="Accessories">Tilbehør</li>
-    <li class="category-item" data-category="Selfcare">Selfcare</li>
-  </ul>
-</header>
+  /* GRID */
+  body.is-brands-page .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 
-  <div class="mobile-overlay" id="mobileOverlay" hidden></div>
+  /* CARD */
+  body.is-brands-page .brand-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 
-<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
-  <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Meny</p>
-    <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
-  </div>
+    min-height: 180px;
+    max-height: 180px;
 
-  <div class="mobile-drawer-section mobile-drawer-section--primary">
-  <a href="index.html">Hjem</a>
-  <a href="news.html">Nyheter</a>
-  <a href="brands.html" class="mobile-drawer-link mobile-drawer-link--brands">Brands</a>
-  <a href="favoritter.html">Favoritter</a>
-  <a href="luxury.html">Luxury Corner ✨</a>
-</div>
+    padding: 14px 12px 12px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    text-align: center;
+    overflow: hidden;
+  }
 
-  <div class="mobile-drawer-section">
-    <p class="mobile-drawer-subtitle">Kategorier</p>
-    <a href="category.html?category=Clothing">Klær</a>
-    <a href="category.html?category=Shoes">Sko</a>
-    <a href="category.html?category=Gymcorner">Gymcorner</a>
-    <a href="category.html?category=Accessories">Tilbehør</a>
-    <a href="category.html?category=Selfcare">Selfcare</a>
-  </div>
-</nav>
+  /* Highlight border */
+  body.is-brands-page .highlighted-brands .brand-card {
+    border: 1.5px solid rgba(0,112,243,0.7);
+  }
 
+  /* LOGO (senket riktig) */
+  body.is-brands-page .brand-card img {
+    width: 100%;
+    max-width: 96px;
+    height: 40px;
+    object-fit: contain;
+    object-position: center;
 
-  <!-- ✅ Manglet – MEGA-MENYEN LASTES HER -->
-<nav class="mega-menu"></nav>
- 
-  <!-- BRAND SEARCH -->
-  <section class="brand-search">
-    <input type="text" id="brandSearch" placeholder="Søk etter brand..." />
-  </section>
+    margin: 16px auto 8px;
+  }
 
-<!-- ✅ Brand Alphabet Filter -->
-<div class="brand-alphabet">
-  <span data-letter="all" class="active">Alle</span>
-  <span data-letter="A">A</span>
-  <span data-letter="B">B</span>
-  <span data-letter="C">C</span>
-  <span data-letter="D">D</span>
-  <span data-letter="E">E</span>
-  <span data-letter="F">F</span>
-  <span data-letter="G">G</span>
-  <span data-letter="H">H</span>
-  <span data-letter="I">I</span>
-  <span data-letter="J">J</span>
-  <span data-letter="K">K</span>
-  <span data-letter="L">L</span>
-  <span data-letter="M">M</span>
-  <span data-letter="N">N</span>
-  <span data-letter="O">O</span>
-  <span data-letter="P">P</span>
-  <span data-letter="Q">Q</span>
-  <span data-letter="R">R</span>
-  <span data-letter="S">S</span>
-  <span data-letter="T">T</span>
-  <span data-letter="U">U</span>
-  <span data-letter="V">V</span>
-  <span data-letter="W">W</span>
-  <span data-letter="X">X</span>
-  <span data-letter="Y">Y</span>
-  <span data-letter="Z">Z</span>
-  <span data-letter="Æ">Æ</span>
-  <span data-letter="Ø">Ø</span>
-  <span data-letter="Å">Å</span>
-</div>
+  /* TITLE */
+  body.is-brands-page .brand-card h3 {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
 
-  
-  <!-- HIGHLIGHTED BRANDS -->
-  <section class="highlighted-brands">
-    <h2>Fremhevede brands</h2>
-    <div class="brand-grid" id="highlight-grid"></div>
-  </section>
+  /* BUTTON (riktig posisjon) */
+  body.is-brands-page .brand-btn {
+    margin-top: auto;
+    width: 100%;
+    max-width: 124px;
+    height: 36px;
 
-  <!-- ALL BRANDS -->
-  <section class="all-brands">
-    <h2>Alle brands</h2>
-    <div class="brand-grid" id="brand-grid"></div>
-  </section>
+    border-radius: 10px;
+    background: #111827;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  /* FAVORITT */
+  body.is-brands-page .brand-card .fav-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+  }
+}
 
 
-<script src="favorites-core.js"></script>
-<script src="script-favorites.js"></script>
-<script src="script-brands.js"></script>
-<script src="script.js"></script>
-<script src="search.js"></script>
+/* ==============================
+   SMALL DEVICES
+============================== */
 
+@media (max-width: 420px) {
 
-<nav class="m-bottom-nav" aria-label="Bunnmeny">
-  <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Hjem</span>
-  </a>
+  body.is-brands-page .brand-alphabet {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 7px;
+  }
 
-  <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Søk</span>
-  </a>
+  body.is-brands-page .brand-card {
+    min-height: 170px;
+    max-height: 170px;
+    padding: 12px 10px 10px;
+  }
 
-  <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
-            stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Favoritter</span>
-  </a>
+  body.is-brands-page .brand-card img {
+    max-width: 88px;
+    height: 36px;
+    margin: 14px auto 6px;
+  }
 
- <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
-  <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>
-  <span class="m-txt">News</span>
-</a>
+  body.is-brands-page .brand-card h3 {
+    font-size: 0.88rem;
+  }
 
-  <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Luxury</span>
-  </a>
-</nav>
-
-</body>
-</html>
-
-  
+  body.is-brands-page .brand-btn {
+    height: 34px;
+    font-size: 0.8rem;
+  }
+}
