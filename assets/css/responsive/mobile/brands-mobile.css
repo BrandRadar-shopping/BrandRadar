@@ -277,10 +277,12 @@
 }
 
 /* =====================================================
-   BrandRadar – Brands Mobile FINAL (centered + balanced)
+   BrandRadar – Brands Mobile FINAL (tight centered layout)
    ===================================================== */
 
 @media (max-width: 768px) {
+
+  /* GRID */
   .highlighted-brands .brand-grid,
   .all-brands .brand-grid {
     display: grid !important;
@@ -288,61 +290,65 @@
     gap: 12px !important;
   }
 
+  /* CARD BASE */
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
-
-    min-height: 172px !important;
-    max-height: 172px !important;
-
-    padding: 14px 10px 12px !important;
+    justify-content: center !important; /* 🔥 sentrer ALT */
+    padding: 12px 10px 16px !important;
     border-radius: 18px !important;
     overflow: hidden !important;
-    text-align: center !important;
+
+    min-height: 180px !important;
+    max-height: 180px !important;
   }
 
+  /* LOGO – SENKET */
   .highlighted-brands .brand-card img,
-.all-brands .brand-card img {
-  width: 100% !important;
-  max-width: 92px !important;
-  height: 38px !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  display: block !important;
-  margin: 14px auto 8px !important;
-  flex: 0 0 auto !important;
-}
+  .all-brands .brand-card img {
+    width: 100% !important;
+    max-width: 92px !important;
+    height: 38px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
 
+    margin: 18px auto 6px !important; /* 👈 senket */
+  }
+
+  /* BRAND NAME */
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    margin: 0 0 12px !important;
-    font-size: 0.9rem !important;
-    line-height: 1.12 !important;
+    margin: 0 0 6px !important;
+    font-size: 0.95rem !important;
     font-weight: 800 !important;
     letter-spacing: -0.02em !important;
     color: #111827 !important;
+    text-align: center !important;
   }
 
+  /* BUTTON – LØFTET OPP */
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
-    margin-top: 0 !important;
+    margin-top: 10px !important; /* 👈 viktig */
     width: 100% !important;
-    max-width: 126px !important;
-    min-height: 34px !important;
-    height: 34px !important;
-    padding: 0 12px !important;
-    border-radius: 10px !important;
-    font-size: 0.82rem !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    border-radius: 12px !important;
+
+    font-size: 0.88rem !important;
     font-weight: 700 !important;
+
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+
     line-height: 1 !important;
   }
 
+  /* FAVORITT IKON */
   .highlighted-brands .brand-card .fav-icon,
   .all-brands .brand-card .fav-icon {
     width: 32px !important;
@@ -352,32 +358,38 @@
   }
 }
 
+
+/* ===== SMALL DEVICES ===== */
 @media (max-width: 420px) {
+
+  .highlighted-brands .brand-grid,
+  .all-brands .brand-grid {
+    gap: 10px !important;
+  }
+
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
-    min-height: 160px !important;
-    max-height: 160px !important;
-    padding: 12px 8px 10px !important;
+    min-height: 170px !important;
+    max-height: 170px !important;
+    padding: 10px 8px 14px !important;
   }
 
   .highlighted-brands .brand-card img,
-.all-brands .brand-card img {
-  max-width: 84px !important;
-  height: 34px !important;
-  margin: 12px auto 8px !important;
-}
+  .all-brands .brand-card img {
+    max-width: 84px !important;
+    height: 34px !important;
+    margin: 16px auto 6px !important;
+  }
 
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    font-size: 0.86rem !important;
-    margin-bottom: 10px !important;
+    font-size: 0.9rem !important;
   }
 
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
-    max-width: 118px !important;
-    min-height: 32px !important;
-    height: 32px !important;
-    font-size: 0.78rem !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    font-size: 0.84rem !important;
   }
 }
