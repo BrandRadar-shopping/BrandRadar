@@ -132,7 +132,7 @@
 .rating-value {
   font-size: 0.82rem;
   line-height: 1;
-  font-weight: 700;
+  font-weight: 600;
   color: #111827;
   letter-spacing: -0.01em;
 }
@@ -157,7 +157,7 @@
 /* Ny pris – hovedpris */
 .product-card .new-price,
 .product-card .price-main {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.98rem;
   color: #111827;
 }
@@ -189,7 +189,7 @@
 
 /* Enkle pris-varianter (brand-page m.m. som bruker .price direkt) */
 .product-card .price {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.98rem;
   color: #111827;
   margin-top: 0.25rem;
@@ -203,7 +203,7 @@
   background: #dc2626;
   color: #fff;
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
@@ -383,7 +383,7 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.25;
-  font-weight: 700;
+  font-weight: 600;
   color: #111827;
   text-align: center;
 }
@@ -398,7 +398,7 @@
   padding: 0.18rem 0.65rem;
   border-radius: 999px;
   z-index: 3;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* Grid for favoritt-brands */
@@ -440,13 +440,13 @@
 
 .product-card .offer-summary-price {
   font-size: 0.98rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #111827;
 }
 
 .product-card .offer-summary-count {
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #2563eb;
 }
 
@@ -501,7 +501,7 @@
 
 .product-card .product-image-fallback__label {
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #64748b;
