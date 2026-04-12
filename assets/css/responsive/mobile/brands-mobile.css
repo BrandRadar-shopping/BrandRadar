@@ -305,16 +305,16 @@
   }
 
   .highlighted-brands .brand-card img,
-  .all-brands .brand-card img {
-    width: 100% !important;
-    max-width: 92px !important;
-    height: 38px !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    display: block !important;
-    margin: 0 auto 10px !important;
-    flex: 0 0 auto !important;
-  }
+.all-brands .brand-card img {
+  width: 100% !important;
+  max-width: 92px !important;
+  height: 38px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  margin: 14px auto 8px !important;
+  flex: 0 0 auto !important;
+}
 
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
@@ -361,11 +361,11 @@
   }
 
   .highlighted-brands .brand-card img,
-  .all-brands .brand-card img {
-    max-width: 84px !important;
-    height: 34px !important;
-    margin-bottom: 8px !important;
-  }
+.all-brands .brand-card img {
+  max-width: 84px !important;
+  height: 34px !important;
+  margin: 12px auto 8px !important;
+}
 
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
