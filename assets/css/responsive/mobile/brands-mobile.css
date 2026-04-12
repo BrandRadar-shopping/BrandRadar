@@ -277,12 +277,10 @@
 }
 
 /* =====================================================
-   BrandRadar – Brands Mobile FINAL (BALANCED + CLEAN)
+   BrandRadar – Brands Mobile FINAL (centered + balanced)
    ===================================================== */
 
 @media (max-width: 768px) {
-
-  /* GRID */
   .highlighted-brands .brand-grid,
   .all-brands .brand-grid {
     display: grid !important;
@@ -290,67 +288,61 @@
     gap: 12px !important;
   }
 
-  /* CARD BASE */
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
 
-    min-height: 175px !important;
-    max-height: 175px !important;
+    min-height: 172px !important;
+    max-height: 172px !important;
 
-    padding: 10px 10px 14px !important; /* 👈 mer luft under */
+    padding: 14px 10px 12px !important;
     border-radius: 18px !important;
     overflow: hidden !important;
+    text-align: center !important;
   }
 
-  /* LOGO */
   .highlighted-brands .brand-card img,
   .all-brands .brand-card img {
     width: 100% !important;
-    max-width: 90px !important;
+    max-width: 92px !important;
     height: 38px !important;
-
     object-fit: contain !important;
     object-position: center !important;
-
-    margin: 4px auto 6px !important; /* 👈 mindre luft */
     display: block !important;
+    margin: 0 auto 10px !important;
+    flex: 0 0 auto !important;
   }
 
-  /* NAME */
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    margin: 0 0 6px !important; /* 👈 mindre luft */
+    margin: 0 0 12px !important;
     font-size: 0.9rem !important;
+    line-height: 1.12 !important;
     font-weight: 800 !important;
     letter-spacing: -0.02em !important;
     color: #111827 !important;
   }
 
-  /* CTA */
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
-    margin-top: auto !important; /* 👈 presser knappen ned */
-
+    margin-top: 0 !important;
     width: 100% !important;
-    height: 34px !important;
+    max-width: 126px !important;
     min-height: 34px !important;
-
+    height: 34px !important;
+    padding: 0 12px !important;
     border-radius: 10px !important;
     font-size: 0.82rem !important;
     font-weight: 700 !important;
-
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-
     line-height: 1 !important;
   }
 
-  /* FAVORITE */
   .highlighted-brands .brand-card .fav-icon,
   .all-brands .brand-card .fav-icon {
     width: 32px !important;
@@ -360,30 +352,31 @@
   }
 }
 
-/* SMALL SCREENS */
 @media (max-width: 420px) {
-
   .highlighted-brands .brand-card,
   .all-brands .brand-card {
-    min-height: 165px !important;
-    max-height: 165px !important;
-    padding: 10px 8px 12px !important;
+    min-height: 160px !important;
+    max-height: 160px !important;
+    padding: 12px 8px 10px !important;
   }
 
   .highlighted-brands .brand-card img,
   .all-brands .brand-card img {
-    max-width: 80px !important;
+    max-width: 84px !important;
     height: 34px !important;
-    margin-bottom: 5px !important;
+    margin-bottom: 8px !important;
   }
 
   .highlighted-brands .brand-card h3,
   .all-brands .brand-card h3 {
-    font-size: 0.85rem !important;
+    font-size: 0.86rem !important;
+    margin-bottom: 10px !important;
   }
 
   .highlighted-brands .brand-btn,
   .all-brands .brand-btn {
+    max-width: 118px !important;
+    min-height: 32px !important;
     height: 32px !important;
     font-size: 0.78rem !important;
   }
