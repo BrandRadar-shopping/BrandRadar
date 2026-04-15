@@ -110,6 +110,8 @@ html, body {
 .intro h2 {
   margin: 0 auto 1.6rem;
   font-size: clamp(1.9rem, 2.4vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.08;
   letter-spacing: -0.4px;
   color: #0f172a;
 }
@@ -161,14 +163,15 @@ html, body {
 .intro-card h3 {
   margin: 0;
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 600;
+  line-height: 1.28;
   color: #0f172a;
 }
 
 .intro-card p {
   margin: 0;
-  color: #334155;
-  line-height: 1.55;
+  color: #475569;
+  line-height: 1.6;
   font-size: 0.95rem;
 }
 
@@ -298,7 +301,7 @@ html, body {
   align-items: center;
   justify-content: center;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #1d4f91;
   opacity: 0;
   pointer-events: none;
@@ -328,15 +331,15 @@ html, body {
   }
 
   .topbrand-card {
-  height: 112px;
-  padding: 18px 14px;
-  border-radius: 18px;
-}
+    height: 112px;
+    padding: 18px 14px;
+    border-radius: 18px;
+  }
 
-.topbrand-card:hover,
-.topbrand-card:focus-visible {
-  transform: translateY(-2px) scaleY(1.14);
-}
+  .topbrand-card:hover,
+  .topbrand-card:focus-visible {
+    transform: translateY(-2px) scaleY(1.14);
+  }
 
   .topbrand-logo img {
     max-height: 46px;
@@ -402,7 +405,7 @@ html, body {
 
 .giveaway-overline {
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #8ec5ff;
@@ -419,7 +422,7 @@ html, body {
   border: 1px solid rgba(255,255,255,0.14);
   color: #e8eef8;
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .giveaway-main-stage {
@@ -471,7 +474,7 @@ html, body {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.12);
   color: #8ec5ff;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 1.2rem;
   letter-spacing: 0.08em;
 }
@@ -479,7 +482,7 @@ html, body {
 .giveaway-main-placeholder-title {
   margin: 0;
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -510,7 +513,7 @@ html, body {
   border: 1px solid rgba(255,255,255,0.10);
   color: #fff;
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 600;
   z-index: 2;
 }
 
@@ -526,7 +529,7 @@ html, body {
   background: rgba(255,255,255,0.92);
   color: #0f172a;
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: 600;
   box-shadow: 0 10px 20px rgba(15,23,42,0.16);
   z-index: 2;
 }
@@ -587,15 +590,15 @@ html, body {
   height: 100%;
   display: grid;
   place-items: center;
-  font-weight: 800;
+  font-weight: 600;
   color: #8ec5ff;
   letter-spacing: 0.08em;
 }
 
 .giveaway-thumb-title {
   font-size: 0.82rem;
-  line-height: 1.25;
-  font-weight: 700;
+  line-height: 1.3;
+  font-weight: 600;
   color: #f8fafc;
   margin: 0 0 4px;
 }
@@ -625,22 +628,23 @@ html, body {
   border: 1px solid rgba(255,255,255,0.12);
   color: #f1f5f9;
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 14px;
 }
 
 .giveaway-title {
   margin: 0 0 10px;
   font-size: clamp(1.9rem, 2.8vw, 2.7rem);
-  line-height: 1.02;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
   color: #ffffff;
 }
 
 .giveaway-description {
   margin: 0 0 18px;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: rgba(226,232,240,0.86);
 }
 
@@ -661,7 +665,7 @@ html, body {
 .giveaway-meta-label {
   display: block;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8ec5ff;
@@ -670,8 +674,8 @@ html, body {
 
 .giveaway-meta-value {
   font-size: 1rem;
-  line-height: 1.35;
-  font-weight: 700;
+  line-height: 1.4;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -686,7 +690,7 @@ html, body {
 .giveaway-rules-title {
   margin: 0 0 8px;
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #f8fafc;
@@ -702,7 +706,7 @@ html, body {
 .giveaway-rules-list li {
   color: rgba(226,232,240,0.86);
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .giveaway-bonus {
@@ -716,7 +720,7 @@ html, body {
 .giveaway-bonus-title {
   margin: 0 0 10px;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #d7ecff;
@@ -738,7 +742,7 @@ html, body {
   border: 1px solid rgba(255,255,255,0.12);
   color: #f8fafc;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .giveaway-legal {
@@ -766,7 +770,7 @@ html, body {
   color: #fff;
   text-decoration: none;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -877,7 +881,7 @@ html, body {
 
 .giveaway-main-countdown.urgent {
   background: rgba(255,80,80,0.85);
-  font-weight: 800;
+  font-weight: 700;
   box-shadow:
     0 0 0 2px rgba(255,80,80,0.35),
     0 6px 20px rgba(0,0,0,0.35);
@@ -928,7 +932,7 @@ html, body {
 .giveaway-shortcut-kicker {
   margin: 0 0 5px;
   font-size: 0.70rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: #8ec5ff;
@@ -937,8 +941,9 @@ html, body {
 .giveaway-shortcut-copy h2 {
   margin: 0 0 7px;
   font-size: clamp(1.1rem, 4.5vw, 1.22rem);
-  line-height: 1.06;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   color: #fff;
   white-space: nowrap;
 }
@@ -969,7 +974,7 @@ html, body {
   background: linear-gradient(90deg, #0a84ff, #169dff);
   color: #fff;
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.01em;
   box-shadow: 0 8px 18px rgba(0,112,243,0.18);
 }
@@ -1004,7 +1009,7 @@ html, body {
   background: rgba(255,255,255,0.94);
   color: #0f172a;
   font-size: 0.58rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
 }
 
@@ -1048,7 +1053,7 @@ html, body {
   display: block;
   margin-bottom: 1px;
   font-size: 0.62rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8ec5ff;
@@ -1059,5 +1064,5 @@ html, body {
   font-size: 0.77rem;
   line-height: 1.15;
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
 }
