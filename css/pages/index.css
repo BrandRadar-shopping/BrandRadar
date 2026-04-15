@@ -57,6 +57,18 @@ html, body {
   text-align: center;
 }
 
+.hero .hero-content h1 {
+  color: #ffffff;
+}
+
+.hero .hero-content p {
+  margin: 0 auto;
+  max-width: 42ch;
+  font-size: 1.02rem;
+  line-height: 1.72;
+  color: rgba(255,255,255,0.72);
+}
+
 .hero .cta-btn {
   display: inline-flex;
   align-items: center;
