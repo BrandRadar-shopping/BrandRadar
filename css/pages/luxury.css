@@ -53,7 +53,13 @@
   text-align: center;
   color: #fff;
   max-width: 760px;
-  padding: 2rem 1.25rem;
+  width: min(100%, 760px);
+  padding: 2.1rem 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .luxury-hero .hero-content h1 {
@@ -72,6 +78,7 @@
   font-size: 1.04rem;
   line-height: 1.7;
   color: rgba(255,255,255,0.82);
+  text-align: center;
 }
 
 .luxury-section {
@@ -97,13 +104,15 @@
   margin-top: 1.5rem;
 }
 
+/* Filter bar */
 .luxury-filter-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
   align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 1.25rem;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0 0 1.25rem;
 }
 
 .luxury-filter-bar select {
@@ -115,6 +124,7 @@
   color: #111827;
   font-size: 0.95rem;
   font-weight: 600;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
 
 .luxury-filter-bar select:focus {
@@ -197,16 +207,30 @@
   }
 
   .luxury-hero .hero-content {
-    padding: 1.4rem 1rem;
+    width: min(84%, 340px);
+    padding: 1.55rem 1.3rem 1.45rem;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
   }
 
   .luxury-hero .hero-content h1 {
     font-size: clamp(1.9rem, 8vw, 2.8rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    margin: 0 0 0.8rem;
+    max-width: 8ch;
+    text-align: center;
   }
 
   .luxury-hero .hero-content p {
     font-size: 0.96rem;
     line-height: 1.58;
+    max-width: 18ch;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .luxury-section {
