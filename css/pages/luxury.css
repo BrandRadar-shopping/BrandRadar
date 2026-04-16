@@ -1,1 +1,239 @@
+/* ==========================================================
+   BRANDRADAR – LUXURY PAGE
+   Typografi- og tonepolish for luxury.html
+   ========================================================== */
 
+.luxury-page {
+  background:
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.08), transparent 24%),
+    linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+}
+
+.luxury-hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.luxury-hero-slider {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.luxury-hero .hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.luxury-hero .hero-slide.active {
+  opacity: 1;
+}
+
+.luxury-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 8, 10, 0.34) 0%, rgba(8, 8, 10, 0.54) 100%),
+    radial-gradient(circle at center, rgba(255,255,255,0.04), transparent 46%);
+  z-index: 1;
+}
+
+.luxury-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  max-width: 760px;
+  padding: 2rem 1.25rem;
+}
+
+.luxury-hero .hero-content h1 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(2.2rem, 4.2vw, 4rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  color: #ffffff;
+  text-shadow: 0 8px 30px rgba(0,0,0,0.28);
+}
+
+.luxury-hero .hero-content p {
+  margin: 0 auto;
+  max-width: 34ch;
+  font-size: 1.04rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.82);
+}
+
+.luxury-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2.6rem 1rem 0;
+}
+
+.luxury-section h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.65rem, 2.4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: #0f172a;
+}
+
+.luxury-section .empty-message {
+  text-align: center;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1.5rem;
+}
+
+.luxury-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.luxury-filter-bar select {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.luxury-filter-bar select:focus {
+  outline: none;
+  border-color: rgba(212, 175, 55, 0.55);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.10);
+}
+
+/* Luxury brand grid / product grid spacing */
+#luxuryBrandGrid.brand-grid,
+#luxuryGoldPickGrid.luxury-product-grid,
+#luxuryProductGrid.luxury-product-grid {
+  display: grid;
+  gap: 22px;
+}
+
+#luxuryBrandGrid.brand-grid {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+#luxuryGoldPickGrid.luxury-product-grid,
+#luxuryProductGrid.luxury-product-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+/* Brand cards inside luxury page */
+.luxury-page .brand-card h3 {
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+/* Product cards inside luxury page */
+.luxury-page .product-card .brand {
+  color: #8b7355;
+}
+
+.luxury-page .product-card .product-name,
+.luxury-page .product-card .product-title,
+.luxury-page .product-card h3 {
+  font-weight: 600;
+  line-height: 1.34;
+  color: #111827;
+}
+
+.luxury-page .product-card .price,
+.luxury-page .product-card .new-price,
+.luxury-page .product-card .price-main {
+  font-weight: 600;
+  color: #111827;
+}
+
+.luxury-page .product-card .old-price {
+  color: #94a3b8;
+}
+
+.luxury-page .product-card .discount-pill,
+.luxury-page .product-card .discount-badge {
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .luxury-hero {
+    min-height: 440px;
+  }
+
+  .luxury-section {
+    padding-top: 2.1rem;
+  }
+
+  .luxury-filter-bar {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .luxury-hero {
+    min-height: 380px;
+  }
+
+  .luxury-hero .hero-content {
+    padding: 1.4rem 1rem;
+  }
+
+  .luxury-hero .hero-content h1 {
+    font-size: clamp(1.9rem, 8vw, 2.8rem);
+  }
+
+  .luxury-hero .hero-content p {
+    font-size: 0.96rem;
+    line-height: 1.58;
+  }
+
+  .luxury-section {
+    padding: 1.8rem 0.9rem 0;
+  }
+
+  .luxury-section h2 {
+    margin-bottom: 0.85rem;
+  }
+
+  .luxury-filter-bar {
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .luxury-filter-bar select {
+    width: 100%;
+  }
+
+  #luxuryBrandGrid.brand-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  #luxuryGoldPickGrid.luxury-product-grid,
+  #luxuryProductGrid.luxury-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
