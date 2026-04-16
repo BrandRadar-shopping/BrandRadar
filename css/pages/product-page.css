@@ -93,7 +93,7 @@
 
 .product-insights-title {
   font-size: 0.96rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   letter-spacing: -0.01em;
   margin-bottom: 0.75rem;
@@ -114,14 +114,14 @@
   background: #f1f5f9;
   color: #0f172a;
   font-size: 0.76rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
 }
 
 .product-insight-summary {
   font-size: 0.93rem;
-  line-height: 1.6;
-  color: #334155;
+  line-height: 1.62;
+  color: #475569;
 }
 
 .product-insight-meta {
@@ -140,16 +140,16 @@
 
 .product-detail-info h1 {
   font-size: clamp(2rem, 3vw, 2.9rem);
-  line-height: 1.08;
-  font-weight: 800;
+  line-height: 1.06;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin: 0;
   color: #111827;
 }
 
 .product-brand {
-  font-size: 1.08rem;
-  color: #475569;
+  font-size: 1.04rem;
+  color: #5b6676;
   font-weight: 600;
 }
 
@@ -206,7 +206,7 @@
 .product-rating-block .rating-value {
   font-size: 0.95rem;
   line-height: 1;
-  font-weight: 700;
+  font-weight: 600;
   color: #111827;
   letter-spacing: -0.01em;
 }
@@ -224,7 +224,7 @@
   color: #111;
   background: transparent;
   border: none;
-  font-weight: 700;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -251,28 +251,28 @@
 
 #new-price {
   font-size: 1.85rem;
-  font-weight: 800;
-  color: #111;
+  font-weight: 600;
+  color: #111827;
   letter-spacing: -0.02em;
 }
 
 #old-price {
   font-size: 1rem;
-  color: #999;
+  color: #94a3b8;
   text-decoration: line-through;
 }
 
 #discount-tag {
   font-size: 0.9rem;
-  font-weight: 700;
-  color: #e60023;
+  font-weight: 600;
+  color: #dc2626;
 }
 
 .description {
   margin: 0.45rem 0 0.15rem;
   font-size: 1rem;
-  line-height: 1.68;
-  color: #1f2937;
+  line-height: 1.72;
+  color: #475569;
   max-width: 62ch;
 }
 
@@ -304,7 +304,7 @@
   border-radius: 10px;
   text-align: center;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   text-decoration: none;
@@ -331,7 +331,7 @@
 .price-comparison-head h2 {
   margin: 0;
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #111827;
 }
 
@@ -339,6 +339,7 @@
   margin: 0.35rem 0 0;
   font-size: 0.92rem;
   color: #64748b;
+  line-height: 1.55;
 }
 
 .price-offers-list {
@@ -368,13 +369,14 @@
 
 .price-offer-merchant {
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
 }
 
 .price-offer-meta {
   font-size: 0.86rem;
   color: #64748b;
+  line-height: 1.5;
 }
 
 .best-price-badge {
@@ -385,7 +387,7 @@
   padding: 0.22rem 0.58rem;
   border-radius: 999px;
   font-size: 0.74rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #065f46;
   background: #d1fae5;
 }
@@ -406,7 +408,7 @@
 
 .price-offer-price {
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #111827;
 }
 
@@ -426,7 +428,7 @@
   background: #111;
   color: #fff !important;
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
   transition: background 0.2s ease, transform 0.2s ease;
 }
@@ -448,7 +450,7 @@
 
 .related-title {
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #111;
   text-align: left;
   max-width: 1300px;
@@ -546,7 +548,6 @@
   top: 0;
   z-index: 5000;
 }
-
 
 /* Desktop: disse toggle-knappene skal ikke vises */
 body.is-product-page .description-toggle,
@@ -695,4 +696,3 @@ body.is-product-page #product-insights[hidden] {
     max-width: 220px;
   }
 }
-
