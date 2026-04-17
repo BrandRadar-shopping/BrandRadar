@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const filterToggleMeta = document.querySelector(".filter-toggle-meta");
   const resetFiltersBtn = document.querySelector(".reset-filters-btn");
   const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
-  const isMobileViewport = () => mobileMediaQuery.matches;
   const filterStorageKey = `br_category_filters_collapsed:${window.location.pathname}${window.location.search}`;
 
   const params = new URLSearchParams(window.location.search);
@@ -79,11 +78,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const kidtypeSlug = normalize(kidtypeParam);
 
   const CATEGORY_ALIAS_MAP = {
-    gymcorner: ["gymcorner", "supplements", "supplement", "sportsnutrition", "nutrition"],
-    shoes: ["shoes", "sko"],
-    clothing: ["clothing", "klaer"],
-    accessories: ["accessories", "tilbehor"],
-    selfcare: ["selfcare", "beauty", "hudpleie", "hygiene"]
+    gymcorner: ["gymcorner", "supplements", "supplement", "sportsnutrition", "nutrition", "kosttilskudd", "utstyr"],
+    shoes: ["shoes", "sko", "footwear"],
+    clothing: ["clothing", "klaer", "apparel", "clothes"],
+    accessories: ["accessories", "tilbehor", "accessory"],
+    selfcare: ["selfcare", "beauty", "hudpleie", "hygiene", "skincare"]
   };
 
   const SUBCATEGORY_ALIAS_MAP = {
@@ -93,7 +92,193 @@ document.addEventListener("DOMContentLoaded", async () => {
     pwo: ["pwo", "pre-workout", "preworkout", "pre-workout-pwo"],
     "vitaminer-mineraler": ["vitaminer-mineraler", "vitaminer", "mineraler", "vitamins", "minerals", "vitamins-minerals"],
     drikke: ["drikke", "drink", "drinks", "beverage", "beverages"],
-    aminosyrer: ["aminosyrer", "amino", "amino-acids", "aminoacids", "bcaa", "eaa"]
+    aminosyrer: ["aminosyrer", "amino", "amino-acids", "aminoacids", "bcaa", "eaa"],
+
+    "gensere-hoodies": ["gensere-hoodies", "gensere", "hoodies", "hoodie", "genser", "sweatshirt", "sweatshirts"],
+    "t-skjorter": ["t-skjorter", "t-skjorte", "tshirt", "tshirts", "tee", "tees"],
+    bukser: ["bukser", "bukse", "pants", "trousers"],
+    jeans: ["jeans", "denim"],
+    jakker: ["jakker", "jakke", "jacket", "jackets"],
+    gymwear: ["gymwear", "trainingwear", "workout-clothes", "treningstoy", "treningsklaer"],
+    "dress-pentoy": ["dress-pentoy", "dress", "pentoy", "formalwear", "suit", "suits"],
+    "undertoy-sokker": ["undertoy-sokker", "undertoy", "sokker", "underwear", "socks"],
+    sport: ["sport", "sportswear"],
+    onepiece: ["onepiece", "one-piece"],
+    "jakker-blazere": ["jakker-blazere", "jakker", "blazere", "blazer", "blazers"],
+    cardigans: ["cardigans", "cardigan"],
+    "t-skjorter-topper": ["t-skjorter-topper", "t-skjorter", "topper", "topper", "top", "tops"],
+    kjoler: ["kjoler", "kjole", "dress", "dresses"],
+    kaper: ["kaper", "kape", "coat", "coats"],
+    skjort: ["skjort", "skjorts"],
+    skjorts: ["skjorts", "skjort"],
+    skjorts2: ["skjort"],
+    skjort3: ["skjort"],
+    skjort4: ["skjort"],
+    skjort5: ["skjort"],
+    skjort6: ["skjort"],
+    skjort7: ["skjort"],
+    skjort8: ["skjort"],
+    skjort9: ["skjort"],
+    skjort10: ["skjort"],
+    skjort11: ["skjort"],
+    skjort12: ["skjort"],
+    skjort13: ["skjort"],
+    skjort14: ["skjort"],
+    skjort15: ["skjort"],
+    skjort16: ["skjort"],
+    skjort17: ["skjort"],
+    skjort18: ["skjort"],
+    skjort19: ["skjort"],
+    skjort20: ["skjort"],
+    skjort21: ["skjort"],
+    skjort22: ["skjort"],
+    skjort23: ["skjort"],
+    skjort24: ["skjort"],
+    skjort25: ["skjort"],
+    skjort26: ["skjort"],
+    skjort27: ["skjort"],
+    skjort28: ["skjort"],
+    skjort29: ["skjort"],
+    skjort30: ["skjort"],
+    skjort31: ["skjort"],
+    skjort32: ["skjort"],
+    skjort33: ["skjort"],
+    skjort34: ["skjort"],
+    skjort35: ["skjort"],
+    skjort36: ["skjort"],
+    skjort37: ["skjort"],
+    skjort38: ["skjort"],
+    skjort39: ["skjort"],
+    skjort40: ["skjort"],
+    skjort41: ["skjort"],
+    skjort42: ["skjort"],
+    skjort43: ["skjort"],
+    skjort44: ["skjort"],
+    skjort45: ["skjort"],
+    skjort46: ["skjort"],
+    skjort47: ["skjort"],
+    skjort48: ["skjort"],
+    skjort49: ["skjort"],
+    skjort50: ["skjort"],
+    skjort51: ["skjort"],
+    skjort52: ["skjort"],
+    skjort53: ["skjort"],
+    skjort54: ["skjort"],
+    skjort55: ["skjort"],
+    skjort56: ["skjort"],
+    skjort57: ["skjort"],
+    skjort58: ["skjort"],
+    skjort59: ["skjort"],
+    skjort60: ["skjort"],
+    skjort61: ["skjort"],
+    skjort62: ["skjort"],
+    skjort63: ["skjort"],
+    skjort64: ["skjort"],
+    skjort65: ["skjort"],
+    skjort66: ["skjort"],
+    skjort67: ["skjort"],
+    skjort68: ["skjort"],
+    skjort69: ["skjort"],
+    skjort70: ["skjort"],
+    skjort71: ["skjort"],
+    skjort72: ["skjort"],
+    skjort73: ["skjort"],
+    skjort74: ["skjort"],
+    skjort75: ["skjort"],
+    skjort76: ["skjort"],
+    skjort77: ["skjort"],
+    skjort78: ["skjort"],
+    skjort79: ["skjort"],
+    skjort80: ["skjort"],
+    skjort81: ["skjort"],
+    skjort82: ["skjort"],
+    skjort83: ["skjort"],
+    skjort84: ["skjort"],
+    skjort85: ["skjort"],
+    skjort86: ["skjort"],
+    skjort87: ["skjort"],
+    skjort88: ["skjort"],
+    skjort89: ["skjort"],
+    skjort90: ["skjort"],
+    skjort91: ["skjort"],
+    skjort92: ["skjort"],
+    skjort93: ["skjort"],
+    skjort94: ["skjort"],
+    skjort95: ["skjort"],
+    skjort96: ["skjort"],
+    skjort97: ["skjort"],
+    skjort98: ["skjort"],
+    skjort99: ["skjort"],
+    skjort100: ["skjort"],
+    skjort: ["skjort", "skjorts", "skirt", "skirts"],
+    sneakers: ["sneakers", "sneaker"],
+    "boots-stovler": ["boots-stovler", "boots", "stovler", "boot", "stovel"],
+    stovletter: ["stovletter", "stovlett", "ankle-boots"],
+    "snoresho-pensko": ["snoresho-pensko", "pensko", "snoresho", "dress-shoes", "formal-shoes"],
+    "flate-sko": ["flate-sko", "flate", "flats", "flat-shoes"],
+    "sandaler-apne-sko": ["sandaler-apne-sko", "sandaler", "apne-sko", "sandals"],
+    "sandaler-badesko": ["sandaler-badesko", "sandaler", "badesko", "slides", "flip-flops"],
+    tofler: ["tofler", "toffel", "slippers"],
+    sportssko: ["sportssko", "running-shoes", "training-shoes", "sport-shoes"],
+    tursko: ["tursko", "hiking-shoes", "trail-shoes"],
+
+    elektronikk: ["elektronikk", "electronics"],
+    strikker: ["strikker", "bands", "resistance-bands"],
+    hjemmetrening: ["hjemmetrening", "home-workout", "home-training"],
+    kampsport: ["kampsport", "combat-sports", "martial-arts"],
+    massasjeverktoy: ["massasjeverktoy", "massage-tools", "recovery-tools"],
+    "vannflasker-shakers": ["vannflasker-shakers", "vannflasker", "shakers", "water-bottles", "shaker"],
+    "vekter-apparater": ["vekter-apparater", "vekter", "apparater", "weights", "machines"],
+    treningsbag: ["treningsbag", "gym-bag", "training-bag"],
+    vektvest: ["vektvest", "weighted-vest"],
+
+    "luer-caps": ["luer-caps", "luer", "caps", "cap", "beanies"],
+    "torklaer-skjerf": ["torklaer-skjerf", "torklaer", "skjerf", "scarves", "scarf"],
+    "hansker-votter": ["hansker-votter", "hansker", "votter", "gloves", "mittens"],
+    "vesker-kofferter": ["vesker-kofferter", "vesker", "kofferter", "bags", "luggage"],
+    smykker: ["smykker", "jewelry", "jewellery"],
+    solbriller: ["solbriller", "sunglasses"],
+    klokker: ["klokker", "watch", "watches"],
+    belter: ["belter", "belt", "belts"],
+    lommeboker: ["lommeboker", "lommebok", "wallet", "wallets"],
+    "slips-tilbehor": ["slips-tilbehor", "slips", "ties", "tie"],
+    vesker: ["vesker", "veske", "bag", "bags"],
+    "hatter-hodeskjerf": ["hatter-hodeskjerf", "hatter", "hodeskjerf", "hats", "headscarves"],
+    "skjerf-sjal": ["skjerf-sjal", "skjerf", "sjal", "shawls"],
+    "harpynt": ["harpynt", "hair-accessories", "hair-accessory"],
+    "bag-charms": ["bag-charms", "bag-charm"],
+
+    ansikt: ["ansikt", "face"],
+    kroppspleie: ["kroppspleie", "bodycare", "body-care"],
+    deodorant: ["deodorant", "deo"],
+    "aktiv-hudpleie": ["aktiv-hudpleie", "active-skincare"],
+    "k-beauty": ["k-beauty", "kbeauty"],
+    solprodukter: ["solprodukter", "sun-care", "suncare"],
+    "beauty-tech": ["beauty-tech", "beautytech"],
+    "mamma-barn": ["mamma-barn", "mom-baby"],
+    hudpleiesett: ["hudpleiesett", "skincare-set", "skincare-sets"],
+    reisestorrelser: ["reisestorrelser", "travel-size", "travel-sizes"],
+    hudpleietilbehor: ["hudpleietilbehor", "skincare-accessories"],
+    munnhygiene: ["munnhygiene", "oral-care"],
+    parfyme: ["parfyme", "perfume", "fragrance"],
+    barbering: ["barbering", "shaving"],
+    "skjegg-bart": ["skjegg-bart", "skjegg", "bart", "beard", "moustache"],
+    hudpleie: ["hudpleie", "skincare"],
+    har: ["har", "hair"],
+    gavesett: ["gavesett", "gift-set", "gift-sets"],
+
+    "yttertoy": ["yttertoy", "outerwear"],
+    "gensere-cardigans": ["gensere-cardigans", "gensere", "cardigans", "genser", "cardigan"],
+    "sport-trening": ["sport-trening", "sport", "trening", "sportswear", "training"],
+    "barn-98-134": ["barn-98-134", "98-134"],
+    "ungdom-140-176": ["ungdom-140-176", "140-176"],
+    "barn-21-34": ["barn-21-34", "21-34"],
+    "ungdom-35-42": ["ungdom-35-42", "35-42"],
+    "alle-accessories": ["alle-accessories", "all-accessories"],
+    "bager-sekker": ["bager-sekker", "bager", "sekker", "bags", "backpacks"],
+    "luer-capser": ["luer-capser", "luer", "capser", "caps"],
+    hansker: ["hansker", "gloves"],
+    "klokker-smykker": ["klokker-smykker", "klokker", "smykker", "watches", "jewelry"]
   };
 
   function parseNumber(val) {
@@ -157,6 +342,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     return [...new Set([slug, ...(map[slug] || [])])];
   }
 
+  function splitSlugTokens(value) {
+    return normalize(value)
+      .split("-")
+      .map(part => part.trim())
+      .filter(Boolean);
+  }
+
+  function buildLooseVariants(value) {
+    const base = normalize(value);
+    if (!base) return [];
+
+    const variants = new Set([base]);
+    const compact = base.replace(/-/g, "");
+    if (compact && compact !== base) variants.add(compact);
+
+    if (base.endsWith("er")) variants.add(base.slice(0, -2));
+    if (base.endsWith("s")) variants.add(base.slice(0, -1));
+
+    return [...variants].filter(Boolean);
+  }
+
+  function getExpandedAliases(slug, map) {
+    const rawAliases = getAliases(slug, map);
+    const expanded = new Set();
+
+    rawAliases.forEach(alias => {
+      buildLooseVariants(alias).forEach(v => expanded.add(v));
+    });
+
+    return [...expanded].filter(Boolean);
+  }
+
   function getProductSearchText(product) {
     return [
       product.category,
@@ -167,7 +384,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       product.name,
       product.info,
       product.description,
-      product.brand
+      product.brand,
+      product.tags,
+      product.tag,
+      product.gender,
+      product.material,
+      product.type
     ]
       .filter(Boolean)
       .map(normalize)
@@ -175,7 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function productMatchesCategory(product, targetCategorySlug) {
-    const aliases = getAliases(targetCategorySlug, CATEGORY_ALIAS_MAP);
+    const aliases = getExpandedAliases(targetCategorySlug, CATEGORY_ALIAS_MAP);
     const pCategory = normalize(product.category);
     const pMainCategory = normalize(product.main_category);
     const text = getProductSearchText(product);
@@ -190,16 +412,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   function productMatchesSubcategory(product, targetSubSlug) {
     if (!targetSubSlug) return true;
 
-    const aliases = getAliases(targetSubSlug, SUBCATEGORY_ALIAS_MAP);
+    const aliases = getExpandedAliases(targetSubSlug, SUBCATEGORY_ALIAS_MAP);
+    const tokens = splitSlugTokens(targetSubSlug);
+
     const pSub = normalize(product.subcategory);
     const pCategory = normalize(product.category);
+    const pMainCategory = normalize(product.main_category);
     const text = getProductSearchText(product);
 
-    return aliases.some(alias =>
+    const hasDirectAliasMatch = aliases.some(alias =>
       pSub === alias ||
       pCategory === alias ||
+      pMainCategory === alias ||
       text.includes(alias)
     );
+
+    if (hasDirectAliasMatch) return true;
+
+    if (tokens.length >= 2) {
+      const matchedTokens = tokens.filter(token => {
+        const loose = buildLooseVariants(token);
+        return loose.some(v =>
+          pSub === v ||
+          pCategory === v ||
+          pMainCategory === v ||
+          text.includes(v)
+        );
+      });
+
+      if (matchedTokens.length >= Math.max(2, tokens.length - 1)) {
+        return true;
+      }
+    }
+
+    if (tokens.length === 1) {
+      const loose = buildLooseVariants(tokens[0]);
+      return loose.some(v =>
+        pSub === v ||
+        pCategory === v ||
+        pMainCategory === v ||
+        text.includes(v)
+      );
+    }
+
+    return false;
   }
 
   function createBaseProduct(masterRow) {
@@ -366,7 +622,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return count;
   }
 
-    function updateMobileFilterToggleSummary() {
+  function updateMobileFilterToggleSummary() {
     if (!filterToggleMeta || !filterBar) return;
 
     const countText =
@@ -450,7 +706,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-    function bindFilterEvents(applyFiltersAndSort) {
+  function bindFilterEvents(applyFiltersAndSort) {
     brandFilter?.addEventListener("change", applyFiltersAndSort);
     priceFilter?.addEventListener("change", applyFiltersAndSort);
     discountFilter?.addEventListener("change", applyFiltersAndSort);
@@ -487,198 +743,197 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function buildDealHighlights(products) {
-  if (!products.length) return null;
+    if (!products.length) return null;
 
-  const sorted = [...products].sort((a, b) => {
-    const aDisc = parseNumber(a.discount) || 0;
-    const bDisc = parseNumber(b.discount) || 0;
+    const sorted = [...products].sort((a, b) => {
+      const aDisc = parseNumber(a.discount) || 0;
+      const bDisc = parseNumber(b.discount) || 0;
 
-    if (bDisc !== aDisc) return bDisc - aDisc;
-    return getEffectivePrice(a) - getEffectivePrice(b);
-  });
-
-  const picks = sorted.slice(0, 5);
-  if (!picks.length) return null;
-
-  const labels = [
-    "Ukens beste deal",
-    "Sterkt tilbud",
-    "Mest verdi",
-    "Verdt å se",
-    "Flere deals"
-  ];
-
-  function attachNavigate(el, product) {
-    el.addEventListener("click", () => {
-      if (product.product_url) {
-        window.open(product.product_url, "_blank", "noopener");
-        return;
-      }
-
-      const id = product.id || product.product_id || "";
-      if (id) {
-        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-      }
+      if (bDisc !== aDisc) return bDisc - aDisc;
+      return getEffectivePrice(a) - getEffectivePrice(b);
     });
-  }
 
-  function buildDesktopCard(product, index) {
-    const discount = parseNumber(product.discount) || 0;
-    const newPrice = parseNumber(product.price);
-    const oldPrice = parseNumber(product.old_price);
-    const safeBrand = product.brand || "BrandRadar";
-    const safeTitle = product.title || "Produkt";
+    const picks = sorted.slice(0, 5);
+    if (!picks.length) return null;
 
-    const card = document.createElement("article");
-    card.className = `deals-promo-card ${index === 0 ? "deals-promo-card--hero" : "deals-promo-card--small"}`;
+    const labels = [
+      "Ukens beste deal",
+      "Sterkt tilbud",
+      "Mest verdi",
+      "Verdt å se",
+      "Flere deals"
+    ];
 
-    card.innerHTML = `
-      <div class="deals-promo-card__media">
-        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-      </div>
+    function attachNavigate(el, product) {
+      el.addEventListener("click", () => {
+        if (product.product_url) {
+          window.open(product.product_url, "_blank", "noopener");
+          return;
+        }
 
-      <div class="deals-promo-card__overlay"></div>
-
-      <div class="deals-promo-card__content">
-        <span class="deals-promo-card__eyebrow">${labels[index] || "Deal"}</span>
-        <h3 class="deals-promo-card__title">${safeTitle}</h3>
-        <p class="deals-promo-card__meta">${safeBrand}</p>
-
-        <div class="deals-promo-card__bottom">
-          <div class="deals-promo-card__pricing">
-            ${newPrice != null ? `<span class="deals-promo-card__price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deals-promo-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-
-          <div class="deals-promo-card__cta-wrap">
-            ${discount ? `<span class="deals-promo-card__discount">-${Math.round(discount)}%</span>` : ""}
-            <span class="deals-promo-card__cta">Shop now</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    attachNavigate(card, product);
-    return card;
-  }
-
-  function buildMobileHeroCard(product, index) {
-    const discount = parseNumber(product.discount) || 0;
-    const newPrice = parseNumber(product.price);
-    const oldPrice = parseNumber(product.old_price);
-    const safeBrand = product.brand || "BrandRadar";
-    const safeTitle = product.title || "Produkt";
-
-    const card = document.createElement("article");
-    card.className = "deals-mobile-hero-card";
-
-    card.innerHTML = `
-      <div class="deals-mobile-hero-card__media">
-        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-      </div>
-
-      <div class="deals-mobile-hero-card__overlay"></div>
-
-      <div class="deals-mobile-hero-card__content">
-        <span class="deals-mobile-hero-card__eyebrow">${labels[index] || "Deal"}</span>
-        <h3 class="deals-mobile-hero-card__title">${safeTitle}</h3>
-        <p class="deals-mobile-hero-card__meta">${safeBrand}</p>
-
-        <div class="deals-mobile-hero-card__bottom">
-          <div class="deals-mobile-hero-card__pricing">
-            ${newPrice != null ? `<span class="deals-mobile-hero-card__price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deals-mobile-hero-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-
-          <div class="deals-mobile-hero-card__cta-wrap">
-            ${discount ? `<span class="deals-mobile-hero-card__discount">-${Math.round(discount)}%</span>` : ""}
-            <span class="deals-mobile-hero-card__cta">Shop now</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    attachNavigate(card, product);
-    return card;
-  }
-
-  function buildMobileRailCard(product, index) {
-    const discount = parseNumber(product.discount) || 0;
-    const newPrice = parseNumber(product.price);
-    const oldPrice = parseNumber(product.old_price);
-    const safeBrand = product.brand || "BrandRadar";
-    const safeTitle = product.title || "Produkt";
-
-    const card = document.createElement("article");
-    card.className = "deals-mobile-rail-card";
-
-    card.innerHTML = `
-      <div class="deals-mobile-rail-card__media">
-        <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-      </div>
-
-      <div class="deals-mobile-rail-card__overlay"></div>
-
-      <div class="deals-mobile-rail-card__content">
-        <span class="deals-mobile-rail-card__eyebrow">${labels[index] || "Deal"}</span>
-        <h3 class="deals-mobile-rail-card__title">${safeTitle}</h3>
-        <p class="deals-mobile-rail-card__meta">${safeBrand}</p>
-
-        <div class="deals-mobile-rail-card__bottom">
-          <div class="deals-mobile-rail-card__pricing">
-            ${newPrice != null ? `<span class="deals-mobile-rail-card__price">${formatPrice(newPrice)}</span>` : ""}
-            ${oldPrice != null ? `<span class="deals-mobile-rail-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-          </div>
-
-          <div class="deals-mobile-rail-card__cta-wrap">
-            ${discount ? `<span class="deals-mobile-rail-card__discount">-${Math.round(discount)}%</span>` : ""}
-            <span class="deals-mobile-rail-card__cta">Shop now</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    attachNavigate(card, product);
-    return card;
-  }
-
-  // MOBILE ONLY
-  if (mobileMediaQuery.matches) {
-    const shell = document.createElement("section");
-    shell.className = "deals-mobile-top";
-
-    if (picks[0]) {
-      shell.appendChild(buildMobileHeroCard(picks[0], 0));
-    }
-
-    if (picks.length > 1) {
-      const rail = document.createElement("div");
-      rail.className = "deals-mobile-rail";
-
-      picks.slice(1).forEach((product, idx) => {
-        rail.appendChild(buildMobileRailCard(product, idx + 1));
+        const id = product.id || product.product_id || "";
+        if (id) {
+          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+        }
       });
-
-      shell.appendChild(rail);
     }
 
+    function buildDesktopCard(product, index) {
+      const discount = parseNumber(product.discount) || 0;
+      const newPrice = parseNumber(product.price);
+      const oldPrice = parseNumber(product.old_price);
+      const safeBrand = product.brand || "BrandRadar";
+      const safeTitle = product.title || "Produkt";
+
+      const card = document.createElement("article");
+      card.className = `deals-promo-card ${index === 0 ? "deals-promo-card--hero" : "deals-promo-card--small"}`;
+
+      card.innerHTML = `
+        <div class="deals-promo-card__media">
+          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+        </div>
+
+        <div class="deals-promo-card__overlay"></div>
+
+        <div class="deals-promo-card__content">
+          <span class="deals-promo-card__eyebrow">${labels[index] || "Deal"}</span>
+          <h3 class="deals-promo-card__title">${safeTitle}</h3>
+          <p class="deals-promo-card__meta">${safeBrand}</p>
+
+          <div class="deals-promo-card__bottom">
+            <div class="deals-promo-card__pricing">
+              ${newPrice != null ? `<span class="deals-promo-card__price">${formatPrice(newPrice)}</span>` : ""}
+              ${oldPrice != null ? `<span class="deals-promo-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+            </div>
+
+            <div class="deals-promo-card__cta-wrap">
+              ${discount ? `<span class="deals-promo-card__discount">-${Math.round(discount)}%</span>` : ""}
+              <span class="deals-promo-card__cta">Shop now</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      attachNavigate(card, product);
+      return card;
+    }
+
+    function buildMobileHeroCard(product, index) {
+      const discount = parseNumber(product.discount) || 0;
+      const newPrice = parseNumber(product.price);
+      const oldPrice = parseNumber(product.old_price);
+      const safeBrand = product.brand || "BrandRadar";
+      const safeTitle = product.title || "Produkt";
+
+      const card = document.createElement("article");
+      card.className = "deals-mobile-hero-card";
+
+      card.innerHTML = `
+        <div class="deals-mobile-hero-card__media">
+          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+        </div>
+
+        <div class="deals-mobile-hero-card__overlay"></div>
+
+        <div class="deals-mobile-hero-card__content">
+          <span class="deals-mobile-hero-card__eyebrow">${labels[index] || "Deal"}</span>
+          <h3 class="deals-mobile-hero-card__title">${safeTitle}</h3>
+          <p class="deals-mobile-hero-card__meta">${safeBrand}</p>
+
+          <div class="deals-mobile-hero-card__bottom">
+            <div class="deals-mobile-hero-card__pricing">
+              ${newPrice != null ? `<span class="deals-mobile-hero-card__price">${formatPrice(newPrice)}</span>` : ""}
+              ${oldPrice != null ? `<span class="deals-mobile-hero-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+            </div>
+
+            <div class="deals-mobile-hero-card__cta-wrap">
+              ${discount ? `<span class="deals-mobile-hero-card__discount">-${Math.round(discount)}%</span>` : ""}
+              <span class="deals-mobile-hero-card__cta">Shop now</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      attachNavigate(card, product);
+      return card;
+    }
+
+    function buildMobileRailCard(product, index) {
+      const discount = parseNumber(product.discount) || 0;
+      const newPrice = parseNumber(product.price);
+      const oldPrice = parseNumber(product.old_price);
+      const safeBrand = product.brand || "BrandRadar";
+      const safeTitle = product.title || "Produkt";
+
+      const card = document.createElement("article");
+      card.className = "deals-mobile-rail-card";
+
+      card.innerHTML = `
+        <div class="deals-mobile-rail-card__media">
+          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
+        </div>
+
+        <div class="deals-mobile-rail-card__overlay"></div>
+
+        <div class="deals-mobile-rail-card__content">
+          <span class="deals-mobile-rail-card__eyebrow">${labels[index] || "Deal"}</span>
+          <h3 class="deals-mobile-rail-card__title">${safeTitle}</h3>
+          <p class="deals-mobile-rail-card__meta">${safeBrand}</p>
+
+          <div class="deals-mobile-rail-card__bottom">
+            <div class="deals-mobile-rail-card__pricing">
+              ${newPrice != null ? `<span class="deals-mobile-rail-card__price">${formatPrice(newPrice)}</span>` : ""}
+              ${oldPrice != null ? `<span class="deals-mobile-rail-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
+            </div>
+
+            <div class="deals-mobile-rail-card__cta-wrap">
+              ${discount ? `<span class="deals-mobile-rail-card__discount">-${Math.round(discount)}%</span>` : ""}
+              <span class="deals-mobile-rail-card__cta">Shop now</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      attachNavigate(card, product);
+      return card;
+    }
+
+    if (mobileMediaQuery.matches) {
+      const shell = document.createElement("section");
+      shell.className = "deals-mobile-top";
+
+      if (picks[0]) {
+        shell.appendChild(buildMobileHeroCard(picks[0], 0));
+      }
+
+      if (picks.length > 1) {
+        const rail = document.createElement("div");
+        rail.className = "deals-mobile-rail";
+
+        picks.slice(1).forEach((product, idx) => {
+          rail.appendChild(buildMobileRailCard(product, idx + 1));
+        });
+
+        shell.appendChild(rail);
+      }
+
+      return shell;
+    }
+
+    const shell = document.createElement("section");
+    shell.className = "deals-promo-shell";
+
+    const grid = document.createElement("div");
+    grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
+
+    picks.forEach((product, index) => {
+      grid.appendChild(buildDesktopCard(product, index));
+    });
+
+    shell.appendChild(grid);
     return shell;
   }
 
-  // DESKTOP – URØRT
-  const shell = document.createElement("section");
-  shell.className = "deals-promo-shell";
-
-  const grid = document.createElement("div");
-  grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
-
-  picks.forEach((product, index) => {
-    grid.appendChild(buildDesktopCard(product, index));
-  });
-
-  shell.appendChild(grid);
-  return shell;
-}
   function buildDealsTopZone(heroEl, highlightsEl) {
     const section = document.createElement("section");
     section.className = "deals-top-zone";
@@ -730,15 +985,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         breadcrumbLabel = "Deals";
 
         collectionHero = createCollectionHero({
-  eyebrow: "BrandRadar Deals",
-  title: "De beste dealene akkurat nå",
-  text: "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp.",
-  metaPills: [
-    "Utvalgte deals",
-    "Oppdatert nå",
-    "Enklere oversikt"
-  ]
-});
+          eyebrow: "BrandRadar Deals",
+          title: "De beste dealene akkurat nå",
+          text: "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp.",
+          metaPills: [
+            "Utvalgte deals",
+            "Oppdatert nå",
+            "Enklere oversikt"
+          ]
+        });
       } else if (collectionSlug === "picks") {
         ensurePageRootCollectionClass("picks");
 
