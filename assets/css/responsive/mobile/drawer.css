@@ -873,10 +873,11 @@
     background: #f8fafc;
   }
 
-  /* Skjul gammel browse-struktur hvis noe ligger igjen på andre sider */
-  .m-topcats,
-  .m-segments,
-  .m-results {
+  /* Viktig:
+     Ikke skjul browse-strukturen på search-mobile */
+  body:not(.is-search-page) .m-topcats,
+  body:not(.is-search-page) .m-segments,
+  body:not(.is-search-page) .m-results {
     display: none !important;
   }
 }
