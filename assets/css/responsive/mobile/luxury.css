@@ -386,7 +386,7 @@
 
   .luxury-hero h1 {
     font-size: clamp(1.58rem, 8vw, 1.96rem);
-    max-width: 10.5ch;
+    max-width: 12ch;
     line-height: 1.05;
   }
 
