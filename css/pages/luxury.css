@@ -52,8 +52,8 @@
   z-index: 2;
   text-align: center;
   color: #fff;
-  max-width: 760px;
-  width: min(100%, 760px);
+  max-width: 940px;
+  width: min(100%, 940px);
   padding: 2.1rem 2rem;
   margin: 0 auto;
   display: flex;
@@ -64,11 +64,17 @@
 
 .luxury-hero .hero-content h1 {
   margin: 0 0 0.85rem;
+  width: 100%;
+  max-width: none;
   font-size: clamp(2.2rem, 4.2vw, 4rem);
   font-weight: 600;
   line-height: 0.98;
   letter-spacing: -0.05em;
   color: #ffffff;
+  text-align: center;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
   text-shadow: 0 8px 30px rgba(0,0,0,0.28);
 }
 
@@ -204,33 +210,6 @@
 @media (max-width: 768px) {
   .luxury-hero {
     min-height: 380px;
-  }
-
-  .luxury-hero .hero-content {
-    width: min(84%, 340px);
-    padding: 1.55rem 1.3rem 1.45rem;
-    margin: 0 auto;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    border-radius: 24px;
-  }
-
-  .luxury-hero .hero-content h1 {
-    font-size: clamp(1.9rem, 8vw, 2.8rem);
-    line-height: 1.02;
-    letter-spacing: -0.045em;
-    margin: 0 0 0.8rem;
-    max-width: 8ch;
-    text-align: center;
-  }
-
-  .luxury-hero .hero-content p {
-    font-size: 0.96rem;
-    line-height: 1.58;
-    max-width: 18ch;
-    margin: 0 auto;
-    text-align: center;
   }
 
   .luxury-section {
