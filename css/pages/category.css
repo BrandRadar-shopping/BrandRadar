@@ -717,7 +717,8 @@ body.is-category-page .filter-tag .close-tag {
 
 .collection-page--deals .category-products .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  justify-content: center;
   gap: 26px;
   align-items: stretch;
 }
