@@ -42,9 +42,8 @@
   gap: 15px;
   padding: 20px 0;
   width: 100%;
-  justify-items: center;
+  justify-items: stretch;
 }
-
 /* ==========================================================
    PREMIUM UNIVERS-GRID – Always 4 cards in one row (desktop)
    ========================================================== */
