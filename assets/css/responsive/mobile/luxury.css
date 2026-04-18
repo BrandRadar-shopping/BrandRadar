@@ -14,7 +14,7 @@
     min-width: 0;
   }
 
-  /* Skjul desktop hero */
+  /* Skjul evt. gammel desktop-hero */
   .luxury-hero-banner {
     display: none;
   }
@@ -26,7 +26,8 @@
   .luxury-hero {
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    padding: 2.1rem 1rem 1.35rem;
+    margin-right: 0;
+    padding: 2.1rem 0.9rem 1.35rem;
     position: relative;
     text-align: center;
     overflow: hidden;
@@ -52,15 +53,14 @@
     opacity: 1;
   }
 
-  /* Overlay */
   .luxury-hero::before {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(0,0,0,0.6),
-      rgba(0,0,0,0.85)
+      rgba(0,0,0,0.58),
+      rgba(0,0,0,0.84)
     );
     z-index: 1;
   }
@@ -74,60 +74,63 @@
     height: 28px;
     background: linear-gradient(to bottom, rgba(17,17,17,1), rgba(255,255,255,0));
     z-index: 2;
+    pointer-events: none;
   }
 
   /* =========================================
-     HERO CONTENT (FIXED WIDTH ISSUE)
+     HERO CONTENT – bredere innside
   ========================================= */
 
   .luxury-hero .hero-content {
     position: relative;
     z-index: 3;
-
-    width: min(100%, 352px); /* 🔥 ØKT bredde */
+    width: min(calc(100% - 6px), 382px);
+    max-width: 382px;
     margin: 0 auto;
-
-    padding: 1.2rem 0.85rem 1.1rem; /* 🔥 litt mindre sidepadding */
-
+    padding: 1.18rem 0.6rem 1.08rem;
     border-radius: 22px;
     background: rgba(10, 10, 10, 0.42);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-
     box-shadow:
       0 10px 30px rgba(0,0,0,0.16),
       inset 0 1px 0 rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
   }
 
-  /* 🔥 FIXED HEADING */
   .luxury-hero h1 {
+    position: relative;
+    z-index: 4;
     margin: 0 auto 0.72rem;
     width: 100%;
-    max-width: none; /* 🔥 viktig */
-
-    font-size: clamp(1.72rem, 7.1vw, 2.12rem);
-    line-height: 1.04;
-    letter-spacing: -0.05em;
-
+    max-width: none;
+    font-size: clamp(1.58rem, 7.2vw, 2.02rem);
+    line-height: 1.03;
+    letter-spacing: -0.045em;
     text-align: center;
     color: #e0c25a;
-
-    text-wrap: pretty;
+    white-space: normal;
+    word-break: normal;
     overflow-wrap: normal;
-    word-break: keep-all;
     hyphens: none;
-
+    text-wrap: balance;
     text-shadow: 0 3px 14px rgba(0,0,0,0.35);
   }
 
   .luxury-hero p {
+    position: relative;
+    z-index: 4;
     font-size: 0.96rem;
     line-height: 1.48;
     max-width: 20ch;
     margin: 0 auto;
     color: rgba(255,255,255,0.88);
     text-align: center;
-    text-wrap: pretty;
+    text-wrap: balance;
     text-shadow: 0 2px 10px rgba(0,0,0,0.35);
   }
 
@@ -145,42 +148,55 @@
     font-size: 1.3rem;
     line-height: 1.04;
     letter-spacing: -0.035em;
+    text-align: left;
     padding: 0 6px;
   }
 
   /* =========================================
-     BRAND GRID
+     BRAND GRID – stopp overlapping
   ========================================= */
 
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 14px;
-    row-gap: 12px;
+    gap: 12px;
+    align-items: stretch;
     padding: 0 4px;
   }
 
   .brand-card {
-    aspect-ratio: 1 / 0.94;
-    padding: 10px 8px 11px;
+    width: 100%;
+    max-width: 100%;
+    min-height: 164px;
+    margin: 0;
+    padding: 14px 10px 12px;
     border-radius: 16px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    overflow: hidden;
+    aspect-ratio: auto;
   }
 
+  .brand-card .brand-logo,
   .brand-logo {
-    max-width: 118px;
-    height: 58px;
+    width: 100%;
+    max-width: 110px;
+    height: 54px;
     object-fit: contain;
-    margin-bottom: 10px;
+    display: block;
+    margin: 0 auto 12px;
   }
 
   .brand-card h3 {
+    margin: 0;
     font-size: 12.5px;
+    line-height: 1.18;
     text-align: center;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   /* =========================================
@@ -192,15 +208,22 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 12px;
+    padding: 0 2px;
   }
 
   .luxury-filter-bar select {
+    width: 100%;
+    min-width: 0;
     min-height: 44px;
     border-radius: 12px;
     border: 1px solid rgba(148, 163, 184, 0.2);
+    background: #fff;
+    color: #0f172a;
     font-size: 14px;
     font-weight: 700;
     padding: 0 12px;
+    outline: none;
+    box-shadow: none;
   }
 
   /* =========================================
@@ -212,9 +235,17 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+    max-width: 100%;
+    justify-items: stretch;
+    align-items: start;
+    padding: 0 2px;
   }
 
-  .luxury-product-card {
+  .luxury-product-card,
+  .luxury-hero-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
     border-radius: 17px;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
     overflow: hidden;
@@ -222,62 +253,189 @@
     position: relative;
   }
 
-  .luxury-product-card img {
+  .luxury-product-card img,
+  .luxury-hero-card img,
+  .luxury-img {
+    width: 100%;
+    height: auto;
     aspect-ratio: 1 / 1;
     object-fit: contain;
+    background: #fff;
     padding: 8px;
+    margin: 0;
+    display: block;
+    border-radius: 0;
   }
 
   .luxury-info {
     padding: 9px 10px 10px;
+    text-align: left;
   }
 
   .luxury-info h4 {
     font-size: 13px;
+    line-height: 1.18;
+    margin: 0 0 2px;
+    color: #111827;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 2.36em;
   }
 
   .luxury-info .brand {
     font-size: 11px;
-    opacity: 0.75;
+    line-height: 1.15;
+    margin: 0 0 2px;
+    opacity: 0.78;
+    color: #6b7280;
+  }
+
+  .luxury-product-card .rating-stars {
+    margin: 2px 0 4px;
+    gap: 4px;
+    min-height: 12px;
+  }
+
+  .luxury-product-card .rating-stars-row {
+    gap: 0.18rem;
+  }
+
+  .luxury-product-card .rating-star,
+  .luxury-product-card .rating-star-svg {
+    width: 11px;
+    height: 11px;
+    flex: 0 0 11px;
+  }
+
+  .luxury-product-card .rating-value {
+    font-size: 11px;
   }
 
   .luxury-info .price {
     font-size: 14px;
+    line-height: 1.08;
     font-weight: 800;
     color: #d4a514;
+    margin: 0;
+  }
+
+  .discount-badge {
+    top: 8px;
+    left: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 999px;
+    z-index: 12;
+  }
+
+  .gold-pick-badge {
+    top: 8px;
+    right: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 999px;
+    max-width: calc(100% - 16px);
+    white-space: nowrap;
+    z-index: 12;
   }
 
   .fav-btn {
-    position: absolute;
     top: 36px;
     right: 8px;
     width: 28px;
     height: 28px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 13;
     background: rgba(255,255,255,0.92);
-    border-radius: 50%;
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(15,23,42,0.18);
+  }
+
+  .luxury-page .fav-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #fbbf24;
+    stroke-width: 1.7;
+  }
+
+  .luxury-page .fav-btn.active .fav-icon {
+    fill: #facc15;
+    stroke: #fbbf24;
+  }
+
+  .empty-message {
+    margin: 24px 0 8px;
+    font-size: 15px;
+    color: #64748b;
   }
 }
 
-/* =========================================
-   SMALL DEVICES
-========================================= */
-
 @media (max-width: 360px) {
+  .luxury-page {
+    padding: 0 6px 116px;
+  }
+
+  .brand-grid,
+  #luxuryGoldPickGrid,
+  #luxuryProductGrid,
+  .luxury-filter-bar {
+    gap: 8px;
+  }
+
+  .brand-grid {
+    padding: 0 2px;
+  }
+
+  .luxury-section h2 {
+    font-size: 1.18rem;
+    padding: 0 4px;
+  }
 
   .luxury-hero .hero-content {
-    width: min(100%, 320px); /* 🔥 også økt */
-    padding: 1.05rem 0.8rem 1rem;
+    width: min(calc(100% - 6px), 334px);
+    max-width: 334px;
+    padding: 1.02rem 0.5rem 0.98rem;
   }
 
   .luxury-hero h1 {
-    font-size: clamp(1.58rem, 8vw, 1.96rem);
+    font-size: clamp(1.5rem, 7.9vw, 1.88rem);
+    line-height: 1.04;
   }
 
   .luxury-hero p {
     font-size: 0.92rem;
+    max-width: 18ch;
+  }
+
+  .luxury-info {
+    padding: 9px 9px 10px;
+  }
+
+  .luxury-info h4 {
+    font-size: 12.5px;
+  }
+
+  .luxury-info .brand,
+  .luxury-product-card .rating-value {
+    font-size: 10.5px;
+  }
+
+  .luxury-info .price {
+    font-size: 13px;
+  }
+
+  .discount-badge,
+  .gold-pick-badge {
+    font-size: 10px;
+    padding: 4px 7px;
   }
 }
