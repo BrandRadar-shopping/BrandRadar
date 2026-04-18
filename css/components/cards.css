@@ -289,10 +289,11 @@
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
 }
 
-/* Category-page: litt større kort på desktop */
+/* Category-page: la kort fylle gridkolonnen på desktop */
 .category-products .product-grid .product-card {
-  max-width: 320px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 /* Brand-page: behold clean layout, men med v9-look */
