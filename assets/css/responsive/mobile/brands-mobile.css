@@ -1,12 +1,19 @@
 /* =====================================================
-   BrandRadar – Brands Mobile (FINAL CLEAN)
+   BrandRadar – Brands Mobile
    Scoped kun til brands.html
+   Bytt hele filen med denne
    ===================================================== */
 
 @media (max-width: 768px) {
 
   body.is-brands-page {
     background: #f8fafc;
+  }
+
+  body.is-brands-page *,
+  body.is-brands-page *::before,
+  body.is-brands-page *::after {
+    box-sizing: border-box;
   }
 
   /* SEARCH */
@@ -28,9 +35,11 @@
   /* A–Å */
   body.is-brands-page .brand-alphabet {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 8px;
     margin: 6px 14px 18px;
+    padding: 0;
+    max-width: none;
   }
 
   body.is-brands-page .brand-alphabet span {
@@ -38,6 +47,8 @@
     align-items: center;
     justify-content: center;
     height: 40px;
+    min-width: 0;
+    padding: 0;
     border-radius: 12px;
     border: 1px solid rgba(15, 23, 42, 0.08);
     background: #fff;
@@ -58,121 +69,155 @@
     padding: 0 14px;
   }
 
+  body.is-brands-page .highlighted-brands {
+    background: transparent;
+    border-bottom: 0;
+  }
+
   body.is-brands-page .highlighted-brands h2,
   body.is-brands-page .all-brands h2 {
     text-align: center;
     font-size: 1.8rem;
-    margin-bottom: 14px;
+    line-height: 1.08;
+    margin: 0 0 14px;
   }
 
-  /* GRID */
-  body.is-brands-page .brand-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  /* GRID – hard reset for mobil */
+  body.is-brands-page .highlighted-brands .brand-grid,
+  body.is-brands-page .all-brands .brand-grid,
+  body.is-brands-page #highlight-grid,
+  body.is-brands-page #brand-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    justify-items: stretch !important;
+    align-items: stretch !important;
   }
 
-  /* CARD */
+  /* CARD – hard reset so cards never bleed into each other */
   body.is-brands-page .brand-card {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: center;
     justify-content: flex-start;
 
-    min-height: 180px;
-    max-height: 180px;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
 
-    padding: 14px 12px 12px;
-    border-radius: 18px;
+    min-height: 180px !important;
+    padding: 14px 12px 12px !important;
+    border-radius: 18px !important;
     background: #fff;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
     text-align: center;
-    overflow: hidden;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  body.is-brands-page .brand-card:hover {
+    transform: none !important;
   }
 
   /* Highlight border */
   body.is-brands-page .highlighted-brands .brand-card {
-    border: 1.5px solid rgba(0,112,243,0.7);
+    border: 1.5px solid rgba(0, 112, 243, 0.7) !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
   }
 
-  /* LOGO (senket riktig) */
-  body.is-brands-page .brand-card img {
+  /* LOGO */
+  body.is-brands-page .brand-card img,
+  body.is-brands-page .brand-card .brand-logo {
+    display: block;
     width: 100%;
     max-width: 96px;
     height: 40px;
+    min-width: 0;
     object-fit: contain;
     object-position: center;
-
     margin: 16px auto 8px;
   }
 
   /* TITLE */
   body.is-brands-page .brand-card h3 {
-    margin: 0 0 8px;
-    font-size: 0.9rem;
-    font-weight: 800;
+    margin: 0 0 8px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+    min-width: 0;
+    width: 100%;
+    text-align: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
-  /* BUTTON (riktig posisjon) */
+  /* BUTTON */
   body.is-brands-page .brand-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
     margin-top: auto;
     width: 100%;
     max-width: 124px;
+    min-width: 0;
     height: 36px;
-
+    padding: 0 12px;
     border-radius: 10px;
     background: #111827;
     color: #fff;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     font-size: 0.82rem;
     font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
   /* FAVORITT */
   body.is-brands-page .brand-card .fav-icon {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
+    top: 10px !important;
+    right: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    z-index: 5;
   }
 }
-
 
 /* ==============================
    SMALL DEVICES
 ============================== */
 
 @media (max-width: 420px) {
-
   body.is-brands-page .brand-alphabet {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 7px;
   }
 
   body.is-brands-page .brand-card {
-    min-height: 170px;
-    max-height: 170px;
-    padding: 12px 10px 10px;
+    min-height: 170px !important;
+    padding: 12px 10px 10px !important;
   }
 
-  body.is-brands-page .brand-card img {
+  body.is-brands-page .brand-card img,
+  body.is-brands-page .brand-card .brand-logo {
     max-width: 88px;
     height: 36px;
     margin: 14px auto 6px;
   }
 
   body.is-brands-page .brand-card h3 {
-    font-size: 0.88rem;
+    font-size: 0.88rem !important;
   }
 
   body.is-brands-page .brand-btn {
     height: 34px;
     font-size: 0.8rem;
+    max-width: 118px;
   }
 }
