@@ -245,14 +245,19 @@
     overflow: hidden;
     background: #fff;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   .luxury-page #luxuryGoldPickGrid .product-card .product-media,
   .luxury-page #luxuryProductGrid .product-card .product-media {
-    aspect-ratio: 1 / 1 !important;
+    aspect-ratio: 1 / 0.82 !important;
     background: #fff;
-    padding: 8px;
+    padding: 10px 8px 6px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .luxury-page #luxuryGoldPickGrid .product-card .product-image,
@@ -265,7 +270,7 @@
 
   .luxury-page #luxuryGoldPickGrid .product-card .product-info,
   .luxury-page #luxuryProductGrid .product-card .product-info {
-    padding: 9px 10px 10px !important;
+    padding: 8px 10px 11px !important;
     text-align: left;
     min-height: 0 !important;
     gap: 2px !important;
@@ -463,6 +468,12 @@
 
   .luxury-page #luxuryBrandGrid .brand-card h3 {
     font-size: 12px;
+  }
+
+  .luxury-page #luxuryGoldPickGrid .product-card .product-media,
+  .luxury-page #luxuryProductGrid .product-card .product-media {
+    aspect-ratio: 1 / 0.8 !important;
+    padding: 9px 7px 5px;
   }
 
   .luxury-page #luxuryGoldPickGrid .product-card .product-info,
