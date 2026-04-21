@@ -249,9 +249,13 @@
     flex-direction: column;
   }
 
+  /* KUN dette området er strammet inn */
   .luxury-page #luxuryGoldPickGrid .product-card .product-media,
   .luxury-page #luxuryProductGrid .product-card .product-media {
-    aspect-ratio: 1 / 0.82 !important;
+    height: 168px !important;
+    min-height: 168px !important;
+    max-height: 168px !important;
+    aspect-ratio: auto !important;
     background: #fff;
     padding: 10px 8px 6px;
     overflow: hidden;
@@ -470,9 +474,12 @@
     font-size: 12px;
   }
 
+  /* KUN dette området er strammet inn */
   .luxury-page #luxuryGoldPickGrid .product-card .product-media,
   .luxury-page #luxuryProductGrid .product-card .product-media {
-    aspect-ratio: 1 / 0.8 !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    max-height: 154px !important;
     padding: 9px 7px 5px;
   }
 
