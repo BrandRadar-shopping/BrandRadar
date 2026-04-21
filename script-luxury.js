@@ -166,7 +166,7 @@ function renderLuxuryProducts() {
 
   empty.style.display = list.length ? "none" : "block";
 
-  list.forEach(p => {
+  function createLuxuryCard(p) {
     const card = document.createElement("article");
     card.className = "luxury-product-card";
 
@@ -249,11 +249,17 @@ function renderLuxuryProducts() {
       );
     });
 
+    return card;
+  }
+
+  list.forEach(p => {
+    const goldPick = String(p.goldpick || "").toLowerCase() === "yes";
+
     if (goldPick) {
-      goldGrid.appendChild(card);
-    } else {
-      prodGrid.appendChild(card);
+      goldGrid.appendChild(createLuxuryCard(p));
     }
+
+    prodGrid.appendChild(createLuxuryCard(p));
   });
 }
 
@@ -298,4 +304,3 @@ function initLuxuryHeroSlider() {
 }
 
 document.addEventListener("DOMContentLoaded", initLuxuryHeroSlider);
-
