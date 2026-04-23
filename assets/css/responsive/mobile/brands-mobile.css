@@ -1,13 +1,13 @@
 /* =====================================================
    BrandRadar – Brands Mobile
    Scoped kun til brands.html
-   Bytt hele filen med denne
+   Mobil: sponsored slider + standard all-brands grid
    ===================================================== */
 
 @media (max-width: 768px) {
 
   body.is-brands-page {
-    background: #f8fafc;
+    background: #f6f6f4;
   }
 
   body.is-brands-page *,
@@ -63,7 +63,7 @@
     border-color: #0070f3;
   }
 
-  /* SECTIONS */
+  /* SECTION WRAP */
   body.is-brands-page .highlighted-brands,
   body.is-brands-page .all-brands {
     padding: 0 14px;
@@ -72,20 +72,264 @@
   body.is-brands-page .highlighted-brands {
     background: transparent;
     border-bottom: 0;
+    margin-bottom: 18px;
   }
 
   body.is-brands-page .highlighted-brands h2,
   body.is-brands-page .all-brands h2 {
-    text-align: center;
-    font-size: 1.8rem;
+    text-align: left;
+    font-size: 1.5rem;
     line-height: 1.08;
     margin: 0 0 14px;
+    letter-spacing: -0.03em;
   }
 
-  /* GRID – hard reset for mobil */
+  /* =========================================
+     SPONSORED BRANDS = HORIZONTAL SLIDER
+  ========================================= */
+
   body.is-brands-page .highlighted-brands .brand-grid,
+  body.is-brands-page #highlight-grid {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: 88% !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 2px 8px 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 0;
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+  }
+
+  body.is-brands-page #highlight-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.is-brands-page #highlight-grid {
+    scrollbar-width: none;
+  }
+
+  body.is-brands-page .highlighted-brands .featured-brand-card {
+    width: 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  /* =========================================
+     SPONSORED CARD MOBILE
+  ========================================= */
+
+  body.is-brands-page .featured-brand-card__shell {
+    position: relative;
+    padding: 16px 14px 14px;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid #e7e2d8;
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.05),
+      0 1px 0 rgba(255,255,255,0.96) inset;
+    overflow: hidden;
+  }
+
+  body.is-brands-page .featured-brand-card__shell::before {
+    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(251,250,247,0.96));
+  }
+
+  body.is-brands-page .featured-brand-card__rail {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* logo i hjørnet + sponset ved siden av */
+  body.is-brands-page .featured-brand-card__brandhead {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  body.is-brands-page .featured-brand-card__logo-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid #e6e1d8;
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.05),
+      0 1px 0 rgba(255,255,255,0.96) inset;
+    flex: 0 0 auto;
+  }
+
+  body.is-brands-page .featured-brand-card__logo {
+    width: 68%;
+    height: 68%;
+    object-fit: contain;
+    display: block;
+  }
+
+  body.is-brands-page .featured-brand-card__tag {
+    min-height: 29px;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: #e9d4a8;
+    color: #714e17;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(181, 140, 84, 0.10);
+    box-shadow: 0 4px 10px rgba(181, 140, 84, 0.08);
+    margin-top: 0;
+  }
+
+  body.is-brands-page .featured-brand-card .fav-icon {
+    top: 12px !important;
+    right: 12px !important;
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* én kolonne på mobil */
+  body.is-brands-page .featured-brand-card__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  body.is-brands-page .featured-brand-card__intro {
+    padding: 0;
+  }
+
+  body.is-brands-page .featured-brand-card__eyebrow {
+    font-size: 0.72rem;
+    margin: 0 0 6px;
+    color: #87622c;
+    letter-spacing: 0.08em;
+  }
+
+  body.is-brands-page .featured-brand-card__title {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+  }
+
+  body.is-brands-page .featured-brand-card__copy {
+    max-width: none;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #465264;
+  }
+
+  body.is-brands-page .featured-brand-card__cta {
+    margin-top: 16px;
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 0.92rem;
+  }
+
+  /* hero */
+  body.is-brands-page .featured-brand-card__hero {
+    min-width: 0;
+  }
+
+  body.is-brands-page .featured-brand-card__hero-stage {
+    min-height: 220px;
+    height: 220px;
+    padding: 14px 16px 10px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #fbfbfa 0%, #f4f2ee 100%);
+    border: 1px solid #e8e4dc;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.72),
+      0 6px 16px rgba(15, 23, 42, 0.025);
+  }
+
+  body.is-brands-page .featured-brand-card__hero-image {
+    width: 150%;
+    height: 150%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    object-position: center;
+    filter: drop-shadow(0 14px 22px rgba(15, 23, 42, 0.08));
+  }
+
+  body.is-brands-page .featured-brand-card__hero-caption {
+    margin-top: 10px;
+    min-height: 54px;
+    padding: 0 14px;
+    gap: 10px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid #e8e4dc;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.035);
+  }
+
+  body.is-brands-page .featured-brand-card__hero-name {
+    font-size: 0.94rem;
+    line-height: 1.15;
+  }
+
+  body.is-brands-page .featured-brand-card__hero-price {
+    font-size: 0.95rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  /* thumbs */
+  body.is-brands-page .featured-brand-card__thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(78px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  body.is-brands-page .featured-brand-card__thumb {
+    min-width: 78px;
+    height: 84px;
+    border-radius: 14px;
+    padding: 4px;
+    border: 1px solid #e8e4dc;
+    background: linear-gradient(180deg, #fbfbfa 0%, #f4f2ee 100%);
+    box-shadow: none;
+  }
+
+  body.is-brands-page .featured-brand-card__thumb img {
+    width: 136%;
+    height: 136%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  body.is-brands-page .featured-brand-card__thumb:hover,
+  body.is-brands-page .featured-brand-card__thumb.is-active {
+    border-color: rgba(210, 178, 118, 0.80);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04);
+    transform: translateY(-1px);
+    background: #fff;
+  }
+
+  /* =========================================
+     ALL BRANDS GRID
+  ========================================= */
+
   body.is-brands-page .all-brands .brand-grid,
-  body.is-brands-page #highlight-grid,
   body.is-brands-page #brand-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -98,24 +342,24 @@
     align-items: stretch !important;
   }
 
-  /* CARD – hard reset so cards never bleed into each other */
   body.is-brands-page .brand-card {
     position: relative;
     display: flex !important;
     flex-direction: column !important;
     align-items: center;
     justify-content: flex-start;
-
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     margin: 0 !important;
-
     min-height: 180px !important;
     padding: 14px 12px 12px !important;
     border-radius: 18px !important;
     background: #fff;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.05),
+      0 1px 0 rgba(255,255,255,0.95) inset !important;
+    border: 1px solid #e7e3db !important;
     text-align: center;
     overflow: hidden !important;
     transform: none !important;
@@ -123,15 +367,11 @@
 
   body.is-brands-page .brand-card:hover {
     transform: none !important;
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.05),
+      0 1px 0 rgba(255,255,255,0.95) inset !important;
   }
 
-  /* Highlight border */
-  body.is-brands-page .highlighted-brands .brand-card {
-    border: 1.5px solid rgba(0, 112, 243, 0.7) !important;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
-  }
-
-  /* LOGO */
   body.is-brands-page .brand-card img,
   body.is-brands-page .brand-card .brand-logo {
     display: block;
@@ -144,7 +384,6 @@
     margin: 16px auto 8px;
   }
 
-  /* TITLE */
   body.is-brands-page .brand-card h3 {
     margin: 0 0 8px !important;
     font-size: 0.9rem !important;
@@ -157,7 +396,6 @@
     word-break: break-word;
   }
 
-  /* BUTTON */
   body.is-brands-page .brand-btn {
     display: inline-flex !important;
     align-items: center;
@@ -178,7 +416,6 @@
     white-space: nowrap;
   }
 
-  /* FAVORITT */
   body.is-brands-page .brand-card .fav-icon {
     position: absolute;
     top: 10px !important;
@@ -197,6 +434,61 @@
   body.is-brands-page .brand-alphabet {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 7px;
+  }
+
+  body.is-brands-page .highlighted-brands h2,
+  body.is-brands-page .all-brands h2 {
+    font-size: 1.38rem;
+  }
+
+  body.is-brands-page .highlighted-brands .brand-grid,
+  body.is-brands-page #highlight-grid {
+    grid-auto-columns: 92% !important;
+  }
+
+  body.is-brands-page .featured-brand-card__shell {
+    padding: 14px 12px 12px;
+    border-radius: 20px;
+  }
+
+  body.is-brands-page .featured-brand-card__logo-wrap {
+    width: 66px;
+    height: 66px;
+    border-radius: 16px;
+  }
+
+  body.is-brands-page .featured-brand-card__tag {
+    font-size: 0.64rem;
+    padding: 0 10px;
+    min-height: 27px;
+  }
+
+  body.is-brands-page .featured-brand-card__title {
+    font-size: 1.72rem;
+  }
+
+  body.is-brands-page .featured-brand-card__copy {
+    font-size: 0.91rem;
+  }
+
+  body.is-brands-page .featured-brand-card__hero-stage {
+    min-height: 202px;
+    height: 202px;
+  }
+
+  body.is-brands-page .featured-brand-card__hero-image {
+    width: 142%;
+    height: 142%;
+  }
+
+  body.is-brands-page .featured-brand-card__thumb {
+    min-width: 72px;
+    height: 78px;
+  }
+
+  body.is-brands-page .featured-brand-card__thumb img {
+    width: 130%;
+    height: 130%;
   }
 
   body.is-brands-page .brand-card {
