@@ -303,7 +303,11 @@
   height: 250px;
   padding: 18px 26px 14px;
   border-radius: 24px;
-  background: linear-gradient(180deg, #faf9f7 0%, #f3f1ed 100%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brand-bg, #f3f1ed) 88%, white),
+    var(--brand-bg, #f3f1ed)
+  );
   border: 1px solid #ece7de;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
   overflow: hidden;
