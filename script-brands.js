@@ -135,24 +135,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getBrandThemeColor(brandName) {
-    const brandColors = {
-      nike: "#f3f1ed",
-      adidas: "#f1f1f1",
-      puma: "#f5efe6",
-      "new balance": "#eef2f6",
-      "the north face": "#f6f3ee",
-      salomon: "#eef3f1",
-      arcteryx: "#f1f0ec",
-      "arc'teryx": "#f1f0ec",
-      zara: "#f5f2eb",
-      gucci: "#f6f1ea",
-      moncler: "#f3f4f6",
-      rolex: "#f2f3ed",
-      "star nutrition": "#f3f6fb",
-      gymgrossisten: "#f2f5f8"
-    };
+    const normalized = normalizeBrand(brandName);
 
-    return brandColors[normalizeBrand(brandName)] || "#f3f1ed";
+    if (normalized.includes("nike")) return "#f3f1ed";
+    if (normalized.includes("adidas")) return "#eef2f7";
+    if (normalized.includes("puma")) return "#f6eee6";
+    if (normalized.includes("new balance")) return "#edf1f5";
+    if (normalized.includes("north face")) return "#f6f3ee";
+    if (normalized.includes("salomon")) return "#eef4f1";
+    if (normalized.includes("arc'teryx") || normalized.includes("arcteryx")) return "#f1f0ec";
+    if (normalized.includes("zara")) return "#f6f1ea";
+    if (normalized.includes("gucci")) return "#f5efe7";
+    if (normalized.includes("moncler")) return "#f3f4f6";
+    if (normalized.includes("rolex")) return "#f2f3ed";
+    if (normalized.includes("star nutrition")) return "#eef4fb";
+    if (normalized.includes("gymgrossisten")) return "#eef3f8";
+    if (normalized.includes("boss")) return "#f3f4f6";
+    if (normalized.includes("carhartt")) return "#f4efe8";
+    if (normalized.includes("zalando")) return "#f5f1eb";
+    if (normalized.includes("timex")) return "#eef1f4";
+    if (normalized.includes("onepiece")) return "#f3efe9";
+
+    return "#f3f1ed";
   }
 
   function createRegularBrandCard(brandObj, isFav) {
