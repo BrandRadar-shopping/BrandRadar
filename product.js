@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
 
-   document.getElementById("product-title").textContent = product.title || "";
+  document.getElementById("product-title").textContent = product.title || "";
   document.getElementById("product-brand").textContent = product.brand || "";
 
   const productDescriptionEl =
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let discount = parseFloat(String(product.discount || "").replace(",", "."));
   if (discount && discount < 1) discount *= 100;
 
-    if (numericPrice && discount > 0) {
+  if (numericPrice && discount > 0) {
     const newPrice = Math.round(numericPrice * (1 - discount / 100));
     newPriceEl.textContent = `${newPrice} kr`;
     oldPriceEl.textContent = `${numericPrice} kr`;
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderProductRating(product);
 
-    const mainImg = document.getElementById("main-image");
+  const mainImg = document.getElementById("main-image");
   const thumbs = document.getElementById("thumbnails");
   const imageGallery = document.querySelector(".image-gallery");
 
@@ -243,8 +243,23 @@ function getCombinedProductText(product) {
     .toLowerCase();
 }
 
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function hasAnyKeyword(text, keywords = []) {
-  return keywords.some(keyword => text.includes(keyword));
+  const source = ` ${String(text || "").toLowerCase()} `;
+  return keywords.some((keyword) => {
+    const k = String(keyword || "").toLowerCase().trim();
+    if (!k) return false;
+
+    if (k.includes(" ")) {
+      return source.includes(` ${k} `) || source.includes(k);
+    }
+
+    const pattern = new RegExp(`(^|[^a-z0-9æøå])${escapeRegex(k)}([^a-z0-9æøå]|$)`, "i");
+    return pattern.test(source);
+  });
 }
 
 function getDiscountPercent(product, offerSummary) {
@@ -264,6 +279,7 @@ function getDiscountPercent(product, offerSummary) {
 function extractProductSignals(product, offerSummary) {
   const text = getCombinedProductText(product);
   const category = normalizeCategory(product.category);
+  const subcategory = normalizeCategory(product.subcategory);
   const brand = normalizeText(product.brand);
 
   const ratingNum = parseFloat(
@@ -277,22 +293,44 @@ function extractProductSignals(product, offerSummary) {
   const discountPercent = getDiscountPercent(product, offerSummary);
   const hasDiscount = !!discountPercent;
 
-  const isFoodLike = hasAnyKeyword(text, [
-    "proteinbar", "protein bar", "proteinbars", "bar", "snack",
-    "hazelnut", "choco", "chocolate", "cookie", "caramel", "peanut", "soft bar"
+  const isWatch = category === "accessories" && (
+    hasAnyKeyword(subcategory, ["klokker", "klokke", "watch", "watches"]) ||
+    hasAnyKeyword(text, ["klokke", "watch", "watches"])
+  );
+
+  const isFoodLike = category === "supplements" && hasAnyKeyword(text, [
+    "proteinbar",
+    "protein bar",
+    "proteinbars",
+    "soft bar",
+    "snack",
+    "hazelnut",
+    "choco",
+    "chocolate",
+    "cookie",
+    "caramel",
+    "peanut"
   ]);
 
-  const isSupplementLike = hasAnyKeyword(text, [
-    "whey", "protein", "creatine", "pre workout", "pre-workout", "bcaa",
-    "supplement", "mass gainer", "electrolyte", "isolate"
+  const isSupplementLike = category === "supplements" || hasAnyKeyword(text, [
+    "whey",
+    "protein",
+    "creatine",
+    "pre workout",
+    "pre-workout",
+    "bcaa",
+    "supplement",
+    "mass gainer",
+    "electrolyte",
+    "isolate"
   ]);
 
   const isSneaker = hasAnyKeyword(text, [
-    "sneaker", "air max", "air jordan", "trainer", "pulse", "rm", "shoe", "sko"
+    "sneaker", "sneakers", "air max", "air jordan", "trainer", "pulse", "shoe", "sko"
   ]);
 
   const isBoot = hasAnyKeyword(text, [
-    "boot", "boots", "winter boot", "snow", "snowbae"
+    "boot", "boots", "winter boot", "snow", "snowbae", "støvlett", "støvler"
   ]);
 
   const isJacket = hasAnyKeyword(text, [
@@ -324,13 +362,14 @@ function extractProductSignals(product, offerSummary) {
     "winter", "snow", "boot", "insulated"
   ]);
 
-  const isFlavorFocused = hasAnyKeyword(text, [
+  const isFlavorFocused = category === "supplements" && hasAnyKeyword(text, [
     "hazelnut", "choco", "chocolate", "cookie", "caramel", "peanut", "vanilla", "salted"
   ]);
 
   return {
     text,
     category,
+    subcategory,
     brand,
     ratingNum,
     storeCount,
@@ -339,6 +378,7 @@ function extractProductSignals(product, offerSummary) {
     hasGoodRating,
     discountPercent,
     hasDiscount,
+    isWatch,
     isFoodLike,
     isSupplementLike,
     isSneaker,
@@ -355,6 +395,7 @@ function extractProductSignals(product, offerSummary) {
 function detectProductFamily(product, offerSummary) {
   const s = extractProductSignals(product, offerSummary);
 
+  if (s.isWatch) return "accessory_watch";
   if (s.isFoodLike) return "food_protein_bar";
   if (s.isSupplementLike) return "supplement_general";
 
@@ -401,6 +442,8 @@ function buildInsightHighlights(product, offerSummary) {
     highlights.push("Proteinbar");
   } else if (family === "supplement_general") {
     highlights.push("Supplements");
+  } else if (family === "accessory_watch") {
+    highlights.push("Klokke");
   } else if (family === "footwear_boot") {
     highlights.push("Boots");
   } else if (family === "footwear_sneaker") {
@@ -480,6 +523,7 @@ function buildRuleBasedSummary(product, offerSummary) {
   const familyBuilders = {
     food_protein_bar: () => buildProteinBarSummary(ctx),
     supplement_general: () => buildSupplementSummary(ctx),
+    accessory_watch: () => buildWatchSummary(ctx),
     footwear_boot: () => buildBootSummary(ctx),
     footwear_sneaker: () => buildSneakerSummary(ctx),
     footwear_general: () => buildFootwearGeneralSummary(ctx),
@@ -675,6 +719,22 @@ function buildClothingSummary(ctx) {
   ]);
 }
 
+function buildWatchSummary(ctx) {
+  if (!ctx.hasOffers) {
+    return pickVariantByHash(ctx.seed, [
+      `Et gjennomført klokkevalg${ctx.brand ? ` fra ${ctx.brand}` : ""} med fokus på design, bruk og et mer tidløst uttrykk.`,
+      `En klokkemodell${ctx.brand ? ` fra ${ctx.brand}` : ""} som passer godt for deg som vil ha et rent og anvendelig accessory i hverdagen.`,
+      `Et relevant valg innen klokker${ctx.brand ? ` fra ${ctx.brand}` : ""}, spesielt når du vil ha en modell som fungerer bredt og ser gjennomført ut.`
+    ]);
+  }
+
+  return pickVariantByHash(ctx.seed, [
+    `Et gjennomført klokkevalg${ctx.brand ? ` fra ${ctx.brand}` : ""} med ryddig prisoversikt og enkel vurdering av tilgjengelighet akkurat nå.`,
+    `En klokkemodell${ctx.brand ? ` fra ${ctx.brand}` : ""} som gjør det enklere å sammenligne pris og kjøpsmuligheter uten ekstra friksjon.`,
+    `Et relevant valg innen klokker${ctx.brand ? ` fra ${ctx.brand}` : ""}, presentert med fokus på pris, tilgjengelighet og en mer oversiktlig kjøpsprosess.`
+  ]);
+}
+
 function buildAccessorySummary(ctx) {
   if (!ctx.hasOffers) {
     return pickVariantByHash(ctx.seed, [
@@ -766,8 +826,7 @@ function renderProductInsights(product, offerSummary) {
     ? `<div class="product-insight-meta">${metaParts.join(" • ")}</div>`
     : "";
 
-
-container.innerHTML = `
+  container.innerHTML = `
     <div class="product-insights-title">Hvorfor dette produktet skiller seg ut</div>
     ${highlightsHTML}
     <div class="product-insight-summary">${summary}</div>
@@ -1010,15 +1069,11 @@ const backBtn = document.getElementById("back-btn");
 
 if (backBtn) {
   backBtn.addEventListener("click", () => {
-
-    // Hvis det finnes historikk → gå tilbake
     if (window.history.length > 1) {
       window.history.back();
     } else {
-      // fallback hvis brukeren åpner produkt direkte
       window.location.href = "index.html";
     }
-
   });
 }
 
@@ -1083,4 +1138,3 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInsightsToggle();
   setupDescriptionToggle();
 });
-
