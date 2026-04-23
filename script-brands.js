@@ -134,6 +134,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `${brandObj.brand} er valgt ut som fremhevet brand akkurat nå. Utforsk utvalgte produkter og få en rask oversikt over hva som gjør brandet interessant akkurat nå.`;
   }
 
+  function getBrandThemeColor(brandName) {
+    const brandColors = {
+      nike: "#f3f1ed",
+      adidas: "#f1f1f1",
+      puma: "#f5efe6",
+      "new balance": "#eef2f6",
+      "the north face": "#f6f3ee",
+      salomon: "#eef3f1",
+      arcteryx: "#f1f0ec",
+      "arc'teryx": "#f1f0ec",
+      zara: "#f5f2eb",
+      gucci: "#f6f1ea",
+      moncler: "#f3f4f6",
+      rolex: "#f2f3ed",
+      "star nutrition": "#f3f6fb",
+      gymgrossisten: "#f2f5f8"
+    };
+
+    return brandColors[normalizeBrand(brandName)] || "#f3f1ed";
+  }
+
   function createRegularBrandCard(brandObj, isFav) {
     const brandKey = String(brandObj.brand || "").trim();
 
@@ -190,6 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const intro = buildSponsorIntro(brandObj);
     const heroProduct = getHeroProduct(allBrandProducts);
     const thumbProducts = getThumbProducts(allBrandProducts, heroProduct);
+    const bgColor = getBrandThemeColor(brandObj.brand);
 
     const heroImage = heroProduct?.image_url || brandObj.logo || "";
     const heroTitle = heroProduct ? getProductTitle(heroProduct) : brandKey;
@@ -200,7 +222,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.className = "featured-brand-card";
 
     card.innerHTML = `
-      <div class="featured-brand-card__shell">
+      <div class="featured-brand-card__shell" style="--brand-bg:${escapeHtml(bgColor)};">
         <button class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}" aria-label="Favoritt-brand">
           <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
