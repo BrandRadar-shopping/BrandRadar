@@ -419,6 +419,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+function setupMobileAlphabetToggle() {
+  const toggleBtn = document.getElementById("brandAlphabetToggle");
+  const alphabet = document.getElementById("brandAlphabet");
+
+  if (!toggleBtn || !alphabet) return;
+
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function applyState() {
+    if (isMobile()) {
+      alphabet.hidden = true;
+      toggleBtn.hidden = false;
+      toggleBtn.setAttribute("aria-expanded", "false");
+      toggleBtn.classList.remove("is-open");
+    } else {
+      alphabet.hidden = false;
+      toggleBtn.hidden = true;
+      toggleBtn.setAttribute("aria-expanded", "true");
+      toggleBtn.classList.remove("is-open");
+    }
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const willOpen = alphabet.hidden;
+    alphabet.hidden = !willOpen;
+    toggleBtn.setAttribute("aria-expanded", String(willOpen));
+    toggleBtn.classList.toggle("is-open", willOpen);
+  });
+
+  applyState();
+  window.addEventListener("resize", applyState);
+}
+  
   function renderBrands(brands, allProducts) {
     highlightGrid.innerHTML = "";
     brandGrid.innerHTML = "";
@@ -487,6 +520,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     initAlphabetFilter(brands, products);
     renderBrands(brands, products);
+    setupMobileAlphabetToggle();
 
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
