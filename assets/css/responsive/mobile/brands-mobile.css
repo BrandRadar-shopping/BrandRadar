@@ -32,6 +32,8 @@
     font-weight: 600;
   }
 
+
+   
   /* A–Å */
   body.is-brands-page .brand-alphabet {
     display: grid;
@@ -84,6 +86,39 @@
     letter-spacing: -0.03em;
   }
 
+body.is-brands-page .brand-alphabet-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  margin: 4px 14px 14px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 12px;
+  background: #fff;
+  color: #111827;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+body.is-brands-page .brand-alphabet-toggle::after {
+  content: "▾";
+  margin-left: 8px;
+  font-size: 0.82rem;
+  opacity: 0.75;
+  transition: transform 0.18s ease;
+}
+
+body.is-brands-page .brand-alphabet-toggle.is-open::after {
+  transform: rotate(180deg);
+}
+
+body.is-brands-page .brand-alphabet[hidden] {
+  display: none !important;
+}
+   
   /* =========================================
      SPONSORED BRANDS = FULL-WIDTH SLIDER
   ========================================= */
