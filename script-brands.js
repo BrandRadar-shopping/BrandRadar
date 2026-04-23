@@ -342,6 +342,64 @@ document.addEventListener("DOMContentLoaded", async () => {
     return card;
   }
 
+  function setupMobileHighlightDots() {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const grid = document.getElementById("highlight-grid");
+    if (!isMobile || !grid) return;
+
+    const oldDots = document.querySelector(".highlight-slider-dots");
+    if (oldDots) oldDots.remove();
+
+    const cards = Array.from(grid.querySelectorAll(".featured-brand-card"));
+    if (cards.length <= 1) return;
+
+    const dotsWrap = document.createElement("div");
+    dotsWrap.className = "highlight-slider-dots";
+
+    const dots = cards.map((_, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = `highlight-slider-dot${index === 0 ? " is-active" : ""}`;
+      dot.setAttribute("aria-label", `Gå til sponsede brand ${index + 1}`);
+      dot.style.border = "0";
+      dot.style.padding = "0";
+      dot.style.cursor = "pointer";
+      dot.addEventListener("click", () => {
+        const card = cards[index];
+        if (!card) return;
+        grid.scrollTo({
+          left: card.offsetLeft,
+          behavior: "smooth"
+        });
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    grid.insertAdjacentElement("afterend", dotsWrap);
+
+    function updateActiveDot() {
+      const scrollLeft = grid.scrollLeft;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.offsetLeft - scrollLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === closestIndex);
+      });
+    }
+
+    grid.addEventListener("scroll", updateActiveDot, { passive: true });
+    updateActiveDot();
+  }
+
   function initAlphabetFilter(allBrands, allProducts) {
     document.querySelectorAll(".brand-alphabet span").forEach((letterEl) => {
       letterEl.addEventListener("click", () => {
@@ -388,6 +446,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const card = createRegularBrandCard(brandObj, isFav);
       brandGrid.appendChild(card);
     });
+
+    setupMobileHighlightDots();
   }
 
   try {
@@ -439,6 +499,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderBrands(filtered, products);
       });
     }
+
+    window.addEventListener("resize", () => {
+      setupMobileHighlightDots();
+    });
   } catch (err) {
     console.error("❌ FEIL ved lasting av brands/products:", err);
   }
