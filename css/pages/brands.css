@@ -310,14 +310,13 @@
 }
 
 .featured-brand-card__hero-image {
-  width: auto;
-  height: auto;
-  max-width: 94%;
-  max-height: 94%;
+  width: 138%;
+  height: 138%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: center;
   display: block;
-  transform: scale(1.60);
   filter: drop-shadow(0 16px 22px rgba(15, 23, 42, 0.10));
 }
 
@@ -373,15 +372,13 @@
 }
 
 .featured-brand-card__thumb img {
-  width: auto;
-  height: auto;
-  max-width: 94%;
-  max-height: 90%;
+  width: 128%;
+  height: 128%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: center;
   display: block;
-  transform: scale(1.48);
-  transform-origin: center center;
 }
 
 .featured-brand-card__thumb:hover,
@@ -529,11 +526,11 @@
   }
 
   .featured-brand-card__hero-image {
-    width: auto;
-    height: auto;
-    max-width: 84%;
-    max-height: 80%;
-    transform: none;
+    width: 112%;
+    height: 112%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
   }
 
   .featured-brand-card__hero-caption {
@@ -566,10 +563,11 @@
   }
 
   .featured-brand-card__thumb img {
-    width: auto;
-    height: auto;
-    max-width: 82%;
-    max-height: 70%;
-    transform: none;
+    width: 112%;
+    height: 112%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
   }
 }
+_
