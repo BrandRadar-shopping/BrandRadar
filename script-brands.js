@@ -1,6 +1,6 @@
 // ======================================================
 // ✅ BrandRadar – Brands Page
-// Oppgradert featured sponsor-layout + stabil brand-grid
+// Featured sponsor cards refined closer to approved mockup
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -82,26 +82,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getHeroProduct(products = []) {
     if (!products.length) return null;
 
-    const withDiscount = products
-      .filter((p) => cleanPrice(p.discount) !== null && cleanPrice(p.discount) > 0)
-      .sort((a, b) => (cleanPrice(b.discount) || 0) - (cleanPrice(a.discount) || 0));
+    const byPriority = [...products].sort((a, b) => {
+      const ad = cleanPrice(a.discount) || 0;
+      const bd = cleanPrice(b.discount) || 0;
+      if (bd !== ad) return bd - ad;
 
-    if (withDiscount.length) return withDiscount[0];
+      const ar = parseFloat(String(a.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+      const br = parseFloat(String(b.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+      if (br !== ar) return br - ar;
 
-    const withRating = products
-      .filter((p) => {
-        const rating = parseFloat(String(p.rating || "").replace(",", ".").replace(/[^0-9.]/g, ""));
-        return Number.isFinite(rating);
-      })
-      .sort((a, b) => {
-        const ra = parseFloat(String(a.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-        const rb = parseFloat(String(b.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-        return rb - ra;
-      });
+      return 0;
+    });
 
-    if (withRating.length) return withRating[0];
-
-    return products[0];
+    return byPriority[0];
   }
 
   function getThumbProducts(products = [], heroProduct) {
@@ -115,8 +108,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       unique.push(p);
     });
 
+    const heroKey = heroProduct
+      ? String(heroProduct.id || heroProduct.product_id || heroProduct.product_url || getProductTitle(heroProduct)).trim()
+      : "";
+
     const ordered = heroProduct
-      ? [heroProduct, ...unique.filter((p) => String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim() !== String(heroProduct.id || heroProduct.product_id || heroProduct.product_url || getProductTitle(heroProduct)).trim())]
+      ? [heroProduct, ...unique.filter((p) => String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim() !== heroKey)]
       : unique;
 
     return ordered.slice(0, 5);
@@ -204,61 +201,63 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     card.innerHTML = `
       <div class="featured-brand-card__shell">
-        <span class="featured-brand-card__tag">Sponset</span>
-
         <button class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}" aria-label="Favoritt-brand">
           <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
           </svg>
         </button>
 
-        <div class="featured-brand-card__top">
-          <div class="featured-brand-card__intro">
+        <div class="featured-brand-card__rail">
+          <div class="featured-brand-card__brandhead">
             <div class="featured-brand-card__logo-wrap">
               <img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="featured-brand-card__logo">
             </div>
+            <span class="featured-brand-card__tag">Sponset</span>
+          </div>
 
-            <div class="featured-brand-card__eyebrow">Fremhevet brand</div>
-            <h3 class="featured-brand-card__title">${escapeHtml(brandKey)}</h3>
-            <p class="featured-brand-card__copy">${escapeHtml(intro)}</p>
+          <div class="featured-brand-card__top">
+            <div class="featured-brand-card__intro">
+              <div class="featured-brand-card__eyebrow">Fremhevet brand</div>
+              <h3 class="featured-brand-card__title">${escapeHtml(brandKey)}</h3>
+              <p class="featured-brand-card__copy">${escapeHtml(intro)}</p>
 
-            <a class="featured-brand-card__cta" href="brand-page.html?brand=${encodeURIComponent(brandKey)}">
-              Se alle ${escapeHtml(brandKey)}-produkter
+              <a class="featured-brand-card__cta" href="brand-page.html?brand=${encodeURIComponent(brandKey)}">
+                Se alle ${escapeHtml(brandKey)}-produkter
+              </a>
+            </div>
+
+            <a class="featured-brand-card__hero" href="${escapeHtml(heroLink)}">
+              <div class="featured-brand-card__hero-stage">
+                <img
+                  src="${escapeHtml(heroImage)}"
+                  alt="${escapeHtml(heroTitle)}"
+                  class="featured-brand-card__hero-image"
+                  data-hero-image
+                >
+              </div>
+
+              <div class="featured-brand-card__hero-caption">
+                <div class="featured-brand-card__hero-name" data-hero-title>${escapeHtml(heroTitle)}</div>
+                <div class="featured-brand-card__hero-price" data-hero-price>${escapeHtml(heroPrice)}</div>
+              </div>
             </a>
           </div>
 
-          <a class="featured-brand-card__hero" href="${escapeHtml(heroLink)}">
-            <div class="featured-brand-card__hero-media">
-              <img
-                src="${escapeHtml(heroImage)}"
-                alt="${escapeHtml(heroTitle)}"
-                class="featured-brand-card__hero-image"
-                data-hero-image
+          <div class="featured-brand-card__thumbs">
+            ${thumbProducts.map((product, index) => `
+              <button
+                type="button"
+                class="featured-brand-card__thumb ${index === 0 ? "is-active" : ""}"
+                data-thumb-image="${escapeHtml(product.image_url || "")}"
+                data-thumb-title="${escapeHtml(getProductTitle(product))}"
+                data-thumb-price="${escapeHtml(formatPrice(product.price))}"
+                data-thumb-link="${escapeHtml(getProductLink(product))}"
+                aria-label="${escapeHtml(getProductTitle(product))}"
               >
-            </div>
-
-            <div class="featured-brand-card__hero-meta">
-              <div class="featured-brand-card__hero-kicker">Utvalgt produkt</div>
-              <div class="featured-brand-card__hero-name" data-hero-title>${escapeHtml(heroTitle)}</div>
-              <div class="featured-brand-card__hero-price" data-hero-price>${escapeHtml(heroPrice)}</div>
-            </div>
-          </a>
-        </div>
-
-        <div class="featured-brand-card__thumbs">
-          ${thumbProducts.map((product, index) => `
-            <button
-              type="button"
-              class="featured-brand-card__thumb ${index === 0 ? "is-active" : ""}"
-              data-thumb-image="${escapeHtml(product.image_url || "")}"
-              data-thumb-title="${escapeHtml(getProductTitle(product))}"
-              data-thumb-price="${escapeHtml(formatPrice(product.price))}"
-              data-thumb-link="${escapeHtml(getProductLink(product))}"
-              aria-label="${escapeHtml(getProductTitle(product))}"
-            >
-              <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(getProductTitle(product))}">
-            </button>
-          `).join("")}
+                <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(getProductTitle(product))}">
+              </button>
+            `).join("")}
+          </div>
         </div>
       </div>
     `;
@@ -291,7 +290,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           setActiveThumb(btn);
         }
       });
-
       btn.addEventListener("focus", () => setActiveThumb(btn));
       btn.addEventListener("click", () => setActiveThumb(btn));
     });
@@ -325,11 +323,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         letterEl.classList.add("active");
 
         const letter = letterEl.dataset.letter;
-
         const filtered =
           letter === "all"
             ? allBrands
-            : allBrands.filter((b) => b.brand.toUpperCase().startsWith(letterEl.textContent.trim().toUpperCase()));
+            : allBrands.filter((b) =>
+                b.brand.toUpperCase().startsWith(letterEl.textContent.trim().toUpperCase())
+              );
 
         renderBrands(filtered, allProducts);
       });
