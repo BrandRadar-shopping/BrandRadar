@@ -32,8 +32,40 @@
     font-weight: 600;
   }
 
+  /* TOGGLE BUTTON */
+  body.is-brands-page .brand-alphabet-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 16px;
+    margin: 4px 14px 14px;
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    border-radius: 12px;
+    background: #fff;
+    color: #111827;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+  }
 
-   
+  body.is-brands-page .brand-alphabet-toggle::after {
+    content: "▾";
+    margin-left: 8px;
+    font-size: 0.82rem;
+    opacity: 0.75;
+    transition: transform 0.18s ease;
+  }
+
+  body.is-brands-page .brand-alphabet-toggle.is-open::after {
+    transform: rotate(180deg);
+  }
+
+  body.is-brands-page .brand-alphabet[hidden] {
+    display: none !important;
+  }
+
   /* A–Å */
   body.is-brands-page .brand-alphabet {
     display: grid;
@@ -86,85 +118,38 @@
     letter-spacing: -0.03em;
   }
 
-body.is-brands-page .brand-alphabet-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0 16px;
-  margin: 4px 14px 14px;
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  border-radius: 12px;
-  background: #fff;
-  color: #111827;
-  font-size: 0.92rem;
-  font-weight: 700;
-  line-height: 1;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-}
-
-body.is-brands-page .brand-alphabet-toggle::after {
-  content: "▾";
-  margin-left: 8px;
-  font-size: 0.82rem;
-  opacity: 0.75;
-  transition: transform 0.18s ease;
-}
-
-body.is-brands-page .brand-alphabet-toggle.is-open::after {
-  transform: rotate(180deg);
-}
-
-body.is-brands-page .brand-alphabet[hidden] {
-  display: none !important;
-}
-   
   /* =========================================
      SPONSORED BRANDS = FULL-WIDTH SLIDER
   ========================================= */
 
- body.is-brands-page .highlighted-brands .brand-grid,
-body.is-brands-page #highlight-grid {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 12px !important;
-
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-
-  scroll-snap-type: x mandatory;
-  scroll-padding-left: 0;
-  -webkit-overflow-scrolling: touch;
-
-  align-items: stretch !important;
-  scrollbar-width: none;
-}
-
-body.is-brands-page #highlight-grid::-webkit-scrollbar {
-  display: none;
-}
-
-body.is-brands-page .highlighted-brands .featured-brand-card,
-body.is-brands-page #highlight-grid .featured-brand-card {
-  flex: 0 0 100%;
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  scroll-snap-align: start;
-}
+  body.is-brands-page .highlighted-brands .brand-grid,
+  body.is-brands-page #highlight-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 0;
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch !important;
+    scrollbar-width: none;
+  }
 
   body.is-brands-page #highlight-grid::-webkit-scrollbar {
     display: none;
   }
 
-  body.is-brands-page .highlighted-brands .featured-brand-card {
+  body.is-brands-page .highlighted-brands .featured-brand-card,
+  body.is-brands-page #highlight-grid .featured-brand-card {
+    flex: 0 0 100%;
     width: 100%;
-    min-width: 0;
+    min-width: 100%;
+    max-width: 100%;
     scroll-snap-align: start;
   }
 
