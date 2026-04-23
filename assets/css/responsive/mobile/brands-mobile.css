@@ -88,25 +88,40 @@
      SPONSORED BRANDS = FULL-WIDTH SLIDER
   ========================================= */
 
-  body.is-brands-page .highlighted-brands .brand-grid,
-  body.is-brands-page #highlight-grid {
-    display: grid !important;
-    grid-auto-flow: column !important;
-    grid-auto-columns: 100% !important;
-    gap: 12px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 0;
-    -webkit-overflow-scrolling: touch;
-    align-items: stretch !important;
-    justify-items: stretch !important;
-    scrollbar-width: none;
-  }
+ body.is-brands-page .highlighted-brands .brand-grid,
+body.is-brands-page #highlight-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  -webkit-overflow-scrolling: touch;
+
+  align-items: stretch !important;
+  scrollbar-width: none;
+}
+
+body.is-brands-page #highlight-grid::-webkit-scrollbar {
+  display: none;
+}
+
+body.is-brands-page .highlighted-brands .featured-brand-card,
+body.is-brands-page #highlight-grid .featured-brand-card {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  scroll-snap-align: start;
+}
 
   body.is-brands-page #highlight-grid::-webkit-scrollbar {
     display: none;
