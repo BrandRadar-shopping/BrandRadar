@@ -312,12 +312,12 @@
 .featured-brand-card__hero-image {
   width: auto;
   height: auto;
-  max-width: 95%;
-  max-height: 95%;
+  max-width: 94%;
+  max-height: 94%;
   object-fit: contain;
   object-position: center;
   display: block;
-  transform: none;
+  transform: scale(1.60);
   filter: drop-shadow(0 16px 22px rgba(15, 23, 42, 0.10));
 }
 
@@ -375,12 +375,13 @@
 .featured-brand-card__thumb img {
   width: auto;
   height: auto;
-  max-width: 92%;
-  max-height: 88%;
+  max-width: 94%;
+  max-height: 90%;
   object-fit: contain;
   object-position: center;
   display: block;
-  transform: none;
+  transform: scale(1.48);
+  transform-origin: center center;
 }
 
 .featured-brand-card__thumb:hover,
