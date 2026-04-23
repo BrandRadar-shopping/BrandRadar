@@ -1,44 +1,43 @@
 // ======================================================
 // ✅ BrandRadar – Brands Page
-// Standard cards i "Alle brands"
-// Premium sponsored cards i "Fremhevede brands" på desktop
-// Mobil: trygg fallback til vanlige cards
+// Oppgradert featured sponsor-layout + stabil brand-grid
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const BRAND_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
-  const BRAND_SHEET_NAME = "Ark 1";
+  const BRANDS_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
+  const BRANDS_SHEET_NAME = "Ark 1";
 
-  const PRODUCT_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const PRODUCT_SHEET_NAME = "BrandRadarProdukter";
+  const PRODUCTS_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const PRODUCTS_SHEET_NAME = "BrandRadarProdukter";
 
   const highlightGrid = document.getElementById("highlight-grid");
   const brandGrid = document.getElementById("brand-grid");
   const searchInput = document.getElementById("brandSearch");
-  const desktopFeaturedQuery = window.matchMedia("(min-width: 769px)");
 
-  let allBrands = [];
-  let allProducts = [];
+  if (!highlightGrid || !brandGrid) return;
 
-  // ------------------------------------------------------
-  // 🩶 Favoritt-ikonet skal alltid være synlig
-  // ------------------------------------------------------
   const forceHeartStyles = document.createElement("style");
   forceHeartStyles.textContent = `
     .brand-card { position: relative; }
-    .brand-card .fav-icon.always-visible {
+    .brand-card .fav-icon.always-visible,
+    .featured-brand-card .fav-icon.always-visible {
       opacity: 1 !important;
       visibility: visible !important;
       pointer-events: auto !important;
     }
-    .brand-card:hover .fav-icon.always-visible { opacity: 1 !important; }
-    .brand-card .fav-icon.always-visible .heart-icon {
+    .brand-card:hover .fav-icon.always-visible,
+    .featured-brand-card:hover .fav-icon.always-visible {
+      opacity: 1 !important;
+    }
+    .brand-card .fav-icon.always-visible .heart-icon,
+    .featured-brand-card .fav-icon.always-visible .heart-icon {
       stroke: #222;
       fill: transparent;
       stroke-width: 1.4px;
       transition: .22s ease;
     }
-    .brand-card .fav-icon.always-visible.active .heart-icon {
+    .brand-card .fav-icon.always-visible.active .heart-icon,
+    .featured-brand-card .fav-icon.always-visible.active .heart-icon {
       fill: #ff1f3d;
       stroke: #ff1f3d;
     }
@@ -46,11 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.head.appendChild(forceHeartStyles);
 
   function normalizeBrand(value) {
-    return String(value || "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .replace(/&/g, "and");
+    return String(value || "").trim().toLowerCase();
   }
 
   function escapeHtml(value) {
@@ -63,136 +58,90 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function cleanPrice(value) {
-    const parsed = parseFloat(
-      String(value ?? "").replace(/[^\d.,]/g, "").replace(",", ".")
-    );
-    return Number.isFinite(parsed) ? parsed : 0;
+    const n = parseFloat(String(value ?? "").replace(/[^\d.,]/g, "").replace(",", "."));
+    return Number.isFinite(n) ? n : null;
   }
 
   function formatPrice(value) {
     const n = cleanPrice(value);
-    if (!n) return "";
+    if (n == null) return "";
     return `${new Intl.NumberFormat("nb-NO").format(Math.round(n))} kr`;
   }
 
   function getProductTitle(product) {
-    return (
-      product.title ||
-      product.product_name ||
-      product.name ||
-      "Uten navn"
-    );
+    return product.title || product.product_name || product.name || "Produkt";
   }
 
-  function getProductImage(product) {
-    return (
-      product.image_url ||
-      product.image2 ||
-      product.image3 ||
-      product.image4 ||
-      ""
-    );
-  }
-
-  function getProductDestination(product) {
+  function getProductLink(product) {
     const id = String(product.id || product.product_id || "").trim();
-    if (id) {
-      return `product.html?id=${encodeURIComponent(id)}`;
-    }
-
-    const external = String(product.product_url || "").trim();
-    if (/^https?:\/\//i.test(external)) return external;
-
+    if (id) return `product.html?id=${encodeURIComponent(id)}`;
+    if (product.product_url) return product.product_url;
     return "#";
   }
 
-  function getBrandIntro(brand) {
-    return (
-      brand.about ||
-      brand.description ||
-      `${brand.brand} er valgt ut som fremhevet brand akkurat nå. Utforsk utvalgte produkter og få en rask oversikt over hva som gjør brandet interessant akkurat nå.`
-    );
+  function getHeroProduct(products = []) {
+    if (!products.length) return null;
+
+    const withDiscount = products
+      .filter((p) => cleanPrice(p.discount) !== null && cleanPrice(p.discount) > 0)
+      .sort((a, b) => (cleanPrice(b.discount) || 0) - (cleanPrice(a.discount) || 0));
+
+    if (withDiscount.length) return withDiscount[0];
+
+    const withRating = products
+      .filter((p) => {
+        const rating = parseFloat(String(p.rating || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+        return Number.isFinite(rating);
+      })
+      .sort((a, b) => {
+        const ra = parseFloat(String(a.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+        const rb = parseFloat(String(b.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
+        return rb - ra;
+      });
+
+    if (withRating.length) return withRating[0];
+
+    return products[0];
   }
 
-  function getPaletteForBrand(name) {
-    const palettes = [
-      {
-        surface: "#fff8f1",
-        surface2: "#f5eadc",
-        line: "rgba(166,106,44,0.18)",
-        accent: "#8f5a25",
-        badge: "#8f5a25"
-      },
-      {
-        surface: "#fffaf5",
-        surface2: "#efe3d6",
-        line: "rgba(146,97,61,0.18)",
-        accent: "#8e5c3c",
-        badge: "#8e5c3c"
-      },
-      {
-        surface: "#fffaf7",
-        surface2: "#f3e7de",
-        line: "rgba(150,104,86,0.18)",
-        accent: "#936552",
-        badge: "#936552"
-      },
-      {
-        surface: "#fffdf8",
-        surface2: "#efe8d8",
-        line: "rgba(143,118,68,0.18)",
-        accent: "#8a7243",
-        badge: "#8a7243"
-      }
-    ];
+  function getThumbProducts(products = [], heroProduct) {
+    const unique = [];
+    const seen = new Set();
 
-    let hash = 0;
-    const text = String(name || "");
-    for (let i = 0; i < text.length; i++) {
-      hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
-    }
-    return palettes[hash % palettes.length];
+    products.forEach((p) => {
+      const key = String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim();
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      unique.push(p);
+    });
+
+    const ordered = heroProduct
+      ? [heroProduct, ...unique.filter((p) => String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim() !== String(heroProduct.id || heroProduct.product_id || heroProduct.product_url || getProductTitle(heroProduct)).trim())]
+      : unique;
+
+    return ordered.slice(0, 5);
   }
 
-  function getProductsForBrand(brandName) {
-    const target = normalizeBrand(brandName);
-
-    return allProducts
-      .filter(p => normalizeBrand(p.brand) === target)
-      .filter(p => getProductImage(p))
-      .sort((a, b) => cleanPrice(b.price) - cleanPrice(a.price));
-  }
-
-  // ------------------------------------------------------
-  // ✅ Sync hjerter for samme brand i hele DOM
-  // ------------------------------------------------------
   function syncBrandHearts(brandKey, isActive) {
-    document.querySelectorAll(".fav-icon[data-brand]").forEach(el => {
+    document.querySelectorAll(".fav-icon[data-brand]").forEach((el) => {
       if (String(el.dataset.brand || "").trim() === brandKey) {
         el.classList.toggle("active", isActive);
       }
     });
   }
 
-  function toggleBrandFavoriteState(brandKey) {
-    if (window.toggleBrandFavorite) window.toggleBrandFavorite(brandKey);
+  function buildSponsorIntro(brandObj) {
+    if (brandObj.about) return brandObj.about;
+    if (brandObj.description) return brandObj.description;
 
-    const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
-    const isNowFav = updatedFavs.includes(brandKey);
-
-    syncBrandHearts(brandKey, isNowFav);
-
-    if (window.updateFavoriteCounter) window.updateFavoriteCounter();
+    return `${brandObj.brand} er valgt ut som fremhevet brand akkurat nå. Utforsk utvalgte produkter og få en rask oversikt over hva som gjør brandet interessant akkurat nå.`;
   }
 
-  // ------------------------------------------------------
-  // 🧩 Standard kort for "Alle brands"
-  // ------------------------------------------------------
-  function createStandardBrandCard(brand, isFav) {
-    const brandKey = String(brand.brand || "").trim();
+  function createRegularBrandCard(brandObj, isFav) {
+    const brandKey = String(brandObj.brand || "").trim();
 
     const card = document.createElement("div");
-    card.classList.add("brand-card");
+    card.className = "brand-card";
 
     card.innerHTML = `
       <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}">
@@ -201,303 +150,269 @@ document.addEventListener("DOMContentLoaded", async () => {
         </svg>
       </span>
 
-      <img src="${escapeHtml(brand.logo)}" alt="${escapeHtml(brandKey)}" class="brand-logo">
+      <img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="brand-logo">
       <h3>${escapeHtml(brandKey)}</h3>
-      <p>${escapeHtml(brand.description || "")}</p>
+      <p>${escapeHtml(brandObj.description || "")}</p>
       <a class="brand-btn">Se produkter →</a>
     `;
 
-    card.querySelector(".brand-btn")?.addEventListener("click", e => {
+    card.querySelector(".brand-btn")?.addEventListener("click", (e) => {
       e.stopPropagation();
       window.location.href = `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
     });
 
-    card.addEventListener("click", () => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".fav-icon")) return;
+      if (e.target.closest(".brand-btn")) return;
       window.location.href = `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
     });
 
-    card.querySelector(".fav-icon")?.addEventListener("click", e => {
+    const heart = card.querySelector(".fav-icon");
+    heart?.addEventListener("click", (e) => {
       e.stopPropagation();
-      toggleBrandFavoriteState(brandKey);
+
+      if (window.toggleBrandFavorite) {
+        window.toggleBrandFavorite(brandKey);
+      }
+
+      const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
+      const isNowFav = updatedFavs.includes(brandKey);
+
+      syncBrandHearts(brandKey, isNowFav);
+
+      if (window.updateFavoriteCounter) {
+        window.updateFavoriteCounter();
+      }
     });
 
     return card;
   }
 
-  // ------------------------------------------------------
-  // 💎 Premium featured card for desktop
-  // ------------------------------------------------------
-  function createFeaturedPremiumCard(brand, isFav) {
-    const brandKey = String(brand.brand || "").trim();
-    const products = getProductsForBrand(brandKey).slice(0, 6);
-    const heroProduct = products[0] || null;
-    const thumbProducts = products.slice(0, 5);
-    const palette = getPaletteForBrand(brandKey);
+  function createFeaturedBrandCard(brandObj, allBrandProducts, isFav) {
+    const brandKey = String(brandObj.brand || "").trim();
+    const intro = buildSponsorIntro(brandObj);
+    const heroProduct = getHeroProduct(allBrandProducts);
+    const thumbProducts = getThumbProducts(allBrandProducts, heroProduct);
+
+    const heroImage = heroProduct?.image_url || brandObj.logo || "";
+    const heroTitle = heroProduct ? getProductTitle(heroProduct) : brandKey;
+    const heroPrice = heroProduct ? formatPrice(heroProduct.price) : "";
+    const heroLink = heroProduct ? getProductLink(heroProduct) : `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
 
     const card = document.createElement("article");
-    card.className = "brand-card brand-card--featured-premium";
-    card.style.setProperty("--featured-surface", palette.surface);
-    card.style.setProperty("--featured-surface-2", palette.surface2);
-    card.style.setProperty("--featured-line", palette.line);
-    card.style.setProperty("--featured-accent", palette.accent);
-    card.style.setProperty("--featured-badge", palette.badge);
-
-    const intro = getBrandIntro(brand);
-    const heroTitle = heroProduct ? getProductTitle(heroProduct) : `${brandKey} utvalgte produkter`;
-    const heroPrice = heroProduct ? formatPrice(heroProduct.price) : "";
-    const heroImg = heroProduct ? getProductImage(heroProduct) : (brand.logo || "");
-    const heroDestination = heroProduct ? getProductDestination(heroProduct) : `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
+    card.className = "featured-brand-card";
 
     card.innerHTML = `
-      <div class="featured-brand-premium">
-        <div class="featured-brand-premium__badge-row">
-          <span class="featured-brand-premium__badge">Sponset</span>
+      <div class="featured-brand-card__shell">
+        <span class="featured-brand-card__tag">Sponset</span>
 
-          <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}">
-            <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
-            </svg>
-          </span>
+        <button class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}" aria-label="Favoritt-brand">
+          <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
+          </svg>
+        </button>
+
+        <div class="featured-brand-card__top">
+          <div class="featured-brand-card__intro">
+            <div class="featured-brand-card__logo-wrap">
+              <img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="featured-brand-card__logo">
+            </div>
+
+            <div class="featured-brand-card__eyebrow">Fremhevet brand</div>
+            <h3 class="featured-brand-card__title">${escapeHtml(brandKey)}</h3>
+            <p class="featured-brand-card__copy">${escapeHtml(intro)}</p>
+
+            <a class="featured-brand-card__cta" href="brand-page.html?brand=${encodeURIComponent(brandKey)}">
+              Se alle ${escapeHtml(brandKey)}-produkter
+            </a>
+          </div>
+
+          <a class="featured-brand-card__hero" href="${escapeHtml(heroLink)}">
+            <div class="featured-brand-card__hero-media">
+              <img
+                src="${escapeHtml(heroImage)}"
+                alt="${escapeHtml(heroTitle)}"
+                class="featured-brand-card__hero-image"
+                data-hero-image
+              >
+            </div>
+
+            <div class="featured-brand-card__hero-meta">
+              <div class="featured-brand-card__hero-kicker">Utvalgt produkt</div>
+              <div class="featured-brand-card__hero-name" data-hero-title>${escapeHtml(heroTitle)}</div>
+              <div class="featured-brand-card__hero-price" data-hero-price>${escapeHtml(heroPrice)}</div>
+            </div>
+          </a>
         </div>
 
-        <div class="featured-brand-premium__grid">
-          <div class="featured-brand-premium__copy">
-            <div class="featured-brand-premium__brand-head">
-              <div class="featured-brand-premium__logo-wrap">
-                <img src="${escapeHtml(brand.logo)}" alt="${escapeHtml(brandKey)}" class="featured-brand-premium__logo">
-              </div>
-
-              <div class="featured-brand-premium__brand-meta">
-                <p class="featured-brand-premium__eyebrow">Fremhevet brand</p>
-                <h3>${escapeHtml(brandKey)}</h3>
-              </div>
-            </div>
-
-            <p class="featured-brand-premium__intro">${escapeHtml(intro)}</p>
-
-            <div class="featured-brand-premium__actions">
-              <a class="brand-btn featured-brand-premium__cta" href="brand-page.html?brand=${encodeURIComponent(brandKey)}">Se alle produkter</a>
-            </div>
-          </div>
-
-          <div class="featured-brand-premium__showcase">
-            <a class="featured-brand-premium__hero" href="${escapeHtml(heroDestination)}">
-              <div class="featured-brand-premium__hero-media">
-                <img
-                  src="${escapeHtml(heroImg)}"
-                  alt="${escapeHtml(heroTitle)}"
-                  class="featured-brand-premium__hero-image"
-                >
-              </div>
-
-              <div class="featured-brand-premium__hero-info">
-                <p class="featured-brand-premium__hero-kicker">Utvalgt produkt</p>
-                <h4 class="featured-brand-premium__hero-title">${escapeHtml(heroTitle)}</h4>
-                ${heroPrice ? `<p class="featured-brand-premium__hero-price">${escapeHtml(heroPrice)}</p>` : ""}
-              </div>
-            </a>
-
-            <div class="featured-brand-premium__thumbs">
-              ${thumbProducts.map((product, index) => {
-                const title = getProductTitle(product);
-                const price = formatPrice(product.price);
-                const image = getProductImage(product);
-                const destination = getProductDestination(product);
-
-                return `
-                  <button
-                    type="button"
-                    class="featured-brand-premium__thumb ${index === 0 ? "is-active" : ""}"
-                    data-image="${escapeHtml(image)}"
-                    data-title="${escapeHtml(title)}"
-                    data-price="${escapeHtml(price)}"
-                    data-link="${escapeHtml(destination)}"
-                    aria-label="${escapeHtml(title)}"
-                  >
-                    <img src="${escapeHtml(image)}" alt="${escapeHtml(title)}">
-                  </button>
-                `;
-              }).join("")}
-            </div>
-          </div>
+        <div class="featured-brand-card__thumbs">
+          ${thumbProducts.map((product, index) => `
+            <button
+              type="button"
+              class="featured-brand-card__thumb ${index === 0 ? "is-active" : ""}"
+              data-thumb-image="${escapeHtml(product.image_url || "")}"
+              data-thumb-title="${escapeHtml(getProductTitle(product))}"
+              data-thumb-price="${escapeHtml(formatPrice(product.price))}"
+              data-thumb-link="${escapeHtml(getProductLink(product))}"
+              aria-label="${escapeHtml(getProductTitle(product))}"
+            >
+              <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(getProductTitle(product))}">
+            </button>
+          `).join("")}
         </div>
       </div>
     `;
 
-    card.querySelector(".fav-icon")?.addEventListener("click", e => {
-      e.stopPropagation();
-      e.preventDefault();
-      toggleBrandFavoriteState(brandKey);
+    const heroLinkEl = card.querySelector(".featured-brand-card__hero");
+    const heroImageEl = card.querySelector("[data-hero-image]");
+    const heroTitleEl = card.querySelector("[data-hero-title]");
+    const heroPriceEl = card.querySelector("[data-hero-price]");
+    const thumbs = card.querySelectorAll(".featured-brand-card__thumb");
+
+    function setActiveThumb(btn) {
+      thumbs.forEach((thumb) => thumb.classList.remove("is-active"));
+      btn.classList.add("is-active");
+
+      const nextImage = btn.dataset.thumbImage || "";
+      const nextTitle = btn.dataset.thumbTitle || "";
+      const nextPrice = btn.dataset.thumbPrice || "";
+      const nextLink = btn.dataset.thumbLink || "#";
+
+      if (heroImageEl) heroImageEl.src = nextImage;
+      if (heroImageEl) heroImageEl.alt = nextTitle;
+      if (heroTitleEl) heroTitleEl.textContent = nextTitle;
+      if (heroPriceEl) heroPriceEl.textContent = nextPrice;
+      if (heroLinkEl) heroLinkEl.href = nextLink;
+    }
+
+    thumbs.forEach((btn) => {
+      btn.addEventListener("mouseenter", () => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          setActiveThumb(btn);
+        }
+      });
+
+      btn.addEventListener("focus", () => setActiveThumb(btn));
+      btn.addEventListener("click", () => setActiveThumb(btn));
     });
 
-    const heroLink = card.querySelector(".featured-brand-premium__hero");
-    const heroImage = card.querySelector(".featured-brand-premium__hero-image");
-    const heroTitleEl = card.querySelector(".featured-brand-premium__hero-title");
-    const heroPriceEl = card.querySelector(".featured-brand-premium__hero-price");
-    const thumbs = card.querySelectorAll(".featured-brand-premium__thumb");
+    const heart = card.querySelector(".fav-icon");
+    heart?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    thumbs.forEach(thumb => {
-      const activate = () => {
-        thumbs.forEach(t => t.classList.remove("is-active"));
-        thumb.classList.add("is-active");
+      if (window.toggleBrandFavorite) {
+        window.toggleBrandFavorite(brandKey);
+      }
 
-        const nextImage = thumb.dataset.image || "";
-        const nextTitle = thumb.dataset.title || "";
-        const nextPrice = thumb.dataset.price || "";
-        const nextLink = thumb.dataset.link || "#";
+      const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
+      const isNowFav = updatedFavs.includes(brandKey);
 
-        if (heroImage) {
-          heroImage.src = nextImage;
-          heroImage.alt = nextTitle;
-        }
+      syncBrandHearts(brandKey, isNowFav);
 
-        if (heroTitleEl) {
-          heroTitleEl.textContent = nextTitle;
-        }
-
-        if (heroPriceEl) {
-          heroPriceEl.textContent = nextPrice;
-          heroPriceEl.style.display = nextPrice ? "block" : "none";
-        }
-
-        if (heroLink) {
-          heroLink.href = nextLink;
-        }
-      };
-
-      thumb.addEventListener("mouseenter", activate);
-      thumb.addEventListener("focus", activate);
-      thumb.addEventListener("click", activate);
+      if (window.updateFavoriteCounter) {
+        window.updateFavoriteCounter();
+      }
     });
 
     return card;
   }
 
-  // ------------------------------------------------------
-  // 🔁 Render
-  // ------------------------------------------------------
-  function renderBrands(brands) {
-    if (!highlightGrid || !brandGrid) return;
+  function initAlphabetFilter(allBrands, allProducts) {
+    document.querySelectorAll(".brand-alphabet span").forEach((letterEl) => {
+      letterEl.addEventListener("click", () => {
+        document.querySelectorAll(".brand-alphabet span").forEach((x) => x.classList.remove("active"));
+        letterEl.classList.add("active");
 
+        const letter = letterEl.dataset.letter;
+
+        const filtered =
+          letter === "all"
+            ? allBrands
+            : allBrands.filter((b) => b.brand.toUpperCase().startsWith(letterEl.textContent.trim().toUpperCase()));
+
+        renderBrands(filtered, allProducts);
+      });
+    });
+  }
+
+  function renderBrands(brands, allProducts) {
     highlightGrid.innerHTML = "";
     brandGrid.innerHTML = "";
 
     const favList = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
-    const showPremiumFeatured = desktopFeaturedQuery.matches;
 
-    brands.forEach(brand => {
-      const brandKey = String(brand.brand || "").trim();
+    const highlightedBrands = brands.filter((b) => b.highlight);
+    const regularBrands = brands;
+
+    highlightedBrands.forEach((brandObj) => {
+      const brandKey = String(brandObj.brand || "").trim();
       const isFav = favList.includes(brandKey);
 
-      // Alle brands
-      brandGrid.appendChild(createStandardBrandCard(brand, isFav));
+      const relatedProducts = allProducts.filter(
+        (p) => normalizeBrand(p.brand) === normalizeBrand(brandObj.brand)
+      );
 
-      // Fremhevede brands
-      if (brand.highlight) {
-        const featuredCard = showPremiumFeatured
-          ? createFeaturedPremiumCard(brand, isFav)
-          : createStandardBrandCard(brand, isFav);
-
-        highlightGrid.appendChild(featuredCard);
-      }
+      const featuredCard = createFeaturedBrandCard(brandObj, relatedProducts, isFav);
+      highlightGrid.appendChild(featuredCard);
     });
-  }
 
-  // ------------------------------------------------------
-  // 🔤 Alfabetfilter
-  // ------------------------------------------------------
-  function initAlphabetFilter(allBrandsSource) {
-    document.querySelectorAll(".brand-alphabet span").forEach(letterEl => {
-      letterEl.addEventListener("click", () => {
-        document.querySelectorAll(".brand-alphabet span").forEach(x => x.classList.remove("active"));
-        letterEl.classList.add("active");
-
-        const letter = letterEl.dataset.letter || letterEl.textContent || "";
-        const filtered =
-          letter === "all"
-            ? allBrandsSource
-            : allBrandsSource.filter(b =>
-                String(b.brand || "").toUpperCase().startsWith(letter.toUpperCase())
-              );
-
-        renderBrands(filtered);
-      });
+    regularBrands.forEach((brandObj) => {
+      const brandKey = String(brandObj.brand || "").trim();
+      const isFav = favList.includes(brandKey);
+      const card = createRegularBrandCard(brandObj, isFav);
+      brandGrid.appendChild(card);
     });
   }
 
   try {
-    const brandUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_SHEET_NAME}`;
-    const productUrl = `https://opensheet.elk.sh/${PRODUCT_SHEET_ID}/${PRODUCT_SHEET_NAME}`;
+    const brandsUrl = `https://opensheet.elk.sh/${BRANDS_SHEET_ID}/${BRANDS_SHEET_NAME}`;
+    const productsUrl = `https://opensheet.elk.sh/${PRODUCTS_SHEET_ID}/${PRODUCTS_SHEET_NAME}`;
 
     const [brandRows, productRows] = await Promise.all([
-      fetch(brandUrl).then(res => res.json()),
-      fetch(productUrl).then(res => res.json()).catch(() => [])
+      fetch(brandsUrl).then((res) => res.json()),
+      fetch(productsUrl).then((res) => res.json())
     ]);
 
-    allBrands = brandRows
-      .map(r => ({
-        brand: (r.brand || "").trim(),
-        logo: (r.logo || "").trim(),
-        description: (r.description || "").trim(),
-        homepage: (r.homepage_url || "").trim() || "#",
-        about: (r.about || "").trim(),
+    const brands = brandRows
+      .map((r) => ({
+        brand: String(r.brand || "").trim(),
+        logo: String(r.logo || "").trim(),
+        description: String(r.description || "").trim(),
+        homepage: String(r.homepage_url || "").trim() || "#",
+        about: String(r.about || "").trim(),
         highlight: String(r.highlight || "").toLowerCase() === "yes",
-        categories: r.categories ? r.categories.split(",").map(c => c.trim()) : []
+        categories: r.categories ? String(r.categories).split(",").map((c) => c.trim()) : []
       }))
-      .filter(b => b.brand);
+      .filter((b) => b.brand);
 
-    allProducts = (Array.isArray(productRows) ? productRows : [])
-      .map(p => ({
+    const products = productRows
+      .map((p) => ({
         ...p,
         id: String(p.id || p.product_id || "").trim(),
         title: getProductTitle(p),
         brand: String(p.brand || "").trim(),
-        image_url: getProductImage(p),
+        image_url: String(p.image_url || "").trim(),
         price: p.price || "",
-        product_url: p.product_url || ""
+        product_url: String(p.product_url || "").trim()
       }))
-      .filter(p => p.brand);
+      .filter((p) => p.brand && p.image_url);
 
-    localStorage.setItem("allBrandsData", JSON.stringify(allBrands));
+    localStorage.setItem("allBrandsData", JSON.stringify(brands));
 
-    initAlphabetFilter(allBrands);
-    renderBrands(allBrands);
+    initAlphabetFilter(brands, products);
+    renderBrands(brands, products);
 
     if (searchInput) {
-      searchInput.addEventListener("input", e => {
+      searchInput.addEventListener("input", (e) => {
         const search = String(e.target.value || "").toLowerCase().trim();
+
         const filtered = !search
-          ? allBrands
-          : allBrands.filter(b => b.brand.toLowerCase().includes(search));
+          ? brands
+          : brands.filter((b) => b.brand.toLowerCase().includes(search));
 
-        renderBrands(filtered);
+        renderBrands(filtered, products);
       });
-    }
-
-    const handleFeaturedModeChange = () => {
-      const search = String(searchInput?.value || "").toLowerCase().trim();
-      const activeLetterEl = document.querySelector(".brand-alphabet span.active");
-      const activeLetter = activeLetterEl?.dataset.letter || activeLetterEl?.textContent || "all";
-
-      let filtered = [...allBrands];
-
-      if (activeLetter !== "all") {
-        filtered = filtered.filter(b =>
-          String(b.brand || "").toUpperCase().startsWith(String(activeLetter).toUpperCase())
-        );
-      }
-
-      if (search) {
-        filtered = filtered.filter(b => b.brand.toLowerCase().includes(search));
-      }
-
-      renderBrands(filtered);
-    };
-
-    if (typeof desktopFeaturedQuery.addEventListener === "function") {
-      desktopFeaturedQuery.addEventListener("change", handleFeaturedModeChange);
-    } else if (typeof desktopFeaturedQuery.addListener === "function") {
-      desktopFeaturedQuery.addListener(handleFeaturedModeChange);
     }
   } catch (err) {
     console.error("❌ FEIL ved lasting av brands/products:", err);
