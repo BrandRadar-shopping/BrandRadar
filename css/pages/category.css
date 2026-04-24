@@ -1307,3 +1307,59 @@ body.is-category-page .filter-tag .close-tag {
     padding: 12px;
   }
 }
+
+/* DEALS HERO IMAGE PATCH */
+
+.collection-page--deals .deals-clean-hero__visual {
+  position: relative;
+  min-height: 260px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: visible;
+}
+
+.collection-page--deals .deals-clean-hero__visual::before,
+.collection-page--deals .deals-clean-product,
+.collection-page--deals .deals-clean-discount {
+  display: none !important;
+}
+
+.collection-page--deals .deals-clean-hero__image {
+  width: min(680px, 100%);
+  max-height: 285px;
+  object-fit: contain;
+  object-position: right center;
+  display: block;
+  filter: drop-shadow(0 18px 28px rgba(15, 23, 42, 0.08));
+}
+
+.collection-page--deals .deals-quick-nav__member {
+  display: none !important;
+}
+
+.collection-page--deals .deals-quick-nav__highlight {
+  background: #eaf6e5 !important;
+  border-color: #eaf6e5 !important;
+  color: #244622 !important;
+  font-weight: 750;
+}
+
+@media (max-width: 980px) {
+  .collection-page--deals .deals-clean-hero__image {
+    width: 100%;
+    max-height: 240px;
+    object-position: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .collection-page--deals .deals-clean-hero__visual {
+    min-height: 190px;
+  }
+
+  .collection-page--deals .deals-clean-hero__image {
+    max-height: 190px;
+  }
+}
