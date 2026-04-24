@@ -742,227 +742,213 @@ document.addEventListener("DOMContentLoaded", async () => {
     return hero;
   }
 
-  function buildDealHighlights(products) {
-    if (!products.length) return null;
+ function getDealPriceParts(product) {
+  const price = parseNumber(product.price);
+  const oldPrice = parseNumber(product.old_price);
 
-    const sorted = [...products].sort((a, b) => {
-      const aDisc = parseNumber(a.discount) || 0;
-      const bDisc = parseNumber(b.discount) || 0;
+  let discount = parseNumber(product.discount);
 
-      if (bDisc !== aDisc) return bDisc - aDisc;
-      return getEffectivePrice(a) - getEffectivePrice(b);
-    });
+  if ((!discount || discount <= 0) && price && oldPrice && oldPrice > price) {
+    discount = Math.round(((oldPrice - price) / oldPrice) * 100);
+  }
 
-    const picks = sorted.slice(0, 5);
-    if (!picks.length) return null;
+  if ((!oldPrice || oldPrice <= price) && price && discount && discount > 0) {
+    const estimatedOld = price / (1 - discount / 100);
+    return {
+      price,
+      oldPrice: estimatedOld,
+      discount: Math.round(discount)
+    };
+  }
 
-    const labels = [
-      "Ukens beste deal",
-      "Sterkt tilbud",
-      "Mest verdi",
-      "Verdt å se",
-      "Flere deals"
-    ];
+  return {
+    price,
+    oldPrice,
+    discount: discount ? Math.round(discount) : 0
+  };
+}
 
-    function attachNavigate(el, product) {
-      el.addEventListener("click", () => {
-        if (product.product_url) {
-          window.open(product.product_url, "_blank", "noopener");
-          return;
-        }
+function buildDealHighlights(products) {
+  if (!products.length) return null;
 
-        const id = product.id || product.product_id || "";
-        if (id) {
-          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-        }
-      });
+  const sorted = [...products].sort((a, b) => {
+    const aParts = getDealPriceParts(a);
+    const bParts = getDealPriceParts(b);
+
+    if (bParts.discount !== aParts.discount) {
+      return bParts.discount - aParts.discount;
     }
 
-    function buildDesktopCard(product, index) {
-      const discount = parseNumber(product.discount) || 0;
-      const newPrice = parseNumber(product.price);
-      const oldPrice = parseNumber(product.old_price);
-      const safeBrand = product.brand || "BrandRadar";
-      const safeTitle = product.title || "Produkt";
+    return getEffectivePrice(a) - getEffectivePrice(b);
+  });
 
-      const card = document.createElement("article");
-      card.className = `deals-promo-card ${index === 0 ? "deals-promo-card--hero" : "deals-promo-card--small"}`;
+  const picks = sorted.slice(0, 2);
+  if (!picks.length) return null;
 
-      card.innerHTML = `
-        <div class="deals-promo-card__media">
-          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-        </div>
-
-        <div class="deals-promo-card__overlay"></div>
-
-        <div class="deals-promo-card__content">
-          <span class="deals-promo-card__eyebrow">${labels[index] || "Deal"}</span>
-          <h3 class="deals-promo-card__title">${safeTitle}</h3>
-          <p class="deals-promo-card__meta">${safeBrand}</p>
-
-          <div class="deals-promo-card__bottom">
-            <div class="deals-promo-card__pricing">
-              ${newPrice != null ? `<span class="deals-promo-card__price">${formatPrice(newPrice)}</span>` : ""}
-              ${oldPrice != null ? `<span class="deals-promo-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-            </div>
-
-            <div class="deals-promo-card__cta-wrap">
-              ${discount ? `<span class="deals-promo-card__discount">-${Math.round(discount)}%</span>` : ""}
-              <span class="deals-promo-card__cta">Shop now</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-      attachNavigate(card, product);
-      return card;
-    }
-
-    function buildMobileHeroCard(product, index) {
-      const discount = parseNumber(product.discount) || 0;
-      const newPrice = parseNumber(product.price);
-      const oldPrice = parseNumber(product.old_price);
-      const safeBrand = product.brand || "BrandRadar";
-      const safeTitle = product.title || "Produkt";
-
-      const card = document.createElement("article");
-      card.className = "deals-mobile-hero-card";
-
-      card.innerHTML = `
-        <div class="deals-mobile-hero-card__media">
-          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-        </div>
-
-        <div class="deals-mobile-hero-card__overlay"></div>
-
-        <div class="deals-mobile-hero-card__content">
-          <span class="deals-mobile-hero-card__eyebrow">${labels[index] || "Deal"}</span>
-          <h3 class="deals-mobile-hero-card__title">${safeTitle}</h3>
-          <p class="deals-mobile-hero-card__meta">${safeBrand}</p>
-
-          <div class="deals-mobile-hero-card__bottom">
-            <div class="deals-mobile-hero-card__pricing">
-              ${newPrice != null ? `<span class="deals-mobile-hero-card__price">${formatPrice(newPrice)}</span>` : ""}
-              ${oldPrice != null ? `<span class="deals-mobile-hero-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-            </div>
-
-            <div class="deals-mobile-hero-card__cta-wrap">
-              ${discount ? `<span class="deals-mobile-hero-card__discount">-${Math.round(discount)}%</span>` : ""}
-              <span class="deals-mobile-hero-card__cta">Shop now</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-      attachNavigate(card, product);
-      return card;
-    }
-
-    function buildMobileRailCard(product, index) {
-      const discount = parseNumber(product.discount) || 0;
-      const newPrice = parseNumber(product.price);
-      const oldPrice = parseNumber(product.old_price);
-      const safeBrand = product.brand || "BrandRadar";
-      const safeTitle = product.title || "Produkt";
-
-      const card = document.createElement("article");
-      card.className = "deals-mobile-rail-card";
-
-      card.innerHTML = `
-        <div class="deals-mobile-rail-card__media">
-          <img src="${product.image_url || ""}" alt="${safeTitle}" loading="lazy">
-        </div>
-
-        <div class="deals-mobile-rail-card__overlay"></div>
-
-        <div class="deals-mobile-rail-card__content">
-          <span class="deals-mobile-rail-card__eyebrow">${labels[index] || "Deal"}</span>
-          <h3 class="deals-mobile-rail-card__title">${safeTitle}</h3>
-          <p class="deals-mobile-rail-card__meta">${safeBrand}</p>
-
-          <div class="deals-mobile-rail-card__bottom">
-            <div class="deals-mobile-rail-card__pricing">
-              ${newPrice != null ? `<span class="deals-mobile-rail-card__price">${formatPrice(newPrice)}</span>` : ""}
-              ${oldPrice != null ? `<span class="deals-mobile-rail-card__oldprice">${formatPrice(oldPrice)}</span>` : ""}
-            </div>
-
-            <div class="deals-mobile-rail-card__cta-wrap">
-              ${discount ? `<span class="deals-mobile-rail-card__discount">-${Math.round(discount)}%</span>` : ""}
-              <span class="deals-mobile-rail-card__cta">Shop now</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-      attachNavigate(card, product);
-      return card;
-    }
-
-    if (mobileMediaQuery.matches) {
-      const shell = document.createElement("section");
-      shell.className = "deals-mobile-top";
-
-      if (picks[0]) {
-        shell.appendChild(buildMobileHeroCard(picks[0], 0));
+  function attachNavigate(el, product) {
+    el.addEventListener("click", () => {
+      if (product.product_url) {
+        window.open(product.product_url, "_blank", "noopener");
+        return;
       }
 
-      if (picks.length > 1) {
-        const rail = document.createElement("div");
-        rail.className = "deals-mobile-rail";
-
-        picks.slice(1).forEach((product, idx) => {
-          rail.appendChild(buildMobileRailCard(product, idx + 1));
-        });
-
-        shell.appendChild(rail);
+      const id = product.id || product.product_id || "";
+      if (id) {
+        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
       }
-
-      return shell;
-    }
-
-    const shell = document.createElement("section");
-    shell.className = "deals-promo-shell";
-
-    const grid = document.createElement("div");
-    grid.className = `deals-promo-grid deals-promo-grid--count-${picks.length}`;
-
-    picks.forEach((product, index) => {
-      grid.appendChild(buildDesktopCard(product, index));
-    });
-
-    shell.appendChild(grid);
-    return shell;
-  }
-
-  function buildDealsTopZone(heroEl, highlightsEl) {
-    const section = document.createElement("section");
-    section.className = "deals-top-zone";
-
-    const inner = document.createElement("div");
-    inner.className = "deals-top-zone__inner";
-
-    if (heroEl) inner.appendChild(heroEl);
-    if (highlightsEl) inner.appendChild(highlightsEl);
-
-    const divider = document.createElement("div");
-    divider.className = "deals-top-zone-divider";
-
-    section.appendChild(inner);
-    section.appendChild(divider);
-
-    return section;
-  }
-
-  function insertBeforeFilterBar(elements = []) {
-    if (!filterBar) return;
-    const parent = filterBar.parentNode;
-    if (!parent) return;
-
-    elements.filter(Boolean).forEach(el => {
-      parent.insertBefore(el, filterBar);
     });
   }
 
+  function buildFeaturedCard(product, index) {
+    const parts = getDealPriceParts(product);
+    const safeBrand = product.brand || "BrandRadar";
+    const safeTitle = product.title || product.product_name || product.name || "Produkt";
+    const image = product.image_url || "";
+
+    const card = document.createElement("article");
+    card.className = "deals-featured-card";
+
+    card.innerHTML = `
+      <div class="deals-featured-card__media">
+        ${image ? `<img src="${image}" alt="${safeTitle}" loading="lazy">` : ""}
+      </div>
+
+      <div class="deals-featured-card__content">
+        <p class="deals-featured-card__brand">${safeBrand}</p>
+        <h3>${safeTitle}</h3>
+        <p class="deals-featured-card__desc">
+          ${index === 0 ? "Et sterkt tilbud valgt ut for deg." : "Populær deal akkurat nå."}
+        </p>
+
+        <div class="deals-featured-card__price-row">
+          ${parts.price ? `<span class="deals-featured-card__price">${formatPrice(parts.price)}</span>` : ""}
+          ${parts.oldPrice ? `<span class="deals-featured-card__oldprice">${formatPrice(parts.oldPrice)}</span>` : ""}
+          ${parts.discount ? `<span class="deals-featured-card__discount">-${parts.discount}%</span>` : ""}
+        </div>
+
+        <div class="deals-featured-card__actions">
+          <span class="deals-featured-card__button">Kjøp nå</span>
+          <span class="deals-featured-card__heart">♡</span>
+        </div>
+
+        <p class="deals-featured-card__note">Tilbudet kan endres hos butikken.</p>
+      </div>
+    `;
+
+    attachNavigate(card, product);
+    return card;
+  }
+
+  const shell = document.createElement("section");
+  shell.className = "deals-featured-section";
+
+  shell.innerHTML = `
+    <div class="deals-section-head">
+      <h3>Utvalgte deals</h3>
+      <a href="#deals-feed" class="deals-section-link">Se alle <span>→</span></a>
+    </div>
+  `;
+
+  const grid = document.createElement("div");
+  grid.className = "deals-featured-grid";
+
+  picks.forEach((product, index) => {
+    grid.appendChild(buildFeaturedCard(product, index));
+  });
+
+  shell.appendChild(grid);
+  return shell;
+}
+
+function buildDealsTopZone(heroEl, highlightsEl) {
+  const section = document.createElement("section");
+  section.className = "deals-top-zone";
+
+  const hero = document.createElement("section");
+  hero.className = "deals-clean-hero";
+
+  hero.innerHTML = `
+    <div class="deals-clean-hero__content">
+      <div class="deals-clean-hero__text">
+        <h2>De beste dealsene</h2>
+        <p>Oppdag sesongens beste tilbud fra dine favorittbrands.</p>
+
+        <div class="deals-clean-benefits">
+          <div class="deals-clean-benefit">
+            <span class="deals-clean-benefit__icon">◇</span>
+            <div>
+              <strong>Eksklusive deals</strong>
+              <span>Kun for medlemmer</span>
+            </div>
+          </div>
+
+          <div class="deals-clean-benefit">
+            <span class="deals-clean-benefit__icon">□</span>
+            <div>
+              <strong>Nye deals hver uke</strong>
+              <span>Friske tilbud kontinuerlig</span>
+            </div>
+          </div>
+
+          <div class="deals-clean-benefit">
+            <span class="deals-clean-benefit__icon">⌾</span>
+            <div>
+              <strong>100% trygt kjøp</strong>
+              <span>Sikre betalinger</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deals-clean-hero__visual" aria-hidden="true">
+        <div class="deals-clean-product deals-clean-product--shoe"></div>
+        <div class="deals-clean-product deals-clean-product--hoodie"></div>
+        <div class="deals-clean-product deals-clean-product--bottle"></div>
+        <div class="deals-clean-discount">
+          <span>Opptil</span>
+          <strong>-60%</strong>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const quickNav = document.createElement("section");
+  quickNav.className = "deals-quick-nav";
+  quickNav.innerHTML = `
+    <button class="is-active" type="button">Alle deals</button>
+    <button type="button">Sko</button>
+    <button type="button">Klær</button>
+    <button type="button">Tilbehør</button>
+    <button type="button">Sport</button>
+    <button type="button">Lifestyle</button>
+    <button type="button">Barn</button>
+    <button class="deals-quick-nav__member" type="button">Kun medlemmer 🔒</button>
+  `;
+
+  section.appendChild(hero);
+  section.appendChild(quickNav);
+
+  if (highlightsEl) {
+    section.appendChild(highlightsEl);
+  }
+
+  return section;
+}
+
+function insertBeforeFilterBar(elements = []) {
+  if (!filterBar) return;
+  const parent = filterBar.parentNode;
+  if (!parent) return;
+
+  elements.filter(Boolean).forEach(el => {
+    parent.insertBefore(el, filterBar);
+  });
+
+  const productsSection = document.querySelector(".category-products");
+  if (productsSection) {
+    productsSection.id = "deals-feed";
+  }
+}
   try {
     // ======================================================
     // COLLECTION MODE
