@@ -878,7 +878,7 @@ function buildDealsTopZone(heroEl, highlightsEl) {
             <span class="deals-clean-benefit__icon">◇</span>
             <div>
               <strong>Eksklusive deals</strong>
-              <span>Kun for medlemmer</span>
+              <span>Utvalgte tilbud samlet på ett sted</span>
             </div>
           </div>
 
@@ -893,21 +893,20 @@ function buildDealsTopZone(heroEl, highlightsEl) {
           <div class="deals-clean-benefit">
             <span class="deals-clean-benefit__icon">⌾</span>
             <div>
-              <strong>100% trygt kjøp</strong>
-              <span>Sikre betalinger</span>
+              <strong>Enkel oversikt</strong>
+              <span>Sammenlign priser raskt</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="deals-clean-hero__visual" aria-hidden="true">
-        <div class="deals-clean-product deals-clean-product--shoe"></div>
-        <div class="deals-clean-product deals-clean-product--hoodie"></div>
-        <div class="deals-clean-product deals-clean-product--bottle"></div>
-        <div class="deals-clean-discount">
-          <span>Opptil</span>
-          <strong>-60%</strong>
-        </div>
+        <img
+          src="assets/images/deals/deals-hero.png"
+          alt=""
+          class="deals-clean-hero__image"
+          loading="eager"
+        >
       </div>
     </div>
   `;
@@ -922,7 +921,7 @@ function buildDealsTopZone(heroEl, highlightsEl) {
     <button type="button">Sport</button>
     <button type="button">Lifestyle</button>
     <button type="button">Barn</button>
-    <button class="deals-quick-nav__member" type="button">Kun medlemmer 🔒</button>
+    <button class="deals-quick-nav__highlight" type="button">Best rabatt</button>
   `;
 
   section.appendChild(hero);
