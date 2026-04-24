@@ -914,15 +914,13 @@ function buildDealsTopZone(heroEl, highlightsEl) {
   const quickNav = document.createElement("section");
   quickNav.className = "deals-quick-nav";
   quickNav.innerHTML = `
-    <button class="is-active" type="button">Alle deals</button>
-    <button type="button">Sko</button>
-    <button type="button">Klær</button>
-    <button type="button">Tilbehør</button>
-    <button type="button">Sport</button>
-    <button type="button">Lifestyle</button>
-    <button type="button">Barn</button>
-    <button class="deals-quick-nav__highlight" type="button">Best rabatt</button>
-  `;
+  <button class="is-active" type="button">Alle deals</button>
+  <button type="button">Sko</button>
+  <button type="button">Klær</button>
+  <button type="button">Tilbehør</button>
+  <button type="button">Sport</button>
+  <button class="deals-quick-nav__highlight" type="button">Best rabatt</button>
+`;
 
   section.appendChild(hero);
   section.appendChild(quickNav);
