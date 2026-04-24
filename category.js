@@ -902,7 +902,7 @@ function buildDealsTopZone(heroEl, highlightsEl) {
 
       <div class="deals-clean-hero__visual" aria-hidden="true">
         <img
-          src="assets/images/deals/deals-hero.png"
+          src="assets/img/deals/deals-hero.png"
           alt=""
           class="deals-clean-hero__image"
           loading="eager"
