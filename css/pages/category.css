@@ -1363,3 +1363,16 @@ body.is-category-page .filter-tag .close-tag {
     max-height: 190px;
   }
 }
+
+.collection-page--deals .deals-quick-nav__highlight {
+  background: #eaf6e5;
+  border: 1px solid #eaf6e5;
+  color: #244622;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+
+.collection-page--deals .deals-quick-nav__highlight:hover {
+  background: #dff0d7;
+}
