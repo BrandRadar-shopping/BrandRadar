@@ -1402,3 +1402,18 @@ body.is-category-page .filter-tag .close-tag {
     top: 74px;
   }
 }
+
+.collection-page--deals > .deals-quick-nav {
+  width: min(1440px, calc(100% - 56px));
+  margin: 18px auto 18px;
+  position: sticky;
+  top: 92px;
+  z-index: 80;
+}
+
+@media (max-width: 768px) {
+  .collection-page--deals > .deals-quick-nav {
+    width: min(100%, calc(100% - 28px));
+    top: 74px;
+  }
+}
