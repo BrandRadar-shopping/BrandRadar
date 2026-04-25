@@ -480,27 +480,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function mapDealRowToProduct(row, index = 0) {
-    const oldPrice = parseNumber(row.old_price);
-    const newPrice = parseNumber(row.new_price);
-    const discount =
-      oldPrice && newPrice
-        ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
-        : parseNumber(row.discount);
+  const active = parseBool(row.active);
+  const lowestPrice = parseNumber(row.lowest_price);
+  const oldPrice = parseNumber(row.old_price);
+  const discount = parseNumber(row.discount);
 
-    return {
-      id: String(row.id || row.product_id || `deal_${index}`).trim(),
-      title: row.product_name || row.title || "",
-      brand: row.brand || "",
-      price: newPrice != null ? newPrice : (oldPrice ?? row.price ?? ""),
-      old_price: oldPrice ?? "",
-      discount: discount ?? "",
-      image_url: row.image_url || "",
-      product_url: row.link || row.product_url || "",
-      category: row.category || "",
-      rating: row.rating || "",
-      luxury: false
-    };
-  }
+  // 🔥 VIKTIG: filtrer bort produkter uten deals
+  if (!active || !lowestPrice) return null;
+
+  const cleanUrl = (value) => {
+    const url = String(value || "").trim();
+    return /^https?:\/\//i.test(url) ? url : "";
+  };
+
+  const buyUrl =
+    cleanUrl(row.affiliate_url) ||
+    cleanUrl(row.store_url) ||
+    cleanUrl(row.product_url);
+
+  return {
+    id: String(row.product_id || row.id || `deal_${index}`).trim(),
+    product_id: String(row.product_id || row.id || "").trim(),
+    title: row.product_name || row.title || "",
+    brand: row.brand || "",
+    price: lowestPrice,
+    old_price: oldPrice || "",
+    discount: discount || "",
+    image_url: row.image_url || "",
+    product_url: buyUrl,
+    category: row.deal_category || row.category || "",
+    rating: row.rating || "",
+    priority: parseNumber(row.priority) || index + 1,
+    featured: parseBool(row.featured),
+    badge_text: row.badge_text || "Deal",
+    merchant_slug: row.merchant_slug || "",
+    luxury: false
+  };
+}
 
   function populateBrandFilter(products) {
     if (!brandFilter) return;
