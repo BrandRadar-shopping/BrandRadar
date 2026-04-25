@@ -954,6 +954,148 @@ async function renderPriceComparison(product) {
   }
 }
 
+async function loadMoreDeals(currentProduct) {
+  const section = document.getElementById("more-deals-section");
+  const slider = document.getElementById("more-deals-slider");
+  const titleEl = document.getElementById("more-deals-title");
+
+  if (!section || !slider) return;
+
+  const DEALS_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
+  const DEALS_SHEET_NAME = "deals";
+
+  const normalize = (value) =>
+    String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/æ/g, "a")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a");
+
+  const parseBool = (value) => {
+    const s = String(value || "").trim().toLowerCase();
+    return s === "true" || s === "1" || s === "yes" || s === "ja";
+  };
+
+  const parseNumber = (value) => {
+    const n = Number(String(value || "").replace(/\s/g, "").replace(",", ".").replace(/[^\d.-]/g, ""));
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const cleanUrl = (value) => {
+    const url = String(value || "").trim();
+    return /^https?:\/\//i.test(url) ? url : "";
+  };
+
+  function mapDealRow(row, index) {
+    const active = parseBool(row.active);
+    const lowestPrice = parseNumber(row.lowest_price);
+    if (!active || !lowestPrice) return null;
+
+    const productId = String(row.product_id || row.id || "").trim();
+    if (!productId) return null;
+
+    return {
+      id: productId,
+      product_id: productId,
+      title: row.product_name || row.title || "",
+      brand: row.brand || "",
+      price: lowestPrice,
+      old_price: parseNumber(row.old_price) || "",
+      discount: parseNumber(row.discount) || "",
+      image_url: row.image_url || "",
+      product_url:
+        cleanUrl(row.affiliate_url) ||
+        cleanUrl(row.store_url) ||
+        cleanUrl(row.product_url),
+      category: row.deal_category || row.category || "",
+      rating: row.rating || "",
+      priority: parseNumber(row.priority) || index + 1,
+      featured: parseBool(row.featured),
+      badge_text: row.badge_text || "Deal",
+      merchant_slug: row.merchant_slug || ""
+    };
+  }
+
+  const rows = await fetch(`https://opensheet.elk.sh/${DEALS_SHEET_ID}/${DEALS_SHEET_NAME}`)
+    .then(r => r.json())
+    .catch(() => []);
+
+  const currentId = String(currentProduct.id || "").trim();
+  const currentCategory = normalize(currentProduct.category || currentProduct.main_category || "");
+
+  let deals = rows
+    .map(mapDealRow)
+    .filter(Boolean)
+    .filter(deal => String(deal.product_id) !== currentId)
+    .filter(deal => normalize(deal.category) === currentCategory)
+    .sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return (a.priority || 999) - (b.priority || 999);
+    })
+    .slice(0, 10);
+
+  if (!deals.length) {
+    section.hidden = true;
+    return;
+  }
+
+  if (window.BrandRadarOffersEngine) {
+    deals = await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(deals);
+  }
+
+  const label =
+    currentCategory === "supplements" ? "Gym" :
+    currentCategory === "shoes" ? "Sko" :
+    currentCategory === "clothing" ? "Klær" :
+    currentProduct.category || "samme kategori";
+
+  if (titleEl) {
+    titleEl.textContent = `Flere deals i ${label}`;
+  }
+
+  slider.innerHTML = "";
+
+  deals.forEach(deal => {
+    const card = window.BrandRadarProductCardEngine.createCard(deal, {
+      showBrand: true,
+      showRating: true,
+      enableFavorite: true,
+      onNavigate: (product) => {
+        const id = product.id || product.product_id;
+        if (id) window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+      },
+      favoriteProductFactory: (product) => ({
+        id: product.id || product.product_id || "",
+        title: product.title || product.product_name || product.name || "Uten navn",
+        product_name: product.title || product.product_name || product.name || "Uten navn",
+        brand: product.brand || "",
+        price: product.price,
+        discount: product.discount || "",
+        image_url: product.image_url || "",
+        product_url: product.product_url || "",
+        category: product.category || "",
+        rating: product.rating
+      })
+    });
+
+    slider.appendChild(card);
+  });
+
+  section.hidden = false;
+
+  const prev = section.querySelector(".more-deals-btn.prev");
+  const next = section.querySelector(".more-deals-btn.next");
+
+  prev?.addEventListener("click", () => {
+    slider.scrollBy({ left: -350, behavior: "smooth" });
+  });
+
+  next?.addEventListener("click", () => {
+    slider.scrollBy({ left: 350, behavior: "smooth" });
+  });
+}
+
 async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
   if (!slider) return;
