@@ -930,16 +930,20 @@ function buildDealsTopZone(heroEl, highlightsEl) {
     </div>
   `;
 
-  const quickNav = document.createElement("section");
-  quickNav.className = "deals-quick-nav";
-  quickNav.innerHTML = `
-  <button class="is-active" type="button" data-deal-filter="all">Alle deals</button>
-  <button type="button" data-deal-filter="Shoes">Sko</button>
-  <button type="button" data-deal-filter="clothing">Klær</button>
-  <button type="button" data-deal-filter="supplements">Gym</button>
-  <button type="button" data-deal-filter="Accessories">Tilbehør</button>
-  <button class="deals-quick-nav__highlight" type="button" data-deal-sort="discount-desc">Best rabatt</button>
-`;
+    const quickNavSection = document.createElement("section");
+  quickNavSection.className = "deals-quick-nav-section";
+  quickNavSection.innerHTML = `
+    <h3 class="deals-quick-nav-title">Browse deals</h3>
+
+    <div class="deals-quick-nav">
+      <button class="is-active" type="button" data-deal-filter="all">Alle deals</button>
+      <button type="button" data-deal-filter="Shoes">Sko</button>
+      <button type="button" data-deal-filter="clothing">Klær</button>
+      <button type="button" data-deal-filter="supplements">Gym</button>
+      <button type="button" data-deal-filter="Accessories">Tilbehør</button>
+      <button class="deals-quick-nav__highlight" type="button" data-deal-sort="discount-desc">Best rabatt</button>
+    </div>
+  `;
 
   section.appendChild(hero);
 
@@ -947,7 +951,7 @@ if (highlightsEl) {
   section.appendChild(highlightsEl);
 }
 
-section.appendChild(quickNav);
+section.appendChild(quickNavSection);
 
   return section;
 }
@@ -962,9 +966,9 @@ function insertBeforeFilterBar(elements = []) {
   });
 
   if (document.querySelector(".collection-page--deals")) {
-    const quickNav = document.querySelector(".deals-quick-nav");
-    if (quickNav) {
-      parent.insertBefore(quickNav, filterBar);
+    const quickNavSection = document.querySelector(".deals-quick-nav-section");
+    if (quickNavSection) {
+      parent.insertBefore(quickNavSection, filterBar);
     }
   }
 
