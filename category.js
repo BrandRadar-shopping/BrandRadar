@@ -1118,34 +1118,15 @@ products = rows
         insertBeforeFilterBar([collectionHero]);
       }
 
-        let dealQuickFilter = "all";
-        let dealQuickSort = "";
-      
-      function applyFiltersAndSort() 
-      if (collectionSlug === "deals") {
-  document.querySelectorAll(".deals-quick-nav button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".deals-quick-nav button").forEach(b => {
-        b.classList.remove("is-active");
-      });
+              let dealQuickFilter = "all";
+      let dealQuickSort = "";
 
-      btn.classList.add("is-active");
-
-      dealQuickFilter = btn.dataset.dealFilter || "all";
-      dealQuickSort = btn.dataset.dealSort || "";
-
-      applyFiltersAndSort();
-    });
-  });
-}
-      {
+      function applyFiltersAndSort() {
         let result = [...enrichedProducts];
 
-        if (collectionSlug === "deals") {
-  if (dealQuickFilter !== "all") {
-    result = result.filter(p => normalize(p.category) === normalize(dealQuickFilter));
-  }
-}
+        if (collectionSlug === "deals" && dealQuickFilter !== "all") {
+          result = result.filter(p => normalize(p.category) === normalize(dealQuickFilter));
+        }
 
         if (brandFilter && brandFilter.value !== "all") {
           result = result.filter(p => p.brand === brandFilter.value);
@@ -1170,30 +1151,49 @@ products = rows
           });
         }
 
-          if (collectionSlug === "deals" && dealQuickSort === "discount-desc") {
-  result.sort((a, b) => (parseNumber(b.discount) || 0) - (parseNumber(a.discount) || 0));
-}
-        
-        if (!(collectionSlug === "deals" && dealQuickSort === "discount-desc")) {
-  switch (sortSelect?.value) { {
-          case "price-asc":
-            result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
-            break;
-          case "price-desc":
-            result.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
-            break;
-          case "rating-desc":
-            result.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
-            break;
-        }}
+        if (collectionSlug === "deals" && dealQuickSort === "discount-desc") {
+          result.sort((a, b) => (parseNumber(b.discount) || 0) - (parseNumber(a.discount) || 0));
+        } else {
+          switch (sortSelect?.value) {
+            case "price-asc":
+              result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
+              break;
+            case "price-desc":
+              result.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
+              break;
+            case "rating-desc":
+              result.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
+              break;
+          }
+        }
 
         renderProducts(result, collectionSlug);
         updateFilterTags(applyFiltersAndSort);
         updateMobileFilterToggleSummary();
       }
 
-      bindFilterEvents(applyFiltersAndSort);
+      function bindDealQuickNav() {
+        if (collectionSlug !== "deals") return;
+
+        document.querySelectorAll(".deals-quick-nav button").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".deals-quick-nav button").forEach(b => {
+              b.classList.remove("is-active");
+            });
+
+            btn.classList.add("is-active");
+
+            dealQuickFilter = btn.dataset.dealFilter || "all";
+            dealQuickSort = btn.dataset.dealSort || "";
+
+            applyFiltersAndSort();
+          });
+        });
+      }
+
+            bindFilterEvents(applyFiltersAndSort);
       setupMobileFilterToggle();
+      bindDealQuickNav();
 
       if (collectionSlug === "deals") {
         if (sortSelect) sortSelect.value = "price-asc";
