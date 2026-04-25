@@ -19,7 +19,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const productUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/BrandRadarProdukter`;
   const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
-  const dealsUrl = `https://opensheet.elk.sh/${SHEET_DEALS}/deals`;
+
+  // ✅ ENESTE ENDRING
+  const dealsUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/deals`;
+
   const picksUrl = `https://opensheet.elk.sh/${SHEET_PICKS}/picks`;
   const newsUrl = `https://opensheet.elk.sh/${SHEET_NEWS}/news`;
 
