@@ -1118,8 +1118,34 @@ products = rows
         insertBeforeFilterBar([collectionHero]);
       }
 
-      function applyFiltersAndSort() {
+        let dealQuickFilter = "all";
+        let dealQuickSort = "";
+      
+      function applyFiltersAndSort() 
+      if (collectionSlug === "deals") {
+  document.querySelectorAll(".deals-quick-nav button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".deals-quick-nav button").forEach(b => {
+        b.classList.remove("is-active");
+      });
+
+      btn.classList.add("is-active");
+
+      dealQuickFilter = btn.dataset.dealFilter || "all";
+      dealQuickSort = btn.dataset.dealSort || "";
+
+      applyFiltersAndSort();
+    });
+  });
+}
+      {
         let result = [...enrichedProducts];
+
+        if (collectionSlug === "deals") {
+  if (dealQuickFilter !== "all") {
+    result = result.filter(p => normalize(p.category) === normalize(dealQuickFilter));
+  }
+}
 
         if (brandFilter && brandFilter.value !== "all") {
           result = result.filter(p => p.brand === brandFilter.value);
@@ -1144,7 +1170,12 @@ products = rows
           });
         }
 
-        switch (sortSelect?.value) {
+          if (collectionSlug === "deals" && dealQuickSort === "discount-desc") {
+  result.sort((a, b) => (parseNumber(b.discount) || 0) - (parseNumber(a.discount) || 0));
+}
+        
+        if (!(collectionSlug === "deals" && dealQuickSort === "discount-desc")) {
+  switch (sortSelect?.value) { {
           case "price-asc":
             result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
             break;
@@ -1154,7 +1185,7 @@ products = rows
           case "rating-desc":
             result.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
             break;
-        }
+        }}
 
         renderProducts(result, collectionSlug);
         updateFilterTags(applyFiltersAndSort);
