@@ -696,3 +696,78 @@ body.is-product-page #product-insights[hidden] {
     max-width: 220px;
   }
 }
+
+/* =====================================================
+   MORE DEALS – PRODUCT PAGE
+===================================================== */
+
+.more-deals-section {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.12);
+  margin-top: 1rem;
+}
+
+.more-deals-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111;
+  text-align: left;
+  max-width: 1300px;
+  margin: 0 auto 1rem auto;
+}
+
+.more-deals-slider-wrapper {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.more-deals-slider {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0 20px;
+}
+
+.more-deals-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.more-deals-slider {
+  scrollbar-width: none;
+}
+
+.more-deals-slider .product-card {
+  flex: 0 0 260px;
+  min-width: 260px;
+  max-width: 260px;
+}
+
+.more-deals-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #111;
+  background: #fff;
+  font-size: 24px;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.more-deals-btn.prev {
+  left: -35px;
+}
+
+.more-deals-btn.next {
+  right: -35px;
+}
