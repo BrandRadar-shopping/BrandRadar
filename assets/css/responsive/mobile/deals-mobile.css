@@ -79,9 +79,9 @@
   body.is-category-page .collection-page--deals .deals-clean-hero__visual {
     position: absolute !important;
     right: -10px !important;
-    top: 118px !important;
+    top: 132px !important;
     width: 52% !important;
-    height: 112px !important;
+    height: 96px !important;
     min-height: 0 !important;
     z-index: 1 !important;
     pointer-events: none !important;
@@ -92,53 +92,55 @@
 
   body.is-category-page .collection-page--deals .deals-clean-hero__image {
     width: 100% !important;
-    max-height: 108px !important;
+    max-height: 92px !important;
     object-fit: contain !important;
     object-position: right center !important;
     filter: drop-shadow(0 16px 20px rgba(15, 23, 42, 0.12)) !important;
   }
 
-    /* BENEFITS */
+     /* BENEFITS */
   body.is-category-page .collection-page--deals .deals-clean-benefits {
     position: relative !important;
     z-index: 3 !important;
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 0 !important;
-    margin: 24px -18px 0 !important;
-    padding: 13px 10px 14px !important;
-    background: rgba(255, 255, 255, 0.94) !important;
+    gap: 8px !important;
+    margin: 28px -8px 0 !important;
+    padding: 12px 8px 14px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
     border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit {
-    display: grid !important;
-    grid-template-columns: 28px minmax(0, 1fr) !important;
-    gap: 7px !important;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    padding: 0 8px !important;
+    justify-content: flex-start !important;
+    gap: 7px !important;
+    padding: 0 4px !important;
+    text-align: center !important;
     min-width: 0 !important;
+    border-left: 0 !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit + .deals-clean-benefit {
-    border-left: 1px solid rgba(15, 23, 42, 0.08) !important;
+    border-left: 0 !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit__icon {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    min-height: 28px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
     border-radius: 999px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    place-items: center !important;
     background: #fff4ec !important;
     color: #ff4d00 !important;
-    font-size: 0.78rem !important;
+    font-size: 0.82rem !important;
     line-height: 1 !important;
-    font-weight: 800 !important;
+    font-weight: 850 !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit > div {
@@ -147,23 +149,17 @@
 
   body.is-category-page .collection-page--deals .deals-clean-benefit strong {
     display: block !important;
-    margin: 0 0 2px !important;
+    margin: 0 !important;
     color: #0b0f19 !important;
-    font-size: 0.66rem !important;
+    font-size: 0.68rem !important;
     line-height: 1.08 !important;
     font-weight: 850 !important;
-    max-width: 8ch !important;
-  }
-
-  body.is-category-page .collection-page--deals .deals-clean-benefit span:not(.deals-clean-benefit__icon) {
-    display: block !important;
-    color: #5b6270 !important;
-    font-size: 0.62rem !important;
-    line-height: 1.1 !important;
-    font-weight: 550 !important;
     max-width: 9ch !important;
   }
 
+  body.is-category-page .collection-page--deals .deals-clean-benefit span:not(.deals-clean-benefit__icon) {
+    display: none !important;
+  }
   /* FEATURED */
   body.is-category-page .collection-page--deals .deals-featured-section {
     width: 100% !important;
