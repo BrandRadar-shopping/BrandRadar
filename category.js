@@ -961,6 +961,13 @@ function insertBeforeFilterBar(elements = []) {
     parent.insertBefore(el, filterBar);
   });
 
+  if (document.querySelector(".collection-page--deals")) {
+    const quickNav = document.querySelector(".deals-quick-nav");
+    if (quickNav) {
+      parent.insertBefore(quickNav, filterBar);
+    }
+  }
+
   const productsSection = document.querySelector(".category-products");
   if (productsSection) {
     productsSection.id = "deals-feed";
