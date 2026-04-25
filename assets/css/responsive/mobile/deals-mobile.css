@@ -580,3 +580,180 @@
     gap: 14px !important;
   }
 }
+
+/* =====================================================
+   Deals Mobile – polish pass v2
+   ===================================================== */
+
+@media (max-width: 768px) {
+  body.is-category-page .collection-page--deals {
+    background: #fff !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero {
+    margin: 14px 12px 0 !important;
+    border-radius: 18px !important;
+    background:
+      linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.35) 100%),
+      #f7f2ec !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero__content {
+    padding: 24px 20px 0 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero h2 {
+    max-width: 8.2ch !important;
+    font-size: clamp(2rem, 10vw, 2.65rem) !important;
+    line-height: .96 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero p {
+    max-width: 18ch !important;
+    font-size: .98rem !important;
+    line-height: 1.45 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero__visual {
+    right: -10px !important;
+    top: 128px !important;
+    width: 52% !important;
+    height: 130px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero__image {
+    max-height: 126px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefits {
+    margin: 22px -20px 0 !important;
+    padding: 12px 10px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefit {
+    display: grid !important;
+    grid-template-columns: 30px 1fr !important;
+    gap: 7px !important;
+    padding: 0 7px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefit__icon {
+    width: 30px !important;
+    height: 30px !important;
+    flex-basis: 30px !important;
+    font-size: .85rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefit strong {
+    font-size: .68rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefit span:not(.deals-clean-benefit__icon) {
+    font-size: .64rem !important;
+    line-height: 1.15 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-section {
+    padding: 26px 16px 18px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-section-head h3 {
+    font-size: 1.08rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card {
+    flex-basis: 68% !important;
+    min-width: 68% !important;
+    max-width: 68% !important;
+    border-radius: 16px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card__media {
+    height: 146px !important;
+    min-height: 146px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card h3 {
+    font-size: .96rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card__button {
+    height: 40px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card__button {
+    font-size: 0 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-featured-card__button::before {
+    content: "Se deal";
+    font-size: .9rem;
+  }
+
+  body.is-category-page .collection-page--deals .deals-quick-nav {
+    padding: 20px 16px 10px !important;
+    gap: 16px !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-quick-nav button {
+    width: 68px !important;
+    height: 82px !important;
+    font-size: .74rem !important;
+  }
+
+  body.is-category-page .collection-page--deals .filter-bar {
+    width: calc(100% - 32px) !important;
+    margin: 6px auto 14px !important;
+  }
+
+  body.is-category-page .collection-page--deals .filter-panel {
+    gap: 10px !important;
+  }
+
+  body.is-category-page .collection-page--deals .filter-panel::before,
+  body.is-category-page .collection-page--deals #sort-select {
+    height: 48px !important;
+    font-size: .9rem !important;
+    border-radius: 12px !important;
+  }
+
+  body.is-category-page .collection-page--deals .filter-tags {
+    width: calc(100% - 32px) !important;
+    margin-bottom: 14px !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products {
+    padding: 0 16px 96px !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-grid {
+    gap: 14px 12px !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card {
+    border-radius: 17px !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-media {
+    padding: 14px !important;
+  }
+
+  body.is-category-page .collection-page--deals .category-products .product-card .product-name {
+    min-height: 2.2em !important;
+  }
+}
+
+@media (max-width: 390px) {
+  body.is-category-page .collection-page--deals .deals-featured-card {
+    flex-basis: 72% !important;
+    min-width: 72% !important;
+    max-width: 72% !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-hero__visual {
+    width: 54% !important;
+    right: -18px !important;
+  }
+}
