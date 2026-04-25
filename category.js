@@ -548,10 +548,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         showRating: true,
         enableFavorite: true,
         onNavigate: (p) => {
-          if (p.product_url && collectionSlug === "deals") {
-            window.open(p.product_url, "_blank", "noopener");
-            return;
-          }
+          
 
           const id = typeof resolveProductId === "function"
             ? resolveProductId(p)
