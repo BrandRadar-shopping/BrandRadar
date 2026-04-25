@@ -966,7 +966,17 @@ function insertBeforeFilterBar(elements = []) {
         ensurePageRootCollectionClass("deals");
 
         const rows = await fetch(dealsUrl).then(r => r.json());
-        products = rows.map(mapDealRowToProduct).filter(p => p.id || p.product_url);
+
+products = rows
+  .map(mapDealRowToProduct)
+  .filter(Boolean) // fjerner null (ingen deals)
+  .sort((a, b) => {
+    // featured først
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+
+    // deretter priority
+    return (a.priority || 999) - (b.priority || 999);
+  });
         pageTitle = "Ukens Deals";
         breadcrumbLabel = "Deals";
 
