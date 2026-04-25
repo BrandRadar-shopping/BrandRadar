@@ -183,8 +183,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const offerSummary = await renderPriceComparison(product);
   renderProductInsights(product, offerSummary);
 
-  await loadRecommendations(products, product);
-  setupFavoriteButton(product);
+  await loadMoreDeals(product);
+await loadRecommendations(products, product);
+setupFavoriteButton(product);
 
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
