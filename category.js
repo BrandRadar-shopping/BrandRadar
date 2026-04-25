@@ -942,11 +942,12 @@ function buildDealsTopZone(heroEl, highlightsEl) {
 `;
 
   section.appendChild(hero);
-  section.appendChild(quickNav);
 
-  if (highlightsEl) {
-    section.appendChild(highlightsEl);
-  }
+if (highlightsEl) {
+  section.appendChild(highlightsEl);
+}
+
+section.appendChild(quickNav);
 
   return section;
 }
