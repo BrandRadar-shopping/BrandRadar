@@ -98,51 +98,70 @@
     filter: drop-shadow(0 16px 20px rgba(15, 23, 42, 0.12)) !important;
   }
 
-  /* BENEFITS */
+    /* BENEFITS */
   body.is-category-page .collection-page--deals .deals-clean-benefits {
+    position: relative !important;
+    z-index: 3 !important;
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 0 !important;
     margin: 24px -18px 0 !important;
-    padding: 12px 10px !important;
-    background: rgba(255,255,255,0.88) !important;
-    border-top: 1px solid rgba(15,23,42,0.08) !important;
+    padding: 13px 10px 14px !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit {
     display: grid !important;
-    grid-template-columns: 30px 1fr !important;
+    grid-template-columns: 28px minmax(0, 1fr) !important;
     gap: 7px !important;
     align-items: center !important;
-    padding: 0 7px !important;
+    padding: 0 8px !important;
+    min-width: 0 !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit + .deals-clean-benefit {
-    border-left: 1px solid rgba(15,23,42,0.08) !important;
+    border-left: 1px solid rgba(15, 23, 42, 0.08) !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit__icon {
-    width: 30px !important;
-    height: 30px !important;
-    flex: 0 0 30px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    border-radius: 999px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    place-items: center !important;
     background: #fff4ec !important;
     color: #ff4d00 !important;
-    font-size: 0.85rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+  }
+
+  body.is-category-page .collection-page--deals .deals-clean-benefit > div {
+    min-width: 0 !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit strong {
+    display: block !important;
     margin: 0 0 2px !important;
     color: #0b0f19 !important;
-    font-size: 0.68rem !important;
-    line-height: 1.1 !important;
+    font-size: 0.66rem !important;
+    line-height: 1.08 !important;
     font-weight: 850 !important;
+    max-width: 8ch !important;
   }
 
   body.is-category-page .collection-page--deals .deals-clean-benefit span:not(.deals-clean-benefit__icon) {
+    display: block !important;
     color: #5b6270 !important;
-    font-size: 0.64rem !important;
-    line-height: 1.14 !important;
+    font-size: 0.62rem !important;
+    line-height: 1.1 !important;
     font-weight: 550 !important;
+    max-width: 9ch !important;
   }
 
   /* FEATURED */
