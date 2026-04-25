@@ -623,6 +623,51 @@ body.is-product-page #product-insights[hidden] {
   }
 
   /* -------------------------------------------------
+     More deals – compact mobile grid
+  ------------------------------------------------- */
+  body.is-product-page .more-deals-section {
+    margin-top: 1.2rem;
+    padding: 1.2rem 14px 1.5rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  body.is-product-page .more-deals-title {
+    max-width: 100%;
+    margin: 0 0 0.85rem;
+    font-size: 1.22rem;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  body.is-product-page .more-deals-slider-wrapper {
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  body.is-product-page .more-deals-slider {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 2px 0 10px;
+    overflow: visible;
+  }
+
+  body.is-product-page .more-deals-slider .product-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    flex: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+  }
+
+  body.is-product-page .more-deals-btn,
+  body.is-product-page .more-deals-slider-wrapper::before,
+  body.is-product-page .more-deals-slider-wrapper::after {
+    display: none !important;
+  }
+   
+  /* -------------------------------------------------
      More space above bottom nav
   ------------------------------------------------- */
   body.is-product-page .related-section,
