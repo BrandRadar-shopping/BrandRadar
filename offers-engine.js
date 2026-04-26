@@ -186,7 +186,11 @@
           source_program: normalizeText(offer.source_program),
           last_updated: normalizeText(offer.last_updated),
 
-          active: toBool(offer.active)
+offer_name: normalizeText(offer.offer_name),
+variant_type: normalizeText(offer.variant_type).toLowerCase(),
+variant_value: normalizeText(offer.variant_value),
+
+active: toBool(offer.active)
         };
       })
       .filter((offer) => offer.product_id && offer.price !== null);
