@@ -792,3 +792,77 @@ body.is-product-page #product-insights[hidden] {
   color: #334155;
   background: #eef2f7;
 }
+
+/* =====================================================
+   PRODUCT PAGE – MORE DEALS + RELATED SLIDER ARROWS FIX
+===================================================== */
+
+.more-deals-section,
+.related-section {
+  position: relative;
+}
+
+.more-deals-section .slider-wrapper,
+.related-section .slider-wrapper {
+  overflow: visible !important;
+  padding: 0 56px;
+}
+
+.more-deals-slider,
+.related-slider {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.more-deals-slider::-webkit-scrollbar,
+.related-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.more-deals-btn,
+.related-section .slider-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  z-index: 20;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.more-deals-btn.prev,
+.related-section .slider-btn.prev {
+  left: 4px;
+}
+
+.more-deals-btn.next,
+.related-section .slider-btn.next {
+  right: 4px;
+}
+
+.more-deals-btn:hover,
+.related-section .slider-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Mobile: behold grid/swipe uten desktop-piler */
+@media (max-width: 768px) {
+  .more-deals-section .slider-wrapper,
+  .related-section .slider-wrapper {
+    padding: 0;
+  }
+
+  .more-deals-btn,
+  .related-section .slider-btn {
+    display: none !important;
+  }
+}
