@@ -895,14 +895,41 @@ async function renderPriceComparison(product) {
       meta.textContent = shippingLabel || "Aktiv butikk";
 
       left.appendChild(merchantName);
-      left.appendChild(meta);
+left.appendChild(meta);
 
-      if (index === 0) {
-        const badge = document.createElement("span");
-        badge.className = "best-price-badge";
-        badge.textContent = "Best price";
-        left.appendChild(badge);
-      }
+const badges = document.createElement("div");
+badges.className = "price-offer-badges";
+
+if (index === 0) {
+  const badge = document.createElement("span");
+  badge.className = "best-price-badge";
+  badge.textContent = "Best price";
+  badges.appendChild(badge);
+}
+
+if (offer.variant_type && offer.variant_value) {
+  const variantBadge = document.createElement("span");
+  variantBadge.className = "variant-price-badge";
+
+  const type = String(offer.variant_type).toLowerCase();
+  const value = String(offer.variant_value).trim();
+
+  if (type === "color") {
+    variantBadge.textContent = `Farge: ${value}`;
+  } else if (type === "size") {
+    variantBadge.textContent = `Størrelse: ${value}`;
+  } else if (type === "color_size") {
+    variantBadge.textContent = `Variant: ${value}`;
+  } else {
+    variantBadge.textContent = value;
+  }
+
+  badges.appendChild(variantBadge);
+}
+
+if (badges.children.length) {
+  left.appendChild(badges);
+}
 
       const right = document.createElement("div");
       right.className = "price-offer-right";
