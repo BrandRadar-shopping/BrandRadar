@@ -18,7 +18,7 @@
   const MASTER_TAB = "BrandRadarProdukter";
 
   const DEALS_SHEET_ID = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
-  const DEALS_TAB = "deals";
+  const DEALS_TAB = "NewsDeals";
 
   const PICKS_SHEET_ID = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
   const PICKS_TAB = "picks";
