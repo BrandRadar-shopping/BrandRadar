@@ -997,69 +997,91 @@
     }
   }
 
-  // ======================================================
-  // 2) UKENS DEALS
-  // ======================================================
-  async function loadDeals() {
-    if (!dealsTrack) return;
+ // ======================================================
+// 2) UKENS DEALS
+// ======================================================
+async function loadDeals() {
+  if (!dealsTrack) return;
 
-    try {
-      const rows = await fetchJson(DEALS_SHEET_ID, DEALS_TAB);
+  try {
+    const [dealRows, masterRows] = await Promise.all([
+      fetchJson(DEALS_SHEET_ID, DEALS_TAB),
+      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+    ]);
 
-      dealsTrack.classList.remove("loading");
-      dealsTrack.innerHTML = "";
+    dealsTrack.classList.remove("loading");
+    dealsTrack.innerHTML = "";
 
-      if (!rows.length) {
-        dealsTrack.textContent = "Ingen deals akkurat nå.";
-        return;
+    const masterById = new Map(
+      masterRows.map(row => [String(row.id || "").trim(), row])
+    );
+
+    const deals = dealRows
+      .filter(row => parseBool(row.active))
+      .map((row, index) => {
+        const productId = String(row.product_id || row.id || "").trim();
+        const master = masterById.get(productId);
+
+        if (!productId || !master) return null;
+
+        const base = createProductBaseFromMaster(master);
+
+        if (!base) return null;
+
+        return {
+          ...base,
+          id: productId,
+          highlight_reason: row.highlight_reason || "",
+          rank: parseInt(row.rank, 10) || index + 1
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.rank - b.rank);
+
+    if (!deals.length) {
+      dealsTrack.textContent = "Ingen deals akkurat nå.";
+      return;
+    }
+
+    const enrichedDeals = window.BrandRadarOffersEngine
+      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(deals)
+      : deals;
+
+    enrichedDeals.forEach((prod) => {
+      const summary = prod.offer_summary;
+
+      if (summary?.hasOffers) {
+        prod.new_price = summary.lowestPrice;
+        prod.price = summary.lowestPrice;
+
+        const bestOffer = summary.offers?.[0];
+
+        if (bestOffer?.old_price) {
+          prod.old_price = bestOffer.old_price;
+        }
       }
 
-      rows.forEach((d, index) => {
-        const oldPrice = parseNum(d.old_price);
-        const newPrice = parseNum(d.new_price);
-        const discount =
-          oldPrice != null && newPrice != null && oldPrice > newPrice
-            ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
-            : null;
-
-        const prod = {
-          id: d.id || d.product_id || `deal_${index}`,
-          title: d.product_name || d.title || "",
-          brand: d.brand || "",
-          price: oldPrice != null ? oldPrice : newPrice,
-          old_price: oldPrice,
-          new_price: newPrice,
-          discount,
-          image_url: d.image_url || "",
-          product_url: d.link || d.product_url || "",
-          rating: d.rating || "",
-          luxury: false,
-          category: d.category || ""
-        };
-
-        prod.id = resolveProductIdSafe(prod);
-
-        const card = buildEliteCard(prod, {
-          extraClasses: "deal-card",
-          onCardClick: (product) => {
-  if (product.id) {
-    window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-  }
-}
-        });
-
-        dealsTrack.appendChild(card);
+      const card = buildEliteCard(prod, {
+        extraClasses: "deal-card",
+        tag: prod.highlight_reason || "",
+        onCardClick: (product) => {
+          if (product.id) {
+            window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+          }
+        }
       });
 
-      initArrowSlider(dealsTrack);
-      initMobileFocusCarousel(dealsTrack);
-    } catch (err) {
-      console.error("❌ Deals error:", err);
-      dealsTrack.classList.remove("loading");
-      dealsTrack.textContent = "Kunne ikke laste deals.";
-    }
-  }
+      dealsTrack.appendChild(card);
+    });
 
+    initArrowSlider(dealsTrack);
+    initMobileFocusCarousel(dealsTrack);
+  } catch (err) {
+    console.error("❌ Deals error:", err);
+    dealsTrack.classList.remove("loading");
+    dealsTrack.textContent = "Kunne ikke laste deals.";
+  }
+}
   // ======================================================
   // 3) RADAR PICKS
   // ======================================================
