@@ -1042,14 +1042,10 @@
         const card = buildEliteCard(prod, {
           extraClasses: "deal-card",
           onCardClick: (product) => {
-            if (product.product_url) {
-              window.open(product.product_url, "_blank", "noopener");
-              return;
-            }
-            if (product.id) {
-              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-            }
-          }
+  if (product.id) {
+    window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+  }
+}
         });
 
         dealsTrack.appendChild(card);
