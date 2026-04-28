@@ -1083,63 +1083,93 @@ async function loadDeals() {
   }
 }
   // ======================================================
-  // 3) RADAR PICKS
-  // ======================================================
-  async function loadPicks() {
-    if (!picksTrack) return;
+// 3) RADAR PICKS
+// ======================================================
+async function loadPicks() {
+  if (!picksTrack) return;
 
-    try {
-      const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
+  try {
+    const [pickRows, masterRows] = await Promise.all([
+      fetchJson(PICKS_SHEET_ID, PICKS_TAB),
+      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+    ]);
 
-      picksTrack.classList.remove("loading");
-      picksTrack.innerHTML = "";
+    picksTrack.classList.remove("loading");
+    picksTrack.innerHTML = "";
 
-      if (!rows.length) {
-        picksTrack.textContent = "Ingen picks akkurat nå.";
-        return;
-      }
+    const masterById = new Map(
+      masterRows.map(row => [String(row.id || "").trim(), row])
+    );
 
-      rows.forEach((p, index) => {
-        const prod = {
-          id: p.id || p.product_id || `pick_${index}`,
-          title: p.product_name || p.title || "",
-          brand: p.brand || "",
-          price: p.price || "",
-          discount: p.discount || "",
-          image_url: p.image_url || "",
-          product_url: p.link || p.product_url || "",
-          rating: p.rating || "",
-          luxury: parseBool(p.luxury),
-          category: p.category || ""
+    const picks = pickRows
+      .filter(row => parseBool(row.active))
+      .map((row, index) => {
+        const productId = String(row.product_id || row.id || "").trim();
+        const master = masterById.get(productId);
+
+        if (!productId || !master) return null;
+
+        const base = createProductBaseFromMaster(master);
+        if (!base) return null;
+
+        return {
+          ...base,
+          id: productId,
+          reason: row.reason || "",
+          rank: parseInt(row.rank, 10) || index + 1,
+          featured: parseBool(row.featured)
         };
-
-        prod.id = resolveProductIdSafe(prod);
-
-        const card = buildEliteCard(prod, {
-          showExcerpt: false,
-          tag: p.reason || "",
-          extraClasses: "pick-card",
-          onCardClick: (product) => {
-            if (product.product_url) {
-              window.open(product.product_url, "_blank", "noopener");
-              return;
-            }
-            if (product.id) {
-              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-            }
-          }
-        });
-
-        picksTrack.appendChild(card);
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        if (a.featured !== b.featured) return a.featured ? -1 : 1;
+        return a.rank - b.rank;
       });
 
-      initArrowSlider(picksTrack);
-    } catch (err) {
-      console.error("❌ Picks error:", err);
-      picksTrack.classList.remove("loading");
-      picksTrack.textContent = "Kunne ikke laste picks.";
+    if (!picks.length) {
+      picksTrack.textContent = "Ingen picks akkurat nå.";
+      return;
     }
+
+    const enrichedPicks = window.BrandRadarOffersEngine
+      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(picks)
+      : picks;
+
+    enrichedPicks.forEach((prod) => {
+      const summary = prod.offer_summary;
+
+      if (summary?.hasOffers) {
+        prod.new_price = summary.lowestPrice;
+        prod.price = summary.lowestPrice;
+
+        const bestOffer = summary.offers?.[0];
+
+        if (bestOffer?.old_price) {
+          prod.old_price = bestOffer.old_price;
+        }
+      }
+
+      const card = buildEliteCard(prod, {
+        showExcerpt: false,
+        tag: prod.reason || "",
+        extraClasses: "pick-card",
+        onCardClick: (product) => {
+          if (product.id) {
+            window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+          }
+        }
+      });
+
+      picksTrack.appendChild(card);
+    });
+
+    initArrowSlider(picksTrack);
+  } catch (err) {
+    console.error("❌ Picks error:", err);
+    picksTrack.classList.remove("loading");
+    picksTrack.textContent = "Kunne ikke laste picks.";
   }
+}
 
   // ======================================================
   // 4) SPOTLIGHT + NEWS FEED
