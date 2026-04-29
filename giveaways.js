@@ -75,22 +75,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const end = new Date(endValue).getTime();
 
     if (!Number.isFinite(end)) {
-      return {
-        text: "Kommer snart",
-        urgency: false,
-        expired: false
-      };
+      return { text: "Kommer snart", urgency: false, expired: false };
     }
 
-    const now = Date.now();
-    const diff = end - now;
+    const diff = end - Date.now();
 
     if (diff <= 0) {
-      return {
-        text: "Giveaway avsluttet",
-        urgency: false,
-        expired: true
-      };
+      return { text: "Giveaway avsluttet", urgency: false, expired: true };
     }
 
     const totalSeconds = Math.floor(diff / 1000);
@@ -121,8 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function buildSponsorLabel(item) {
     const sponsorName = String(item.sponsor_name || "").trim();
-    if (!sponsorName) return "";
-    return `Sponset av ${sponsorName}`;
+    return sponsorName ? `Sponset av ${sponsorName}` : "";
   }
 
   function normalizeRow(row) {
@@ -223,7 +213,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             <div class="giveaway-main-overlay"></div>
 
-            <div class="giveaway-main-countdown ${countdown.urgency ? "urgent" : ""}">
+            <div
+              class="giveaway-main-countdown ${countdown.urgency ? "urgent" : ""}"
+              data-countdown-main="true"
+            >
               ${sanitize(countdown.text)}
             </div>
 
@@ -252,7 +245,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             <div class="giveaway-meta-card">
               <span class="giveaway-meta-label">Frist</span>
-              <div class="giveaway-meta-value">${sanitize(countdown.text)}</div>
+              <div class="giveaway-meta-value" data-countdown-meta="true">${sanitize(countdown.text)}</div>
             </div>
           </div>
 
@@ -295,6 +288,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
+  function updateCountdownOnly(items, activeIndex) {
+    const active = items[activeIndex];
+    if (!active) return;
+
+    const countdown = getCountdownState(active.countdown_end);
+
+    const mainCountdown = shell.querySelector("[data-countdown-main]");
+    const metaCountdown = shell.querySelector("[data-countdown-meta]");
+
+    if (mainCountdown) {
+      mainCountdown.textContent = countdown.text;
+      mainCountdown.classList.toggle("urgent", countdown.urgency);
+    }
+
+    if (metaCountdown) {
+      metaCountdown.textContent = countdown.text;
+    }
+  }
+
   try {
     const rows = await fetch(giveawaysUrl).then(r => r.json());
 
@@ -329,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setInterval(() => {
       if (!document.body.contains(shell)) return;
-      rerender();
+      updateCountdownOnly(giveaways, activeIndex);
     }, 1000);
 
   } catch (error) {
