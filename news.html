@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="assets/css/responsive/mobile/news-mobile.css">
 </head>
 <body>
-  <!-- ✅ HEADER -->
   <header class="main-header">
     <div class="nav-container">
       <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
@@ -96,18 +95,14 @@
     </div>
   </nav>
 
-  <!-- ✅ MEGA-MENY -->
   <nav class="mega-menu"></nav>
 
-  <!-- 🔽 MAIN -->
   <main class="news-page">
     <section class="news-intro section-padding">
       <div class="container">
         <div class="news-intro__eyebrow">BrandRadar News</div>
         <h1>Curated drops, deals & spotlight picks</h1>
-        <p>
-          Oppdag ukens kampanjer, håndplukkede favoritter og nye produkter.
-        </p>
+        <p>Oppdag ukens kampanjer, håndplukkede favoritter og nye produkter.</p>
       </div>
     </section>
 
@@ -123,9 +118,7 @@
 
         <div class="slider-wrapper slider-wrapper--spotlight" data-slider="spotlight">
           <button type="button" class="slider-btn prev" aria-label="Forrige spotlight">❮</button>
-
           <div class="featured-wrapper loading" id="spotlight-track">Laster spotlight...</div>
-
           <button type="button" class="slider-btn next" aria-label="Neste spotlight">❯</button>
         </div>
       </div>
@@ -152,9 +145,7 @@
           <div>
             <span class="section-kicker">This Week</span>
             <h2>Ukens Deals</h2>
-            <p>
-              Gode tilbud og produkter det er verdt å få med seg akkurat nå.
-            </p>
+            <p>Gode tilbud og produkter det er verdt å få med seg akkurat nå.</p>
           </div>
 
           <a href="category.html?collection=deals" class="section-link">Se flere deals</a>
@@ -162,42 +153,34 @@
 
         <div class="slider-wrapper slider-wrapper--deals" data-slider="deals">
           <button type="button" class="slider-btn prev" aria-label="Forrige deals">❮</button>
-
           <div class="deals-grid loading" id="deals-track">Laster deals...</div>
-
           <button type="button" class="slider-btn next" aria-label="Neste deals">❯</button>
         </div>
       </div>
     </section>
 
-    <section id="picks-section" class="section-padding news-section news-section--picks">
+    <section id="picks-section" class="section-padding news-section news-section--picks radar-picks-section">
       <div class="container">
-        <div class="section-heading section-heading--split">
+        <div class="radar-picks-header">
           <div>
-            <span class="section-kicker">Curated</span>
+            <span class="radar-tag">RADAR PICKS ✦</span>
             <h2>Radar Picks</h2>
-            <p>
-              Håndplukkede favoritter fra BrandRadar.
-            </p>
+            <p>Håndplukkede produkter vi mener skiller seg ut akkurat nå.</p>
           </div>
 
-          <a href="category.html?collection=picks" class="section-link">Se alle picks</a>
+          <a href="category.html?collection=picks" class="radar-link">Se alle picks →</a>
         </div>
 
-        <div class="news-picks-layout">
-          <aside class="news-picks-aside">
-            <div class="news-picks-aside__badge">Editor’s Selection</div>
+        <div class="radar-picks-layout">
+          <aside class="radar-intro-card">
+            <span class="editor-badge">EDITOR'S PICK</span>
             <h3>Utvalgte picks</h3>
-            <p>
-              Produkter vi mener skiller seg ut akkurat nå.
-            </p>
+            <p>Produkter vi mener skiller seg ut akkurat nå.</p>
           </aside>
 
-          <div class="slider-wrapper slider-wrapper--picks" data-slider="picks">
+          <div class="radar-slider-wrapper slider-wrapper slider-wrapper--picks" data-slider="picks">
             <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
-
-            <div class="picks-grid loading" id="picks-track">Laster picks...</div>
-
+            <div class="picks-grid radar-track loading" id="picks-track">Laster picks...</div>
             <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
           </div>
         </div>
@@ -221,7 +204,7 @@
     </section>
   </main>
 
-  <!-- 🧠 Scripts -->
+  <script src="offers-engine.js"></script>
   <script src="favorites-core.js"></script>
   <script src="script.js"></script>
   <script src="search.js"></script>
