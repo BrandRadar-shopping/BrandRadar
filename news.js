@@ -1107,7 +1107,15 @@ async function loadPicks() {
         const productId = String(row.product_id || row.id || "").trim();
         const master = masterById.get(productId);
 
-        if (!productId || !master) return null;
+        if (!productId) {
+          console.warn("⚠️ Pick mangler product_id:", row);
+          return null;
+        }
+
+        if (!master) {
+          console.warn(`⚠️ Fant ikke produkt ${productId} i BrandRadarProdukter`, row);
+          return null;
+        }
 
         const base = createProductBaseFromMaster(master);
         if (!base) return null;
@@ -1128,6 +1136,7 @@ async function loadPicks() {
 
     if (!picks.length) {
       picksTrack.textContent = "Ingen picks akkurat nå.";
+      console.warn("⚠️ Ingen Radar Picks kunne bygges. Sjekk product_id mot BrandRadarProdukter.");
       return;
     }
 
@@ -1143,7 +1152,6 @@ async function loadPicks() {
         prod.price = summary.lowestPrice;
 
         const bestOffer = summary.offers?.[0];
-
         if (bestOffer?.old_price) {
           prod.old_price = bestOffer.old_price;
         }
