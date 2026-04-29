@@ -1089,82 +1089,31 @@ async function loadPicks() {
   if (!picksTrack) return;
 
   try {
-    const [pickRows, masterRows] = await Promise.all([
-      fetchJson(PICKS_SHEET_ID, PICKS_TAB),
-      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
-    ]);
+    const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
 
-    picksTrack.classList.remove("loading");
-    picksTrack.innerHTML = "";
+    const masterRows = await fetchJson(MASTER_SHEET_ID, MASTER_TAB);
 
-    const masterById = new Map(
-      masterRows.map(row => [String(row.id || "").trim(), row])
+    const masterMap = new Map(
+      masterRows.map(p => [String(p.id).trim(), p])
     );
 
-    const picks = pickRows
-      .filter(row => parseBool(row.active))
-      .map((row, index) => {
-        const productId = String(row.product_id || row.id || "").trim();
-        const master = masterById.get(productId);
+    picksTrack.innerHTML = "";
 
-        if (!productId) {
-          console.warn("⚠️ Pick mangler product_id:", row);
-          return null;
-        }
+    const active = rows
+      .filter(r => parseBool(r.active))
+      .sort((a, b) => (parseInt(a.rank) || 999) - (parseInt(b.rank) || 999));
 
-        if (!master) {
-          console.warn(`⚠️ Fant ikke produkt ${productId} i BrandRadarProdukter`, row);
-          return null;
-        }
+    active.forEach((row) => {
+      const master = masterMap.get(String(row.product_id).trim());
+      if (!master) return;
 
-        const base = createProductBaseFromMaster(master);
-        if (!base) return null;
+      const product = createProductBaseFromMaster(master);
 
-        return {
-          ...base,
-          id: productId,
-          reason: row.reason || "",
-          rank: parseInt(row.rank, 10) || index + 1,
-          featured: parseBool(row.featured)
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => {
-        if (a.featured !== b.featured) return a.featured ? -1 : 1;
-        return a.rank - b.rank;
-      });
-
-    if (!picks.length) {
-      picksTrack.textContent = "Ingen picks akkurat nå.";
-      console.warn("⚠️ Ingen Radar Picks kunne bygges. Sjekk product_id mot BrandRadarProdukter.");
-      return;
-    }
-
-    const enrichedPicks = window.BrandRadarOffersEngine
-      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(picks)
-      : picks;
-
-    enrichedPicks.forEach((prod) => {
-      const summary = prod.offer_summary;
-
-      if (summary?.hasOffers) {
-        prod.new_price = summary.lowestPrice;
-        prod.price = summary.lowestPrice;
-
-        const bestOffer = summary.offers?.[0];
-        if (bestOffer?.old_price) {
-          prod.old_price = bestOffer.old_price;
-        }
-      }
-
-      const card = buildEliteCard(prod, {
-        showExcerpt: false,
-        tag: prod.reason || "",
+      const card = buildEliteCard(product, {
         extraClasses: "pick-card",
-        onCardClick: (product) => {
-          if (product.id) {
-            window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-          }
+        tag: row.reason || "",
+        onCardClick: (p) => {
+          window.location.href = `product.html?id=${encodeURIComponent(p.id)}`;
         }
       });
 
@@ -1172,10 +1121,9 @@ async function loadPicks() {
     });
 
     initArrowSlider(picksTrack);
+
   } catch (err) {
     console.error("❌ Picks error:", err);
-    picksTrack.classList.remove("loading");
-    picksTrack.textContent = "Kunne ikke laste picks.";
   }
 }
 
