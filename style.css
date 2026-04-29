@@ -41,7 +41,7 @@
 @import url('./css/components/news-cards.css');
 @import url('./css/components/sliders.css');
 @import url('./css/components/hero.css');
-
+@import url("./css/components/radar-picks.css");
 /* Breadcrumbs / små helpers */
 @import url('./css/components/breadcrumb.css');
 
