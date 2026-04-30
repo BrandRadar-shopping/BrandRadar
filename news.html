@@ -160,32 +160,42 @@
     </section>
 
     <section id="picks-section" class="section-padding news-section news-section--picks radar-picks-section">
-      <div class="container">
-        <div class="radar-picks-header">
-          <div>
-            <span class="radar-tag">RADAR PICKS ✦</span>
-            <h2>Radar Picks</h2>
-            <p>Håndplukkede produkter vi mener skiller seg ut akkurat nå.</p>
-          </div>
+  <div class="container">
+    <div class="radar-picks-header">
+      <div>
+        <span class="radar-tag">RADAR PICKS ✦</span>
+        <h2>Radar Picks</h2>
+        <p>Håndplukkede produkter vi mener skiller seg ut akkurat nå.</p>
+      </div>
 
-          <a href="category.html?collection=picks" class="radar-link">Se alle picks →</a>
+      <a href="category.html?collection=picks" class="radar-link">Se alle picks →</a>
+    </div>
+
+    <div class="radar-picks-layout">
+      <aside class="radar-intro-card">
+        <span class="editor-badge">EDITOR'S PICK</span>
+        <h3>Utvalgte picks</h3>
+        <p>Produkter vi mener skiller seg ut akkurat nå.</p>
+      </aside>
+
+      <div class="radar-slider-panel">
+        <div class="radar-slider-wrapper slider-wrapper slider-wrapper--picks" data-slider="picks">
+          <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
+          <div class="picks-grid radar-track loading" id="picks-track">Laster picks...</div>
+          <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
         </div>
 
-        <div class="radar-picks-layout">
-          <aside class="radar-intro-card">
-            <span class="editor-badge">EDITOR'S PICK</span>
-            <h3>Utvalgte picks</h3>
-            <p>Produkter vi mener skiller seg ut akkurat nå.</p>
-          </aside>
-
-          <div class="radar-slider-wrapper slider-wrapper slider-wrapper--picks" data-slider="picks">
-            <button type="button" class="slider-btn prev" aria-label="Forrige picks">❮</button>
-            <div class="picks-grid radar-track loading" id="picks-track">Laster picks...</div>
-            <button type="button" class="slider-btn next" aria-label="Neste picks">❯</button>
+        <div class="radar-info-banner">
+          <div>
+            <span class="radar-info-kicker">BrandRadar selection</span>
+            <strong>Pris, popularitet og produktprofil samlet i én oversikt.</strong>
           </div>
+          <p>Vi løfter frem produkter som er relevante akkurat nå.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section id="news-feed" class="section-padding news-section news-section--feed">
       <div class="container">
