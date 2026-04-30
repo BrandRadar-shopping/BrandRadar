@@ -1088,45 +1088,173 @@ async function loadDeals() {
 async function loadPicks() {
   if (!picksTrack) return;
 
+  function buildRadarPickCard(product) {
+    const pid = resolveProductIdSafe(product);
+    const summary = product.offer_summary;
+
+    const bestOffer = summary?.offers?.[0] || null;
+    const price =
+      summary?.hasOffers && summary.lowestPrice != null
+        ? summary.lowestPrice
+        : parseNum(product.price);
+
+    const oldPrice =
+      bestOffer?.old_price ||
+      parseNum(product.old_price) ||
+      null;
+
+    const hasDiscount = price && oldPrice && oldPrice > price;
+    const discountPct = hasDiscount
+      ? Math.round(((oldPrice - price) / oldPrice) * 100)
+      : null;
+
+    const isFav =
+      typeof window.isProductFavorite === "function" && pid
+        ? window.isProductFavorite(pid)
+        : false;
+
+    const card = document.createElement("article");
+    card.className = "radar-pick-card";
+    card.setAttribute("data-product-id", pid || "");
+
+    card.innerHTML = `
+      <button
+        type="button"
+        class="radar-pick-fav ${isFav ? "active" : ""}"
+        aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+          2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
+          3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </button>
+
+      ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
+
+      <div class="radar-pick-media">
+        <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(product.title || product.product_name || "")}" loading="lazy">
+      </div>
+
+      <div class="radar-pick-body">
+        <p class="radar-pick-brand">${escapeHtml(product.brand || "")}</p>
+
+        <h3>${escapeHtml(product.title || product.product_name || product.name || "Produkt")}</h3>
+
+        ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
+
+        <div class="radar-pick-bottom">
+          <div class="radar-pick-price">
+            ${price != null ? `<span>${formatPrice(price)}</span>` : ""}
+            ${hasDiscount ? `<del>${formatPrice(oldPrice)}</del>` : ""}
+          </div>
+
+          ${summary?.storeCount
+            ? `<span class="radar-pick-stores">${summary.storeCount} butikk${summary.storeCount === 1 ? "" : "er"}</span>`
+            : ""
+          }
+        </div>
+      </div>
+    `;
+
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".radar-pick-fav")) return;
+      if (pid) window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+    });
+
+    const favBtn = card.querySelector(".radar-pick-fav");
+    favBtn?.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (typeof window.toggleFavorite !== "function" || !pid) return;
+
+      window.toggleFavorite({
+        id: pid,
+        title: product.title || product.product_name || product.name || "Uten navn",
+        product_name: product.title || product.product_name || product.name || "Uten navn",
+        brand: product.brand || "",
+        price: product.price || price || "",
+        discount: product.discount || "",
+        image_url: product.image_url || "",
+        product_url: product.product_url || "",
+        category: product.category || "",
+        rating: product.rating || "",
+        luxury: !!product.luxury
+      }, favBtn);
+
+      const active =
+        typeof window.isProductFavorite === "function"
+          ? window.isProductFavorite(pid)
+          : favBtn.classList.toggle("active");
+
+      favBtn.classList.toggle("active", active);
+      favBtn.setAttribute(
+        "aria-label",
+        active ? "Fjern fra favoritter" : "Legg til favoritt"
+      );
+    });
+
+    return card;
+  }
+
   try {
-    const rows = await fetchJson(PICKS_SHEET_ID, PICKS_TAB);
+    const [pickRows, masterRows] = await Promise.all([
+      fetchJson(PICKS_SHEET_ID, PICKS_TAB),
+      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+    ]);
 
-    const masterRows = await fetchJson(MASTER_SHEET_ID, MASTER_TAB);
-
-    const masterMap = new Map(
-      masterRows.map(p => [String(p.id).trim(), p])
-    );
-
+    picksTrack.classList.remove("loading");
     picksTrack.innerHTML = "";
 
-    const active = rows
-      .filter(r => parseBool(r.active))
-      .sort((a, b) => (parseInt(a.rank) || 999) - (parseInt(b.rank) || 999));
+    const masterById = new Map(
+      masterRows.map(row => [String(row.id || "").trim(), row])
+    );
 
-    active.forEach((row) => {
-      const master = masterMap.get(String(row.product_id).trim());
-      if (!master) return;
+    const picks = pickRows
+      .filter(row => parseBool(row.active))
+      .map((row, index) => {
+        const productId = String(row.product_id || row.id || "").trim();
+        const master = masterById.get(productId);
 
-      const product = createProductBaseFromMaster(master);
-
-      const card = buildEliteCard(product, {
-        extraClasses: "pick-card",
-        tag: row.reason || "",
-        onCardClick: (p) => {
-          window.location.href = `product.html?id=${encodeURIComponent(p.id)}`;
+        if (!productId || !master) {
+          console.warn("⚠️ Radar Pick mangler match i BrandRadarProdukter:", productId, row);
+          return null;
         }
-      });
 
-      picksTrack.appendChild(card);
+        const base = createProductBaseFromMaster(master);
+        if (!base) return null;
+
+        return {
+          ...base,
+          id: productId,
+          reason: row.reason || "",
+          rank: parseInt(row.rank, 10) || index + 1
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.rank - b.rank);
+
+    if (!picks.length) {
+      picksTrack.textContent = "Ingen picks akkurat nå.";
+      return;
+    }
+
+    const enrichedPicks = window.BrandRadarOffersEngine
+      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(picks)
+      : picks;
+
+    enrichedPicks.forEach(product => {
+      picksTrack.appendChild(buildRadarPickCard(product));
     });
 
     initArrowSlider(picksTrack);
-
   } catch (err) {
     console.error("❌ Picks error:", err);
+    picksTrack.classList.remove("loading");
+    picksTrack.textContent = "Kunne ikke laste picks.";
   }
 }
-
   // ======================================================
   // 4) SPOTLIGHT + NEWS FEED
   // ======================================================
