@@ -1,6 +1,6 @@
 @media (max-width: 768px) {
   .news-section--picks.radar-picks-section {
-    padding: 30px 0 36px;
+    padding: 28px 0 34px;
     overflow: hidden;
     background:
       radial-gradient(circle at 88% 4%, rgba(0,112,243,.07), transparent 28%),
@@ -8,66 +8,61 @@
   }
 
   .news-section--picks .section-container {
-    max-width: none !important;
     width: 100% !important;
+    max-width: none !important;
     padding: 0 !important;
   }
 
-  /* TOP — like mockup */
+  /* CLEAN TOP */
   .news-section--picks .radar-picks-header {
-    display: grid !important;
-    grid-template-columns: 1fr auto;
-    align-items: end;
-    gap: 14px;
-    padding: 0 28px;
+    display: block !important;
+    padding: 0 24px;
     margin: 0 0 18px;
   }
 
   .news-section--picks .radar-tag {
-    margin: 0 0 7px;
-    font-size: .66rem;
+    display: block;
+    margin: 0 0 8px;
+    font-size: 0.68rem;
     line-height: 1;
-    letter-spacing: .16em;
+    letter-spacing: 0.15em;
     font-weight: 900;
   }
 
   .news-section--picks .radar-picks-header h2 {
     margin: 0;
-    font-size: 2.25rem;
-    line-height: .95;
-    letter-spacing: -.065em;
+    font-size: 2.35rem;
+    line-height: 0.95;
+    letter-spacing: -0.065em;
   }
 
   .news-section--picks .radar-picks-header p {
-    margin: 9px 0 0;
-    max-width: 25ch;
-    font-size: .84rem;
-    line-height: 1.32;
+    max-width: 30ch;
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+    line-height: 1.36;
   }
 
   .news-section--picks .radar-link {
+    margin-top: 16px;
     min-height: 40px;
-    padding: 0 17px;
-    font-size: .78rem;
-    white-space: nowrap;
+    padding: 0 18px;
+    font-size: 0.8rem;
     border-radius: 999px;
+    display: inline-flex;
   }
 
   /* PRODUCT RAIL */
-  .news-section--picks .radar-slider-wrapper {
-    overflow: visible !important;
-  }
-
   .news-section--picks .radar-track,
   .news-section--picks .picks-grid {
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 18px !important;
+    gap: 16px !important;
     overflow-x: auto !important;
     overflow-y: visible !important;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: 28px;
-    padding: 4px 28px 16px !important;
+    scroll-padding-left: 24px;
+    padding: 4px 24px 14px !important;
     scrollbar-width: none;
   }
 
@@ -80,12 +75,12 @@
     display: none !important;
   }
 
-  /* CARD — wider, tighter, closer to mockup */
+  /* PRODUCT CARD */
   .news-section--picks .radar-pick-card {
     flex: 0 0 72% !important;
     width: 72% !important;
     min-width: 72% !important;
-    height: 382px !important;
+    height: auto !important;
     border-radius: 22px;
     scroll-snap-align: center;
     background: #fff;
@@ -104,39 +99,37 @@
     height: 100%;
     padding: 4px 8px;
     object-fit: contain;
-    transform: scale(1.2);
+    transform: scale(1.18);
     transform-origin: center;
   }
 
   .news-section--picks .radar-pick-body {
-    height: 204px;
-    padding: 12px 16px 14px;
-    display: grid;
-    grid-template-rows: auto auto auto auto 1fr;
-    align-content: start;
+    padding: 12px 16px 15px;
+    display: flex;
+    flex-direction: column;
   }
 
   .news-section--picks .radar-pick-brand {
     margin: 0 0 5px;
-    font-size: .66rem;
+    font-size: 0.66rem;
     line-height: 1;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
   }
 
   .news-section--picks .radar-pick-card h3 {
     margin: 0;
-    font-size: .92rem;
-    line-height: 1.12;
-    min-height: unset !important;
-    max-height: 2.25em;
+    font-size: 0.92rem;
+    line-height: 1.14;
+    min-height: 0 !important;
+    max-height: 2.28em;
     -webkit-line-clamp: 2;
   }
 
   .news-section--picks .radar-pick-reason {
     margin: 7px 0 0;
-    font-size: .76rem;
+    font-size: 0.76rem;
     line-height: 1.25;
-    min-height: unset !important;
+    min-height: 0 !important;
     max-height: 2.5em;
     -webkit-line-clamp: 2;
   }
@@ -145,13 +138,16 @@
     margin-top: 8px;
     padding: 5px 9px;
     max-width: 150px;
-    font-size: .66rem;
+    font-size: 0.66rem;
   }
 
+  /* removes the big empty white gap */
   .news-section--picks .radar-pick-bottom {
-    align-self: end;
-    margin-top: 0 !important;
+    margin-top: 12px !important;
     padding-top: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .news-section--picks .radar-pick-price span {
@@ -159,7 +155,7 @@
   }
 
   .news-section--picks .radar-pick-price del {
-    font-size: .74rem;
+    font-size: 0.74rem;
   }
 
   .news-section--picks .radar-pick-arrow {
@@ -180,29 +176,29 @@
     left: 15px;
     min-height: 29px;
     padding: 0 12px;
-    font-size: .62rem;
+    font-size: 0.62rem;
   }
 
   .news-section--picks .radar-pick-discount {
     right: 16px;
-    bottom: 150px;
+    bottom: 118px;
     min-height: 24px;
     padding: 0 9px;
-    font-size: .68rem;
+    font-size: 0.68rem;
   }
 
-  /* BENEFIT BAR — same width as rail, cleaner */
+  /* BENEFIT BAR — wider and cleaner */
   .news-section--picks .radar-benefit-bar {
-    width: auto !important;
+    margin: 6px 16px 0 !important;
+    width: calc(100% - 32px) !important;
     max-width: none !important;
     box-sizing: border-box;
-    margin: 4px 28px 0 !important;
     padding: 15px 14px !important;
     border-radius: 22px;
     min-height: unset !important;
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 10px;
+    gap: 12px;
     background: rgba(255,255,255,.98);
     border: 1px solid rgba(15,23,42,.065);
     box-shadow: 0 16px 36px rgba(15,23,42,.075);
@@ -221,12 +217,12 @@
   .news-section--picks .radar-benefit > span {
     width: 38px;
     height: 38px;
-    font-size: .9rem;
+    font-size: 0.9rem;
   }
 
   .news-section--picks .radar-benefit strong {
     margin: 0;
-    font-size: .66rem;
+    font-size: 0.66rem;
     line-height: 1.05;
     font-weight: 900;
   }
@@ -238,35 +234,25 @@
 
 @media (max-width: 420px) {
   .news-section--picks .radar-picks-header {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 22px;
+    padding-right: 22px;
   }
 
   .news-section--picks .radar-track,
   .news-section--picks .picks-grid {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-    scroll-padding-left: 24px;
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+    scroll-padding-left: 22px;
   }
 
   .news-section--picks .radar-pick-card {
     flex-basis: 72% !important;
     width: 72% !important;
     min-width: 72% !important;
-    height: 374px !important;
   }
 
   .news-section--picks .radar-pick-media {
-    height: 172px !important;
-    flex-basis: 172px !important;
-  }
-
-  .news-section--picks .radar-pick-body {
-    height: 202px;
-  }
-
-  .news-section--picks .radar-benefit-bar {
-    margin-left: 24px !important;
-    margin-right: 24px !important;
+    height: 170px !important;
+    flex-basis: 170px !important;
   }
 }
