@@ -426,3 +426,39 @@
     width: calc(100% - 12px) !important;
   }
 }
+
+@media (max-width: 768px) {
+  /* Rabatt skal ikke ligge over tittelen */
+  .news-section--picks .radar-pick-discount {
+    top: 232px !important;
+    right: 14px !important;
+    bottom: auto !important;
+  }
+
+  .news-section--picks .radar-pick-card h3 {
+    max-width: calc(100% - 58px) !important;
+  }
+
+  /* Benefit bar lavere/tightere */
+  .news-section--picks .radar-benefit-bar {
+    padding: 10px 10px 11px !important;
+    gap: 8px !important;
+  }
+
+  .news-section--picks .radar-benefit {
+    gap: 4px !important;
+  }
+
+  .news-section--picks .radar-benefit > span {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .news-section--picks .radar-benefit strong {
+    font-size: 0.62rem !important;
+    line-height: 1.02 !important;
+  }
+}
