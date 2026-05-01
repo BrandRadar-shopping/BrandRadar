@@ -1,0 +1,213 @@
+@media (max-width: 768px) {
+  .news-section--picks.radar-picks-section {
+    padding: 48px 0 62px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 88% 6%, rgba(0, 112, 243, 0.08), transparent 28%),
+      linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+  }
+
+  .news-section--picks .section-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .news-section--picks .radar-picks-header {
+    padding: 0 22px;
+    margin-bottom: 24px;
+    gap: 18px;
+  }
+
+  .news-section--picks .radar-tag {
+    margin-bottom: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.13em;
+  }
+
+  .news-section--picks .radar-picks-header h2 {
+    font-size: clamp(2.75rem, 14vw, 4rem);
+    line-height: 0.92;
+    letter-spacing: -0.075em;
+  }
+
+  .news-section--picks .radar-picks-header p {
+    max-width: 28ch;
+    margin-top: 14px;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .news-section--picks .radar-link {
+    min-height: 46px;
+    padding: 0 22px;
+    font-size: 0.92rem;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+  }
+
+  .news-section--picks .radar-track,
+  .news-section--picks .picks-grid {
+    gap: 18px !important;
+    padding: 6px 22px 20px !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 22px;
+  }
+
+  .news-section--picks .radar-pick-card {
+    flex: 0 0 82%;
+    width: 82%;
+    min-width: 82%;
+    height: 526px;
+    border-radius: 24px;
+    scroll-snap-align: center;
+    box-shadow: 0 18px 46px rgba(15, 23, 42, 0.1);
+  }
+
+  .news-section--picks .radar-pick-media {
+    height: 232px;
+    flex-basis: 232px;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .news-section--picks .radar-pick-media img {
+    padding: 12px;
+  }
+
+  .news-section--picks .radar-pick-body {
+    padding: 17px 20px 20px;
+  }
+
+  .news-section--picks .radar-pick-brand {
+    margin-bottom: 8px;
+    font-size: 0.73rem;
+  }
+
+  .news-section--picks .radar-pick-card h3 {
+    font-size: 1.05rem;
+    line-height: 1.18;
+    min-height: 2.36em;
+  }
+
+  .news-section--picks .radar-pick-reason {
+    margin-top: 9px;
+    font-size: 0.9rem;
+    line-height: 1.38;
+    min-height: 2.76em;
+    -webkit-line-clamp: 2;
+  }
+
+  .news-section--picks .radar-pick-label {
+    margin-top: 12px;
+    max-width: 170px;
+    font-size: 0.76rem;
+  }
+
+  .news-section--picks .radar-pick-bottom {
+    padding-top: 14px;
+  }
+
+  .news-section--picks .radar-pick-price span {
+    font-size: 1.28rem;
+  }
+
+  .news-section--picks .radar-pick-price del {
+    font-size: 0.88rem;
+  }
+
+  .news-section--picks .radar-pick-arrow {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .news-section--picks .radar-pick-fav {
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .news-section--picks .radar-pick-badge {
+    top: 18px;
+    left: 18px;
+    min-height: 34px;
+    padding: 0 14px;
+  }
+
+  .news-section--picks .radar-pick-discount {
+    right: 20px;
+    bottom: 170px;
+  }
+
+  .news-section--picks .slider-btn {
+    display: none;
+  }
+
+  .news-section--picks .radar-benefit-bar {
+    margin: 8px 22px 0;
+    min-height: unset;
+    padding: 18px;
+    border-radius: 24px;
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .news-section--picks .radar-benefit-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .news-section--picks .radar-benefit {
+    flex: 0 0 74%;
+    min-width: 74%;
+    scroll-snap-align: start;
+    padding: 4px 2px;
+  }
+
+  .news-section--picks .radar-benefit > span {
+    width: 48px;
+    height: 48px;
+  }
+
+  .news-section--picks .radar-benefit strong {
+    font-size: 0.98rem;
+  }
+
+  .news-section--picks .radar-benefit p {
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .news-section--picks .radar-pick-card {
+    flex-basis: 86%;
+    width: 86%;
+    min-width: 86%;
+    height: 522px;
+  }
+
+  .news-section--picks .radar-pick-media {
+    height: 224px;
+    flex-basis: 224px;
+  }
+
+  .news-section--picks .radar-picks-header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .news-section--picks .radar-track,
+  .news-section--picks .picks-grid {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    scroll-padding-left: 18px;
+  }
+
+  .news-section--picks .radar-benefit-bar {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+}
