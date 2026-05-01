@@ -256,3 +256,68 @@
     flex-basis: 170px !important;
   }
 }
+
+/* ===== FINAL POLISH ===== */
+
+/* TOP – mindre tung, mer premium */
+.news-section--picks .radar-picks-header h2 {
+  font-size: 2.1rem;
+  letter-spacing: -0.05em;
+}
+
+.news-section--picks .radar-picks-header p {
+  font-size: 0.82rem;
+  line-height: 1.28;
+  max-width: 26ch;
+}
+
+.news-section--picks .radar-link {
+  margin-top: 12px;
+  font-size: 0.76rem;
+  padding: 0 16px;
+}
+
+/* CARD – mindre luft + større produkt */
+.news-section--picks .radar-pick-media {
+  height: 165px !important;
+  flex-basis: 165px !important;
+}
+
+.news-section--picks .radar-pick-media img {
+  transform: scale(1.25); /* 🔥 mer fokus på produkt */
+}
+
+.news-section--picks .radar-pick-body {
+  padding: 10px 14px 12px;
+}
+
+/* Fjern litt “støy” i midten */
+.news-section--picks .radar-pick-reason {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  max-height: 2.2em;
+}
+
+/* Strammere spacing før pris */
+.news-section--picks .radar-pick-bottom {
+  margin-top: 10px !important;
+}
+
+/* BENEFIT BAR – mer premium */
+.news-section--picks .radar-benefit-bar {
+  padding: 14px 10px !important;
+  gap: 8px;
+  border-radius: 18px;
+}
+
+/* Ikoner litt mindre og renere */
+.news-section--picks .radar-benefit > span {
+  width: 34px;
+  height: 34px;
+}
+
+/* Tittel mer “tight” */
+.news-section--picks .radar-benefit strong {
+  font-size: 0.64rem;
+  letter-spacing: -0.01em;
+}
