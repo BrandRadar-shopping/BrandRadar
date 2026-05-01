@@ -1156,3 +1156,32 @@
     font-weight: 900 !important;
   }
 }
+@media (max-width: 768px) {
+  .news-section--deals .product-card p:not(.brand):not(.product-brand),
+  .news-section--deals .elite-card p:not(.brand):not(.product-brand),
+  .news-section--deals .product-card .product-description,
+  .news-section--deals .product-card .product-excerpt,
+  .news-section--deals .product-card .product-note,
+  .news-section--deals .product-card .product-reason,
+  .news-section--deals .product-card .card-note,
+  .news-section--deals .product-card .card-reason,
+  .news-section--deals .elite-card .product-description,
+  .news-section--deals .elite-card .product-excerpt,
+  .news-section--deals .elite-card .product-note,
+  .news-section--deals .elite-card .product-reason,
+  .news-section--deals .elite-card .card-note,
+  .news-section--deals .elite-card .card-reason {
+    display: none !important;
+  }
+
+  .news-section--deals .product-card [class*="reason"],
+  .news-section--deals .product-card [class*="note"],
+  .news-section--deals .product-card [class*="excerpt"],
+  .news-section--deals .product-card [class*="description"],
+  .news-section--deals .elite-card [class*="reason"],
+  .news-section--deals .elite-card [class*="note"],
+  .news-section--deals .elite-card [class*="excerpt"],
+  .news-section--deals .elite-card [class*="description"] {
+    display: none !important;
+  }
+}
