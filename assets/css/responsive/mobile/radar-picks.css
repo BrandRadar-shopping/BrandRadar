@@ -321,3 +321,24 @@
   font-size: 0.64rem;
   letter-spacing: -0.01em;
 }
+
+.news-section--picks .radar-pick-reason {
+  display: none !important;
+}
+
+/* TOP – bruk mer bredde */
+.news-section--picks .radar-picks-header {
+  padding: 0 20px; /* litt mindre sidepadding */
+}
+
+.news-section--picks .radar-picks-header p {
+  max-width: none; /* 🔥 fjern begrensning */
+  width: 100%;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* Litt mindre luft totalt */
+.news-section--picks.radar-picks-section {
+  padding-top: 22px;
+}
