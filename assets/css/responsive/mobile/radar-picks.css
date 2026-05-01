@@ -327,3 +327,60 @@
     width: calc(100% - 36px) !important;
   }
 }
+
+@media (max-width: 768px) {
+  /* TOP TEXT – kun første setning, ingen lekkasje */
+  .news-section--picks .radar-picks-header p {
+    max-width: 30ch !important;
+    width: auto !important;
+    font-size: 0.9rem !important;
+    line-height: 1.32 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  .news-section--picks .radar-picks-header p br,
+  .news-section--picks .radar-picks-header p br + * {
+    display: none !important;
+  }
+
+  /* BENEFIT BAR – samme bredde som slider-rammen over */
+  .news-section--picks .radar-benefit-bar {
+    margin: 8px 8px 0 !important;
+    width: calc(100% - 16px) !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+
+    padding: 15px 12px !important;
+    border-radius: 22px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  /* Ikon-sirkler helt midtstilt */
+  .news-section--picks .radar-benefit > span {
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    text-align: center !important;
+  }
+
+  /* GYM PICK sort/gull */
+  .news-section--picks .radar-pick-badge.is-gym {
+    background: #07111f !important;
+    color: #f5c542 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .news-section--picks .radar-benefit-bar {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    width: calc(100% - 16px) !important;
+  }
+}
