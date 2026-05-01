@@ -177,6 +177,7 @@
     letter-spacing: -0.035em !important;
     min-height: 0 !important;
     max-height: 2.28em !important;
+    max-width: calc(100% - 58px) !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -318,8 +319,9 @@
 
   .news-section--picks .radar-pick-discount {
     position: absolute !important;
+    top: 232px !important;
     right: 14px !important;
-    bottom: 110px !important;
+    bottom: auto !important;
     z-index: 20 !important;
     min-height: 24px !important;
     padding: 0 9px !important;
@@ -333,63 +335,87 @@
     font-weight: 950 !important;
   }
 
-  /* ================= BENEFIT BAR ================= */
-
-  @media (max-width: 768px) {
+  /* ================= BENEFIT BAR — HIGH END ================= */
 
   .news-section--picks .radar-benefit-bar {
-    margin: 12px 12px 0 !important;
+    margin: 14px 12px 0 !important;
     width: calc(100% - 24px) !important;
-    padding: 14px 12px !important;
-    border-radius: 22px !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    padding: 18px 14px !important;
+    border-radius: 24px !important;
+    background:
+      linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%) !important;
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+    box-shadow:
+      0 20px 50px rgba(15, 23, 42, 0.08),
+      0 6px 18px rgba(15, 23, 42, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 10px !important;
+    gap: 12px !important;
+    overflow: hidden !important;
   }
 
   .news-section--picks .radar-benefit {
+    min-width: 0 !important;
+    width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
+    gap: 10px !important;
     text-align: center !important;
+    padding: 0 !important;
   }
 
-  /* 🔥 IKON – litt større og mer premium */
   .news-section--picks .radar-benefit > span {
-    width: 40px !important;
-    height: 40px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
     border-radius: 999px !important;
-    background: #07111f !important;
+    background:
+      radial-gradient(circle at 30% 25%, #1f2a3f 0%, #07111f 60%, #020617 100%) !important;
     color: #f6c84c !important;
-
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-
-    font-size: 1rem !important;
+    text-align: center !important;
+    font-size: 1.05rem !important;
     font-weight: 900 !important;
-
-    box-shadow: 0 10px 22px rgba(0,0,0,0.18) !important;
+    line-height: 1 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.35) !important;
   }
 
-  /* 🔥 TEKST – helt tight og midtstilt */
+  .news-section--picks .radar-benefit > div {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
   .news-section--picks .radar-benefit strong {
     display: block !important;
-    font-size: 0.64rem !important;
-    line-height: 1.05 !important;
+    width: 100% !important;
+    max-width: 70px !important;
+    margin: 0 auto !important;
+    color: #07111f !important;
+    font-size: 0.68rem !important;
+    line-height: 1.08 !important;
     font-weight: 900 !important;
+    letter-spacing: -0.015em !important;
     text-align: center !important;
-    letter-spacing: -0.02em !important;
+    white-space: normal !important;
+    word-break: normal !important;
   }
 
   .news-section--picks .radar-benefit p {
     display: none !important;
   }
-
 }
-
 
 @media (max-width: 420px) {
   .news-section--picks .radar-picks-header {
@@ -416,174 +442,21 @@
   }
 
   .news-section--picks .radar-benefit-bar {
-    margin-left: 6px !important;
-    margin-right: 6px !important;
-    width: calc(100% - 12px) !important;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Rabatt skal ikke ligge over tittelen */
-  .news-section--picks .radar-pick-discount {
-    top: 232px !important;
-    right: 14px !important;
-    bottom: auto !important;
-  }
-
-  .news-section--picks .radar-pick-card h3 {
-    max-width: calc(100% - 58px) !important;
-  }
-
-  /* Benefit bar lavere/tightere */
-  .news-section--picks .radar-benefit-bar {
-    padding: 10px 10px 11px !important;
-    gap: 8px !important;
-  }
-
-  .news-section--picks .radar-benefit {
-    gap: 4px !important;
-  }
-
-  .news-section--picks .radar-benefit > span {
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
-    min-height: 34px !important;
-    font-size: 0.9rem !important;
-  }
-
-  .news-section--picks .radar-benefit strong {
-    font-size: 0.62rem !important;
-    line-height: 1.02 !important;
-  }
-}
-
-@media (max-width: 768px) {
-
-  /* GI ALLE 4 LIK BREDDE (viktigste fix) */
-  .news-section--picks .radar-benefit-bar {
-    grid-template-columns: repeat(4, 1fr) !important;
-  }
-
-  /* Sørg for at hver blokk faktisk bruker hele bredden */
-  .news-section--picks .radar-benefit {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  /* FIX TEKST */
-  .news-section--picks .radar-benefit strong {
-    display: block !important;
-    width: 100% !important;
-    max-width: 70px !important;   /* 🔥 gir nok plass til 2 linjer */
-    margin: 0 auto !important;
-
-    font-size: 0.64rem !important;
-    line-height: 1.1 !important;  /* 🔥 viktig: strammer vertikalt */
-
-    text-align: center !important;
-    white-space: normal !important;
-    word-break: normal !important;
-  }
-
-}
-
-@media (max-width: 768px) {
-  .news-section--picks .radar-benefit-bar {
-    margin: 10px 10px 0 !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
     width: calc(100% - 20px) !important;
-    padding: 12px 10px !important;
-    border-radius: 24px !important;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,251,255,.96)) !important;
-    border: 1px solid rgba(15,23,42,.07) !important;
-    box-shadow:
-      0 18px 42px rgba(15,23,42,.08),
-      inset 0 1px 0 rgba(255,255,255,.9) !important;
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    overflow: hidden !important;
+    padding: 17px 12px !important;
+    gap: 10px !important;
   }
 
-  .news-section--picks .radar-benefit {
-    min-width: 0 !important;
-    display: grid !important;
-    grid-template-rows: 34px auto !important;
-    justify-items: center !important;
-    align-items: start !important;
-    gap: 6px !important;
-    text-align: center !important;
-  }
-
-  .news-section--picks .radar-benefit > span {
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
-    min-height: 34px !important;
-    border-radius: 999px !important;
-    background:
-      radial-gradient(circle at 35% 25%, #18283f 0%, #07111f 58%, #020617 100%) !important;
-    color: #f6c84c !important;
-    display: grid !important;
-    place-items: center !important;
-    font-size: 0.9rem !important;
-    font-weight: 950 !important;
-    line-height: 1 !important;
-    box-shadow:
-      0 10px 18px rgba(7,17,31,.18),
-      inset 0 1px 0 rgba(255,255,255,.12) !important;
-  }
-
-  .news-section--picks .radar-benefit > div {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .news-section--picks .radar-benefit strong {
-    display: block !important;
-    width: 100% !important;
-    max-width: 68px !important;
-    margin: 0 auto !important;
-    color: #07111f !important;
-    font-size: 0.61rem !important;
-    line-height: 1.05 !important;
-    font-weight: 950 !important;
-    letter-spacing: -0.035em !important;
-    text-align: center !important;
-    white-space: normal !important;
-    overflow-wrap: normal !important;
-  }
-
-  .news-section--picks .radar-benefit p {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-
-  .news-section--picks .radar-benefit-bar {
-    padding: 16px 12px !important; /* 🔥 mer luft oppe */
-  }
-
-  .news-section--picks .radar-benefit {
-    padding-top: 2px;  /* finjustering */
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  /* litt større ikon */
   .news-section--picks .radar-benefit > span {
     width: 42px !important;
     height: 42px !important;
-    font-size: 1.05rem !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
   }
 
-  /* litt tydeligere tekst */
   .news-section--picks .radar-benefit strong {
     font-size: 0.66rem !important;
   }
-
 }
