@@ -559,3 +559,31 @@
     display: none !important;
   }
 }
+
+@media (max-width: 768px) {
+
+  .news-section--picks .radar-benefit-bar {
+    padding: 16px 12px !important; /* 🔥 mer luft oppe */
+  }
+
+  .news-section--picks .radar-benefit {
+    padding-top: 2px;  /* finjustering */
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  /* litt større ikon */
+  .news-section--picks .radar-benefit > span {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 1.05rem !important;
+  }
+
+  /* litt tydeligere tekst */
+  .news-section--picks .radar-benefit strong {
+    font-size: 0.66rem !important;
+  }
+
+}
