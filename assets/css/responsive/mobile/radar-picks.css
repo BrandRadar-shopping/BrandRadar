@@ -1,6 +1,6 @@
 @media (max-width: 768px) {
   .news-section--picks.radar-picks-section {
-    padding: 28px 0 34px;
+    padding: 22px 0 30px;
     overflow: hidden;
     background:
       radial-gradient(circle at 88% 4%, rgba(0,112,243,.07), transparent 28%),
@@ -13,46 +13,46 @@
     padding: 0 !important;
   }
 
-  /* CLEAN TOP */
+  /* ===== TOP ===== */
+
   .news-section--picks .radar-picks-header {
     display: block !important;
-    padding: 0 24px;
-    margin: 0 0 18px;
+    padding: 0 20px;
+    margin: 0 0 16px;
   }
 
   .news-section--picks .radar-tag {
     display: block;
     margin: 0 0 8px;
     font-size: 0.68rem;
-    line-height: 1;
     letter-spacing: 0.15em;
     font-weight: 900;
   }
 
+  /* 🔥 Fjern stor tittel */
   .news-section--picks .radar-picks-header h2 {
-    margin: 0;
-    font-size: 2.35rem;
-    line-height: 0.95;
-    letter-spacing: -0.065em;
+    display: none !important;
   }
 
   .news-section--picks .radar-picks-header p {
-    max-width: 30ch;
-    margin: 10px 0 0;
+    margin: 0;
+    max-width: none;
+    width: 100%;
     font-size: 0.9rem;
-    line-height: 1.36;
+    line-height: 1.35;
   }
 
   .news-section--picks .radar-link {
-    margin-top: 16px;
-    min-height: 40px;
-    padding: 0 18px;
-    font-size: 0.8rem;
+    margin-top: 12px;
+    min-height: 38px;
+    padding: 0 16px;
+    font-size: 0.78rem;
     border-radius: 999px;
     display: inline-flex;
   }
 
-  /* PRODUCT RAIL */
+  /* ===== PRODUCT RAIL ===== */
+
   .news-section--picks .radar-track,
   .news-section--picks .picks-grid {
     display: flex !important;
@@ -61,8 +61,8 @@
     overflow-x: auto !important;
     overflow-y: visible !important;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: 24px;
-    padding: 4px 24px 14px !important;
+    scroll-padding-left: 20px;
+    padding: 4px 20px 14px !important;
     scrollbar-width: none;
   }
 
@@ -75,7 +75,8 @@
     display: none !important;
   }
 
-  /* PRODUCT CARD */
+  /* ===== PRODUCT CARD ===== */
+
   .news-section--picks .radar-pick-card {
     flex: 0 0 72% !important;
     width: 72% !important;
@@ -89,22 +90,21 @@
   }
 
   .news-section--picks .radar-pick-media {
-    height: 178px !important;
-    flex: 0 0 178px !important;
+    height: 165px !important;
+    flex: 0 0 165px !important;
     background: linear-gradient(180deg, #fbfbfc 0%, #f1f3f6 100%);
   }
 
   .news-section--picks .radar-pick-media img {
     width: 100%;
     height: 100%;
-    padding: 4px 8px;
+    padding: 4px 6px;
     object-fit: contain;
-    transform: scale(1.18);
-    transform-origin: center;
+    transform: scale(1.25);
   }
 
   .news-section--picks .radar-pick-body {
-    padding: 12px 16px 15px;
+    padding: 10px 14px 12px;
     display: flex;
     flex-direction: column;
   }
@@ -112,7 +112,6 @@
   .news-section--picks .radar-pick-brand {
     margin: 0 0 5px;
     font-size: 0.66rem;
-    line-height: 1;
     letter-spacing: 0.08em;
   }
 
@@ -120,18 +119,13 @@
     margin: 0;
     font-size: 0.92rem;
     line-height: 1.14;
-    min-height: 0 !important;
     max-height: 2.28em;
     -webkit-line-clamp: 2;
   }
 
+  /* 🔥 fjernet reason helt */
   .news-section--picks .radar-pick-reason {
-    margin: 7px 0 0;
-    font-size: 0.76rem;
-    line-height: 1.25;
-    min-height: 0 !important;
-    max-height: 2.5em;
-    -webkit-line-clamp: 2;
+    display: none !important;
   }
 
   .news-section--picks .radar-pick-label {
@@ -141,10 +135,8 @@
     font-size: 0.66rem;
   }
 
-  /* removes the big empty white gap */
   .news-section--picks .radar-pick-bottom {
-    margin-top: 12px !important;
-    padding-top: 0 !important;
+    margin-top: 10px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -161,69 +153,58 @@
   .news-section--picks .radar-pick-arrow {
     width: 34px;
     height: 34px;
-    flex: 0 0 34px;
   }
 
   .news-section--picks .radar-pick-fav {
-    top: 15px;
-    right: 15px;
-    width: 38px;
-    height: 38px;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
   }
 
   .news-section--picks .radar-pick-badge {
-    top: 15px;
-    left: 15px;
-    min-height: 29px;
+    top: 14px;
+    left: 14px;
     padding: 0 12px;
     font-size: 0.62rem;
   }
 
   .news-section--picks .radar-pick-discount {
-    right: 16px;
-    bottom: 118px;
-    min-height: 24px;
-    padding: 0 9px;
-    font-size: 0.68rem;
+    right: 14px;
+    bottom: 110px;
+    font-size: 0.66rem;
   }
 
-  /* BENEFIT BAR — wider and cleaner */
+  /* ===== BENEFIT BAR ===== */
+
   .news-section--picks .radar-benefit-bar {
-    margin: 6px 16px 0 !important;
-    width: calc(100% - 32px) !important;
-    max-width: none !important;
-    box-sizing: border-box;
-    padding: 15px 14px !important;
-    border-radius: 22px;
-    min-height: unset !important;
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 12px;
+    margin: 8px 20px 0;
+    width: calc(100% - 40px);
+    padding: 14px 10px;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
     background: rgba(255,255,255,.98);
     border: 1px solid rgba(15,23,42,.065);
     box-shadow: 0 16px 36px rgba(15,23,42,.075);
-    overflow: hidden;
   }
 
   .news-section--picks .radar-benefit {
-    min-width: 0 !important;
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     text-align: center;
   }
 
   .news-section--picks .radar-benefit > span {
-    width: 38px;
-    height: 38px;
-    font-size: 0.9rem;
+    width: 34px;
+    height: 34px;
   }
 
   .news-section--picks .radar-benefit strong {
-    margin: 0;
-    font-size: 0.66rem;
-    line-height: 1.05;
+    font-size: 0.64rem;
     font-weight: 900;
   }
 
@@ -233,112 +214,22 @@
 }
 
 @media (max-width: 420px) {
-  .news-section--picks .radar-picks-header {
-    padding-left: 22px;
-    padding-right: 22px;
-  }
-
-  .news-section--picks .radar-track,
-  .news-section--picks .picks-grid {
-    padding-left: 22px !important;
-    padding-right: 22px !important;
-    scroll-padding-left: 22px;
-  }
-
   .news-section--picks .radar-pick-card {
     flex-basis: 72% !important;
     width: 72% !important;
     min-width: 72% !important;
   }
 
-  .news-section--picks .radar-pick-media {
-    height: 170px !important;
-    flex-basis: 170px !important;
+  .news-section--picks .radar-track,
+  .news-section--picks .picks-grid {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    scroll-padding-left: 18px;
   }
-}
 
-/* ===== FINAL POLISH ===== */
-
-/* TOP – mindre tung, mer premium */
-.news-section--picks .radar-picks-header h2 {
-  font-size: 2.1rem;
-  letter-spacing: -0.05em;
-}
-
-.news-section--picks .radar-picks-header p {
-  font-size: 0.82rem;
-  line-height: 1.28;
-  max-width: 26ch;
-}
-
-.news-section--picks .radar-link {
-  margin-top: 12px;
-  font-size: 0.76rem;
-  padding: 0 16px;
-}
-
-/* CARD – mindre luft + større produkt */
-.news-section--picks .radar-pick-media {
-  height: 165px !important;
-  flex-basis: 165px !important;
-}
-
-.news-section--picks .radar-pick-media img {
-  transform: scale(1.25); /* 🔥 mer fokus på produkt */
-}
-
-.news-section--picks .radar-pick-body {
-  padding: 10px 14px 12px;
-}
-
-/* Fjern litt “støy” i midten */
-.news-section--picks .radar-pick-reason {
-  font-size: 0.72rem;
-  line-height: 1.2;
-  max-height: 2.2em;
-}
-
-/* Strammere spacing før pris */
-.news-section--picks .radar-pick-bottom {
-  margin-top: 10px !important;
-}
-
-/* BENEFIT BAR – mer premium */
-.news-section--picks .radar-benefit-bar {
-  padding: 14px 10px !important;
-  gap: 8px;
-  border-radius: 18px;
-}
-
-/* Ikoner litt mindre og renere */
-.news-section--picks .radar-benefit > span {
-  width: 34px;
-  height: 34px;
-}
-
-/* Tittel mer “tight” */
-.news-section--picks .radar-benefit strong {
-  font-size: 0.64rem;
-  letter-spacing: -0.01em;
-}
-
-.news-section--picks .radar-pick-reason {
-  display: none !important;
-}
-
-/* TOP – bruk mer bredde */
-.news-section--picks .radar-picks-header {
-  padding: 0 20px; /* litt mindre sidepadding */
-}
-
-.news-section--picks .radar-picks-header p {
-  max-width: none; /* 🔥 fjern begrensning */
-  width: 100%;
-  font-size: 0.9rem;
-  line-height: 1.35;
-}
-
-/* Litt mindre luft totalt */
-.news-section--picks.radar-picks-section {
-  padding-top: 22px;
+  .news-section--picks .radar-benefit-bar {
+    margin-left: 18px;
+    margin-right: 18px;
+    width: calc(100% - 36px);
+  }
 }
