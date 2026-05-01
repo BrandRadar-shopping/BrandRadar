@@ -254,3 +254,48 @@
     padding-right: 18px !important;
   }
 }
+
+@media (max-width: 768px) {
+  .news-section--picks .radar-pick-fav,
+  .news-section--picks .favorite-toggle {
+    top: 14px !important;
+    right: 14px !important;
+    width: 38px !important;
+    height: 38px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: 0 10px 22px rgba(15,23,42,.13) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #07111f !important;
+  }
+
+  .news-section--picks .radar-pick-fav svg,
+  .news-section--picks .favorite-toggle svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: none !important;
+    stroke: #07111f !important;
+    stroke-width: 1.9 !important;
+  }
+
+  .news-section--picks .radar-pick-fav.active svg,
+  .news-section--picks .favorite-toggle.active svg {
+    fill: #ef4444 !important;
+    stroke: #ef4444 !important;
+  }
+
+  .news-section--picks .radar-benefit-bar {
+    margin: 8px 20px 0 !important;
+    width: calc(100% - 40px) !important;
+  }
+
+  .news-section--picks .radar-benefit > span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+  }
+}
