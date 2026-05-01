@@ -246,3 +246,45 @@
     overflow: hidden;
   }
 }
+
+@media (max-width: 768px) {
+  /* TOP TEXT – vis hele første setning, skjul kun linje 2 */
+  .news-section--picks .radar-picks-header p br {
+    display: none;
+  }
+
+  .news-section--picks .radar-picks-header p {
+    display: block !important;
+    max-width: 31ch;
+    font-size: 0.9rem;
+    line-height: 1.32;
+  }
+
+  .news-section--picks .radar-picks-header p {
+    max-height: 2.65em;
+    overflow: hidden;
+  }
+
+  /* BENEFIT BAR – premium black/gold */
+  .news-section--picks .radar-benefit-bar {
+    padding: 15px 12px;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+  }
+
+  .news-section--picks .radar-benefit > span {
+    width: 36px;
+    height: 36px;
+    background: #07111f;
+    color: #f5c542;
+    box-shadow: 0 10px 22px rgba(7, 17, 31, 0.18);
+  }
+
+  .news-section--picks .radar-benefit strong {
+    color: #07111f;
+    font-size: 0.64rem;
+    line-height: 1.08;
+  }
+}
