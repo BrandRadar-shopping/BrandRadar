@@ -1132,7 +1132,10 @@ async function loadPicks() {
       </button>
 
       ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
-
+${product.category?.toLowerCase() === "supplements"
+  ? `<span class="radar-pick-badge is-gym">GYM PICK</span>`
+  : `<span class="radar-pick-badge">EDITOR'S PICK</span>`
+}
       <div class="radar-pick-media">
         <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(product.title || product.product_name || "")}" loading="lazy">
       </div>
@@ -1143,17 +1146,16 @@ async function loadPicks() {
         <h3>${escapeHtml(product.title || product.product_name || product.name || "Produkt")}</h3>
 
         ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
-
+<span class="radar-pick-label">
+  ${product.category?.toLowerCase() === "supplements" ? "Sammenlign og spar" : "Populært valg"}
+</span>
         <div class="radar-pick-bottom">
           <div class="radar-pick-price">
             ${price != null ? `<span>${formatPrice(price)}</span>` : ""}
             ${hasDiscount ? `<del>${formatPrice(oldPrice)}</del>` : ""}
           </div>
 
-          ${summary?.storeCount
-            ? `<span class="radar-pick-stores">${summary.storeCount} butikk${summary.storeCount === 1 ? "" : "er"}</span>`
-            : ""
-          }
+          <span class="radar-pick-arrow">→</span>
         </div>
       </div>
     `;
