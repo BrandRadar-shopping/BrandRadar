@@ -288,3 +288,42 @@
     line-height: 1.08;
   }
 }
+
+@media (max-width: 768px) {
+  /* 1) Benefit bar samme bredde/innrykk som produktseksjonen */
+  .news-section--picks .radar-benefit-bar {
+    margin: 8px 20px 0 !important;
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    box-sizing: border-box;
+  }
+
+  /* 2) Midtstill alle benefit-ikoner helt */
+  .news-section--picks .radar-benefit > span {
+    display: inline-grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    text-align: center;
+  }
+
+  .news-section--picks .radar-benefit > span svg,
+  .news-section--picks .radar-benefit > span i {
+    display: block;
+    margin: auto;
+  }
+
+  /* 3) GYM PICK får samme premium feel som benefit-ikonene */
+  .news-section--picks .radar-pick-badge.is-gym {
+    background: #07111f !important;
+    color: #f5c542 !important;
+    box-shadow: 0 10px 22px rgba(7, 17, 31, 0.18);
+  }
+}
+
+@media (max-width: 420px) {
+  .news-section--picks .radar-benefit-bar {
+    margin-left: 18px !important;
+    margin-right: 18px !important;
+    width: calc(100% - 36px) !important;
+  }
+}
