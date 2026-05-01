@@ -1088,6 +1088,35 @@ async function loadDeals() {
 async function loadPicks() {
   if (!picksTrack) return;
 
+  function normalizePickBadge(value) {
+    const badge = String(value || "editor").trim().toLowerCase();
+
+    const badgeMap = {
+      editor: {
+        text: "EDITOR'S PICK",
+        className: ""
+      },
+      gym: {
+        text: "GYM PICK",
+        className: "is-gym"
+      },
+      deal: {
+        text: "DEAL PICK",
+        className: "is-deal"
+      },
+      luxury: {
+        text: "LUXURY PICK",
+        className: "is-luxury"
+      },
+      trending: {
+        text: "TRENDING",
+        className: "is-trending"
+      }
+    };
+
+    return badgeMap[badge] || badgeMap.editor;
+  }
+
   function buildRadarPickCard(product) {
     const pid = resolveProductIdSafe(product);
     const summary = product.offer_summary;
@@ -1113,6 +1142,9 @@ async function loadPicks() {
         ? window.isProductFavorite(pid)
         : false;
 
+    const badge = normalizePickBadge(product.badge);
+    const labelText = product.label || "Populært valg";
+
     const card = document.createElement("article");
     card.className = "radar-pick-card";
     card.setAttribute("data-product-id", pid || "");
@@ -1132,12 +1164,17 @@ async function loadPicks() {
       </button>
 
       ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
-${product.category?.toLowerCase() === "supplements"
-  ? `<span class="radar-pick-badge is-gym">GYM PICK</span>`
-  : `<span class="radar-pick-badge">EDITOR'S PICK</span>`
-}
+
+      <span class="radar-pick-badge ${badge.className}">
+        ${escapeHtml(badge.text)}
+      </span>
+
       <div class="radar-pick-media">
-        <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(product.title || product.product_name || "")}" loading="lazy">
+        <img 
+          src="${escapeHtml(product.image_url || "")}" 
+          alt="${escapeHtml(product.title || product.product_name || "")}" 
+          loading="lazy"
+        >
       </div>
 
       <div class="radar-pick-body">
@@ -1146,9 +1183,11 @@ ${product.category?.toLowerCase() === "supplements"
         <h3>${escapeHtml(product.title || product.product_name || product.name || "Produkt")}</h3>
 
         ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
-<span class="radar-pick-label">
-  ${product.category?.toLowerCase() === "supplements" ? "Sammenlign og spar" : "Populært valg"}
-</span>
+
+        <span class="radar-pick-label">
+          ${escapeHtml(labelText)}
+        </span>
+
         <div class="radar-pick-bottom">
           <div class="radar-pick-price">
             ${price != null ? `<span>${formatPrice(price)}</span>` : ""}
@@ -1231,7 +1270,11 @@ ${product.category?.toLowerCase() === "supplements"
           ...base,
           id: productId,
           reason: row.reason || "",
-          rank: parseInt(row.rank, 10) || index + 1
+          rank: parseInt(row.rank, 10) || index + 1,
+
+          // ✅ Datastyrt fra picks-sheet
+          badge: row.badge || "editor",
+          label: row.label || ""
         };
       })
       .filter(Boolean)
