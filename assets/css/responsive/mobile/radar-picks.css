@@ -233,3 +233,16 @@
     width: calc(100% - 36px);
   }
 }
+
+@media (max-width: 768px) {
+  .news-section--picks .radar-picks-header p br {
+    display: none;
+  }
+
+  .news-section--picks .radar-picks-header p {
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* 🔥 viser kun første linje */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
