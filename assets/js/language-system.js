@@ -21,6 +21,11 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      favorite_brand: "♡ Favoritt-brand",
+visit_brand: "Besøk brand",
+category_label_colon: "Kategori:",
+sort_label_colon: "Sorter:",
+
       brand_search_placeholder: "Søk etter brand...",
 highlighted_brands: "Fremhevede brands",
 
@@ -239,6 +244,11 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      favorite_brand: "♡ Favorite brand",
+visit_brand: "Visit brand",
+category_label_colon: "Category:",
+sort_label_colon: "Sort:",
 
       brand_search_placeholder: "Search for brand...",
 highlighted_brands: "Featured brands",
