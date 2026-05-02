@@ -21,6 +21,9 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      brand_search_placeholder: "Søk etter brand...",
+highlighted_brands: "Fremhevede brands",
+
       about_product: "Om produktet",
 best_prices_now: "Beste priser akkurat nå",
 buy_product: "Kjøp produkt",
@@ -236,6 +239,9 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      brand_search_placeholder: "Search for brand...",
+highlighted_brands: "Featured brands",
 
       about_product: "About the product",
 best_prices_now: "Best prices right now",
