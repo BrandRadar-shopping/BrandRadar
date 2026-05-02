@@ -298,7 +298,7 @@ other: "Other",
 popular: "Popular",
 price_high_low_short: "High price → Low",
 price_low_high_short: "Low price → High",
-no_luxury_products_match: "No products match your selection 🔍"
+no_luxury_products_match: "No products match your selection 🔍",
 
       no_favorite_products: "You do not have any favorite products yet.",
 no_favorite_brands: "You do not have any favorite brands yet.",
