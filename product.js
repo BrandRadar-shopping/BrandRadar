@@ -425,7 +425,7 @@ function buildInsightHighlights(product, offerSummary) {
   const family = detectProductFamily(product, offerSummary);
 
   if (offerSummary?.lowestPriceFormatted) {
-    highlights.push(`Laveste pris ${offerSummary.lowestPriceFormatted}`);
+    highlights.push(`${t("lowest_price", "Laveste pris")} ${offerSummary.lowestPriceFormatted}`);
   }
 
   if (offerSummary?.storeCount) {
