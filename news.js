@@ -6,6 +6,7 @@
 //  - Ukens Spotlight (stor editorial slider + hover gallery)
 //  - Nye Produkter & Trender (grid)
 // ======================================================
+const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
 (function () {
   console.log("✅ news.js loaded");
