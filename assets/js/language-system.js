@@ -21,6 +21,11 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      explore: "Utforsk",
+no_hero_slides: "Ingen hero-slides er konfigurert ennå.",
+go_to_slide: "Gå til slide",
+could_not_load_hero_slides: "Klarte ikke laste HeroSlides:",
+
       see_all: "Se alle",
 popular_now: "Populært nå",
 exclusive_selection: "Eksklusivt utvalg",
@@ -268,6 +273,11 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      explore: "Explore",
+no_hero_slides: "No hero slides are configured yet.",
+go_to_slide: "Go to slide",
+could_not_load_hero_slides: "Could not load HeroSlides:",
 
       see_all: "See all",
 popular_now: "Popular now",
