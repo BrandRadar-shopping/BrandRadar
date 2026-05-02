@@ -437,7 +437,7 @@ function buildInsightHighlights(product, offerSummary) {
   }
 
   if (product.brand) {
-    highlights.push(`Fra ${product.brand}`);
+    highlights.push(`${t("from_brand", "Fra")} ${product.brand}`);
   }
 
   if (family === "food_protein_bar") {
