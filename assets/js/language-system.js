@@ -326,4 +326,28 @@ kids: "Kids"
   document.addEventListener("DOMContentLoaded", () => {
     applyTranslations();
   });
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".lang-btn");
+
+  function updateActive() {
+    const current = window.BrandRadarLang.get();
+
+    buttons.forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.lang === current);
+    });
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.dataset.lang;
+      window.BrandRadarLang.set(lang);
+      updateActive();
+    });
+  });
+
+  updateActive();
+
+  window.addEventListener("brandradar:languagechange", updateActive);
+});
 })();
