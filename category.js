@@ -11,6 +11,8 @@
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
+
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
   const SHEET_DEALS = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const collectionParam = params.get("collection");
 
   if (!categoryParam && !collectionParam) {
-    titleEl.textContent = "Ugyldig kategori";
+    titleEl.textContent = t("invalid_category", "Ugyldig kategori");
     emptyMessage.style.display = "block";
     return;
   }
@@ -480,48 +482,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function mapDealRowToProduct(row, index = 0) {
-  const active = parseBool(row.active);
-  const lowestPrice = parseNumber(row.lowest_price);
-  const oldPrice = parseNumber(row.old_price);
-  const discount = parseNumber(row.discount);
+    const active = parseBool(row.active);
+    const lowestPrice = parseNumber(row.lowest_price);
+    const oldPrice = parseNumber(row.old_price);
+    const discount = parseNumber(row.discount);
 
-  // 🔥 VIKTIG: filtrer bort produkter uten deals
-  if (!active || !lowestPrice) return null;
+    // 🔥 VIKTIG: filtrer bort produkter uten deals
+    if (!active || !lowestPrice) return null;
 
-  const cleanUrl = (value) => {
-    const url = String(value || "").trim();
-    return /^https?:\/\//i.test(url) ? url : "";
-  };
+    const cleanUrl = (value) => {
+      const url = String(value || "").trim();
+      return /^https?:\/\//i.test(url) ? url : "";
+    };
 
-  const buyUrl =
-    cleanUrl(row.affiliate_url) ||
-    cleanUrl(row.store_url) ||
-    cleanUrl(row.product_url);
+    const buyUrl =
+      cleanUrl(row.affiliate_url) ||
+      cleanUrl(row.store_url) ||
+      cleanUrl(row.product_url);
 
-  return {
-    id: String(row.product_id || row.id || `deal_${index}`).trim(),
-    product_id: String(row.product_id || row.id || "").trim(),
-    title: row.product_name || row.title || "",
-    brand: row.brand || "",
-    price: lowestPrice,
-    old_price: oldPrice || "",
-    discount: discount || "",
-    image_url: row.image_url || "",
-    product_url: buyUrl,
-    category: row.deal_category || row.category || "",
-    rating: row.rating || "",
-    priority: parseNumber(row.priority) || index + 1,
-    featured: parseBool(row.featured),
-    badge_text: row.badge_text || "Deal",
-    merchant_slug: row.merchant_slug || "",
-    luxury: false
-  };
-}
+    return {
+      id: String(row.product_id || row.id || `deal_${index}`).trim(),
+      product_id: String(row.product_id || row.id || "").trim(),
+      title: row.product_name || row.title || "",
+      brand: row.brand || "",
+      price: lowestPrice,
+      old_price: oldPrice || "",
+      discount: discount || "",
+      image_url: row.image_url || "",
+      product_url: buyUrl,
+      category: row.deal_category || row.category || "",
+      rating: row.rating || "",
+      priority: parseNumber(row.priority) || index + 1,
+      featured: parseBool(row.featured),
+      badge_text: row.badge_text || t("deal", "Deal"),
+      merchant_slug: row.merchant_slug || "",
+      luxury: false
+    };
+  }
 
   function populateBrandFilter(products) {
     if (!brandFilter) return;
 
-    brandFilter.innerHTML = `<option value="all">Alle brands</option>`;
+    brandFilter.innerHTML = `<option value="all">${t("all_brands", "Alle brands")}</option>`;
 
     [...new Set(products.map(p => p.brand).filter(Boolean))]
       .sort()
@@ -560,8 +562,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         favoriteProductFactory: (p) => ({
           id: pid,
-          product_name: p.title || p.product_name || p.name || "Uten navn",
-          title: p.title || p.product_name || p.name || "Uten navn",
+          product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
+          title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
           brand: p.brand || "",
           price: p.price,
           discount: p.discount,
@@ -577,7 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const resultEl = document.querySelector(".filter-bar .result-count");
-    if (resultEl) resultEl.textContent = `${list.length} produkter`;
+    if (resultEl) resultEl.textContent = `${list.length} ${t("products", "produkter")}`;
   }
 
   function updateFilterTags(applyFiltersAndSort) {
@@ -598,7 +600,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (priceFilter && priceFilter.value !== "all") {
       tags.push({
-        label: `Pris: ${priceFilter.options[priceFilter.selectedIndex].text}`,
+        label: `${t("price_label", "Pris")}: ${priceFilter.options[priceFilter.selectedIndex].text}`,
         remove: () => {
           priceFilter.value = "all";
           applyFiltersAndSort();
@@ -608,7 +610,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (discountFilter && discountFilter.checked) {
       tags.push({
-        label: "Kun tilbud",
+        label: t("only_deals", "Kun tilbud"),
         remove: () => {
           discountFilter.checked = false;
           applyFiltersAndSort();
@@ -656,8 +658,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (countText) parts.push(countText);
       parts.push(
         activeCount > 0
-          ? `${activeCount} aktiv${activeCount === 1 ? "t filter" : "e filtre"}`
-          : "Vis filtre"
+          ? `${activeCount} ${activeCount === 1 ? t("active_filter", "aktivt filter") : t("active_filters", "aktive filtre")}`
+          : t("show_filters", "Vis filtre")
       );
       filterToggleMeta.textContent = parts.join(" • ");
       return;
@@ -665,8 +667,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     filterToggleMeta.textContent =
       activeCount > 0
-        ? `${activeCount} aktiv${activeCount === 1 ? "t filter" : "e filtre"}`
-        : "Skjul filtre";
+        ? `${activeCount} ${activeCount === 1 ? t("active_filter", "aktivt filter") : t("active_filters", "aktive filtre")}`
+        : t("hide_filters", "Skjul filtre");
   }
 
   function applyMobileFilterCollapsedState(shouldCollapse, persist = true) {
@@ -758,222 +760,223 @@ document.addEventListener("DOMContentLoaded", async () => {
     return hero;
   }
 
- function getDealPriceParts(product) {
-  const price = parseNumber(product.price);
-  const oldPrice = parseNumber(product.old_price);
+  function getDealPriceParts(product) {
+    const price = parseNumber(product.price);
+    const oldPrice = parseNumber(product.old_price);
 
-  let discount = parseNumber(product.discount);
+    let discount = parseNumber(product.discount);
 
-  if ((!discount || discount <= 0) && price && oldPrice && oldPrice > price) {
-    discount = Math.round(((oldPrice - price) / oldPrice) * 100);
-  }
+    if ((!discount || discount <= 0) && price && oldPrice && oldPrice > price) {
+      discount = Math.round(((oldPrice - price) / oldPrice) * 100);
+    }
 
-  if ((!oldPrice || oldPrice <= price) && price && discount && discount > 0) {
-    const estimatedOld = price / (1 - discount / 100);
+    if ((!oldPrice || oldPrice <= price) && price && discount && discount > 0) {
+      const estimatedOld = price / (1 - discount / 100);
+      return {
+        price,
+        oldPrice: estimatedOld,
+        discount: Math.round(discount)
+      };
+    }
+
     return {
       price,
-      oldPrice: estimatedOld,
-      discount: Math.round(discount)
+      oldPrice,
+      discount: discount ? Math.round(discount) : 0
     };
   }
 
-  return {
-    price,
-    oldPrice,
-    discount: discount ? Math.round(discount) : 0
-  };
-}
+  function buildDealHighlights(products) {
+    if (!products.length) return null;
 
-function buildDealHighlights(products) {
-  if (!products.length) return null;
+    const sorted = [...products].sort((a, b) => {
+      const aParts = getDealPriceParts(a);
+      const bParts = getDealPriceParts(b);
 
-  const sorted = [...products].sort((a, b) => {
-    const aParts = getDealPriceParts(a);
-    const bParts = getDealPriceParts(b);
+      if (bParts.discount !== aParts.discount) {
+        return bParts.discount - aParts.discount;
+      }
 
-    if (bParts.discount !== aParts.discount) {
-      return bParts.discount - aParts.discount;
+      return getEffectivePrice(a) - getEffectivePrice(b);
+    });
+
+    const picks = sorted.slice(0, 2);
+    if (!picks.length) return null;
+
+    function attachNavigate(el, product) {
+      el.addEventListener("click", () => {
+        if (product.product_url) {
+          window.open(product.product_url, "_blank", "noopener");
+          return;
+        }
+
+        const id = product.id || product.product_id || "";
+        if (id) {
+          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+        }
+      });
     }
 
-    return getEffectivePrice(a) - getEffectivePrice(b);
-  });
+    function buildFeaturedCard(product, index) {
+      const parts = getDealPriceParts(product);
+      const safeBrand = product.brand || "BrandRadar";
+      const safeTitle = product.title || product.product_name || product.name || t("product", "Produkt");
+      const image = product.image_url || "";
 
-  const picks = sorted.slice(0, 2);
-  if (!picks.length) return null;
+      const card = document.createElement("article");
+      card.className = "deals-featured-card";
 
-  function attachNavigate(el, product) {
-    el.addEventListener("click", () => {
-      if (product.product_url) {
-        window.open(product.product_url, "_blank", "noopener");
-        return;
-      }
-
-      const id = product.id || product.product_id || "";
-      if (id) {
-        window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-      }
-    });
-  }
-
-  function buildFeaturedCard(product, index) {
-    const parts = getDealPriceParts(product);
-    const safeBrand = product.brand || "BrandRadar";
-    const safeTitle = product.title || product.product_name || product.name || "Produkt";
-    const image = product.image_url || "";
-
-    const card = document.createElement("article");
-    card.className = "deals-featured-card";
-
-    card.innerHTML = `
-      <div class="deals-featured-card__media">
-        ${image ? `<img src="${image}" alt="${safeTitle}" loading="lazy">` : ""}
-      </div>
-
-      <div class="deals-featured-card__content">
-        <p class="deals-featured-card__brand">${safeBrand}</p>
-        <h3>${safeTitle}</h3>
-        <p class="deals-featured-card__desc">
-          ${index === 0 ? "Et sterkt tilbud valgt ut for deg." : "Populær deal akkurat nå."}
-        </p>
-
-        <div class="deals-featured-card__price-row">
-          ${parts.price ? `<span class="deals-featured-card__price">${formatPrice(parts.price)}</span>` : ""}
-          ${parts.oldPrice ? `<span class="deals-featured-card__oldprice">${formatPrice(parts.oldPrice)}</span>` : ""}
-          ${parts.discount ? `<span class="deals-featured-card__discount">-${parts.discount}%</span>` : ""}
+      card.innerHTML = `
+        <div class="deals-featured-card__media">
+          ${image ? `<img src="${image}" alt="${safeTitle}" loading="lazy">` : ""}
         </div>
 
-        <div class="deals-featured-card__actions">
-          <span class="deals-featured-card__button">Kjøp nå</span>
-          <span class="deals-featured-card__heart">♡</span>
-        </div>
+        <div class="deals-featured-card__content">
+          <p class="deals-featured-card__brand">${safeBrand}</p>
+          <h3>${safeTitle}</h3>
+          <p class="deals-featured-card__desc">
+            ${index === 0 ? t("deal_feature_desc_primary", "Et sterkt tilbud valgt ut for deg.") : t("deal_feature_desc_secondary", "Populær deal akkurat nå.")}
+          </p>
 
-        <p class="deals-featured-card__note">Tilbudet kan endres hos butikken.</p>
+          <div class="deals-featured-card__price-row">
+            ${parts.price ? `<span class="deals-featured-card__price">${formatPrice(parts.price)}</span>` : ""}
+            ${parts.oldPrice ? `<span class="deals-featured-card__oldprice">${formatPrice(parts.oldPrice)}</span>` : ""}
+            ${parts.discount ? `<span class="deals-featured-card__discount">-${parts.discount}%</span>` : ""}
+          </div>
+
+          <div class="deals-featured-card__actions">
+            <span class="deals-featured-card__button">${t("buy_now", "Kjøp nå")}</span>
+            <span class="deals-featured-card__heart">♡</span>
+          </div>
+
+          <p class="deals-featured-card__note">${t("deal_may_change", "Tilbudet kan endres hos butikken.")}</p>
+        </div>
+      `;
+
+      attachNavigate(card, product);
+      return card;
+    }
+
+    const shell = document.createElement("section");
+    shell.className = "deals-featured-section";
+
+    shell.innerHTML = `
+      <div class="deals-section-head">
+        <h3>${t("featured_deals", "Utvalgte deals")}</h3>
+        <a href="#deals-feed" class="deals-section-link">${t("see_all", "Se alle")} <span>→</span></a>
       </div>
     `;
 
-    attachNavigate(card, product);
-    return card;
+    const grid = document.createElement("div");
+    grid.className = "deals-featured-grid";
+
+    picks.forEach((product, index) => {
+      grid.appendChild(buildFeaturedCard(product, index));
+    });
+
+    shell.appendChild(grid);
+    return shell;
   }
 
-  const shell = document.createElement("section");
-  shell.className = "deals-featured-section";
+  function buildDealsTopZone(heroEl, highlightsEl) {
+    const section = document.createElement("section");
+    section.className = "deals-top-zone";
 
-  shell.innerHTML = `
-    <div class="deals-section-head">
-      <h3>Utvalgte deals</h3>
-      <a href="#deals-feed" class="deals-section-link">Se alle <span>→</span></a>
-    </div>
-  `;
+    const hero = document.createElement("section");
+    hero.className = "deals-clean-hero";
 
-  const grid = document.createElement("div");
-  grid.className = "deals-featured-grid";
+    hero.innerHTML = `
+      <div class="deals-clean-hero__content">
+        <div class="deals-clean-hero__text">
+          <h2>${t("deals_hero_title", "De beste dealsene")}</h2>
+          <p>${t("deals_hero_text", "Oppdag sesongens beste tilbud fra dine favorittbrands.")}</p>
 
-  picks.forEach((product, index) => {
-    grid.appendChild(buildFeaturedCard(product, index));
-  });
-
-  shell.appendChild(grid);
-  return shell;
-}
-
-function buildDealsTopZone(heroEl, highlightsEl) {
-  const section = document.createElement("section");
-  section.className = "deals-top-zone";
-
-  const hero = document.createElement("section");
-  hero.className = "deals-clean-hero";
-
-  hero.innerHTML = `
-    <div class="deals-clean-hero__content">
-      <div class="deals-clean-hero__text">
-        <h2>De beste dealsene</h2>
-        <p>Oppdag sesongens beste tilbud fra dine favorittbrands.</p>
-
-        <div class="deals-clean-benefits">
-          <div class="deals-clean-benefit">
-            <span class="deals-clean-benefit__icon">◇</span>
-            <div>
-              <strong>Eksklusive deals</strong>
-              <span>Utvalgte tilbud samlet på ett sted</span>
+          <div class="deals-clean-benefits">
+            <div class="deals-clean-benefit">
+              <span class="deals-clean-benefit__icon">◇</span>
+              <div>
+                <strong>${t("exclusive_deals", "Eksklusive deals")}</strong>
+                <span>${t("exclusive_deals_text", "Utvalgte tilbud samlet på ett sted")}</span>
+              </div>
             </div>
-          </div>
 
-          <div class="deals-clean-benefit">
-            <span class="deals-clean-benefit__icon">□</span>
-            <div>
-              <strong>Nye deals hver uke</strong>
-              <span>Friske tilbud kontinuerlig</span>
+            <div class="deals-clean-benefit">
+              <span class="deals-clean-benefit__icon">□</span>
+              <div>
+                <strong>${t("new_deals_weekly", "Nye deals hver uke")}</strong>
+                <span>${t("new_deals_weekly_text", "Friske tilbud kontinuerlig")}</span>
+              </div>
             </div>
-          </div>
 
-          <div class="deals-clean-benefit">
-            <span class="deals-clean-benefit__icon">⌾</span>
-            <div>
-              <strong>Enkel oversikt</strong>
-              <span>Sammenlign priser raskt</span>
+            <div class="deals-clean-benefit">
+              <span class="deals-clean-benefit__icon">⌾</span>
+              <div>
+                <strong>${t("easy_overview", "Enkel oversikt")}</strong>
+                <span>${t("easy_overview_text", "Sammenlign priser raskt")}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="deals-clean-hero__visual" aria-hidden="true">
-        <img
-          src="assets/img/deals/deals-hero.png"
-          alt=""
-          class="deals-clean-hero__image"
-          loading="eager"
-        >
+        <div class="deals-clean-hero__visual" aria-hidden="true">
+          <img
+            src="assets/img/deals/deals-hero.png"
+            alt=""
+            class="deals-clean-hero__image"
+            loading="eager"
+          >
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
     const quickNavSection = document.createElement("section");
-  quickNavSection.className = "deals-quick-nav-section";
-  quickNavSection.innerHTML = `
-    <h3 class="deals-quick-nav-title">Browse deals</h3>
+    quickNavSection.className = "deals-quick-nav-section";
+    quickNavSection.innerHTML = `
+      <h3 class="deals-quick-nav-title">${t("browse_deals", "Browse deals")}</h3>
 
-    <div class="deals-quick-nav">
-      <button class="is-active" type="button" data-deal-filter="all">Alle deals</button>
-      <button type="button" data-deal-filter="Shoes">Sko</button>
-      <button type="button" data-deal-filter="clothing">Klær</button>
-      <button type="button" data-deal-filter="supplements">Gym</button>
-      <button type="button" data-deal-filter="Accessories">Tilbehør</button>
-      <button class="deals-quick-nav__highlight" type="button" data-deal-sort="discount-desc">Best rabatt</button>
-    </div>
-  `;
+      <div class="deals-quick-nav">
+        <button class="is-active" type="button" data-deal-filter="all">${t("all_deals", "Alle deals")}</button>
+        <button type="button" data-deal-filter="Shoes">${t("shoes", "Sko")}</button>
+        <button type="button" data-deal-filter="clothing">${t("clothing", "Klær")}</button>
+        <button type="button" data-deal-filter="supplements">${t("gym", "Gym")}</button>
+        <button type="button" data-deal-filter="Accessories">${t("accessories", "Tilbehør")}</button>
+        <button class="deals-quick-nav__highlight" type="button" data-deal-sort="discount-desc">${t("best_discount", "Best rabatt")}</button>
+      </div>
+    `;
 
-  section.appendChild(hero);
+    section.appendChild(hero);
 
-if (highlightsEl) {
-  section.appendChild(highlightsEl);
-}
+    if (highlightsEl) {
+      section.appendChild(highlightsEl);
+    }
 
-section.appendChild(quickNavSection);
+    section.appendChild(quickNavSection);
 
-  return section;
-}
+    return section;
+  }
 
-function insertBeforeFilterBar(elements = []) {
-  if (!filterBar) return;
-  const parent = filterBar.parentNode;
-  if (!parent) return;
+  function insertBeforeFilterBar(elements = []) {
+    if (!filterBar) return;
+    const parent = filterBar.parentNode;
+    if (!parent) return;
 
-  elements.filter(Boolean).forEach(el => {
-    parent.insertBefore(el, filterBar);
-  });
+    elements.filter(Boolean).forEach(el => {
+      parent.insertBefore(el, filterBar);
+    });
 
-  if (document.querySelector(".collection-page--deals")) {
-    const quickNavSection = document.querySelector(".deals-quick-nav-section");
-    if (quickNavSection) {
-      parent.insertBefore(quickNavSection, filterBar);
+    if (document.querySelector(".collection-page--deals")) {
+      const quickNavSection = document.querySelector(".deals-quick-nav-section");
+      if (quickNavSection) {
+        parent.insertBefore(quickNavSection, filterBar);
+      }
+    }
+
+    const productsSection = document.querySelector(".category-products");
+    if (productsSection) {
+      productsSection.id = "deals-feed";
     }
   }
 
-  const productsSection = document.querySelector(".category-products");
-  if (productsSection) {
-    productsSection.id = "deals-feed";
-  }
-}
   try {
     // ======================================================
     // COLLECTION MODE
@@ -992,27 +995,28 @@ function insertBeforeFilterBar(elements = []) {
 
         const rows = await fetch(dealsUrl).then(r => r.json());
 
-products = rows
-  .map(mapDealRowToProduct)
-  .filter(Boolean) // fjerner null (ingen deals)
-  .sort((a, b) => {
-    // featured først
-    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+        products = rows
+          .map(mapDealRowToProduct)
+          .filter(Boolean) // fjerner null (ingen deals)
+          .sort((a, b) => {
+            // featured først
+            if (a.featured !== b.featured) return a.featured ? -1 : 1;
 
-    // deretter priority
-    return (a.priority || 999) - (b.priority || 999);
-  });
-        pageTitle = "Ukens Deals";
-        breadcrumbLabel = "Deals";
+            // deretter priority
+            return (a.priority || 999) - (b.priority || 999);
+          });
+
+        pageTitle = t("weekly_deals", "Ukens Deals");
+        breadcrumbLabel = t("deals", "Deals");
 
         collectionHero = createCollectionHero({
-          eyebrow: "BrandRadar Deals",
-          title: "De beste dealene akkurat nå",
-          text: "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp.",
+          eyebrow: t("brandradar_deals", "BrandRadar Deals"),
+          title: t("best_deals_now", "De beste dealene akkurat nå"),
+          text: t("deals_collection_text", "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp."),
           metaPills: [
-            "Utvalgte deals",
-            "Oppdatert nå",
-            "Enklere oversikt"
+            t("selected_deals", "Utvalgte deals"),
+            t("updated_now", "Oppdatert nå"),
+            t("easier_overview", "Enklere oversikt")
           ]
         });
       } else if (collectionSlug === "picks") {
@@ -1077,10 +1081,10 @@ products = rows
           })
           .filter(Boolean);
 
-        pageTitle = "Nye Produkter & Trender";
-        breadcrumbLabel = "Nyheter";
+        pageTitle = t("new_products_trends", "Nye Produkter & Trender");
+        breadcrumbLabel = t("news", "Nyheter");
       } else {
-        titleEl.textContent = "Ugyldig kategori";
+        titleEl.textContent = t("invalid_category", "Ugyldig kategori");
         emptyMessage.style.display = "block";
         return;
       }
@@ -1090,9 +1094,9 @@ products = rows
 
       if (breadcrumbEl) {
         if (collectionSlug === "deals") {
-          breadcrumbEl.innerHTML = `<a href="index.html">Hjem</a> › ${breadcrumbLabel}`;
+          breadcrumbEl.innerHTML = `<a href="index.html">${t("home", "Hjem")}</a> › ${breadcrumbLabel}`;
         } else {
-          breadcrumbEl.innerHTML = `<a href="index.html">Hjem</a> › <a href="news.html">Nyheter</a> › ${breadcrumbLabel}`;
+          breadcrumbEl.innerHTML = `<a href="index.html">${t("home", "Hjem")}</a> › <a href="news.html">${t("news", "Nyheter")}</a> › ${breadcrumbLabel}`;
         }
       }
 
@@ -1102,7 +1106,7 @@ products = rows
 
       if (!enrichedProducts.length) {
         emptyMessage.style.display = "block";
-        emptyMessage.textContent = "Ingen produkter funnet.";
+        emptyMessage.textContent = t("no_products_found", "Ingen produkter funnet.");
         return;
       }
 
@@ -1117,8 +1121,8 @@ products = rows
         collectionIntroBlock.className = "collection-subhead";
         collectionIntroBlock.innerHTML = `
           <div class="collection-subhead__text">
-            <h3>Alle deals</h3>
-            <p>Browse hele utvalget, filtrer smart og finn tilbudene som faktisk er relevante.</p>
+            <h3>${t("all_deals", "Alle deals")}</h3>
+            <p>${t("all_deals_intro", "Browse hele utvalget, filtrer smart og finn tilbudene som faktisk er relevante.")}</p>
           </div>
         `;
 
@@ -1127,7 +1131,7 @@ products = rows
         insertBeforeFilterBar([collectionHero]);
       }
 
-              let dealQuickFilter = "all";
+      let dealQuickFilter = "all";
       let dealQuickSort = "";
 
       function applyFiltersAndSort() {
@@ -1200,7 +1204,7 @@ products = rows
         });
       }
 
-            bindFilterEvents(applyFiltersAndSort);
+      bindFilterEvents(applyFiltersAndSort);
       setupMobileFilterToggle();
       bindDealQuickNav();
 
@@ -1241,15 +1245,15 @@ products = rows
     });
 
     if (!match) {
-      titleEl.textContent = "Ugyldig kategori";
+      titleEl.textContent = t("invalid_category", "Ugyldig kategori");
       emptyMessage.style.display = "block";
       return;
     }
 
     const norskGender =
-      genderSlug === "men" ? "Herre" :
-      genderSlug === "women" ? "Dame" :
-      genderSlug === "kids" ? "Barn" : "";
+      genderSlug === "men" ? t("men", "Herre") :
+      genderSlug === "women" ? t("women", "Dame") :
+      genderSlug === "kids" ? t("kids", "Barn") : "";
 
     let subNameNo = null;
 
@@ -1282,7 +1286,7 @@ products = rows
 
     document.title = `${titleEl.textContent} | BrandRadar`;
 
-    let breadcrumbHtml = `<a href="index.html">Hjem</a> › `;
+    let breadcrumbHtml = `<a href="index.html">${t("home", "Hjem")}</a> › `;
 
     if (norskGender) {
       breadcrumbHtml += `
@@ -1320,6 +1324,7 @@ products = rows
 
     if (!filtered.length) {
       emptyMessage.style.display = "block";
+      emptyMessage.textContent = t("no_products_found", "Ingen produkter funnet.");
       return;
     }
 
