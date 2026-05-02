@@ -4,6 +4,7 @@
 // Inkluderer dynamisk BrandRadar Product Insights
 // Oppgradert med smartere product-family / summary engine
 // ======================================================
+const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
