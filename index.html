@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!-- 🟦 HEADER -->
 <header class="main-header">
   <div class="nav-container">
     <button class="mobile-menu-btn" type="button" aria-label="Åpne meny" aria-controls="mobileDrawer" aria-expanded="false">
@@ -27,60 +26,60 @@
         </svg>
       </span>
 
-     <input
-  id="search-input"
-  type="search"
-  placeholder="Søk produkter eller merker…"
-  data-i18n-placeholder="search_placeholder"
-  data-i18n-title="search_placeholder"
-  autocomplete="off"
-  spellcheck="false"
-  aria-label="Søk"
-/>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Søk produkter eller merker…"
+        data-i18n-placeholder="search_placeholder"
+        data-i18n-title="search_placeholder"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Søk"
+      />
 
       <button class="search-clear" type="button" aria-label="Tøm søk">✕</button>
 
       <div class="search-dropdown" id="search-dropdown" hidden>
         <div class="search-section" data-section="products">
-          <p class="search-section-title">Produkter</p>
+          <p class="search-section-title" data-i18n="products_title">Produkter</p>
           <div class="search-results" id="search-results-products"></div>
         </div>
 
         <div class="search-section" data-section="brands">
-          <p class="search-section-title">Brands</p>
+          <p class="search-section-title" data-i18n="brands">Brands</p>
           <div class="search-results" id="search-results-brands"></div>
         </div>
       </div>
     </div>
 
     <div class="lang-switch">
-  <button data-lang="no" class="lang-btn" type="button">NO</button>
-  <span class="lang-sep">/</span>
-  <button data-lang="en" class="lang-btn" type="button">EN</button>
-</div>
+      <button data-lang="no" class="lang-btn" type="button">NO</button>
+      <span class="lang-sep">/</span>
+      <button data-lang="en" class="lang-btn" type="button">EN</button>
+    </div>
 
     <nav class="top-links">
-  <a href="index.html" data-i18n="home">Hjem</a>
-  <a href="news.html" data-i18n="news">Nyheter</a>
-  <a href="brands.html" data-i18n="brands">Brands</a>
+      <a href="index.html" data-i18n="home">Hjem</a>
+      <a href="news.html" data-i18n="news">Nyheter</a>
+      <a href="brands.html" data-i18n="brands">Brands</a>
 
-  <a href="favoritter.html" class="favorites-link">
-    <span data-i18n="favorites">Favoritter</span>
-    <span id="favorites-count">0</span>
-  </a>
+      <a href="favoritter.html" class="favorites-link">
+        <span data-i18n="favorites">Favoritter</span>
+        <span id="favorites-count">0</span>
+      </a>
 
-  <a href="luxury.html" class="luxury-link" data-i18n="luxury">
-    Luxury Corner ✨
-  </a>
-</nav>
+      <a href="luxury.html" class="luxury-link" data-i18n="luxury">
+        Luxury Corner ✨
+      </a>
+    </nav>
   </div>
 
   <ul class="category-bar">
-    <li class="category-item" data-category="Clothing">Klær</li>
-    <li class="category-item" data-category="Shoes">Sko</li>
-    <li class="category-item" data-category="Gymcorner">Gymcorner</li>
-    <li class="category-item" data-category="Accessories">Tilbehør</li>
-    <li class="category-item" data-category="Selfcare">Selfcare</li>
+    <li class="category-item" data-category="Clothing" data-i18n="clothing">Klær</li>
+    <li class="category-item" data-category="Shoes" data-i18n="shoes">Sko</li>
+    <li class="category-item" data-category="Gymcorner" data-i18n="gymcorner">Gymcorner</li>
+    <li class="category-item" data-category="Accessories" data-i18n="accessories">Tilbehør</li>
+    <li class="category-item" data-category="Selfcare" data-i18n="selfcare">Selfcare</li>
   </ul>
 </header>
 
@@ -88,39 +87,35 @@
 
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobilmeny" hidden>
   <div class="mobile-drawer-header">
-    <p class="mobile-drawer-title">Meny</p>
+    <p class="mobile-drawer-title" data-i18n="menu">Meny</p>
     <button class="mobile-drawer-close" type="button" aria-label="Lukk meny">✕</button>
   </div>
 
   <div class="mobile-drawer-section mobile-drawer-nav">
-    <a href="index.html">Hjem</a>
-    <a href="news.html">Nyheter</a>
-    <a href="brands.html" class="mobile-drawer-link--brands">Brands</a>
-    <a href="favoritter.html">Favoritter</a>
-    <a href="luxury.html">Luxury Corner ✨</a>
+    <a href="index.html" data-i18n="home">Hjem</a>
+    <a href="news.html" data-i18n="news">Nyheter</a>
+    <a href="brands.html" class="mobile-drawer-link--brands" data-i18n="brands">Brands</a>
+    <a href="favoritter.html" data-i18n="favorites">Favoritter</a>
+    <a href="luxury.html" data-i18n="luxury">Luxury Corner ✨</a>
   </div>
 
   <div class="mobile-drawer-section mobile-drawer-cats">
-    <p class="mobile-drawer-subtitle">Utforsk kategorier</p>
+    <p class="mobile-drawer-subtitle" data-i18n="explore_categories">Utforsk kategorier</p>
 
     <div class="mobile-drawer-catlist">
-      <a href="category.html?category=Clothing">Klær</a>
-      <a href="category.html?category=Shoes">Sko</a>
-      <a href="category.html?category=Gymcorner">Gymcorner</a>
-      <a href="category.html?category=Accessories">Tilbehør</a>
-      <a href="category.html?category=Selfcare">Selfcare</a>
+      <a href="category.html?category=Clothing" data-i18n="clothing">Klær</a>
+      <a href="category.html?category=Shoes" data-i18n="shoes">Sko</a>
+      <a href="category.html?category=Gymcorner" data-i18n="gymcorner">Gymcorner</a>
+      <a href="category.html?category=Accessories" data-i18n="accessories">Tilbehør</a>
+      <a href="category.html?category=Selfcare" data-i18n="selfcare">Selfcare</a>
     </div>
   </div>
 </nav>
 
 <nav class="mega-menu"></nav>
 
-<!-- ✅ NY: Wrapper for å kunne re-ordre kun på mobil -->
 <main class="page">
 
-  <!-- ============================================
-       🌟 HERO SLIDER (Dynamisk – tom container)
-  ============================================ -->
   <section class="hero-slider">
     <div class="slides"></div>
 
@@ -130,35 +125,31 @@
     <div class="dots"></div>
   </section>
 
-  <!-- 💎 HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1>Oppdag trender. Følg radarene. Finn din stil.</h1>
-      <p>BrandRadar samler de mest ettertraktede produktene fra toppmerker, alt på ett sted.</p>
-      <a href="luxury.html" class="cta-btn">Utforsk Luxury Corner ✨</a>
+      <h1 data-i18n="home_hero_title">Oppdag trender. Følg radarene. Finn din stil.</h1>
+      <p data-i18n="home_hero_text">BrandRadar samler de mest ettertraktede produktene fra toppmerker, alt på ett sted.</p>
+      <a href="luxury.html" class="cta-btn" data-i18n="explore_luxury">Utforsk Luxury Corner ✨</a>
     </div>
     <div class="radar-bg"></div>
   </section>
 
-  <!-- ✅ Partner Banner Section -->
   <section id="partner-banner-section" class="partner-banner">
     <div id="partner-banner-content">
       <img id="partner-banner-img" src="" alt="Ukens samarbeid" />
       <div class="partner-text">
         <h3 id="partner-name"></h3>
         <p id="partner-desc"></p>
-        <a id="partner-link" href="#" target="_blank" class="btn-primary">Se samarbeid</a>
+        <a id="partner-link" href="#" target="_blank" class="btn-primary" data-i18n="see_collaboration">Se samarbeid</a>
       </div>
     </div>
   </section>
 
-  <!-- 🧭 INTRO – Premium v2 -->
   <section class="intro">
-    <h2>Hva er BrandRadar?</h2>
+    <h2 data-i18n="what_is_brandradar">Hva er BrandRadar?</h2>
 
     <div class="intro-grid">
 
-      <!-- CARD 1 -->
       <div class="intro-card">
         <div class="icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
@@ -168,11 +159,10 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </div>
-        <h3>Vi finner</h3>
-        <p>De mest spennende trendene og produktene akkurat nå.</p>
+        <h3 data-i18n="intro_find_title">Vi finner</h3>
+        <p data-i18n="intro_find_text">De mest spennende trendene og produktene akkurat nå.</p>
       </div>
 
-      <!-- CARD 2 -->
       <div class="intro-card">
         <div class="icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
@@ -189,11 +179,10 @@
             <line x1="17" y1="16" x2="23" y2="16"></line>
           </svg>
         </div>
-        <h3>Vi filtrerer</h3>
-        <p>Kvalitet uten støy. Vi håndplukker det beste.</p>
+        <h3 data-i18n="intro_filter_title">Vi filtrerer</h3>
+        <p data-i18n="intro_filter_text">Kvalitet uten støy. Vi håndplukker det beste.</p>
       </div>
 
-      <!-- CARD 3 -->
       <div class="intro-card">
         <div class="icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
@@ -204,17 +193,16 @@
             <path d="M12 2a7 7 0 0 0-7 7c0 2.76 1.5 5.19 3.75 6.32a2.46 2.46 0 0 1 1.25 2.1V18h6v-.58c0-.88.5-1.69 1.25-2.1C17.5 14.19 19 11.76 19 9a7 7 0 0 0-7-7z"></path>
           </svg>
         </div>
-        <h3>Du oppdager</h3>
-        <p>Alt samlet på ett sted — fra klær til selfcare.</p>
+        <h3 data-i18n="intro_discover_title">Du oppdager</h3>
+        <p data-i18n="intro_discover_text">Alt samlet på ett sted — fra klær til selfcare.</p>
       </div>
 
     </div>
   </section>
 
-  <!-- 🌐 UTFORSK BRANDRADAR-UNIVERSET -->
   <section class="universes">
-    <h2>Utforsk BrandRadar-universet</h2>
-    <p class="section-sub">
+    <h2 data-i18n="explore_universe_title">Utforsk BrandRadar-universet</h2>
+    <p class="section-sub" data-i18n="explore_universe_text">
       Velg hvor du vil starte reisen – fra eksklusive univers og sterke brands til deals og aktuelle kampanjer.
     </p>
 
@@ -226,9 +214,9 @@
         </div>
         <div class="u-card-overlay"></div>
         <div class="u-card-content">
-          <span class="u-card-kicker">Oppdag</span>
-          <h3>Brands</h3>
-          <p>Utforsk merkeuniverset og oppdag favorittbrandene dine.</p>
+          <span class="u-card-kicker" data-i18n="discover">Oppdag</span>
+          <h3 data-i18n="brands">Brands</h3>
+          <p data-i18n="universe_brands_text">Utforsk merkeuniverset og oppdag favorittbrandene dine.</p>
         </div>
       </a>
 
@@ -238,9 +226,9 @@
         </div>
         <div class="u-card-overlay"></div>
         <div class="u-card-content">
-          <span class="u-card-kicker">Aktuelt nå</span>
-          <h3>Deals</h3>
-          <p>De beste tilbudene akkurat nå – kuratert for raskere valg.</p>
+          <span class="u-card-kicker" data-i18n="current_now">Aktuelt nå</span>
+          <h3 data-i18n="deals">Deals</h3>
+          <p data-i18n="universe_deals_text">De beste tilbudene akkurat nå – valgt for raskere oversikt.</p>
         </div>
       </a>
 
@@ -250,9 +238,9 @@
         </div>
         <div class="u-card-overlay"></div>
         <div class="u-card-content">
-          <span class="u-card-kicker">Premium</span>
-          <h3>Luxury Corner ✨</h3>
-          <p>Eksklusive merker og håndplukkede premium-produkter i øverste sjikt.</p>
+          <span class="u-card-kicker" data-i18n="premium">Premium</span>
+          <h3 data-i18n="luxury">Luxury Corner ✨</h3>
+          <p data-i18n="universe_luxury_text">Eksklusive merker og håndplukkede premium-produkter i øverste sjikt.</p>
         </div>
       </a>
 
@@ -263,18 +251,17 @@
         <div class="u-card-overlay"></div>
         <div class="u-card-content">
           <span class="u-card-kicker">Editorial</span>
-          <h3>Trender &amp; kampanjer</h3>
-          <p>Oppdag nye drops, aktuelle kampanjer og det som beveger seg nå.</p>
+          <h3 data-i18n="trends_campaigns">Trender &amp; kampanjer</h3>
+          <p data-i18n="universe_trends_text">Oppdag nye drops, aktuelle kampanjer og det som beveger seg nå.</p>
         </div>
       </a>
 
     </div>
   </section>
 
-  <!-- 🌟 TRENDING RIGHT NOW -->
   <section class="trending-section">
-    <h2>Trending Right Now</h2>
-    <p class="section-sub">Det som beveger seg mest akkurat nå på radaren</p>
+    <h2 data-i18n="trending_now">Trending Right Now</h2>
+    <p class="section-sub" data-i18n="trending_now_text">Det som beveger seg mest akkurat nå på radaren</p>
 
     <button id="trendingPrev" class="trending-nav prev">❮</button>
     <button id="trendingNext" class="trending-nav next">❯</button>
@@ -282,33 +269,29 @@
     <div id="trending-grid" class="trending-grid"></div>
   </section>
 
-  <!-- 🌟 TOP BRANDS THIS WEEK -->
   <section class="top-brands">
-    <h2>Top Brands This Week</h2>
-    <p class="section-sub">Merker som trender på radaren akkurat nå.</p>
+    <h2 data-i18n="top_brands_this_week">Top Brands This Week</h2>
+    <p class="section-sub" data-i18n="top_brands_text">Merker som trender på radaren akkurat nå.</p>
 
     <div class="brands-grid" id="topbrands-grid"></div>
   </section>
 
-  <!-- 🎁 BRANDRADAR GIVEAWAYS -->
   <section class="giveaway-section" id="giveaway-section">
-    <div class="giveaway-shell" id="giveaway-shell">
-      <!-- Dynamisk innhold fra giveaways.js -->
-    </div>
+    <div class="giveaway-shell" id="giveaway-shell"></div>
   </section>
 
   <section class="giveaway-shortcut-section" aria-label="Giveaway Hub shortcut">
     <a href="giveaways.html" class="giveaway-shortcut-card">
       <div class="giveaway-shortcut-copy">
         <p class="giveaway-shortcut-kicker">Giveaway Hub</p>
-        <h2>Vinn utvalgte produkter</h2>
-        <p class="giveaway-shortcut-text">
+        <h2 data-i18n="giveaway_title">Vinn utvalgte produkter</h2>
+        <p class="giveaway-shortcut-text" data-i18n="giveaway_text">
           Se aktive giveaways samlet på ett sted og følg konkurransene som er live nå.
         </p>
 
         <div class="giveaway-shortcut-actions">
-          <span class="giveaway-shortcut-cta">Se giveaways</span>
-          <span class="giveaway-shortcut-meta">Aktive giveaways · samlet oversikt</span>
+          <span class="giveaway-shortcut-cta" data-i18n="see_giveaways">Se giveaways</span>
+          <span class="giveaway-shortcut-meta" data-i18n="giveaway_meta">Aktive giveaways · samlet oversikt</span>
         </div>
       </div>
 
@@ -317,28 +300,26 @@
         <div class="giveaway-shortcut-orb giveaway-shortcut-orb--1"></div>
         <div class="giveaway-shortcut-orb giveaway-shortcut-orb--2"></div>
         <div class="giveaway-shortcut-panel">
-          <span>Aktivt nå</span>
-          <strong>Giveaways samlet ett sted</strong>
+          <span data-i18n="active_now">Aktivt nå</span>
+          <strong data-i18n="giveaways_one_place">Giveaways samlet ett sted</strong>
         </div>
       </div>
     </a>
   </section>
   
-  <!-- 🧭 UKENS RADAR PICKS -->
   <section class="featured-products">
-    <h2>Ukens Radar Picks</h2>
-    <p class="section-sub">Håndplukket inspirasjon – rett fra radaren vår.</p>
+    <h2 data-i18n="weekly_radar_picks">Ukens Radar Picks</h2>
+    <p class="section-sub" data-i18n="weekly_radar_picks_text">Håndplukket inspirasjon – rett fra radaren vår.</p>
 
     <div class="product-grid premium-grid" id="featured-grid"></div>
   </section>
 
-  <!-- ✉️ CTA FOOTER -->
   <footer class="footer-cta">
-    <h2>Hold deg på radaren</h2>
-    <p>Få ukens radar picks og eksklusive nyheter først.</p>
+    <h2 data-i18n="stay_on_radar">Hold deg på radaren</h2>
+    <p data-i18n="newsletter_text">Få ukens radar picks og eksklusive nyheter først.</p>
     <div class="newsletter">
-      <input type="email" placeholder="Din e-postadresse" />
-      <button>Meld meg på</button>
+      <input type="email" placeholder="Din e-postadresse" data-i18n-placeholder="email_placeholder" />
+      <button data-i18n="newsletter_signup">Meld meg på</button>
     </div>
   </footer>
 
@@ -349,7 +330,7 @@
     <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
     </svg>
-    <span class="m-txt">Hjem</span>
+    <span class="m-txt" data-i18n="home">Hjem</span>
   </a>
 
   <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk">
@@ -357,7 +338,7 @@
       <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
       <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
     </svg>
-    <span class="m-txt">Søk</span>
+    <span class="m-txt" data-i18n="search">Søk</span>
   </a>
 
   <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
@@ -365,7 +346,7 @@
       <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
             stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
     </svg>
-    <span class="m-txt">Favoritter</span>
+    <span class="m-txt" data-i18n="favorites">Favoritter</span>
   </a>
 
   <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
@@ -375,7 +356,7 @@
       <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
     </svg>
-    <span class="m-txt">News</span>
+    <span class="m-txt" data-i18n="news">News</span>
   </a>
 
   <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
@@ -384,7 +365,7 @@
       <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
     </svg>
-    <span class="m-txt">Luxury</span>
+    <span class="m-txt" data-i18n="luxury_short">Luxury</span>
   </a>
 </nav>
 
