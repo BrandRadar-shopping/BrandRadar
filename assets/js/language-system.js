@@ -21,6 +21,12 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      about_product: "Om produktet",
+best_prices_now: "Beste priser akkurat nå",
+buy_product: "Kjøp produkt",
+more_deals: "Flere deals",
+you_may_like: "Du vil kanskje like",
+
       back: "Tilbake",
 loading_category: "Laster kategori...",
 filtering_sorting: "Filtrering og sortering",
@@ -230,6 +236,12 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      about_product: "About the product",
+best_prices_now: "Best prices right now",
+buy_product: "Buy product",
+more_deals: "More deals",
+you_may_like: "You may also like",
 
       back: "Back",
 loading_category: "Loading category...",
