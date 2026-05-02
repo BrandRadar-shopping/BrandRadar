@@ -1151,7 +1151,7 @@ async function loadRecommendations(products, currentProduct) {
   matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
 
   if (!matches.length) {
-    slider.innerHTML = "<p>Ingen anbefalinger tilgjengelig.</p>";
+    slider.innerHTML = `<p>${t("no_recommendations", "Ingen anbefalinger tilgjengelig.")}</p>`;
     return;
   }
 
@@ -1200,17 +1200,17 @@ function setupFavoriteButton(product) {
   const exists = getFavorites().some(f => String(f.id) === id);
 
   btn.innerHTML = exists
-    ? `<span class="heart active"></span> Fjern fra favoritter`
-    : `<span class="heart"></span> Legg til favoritter`;
-
+  ? `<span class="heart active"></span> ${t("remove_favorite", "Fjern fra favoritter")}`
+  : `<span class="heart"></span> ${t("add_favorite", "Legg til favoritter")}`;
+  
   btn.addEventListener("click", () => {
     toggleFavorite(product, btn.querySelector(".heart"));
 
     const nowExists = getFavorites().some(f => String(f.id) === id);
 
     btn.innerHTML = nowExists
-      ? `<span class="heart active"></span> Fjern fra favoritter`
-      : `<span class="heart"></span> Legg til favoritter`;
+  ? `<span class="heart active"></span> ${t("remove_favorite", "Fjern fra favoritter")}`
+  : `<span class="heart"></span> ${t("add_favorite", "Legg til favoritter")}`;
   });
 }
 
