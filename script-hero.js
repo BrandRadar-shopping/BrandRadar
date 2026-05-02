@@ -27,23 +27,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   const isTouchMode = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
   function getLocalized(row, baseKey) {
-    if (currentLang === "en") {
-      return (
-        row[`${baseKey}_en`] ||
-        row[`${baseKey}_english`] ||
-        row[`${baseKey}_ENG`] ||
-        row[baseKey] ||
-        ""
-      ).trim();
-    }
+  const normalizedRow = {};
 
-    return (
-      row[`${baseKey}_no`] ||
-      row[`${baseKey}_norwegian`] ||
-      row[baseKey] ||
+  Object.keys(row || {}).forEach((key) => {
+    normalizedRow[String(key).trim().toLowerCase()] = row[key];
+  });
+
+  const clean = (value) => String(value || "").trim();
+
+  if (currentLang === "en") {
+    return clean(
+      normalizedRow[`${baseKey}_en`] ||
+      normalizedRow[`${baseKey}_english`] ||
+      normalizedRow[`${baseKey} english`] ||
+      normalizedRow[baseKey] ||
       ""
-    ).trim();
+    );
   }
+
+  return clean(
+    normalizedRow[`${baseKey}_no`] ||
+    normalizedRow[`${baseKey}_norwegian`] ||
+    normalizedRow[baseKey] ||
+    ""
+  );
+}
 
   try {
     const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
