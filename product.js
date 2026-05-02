@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const isLuxuryParam = params.get("luxury") === "true";
 
   if (!productId) {
-    console.error("❌ Ingen produkt-ID i URL");
+    console.error("❌", t("no_product_id", "Ingen produkt-ID i URL"));
     return;
   }
 
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (!product) {
-    alert("Produktet ble ikke funnet!");
+    alert(t("product_not_found", "Produktet ble ikke funnet!"));
     return;
   }
 
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (productDescriptionEl) {
     productDescriptionEl.textContent =
-      product.info || product.description || "Dette premiumproduktet kombinerer kvalitet og stil.";
+      product.info || product.description || t("product_description_fallback", "Dette premiumproduktet kombinerer kvalitet og stil.");
   }
 
   const newPriceEl = document.getElementById("new-price");
