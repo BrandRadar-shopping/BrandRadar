@@ -456,7 +456,7 @@ function buildInsightHighlights(product, offerSummary) {
 
   const discountPercent = getDiscountPercent(product, offerSummary);
   if (discountPercent && discountPercent > 0) {
-    highlights.push(`${discountPercent}% rabatt`);
+   highlights.push(`${discountPercent}% ${t("discount", "rabatt")}`);
   }
 
   return highlights.slice(0, 4);
@@ -470,11 +470,11 @@ function buildInsightMeta(product, offerSummary) {
   if (hasOffers && offerSummary?.storeCount) {
     parts.push(
       offerSummary.storeCount === 1
-        ? "Pris fra 1 butikk"
-        : `Pris fra ${offerSummary.storeCount} butikker`
+        ? t("price_from_one_store", "Pris fra 1 butikk")
+: `${t("price_from", "Pris fra")} ${offerSummary.storeCount} ${t("stores", "butikker")}`
     );
   } else {
-    parts.push("Produktdata tilgjengelig");
+    parts.push(t("product_data_available", "Produktdata tilgjengelig"));
   }
 
   const hasWorldwide = offers.some((offer) =>
@@ -486,11 +486,11 @@ function buildInsightMeta(product, offerSummary) {
   if (hasWorldwide) {
     parts.push("Worldwide shipping");
   } else if (hasOffers) {
-    parts.push("Aktive offers");
+    parts.push(t("active_offers", "Aktive offers"));
   }
 
   if (hasOffers) {
-    parts.push("Pris sammenlignes live");
+    parts.push(t("price_compared_live", "Pris sammenlignes live"));
   }
 
   return parts;
