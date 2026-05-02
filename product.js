@@ -215,7 +215,7 @@ function renderProductRating(product) {
 
   ratingEl.textContent = Number.isFinite(ratingNum)
     ? `${ratingNum.toFixed(1)} / 5`
-    : "Ingen rating";
+    : t("no_rating", "Ingen rating");
 }
 
 function normalizeText(value) {
