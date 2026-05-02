@@ -17,7 +17,7 @@
       shop_now: "Shop nå",
       view_product: "Se produkt",
       add_favorite: "Legg til favoritt",
-      remove_favorite: "Fjern favoritt",
+      remove_favorite: "Fjern fra favoritter",
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
@@ -39,7 +39,16 @@
       explore_product: "Utforsk produkt",
       no_new_products_now: "Ingen nye produkter akkurat nå.",
       could_not_load_spotlight: "Kunne ikke laste spotlight.",
-      could_not_load_newsfeed: "Kunne ikke laste nyhetsfeed."
+      could_not_load_newsfeed: "Kunne ikke laste nyhetsfeed.",
+
+      fetch_error: "Feil ved henting av",
+      deals_label: "DEALS",
+      spotlight: "Spotlight",
+      show_image: "Vis bilde",
+      of: "av",
+      weekly_spotlight: "Ukens Spotlight",
+      spotlight_fallback_text: "Et håndplukket produkt denne uken."
+      
     },
 
     en: {
@@ -77,7 +86,15 @@
       explore_product: "Explore product",
       no_new_products_now: "No new products right now.",
       could_not_load_spotlight: "Could not load spotlight.",
-      could_not_load_newsfeed: "Could not load news feed."
+      could_not_load_newsfeed: "Could not load news feed.",
+  
+      fetch_error: "Error fetching",
+      deals_label: "DEALS",
+      spotlight: "Spotlight",
+      show_image: "Show image",
+      of: "of",
+      weekly_spotlight: "Weekly Spotlight",
+      spotlight_fallback_text: "A selected product this week."
     }
   };
 
