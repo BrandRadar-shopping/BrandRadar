@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  mainImg.src = images[0] || "https://via.placeholder.com/600x700?text=No+Image";
+  mainImg.src = images[0] || `https://via.placeholder.com/600x700?text=${encodeURIComponent(t("no_image", "No Image"))}`;
   thumbs.innerHTML = "";
 
   images.forEach((src, i) => {
