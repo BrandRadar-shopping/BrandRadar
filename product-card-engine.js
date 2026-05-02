@@ -1,17 +1,11 @@
 // ======================================================
 // ✅ BrandRadar – Product Card Engine
 // Felles motor for produktkort på tvers av sider
-// Støtter:
-// - offer_summary
-// - fallback-pris
-// - favorittikon
-// - luxury heart
-// - SVG rating stars
-// - mer stabil markup for jevnere kort
-// - image fallback / safety hvis bilde feiler
 // ======================================================
 
 (function () {
+  const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
+
   function cleanPrice(value) {
     return parseFloat(
       String(value ?? "").replace(/[^\d.,]/g, "").replace(",", ".")
@@ -88,11 +82,13 @@
     if (!summary?.hasOffers) return "";
 
     const storeLabel =
-      summary.storeCount === 1 ? "1 butikk" : `${summary.storeCount} butikker`;
+      summary.storeCount === 1
+        ? t("one_store", "1 butikk")
+        : `${summary.storeCount} ${t("stores", "butikker")}`;
 
     return `
       <div class="offer-summary">
-        <div class="offer-summary-price">Fra ${summary.lowestPriceFormatted}</div>
+        <div class="offer-summary-price">${t("from_price", "Fra")} ${summary.lowestPriceFormatted}</div>
         <div class="offer-summary-count">${storeLabel}</div>
       </div>
     `;
@@ -151,11 +147,11 @@
     if (rating === null) {
       if (emptyMode === "muted") {
         return `
-          <div class="rating-stars is-empty" aria-label="Ingen rating">
+          <div class="rating-stars is-empty" aria-label="${t("no_rating", "Ingen rating")}">
             <div class="rating-stars-row">
               ${Array.from({ length: 5 }, () => buildStarIcon(0)).join("")}
             </div>
-            ${showValue ? `<span class="rating-value rating-value-empty">Ingen rating</span>` : ""}
+            ${showValue ? `<span class="rating-value rating-value-empty">${t("no_rating", "Ingen rating")}</span>` : ""}
           </div>
         `;
       }
@@ -168,7 +164,7 @@
     }).join("");
 
     return `
-      <div class="rating-stars" aria-label="Rating ${rating.toFixed(1)} av 5">
+      <div class="rating-stars" aria-label="${t("rating", "Rating")} ${rating.toFixed(1)} ${t("out_of_5", "av 5")}">
         <div class="rating-stars-row">
           ${stars}
         </div>
@@ -234,7 +230,7 @@
     } = options;
 
     const id = getResolvedId(product);
-    const name = product.title || product.product_name || product.name || "Uten navn";
+    const name = product.title || product.product_name || product.name || t("unnamed_product", "Uten navn");
     const brand = product.brand || "";
     const img = product.image_url || product.image || product.img || "";
     const safeName = escapeHtml(name);
@@ -265,7 +261,7 @@
         <button
           type="button"
           class="favorite-toggle ${isFav ? "active" : ""} ${isLuxury ? "is-luxury" : ""}"
-          aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
+          aria-label="${isFav ? t("remove_favorite", "Fjern fra favoritter") : t("add_favorite", "Legg til favoritt")}"
         >
           <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
@@ -342,7 +338,9 @@
         favButton.classList.toggle("active", existsAfter);
         favButton.setAttribute(
           "aria-label",
-          existsAfter ? "Fjern fra favoritter" : "Legg til favoritt"
+          existsAfter
+            ? t("remove_favorite", "Fjern fra favoritter")
+            : t("add_favorite", "Legg til favoritt")
         );
       });
     }
