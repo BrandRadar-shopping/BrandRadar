@@ -1025,7 +1025,6 @@ async function loadDeals() {
         if (!productId || !master) return null;
 
         const base = createProductBaseFromMaster(master);
-
         if (!base) return null;
 
         return {
@@ -1039,7 +1038,7 @@ async function loadDeals() {
       .sort((a, b) => a.rank - b.rank);
 
     if (!deals.length) {
-      dealsTrack.textContent = "Ingen deals akkurat nå.";
+      dealsTrack.textContent = t("no_deals_now", "Ingen deals akkurat nå.");
       return;
     }
 
@@ -1079,10 +1078,11 @@ async function loadDeals() {
   } catch (err) {
     console.error("❌ Deals error:", err);
     dealsTrack.classList.remove("loading");
-    dealsTrack.textContent = "Kunne ikke laste deals.";
+    dealsTrack.textContent = t("could_not_load_deals", "Kunne ikke laste deals.");
   }
 }
-  // ======================================================
+
+// ======================================================
 // 3) RADAR PICKS
 // ======================================================
 async function loadPicks() {
@@ -1143,7 +1143,7 @@ async function loadPicks() {
         : false;
 
     const badge = normalizePickBadge(product.badge);
-    const labelText = product.label || "Populært valg";
+    const labelText = product.label || t("popular_choice", "Populært valg");
 
     const card = document.createElement("article");
     card.className = "radar-pick-card";
@@ -1153,7 +1153,7 @@ async function loadPicks() {
       <button
         type="button"
         class="radar-pick-fav ${isFav ? "active" : ""}"
-        aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
+        aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
@@ -1180,7 +1180,7 @@ async function loadPicks() {
       <div class="radar-pick-body">
         <p class="radar-pick-brand">${escapeHtml(product.brand || "")}</p>
 
-        <h3>${escapeHtml(product.title || product.product_name || product.name || "Produkt")}</h3>
+        <h3>${escapeHtml(product.title || product.product_name || product.name || t("product", "Produkt"))}</h3>
 
         ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
 
@@ -1212,8 +1212,8 @@ async function loadPicks() {
 
       window.toggleFavorite({
         id: pid,
-        title: product.title || product.product_name || product.name || "Uten navn",
-        product_name: product.title || product.product_name || product.name || "Uten navn",
+        title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
         brand: product.brand || "",
         price: product.price || price || "",
         discount: product.discount || "",
@@ -1232,7 +1232,7 @@ async function loadPicks() {
       favBtn.classList.toggle("active", active);
       favBtn.setAttribute(
         "aria-label",
-        active ? "Fjern fra favoritter" : "Legg til favoritt"
+        active ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
       );
     });
 
@@ -1271,8 +1271,6 @@ async function loadPicks() {
           id: productId,
           reason: row.reason || "",
           rank: parseInt(row.rank, 10) || index + 1,
-
-          // ✅ Datastyrt fra picks-sheet
           badge: row.badge || "editor",
           label: row.label || ""
         };
@@ -1281,7 +1279,7 @@ async function loadPicks() {
       .sort((a, b) => a.rank - b.rank);
 
     if (!picks.length) {
-      picksTrack.textContent = "Ingen picks akkurat nå.";
+      picksTrack.textContent = t("no_picks_now", "Ingen picks akkurat nå.");
       return;
     }
 
@@ -1297,125 +1295,126 @@ async function loadPicks() {
   } catch (err) {
     console.error("❌ Picks error:", err);
     picksTrack.classList.remove("loading");
-    picksTrack.textContent = "Kunne ikke laste picks.";
+    picksTrack.textContent = t("could_not_load_picks", "Kunne ikke laste picks.");
   }
 }
-  // ======================================================
-  // 4) SPOTLIGHT + NEWS FEED
-  // ======================================================
-  async function loadNewsSections() {
-    if (!spotlightTrack && !newsGridEl) return;
 
-    try {
-      const [newsRows, masterRows] = await Promise.all([
-        fetchJson(NEWS_SHEET_ID, NEWS_TAB),
-        fetchJson(MASTER_SHEET_ID, MASTER_TAB)
-      ]);
+// ======================================================
+// 4) SPOTLIGHT + NEWS FEED
+// ======================================================
+async function loadNewsSections() {
+  if (!spotlightTrack && !newsGridEl) return;
 
-      const masterById = new Map(
-        masterRows.map((row) => [String(row.id || "").trim(), row])
-      );
+  try {
+    const [newsRows, masterRows] = await Promise.all([
+      fetchJson(NEWS_SHEET_ID, NEWS_TAB),
+      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+    ]);
 
-      const merged = [];
+    const masterById = new Map(
+      masterRows.map((row) => [String(row.id || "").trim(), row])
+    );
 
-      newsRows.forEach((row) => {
-        const id = String(row.id || "").trim();
-        if (!id) return;
+    const merged = [];
 
-        const master = masterById.get(id);
-        if (!master) return;
+    newsRows.forEach((row) => {
+      const id = String(row.id || "").trim();
+      if (!id) return;
 
-        const base = createProductBaseFromMaster(master);
-        if (!base) return;
+      const master = masterById.get(id);
+      if (!master) return;
 
-        merged.push({
-          product: base,
-          spotlight: parseBool(row.spotlight),
-          showInFeed: parseBool(row.show_in_feed),
-          excerpt: row.excerpt || row.description || "",
-          tag: row.tag || "",
-          priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
-        });
+      const base = createProductBaseFromMaster(master);
+      if (!base) return;
+
+      merged.push({
+        product: base,
+        spotlight: parseBool(row.spotlight),
+        showInFeed: parseBool(row.show_in_feed),
+        excerpt: row.excerpt || row.description || "",
+        tag: row.tag || "",
+        priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
       });
+    });
 
-      const spotlightItems = merged
-        .filter((m) => m.spotlight)
-        .sort((a, b) => a.priority - b.priority);
+    const spotlightItems = merged
+      .filter((m) => m.spotlight)
+      .sort((a, b) => a.priority - b.priority);
 
-      const feedItems = merged
-        .filter((m) => m.showInFeed)
-        .sort((a, b) => a.priority - b.priority);
+    const feedItems = merged
+      .filter((m) => m.showInFeed)
+      .sort((a, b) => a.priority - b.priority);
 
-            if (spotlightTrack) {
-        spotlightTrack.classList.remove("loading");
-        spotlightTrack.innerHTML = "";
+    if (spotlightTrack) {
+      spotlightTrack.classList.remove("loading");
+      spotlightTrack.innerHTML = "";
 
-        if (!spotlightItems.length) {
-          spotlightTrack.textContent = "Ingen spotlight-produkter akkurat nå.";
-        } else {
-          spotlightItems.forEach((item) => {
-            const spotlightCard = buildSpotlightCard(item.product, {
-              excerpt: item.excerpt,
-              tag: item.tag || "Spotlight",
-              secondaryTag: item.product.brand || item.product.category || "",
-              ctaText: "Utforsk produkt",
-              onCardClick: (product) => {
-                if (!product?.id) return;
-                window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-              }
-            });
-
-            spotlightTrack.appendChild(spotlightCard);
-          });
-
-          initArrowSlider(spotlightTrack);
-          initMobileSpotlightDots(spotlightTrack);
-        }
-      }
-
-      if (newsGridEl) {
-        newsGridEl.classList.remove("loading");
-        newsGridEl.innerHTML = "";
-
-        if (!feedItems.length) {
-          newsGridEl.textContent = "Ingen nye produkter akkurat nå.";
-          return;
-        }
-
-        feedItems.forEach((item) => {
-          const card = buildEliteCard(item.product, {
-            showExcerpt: true,
+      if (!spotlightItems.length) {
+        spotlightTrack.textContent = t("no_spotlight_now", "Ingen spotlight-produkter akkurat nå.");
+      } else {
+        spotlightItems.forEach((item) => {
+          const spotlightCard = buildSpotlightCard(item.product, {
             excerpt: item.excerpt,
-            tag: item.tag || "",
-            extraClasses: "news-card"
+            tag: item.tag || "Spotlight",
+            secondaryTag: item.product.brand || item.product.category || "",
+            ctaText: t("explore_product", "Utforsk produkt"),
+            onCardClick: (product) => {
+              if (!product?.id) return;
+              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+            }
           });
 
-          newsGridEl.appendChild(card);
+          spotlightTrack.appendChild(spotlightCard);
         });
-      }
-    } catch (err) {
-      console.error("❌ News sections error:", err);
 
-      if (spotlightTrack) {
-        spotlightTrack.classList.remove("loading");
-        spotlightTrack.textContent = "Kunne ikke laste spotlight.";
-      }
-
-      if (newsGridEl) {
-        newsGridEl.classList.remove("loading");
-        newsGridEl.textContent = "Kunne ikke laste nyhetsfeed.";
+        initArrowSlider(spotlightTrack);
+        initMobileSpotlightDots(spotlightTrack);
       }
     }
-  }
 
-  // ======================================================
-  // INIT
-  // ======================================================
-  document.addEventListener("DOMContentLoaded", () => {
-    ensureDealsRibbonStyles();
-    loadPartnerBanner();
-    loadDeals();
-    loadPicks();
-    loadNewsSections();
-  });
+    if (newsGridEl) {
+      newsGridEl.classList.remove("loading");
+      newsGridEl.innerHTML = "";
+
+      if (!feedItems.length) {
+        newsGridEl.textContent = t("no_new_products_now", "Ingen nye produkter akkurat nå.");
+        return;
+      }
+
+      feedItems.forEach((item) => {
+        const card = buildEliteCard(item.product, {
+          showExcerpt: true,
+          excerpt: item.excerpt,
+          tag: item.tag || "",
+          extraClasses: "news-card"
+        });
+
+        newsGridEl.appendChild(card);
+      });
+    }
+  } catch (err) {
+    console.error("❌ News sections error:", err);
+
+    if (spotlightTrack) {
+      spotlightTrack.classList.remove("loading");
+      spotlightTrack.textContent = t("could_not_load_spotlight", "Kunne ikke laste spotlight.");
+    }
+
+    if (newsGridEl) {
+      newsGridEl.classList.remove("loading");
+      newsGridEl.textContent = t("could_not_load_newsfeed", "Kunne ikke laste nyhetsfeed.");
+    }
+  }
+}
+
+// ======================================================
+// INIT
+// ======================================================
+document.addEventListener("DOMContentLoaded", () => {
+  ensureDealsRibbonStyles();
+  loadPartnerBanner();
+  loadDeals();
+  loadPicks();
+  loadNewsSections();
+});
 })();
