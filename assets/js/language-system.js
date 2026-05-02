@@ -21,6 +21,9 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      no_favorite_products: "Du har ingen favoritt-produkter enda.",
+no_favorite_brands: "Du har ingen favoritt-brands enda.",
+
       favorite_brand: "♡ Favoritt-brand",
 visit_brand: "Besøk brand",
 category_label_colon: "Kategori:",
@@ -244,6 +247,9 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      no_favorite_products: "You do not have any favorite products yet.",
+no_favorite_brands: "You do not have any favorite brands yet.",
 
       favorite_brand: "♡ Favorite brand",
 visit_brand: "Visit brand",
