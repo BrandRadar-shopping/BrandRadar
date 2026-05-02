@@ -22,6 +22,8 @@
           id="search-input"
           type="search"
           placeholder="Søk produkter eller merker…"
+          data-i18n-placeholder="search_placeholder"
+          data-i18n-title="search_placeholder"
           autocomplete="off"
           spellcheck="false"
           aria-label="Søk"
@@ -31,12 +33,12 @@
 
         <div class="search-dropdown" id="search-dropdown" hidden>
           <div class="search-section" data-section="products">
-            <p class="search-section-title">Produkter</p>
+            <p class="search-section-title" data-i18n="products_title">Produkter</p>
             <div class="search-results" id="search-results-products"></div>
           </div>
 
           <div class="search-section" data-section="brands">
-            <p class="search-section-title">Brands</p>
+            <p class="search-section-title" data-i18n="brands">Brands</p>
             <div class="search-results" id="search-results-brands"></div>
           </div>
         </div>
@@ -56,6 +58,8 @@
           id="mobileDrawerSearchInput"
           type="search"
           placeholder="Søk produkter eller merker"
+          data-i18n-placeholder="search_placeholder"
+          data-i18n-title="search_placeholder"
           autocomplete="off"
           spellcheck="false"
           aria-label="Søk i BrandRadar"
@@ -66,23 +70,23 @@
     </div>
 
     <div class="m-topcats" role="tablist" aria-label="Hovedkategorier">
-      <button class="m-chip is-active" data-cat="clothing" type="button">Klær</button>
-      <button class="m-chip" data-cat="shoes" type="button">Sko</button>
-      <button class="m-chip" data-cat="gymcorner" type="button">Gymcorner</button>
-      <button class="m-chip" data-cat="accessories" type="button">Tilbehør</button>
-      <button class="m-chip" data-cat="selfcare" type="button">Selfcare</button>
+      <button class="m-chip is-active" data-cat="clothing" type="button" data-i18n="clothing">Klær</button>
+      <button class="m-chip" data-cat="shoes" type="button" data-i18n="shoes">Sko</button>
+      <button class="m-chip" data-cat="gymcorner" type="button" data-i18n="gymcorner">Gymcorner</button>
+      <button class="m-chip" data-cat="accessories" type="button" data-i18n="accessories">Tilbehør</button>
+      <button class="m-chip" data-cat="selfcare" type="button" data-i18n="selfcare">Selfcare</button>
     </div>
 
     <div class="m-segments is-tabs" id="mDrawerLevelTwo" role="tablist" aria-label="Velg nivå to"></div>
 
     <div class="m-results" id="mDrawerResults" hidden>
       <div class="m-subcats">
-        <h3 class="m-section-title" id="mSubcatTitle">Kategorier</h3>
+        <h3 class="m-section-title" id="mSubcatTitle" data-i18n="categories">Kategorier</h3>
         <div class="m-grid" id="mSubcatGrid"></div>
       </div>
 
       <div class="m-brands" id="mBrandsWrap">
-        <h3 class="m-section-title">Toppmerker</h3>
+        <h3 class="m-section-title" data-i18n="top_brands">Toppmerker</h3>
         <div class="m-brand-row" id="mBrandRow"></div>
       </div>
     </div>
@@ -92,51 +96,61 @@
 
     <section class="m-search-block">
       <div class="m-search-block-head">
-        <h2>Kategorier</h2>
-        <button class="m-allcats-btn" type="button">Se alle</button>
+        <h2 data-i18n="categories">Kategorier</h2>
+        <button class="m-allcats-btn" type="button" data-i18n="see_all">Se alle</button>
       </div>
 
       <div class="m-cat-chips" aria-label="Kategorier hurtigvalg">
-        <button class="m-cat-chip" type="button" data-open-drawer-cat="clothing"><span class="m-cat-ico">👕</span><span>Klær</span></button>
-        <button class="m-cat-chip" type="button" data-open-drawer-cat="shoes"><span class="m-cat-ico">👟</span><span>Sko</span></button>
-        <button class="m-cat-chip" type="button" data-open-drawer-cat="gymcorner"><span class="m-cat-ico">🏋️</span><span>Gym</span></button>
-        <button class="m-cat-chip" type="button" data-open-drawer-cat="accessories"><span class="m-cat-ico">🧢</span><span>Tilbehør</span></button>
-        <button class="m-cat-chip" type="button" data-open-drawer-cat="selfcare"><span class="m-cat-ico">🧴</span><span>Selfcare</span></button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="clothing">
+          <span class="m-cat-ico">👕</span><span data-i18n="clothing">Klær</span>
+        </button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="shoes">
+          <span class="m-cat-ico">👟</span><span data-i18n="shoes">Sko</span>
+        </button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="gymcorner">
+          <span class="m-cat-ico">🏋️</span><span data-i18n="gym">Gym</span>
+        </button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="accessories">
+          <span class="m-cat-ico">🧢</span><span data-i18n="accessories">Tilbehør</span>
+        </button>
+        <button class="m-cat-chip" type="button" data-open-drawer-cat="selfcare">
+          <span class="m-cat-ico">🧴</span><span data-i18n="selfcare">Selfcare</span>
+        </button>
       </div>
     </section>
 
     <section class="m-search-block">
       <div class="m-search-block-head">
-        <h2>Populært nå</h2>
+        <h2 data-i18n="popular_now">Populært nå</h2>
       </div>
 
       <div class="m-feature-grid">
         <a class="m-feature-tile" href="luxury.html" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
-          <span class="m-feature-title">Luxury Corner</span>
-          <span class="m-feature-sub">Eksklusivt utvalg</span>
+          <span class="m-feature-title" data-i18n="luxury_short">Luxury Corner</span>
+          <span class="m-feature-sub" data-i18n="exclusive_selection">Eksklusivt utvalg</span>
         </a>
 
         <button class="m-feature-tile m-feature-tile--button" type="button" data-open-drawer-cat="clothing" style="--bg:url('/BrandRadar/assets/img/tiles/default-clothing.jpg')">
-          <span class="m-feature-title">Klær</span>
-          <span class="m-feature-sub">Trending styles</span>
+          <span class="m-feature-title" data-i18n="clothing">Klær</span>
+          <span class="m-feature-sub" data-i18n="trending_styles">Trending styles</span>
         </button>
 
         <button class="m-feature-tile m-feature-tile--button" type="button" data-open-drawer-cat="shoes" style="--bg:url('/BrandRadar/assets/img/tiles/default-shoes.jpg')">
-          <span class="m-feature-title">Sko</span>
-          <span class="m-feature-sub">Nyheter & bestselgere</span>
+          <span class="m-feature-title" data-i18n="shoes">Sko</span>
+          <span class="m-feature-sub" data-i18n="news_bestsellers">Nyheter & bestselgere</span>
         </button>
 
         <a class="m-feature-tile" href="news.html" style="--bg:url('/BrandRadar/assets/img/tiles/default-gymcorner.jpg')">
-          <span class="m-feature-title">Trender</span>
-          <span class="m-feature-sub">Drops & kampanjer</span>
+          <span class="m-feature-title" data-i18n="trends">Trender</span>
+          <span class="m-feature-sub" data-i18n="drops_campaigns">Drops & kampanjer</span>
         </a>
       </div>
     </section>
 
     <section class="m-search-block">
       <div class="m-search-block-head">
-        <h2>Toppmerker</h2>
-        <a class="m-link" href="brands.html">Se alle</a>
+        <h2 data-i18n="top_brands">Toppmerker</h2>
+        <a class="m-link" href="brands.html" data-i18n="see_all">Se alle</a>
       </div>
 
       <div class="m-brand-row m-brand-row--search" id="mBrandRowSearch">
@@ -150,49 +164,49 @@
 
   </main>
 
- <nav class="m-bottom-nav" aria-label="Bunnmeny">
-  <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Hjem</span>
-  </a>
+  <nav class="m-bottom-nav" aria-label="Bunnmeny">
+    <a class="m-nav-item" href="index.html" data-route="index" aria-label="Hjem">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="m-txt" data-i18n="home">Hjem</span>
+    </a>
 
-  <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk" aria-current="page">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Søk</span>
-  </a>
+    <a class="m-nav-item" href="search-mobile.html" data-route="search" aria-label="Søk" aria-current="page">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt" data-i18n="search">Søk</span>
+    </a>
 
-  <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
+    <a class="m-nav-item" href="favoritter.html" data-route="favoritter" aria-label="Favoritter">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21s-7-4.7-9.3-8.7C.8 9 .9 5.9 3.2 4.1 5.2 2.5 8 3 9.7 5c.6.7 1.2 1.6 2.3 1.6S13.7 5.7 14.3 5C16 3 18.8 2.5 20.8 4.1c2.3 1.8 2.4 4.9.5 8.2C19 16.3 12 21 12 21Z"
               stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    </svg>
-    <span class="m-txt">Favoritter</span>
-  </a>
+      </svg>
+      <span class="m-txt" data-i18n="favorites">Favoritter</span>
+    </a>
 
-  <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">News</span>
-  </a>
+    <a class="m-nav-item" href="news.html" data-route="news" aria-label="Nyheter">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 4h12a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M8 8h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt" data-i18n="news">News</span>
+    </a>
 
-  <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
-    <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
-    </svg>
-    <span class="m-txt">Luxury</span>
-  </a>
-</nav>
+    <a class="m-nav-item m-lux" href="luxury.html" data-route="luxury" aria-label="Luxury">
+      <svg class="m-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3 3.5 9.5 12 21 20.5 9.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 3v18" stroke="currentColor" stroke-width="1.2" opacity=".8" stroke-linecap="round"/>
+      </svg>
+      <span class="m-txt" data-i18n="luxury_short">Luxury</span>
+    </a>
+  </nav>
 
   <script src="search.js"></script>
   <script src="script.js"></script>
