@@ -829,7 +829,7 @@ function renderProductInsights(product, offerSummary) {
     : "";
 
   container.innerHTML = `
-    <div class="product-insights-title">Hvorfor dette produktet skiller seg ut</div>
+    <div class="product-insights-title">${t("why_product_stands_out", "Hvorfor dette produktet skiller seg ut")}</div>
     ${highlightsHTML}
     <div class="product-insight-summary">${summary}</div>
     ${metaHTML}
@@ -862,14 +862,14 @@ async function renderPriceComparison(product) {
       };
     }
 
-    newPriceEl.textContent = `Fra ${summary.lowestPriceFormatted}`;
+    newPriceEl.textContent = `${t("from_price", "Fra")} ${summary.lowestPriceFormatted}`;
     oldPriceEl.textContent = "";
     discountTagEl.textContent = "";
 
     subtitle.textContent =
-      summary.storeCount === 1
-        ? "Vi fant 1 butikk med aktiv pris akkurat nå."
-        : `Vi fant ${summary.storeCount} butikker med aktive priser akkurat nå.`;
+  summary.storeCount === 1
+    ? t("found_one_store_price", "Vi fant 1 butikk med aktiv pris akkurat nå.")
+    : `${t("found", "Vi fant")} ${summary.storeCount} ${t("stores_with_active_prices", "butikker med aktive priser akkurat nå.")}`;
 
     list.innerHTML = "";
 
@@ -882,7 +882,7 @@ async function renderPriceComparison(product) {
 
       const merchantName = document.createElement("div");
       merchantName.className = "price-offer-merchant";
-      merchantName.textContent = offer.merchant_name || offer.merchant_slug || "Butikk";
+      merchantName.textContent = offer.merchant_name || offer.merchant_slug || t("store", "Butikk");
 
       const meta = document.createElement("div");
       meta.className = "price-offer-meta";
@@ -893,7 +893,7 @@ async function renderPriceComparison(product) {
           : offer.shipping_scope
         : "";
 
-      meta.textContent = shippingLabel || "Aktiv butikk";
+     meta.textContent = shippingLabel || t("active_store", "Aktiv butikk");
 
       left.appendChild(merchantName);
 left.appendChild(meta);
@@ -904,7 +904,8 @@ badges.className = "price-offer-badges";
 if (index === 0) {
   const badge = document.createElement("span");
   badge.className = "best-price-badge";
-  badge.textContent = "Best price";
+  badge.textContent = t("best_price", "Best price");
+  
   badges.appendChild(badge);
 }
 
@@ -916,11 +917,11 @@ if (offer.variant_type && offer.variant_value) {
   const value = String(offer.variant_value).trim();
 
   if (type === "color") {
-    variantBadge.textContent = `Farge: ${value}`;
+    variantBadge.textContent = `${t("color", "Farge")}: ${value}`;
   } else if (type === "size") {
-    variantBadge.textContent = `Størrelse: ${value}`;
+    variantBadge.textContent = `${t("size", "Størrelse")}: ${value}`;
   } else if (type === "color_size") {
-    variantBadge.textContent = `Variant: ${value}`;
+    variantBadge.textContent = `${t("variant", "Variant")}: ${value}`;
   } else {
     variantBadge.textContent = value;
   }
@@ -956,7 +957,7 @@ if (badges.children.length) {
       cta.href = offer.buy_url || offer.affiliate_url || offer.store_url || "#";
       cta.target = "_blank";
       cta.rel = "noopener noreferrer";
-      cta.textContent = "Se tilbud";
+      cta.textContent = t("view_offer", "Se tilbud");
 
       right.appendChild(priceWrap);
       right.appendChild(cta);
@@ -970,7 +971,7 @@ if (badges.children.length) {
     const bestOffer = summary.offers[0];
     if (bestOffer?.buy_url || bestOffer?.affiliate_url || bestOffer?.store_url) {
       buyLinkEl.href = bestOffer.buy_url || bestOffer.affiliate_url || bestOffer.store_url;
-      buyLinkEl.textContent = "Kjøp til beste pris";
+      buyLinkEl.textContent = t("buy_best_price", "Kjøp til beste pris");
     }
 
     section.hidden = false;
@@ -1040,7 +1041,7 @@ async function loadMoreDeals(currentProduct) {
       rating: row.rating || "",
       priority: parseNumber(row.priority) || index + 1,
       featured: parseBool(row.featured),
-      badge_text: row.badge_text || "Deal",
+      badge_text: row.badge_text || t("deal", "Deal"),
       merchant_slug: row.merchant_slug || ""
     };
   }
@@ -1073,13 +1074,13 @@ async function loadMoreDeals(currentProduct) {
   }
 
   const label =
-    currentCategory === "supplements" ? "Gym" :
-    currentCategory === "shoes" ? "Sko" :
-    currentCategory === "clothing" ? "Klær" :
-    currentProduct.category || "samme kategori";
+  currentCategory === "supplements" ? t("gym", "Gym") :
+  currentCategory === "shoes" ? t("shoes", "Sko") :
+  currentCategory === "clothing" ? t("clothing", "Klær") :
+  currentProduct.category || t("same_category", "samme kategori");
 
   if (titleEl) {
-    titleEl.textContent = `Flere deals i ${label}`;
+    titleEl.textContent = `${t("more_deals_in", "Flere deals i")} ${label}`;
   }
 
   slider.innerHTML = "";
@@ -1095,8 +1096,8 @@ async function loadMoreDeals(currentProduct) {
       },
       favoriteProductFactory: (product) => ({
         id: product.id || product.product_id || "",
-        title: product.title || product.product_name || product.name || "Uten navn",
-        product_name: product.title || product.product_name || product.name || "Uten navn",
+        title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
         brand: product.brand || "",
         price: product.price,
         discount: product.discount || "",
