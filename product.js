@@ -431,8 +431,8 @@ function buildInsightHighlights(product, offerSummary) {
   if (offerSummary?.storeCount) {
     highlights.push(
       offerSummary.storeCount === 1
-        ? "1 butikk aktiv"
-        : `${offerSummary.storeCount} butikker aktive`
+        ? t("one_store_active", "1 butikk aktiv")
+: `${offerSummary.storeCount} ${t("stores_active", "butikker aktive")}`
     );
   }
 
