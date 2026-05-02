@@ -44,522 +44,521 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
   const newsGridEl = document.getElementById("news-grid");
 
-  // ---------- HELPERS ----------
-  const nb = new Intl.NumberFormat("nb-NO");
+ // ---------- HELPERS ----------
+const nb = new Intl.NumberFormat("nb-NO");
 
-  const cleanRatingFn =
-    window.cleanRating ||
-    function (value) {
-      if (!value && value !== 0) return null;
-      const n = parseFloat(
-        String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
-      );
-      return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : null;
-    };
-
-  function parseNum(v) {
-    if (v == null || v === "") return null;
-    const n = Number(
-      String(v)
-        .replace(/\s/g, "")
-        .replace(/[^\d.,\-]/g, "")
-        .replace(",", ".")
+const cleanRatingFn =
+  window.cleanRating ||
+  function (value) {
+    if (!value && value !== 0) return null;
+    const n = parseFloat(
+      String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
     );
-    return Number.isFinite(n) ? n : null;
+    return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : null;
+  };
+
+function parseNum(v) {
+  if (v == null || v === "") return null;
+  const n = Number(
+    String(v)
+      .replace(/\s/g, "")
+      .replace(/[^\d.,\-]/g, "")
+      .replace(",", ".")
+  );
+  return Number.isFinite(n) ? n : null;
+}
+
+function formatPrice(n) {
+  if (n == null) return "";
+  return `${nb.format(Math.round(n))} kr`;
+}
+
+function parseBool(v) {
+  if (!v && v !== 0) return false;
+  const s = String(v).trim().toLowerCase();
+  return s === "true" || s === "1" || s === "ja" || s === "yes";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function fetchJson(sheetId, tab) {
+  const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`${t("fetch_error", "Feil ved henting av")} ${tab}: ${res.status}`);
   }
+  return res.json();
+}
 
-  function formatPrice(n) {
-    if (n == null) return "";
-    return `${nb.format(Math.round(n))} kr`;
+function resolveProductIdSafe(productLike) {
+  if (typeof window.resolveProductId === "function") {
+    return window.resolveProductId(productLike);
   }
+  return (
+    productLike?.id ||
+    productLike?.product_id ||
+    productLike?.productId ||
+    ""
+  );
+}
 
-  function parseBool(v) {
-    if (!v && v !== 0) return false;
-    const s = String(v).trim().toLowerCase();
-    return s === "true" || s === "1" || s === "ja" || s === "yes";
-  }
+function createProductBaseFromMaster(masterRow) {
+  if (!masterRow) return null;
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+  const base = {
+    id: String(masterRow.id || "").trim(),
+    title: masterRow.title || masterRow.product_name || masterRow.name || "",
+    brand: masterRow.brand || "",
+    price: masterRow.price || "",
+    discount: masterRow.discount || "",
+    image_url: masterRow.image_url || "",
+    image_2: masterRow.image_2 || masterRow.image2 || masterRow.thumbnail_1 || "",
+    image_3: masterRow.image_3 || masterRow.image3 || masterRow.thumbnail_2 || "",
+    image_4: masterRow.image_4 || masterRow.image4 || masterRow.thumbnail_3 || "",
+    image_5: masterRow.image_5 || masterRow.image5 || masterRow.thumbnail_4 || "",
+    product_url: masterRow.product_url || "",
+    category: masterRow.category || masterRow.main_category || "",
+    rating: masterRow.rating || "",
+    luxury: parseBool(masterRow.luxury),
+    sheet_source: masterRow.sheet_source || "master"
+  };
 
-  async function fetchJson(sheetId, tab) {
-    const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`Feil ved henting av ${tab}: ${res.status}`);
-    }
-    return res.json();
-  }
+  base.id = resolveProductIdSafe(base);
+  return base;
+}
 
-  function resolveProductIdSafe(productLike) {
-    if (typeof window.resolveProductId === "function") {
-      return window.resolveProductId(productLike);
-    }
-    return (
-      productLike?.id ||
-      productLike?.product_id ||
-      productLike?.productId ||
-      ""
-    );
-  }
+function buildStarIcon(fillPercent = 0) {
+  const safeFill = Math.max(0, Math.min(100, fillPercent));
 
-  function createProductBaseFromMaster(masterRow) {
-    if (!masterRow) return null;
-
-    const base = {
-      id: String(masterRow.id || "").trim(),
-      title: masterRow.title || masterRow.product_name || masterRow.name || "",
-      brand: masterRow.brand || "",
-      price: masterRow.price || "",
-      discount: masterRow.discount || "",
-      image_url: masterRow.image_url || "",
-      image_2: masterRow.image_2 || masterRow.image2 || masterRow.thumbnail_1 || "",
-      image_3: masterRow.image_3 || masterRow.image3 || masterRow.thumbnail_2 || "",
-      image_4: masterRow.image_4 || masterRow.image4 || masterRow.thumbnail_3 || "",
-      image_5: masterRow.image_5 || masterRow.image5 || masterRow.thumbnail_4 || "",
-      product_url: masterRow.product_url || "",
-      category: masterRow.category || masterRow.main_category || "",
-      rating: masterRow.rating || "",
-      luxury: parseBool(masterRow.luxury),
-      sheet_source: masterRow.sheet_source || "master"
-    };
-
-    base.id = resolveProductIdSafe(base);
-    return base;
-  }
-
-  function buildStarIcon(fillPercent = 0) {
-    const safeFill = Math.max(0, Math.min(100, fillPercent));
-
-    return `
-      <span class="rating-star" style="--fill:${safeFill}%;" aria-hidden="true">
-        <svg class="rating-star-svg rating-star-outline" viewBox="0 0 24 24" focusable="false">
+  return `
+    <span class="rating-star" style="--fill:${safeFill}%;" aria-hidden="true">
+      <svg class="rating-star-svg rating-star-outline" viewBox="0 0 24 24" focusable="false">
+        <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
+      </svg>
+      <span class="rating-star-fill-wrap">
+        <svg class="rating-star-svg rating-star-fill" viewBox="0 0 24 24" focusable="false">
           <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
         </svg>
-        <span class="rating-star-fill-wrap">
-          <svg class="rating-star-svg rating-star-fill" viewBox="0 0 24 24" focusable="false">
-            <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
-          </svg>
-        </span>
       </span>
-    `;
-  }
+    </span>
+  `;
+}
 
-  function buildRatingMarkup(ratingValue) {
-    const rating = cleanRatingFn(ratingValue);
-    if (rating == null) return "";
+function buildRatingMarkup(ratingValue) {
+  const rating = cleanRatingFn(ratingValue);
+  if (rating == null) return "";
 
-    const stars = Array.from({ length: 5 }, (_, index) => {
-      const fill = Math.max(0, Math.min(1, rating - index)) * 100;
-      return buildStarIcon(fill);
-    }).join("");
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    const fill = Math.max(0, Math.min(1, rating - index)) * 100;
+    return buildStarIcon(fill);
+  }).join("");
 
-    return `
-      <div class="rating-stars" aria-label="Rating ${rating.toFixed(1)} av 5">
-        <div class="rating-stars-row">
-          ${stars}
-        </div>
-        <span class="rating-value">${rating.toFixed(1)}</span>
+  return `
+    <div class="rating-stars" aria-label="${t("rating", "Rating")} ${rating.toFixed(1)} ${t("out_of_5", "av 5")}">
+      <div class="rating-stars-row">
+        ${stars}
       </div>
-    `;
-  }
+      <span class="rating-value">${rating.toFixed(1)}</span>
+    </div>
+  `;
+}
 
-  function getPriceState(prod) {
-    const explicitOldPrice = parseNum(prod.old_price);
-    const explicitNewPrice = parseNum(prod.new_price);
+function getPriceState(prod) {
+  const explicitOldPrice = parseNum(prod.old_price);
+  const explicitNewPrice = parseNum(prod.new_price);
 
-    if (
-      explicitOldPrice != null &&
-      explicitNewPrice != null &&
-      explicitOldPrice > explicitNewPrice
-    ) {
-      const discountPct = Math.round(
-        ((explicitOldPrice - explicitNewPrice) / explicitOldPrice) * 100
-      );
-
-      return {
-        priceNum: explicitOldPrice,
-        discountNum: discountPct,
-        newPriceNum: explicitNewPrice,
-        oldPriceNum: explicitOldPrice,
-        discountPct
-      };
-    }
-
-    const priceNum = parseNum(prod.price);
-    const discountNum = prod.discount ? parseNum(prod.discount) : null;
-
-    let newPriceNum = null;
-    let oldPriceNum = null;
-    let discountPct = null;
-
-    if (priceNum != null && discountNum != null && discountNum > 0) {
-      const percent = discountNum > 1 ? discountNum : discountNum * 100;
-      discountPct = Math.round(percent);
-      oldPriceNum = priceNum;
-      newPriceNum = Math.round(priceNum * (1 - percent / 100));
-    } else if (priceNum != null) {
-      newPriceNum = priceNum;
-    }
+  if (
+    explicitOldPrice != null &&
+    explicitNewPrice != null &&
+    explicitOldPrice > explicitNewPrice
+  ) {
+    const discountPct = Math.round(
+      ((explicitOldPrice - explicitNewPrice) / explicitOldPrice) * 100
+    );
 
     return {
-      priceNum,
-      discountNum,
-      newPriceNum,
-      oldPriceNum,
+      priceNum: explicitOldPrice,
+      discountNum: discountPct,
+      newPriceNum: explicitNewPrice,
+      oldPriceNum: explicitOldPrice,
       discountPct
     };
   }
 
-  function buildFavoritePayload(prod, pid) {
-    return {
-      id: pid,
-      title: prod.title || "",
-      product_name: prod.title || "",
-      brand: prod.brand || "",
-      price: prod.price || "",
-      discount: prod.discount || "",
-      image_url: prod.image_url || "",
-      product_url: prod.product_url || "",
-      category: prod.category || "",
-      rating: prod.rating ?? "",
-      luxury: !!prod.luxury
-    };
+  const priceNum = parseNum(prod.price);
+  const discountNum = prod.discount ? parseNum(prod.discount) : null;
+
+  let newPriceNum = null;
+  let oldPriceNum = null;
+  let discountPct = null;
+
+  if (priceNum != null && discountNum != null && discountNum > 0) {
+    const percent = discountNum > 1 ? discountNum : discountNum * 100;
+    discountPct = Math.round(percent);
+    oldPriceNum = priceNum;
+    newPriceNum = Math.round(priceNum * (1 - percent / 100));
+  } else if (priceNum != null) {
+    newPriceNum = priceNum;
   }
 
-  function getSpotlightImages(prod) {
-    const rawImages = [
-      prod.image_url,
-      prod.image_2,
-      prod.image_3,
-      prod.image_4,
-      prod.image_5
-    ];
+  return {
+    priceNum,
+    discountNum,
+    newPriceNum,
+    oldPriceNum,
+    discountPct
+  };
+}
 
-    const cleaned = rawImages
-      .map((img) => String(img || "").trim())
-      .filter(Boolean);
+function buildFavoritePayload(prod, pid) {
+  return {
+    id: pid,
+    title: prod.title || "",
+    product_name: prod.title || "",
+    brand: prod.brand || "",
+    price: prod.price || "",
+    discount: prod.discount || "",
+    image_url: prod.image_url || "",
+    product_url: prod.product_url || "",
+    category: prod.category || "",
+    rating: prod.rating ?? "",
+    luxury: !!prod.luxury
+  };
+}
 
-    return [...new Set(cleaned)].slice(0, 5);
-  }
+function getSpotlightImages(prod) {
+  const rawImages = [
+    prod.image_url,
+    prod.image_2,
+    prod.image_3,
+    prod.image_4,
+    prod.image_5
+  ];
 
-  // ---------- DEALS CORNER RIBBON (CSS) ----------
-  function buildDealsCornerRibbon() {
-    return `
-      <span class="deals-corner-ribbon">DEALS</span>
-      <span class="deals-corner-ribbon-gloss"></span>
-    `;
-  }
+  const cleaned = rawImages
+    .map((img) => String(img || "").trim())
+    .filter(Boolean);
 
-  function ensureDealsRibbonStyles() {
-    if (document.getElementById("news-deals-ribbon-styles")) return;
+  return [...new Set(cleaned)].slice(0, 5);
+}
 
-    const style = document.createElement("style");
-    style.id = "news-deals-ribbon-styles";
-    style.textContent = `
-      .news-section--deals .deal-card.product-card {
-        position: relative;
-        overflow: hidden;
-      }
+// ---------- DEALS CORNER RIBBON (CSS) ----------
+function buildDealsCornerRibbon() {
+  return `
+    <span class="deals-corner-ribbon">${t("deals_label", "DEALS")}</span>
+    <span class="deals-corner-ribbon-gloss"></span>
+  `;
+}
 
-      .news-section--deals .deal-card.product-card .discount-badge {
-        display: none !important;
-      }
+function ensureDealsRibbonStyles() {
+  if (document.getElementById("news-deals-ribbon-styles")) return;
 
-      .news-section--deals .deal-card .deals-corner-ribbon {
-        position: absolute;
-        top: 18px;
-        left: -44px;
-        width: 132px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background:
-          linear-gradient(135deg, #111827 0%, #1f2937 42%, #0f172a 100%);
-        color: #ffffff;
-        font-size: 0.68rem;
-        font-weight: 800;
-        letter-spacing: 0.16em;
-        line-height: 1;
-        text-align: center;
-        transform: rotate(-45deg);
-        transform-origin: center;
-        z-index: 8;
-        box-shadow:
-          0 10px 20px rgba(0, 0, 0, 0.22),
-          inset 0 1px 0 rgba(255,255,255,0.08),
-          inset 0 -1px 0 rgba(0,0,0,0.22);
-        pointer-events: none;
-        padding-top: 1px;
-        overflow: hidden;
-      }
+  const style = document.createElement("style");
+  style.id = "news-deals-ribbon-styles";
+  style.textContent = `
+    .news-section--deals .deal-card.product-card {
+      position: relative;
+      overflow: hidden;
+    }
 
-      .news-section--deals .deal-card .deals-corner-ribbon::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.16) 0%,
-            rgba(255,255,255,0.04) 32%,
-            rgba(0,0,0,0.18) 100%
-          );
-        mix-blend-mode: screen;
-        opacity: 0.75;
-        pointer-events: none;
-      }
+    .news-section--deals .deal-card.product-card .discount-badge {
+      display: none !important;
+    }
 
-      .news-section--deals .deal-card .deals-corner-ribbon::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 10px;
-        width: 24px;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          rgba(255,255,255,0) 0%,
-          rgba(255,255,255,0.18) 48%,
-          rgba(255,255,255,0) 100%
+    .news-section--deals .deal-card .deals-corner-ribbon {
+      position: absolute;
+      top: 18px;
+      left: -44px;
+      width: 132px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(135deg, #111827 0%, #1f2937 42%, #0f172a 100%);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      text-align: center;
+      transform: rotate(-45deg);
+      transform-origin: center;
+      z-index: 8;
+      box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 -1px 0 rgba(0,0,0,0.22);
+      pointer-events: none;
+      padding-top: 1px;
+      overflow: hidden;
+    }
+
+    .news-section--deals .deal-card .deals-corner-ribbon::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.16) 0%,
+          rgba(255,255,255,0.04) 32%,
+          rgba(0,0,0,0.18) 100%
         );
-        opacity: 0.7;
-        transform: skewX(-18deg);
-        pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .news-section--deals .deal-card .deals-corner-ribbon::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 10px;
+      width: 24px;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.18) 48%,
+        rgba(255,255,255,0) 100%
+      );
+      opacity: 0.7;
+      transform: skewX(-18deg);
+      pointer-events: none;
+    }
+
+    .news-section--deals .deal-card .deals-corner-ribbon-gloss {
+      position: absolute;
+      top: 18px;
+      left: -44px;
+      width: 132px;
+      height: 32px;
+      transform: rotate(-45deg);
+      transform-origin: center;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.08) 0%,
+          rgba(255,255,255,0.02) 30%,
+          rgba(0,0,0,0.08) 100%
+        );
+      z-index: 7;
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .news-section--deals .deal-card.product-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 58px;
+      height: 58px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.16), transparent 68%);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .news-section--deals .deal-card.product-card::after {
+      content: "";
+      position: absolute;
+      top: 17px;
+      left: 17px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 2px 5px rgba(0,0,0,0.18);
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .news-section--deals .deal-card.product-card .favorite-toggle {
+      z-index: 10;
+    }
+
+    .news-section--deals .deal-card.product-card .price-wrapper {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 0.25rem;
+      width: 100%;
+    }
+
+    .news-section--deals .deal-card.product-card .price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .news-section--deals .deal-card.product-card .discount-pill {
+      flex: 0 0 auto;
+      align-self: flex-end;
+      white-space: nowrap;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f172a, #1f2937);
+      padding: 0.34rem 0.62rem;
+      border-radius: 999px;
+      line-height: 1;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
+      margin-left: 0;
+    }
+
+    @media (max-width: 768px) {
+      .news-section--deals .deal-card .deals-corner-ribbon {
+        top: 16px;
+        left: -42px;
+        width: 126px;
+        height: 32px;
+        font-size: 0.64rem;
       }
 
       .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-        position: absolute;
-        top: 18px;
-        left: -44px;
-        width: 132px;
+        top: 16px;
+        left: -42px;
+        width: 126px;
         height: 32px;
-        transform: rotate(-45deg);
-        transform-origin: center;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.08) 0%,
-            rgba(255,255,255,0.02) 30%,
-            rgba(0,0,0,0.08) 100%
-          );
-        z-index: 7;
-        pointer-events: none;
-        opacity: 0.95;
       }
+    }
+  `;
 
-      .news-section--deals .deal-card.product-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 58px;
-        height: 58px;
-        background:
-          radial-gradient(circle at top left, rgba(255,255,255,0.16), transparent 68%);
-        z-index: 6;
-        pointer-events: none;
-      }
+  document.head.appendChild(style);
+}
 
-      .news-section--deals .deal-card.product-card::after {
-        content: "";
-        position: absolute;
-        top: 17px;
-        left: 17px;
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.18);
-        box-shadow:
-          0 0 0 1px rgba(255,255,255,0.05),
-          0 2px 5px rgba(0,0,0,0.18);
-        z-index: 9;
-        pointer-events: none;
-      }
+// ---------- ELITE CARD ----------
+function buildEliteCard(prod, options = {}) {
+  const {
+    showExcerpt = false,
+    excerpt = "",
+    tag = "",
+    extraClasses = "",
+    onCardClick = null
+  } = options;
 
-      .news-section--deals .deal-card.product-card .favorite-toggle {
-        z-index: 10;
-      }
+  const pid = resolveProductIdSafe(prod);
+  prod.id = pid;
 
-      .news-section--deals .deal-card.product-card .price-wrapper {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 0.25rem;
-        width: 100%;
-      }
+  const ratingMarkup = buildRatingMarkup(prod.rating);
+  const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
 
-      .news-section--deals .deal-card.product-card .price-line {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        flex-wrap: wrap;
-        min-width: 0;
-      }
+  const isDealCard = String(extraClasses || "").split(/\s+/).includes("deal-card");
 
-      .news-section--deals .deal-card.product-card .discount-pill {
-        flex: 0 0 auto;
-        align-self: flex-end;
-        white-space: nowrap;
-        font-size: 0.72rem;
-        font-weight: 800;
-        color: #ffffff;
-        background: linear-gradient(135deg, #0f172a, #1f2937);
-        padding: 0.34rem 0.62rem;
-        border-radius: 999px;
-        line-height: 1;
-        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
-        margin-left: 0;
-      }
+  const isFav =
+    typeof window.isProductFavorite === "function" && pid
+      ? window.isProductFavorite(pid)
+      : false;
 
-      @media (max-width: 768px) {
-        .news-section--deals .deal-card .deals-corner-ribbon {
-          top: 16px;
-          left: -42px;
-          width: 126px;
-          height: 32px;
-          font-size: 0.64rem;
-        }
-
-        .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-          top: 16px;
-          left: -42px;
-          width: 126px;
-          height: 32px;
-        }
-      }
-    `;
-
-    document.head.appendChild(style);
-  }
-
-  // ---------- ELITE CARD ----------
-  function buildEliteCard(prod, options = {}) {
-    const {
-      showExcerpt = false,
-      excerpt = "",
-      tag = "",
-      extraClasses = "",
-      onCardClick = null
-    } = options;
-
-    const pid = resolveProductIdSafe(prod);
-    prod.id = pid;
-
-    const ratingMarkup = buildRatingMarkup(prod.rating);
-    const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
-
-    const isDealCard = String(extraClasses || "").split(/\s+/).includes("deal-card");
-
-    const isFav =
-      typeof window.isProductFavorite === "function" && pid
-        ? window.isProductFavorite(pid)
-        : false;
-
-    const priceMarkup = isDealCard && discountPct
-      ? `
-        <div class="price-wrapper">
-          <div class="price-line">
-            <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
-            ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
-          </div>
-          <span class="discount-pill">-${discountPct}%</span>
-        </div>
-      `
-      : `
+  const priceMarkup = isDealCard && discountPct
+    ? `
+      <div class="price-wrapper">
         <div class="price-line">
           <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
           ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
         </div>
-      `;
-
-    const card = document.createElement("article");
-    card.className = `product-card ${extraClasses}`.trim();
-    card.setAttribute("data-product-id", pid || "");
-
-    card.innerHTML = `
-      ${isDealCard ? buildDealsCornerRibbon() : ""}
-      ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
-
-      <button
-        type="button"
-        class="favorite-toggle ${isFav ? "active" : ""}"
-        aria-label="${isFav ? "Fjern fra favoritter" : "Legg til favoritt"}"
-      >
-        <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-          2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
-          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
-          3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-        </svg>
-      </button>
-
-      <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
-
-      <div class="product-info">
-        <p class="brand">${escapeHtml(prod.brand || "")}</p>
-        <h3 class="product-name">${escapeHtml(prod.title || "")}</h3>
-
-        ${showExcerpt && excerpt ? `<p class="tagline">${escapeHtml(excerpt)}</p>` : ""}
-        ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
-
-        ${ratingMarkup}
-        ${priceMarkup}
+        <span class="discount-pill">-${discountPct}%</span>
+      </div>
+    `
+    : `
+      <div class="price-line">
+        <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
+        ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
       </div>
     `;
 
-    const defaultNavigateToProduct = () => {
-      if (!pid) return;
-      window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
-    };
+  const card = document.createElement("article");
+  card.className = `product-card ${extraClasses}`.trim();
+  card.setAttribute("data-product-id", pid || "");
 
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".favorite-toggle")) return;
+  card.innerHTML = `
+    ${isDealCard ? buildDealsCornerRibbon() : ""}
+    ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
 
-      if (typeof onCardClick === "function") {
-        onCardClick(prod, card, e);
-        return;
-      }
+    <button
+      type="button"
+      class="favorite-toggle ${isFav ? "active" : ""}"
+      aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
+    >
+      <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+        2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+        14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
+        3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </button>
 
-      defaultNavigateToProduct();
-    });
+    <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
 
-    const favButton = card.querySelector(".favorite-toggle");
-    favButton?.addEventListener("click", (e) => {
-      e.stopPropagation();
+    <div class="product-info">
+      <p class="brand">${escapeHtml(prod.brand || "")}</p>
+      <h3 class="product-name">${escapeHtml(prod.title || "")}</h3>
 
-      if (typeof window.toggleFavorite !== "function" || !pid) return;
+      ${showExcerpt && excerpt ? `<p class="tagline">${escapeHtml(excerpt)}</p>` : ""}
+      ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
 
-      const existsBefore =
-        typeof window.isProductFavorite === "function"
-          ? window.isProductFavorite(pid)
-          : false;
+      ${ratingMarkup}
+      ${priceMarkup}
+    </div>
+  `;
 
-      window.toggleFavorite(buildFavoritePayload(prod, pid), favButton);
+  const defaultNavigateToProduct = () => {
+    if (!pid) return;
+    window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+  };
 
-      const existsAfter =
-        typeof window.isProductFavorite === "function"
-          ? window.isProductFavorite(pid)
-          : !existsBefore;
+  card.addEventListener("click", (e) => {
+    if (e.target.closest(".favorite-toggle")) return;
 
-      favButton.classList.toggle("active", existsAfter);
-      favButton.setAttribute(
-        "aria-label",
-        existsAfter ? "Fjern fra favoritter" : "Legg til favoritt"
-      );
-    });
+    if (typeof onCardClick === "function") {
+      onCardClick(prod, card, e);
+      return;
+    }
 
-    return card;
-  }
+    defaultNavigateToProduct();
+  });
 
+  const favButton = card.querySelector(".favorite-toggle");
+  favButton?.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (typeof window.toggleFavorite !== "function" || !pid) return;
+
+    const existsBefore =
+      typeof window.isProductFavorite === "function"
+        ? window.isProductFavorite(pid)
+        : false;
+
+    window.toggleFavorite(buildFavoritePayload(prod, pid), favButton);
+
+    const existsAfter =
+      typeof window.isProductFavorite === "function"
+        ? window.isProductFavorite(pid)
+        : !existsBefore;
+
+    favButton.classList.toggle("active", existsAfter);
+    favButton.setAttribute(
+      "aria-label",
+      existsAfter ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
+    );
+  });
+
+  return card;
+}
   // ---------- SPOTLIGHT CARD ----------
   function buildSpotlightCard(prod, options = {}) {
     const {
