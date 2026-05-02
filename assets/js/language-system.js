@@ -21,6 +21,11 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      could_not_load_radar_picks: "Klarte ikke laste Radar Picks:",
+arrows_not_found: "Pilene ble ikke funnet i DOM",
+no_featured_brands_now: "Ingen fremhevede brands akkurat nå.",
+explore_brand: "Utforsk brand",
+
       no_product_id: "Ingen produkt-ID i URL",
 product_not_found: "Produktet ble ikke funnet!",
 product_description_fallback: "Dette premiumproduktet kombinerer kvalitet og stil.",
@@ -143,6 +148,12 @@ kids: "Barn"
       best_price: "Best price",
       updated_regularly: "Updated regularly",
 
+
+could_not_load_radar_picks: "Could not load Radar Picks:",
+arrows_not_found: "Arrows were not found in the DOM",
+no_featured_brands_now: "No featured brands right now.",
+explore_brand: "Explore brand",
+      
       no_product_id: "No product ID in URL",
 product_not_found: "Product not found!",
 product_description_fallback: "This premium product combines quality and style.",
