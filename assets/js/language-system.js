@@ -21,6 +21,19 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      luxury_hero_title: "Luksus håndplukket for deg.",
+luxury_hero_text: "Premium produkter fra verdens mest eksklusive merker",
+exclusive_brands: "Eksklusive Brands",
+all_categories: "Alle kategorier",
+bags: "Vesker",
+watches: "Klokker",
+jewelry: "Smykker",
+other: "Annet",
+popular: "Populært",
+price_high_low_short: "Høy pris → Lav",
+price_low_high_short: "Lav pris → Høy",
+no_luxury_products_match: "Ingen produkter matcher valget ditt 🔍",
+
       no_favorite_products: "Du har ingen favoritt-produkter enda.",
 no_favorite_brands: "Du har ingen favoritt-brands enda.",
 
@@ -247,6 +260,19 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      luxury_hero_title: "Luxury handpicked for you.",
+luxury_hero_text: "Premium products from some of the world’s most exclusive brands",
+exclusive_brands: "Exclusive Brands",
+all_categories: "All categories",
+bags: "Bags",
+watches: "Watches",
+jewelry: "Jewelry",
+other: "Other",
+popular: "Popular",
+price_high_low_short: "High price → Low",
+price_low_high_short: "Low price → High",
+no_luxury_products_match: "No products match your selection 🔍"
 
       no_favorite_products: "You do not have any favorite products yet.",
 no_favorite_brands: "You do not have any favorite brands yet.",
