@@ -4,6 +4,8 @@
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
+
   console.log("✅ Index script loaded");
 
   // ---------- KONSTANTER ----------
@@ -50,8 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (typeof toggleFavorite === "function") {
             const cleanProduct = {
               id: pid,
-              product_name: product.title || product.product_name || product.name || "Uten navn",
-              title: product.title || product.product_name || product.name || "Uten navn",
+              product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+              title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
               brand: product.brand || "",
               price: product.price,
               discount: product.discount,
@@ -77,102 +79,102 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ======================================================
 
   async function loadFeaturedPicks() {
-  const grid = document.getElementById("featured-grid");
-  if (!grid) return;
+    const grid = document.getElementById("featured-grid");
+    if (!grid) return;
 
-  try {
-    const picksUrl = PICKS_URL;
-    const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
+    try {
+      const picksUrl = PICKS_URL;
+      const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
 
-    const [picksRes, productsRes] = await Promise.all([
-      fetch(picksUrl),
-      fetch(productsUrl)
-    ]);
+      const [picksRes, productsRes] = await Promise.all([
+        fetch(picksUrl),
+        fetch(productsUrl)
+      ]);
 
-    if (!picksRes.ok) throw new Error(`Radar Picks fetch failed: ${picksRes.status}`);
-    if (!productsRes.ok) throw new Error(`Products fetch failed: ${productsRes.status}`);
+      if (!picksRes.ok) throw new Error(`Radar Picks fetch failed: ${picksRes.status}`);
+      if (!productsRes.ok) throw new Error(`Products fetch failed: ${productsRes.status}`);
 
-    const pickRows = await picksRes.json();
-    const allProducts = await productsRes.json();
+      const pickRows = await picksRes.json();
+      const allProducts = await productsRes.json();
 
-    const productById = {};
-    allProducts.forEach(p => {
-      if (!p.id) return;
-      productById[String(p.id).trim()] = p;
-    });
-
-    const active = pickRows
-      .filter(row => String(row.active || "").trim().toLowerCase() === "true")
-      .map((row, index) => {
-        const productId = String(row.product_id || row.id || "").trim();
-        const product = productById[productId];
-
-        if (!product) {
-          console.warn(`⚠️ Radar Pick finnes ikke i BrandRadarProdukter: ${productId}`, row);
-          return null;
-        }
-
-        return {
-          row,
-          product,
-          rank: parseNumber(row.rank) || index + 1
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.rank - b.rank);
-
-    const baseProducts = active.map(({ row, product }) => ({
-      ...product,
-      id: product.id || product.product_id || "",
-      product_name: product.title || product.product_name || product.name || "Uten navn",
-      title: product.title || product.product_name || product.name || "Uten navn",
-      highlight_reason: row.reason || ""
-    }));
-
-    const enrichedProducts =
-      window.BrandRadarOffersEngine
-        ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
-        : baseProducts;
-
-    grid.innerHTML = "";
-
-    enrichedProducts.forEach(product => {
-      const card = window.BrandRadarProductCardEngine.createCard(product, {
-        isLuxury: false,
-        showBrand: true,
-        showRating: false,
-        enableFavorite: true,
-        onNavigate: (p) => {
-          const id = typeof resolveProductId === "function"
-            ? resolveProductId(p)
-            : (p.id || p.product_id || "");
-
-          if (id) {
-            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-          }
-        },
-        favoriteProductFactory: (p) => ({
-          id: p.id || p.product_id || "",
-          title: p.title || p.product_name || p.name || "Uten navn",
-          product_name: p.title || p.product_name || p.name || "Uten navn",
-          brand: p.brand || "",
-          price: p.price,
-          discount: p.discount || "",
-          image_url: p.image_url || "",
-          product_url: p.product_url || "",
-          category: p.category || "",
-          rating: p.rating,
-          luxury: false
-        })
+      const productById = {};
+      allProducts.forEach(p => {
+        if (!p.id) return;
+        productById[String(p.id).trim()] = p;
       });
 
-      grid.appendChild(card);
-    });
-  } catch (err) {
-    console.error("❌ Klarte ikke laste Radar Picks:", err);
-    grid.innerHTML = "";
+      const active = pickRows
+        .filter(row => String(row.active || "").trim().toLowerCase() === "true")
+        .map((row, index) => {
+          const productId = String(row.product_id || row.id || "").trim();
+          const product = productById[productId];
+
+          if (!product) {
+            console.warn(`⚠️ Radar Pick finnes ikke i BrandRadarProdukter: ${productId}`, row);
+            return null;
+          }
+
+          return {
+            row,
+            product,
+            rank: parseNumber(row.rank) || index + 1
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.rank - b.rank);
+
+      const baseProducts = active.map(({ row, product }) => ({
+        ...product,
+        id: product.id || product.product_id || "",
+        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+        title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+        highlight_reason: row.reason || ""
+      }));
+
+      const enrichedProducts =
+        window.BrandRadarOffersEngine
+          ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
+          : baseProducts;
+
+      grid.innerHTML = "";
+
+      enrichedProducts.forEach(product => {
+        const card = window.BrandRadarProductCardEngine.createCard(product, {
+          isLuxury: false,
+          showBrand: true,
+          showRating: false,
+          enableFavorite: true,
+          onNavigate: (p) => {
+            const id = typeof resolveProductId === "function"
+              ? resolveProductId(p)
+              : (p.id || p.product_id || "");
+
+            if (id) {
+              window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+            }
+          },
+          favoriteProductFactory: (p) => ({
+            id: p.id || p.product_id || "",
+            title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
+            product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
+            brand: p.brand || "",
+            price: p.price,
+            discount: p.discount || "",
+            image_url: p.image_url || "",
+            product_url: p.product_url || "",
+            category: p.category || "",
+            rating: p.rating,
+            luxury: false
+          })
+        });
+
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error("❌", t("could_not_load_radar_picks", "Klarte ikke laste Radar Picks:"), err);
+      grid.innerHTML = "";
+    }
   }
-}
 
   // ======================================================
   // ⭐ TRENDING NOW
@@ -218,7 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const baseProducts = limited.map(({ row, product }) => ({
         ...product,
-        product_name: product.title || product.product_name || product.name || "Uten navn",
+        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
         id: product.id || product.product_id || "",
         highlight_reason: row.highlight_reason
       }));
@@ -245,8 +247,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           },
           favoriteProductFactory: (p) => ({
             id: p.id || p.product_id || "",
-            title: p.title || p.product_name || p.name || "Uten navn",
-            product_name: p.title || p.product_name || p.name || "Uten navn",
+            title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
+            product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
             brand: p.brand || "",
             price: p.price,
             discount: p.discount || "",
@@ -279,7 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const next = document.getElementById("trendingNext");
 
     if (!track || !prev || !next) {
-      console.warn("⚠️ Pilene ble ikke funnet i DOM");
+      console.warn("⚠️", t("arrows_not_found", "Pilene ble ikke funnet i DOM"));
       return;
     }
 
@@ -319,7 +321,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
 
       if (highlights.length === 0) {
-        container.innerHTML = "<p>Ingen fremhevede brands akkurat nå.</p>";
+        container.innerHTML = `<p>${t("no_featured_brands_now", "Ingen fremhevede brands akkurat nå.")}</p>`;
         return;
       }
 
@@ -328,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <a
             class="topbrand-card"
             href="brand-page.html?brand=${encodeURIComponent(b.brand)}"
-            aria-label="Utforsk ${b.brand}"
+            aria-label="${t("explore_brand", "Utforsk")} ${b.brand}"
             title="${b.brand}"
           >
             <div class="topbrand-logo">
@@ -336,7 +338,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
 
             <span class="topbrand-hover-cta" aria-hidden="true">
-              Explore brand
+              ${t("explore_brand", "Explore brand")}
             </span>
           </a>
         `;
@@ -354,9 +356,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadTrendingNow();
   await loadTopBrands();
 });
-
-
-
-
-
-
