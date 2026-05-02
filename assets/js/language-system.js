@@ -21,14 +21,25 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
-      // 🔥 NYE (fra product-card-engine)
       one_store: "1 butikk",
       stores: "butikker",
       from_price: "Fra",
       no_rating: "Ingen rating",
       rating: "Rating",
       out_of_5: "av 5",
-      unnamed_product: "Uten navn"
+      unnamed_product: "Uten navn",
+
+      no_deals_now: "Ingen deals akkurat nå.",
+      could_not_load_deals: "Kunne ikke laste deals.",
+      popular_choice: "Populært valg",
+      product: "Produkt",
+      no_picks_now: "Ingen picks akkurat nå.",
+      could_not_load_picks: "Kunne ikke laste picks.",
+      no_spotlight_now: "Ingen spotlight-produkter akkurat nå.",
+      explore_product: "Utforsk produkt",
+      no_new_products_now: "Ingen nye produkter akkurat nå.",
+      could_not_load_spotlight: "Kunne ikke laste spotlight.",
+      could_not_load_newsfeed: "Kunne ikke laste nyhetsfeed."
     },
 
     en: {
@@ -48,14 +59,25 @@
       best_price: "Best price",
       updated_regularly: "Updated regularly",
 
-      // 🔥 NYE (fra product-card-engine)
       one_store: "1 store",
       stores: "stores",
       from_price: "From",
       no_rating: "No rating",
       rating: "Rating",
       out_of_5: "out of 5",
-      unnamed_product: "Unnamed product"
+      unnamed_product: "Unnamed product",
+
+      no_deals_now: "No deals right now.",
+      could_not_load_deals: "Could not load deals.",
+      popular_choice: "Popular choice",
+      product: "Product",
+      no_picks_now: "No picks right now.",
+      could_not_load_picks: "Could not load picks.",
+      no_spotlight_now: "No spotlight products right now.",
+      explore_product: "Explore product",
+      no_new_products_now: "No new products right now.",
+      could_not_load_spotlight: "Could not load spotlight.",
+      could_not_load_newsfeed: "Could not load news feed."
     }
   };
 
