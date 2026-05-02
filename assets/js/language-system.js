@@ -19,7 +19,16 @@
       add_favorite: "Legg til favoritt",
       remove_favorite: "Fjern favoritt",
       best_price: "Beste pris",
-      updated_regularly: "Oppdatert jevnlig"
+      updated_regularly: "Oppdatert jevnlig",
+
+      // 🔥 NYE (fra product-card-engine)
+      one_store: "1 butikk",
+      stores: "butikker",
+      from_price: "Fra",
+      no_rating: "Ingen rating",
+      rating: "Rating",
+      out_of_5: "av 5",
+      unnamed_product: "Uten navn"
     },
 
     en: {
@@ -37,7 +46,16 @@
       add_favorite: "Add to favorites",
       remove_favorite: "Remove favorite",
       best_price: "Best price",
-      updated_regularly: "Updated regularly"
+      updated_regularly: "Updated regularly",
+
+      // 🔥 NYE (fra product-card-engine)
+      one_store: "1 store",
+      stores: "stores",
+      from_price: "From",
+      no_rating: "No rating",
+      rating: "Rating",
+      out_of_5: "out of 5",
+      unnamed_product: "Unnamed product"
     }
   };
 
