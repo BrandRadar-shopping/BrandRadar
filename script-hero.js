@@ -4,9 +4,13 @@
 // - CTA-knapp i aktiv slide er klikkbar
 // - bare aktiv slide mottar pointer events
 // - dots fungerer stabilt
+// - språkstøtte for HeroSlides
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
+  const currentLang = window.BrandRadarLang?.get?.() || "no";
+
   const slider = document.querySelector(".hero-slider");
   if (!slider) return;
 
@@ -22,6 +26,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const isTouchMode = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
+  function getLocalized(row, baseKey) {
+    if (currentLang === "en") {
+      return (
+        row[`${baseKey}_en`] ||
+        row[`${baseKey}_english`] ||
+        row[`${baseKey}_ENG`] ||
+        row[baseKey] ||
+        ""
+      ).trim();
+    }
+
+    return (
+      row[`${baseKey}_no`] ||
+      row[`${baseKey}_norwegian`] ||
+      row[baseKey] ||
+      ""
+    ).trim();
+  }
+
   try {
     const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`);
     const raw = await res.json();
@@ -30,22 +53,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       .filter(row => row.image_url && row.image_url.trim().startsWith("http"))
       .map(row => ({
         image_url: row.image_url.trim(),
-        title: (row.title || "").trim(),
-        subtitle: (row.subtitle || "").trim(),
+        title: getLocalized(row, "title"),
+        subtitle: getLocalized(row, "subtitle"),
         link: (row.link || "").trim(),
-        button_text: (row.button_text || "").trim() || "Utforsk",
+        button_text: getLocalized(row, "button_text") || t("explore", "Utforsk"),
         active: String(row.active || "").toLowerCase() === "true"
       }));
 
     if (!slidesData.length) {
       slidesContainer.innerHTML =
-        "<p style='text-align:center;padding:4rem 1rem;'>Ingen hero-slides er konfigurert ennå.</p>";
+        `<p style="text-align:center;padding:4rem 1rem;">${t("no_hero_slides", "Ingen hero-slides er konfigurert ennå.")}</p>`;
       return;
     }
 
     const anyActive = slidesData.some(s => s.active);
 
-    // Build slides
     slidesContainer.innerHTML = slidesData
       .map((s, idx) => `
         <div class="slide${
@@ -63,14 +85,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const slides = Array.from(slider.querySelectorAll(".slide"));
     if (!slides.length) return;
 
-    // Build dots
     dotsContainer.innerHTML = "";
     slides.forEach((_, idx) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "dot";
       btn.dataset.index = String(idx);
-      btn.setAttribute("aria-label", `Gå til slide ${idx + 1}`);
+      btn.setAttribute("aria-label", `${t("go_to_slide", "Gå til slide")} ${idx + 1}`);
       dotsContainer.appendChild(btn);
     });
 
@@ -104,7 +125,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setActive(current);
 
-    // Dots click
     dots.forEach(dot => {
       dot.addEventListener("click", () => {
         const idx = Number(dot.dataset.index || 0);
@@ -141,7 +161,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       startAuto();
     });
 
-    // Auto play
     let autoTimer = null;
     const AUTO_TIME = 7000;
 
@@ -160,7 +179,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       slider.addEventListener("mouseleave", startAuto);
     }
 
-    // Sync active dot on touch scroll
     if (isTouchMode) {
       let rafId = null;
 
@@ -213,7 +231,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("✅ Hero slider v6 klar.");
   } catch (err) {
-    console.error("❌ Klarte ikke laste HeroSlides:", err);
+    console.error("❌", t("could_not_load_hero_slides", "Klarte ikke laste HeroSlides:"), err);
   }
 });
-
