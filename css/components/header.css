@@ -471,3 +471,34 @@ nav.mega-menu .menu-section a:hover {
 .top-links a.luxury-link:hover {
   filter: brightness(1.15);
 }
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-weight: 500;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.lang-btn:hover {
+  color: #000;
+}
+
+.lang-btn.active {
+  color: #0070f3;
+  font-weight: 600;
+}
+
+.lang-sep {
+  color: #aaa;
+}
