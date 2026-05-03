@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const SHEET_GIVEAWAYS = "1E7Fa82dSdgWzCCZ4M8zgodA565FXZvANxWT7RtdP1z8";
   const GIVEAWAYS_TAB = "giveaways";
+  const SETTINGS_TAB = "site_settings";
+
   const giveawaysUrl = `https://opensheet.elk.sh/${SHEET_GIVEAWAYS}/${GIVEAWAYS_TAB}`;
+  const settingsUrl = `https://opensheet.elk.sh/${SHEET_GIVEAWAYS}/${SETTINGS_TAB}`;
 
   const shell = document.getElementById("giveaway-shell");
   if (!shell) return;
@@ -11,6 +14,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   shell.classList.add("is-loading");
   shell.innerHTML = `<p>${t("loading_giveaways", "Laster giveaways...")}</p>`;
+
+  function parseBool(value) {
+    const s = String(value ?? "").trim().toLowerCase();
+    return s === "true" || s === "1" || s === "yes" || s === "ja";
+  }
+
+  function getSetting(rows, key, fallback = "") {
+    const found = rows.find(row => String(row.key || "").trim() === key);
+    return found ? String(found.value || "").trim() : fallback;
+  }
 
   function getLocalized(row, key, fallback = "") {
     const lang = getLang();
@@ -32,11 +45,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       fallback ||
       ""
     ).trim();
-  }
-
-  function parseBool(value) {
-    const s = String(value ?? "").trim().toLowerCase();
-    return s === "true" || s === "1" || s === "yes" || s === "ja";
   }
 
   function parseNumber(value) {
@@ -399,17 +407,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   let cachedRows = [];
+  let giveawaysGloballyEnabled = false;
   let activeIndex = 0;
   let timerStarted = false;
+  let activeGiveaways = [];
 
   function renderFromRows(rows) {
     cachedRows = rows;
+
+    if (!giveawaysGloballyEnabled) {
+      renderComingSoon();
+      return;
+    }
 
     const giveaways = rows
       .map(normalizeRow)
       .filter(item => item.active)
       .sort((a, b) => a.sort_order - b.sort_order);
 
+    activeGiveaways = giveaways;
     shell.classList.remove("is-loading");
 
     if (!giveaways.length) {
@@ -435,13 +451,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       timerStarted = true;
       setInterval(() => {
         if (!document.body.contains(shell)) return;
-        updateCountdownOnly(giveaways, activeIndex);
+        if (!giveawaysGloballyEnabled || !activeGiveaways.length) return;
+        updateCountdownOnly(activeGiveaways, activeIndex);
       }, 1000);
     }
   }
 
   try {
-    const rows = await fetch(giveawaysUrl).then(r => r.json());
+    const [rows, settingsRows] = await Promise.all([
+      fetch(giveawaysUrl).then(r => r.json()),
+      fetch(settingsUrl).then(r => r.json()).catch(() => [])
+    ]);
+
+    giveawaysGloballyEnabled = parseBool(
+      getSetting(settingsRows, "giveaways_enabled", "FALSE")
+    );
+
     renderFromRows(rows);
 
     window.addEventListener("brandradar:languagechange", () => {
