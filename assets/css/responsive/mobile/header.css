@@ -205,3 +205,16 @@
     right: 8px;
   }
 }
+
+@media (max-width: 768px) {
+  .brand-logo {
+    color: #0f1115;
+    font-weight: 650;
+  }
+
+  .brand-logo span {
+    color: #0f1115;
+    font-weight: 500;
+    opacity: 0.92;
+  }
+}
