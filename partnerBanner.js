@@ -2,20 +2,54 @@
 // Desktop: editorial banner
 // Mobile: slim sponsor rail
 // Mobile dismiss varer kun i gjeldende nettleserøkt
+// Språkstøtte via *_en kolonner i partner sheet
 
 const PARTNER_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT91mqXnviD2p5E34VkG_BJHcokhs1dNz3J_trDXjsPLjb4Q7wwjQbM8RaMubguVtzGgiBBVLavxsxU/pub?output=csv";
+
+let cachedPartnerItem = null;
+
+function t(key, fallback = "") {
+  return window.BrandRadarLang?.t?.(key, fallback) || fallback || key;
+}
+
+function getCurrentLang() {
+  return window.BrandRadarLang?.get?.() || "no";
+}
+
+function getLocalized(item, key) {
+  const lang = getCurrentLang();
+
+  if (lang === "en") {
+    return (
+      item[`${key}_en`] ||
+      item[`${key}_english`] ||
+      item[key] ||
+      ""
+    ).trim();
+  }
+
+  return (
+    item[`${key}_no`] ||
+    item[`${key}_norwegian`] ||
+    item[key] ||
+    ""
+  ).trim();
+}
 
 async function fetchPartnerBanner() {
   try {
     const res = await fetch(PARTNER_SHEET_URL);
     if (!res.ok) throw new Error(`Partner CSV fetch failed: ${res.status}`);
+
     const csvText = await res.text();
     const rows = parseCsv(csvText);
     if (!rows.length) return;
-    renderPartnerBanner(rows[0]);
+
+    cachedPartnerItem = rows[0];
+    renderPartnerBanner(cachedPartnerItem);
   } catch (err) {
-    console.error("Feil ved henting av partnerbanner:", err);
+    console.error(t("partner_fetch_error", "Feil ved henting av partnerbanner:"), err);
   }
 }
 
@@ -125,10 +159,10 @@ function getDomainNameFromLink(link) {
 
 function getDesktopPartnerName(item) {
   const candidates = [
-    item.campaign_name,
-    item.alt_text,
-    item.partner_name,
-    item.brand,
+    getLocalized(item, "campaign_name"),
+    getLocalized(item, "alt_text"),
+    getLocalized(item, "partner_name"),
+    getLocalized(item, "brand"),
     getDomainNameFromLink(item.link)
   ];
 
@@ -141,10 +175,10 @@ function getDesktopPartnerName(item) {
 
 function getMobilePartnerName(item) {
   const explicitCandidates = [
-    item.partner_name,
-    item.brand,
-    item.sponsor_name,
-    item.store_name
+    getLocalized(item, "partner_name"),
+    getLocalized(item, "brand"),
+    getLocalized(item, "sponsor_name"),
+    getLocalized(item, "store_name")
   ];
 
   for (const value of explicitCandidates) {
@@ -157,8 +191,8 @@ function getMobilePartnerName(item) {
   if (domainName) return domainName;
 
   const fallbackCandidates = [
-    item.alt_text,
-    item.campaign_name
+    getLocalized(item, "alt_text"),
+    getLocalized(item, "campaign_name")
   ];
 
   for (const value of fallbackCandidates) {
@@ -183,10 +217,10 @@ function renderPartnerBanner(item) {
   const bannerSection = document.querySelector(".partner-banner");
   if (!bannerSection) return;
 
-  const desc = item.description || "";
-  const alt = item.alt_text || "Partner";
-  const desktopCtaText = item.cta_text || "Se kampanjen";
-  const mobileCtaText = "Shop";
+  const desc = getLocalized(item, "description");
+  const alt = getLocalized(item, "alt_text") || "Partner";
+  const desktopCtaText = getLocalized(item, "cta_text") || t("see_campaign", "Se kampanjen");
+  const mobileCtaText = t("shop", "Shop");
   const link = item.link || "#";
   const img = item.image_url || "";
 
@@ -202,12 +236,12 @@ function renderPartnerBanner(item) {
     <div class="partner-banner-desktop">
       <div class="partner-banner-inner">
         <div class="partner-banner-text">
-          <p class="partner-tag">Ukens partner</p>
+          <p class="partner-tag">${escapeHtml(t("weekly_partner", "Ukens partner"))}</p>
           <h2>${escapeHtml(headline || desktopPartnerName)}</h2>
           ${sub ? `<p class="partner-sub">${escapeHtml(sub)}</p>` : ""}
           ${
             link && link !== "#"
-              ? `<a class="partner-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(desktopCtaText)}</a>`
+              ? `<a class="partner-cta" href="${escapeHtml(link)}" target="_blank" rel="noopener">${escapeHtml(desktopCtaText)}</a>`
               : ""
           }
         </div>
@@ -215,7 +249,7 @@ function renderPartnerBanner(item) {
         ${
           img
             ? `<div class="partner-banner-image">
-                 <img src="${img}" alt="${escapeHtml(alt)}" loading="lazy">
+                 <img src="${escapeHtml(img)}" alt="${escapeHtml(alt)}" loading="lazy">
                </div>`
             : ""
         }
@@ -224,13 +258,13 @@ function renderPartnerBanner(item) {
 
     <div class="partner-banner-mobile" data-partner-key="${escapeHtml(partnerKey)}">
       <div class="partner-mobile-rail">
-        <button type="button" class="partner-mobile-close" aria-label="Lukk partnerbanner">×</button>
+        <button type="button" class="partner-mobile-close" aria-label="${escapeHtml(t("close_partner_banner", "Lukk partnerbanner"))}">×</button>
 
         ${
           img
             ? `<div class="partner-mobile-logo-wrap">
                  <img
-                   src="${img}"
+                   src="${escapeHtml(img)}"
                    alt="${escapeHtml(alt || mobilePartnerName)}"
                    class="partner-mobile-logo"
                    loading="lazy"
@@ -240,13 +274,13 @@ function renderPartnerBanner(item) {
         }
 
         <div class="partner-mobile-copy">
-          <span class="partner-mobile-label">Ukens partner er</span>
+          <span class="partner-mobile-label">${escapeHtml(t("weekly_partner_is", "Ukens partner er"))}</span>
           <strong class="partner-mobile-name">${escapeHtml(mobilePartnerName)}</strong>
         </div>
 
         ${
           link && link !== "#"
-            ? `<a class="partner-mobile-cta" href="${link}" target="_blank" rel="noopener">${escapeHtml(mobileCtaText)}</a>`
+            ? `<a class="partner-mobile-cta" href="${escapeHtml(link)}" target="_blank" rel="noopener">${escapeHtml(mobileCtaText)}</a>`
             : ""
         }
       </div>
@@ -303,5 +337,11 @@ function setupMobilePartnerDismiss(section, partnerKey) {
   window.addEventListener("resize", applyState);
   applyState();
 }
+
+window.addEventListener("brandradar:languagechange", () => {
+  if (cachedPartnerItem) {
+    renderPartnerBanner(cachedPartnerItem);
+  }
+});
 
 fetchPartnerBanner();
