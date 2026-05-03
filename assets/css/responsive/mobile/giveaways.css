@@ -1,20 +1,359 @@
 @media (max-width: 768px) {
-
-  /* Skjul shortcut på mobil */
   .giveaway-shortcut-section {
-    display: none;
+    display: none !important;
   }
 
-  /* Vis ekte giveaway-seksjon */
-  #giveaway-section,
   .giveaway-section {
-    display: block;
-    width: 100%;
-    padding: 28px 16px;
+    display: block !important;
+    padding: 26px 14px 34px !important;
   }
 
   .giveaway-shell {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .m-giveaway-hub {
+    display: grid;
+    gap: 16px;
+  }
+
+  .m-giveaway-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 168px;
+    border-radius: 28px;
+    padding: 22px 128px 22px 18px;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(0,112,243,0.16), transparent 38%),
+      linear-gradient(180deg, #ffffff 0%, #eef6ff 100%);
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 18px 38px rgba(15,23,42,0.10);
+  }
+
+  .m-giveaway-kicker {
+    margin: 0 0 8px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0070f3;
+  }
+
+  .m-giveaway-hero h2 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    color: #0f172a;
+  }
+
+  .m-giveaway-hero p {
+    margin: 0;
+    max-width: 25ch;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: #475569;
+  }
+
+  .m-giveaway-visual {
+    position: absolute;
+    right: 14px;
+    top: 20px;
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(15,23,42,0.08);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 16px 30px rgba(15,23,42,0.12);
+  }
+
+  .m-giveaway-visual img {
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .m-giveaway-slider {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 2px 2px 4px;
+    scrollbar-width: none;
+  }
+
+  .m-giveaway-slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .m-giveaway-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    border-radius: 28px;
+    background: #ffffff;
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 18px 40px rgba(15,23,42,0.10);
+    overflow: hidden;
+  }
+
+  .m-giveaway-media {
+    position: relative;
+    height: 220px;
+    background: #e2e8f0;
+  }
+
+  .m-giveaway-media img {
     width: 100%;
-    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .m-giveaway-pill {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    z-index: 2;
+    min-height: 30px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.94);
+    color: #0f172a;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 18px rgba(15,23,42,0.12);
+  }
+
+  .m-giveaway-countdown {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    max-width: calc(100% - 28px);
+    padding: 8px 11px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.82);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    backdrop-filter: blur(10px);
+  }
+
+  .m-giveaway-body {
+    padding: 17px;
+  }
+
+  .m-giveaway-sponsor {
+    margin: 0 0 7px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #0070f3;
+  }
+
+  .m-giveaway-body h3 {
+    margin: 0 0 8px;
+    font-size: 1.32rem;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    color: #0f172a;
+  }
+
+  .m-giveaway-body p {
+    margin: 0 0 13px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #475569;
+  }
+
+  .m-giveaway-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .m-giveaway-meta div {
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid rgba(15,23,42,0.06);
+    padding: 11px;
+  }
+
+  .m-giveaway-meta span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  .m-giveaway-meta strong {
+    font-size: 0.88rem;
+    color: #0f172a;
+  }
+
+  .m-giveaway-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #0070f3, #39a8ff);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 800;
+    box-shadow: 0 14px 26px rgba(0,112,243,0.22);
+  }
+
+  .m-giveaway-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-top: -4px;
+  }
+
+  .m-giveaway-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    border: 0;
+    background: #cbd5e1;
+    padding: 0;
+  }
+
+  .m-giveaway-dot.is-active {
+    width: 18px;
+    background: #0070f3;
+  }
+
+  .m-giveaway-panel {
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 12px 28px rgba(15,23,42,0.07);
+    padding: 16px;
+  }
+
+  .m-giveaway-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .m-giveaway-panel-head h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+
+  .m-giveaway-see-all {
+    border: 0;
+    background: transparent;
+    color: #0070f3;
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 0;
+  }
+
+  .m-upcoming-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .m-upcoming-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .m-upcoming-card {
+    flex: 0 0 142px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid rgba(15,23,42,0.07);
+    overflow: hidden;
+  }
+
+  .m-upcoming-card img {
+    width: 100%;
+    height: 86px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .m-upcoming-card div {
+    padding: 10px;
+  }
+
+  .m-upcoming-card strong {
+    display: block;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    color: #0f172a;
+  }
+
+  .m-upcoming-card span {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: #64748b;
+  }
+
+  .m-giveaway-info-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 22px;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+  }
+
+  .m-giveaway-info-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 15px;
+    background: rgba(0,112,243,0.10);
+    color: #0070f3;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    flex: 0 0 auto;
+  }
+
+  .m-giveaway-info-card h3 {
+    margin: 0 0 3px;
+    font-size: 0.95rem;
+    color: #0f172a;
+  }
+
+  .m-giveaway-info-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: #64748b;
+  }
+
+  .m-giveaway-empty {
+    border-radius: 28px;
+    background: #ffffff;
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 18px 38px rgba(15,23,42,0.09);
+    padding: 20px;
   }
 }
