@@ -385,6 +385,75 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       </div>
     `;
+
+function renderMobileModule(items, activeIndex = 0) {
+  const active = items[activeIndex];
+  if (!active) return "";
+
+  const countdown = getCountdownState(active.countdown_end);
+
+  return `
+    <div class="m-giveaway-hub">
+
+      <div class="m-giveaway-hero">
+        <p class="m-giveaway-kicker">GIVEAWAY HUB</p>
+        <h2>Aktive giveaways</h2>
+        <p>Delta i våre utvalgte giveaways – nye muligheter legges til jevnlig</p>
+
+        <div class="m-giveaway-visual">
+          <img src="assets/img/giveaways/gift-box.png" alt="">
+        </div>
+      </div>
+
+      <div class="m-giveaway-slider">
+        ${items.map(item => {
+          const c = getCountdownState(item.countdown_end);
+          return `
+            <div class="m-giveaway-card">
+              <div class="m-giveaway-media">
+                ${item.image_url ? `<img src="${item.image_url}">` : ""}
+
+                <div class="m-giveaway-pill">${item.badge || "LIVE"}</div>
+                <div class="m-giveaway-countdown">${c.text}</div>
+              </div>
+
+              <div class="m-giveaway-body">
+                <div class="m-giveaway-sponsor">${item.sponsor_name || ""}</div>
+                <h3>${item.title}</h3>
+                <p>${item.description || ""}</p>
+
+                <div class="m-giveaway-meta">
+                  <div>
+                    <span>VERDI</span>
+                    <strong>${item.value_label || formatPrice(item.giveaway_value)}</strong>
+                  </div>
+                  <div>
+                    <span>FRIST</span>
+                    <strong>${c.text}</strong>
+                  </div>
+                </div>
+
+                ${
+                  item.cta_link
+                    ? `<a href="${item.cta_link}" class="m-giveaway-cta">Delta nå</a>`
+                    : `<div class="m-giveaway-cta">Kommer snart</div>`
+                }
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="m-giveaway-dots">
+        ${items.map((_, i) => `
+          <button class="m-giveaway-dot ${i === activeIndex ? "is-active" : ""}" data-dot="${i}"></button>
+        `).join("")}
+      </div>
+
+    </div>
+  `;
+}
+    
   }
 
   function updateCountdownOnly(items, activeIndex) {
