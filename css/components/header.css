@@ -518,9 +518,9 @@ nav.mega-menu .menu-section a:hover {
 
 .brand-logo span {
   color: #ffffff;
-  font-weight: 500;
+  font-weight: 450;   /* subtil reduksjon */
   letter-spacing: 1.35px;
-  opacity: 0.94;
+  opacity: 0.95;
 }
 
 .brand-logo:hover {
