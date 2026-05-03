@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const SHEET_GIVEAWAYS = "1E7Fa82dSdgWzCCZ4M8zgodA565FXZvANxWT7RtdP1z8";
   const GIVEAWAYS_TAB = "giveaways";
   const SETTINGS_TAB = "site_settings";
+  const MOBILE_BREAKPOINT = 768;
 
   const giveawaysUrl = `https://opensheet.elk.sh/${SHEET_GIVEAWAYS}/${GIVEAWAYS_TAB}`;
   const settingsUrl = `https://opensheet.elk.sh/${SHEET_GIVEAWAYS}/${SETTINGS_TAB}`;
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
   const getLang = () => window.BrandRadarLang?.get?.() || "no";
+  const isMobile = () => window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
 
   shell.classList.add("is-loading");
   shell.innerHTML = `<p>${t("loading_giveaways", "Laster giveaways...")}</p>`;
@@ -29,22 +31,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const lang = getLang();
 
     if (lang === "en") {
-      return String(
-        row[`${key}_en`] ||
-        row[`${key}_english`] ||
-        row[key] ||
-        fallback ||
-        ""
-      ).trim();
+      return String(row[`${key}_en`] || row[`${key}_english`] || row[key] || fallback || "").trim();
     }
 
-    return String(
-      row[`${key}_no`] ||
-      row[`${key}_norwegian`] ||
-      row[key] ||
-      fallback ||
-      ""
-    ).trim();
+    return String(row[`${key}_no`] || row[`${key}_norwegian`] || row[key] || fallback || "").trim();
   }
 
   function parseNumber(value) {
@@ -129,21 +119,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     let text;
 
     if (getLang() === "en") {
-      if (totalDays > 10) {
-        text = `Draw in ${days}d ${hours}h ${minutes}m`;
-      } else if (totalDays > 2) {
-        text = `Draw in ${days}d ${hours}h ${minutes}m ${seconds}s`;
-      } else {
-        text = `Draw in ${totalHours}h ${minutes}m ${seconds}s`;
-      }
+      if (totalDays > 10) text = `Draw in ${days}d ${hours}h ${minutes}m`;
+      else if (totalDays > 2) text = `Draw in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      else text = `Draw in ${totalHours}h ${minutes}m ${seconds}s`;
     } else {
-      if (totalDays > 10) {
-        text = `Trekning om ${days}d ${hours}t ${minutes}m`;
-      } else if (totalDays > 2) {
-        text = `Trekning om ${days}d ${hours}t ${minutes}m ${seconds}s`;
-      } else {
-        text = `Trekning om ${totalHours}t ${minutes}m ${seconds}s`;
-      }
+      if (totalDays > 10) text = `Trekning om ${days}d ${hours}t ${minutes}m`;
+      else if (totalDays > 2) text = `Trekning om ${days}d ${hours}t ${minutes}m ${seconds}s`;
+      else text = `Trekning om ${totalHours}t ${minutes}m ${seconds}s`;
     }
 
     return {
@@ -155,9 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function buildSponsorLabel(item) {
     const sponsorName = String(item.sponsor_name || "").trim();
-    return sponsorName
-      ? `${t("sponsored_by", "Sponset av")} ${sponsorName}`
-      : "";
+    return sponsorName ? `${t("sponsored_by", "Sponset av")} ${sponsorName}` : "";
   }
 
   function normalizeRow(row) {
@@ -212,6 +192,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     shell.classList.remove("is-loading", "is-error");
     shell.classList.add("is-empty", "is-coming-soon");
 
+    if (isMobile()) {
+      shell.innerHTML = renderMobileComingSoon();
+      return;
+    }
+
     shell.innerHTML = `
       <div class="giveaway-module giveaway-module--coming-soon">
         <div class="giveaway-left">
@@ -247,6 +232,37 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="giveaway-actions">
             <a href="news.html" class="giveaway-cta">${sanitize(t("explore_news", "Utforsk nyheter"))}</a>
             <span class="giveaway-secondary-note">${sanitize(t("stay_tuned", "Følg med"))}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMobileComingSoon() {
+    return `
+      <div class="m-giveaway-hub">
+        <div class="m-giveaway-hero">
+          <p class="m-giveaway-kicker">GIVEAWAY HUB</p>
+          <h2>${sanitize(t("giveaways_coming_soon", "Giveaways kommer snart"))}</h2>
+          <p>${sanitize(t("giveaways_coming_soon_text", "Vi jobber med nye giveaways. Følg med – flere muligheter kommer snart."))}</p>
+
+          <div class="m-giveaway-visual">
+            <img src="assets/img/giveaways/gift-box.png" alt="">
+          </div>
+        </div>
+
+        <div class="m-giveaway-empty">
+          <p class="m-giveaway-kicker">${sanitize(t("status", "Status"))}</p>
+          <h3>${sanitize(t("coming_soon", "Kommer snart"))}</h3>
+          <p>${sanitize(t("more_giveaways_soon", "Flere giveaways kommer snart – følg med"))}</p>
+          <a href="news.html" class="m-giveaway-cta">${sanitize(t("explore_news", "Utforsk nyheter"))}</a>
+        </div>
+
+        <div class="m-giveaway-info-card">
+          <div class="m-giveaway-info-icon">↻</div>
+          <div>
+            <h3>${sanitize(t("updated_regularly", "Oppdatert jevnlig"))}</h3>
+            <p>${sanitize(t("stay_tuned", "Følg med"))}</p>
           </div>
         </div>
       </div>
@@ -307,10 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             <div class="giveaway-main-overlay"></div>
 
-            <div
-              class="giveaway-main-countdown ${countdown.urgency ? "urgent" : ""}"
-              data-countdown-main="true"
-            >
+            <div class="giveaway-main-countdown ${countdown.urgency ? "urgent" : ""}" data-countdown-main="true">
               ${sanitize(countdown.text)}
             </div>
 
@@ -385,75 +398,121 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       </div>
     `;
+  }
 
-function renderMobileModule(items, activeIndex = 0) {
-  const active = items[activeIndex];
-  if (!active) return "";
+  function renderMobileModule(items, activeIndex = 0) {
+    const hasMultiple = items.length > 1;
+    const upcoming = items.slice(1);
 
-  const countdown = getCountdownState(active.countdown_end);
+    return `
+      <div class="m-giveaway-hub">
+        <div class="m-giveaway-hero">
+          <p class="m-giveaway-kicker">GIVEAWAY HUB</p>
+          <h2>${sanitize(t("active_giveaways", "Aktive giveaways"))}</h2>
+          <p>${sanitize(t("mobile_giveaway_intro", "Delta i våre utvalgte giveaways – nye muligheter legges til jevnlig."))}</p>
 
-  return `
-    <div class="m-giveaway-hub">
-
-      <div class="m-giveaway-hero">
-        <p class="m-giveaway-kicker">GIVEAWAY HUB</p>
-        <h2>Aktive giveaways</h2>
-        <p>Delta i våre utvalgte giveaways – nye muligheter legges til jevnlig</p>
-
-        <div class="m-giveaway-visual">
-          <img src="assets/img/giveaways/gift-box.png" alt="">
+          <div class="m-giveaway-visual">
+            <img src="assets/img/giveaways/gift-box.png" alt="">
+          </div>
         </div>
-      </div>
 
-      <div class="m-giveaway-slider">
-        ${items.map(item => {
-          const c = getCountdownState(item.countdown_end);
-          return `
-            <div class="m-giveaway-card">
-              <div class="m-giveaway-media">
-                ${item.image_url ? `<img src="${item.image_url}">` : ""}
+        <div class="m-giveaway-slider" id="m-giveaway-slider">
+          ${items.map((item, index) => {
+            const countdown = getCountdownState(item.countdown_end);
+            const valueText = item.value_label || formatPrice(item.giveaway_value) || t("coming_soon", "Kommer snart");
+            const isExternal = looksLikeUrl(item.cta_link);
 
-                <div class="m-giveaway-pill">${item.badge || "LIVE"}</div>
-                <div class="m-giveaway-countdown">${c.text}</div>
-              </div>
+            return `
+              <article class="m-giveaway-card" data-mobile-giveaway-card="${index}">
+                <div class="m-giveaway-media">
+                  ${item.image_url
+                    ? `<img src="${sanitize(item.image_url)}" alt="${sanitize(item.title)}" loading="lazy">`
+                    : `<div class="giveaway-thumb-placeholder">BR</div>`
+                  }
 
-              <div class="m-giveaway-body">
-                <div class="m-giveaway-sponsor">${item.sponsor_name || ""}</div>
-                <h3>${item.title}</h3>
-                <p>${item.description || ""}</p>
-
-                <div class="m-giveaway-meta">
-                  <div>
-                    <span>VERDI</span>
-                    <strong>${item.value_label || formatPrice(item.giveaway_value)}</strong>
-                  </div>
-                  <div>
-                    <span>FRIST</span>
-                    <strong>${c.text}</strong>
+                  <div class="m-giveaway-pill">${sanitize(item.badge || t("active_now", "Aktiv nå"))}</div>
+                  <div class="m-giveaway-countdown" data-mobile-countdown="${index}">
+                    ${sanitize(countdown.text)}
                   </div>
                 </div>
 
-                ${
-                  item.cta_link
-                    ? `<a href="${item.cta_link}" class="m-giveaway-cta">Delta nå</a>`
-                    : `<div class="m-giveaway-cta">Kommer snart</div>`
-                }
-              </div>
+                <div class="m-giveaway-body">
+                  ${item.sponsor_name ? `<div class="m-giveaway-sponsor">${sanitize(item.sponsor_name)}</div>` : ""}
+                  <h3>${sanitize(item.title)}</h3>
+                  ${item.description ? `<p>${sanitize(item.description)}</p>` : ""}
+
+                  <div class="m-giveaway-meta">
+                    <div>
+                      <span>${sanitize(t("value", "Verdi"))}</span>
+                      <strong>${sanitize(valueText)}</strong>
+                    </div>
+                    <div>
+                      <span>${sanitize(t("deadline", "Frist"))}</span>
+                      <strong data-mobile-meta-countdown="${index}">${sanitize(countdown.text)}</strong>
+                    </div>
+                  </div>
+
+                  ${item.cta_link
+                    ? `<a href="${sanitize(item.cta_link)}" class="m-giveaway-cta" ${isExternal ? `target="_blank" rel="noopener"` : ""}>${sanitize(item.cta_text || t("join_now", "Delta nå"))}</a>`
+                    : `<span class="m-giveaway-cta is-disabled">${sanitize(t("coming_soon", "Kommer snart"))}</span>`
+                  }
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+
+        ${hasMultiple ? `
+          <div class="m-giveaway-dots">
+            ${items.map((_, index) => `
+              <button
+                class="m-giveaway-dot ${index === activeIndex ? "is-active" : ""}"
+                type="button"
+                data-mobile-dot="${index}"
+                aria-label="${sanitize(t("show_giveaway", "Vis giveaway"))} ${index + 1}"
+              ></button>
+            `).join("")}
+          </div>
+        ` : ""}
+
+        ${upcoming.length ? `
+          <div class="m-giveaway-panel">
+            <div class="m-giveaway-panel-head">
+              <h3>${sanitize(t("coming_soon", "Kommer snart"))}</h3>
+              ${upcoming.length > 3 ? `<button class="m-giveaway-see-all" type="button" data-mobile-upcoming-toggle>${sanitize(t("see_all", "Se alle"))}</button>` : ""}
             </div>
-          `;
-        }).join("")}
-      </div>
 
-      <div class="m-giveaway-dots">
-        ${items.map((_, i) => `
-          <button class="m-giveaway-dot ${i === activeIndex ? "is-active" : ""}" data-dot="${i}"></button>
-        `).join("")}
-      </div>
+            <div class="m-upcoming-row" data-mobile-upcoming-row>
+              ${upcoming.map(item => `
+                <div class="m-upcoming-card">
+                  ${item.thumb_url ? `<img src="${sanitize(item.thumb_url)}" alt="${sanitize(item.title)}" loading="lazy">` : ""}
+                  <div>
+                    <strong>${sanitize(item.title)}</strong>
+                    <span>${sanitize(item.sponsor_name || item.value_label || "")}</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        ` : ""}
 
-    </div>
-  `;
-}
-    
+        <div class="m-giveaway-info-card">
+          <div class="m-giveaway-info-icon">✓</div>
+          <div>
+            <h3>${sanitize(t("how_it_works", "Slik fungerer det"))}</h3>
+            <p>${sanitize(t("giveaway_how_it_works_text", "Les vilkår, delta via knappen og følg med på trekningen."))}</p>
+          </div>
+        </div>
+
+        <div class="m-giveaway-info-card">
+          <div class="m-giveaway-info-icon">↻</div>
+          <div>
+            <h3>${sanitize(t("updated_regularly", "Oppdatert jevnlig"))}</h3>
+            <p>${sanitize(t("new_giveaways_regularly", "Nye giveaways legges til fortløpende."))}</p>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   function updateCountdownOnly(items, activeIndex) {
@@ -473,6 +532,20 @@ function renderMobileModule(items, activeIndex = 0) {
     if (metaCountdown) {
       metaCountdown.textContent = countdown.text;
     }
+
+    shell.querySelectorAll("[data-mobile-countdown]").forEach(el => {
+      const index = Number(el.dataset.mobileCountdown || 0);
+      const item = activeGiveaways[index];
+      if (!item) return;
+      el.textContent = getCountdownState(item.countdown_end).text;
+    });
+
+    shell.querySelectorAll("[data-mobile-meta-countdown]").forEach(el => {
+      const index = Number(el.dataset.mobileMetaCountdown || 0);
+      const item = activeGiveaways[index];
+      if (!item) return;
+      el.textContent = getCountdownState(item.countdown_end).text;
+    });
   }
 
   let cachedRows = [];
@@ -480,6 +553,59 @@ function renderMobileModule(items, activeIndex = 0) {
   let activeIndex = 0;
   let timerStarted = false;
   let activeGiveaways = [];
+
+  function bindMobileInteractions() {
+    const slider = shell.querySelector("#m-giveaway-slider");
+    if (!slider) return;
+
+    const dots = Array.from(shell.querySelectorAll("[data-mobile-dot]"));
+
+    function setActiveDot(index) {
+      activeIndex = index;
+      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener("click", () => {
+        const index = Number(dot.dataset.mobileDot || 0);
+        const card = shell.querySelector(`[data-mobile-giveaway-card="${index}"]`);
+        if (card) {
+          slider.scrollTo({ left: card.offsetLeft - slider.offsetLeft, behavior: "smooth" });
+        }
+        setActiveDot(index);
+      });
+    });
+
+    slider.addEventListener("scroll", () => {
+      const cards = Array.from(shell.querySelectorAll("[data-mobile-giveaway-card]"));
+      if (!cards.length) return;
+
+      const sliderLeft = slider.scrollLeft;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.offsetLeft - slider.offsetLeft - sliderLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveDot(closestIndex);
+    }, { passive: true });
+
+    const upcomingToggle = shell.querySelector("[data-mobile-upcoming-toggle]");
+    const upcomingRow = shell.querySelector("[data-mobile-upcoming-row]");
+
+    if (upcomingToggle && upcomingRow) {
+      upcomingToggle.addEventListener("click", () => {
+        upcomingRow.classList.toggle("is-expanded");
+        const expanded = upcomingRow.classList.contains("is-expanded");
+        upcomingToggle.textContent = expanded ? t("show_less", "Vis færre") : t("see_all", "Se alle");
+      });
+    }
+  }
 
   function renderFromRows(rows) {
     cachedRows = rows;
@@ -504,6 +630,13 @@ function renderMobileModule(items, activeIndex = 0) {
 
     function rerender() {
       shell.classList.remove("is-empty", "is-error", "is-coming-soon");
+
+      if (isMobile()) {
+        shell.innerHTML = renderMobileModule(giveaways, activeIndex);
+        bindMobileInteractions();
+        return;
+      }
+
       shell.innerHTML = renderModule(giveaways, activeIndex);
 
       shell.querySelectorAll("[data-giveaway-index]").forEach(btn => {
@@ -539,6 +672,11 @@ function renderMobileModule(items, activeIndex = 0) {
     renderFromRows(rows);
 
     window.addEventListener("brandradar:languagechange", () => {
+      activeIndex = 0;
+      renderFromRows(cachedRows);
+    });
+
+    window.addEventListener("resize", () => {
       activeIndex = 0;
       renderFromRows(cachedRows);
     });
