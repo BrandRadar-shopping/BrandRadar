@@ -404,6 +404,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   const hasMultiple = items.length > 1;
   const upcoming = items.slice(1);
 
+  function shortCountdown(text) {
+    return String(text || "")
+      .replace(/^Trekning om\s+/i, "")
+      .replace(/^Draw in\s+/i, "")
+      .trim();
+  }
+
+  function shortMobileTitle(item) {
+    let title = String(item.title || "");
+    const sponsor = String(item.sponsor_name || "").trim();
+
+    if (sponsor) {
+      title = title.replace(new RegExp(`\\s+hos\\s+${sponsor}$`, "i"), "");
+      title = title.replace(new RegExp(`\\s+fra\\s+${sponsor}$`, "i"), "");
+    }
+
+    return title.trim() || item.title;
+  }
+
   return `
     <div class="m-giveaway-hub m-giveaway-hub--active">
       <div class="m-giveaway-hero">
@@ -430,15 +449,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div>
                   <span class="m-giveaway-pill">${sanitize(item.badge || t("active_now", "Aktiv nå"))}</span>
                   ${item.sponsor_name ? `<p class="m-giveaway-sponsor">${sanitize(item.sponsor_name)}</p>` : ""}
-                  <h3>${sanitize(item.title)}</h3>
+                  <h3>${sanitize(shortMobileTitle(item))}</h3>
                   ${item.description ? `<p class="m-giveaway-desc">${sanitize(item.description)}</p>` : ""}
                 </div>
 
-                <div class="m-giveaway-media">
-                  ${item.image_url
-                    ? `<img src="${sanitize(item.image_url)}" alt="${sanitize(item.title)}" loading="lazy">`
-                    : `<div class="giveaway-thumb-placeholder">BR</div>`
-                  }
+                <div class="m-giveaway-media-wrap">
+                  <div class="m-giveaway-countdown" data-mobile-countdown="${index}">
+                    ${sanitize(shortCountdown(countdown.text))}
+                  </div>
+
+                  <div class="m-giveaway-media">
+                    ${item.image_url
+                      ? `<img src="${sanitize(item.image_url)}" alt="${sanitize(item.title)}" loading="lazy">`
+                      : `<div class="giveaway-thumb-placeholder">BR</div>`
+                    }
+                  </div>
                 </div>
               </div>
 
@@ -449,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </div>
                 <div>
                   <span>${sanitize(t("deadline", "Frist"))}</span>
-                  <strong data-mobile-meta-countdown="${index}">${sanitize(countdown.text)}</strong>
+                  <strong data-mobile-meta-countdown="${index}">${sanitize(shortCountdown(countdown.text))}</strong>
                 </div>
               </div>
 
@@ -487,7 +512,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="m-upcoming-card">
                 ${item.thumb_url ? `<img src="${sanitize(item.thumb_url)}" alt="${sanitize(item.title)}" loading="lazy">` : ""}
                 <div>
-                  <strong>${sanitize(item.title)}</strong>
+                  <strong>${sanitize(shortMobileTitle(item))}</strong>
                   <span>${sanitize(item.sponsor_name || item.value_label || "")}</span>
                 </div>
               </div>
