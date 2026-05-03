@@ -502,3 +502,39 @@ nav.mega-menu .menu-section a:hover {
 .lang-sep {
   color: #aaa;
 }
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brand-logo span {
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 1.35px;
+  opacity: 0.94;
+}
+
+.brand-logo:hover {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .brand-logo {
+    font-size: 1.18rem;
+    letter-spacing: 0.7px;
+  }
+
+  .brand-logo span {
+    letter-spacing: 1px;
+  }
+}
