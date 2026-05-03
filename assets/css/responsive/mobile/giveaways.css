@@ -433,3 +433,42 @@
 .m-giveaway-meta {
   margin-top: 12px;
 }
+
+.m-giveaway-pill {
+  display: none !important;
+}
+
+.m-giveaway-sponsor--top {
+  margin: 0 0 7px;
+  font-size: 0.78rem;
+  font-weight: 850;
+  color: #0a84ff;
+}
+
+.m-giveaway-countdown {
+  min-height: 30px;
+  padding: 6px 11px;
+  font-size: 0.7rem;
+}
+
+.m-giveaway-card h3 {
+  max-width: 10ch;
+  margin-bottom: 7px;
+}
+
+.m-giveaway-desc {
+  max-width: 22ch;
+  -webkit-line-clamp: 2;
+}
+
+.m-giveaway-meta--single {
+  grid-template-columns: 1fr;
+}
+
+.m-giveaway-meta--single div {
+  min-height: 54px;
+}
+
+.m-giveaway-media {
+  height: 156px;
+}
