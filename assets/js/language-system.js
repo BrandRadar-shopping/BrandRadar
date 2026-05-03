@@ -21,6 +21,13 @@
       best_price: "Beste pris",
       updated_regularly: "Oppdatert jevnlig",
 
+      weekly_partner: "Ukens partner",
+weekly_partner_is: "Ukens partner er",
+see_campaign: "Se kampanjen",
+shop: "Shop",
+close_partner_banner: "Lukk partnerbanner",
+partner_fetch_error: "Feil ved henting av partnerbanner:",
+
       explore: "Utforsk",
 no_hero_slides: "Ingen hero-slides er konfigurert ennå.",
 go_to_slide: "Gå til slide",
@@ -273,6 +280,13 @@ kids: "Barn"
       remove_favorite: "Remove favorite",
       best_price: "Best price",
       updated_regularly: "Updated regularly",
+
+      weekly_partner: "Weekly partner",
+weekly_partner_is: "This week’s partner is",
+see_campaign: "See campaign",
+shop: "Shop",
+close_partner_banner: "Close partner banner",
+partner_fetch_error: "Error fetching partner banner:",
 
       explore: "Explore",
 no_hero_slides: "No hero slides are configured yet.",
