@@ -1078,3 +1078,40 @@ html, body {
   color: #fff;
   font-weight: 600;
 }
+
+/* ==========================================================
+   GIVEAWAYS — COMING SOON STATE
+========================================================== */
+
+.giveaway-module--coming-soon .giveaway-main-stage {
+  filter: saturate(0.85);
+}
+
+.giveaway-main-stage.is-blurred::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.giveaway-module--coming-soon .giveaway-main-placeholder {
+  position: relative;
+  z-index: 3;
+}
+
+.giveaway-module--coming-soon .giveaway-title {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+}
+
+.giveaway-module--coming-soon .giveaway-main-placeholder-title {
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  letter-spacing: -0.04em;
+}
+
+.giveaway-module--coming-soon .giveaway-main-placeholder-sub {
+  max-width: 34ch;
+  line-height: 1.5;
+}
