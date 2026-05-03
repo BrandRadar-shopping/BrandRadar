@@ -1,0 +1,20 @@
+@media (max-width: 768px) {
+
+  /* Skjul shortcut på mobil */
+  .giveaway-shortcut-section {
+    display: none;
+  }
+
+  /* Vis ekte giveaway-seksjon */
+  #giveaway-section,
+  .giveaway-section {
+    display: block;
+    width: 100%;
+    padding: 28px 16px;
+  }
+
+  .giveaway-shell {
+    width: 100%;
+    max-width: 100%;
+  }
+}
