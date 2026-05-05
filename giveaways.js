@@ -140,11 +140,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       else text = `Trekning om ${totalHours}t ${minutes}m ${seconds}s`;
     }
 
-    return {
-      text,
-      urgency: totalHours <= 48,
-      expired: false
-    };
+    return { text, urgency: totalHours <= 48, expired: false };
   }
 
   function shortCountdown(text) {
@@ -172,6 +168,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return sponsorName ? `${t("sponsored_by", "Sponset av")} ${sponsorName}` : "";
   }
 
+  function normalizeDisplayStatus(row) {
+    const raw = String(row.display_status || "").trim().toLowerCase();
+
+    if (["active", "upcoming", "ended", "hidden"].includes(raw)) {
+      return raw;
+    }
+
+    return parseBool(row.active) ? "active" : "hidden";
+  }
+
   function normalizeRow(row) {
     const fallbackCountdown = looksLikeDate(row.cta_text) ? row.cta_text : row.countdown_end;
     const fallbackCtaText = looksLikeDate(row.cta_text)
@@ -195,6 +201,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return {
       id: String(row.id || "").trim(),
       active: parseBool(row.active),
+      display_status: normalizeDisplayStatus(row),
       sort_order: parseNumber(row.sort_order) ?? 999,
       overline: getLocalized(row, "overline", "BrandRadar Giveaway"),
       badge: getLocalized(row, "badge"),
@@ -434,9 +441,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  function renderMobileModule(items, activeIndex = 0) {
-    const hasMultiple = items.length > 1;
-    const upcoming = items.slice(1);
+  function renderMobileModule(activeItems, upcomingItems = [], activeIndex = 0) {
+    const hasMultiple = activeItems.length > 1;
 
     return `
       <div class="m-giveaway-hub m-giveaway-hub--active">
@@ -453,7 +459,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div class="m-giveaway-slider" id="m-giveaway-slider">
-          ${items.map((item, index) => {
+          ${activeItems.map((item, index) => {
             const countdown = getCountdownState(item.countdown_end);
             const valueText = item.value_label || formatPrice(item.giveaway_value) || t("coming_soon", "Kommer snart");
             const isExternal = looksLikeUrl(item.cta_link);
@@ -499,7 +505,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         ${hasMultiple ? `
           <div class="m-giveaway-dots">
-            ${items.map((_, index) => `
+            ${activeItems.map((_, index) => `
               <button
                 class="m-giveaway-dot ${index === activeIndex ? "is-active" : ""}"
                 type="button"
@@ -510,15 +516,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         ` : ""}
 
-        ${upcoming.length ? `
+        ${upcomingItems.length ? `
           <div class="m-giveaway-upcoming">
             <div class="m-giveaway-panel-head">
               <h3>${sanitize(t("coming_soon", "Kommer snart"))}</h3>
-              ${upcoming.length > 3 ? `<button class="m-giveaway-see-all" type="button" data-mobile-upcoming-toggle>${sanitize(t("see_all", "Se alle"))}</button>` : ""}
+              ${upcomingItems.length > 3 ? `<button class="m-giveaway-see-all" type="button" data-mobile-upcoming-toggle>${sanitize(t("see_all", "Se alle"))}</button>` : ""}
             </div>
 
             <div class="m-upcoming-row" data-mobile-upcoming-row>
-              ${upcoming.map(item => `
+              ${upcomingItems.map(item => `
                 <div class="m-upcoming-card">
                   ${item.thumb_url ? `<img src="${sanitize(item.thumb_url)}" alt="${sanitize(item.title)}" loading="lazy">` : ""}
                   <div>
@@ -542,22 +548,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  function updateCountdownOnly(items, activeIndex) {
-    const active = items[activeIndex];
-    if (!active) return;
-
-    const countdown = getCountdownState(active.countdown_end);
-
+  function updateCountdownOnly() {
     const mainCountdown = shell.querySelector("[data-countdown-main]");
     const metaCountdown = shell.querySelector("[data-countdown-meta]");
 
-    if (mainCountdown) {
-      mainCountdown.textContent = countdown.text;
-      mainCountdown.classList.toggle("urgent", countdown.urgency);
-    }
+    const active = activeGiveaways[activeIndex];
+    if (active) {
+      const countdown = getCountdownState(active.countdown_end);
 
-    if (metaCountdown) {
-      metaCountdown.textContent = countdown.text;
+      if (mainCountdown) {
+        mainCountdown.textContent = countdown.text;
+        mainCountdown.classList.toggle("urgent", countdown.urgency);
+      }
+
+      if (metaCountdown) {
+        metaCountdown.textContent = countdown.text;
+      }
     }
 
     shell.querySelectorAll("[data-mobile-countdown]").forEach(el => {
@@ -573,6 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeIndex = 0;
   let timerStarted = false;
   let activeGiveaways = [];
+  let upcomingGiveaways = [];
 
   function bindMobileInteractions() {
     const slider = shell.querySelector("#m-giveaway-slider");
@@ -635,29 +642,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    const giveaways = rows
+    const allGiveaways = rows
       .map(normalizeRow)
-      .filter(item => item.active)
+      .filter(item => item.display_status !== "hidden")
+      .filter(item => item.display_status !== "ended")
       .sort((a, b) => a.sort_order - b.sort_order);
 
-    activeGiveaways = giveaways;
+    const activeList = allGiveaways.filter(item => item.display_status === "active");
+    const upcomingList = allGiveaways.filter(item => item.display_status === "upcoming");
+
+    activeGiveaways = activeList;
+    upcomingGiveaways = upcomingList;
     shell.classList.remove("is-loading");
 
-    if (!giveaways.length) {
+    if (!activeList.length) {
       renderComingSoon();
       return;
+    }
+
+    if (activeIndex >= activeList.length) {
+      activeIndex = 0;
     }
 
     function rerender() {
       shell.classList.remove("is-empty", "is-error", "is-coming-soon");
 
       if (isMobile()) {
-        shell.innerHTML = renderMobileModule(giveaways, activeIndex);
+        shell.innerHTML = renderMobileModule(activeList, upcomingList, activeIndex);
         bindMobileInteractions();
         return;
       }
 
-      shell.innerHTML = renderModule(giveaways, activeIndex);
+      shell.innerHTML = renderModule(activeList, activeIndex);
 
       shell.querySelectorAll("[data-giveaway-index]").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -674,7 +690,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       setInterval(() => {
         if (!document.body.contains(shell)) return;
         if (!giveawaysGloballyEnabled || !activeGiveaways.length) return;
-        updateCountdownOnly(activeGiveaways, activeIndex);
+        updateCountdownOnly();
       }, 1000);
     }
   }
