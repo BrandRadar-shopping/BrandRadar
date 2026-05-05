@@ -929,3 +929,37 @@
   height: 21px;
   stroke-width: 1.8;
 }
+
+/* Remove old mobile drawer dot now that rows use SVG icons */
+.m-row::before,
+.m-row-label::before,
+.m-row-icon::before {
+  content: none !important;
+  display: none !important;
+}
+
+.m-row {
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) 18px !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+}
+
+.m-row-icon {
+  grid-column: 1 !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.m-row-label {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+}
+
+.m-row-arrow {
+  grid-column: 3 !important;
+  justify-self: end !important;
+}
