@@ -282,89 +282,92 @@ document.addEventListener("DOMContentLoaded", async () => {
     return [...expanded].filter(Boolean);
   }
 
-  function getProductSearchText(product) {
-    return [
-      product.category,
-      product.main_category,
-      product.subcategory,
-      product.title,
-      product.product_name,
-      product.name,
-      product.info,
-      product.description,
-      product.brand,
-      product.tags,
-      product.tag,
-      product.gender,
-      product.material,
-      product.type
-    ]
-      .filter(Boolean)
-      .map(normalize)
-      .join(" ");
-  }
+  function getStructuredCategoryText(product) {
+  return [
+    product.category,
+    product.main_category,
+    product.subcategory,
+    product.type,
+    product.gender
+  ]
+    .filter(Boolean)
+    .map(normalize)
+    .join(" ");
+}
 
-  function productMatchesCategory(product, targetCategorySlug) {
-    const aliases = getExpandedAliases(targetCategorySlug, CATEGORY_ALIAS_MAP);
-    const pCategory = normalize(product.category);
-    const pMainCategory = normalize(product.main_category);
-    const text = getProductSearchText(product);
+function getProductSearchText(product) {
+  return [
+    product.title,
+    product.product_name,
+    product.name,
+    product.info,
+    product.description,
+    product.tags,
+    product.tag,
+    product.material,
+    product.type
+  ]
+    .filter(Boolean)
+    .map(normalize)
+    .join(" ");
+}
 
-    return aliases.some(alias =>
-      pCategory === alias ||
-      pMainCategory === alias ||
-      text.includes(alias)
-    );
-  }
+function productMatchesCategory(product, targetCategorySlug) {
+  const aliases = getExpandedAliases(targetCategorySlug, CATEGORY_ALIAS_MAP);
 
-  function productMatchesSubcategory(product, targetSubSlug) {
-    if (!targetSubSlug) return true;
+  const pCategory = normalize(product.category);
+  const pMainCategory = normalize(product.main_category);
+  const structuredText = getStructuredCategoryText(product);
 
-    const aliases = getExpandedAliases(targetSubSlug, SUBCATEGORY_ALIAS_MAP);
-    const tokens = splitSlugTokens(targetSubSlug);
+  return aliases.some(alias =>
+    pCategory === alias ||
+    pMainCategory === alias ||
+    structuredText.split(" ").includes(alias)
+  );
+}
 
-    const pSub = normalize(product.subcategory);
-    const pCategory = normalize(product.category);
-    const pMainCategory = normalize(product.main_category);
-    const text = getProductSearchText(product);
+function productMatchesSubcategory(product, targetSubSlug) {
+  if (!targetSubSlug) return true;
 
-    const hasDirectAliasMatch = aliases.some(alias =>
-      pSub === alias ||
-      pCategory === alias ||
-      pMainCategory === alias ||
-      text.includes(alias)
-    );
+  const aliases = getExpandedAliases(targetSubSlug, SUBCATEGORY_ALIAS_MAP);
+  const tokens = splitSlugTokens(targetSubSlug);
 
-    if (hasDirectAliasMatch) return true;
+  const pSub = normalize(product.subcategory);
+  const pType = normalize(product.type);
+  const structuredText = getStructuredCategoryText(product);
 
-    if (tokens.length >= 2) {
-      const matchedTokens = tokens.filter(token => {
-        const loose = buildLooseVariants(token);
-        return loose.some(v =>
-          pSub === v ||
-          pCategory === v ||
-          pMainCategory === v ||
-          text.includes(v)
-        );
-      });
+  const structuredMatch = aliases.some(alias =>
+    pSub === alias ||
+    pType === alias ||
+    structuredText.split(" ").includes(alias)
+  );
 
-      if (matchedTokens.length >= Math.max(2, tokens.length - 1)) {
-        return true;
-      }
-    }
+  if (structuredMatch) return true;
 
-    if (tokens.length === 1) {
-      const loose = buildLooseVariants(tokens[0]);
+  if (tokens.length >= 2) {
+    const matchedTokens = tokens.filter(token => {
+      const loose = buildLooseVariants(token);
       return loose.some(v =>
         pSub === v ||
-        pCategory === v ||
-        pMainCategory === v ||
-        text.includes(v)
+        pType === v ||
+        structuredText.split(" ").includes(v)
       );
-    }
+    });
 
-    return false;
+    return matchedTokens.length >= Math.max(2, tokens.length - 1);
   }
+
+  if (tokens.length === 1) {
+    const loose = buildLooseVariants(tokens[0]);
+    return loose.some(v =>
+      pSub === v ||
+      pType === v ||
+      structuredText.split(" ").includes(v)
+    );
+  }
+
+  return false;
+}
 
   function createBaseProduct(masterRow) {
     if (!masterRow) return null;
