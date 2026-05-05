@@ -907,3 +907,25 @@
     font-size: 0.94rem;
   }
 }
+
+.m-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.m-row-icon {
+  width: 28px;
+  height: 28px;
+  color: #1f2937;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-row-icon .br-menu-svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 1.8;
+}
