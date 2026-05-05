@@ -695,12 +695,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  try {
-    const [rows, settingsRows] = await Promise.all([
-      fetch(giveawaysUrl).then(r => r.json()),
-      fetch(settingsUrl).then(r => r.json()).catch(() => [])
-    ]);
+   try {
+    const fetchSheet = window.BrandRadarSheets?.fetchWithCache;
 
+    const [rows, settingsRows] = await Promise.all([
+      fetchSheet
+        ? fetchSheet(giveawaysUrl, "giveaways_rows")
+        : fetch(giveawaysUrl).then(r => r.json()),
+
+      fetchSheet
+        ? fetchSheet(settingsUrl, "giveaways_settings")
+        : fetch(settingsUrl).then(r => r.json()).catch(() => [])
+    ]);
+     
     giveawaysGloballyEnabled = parseBool(
       getSetting(settingsRows, "giveaways_enabled", "FALSE")
     );
