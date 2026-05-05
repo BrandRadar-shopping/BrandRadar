@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((html) => {
       menuContainer.innerHTML = html;
       console.log("✅ Mega-menu loaded into DOM");
+      initDesktopMegaMenuIcons();
       initDesktopMegaMenuHover();
       initDesktopMegaMenuRoutingSlugs();
     })
@@ -74,6 +75,215 @@ function getKidtypeFromLink(link, genderSlug) {
   }
 
   return null;
+}
+
+/* =========================================================
+   BRANDRADAR MENU ICONS — desktop + mobile
+   ========================================================= */
+const BR_MENU_ICON_MAP = {
+  "Gensere & hoodies": "hoodie",
+  "Sweats & hettegensere": "hoodie",
+  "T-skjorter": "tshirt",
+  "T-skjorter & polo": "tshirt",
+  "T-skjorter & topper": "tshirt",
+  "Skjorter": "shirt",
+  "Bukser": "pants",
+  "Bukser & shorts": "pants",
+  "Jeans": "jeans",
+  "Jakker": "jacket",
+  "Jakker & blazere": "jacket",
+  "Kåper": "coat",
+  "Frakker": "coat",
+  "Cardigans": "knit",
+  "Kjoler": "dress",
+  "Skjørt": "skirt",
+  "Gymwear": "dumbbell",
+  "Sport": "sport",
+  "Sport & trening": "sport",
+  "Sportsklær": "sport",
+  "Dress & pentøy": "tie",
+  "Dresser": "tie",
+  "Undertøy & sokker": "socks",
+  "Onepiece": "onesie",
+
+  "Sneakers": "shoe",
+  "Boots & støvler": "boot",
+  "Støvletter": "boot",
+  "Boots": "boot",
+  "Støvler": "boot",
+  "Støvler & støvletter": "boot",
+  "Snøresko / Pensko": "dressshoe",
+  "Høye hæler / Pumps": "heel",
+  "Flate sko": "flatshoe",
+  "Slip-ins": "slipon",
+  "Sandaler / Åpne sko": "sandal",
+  "Sandaler / Badesko": "sandal",
+  "Tøfler": "slipper",
+  "Sportssko": "runningshoe",
+  "Tursko": "hiking",
+
+  "Proteinpulver": "supplement",
+  "Proteinbarer": "bar",
+  "Kreatin": "powder",
+  "PWO (preworkout)": "bolt",
+  "Vitaminer & Mineraler": "pill",
+  "Drikke": "bottle",
+  "Aminosyrer": "capsule",
+  "Elektronikk": "watch",
+  "Strikker": "band",
+  "Hjemmetrening": "homegym",
+  "Kampsport": "glove",
+  "Massasjeverktøy": "massage",
+  "Vannflasker & shakers": "bottle",
+  "Vekter & apparater": "dumbbell",
+  "Treningsbag": "bag",
+  "Vektvest": "vest",
+
+  "Luer & caps": "cap",
+  "Tørklær & skjerf": "scarf",
+  "Hansker & votter": "glove",
+  "Vesker & kofferter": "bag",
+  "Vesker": "bag",
+  "Smykker": "jewelry",
+  "Solbriller": "sunglasses",
+  "Klokker": "watch",
+  "Belter": "belt",
+  "Lommebøker": "wallet",
+  "Slips & Tilbehør": "tie",
+  "Hatter & hodeskjerf": "hat",
+  "Skjerf & sjal": "scarf",
+  "Hårpynt": "sparkle",
+  "Bag charms": "sparkle",
+  "Bager & sekker": "backpack",
+  "Klokker & smykker": "jewelry",
+  "Alle accessories": "grid",
+
+  "Ansikt": "face",
+  "Kroppspleie": "bodycare",
+  "Deodorant": "deodorant",
+  "Aktiv hudpleie": "drop",
+  "K-Beauty": "sparkle",
+  "Solprodukter": "sun",
+  "Beauty Tech": "device",
+  "Mamma & Barn": "heart",
+  "Hudpleiesett": "bottle",
+  "Reisestørrelser": "travel",
+  "Hudpleietilbehør": "brush",
+  "Munnhygiene": "tooth",
+  "Parfyme": "perfume",
+  "Barbering": "razor",
+  "Skjegg & Bart": "beard",
+  "Hudpleie": "drop",
+  "Hår": "hair",
+  "Gavesett": "gift",
+
+  "Alle kategorier": "grid",
+  "Yttertøy": "jacket",
+  "Gensere & cardigans": "knit",
+  "Barn 98-134": "kids",
+  "Ungdom 140-176": "kids"
+};
+
+function getMenuIconKey(label) {
+  return BR_MENU_ICON_MAP[String(label || "").trim()] || "grid";
+}
+
+function brMenuIcon(label) {
+  const key = getMenuIconKey(label);
+
+  const icons = {
+    grid: `<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>`,
+    tshirt: `<path d="M8 4 5 6.5 3 10l3 2v8h12v-8l3-2-2-3.5L16 4l-4 2z"/><path d="M9 4c.8 1.2 1.8 1.8 3 1.8S14.2 5.2 15 4"/>`,
+    shirt: `<path d="M8 4h8l3 4-2 2v10H7V10L5 8z"/><path d="M10 4v16M14 4v16M10 9h4"/>`,
+    hoodie: `<path d="M8 8c0-2.2 1.6-4 4-4s4 1.8 4 4"/><path d="M6 9h12l2 11H4z"/><path d="M9 13v7M15 13v7"/>`,
+    pants: `<path d="M8 4h8l1 16h-5l-1-10-1 10H5z"/><path d="M8 8h8"/>`,
+    jeans: `<path d="M7 4h10l1 16h-5l-1-9-1 9H6z"/><path d="M7 8h10M10 4v4M14 4v4"/>`,
+    jacket: `<path d="M8 4 5 7v13h6V9l1-2 1 2v11h6V7l-3-3"/><path d="M9 4c.7 1 1.6 1.5 3 1.5S14.3 5 15 4"/>`,
+    coat: `<path d="M8 4h8l3 5v11H5V9z"/><path d="M12 5v15M8 11h3M13 11h3"/>`,
+    knit: `<path d="M8 5 5 8l2 3v9h10v-9l2-3-3-3"/><path d="M9 9h6M8 13h8M8 17h8"/>`,
+    dress: `<path d="M9 4h6l1 5 4 11H4L8 9z"/><path d="M9 4c.8 1 1.8 1.5 3 1.5S14.2 5 15 4"/>`,
+    skirt: `<path d="M8 4h8l3 16H5z"/><path d="M8 8h8M11 8l-2 12M13 8l2 12"/>`,
+    socks: `<path d="M7 4h5v9l4 2c2 1 1 4-1 5H8c-2 0-3-2-2-4l1-3z"/><path d="M14 4h4v8"/>`,
+    tie: `<path d="M10 4h4l1 3-3 3-3-3z"/><path d="M12 10 8 20h8z"/>`,
+    onesie: `<path d="M8 4h8l3 4-2 2v10h-4v-6h-2v6H7V10L5 8z"/>`,
+    sport: `<path d="M5 17c4-6 10-6 14 0"/><path d="M8 14l-2-4M16 14l2-4M12 12V5"/>`,
+    dumbbell: `<path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/>`,
+
+    shoe: `<path d="M4 15c3 2 8 3 16 2v3H5c-2 0-3-1-3-3z"/><path d="M8 10c2 2 5 4 12 5"/>`,
+    boot: `<path d="M8 4h7v8l5 3v4H5v-4l3-2z"/><path d="M8 9h7"/>`,
+    dressshoe: `<path d="M4 15c4 2 10 3 16 2v3H5c-2 0-3-1-3-3z"/><path d="M10 12h4M12 10h4"/>`,
+    heel: `<path d="M5 15c4 2 9 2 14 1l1 3H6c-2 0-3-1-3-3z"/><path d="M15 16l3 5"/>`,
+    flatshoe: `<path d="M4 15c3 2 8 2 16 2v3H5c-2 0-3-1-3-3z"/>`,
+    slipon: `<path d="M4 15c4 2 10 2 16 1v4H5c-2 0-3-1-3-3z"/><path d="M8 14c2-2 5-2 8 0"/>`,
+    sandal: `<path d="M4 16c4 1 10 1 16 0v4H5c-2 0-3-1-3-3z"/><path d="M8 10l4 6M16 10l-4 6"/>`,
+    slipper: `<path d="M5 15c5-2 10-2 14 1v4H5c-2 0-3-1-3-3z"/>`,
+    runningshoe: `<path d="M4 15c4 2 10 2 16 1v4H5c-2 0-3-1-3-3z"/><path d="M9 11l2 2M13 10l2 2"/>`,
+    hiking: `<path d="M8 4h7v8l5 3v4H5v-4l3-2z"/><path d="M8 9h7M6 17h14"/>`,
+
+    supplement: `<path d="M8 4h8v4H8z"/><path d="M7 8h10l1 12H6z"/><path d="M9 13h6"/>`,
+    bar: `<path d="M5 7h14v10H5z"/><path d="M8 7v10M16 7v10"/>`,
+    powder: `<path d="M8 4h8v5H8z"/><path d="M6 9h12l-1 11H7z"/><path d="M10 14h4"/>`,
+    bolt: `<path d="M13 2 4 14h7l-1 8 10-13h-7z"/>`,
+    pill: `<path d="M10 21a5 5 0 0 1-7-7l7-7a5 5 0 0 1 7 7z"/><path d="M8 9l7 7"/>`,
+    capsule: `<path d="M10 21a5 5 0 0 1-7-7l7-7a5 5 0 0 1 7 7z"/><path d="M8 9l7 7"/>`,
+    bottle: `<path d="M9 3h6v4H9z"/><path d="M8 7h8l1 13H7z"/><path d="M9 12h6"/>`,
+    watch: `<path d="M9 2h6l1 5a7 7 0 0 1 0 10l-1 5H9l-1-5a7 7 0 0 1 0-10z"/><circle cx="12" cy="12" r="4"/>`,
+    band: `<path d="M4 12c4-6 12-6 16 0M4 12c4 6 12 6 16 0"/>`,
+    homegym: `<path d="M4 11 12 4l8 7v9H4z"/><path d="M8 17h8M9 14h6"/>`,
+    glove: `<path d="M8 5h8l3 5-2 8H7l-2-8z"/><path d="M9 9h6"/>`,
+    massage: `<path d="M6 18h12M8 14h8M10 10h4M12 4v6"/>`,
+    bag: `<path d="M6 8h12l1 12H5z"/><path d="M9 8a3 3 0 0 1 6 0"/>`,
+    vest: `<path d="M8 4h8l2 16h-5v-8h-2v8H6z"/>`,
+
+    cap: `<path d="M4 14c2-5 12-7 16 0"/><path d="M4 14c3 2 9 2 16 0"/><path d="M15 14h6"/>`,
+    scarf: `<path d="M9 4h6v10H9z"/><path d="M9 14l-2 6M15 14l2 6"/>`,
+    jewelry: `<path d="M6 8a6 6 0 0 0 12 0"/><path d="M9 8a3 3 0 0 1 6 0"/><circle cx="12" cy="17" r="2"/>`,
+    sunglasses: `<path d="M3 10h6l2 2h2l2-2h6"/><path d="M3 10l1 5h5l2-3M21 10l-1 5h-5l-2-3"/>`,
+    belt: `<path d="M4 10h16v4H4z"/><path d="M8 10v4M12 10v4"/>`,
+    wallet: `<path d="M4 7h16v11H4z"/><path d="M16 12h4"/>`,
+    hat: `<path d="M5 14h14M8 14l2-8h4l2 8"/>`,
+    backpack: `<path d="M7 8h10l1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0M8 13h8"/>`,
+    sparkle: `<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>`,
+
+    face: `<circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01M9 15c2 1 4 1 6 0"/>`,
+    bodycare: `<path d="M9 3h6v4H9z"/><path d="M8 7h8l1 13H7z"/>`,
+    deodorant: `<path d="M9 5h6v4H9z"/><path d="M8 9h8l1 11H7z"/><path d="M10 13h4"/>`,
+    drop: `<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>`,
+    sun: `<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>`,
+    device: `<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>`,
+    heart: `<path d="M12 21s-7-4.5-9-9a5 5 0 0 1 8-6 5 5 0 0 1 8 6c-2 4.5-9 9-9 9z"/>`,
+    travel: `<path d="M7 7h10v13H7z"/><path d="M9 7V5h6v2M10 10h4"/>`,
+    brush: `<path d="M8 3h8v5H8z"/><path d="M10 8v13M14 8v13"/>`,
+    tooth: `<path d="M8 3c2 0 2 1 4 1s2-1 4-1c2 0 3 2 2 5l-2 10c-.3 1.4-2 1.4-2.3 0L12 12l-1.7 6c-.3 1.4-2 1.4-2.3 0L6 8c-1-3 0-5 2-5z"/>`,
+    perfume: `<path d="M9 3h6v4H9z"/><path d="M8 7h8l2 13H6z"/><path d="M10 12h4"/>`,
+    razor: `<path d="M5 6h14M12 6v15M9 21h6"/>`,
+    beard: `<path d="M7 9c0 7 10 7 10 0"/><path d="M9 14c1 2 5 2 6 0"/>`,
+    hair: `<path d="M6 20c0-8 2-16 10-16 3 0 4 2 4 5 0 5-3 8-8 8"/>`,
+    gift: `<path d="M4 10h16v10H4z"/><path d="M12 10v10M4 14h16M7 6c0-2 4-2 5 4M17 6c0-2-4-2-5 4"/>`,
+    kids: `<circle cx="12" cy="7" r="3"/><path d="M6 21c1-5 11-5 12 0"/>`
+  };
+
+  return `
+    <svg class="br-menu-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      ${icons[key] || icons.grid}
+    </svg>
+  `;
+}
+
+/* =========================================================
+   DESKTOP: Add icons to loaded mega-menu links
+   ========================================================= */
+function initDesktopMegaMenuIcons() {
+  document.querySelectorAll("nav.mega-menu .menu-section:not(.brands) li a").forEach((link) => {
+    if (link.querySelector(".desktop-menu-icon")) return;
+
+    const label = link.textContent.trim();
+
+    link.innerHTML = `
+      <span class="desktop-menu-icon" aria-hidden="true">${brMenuIcon(label)}</span>
+      <span class="desktop-menu-label">${label}</span>
+    `;
+  });
 }
 
 /* =========================================================
@@ -325,6 +535,7 @@ function initMobileBrowseMenu() {
   function rowHTML(label, href) {
     return `
       <a class="m-row" href="${href}">
+        <span class="m-row-icon" aria-hidden="true">${brMenuIcon(label)}</span>
         <span class="m-row-label">${escapeHtml(label)}</span>
         <span class="m-row-arrow" aria-hidden="true">›</span>
       </a>
