@@ -1001,3 +1001,10 @@
 .mobile-drawer-search-icon {
   flex: 0 0 auto;
 }
+
+
+/* Hide drawer search field when drawer is opened from search page */
+body.is-search-page .mobile-drawer-search {
+  visibility: hidden;
+  pointer-events: none;
+}
