@@ -963,3 +963,41 @@
   grid-column: 3 !important;
   justify-self: end !important;
 }
+
+/* =========================================================
+   MOBILE DRAWER — search field fix on search page
+   ========================================================= */
+
+.mobile-drawer-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-drawer-search {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.mobile-drawer-search input {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 15px;
+}
+
+.mobile-drawer-search-icon {
+  flex: 0 0 auto;
+}
