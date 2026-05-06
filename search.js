@@ -1,41 +1,81 @@
-// search.js — global site search (autosuggest + keyboard + price)
+// search.js — BrandRadar global search / mobile search page
 (function () {
   const DEBUG = true;
 
-  function log(...args) {
-    if (DEBUG) console.log(...args);
-  }
-  function warn(...args) {
-    console.warn(...args);
-  }
-
-  // ---------- Sources ----------
   const MASTER_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const MASTER_TAB = "BrandRadarProdukter";
 
   const BRANDS_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
   const BRANDS_TAB = "Ark 1";
 
-  const MAX_RESULTS = 7;
+  const MAX_RESULTS = 8;
   const nb = new Intl.NumberFormat("nb-NO");
+
+  function log(...args) {
+    if (DEBUG) console.log(...args);
+  }
+
+  function warn(...args) {
+    console.warn(...args);
+  }
 
   function norm(s) {
     return String(s || "")
       .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
       .normalize("NFKD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
   }
 
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function parseNum(v) {
     if (v == null || v === "") return null;
-    const n = Number(String(v).replace(/\s/g, "").replace(/[^\d.,\-]/g, "").replace(",", "."));
+    const n = Number(
+      String(v)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,\-]/g, "")
+        .replace(",", ".")
+    );
     return Number.isFinite(n) ? n : null;
   }
 
   function formatPrice(n) {
     if (n == null) return "";
     return `${nb.format(Math.round(n))} kr`;
+  }
+
+  function resolveId(p) {
+    if (typeof window.resolveProductId === "function") {
+      const id = window.resolveProductId(p);
+      if (id) return String(id).trim();
+    }
+
+    return String(
+      p.id ||
+      p.product_id ||
+      p.item_id ||
+      p.sku ||
+      ""
+    ).trim();
+  }
+
+  function getTitle(p) {
+    return p.title || p.product_name || p.name || p.product || "";
+  }
+
+  function getImage(p) {
+    return p.image_url || p.image || p.img || p.thumbnail || "";
   }
 
   function priceInfo(p) {
@@ -51,6 +91,7 @@
     }
 
     let pct = null;
+
     if (computedOld != null && computedNew != null && computedOld > computedNew) {
       pct = Math.round(((computedOld - computedNew) / computedOld) * 100);
     } else if (discount != null && discount > 0) {
@@ -60,20 +101,24 @@
     return { newP: computedNew, oldP: computedOld, pct };
   }
 
-  function resolveId(p) {
-    if (typeof window.resolveProductId === "function") return window.resolveProductId(p);
-    return String(p.id || "").trim();
-  }
+  function scoreMatch(product, q) {
+    const title = norm(getTitle(product));
+    const brand = norm(product.brand);
+    const category = norm(product.category);
+    const subcategory = norm(product.subcategory);
+    const tags = norm(product.tags || product.tag);
 
-  function scoreMatch(title, brand, q) {
-    const t = norm(title);
-    const b = norm(brand);
-    let s = 0;
-    if (t.startsWith(q)) s += 10;
-    if (b.startsWith(q)) s += 8;
-    if (t.includes(q)) s += 4;
-    if (b.includes(q)) s += 3;
-    return s;
+    let score = 0;
+
+    if (title.startsWith(q)) score += 18;
+    if (brand.startsWith(q)) score += 14;
+    if (title.includes(q)) score += 9;
+    if (brand.includes(q)) score += 7;
+    if (category.includes(q)) score += 4;
+    if (subcategory.includes(q)) score += 4;
+    if (tags.includes(q)) score += 3;
+
+    return score;
   }
 
   async function fetchJson(sheetId, tab) {
@@ -83,7 +128,6 @@
     return res.json();
   }
 
-  // ---------- Init boot (retry, fordi header/DOM kan komme litt senere) ----------
   function boot() {
     const root = document.getElementById("site-search");
     const input = document.getElementById("search-input");
@@ -98,10 +142,9 @@
     if (!dropdown) missing.push("#search-dropdown");
     if (!prodWrap) missing.push("#search-results-products");
     if (!brandWrap) missing.push("#search-results-brands");
-    if (!clearBtn) missing.push(".search-clear");
 
     if (missing.length) {
-      warn("🔎 Search init blocked: mangler elementer:", missing);
+      warn("🔎 Search init blocked. Missing:", missing);
       return false;
     }
 
@@ -111,34 +154,30 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     log("✅ search.js loaded");
+
     if (boot()) return;
 
-    // Retry i tilfelle header endrer seg etter load
     let tries = 0;
-    const t = setInterval(() => {
-      tries++;
-      if (boot() || tries > 30) clearInterval(t); // ~3 sek
+    const timer = setInterval(() => {
+      tries += 1;
+      if (boot() || tries > 30) clearInterval(timer);
     }, 100);
   });
 
-  // ---------- Main ----------
   function initSearch({ root, input, dropdown, prodWrap, brandWrap, clearBtn }) {
-    log("🔎 Search DOM ok:", {
-      root: true,
-      input: true,
-      dropdown: true,
-      prodWrap: true,
-      brandWrap: true,
-    });
+    if (root.dataset.searchReady === "true") return;
+    root.dataset.searchReady = "true";
+
+    const isSearchPage = document.body.classList.contains("is-search-page");
 
     let products = [];
     let brands = [];
     let flatItems = [];
     let activeIndex = -1;
+    let dataLoaded = false;
 
     function openDropdown() {
       dropdown.hidden = false;
-      // sikker: alltid over alt
       dropdown.style.zIndex = "99999";
     }
 
@@ -148,16 +187,18 @@
       syncActive();
     }
 
-    function setHasValue(v) {
-      root.classList.toggle("has-value", !!v);
+    function setHasValue() {
+      root.classList.toggle("has-value", !!input.value.trim());
     }
 
     function renderEmpty(el, msg) {
-      el.innerHTML = `<div class="search-empty">${msg}</div>`;
+      el.innerHTML = `<div class="search-empty">${escapeHtml(msg)}</div>`;
     }
 
     function syncActive() {
-      flatItems.forEach((el, i) => el.classList.toggle("active", i === activeIndex));
+      flatItems.forEach((el, i) => {
+        el.classList.toggle("active", i === activeIndex);
+      });
     }
 
     function clickActive() {
@@ -169,42 +210,44 @@
       prodWrap.innerHTML = "";
       brandWrap.innerHTML = "";
 
-      const qRaw = input.value;
-      const q = norm(qRaw);
+      const q = norm(input.value);
+
+      if (!dataLoaded) {
+        renderEmpty(prodWrap, "Laster søk…");
+        renderEmpty(brandWrap, "");
+        flatItems = [];
+        activeIndex = -1;
+        return;
+      }
 
       if (!q) {
         renderEmpty(prodWrap, "Skriv for å søke…");
-        renderEmpty(brandWrap, " ");
+        renderEmpty(brandWrap, "");
         flatItems = [];
         activeIndex = -1;
-        syncActive();
         return;
       }
 
       const prodMatches = products
-        .map((p) => {
-          const title = p.title || p.product_name || p.name || "";
-          const brand = p.brand || "";
-          return {
-            type: "product",
-            id: resolveId(p),
-            title,
-            brand,
-            image: p.image_url || "",
-            raw: p,
-            score: scoreMatch(title, brand, q),
-          };
-        })
-        .filter((x) => x.id && x.score > 0)
+        .map((p) => ({
+          type: "product",
+          id: resolveId(p),
+          title: getTitle(p),
+          brand: p.brand || "",
+          image: getImage(p),
+          raw: p,
+          score: scoreMatch(p, q)
+        }))
+        .filter((x) => x.id && x.title && x.score > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, MAX_RESULTS);
 
       const brandMatches = brands
         .map((b) => ({
           type: "brand",
-          brand: (b.brand || b.name || "").trim(),
+          brand: String(b.brand || b.name || "").trim(),
           logo: b.logo || b.logo_url || "",
-          description: (b.description || "").trim(),
+          description: String(b.description || "").trim()
         }))
         .filter((x) => x.brand && norm(x.brand).includes(q))
         .slice(0, MAX_RESULTS);
@@ -217,28 +260,32 @@
 
         const priceLine =
           newP != null
-            ? `<div class="search-price">
+            ? `
+              <div class="search-price">
                 <span class="sp-new">${formatPrice(newP)}</span>
                 ${oldP != null && oldP > newP ? `<span class="sp-old">${formatPrice(oldP)}</span>` : ""}
                 ${pct ? `<span class="sp-pill">-${pct}%</span>` : ""}
-              </div>`
+              </div>
+            `
             : "";
 
-        const el = document.createElement("div");
+        const el = document.createElement("button");
+        el.type = "button";
         el.className = "search-item";
         el.dataset.type = "product";
         el.dataset.id = p.id;
 
         el.innerHTML = `
-          <div class="search-thumb">${p.image ? `<img src="${p.image}" alt="">` : "🛍️"}</div>
-          <div class="search-meta">
-            <p class="search-title">${p.title}</p>
-            <p class="search-sub">${p.brand || ""}</p>
+          <span class="search-thumb">
+            ${p.image ? `<img src="${escapeHtml(p.image)}" alt="">` : "🛍️"}
+          </span>
+          <span class="search-meta">
+            <span class="search-title">${escapeHtml(p.title)}</span>
+            <span class="search-sub">${escapeHtml(p.brand)}</span>
             ${priceLine}
-          </div>
+          </span>
         `;
 
-        el.addEventListener("mousedown", (e) => e.preventDefault());
         el.addEventListener("click", () => {
           window.location.href = `product.html?id=${encodeURIComponent(p.id)}`;
         });
@@ -247,20 +294,22 @@
       });
 
       brandMatches.forEach((b) => {
-        const el = document.createElement("div");
+        const el = document.createElement("button");
+        el.type = "button";
         el.className = "search-item";
         el.dataset.type = "brand";
         el.dataset.brand = b.brand;
 
         el.innerHTML = `
-          <div class="search-thumb">${b.logo ? `<img src="${b.logo}" alt="">` : "🏷️"}</div>
-          <div class="search-meta">
-            <p class="search-title">${b.brand}</p>
-            <p class="search-sub">${b.description || "Åpne brand"}</p>
-          </div>
+          <span class="search-thumb">
+            ${b.logo ? `<img src="${escapeHtml(b.logo)}" alt="">` : "🏷️"}
+          </span>
+          <span class="search-meta">
+            <span class="search-title">${escapeHtml(b.brand)}</span>
+            <span class="search-sub">${escapeHtml(b.description || "Åpne brand")}</span>
+          </span>
         `;
 
-        el.addEventListener("mousedown", (e) => e.preventDefault());
         el.addEventListener("click", () => {
           window.location.href = `brand-page.html?brand=${encodeURIComponent(b.brand)}`;
         });
@@ -273,49 +322,54 @@
       syncActive();
     }
 
-    // Debounce
-    let t = null;
+    let debounceTimer = null;
+
     function debouncedRender() {
-      clearTimeout(t);
-      t = setTimeout(render, 120);
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(render, 100);
     }
 
-    // Load data once
-    (async () => {
+    async function loadData() {
       try {
-        const [master, brandRows] = await Promise.all([
+        const [masterRows, brandRows] = await Promise.all([
           fetchJson(MASTER_SHEET_ID, MASTER_TAB),
-          fetchJson(BRANDS_SHEET_ID, BRANDS_TAB).catch(() => []),
+          fetchJson(BRANDS_SHEET_ID, BRANDS_TAB).catch(() => [])
         ]);
 
-        products = Array.isArray(master) ? master : [];
+        products = Array.isArray(masterRows) ? masterRows : [];
         brands = Array.isArray(brandRows) ? brandRows : [];
 
         if (!brands.length) {
-          const set = new Set();
+          const seen = new Set();
           brands = products
             .map((p) => String(p.brand || "").trim())
             .filter(Boolean)
-            .filter((b) => (set.has(b) ? false : (set.add(b), true)))
-            .map((b) => ({ brand: b, description: "" }));
+            .filter((brand) => {
+              const key = norm(brand);
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            })
+            .map((brand) => ({ brand, description: "" }));
         }
+
+        dataLoaded = true;
 
         log("🔎 Search data loaded:", {
           products: products.length,
-          brands: brands.length,
-          exampleProduct: products[0],
-          exampleBrand: brands[0],
+          brands: brands.length
         });
 
         render();
-      } catch (e) {
-        warn("🔎 Search data load failed:", e);
-        render();
+      } catch (err) {
+        warn("🔎 Search data load failed:", err);
+        dataLoaded = true;
+        products = [];
+        brands = [];
+        renderEmpty(prodWrap, "Kunne ikke laste søk akkurat nå.");
+        renderEmpty(brandWrap, "");
       }
-    })();
-
-    // Initial UI
-    render();
+    }
 
     input.addEventListener("focus", () => {
       openDropdown();
@@ -323,18 +377,20 @@
     });
 
     input.addEventListener("input", () => {
-      setHasValue(input.value);
+      setHasValue();
       openDropdown();
       debouncedRender();
     });
 
-    clearBtn.addEventListener("click", () => {
-      input.value = "";
-      setHasValue(false);
-      openDropdown();
-      render();
-      input.focus();
-    });
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        input.value = "";
+        setHasValue();
+        openDropdown();
+        render();
+        input.focus({ preventScroll: true });
+      });
+    }
 
     document.addEventListener("click", (e) => {
       if (!root.contains(e.target)) closeDropdown();
@@ -351,11 +407,16 @@
 
       if (e.key === "Enter") {
         if (!flatItems.length) render();
-        if (activeIndex < 0 && flatItems.length) activeIndex = 0;
+
+        if (activeIndex < 0 && flatItems.length) {
+          activeIndex = 0;
+        }
+
         if (activeIndex >= 0) {
           e.preventDefault();
           clickActive();
         }
+
         return;
       }
 
@@ -365,13 +426,25 @@
         e.preventDefault();
         activeIndex = Math.min(activeIndex + 1, flatItems.length - 1);
         syncActive();
-      } else if (e.key === "ArrowUp") {
+      }
+
+      if (e.key === "ArrowUp") {
         e.preventDefault();
         activeIndex = Math.max(activeIndex - 1, 0);
         syncActive();
       }
     });
+
+    setHasValue();
+    render();
+    loadData();
+
+    if (isSearchPage) {
+      setTimeout(() => {
+        input.focus({ preventScroll: true });
+        openDropdown();
+        render();
+      }, 250);
+    }
   }
 })();
-
-
