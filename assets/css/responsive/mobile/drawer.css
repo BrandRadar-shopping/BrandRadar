@@ -1003,8 +1003,12 @@
 }
 
 
-/* Hide drawer search field when drawer is opened from search page */
 body.is-search-page .mobile-drawer-search {
-  visibility: hidden;
-  pointer-events: none;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+body.is-search-page .mobile-drawer-search input {
+  font-size: 14px;
+  font-weight: 500;
 }
