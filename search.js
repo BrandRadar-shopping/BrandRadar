@@ -440,11 +440,11 @@
     loadData();
 
     if (isSearchPage) {
-      setTimeout(() => {
-        input.focus({ preventScroll: true });
-        openDropdown();
-        render();
-      }, 250);
-    }
+  closeDropdown();
+
+  setTimeout(() => {
+    input.blur();
+  }, 100);
+}
   }
 })();
