@@ -363,26 +363,41 @@ function initMobileDrawer() {
   if (backBtn) backBtn.addEventListener("click", closeMenu);
 
   if (drawerSearchInput) {
+  const isSearchPage = document.body.classList.contains("is-search-page");
+
+  if (isSearchPage) {
+    drawerSearchInput.removeAttribute("readonly");
+
+    drawerSearchInput.addEventListener("input", () => {
+      const mainSearchInput = document.getElementById("search-input");
+      if (!mainSearchInput) return;
+
+      mainSearchInput.value = drawerSearchInput.value;
+      mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+
+    drawerSearchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const mainSearchInput = document.getElementById("search-input");
+        if (!mainSearchInput) return;
+
+        closeMenu();
+
+        setTimeout(() => {
+          mainSearchInput.focus({ preventScroll: true });
+          mainSearchInput.dispatchEvent(new KeyboardEvent("keydown", {
+            key: "Enter",
+            bubbles: true
+          }));
+        }, 240);
+      }
+    });
+  } else {
     drawerSearchInput.setAttribute("readonly", "readonly");
 
-   const routeToMainSearch = () => {
-  const isSearchPage = document.body.classList.contains("is-search-page");
-  const mainSearchInput = document.getElementById("search-input");
-
-  closeMenu();
-
-  if (isSearchPage) return;
-
-  setTimeout(() => {
-    if (mainSearchInput) {
-      mainSearchInput.focus({ preventScroll: true });
-      mainSearchInput.dispatchEvent(new Event("focus", { bubbles: true }));
-      return;
-    }
-
-    window.location.href = "search-mobile.html";
-  }, 240);
-};
+    const routeToMainSearch = () => {
+      window.location.href = "search-mobile.html";
+    };
 
     drawerSearchInput.addEventListener("click", routeToMainSearch);
     drawerSearchInput.addEventListener("focus", (e) => {
