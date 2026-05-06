@@ -340,6 +340,8 @@ function initMobileDrawer() {
   moveSearchBack();
 }, 220);
 
+    }
+
   window.BrandRadarDrawerAPI = {
     open: (cat = null) => openMenu(cat),
     close: closeMenu
