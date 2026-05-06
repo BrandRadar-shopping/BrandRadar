@@ -366,9 +366,12 @@ function initMobileDrawer() {
     drawerSearchInput.setAttribute("readonly", "readonly");
 
    const routeToMainSearch = () => {
+  const isSearchPage = document.body.classList.contains("is-search-page");
   const mainSearchInput = document.getElementById("search-input");
 
   closeMenu();
+
+  if (isSearchPage) return;
 
   setTimeout(() => {
     if (mainSearchInput) {
