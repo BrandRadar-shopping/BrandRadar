@@ -366,51 +366,55 @@ function initMobileDrawer() {
   const isSearchPage = document.body.classList.contains("is-search-page");
 
   if (isSearchPage) {
-  drawerSearchInput.removeAttribute("readonly");
+    drawerSearchInput.removeAttribute("readonly");
 
-  drawerSearchInput.addEventListener("input", () => {
-    const mainSearchInput = document.getElementById("search-input");
-    const mainDropdown = document.getElementById("search-dropdown");
+    drawerSearchInput.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
 
-    if (!mainSearchInput) return;
+    drawerSearchInput.addEventListener("focus", (e) => {
+      e.stopPropagation();
+    });
 
-    mainSearchInput.value = drawerSearchInput.value;
-    mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    drawerSearchInput.addEventListener("input", () => {
+      const mainSearchInput = document.getElementById("search-input");
+      const mainDropdown = document.getElementById("search-dropdown");
 
-    if (drawerSearchInput.value.trim()) {
+      if (!mainSearchInput) return;
+
+      mainSearchInput.value = drawerSearchInput.value;
+      mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+
+      if (mainDropdown && drawerSearchInput.value.trim()) {
+        mainDropdown.hidden = false;
+      }
+    });
+
+    drawerSearchInput.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+
+      const mainSearchInput = document.getElementById("search-input");
+      if (!mainSearchInput) return;
+
       closeMenu();
 
       setTimeout(() => {
         mainSearchInput.focus({ preventScroll: true });
-        if (mainDropdown) mainDropdown.hidden = false;
+        mainSearchInput.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Enter",
+            bubbles: true
+          })
+        );
       }, 220);
-    }
-  });
+    });
+  } else {
+    drawerSearchInput.setAttribute("readonly", "readonly");
 
-  drawerSearchInput.addEventListener("focus", () => {
-    const mainSearchInput = document.getElementById("search-input");
-
-    if (!mainSearchInput) return;
-
-    closeMenu();
-
-    setTimeout(() => {
-      mainSearchInput.focus({ preventScroll: true });
-    }, 220);
-  });
-} else {
-  drawerSearchInput.setAttribute("readonly", "readonly");
-
-  const routeToMainSearch = () => {
-    window.location.href = "search-mobile.html";
-  };
-
-  drawerSearchInput.addEventListener("click", routeToMainSearch);
-  drawerSearchInput.addEventListener("focus", (e) => {
-    e.preventDefault();
-    routeToMainSearch();
-  });
-}
+    drawerSearchInput.addEventListener("click", () => {
+      window.location.href = "search-mobile.html";
+    });
+  }
 }
 }
 /* =========================
