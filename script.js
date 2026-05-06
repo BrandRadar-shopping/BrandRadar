@@ -354,6 +354,31 @@ function initMobileDrawer() {
   const backBtn = drawer.querySelector(".mobile-drawer-back");
   const drawerSearchInput = document.getElementById("mobileDrawerSearchInput");
 
+  const drawerSearchSlot = document.getElementById("mobileDrawerSearchSlot");
+const siteSearch = document.getElementById("site-search");
+
+let siteSearchHomeMarker = null;
+
+if (siteSearch && siteSearch.parentNode) {
+  siteSearchHomeMarker = document.createComment("brandradar-site-search-home");
+  siteSearch.parentNode.insertBefore(siteSearchHomeMarker, siteSearch);
+}
+
+function moveSearchIntoDrawer() {
+  if (!document.body.classList.contains("is-search-page")) return;
+  if (!drawerSearchSlot || !siteSearch) return;
+
+  drawerSearchSlot.appendChild(siteSearch);
+  siteSearch.classList.add("is-in-drawer");
+}
+
+function moveSearchBack() {
+  if (!siteSearch || !siteSearchHomeMarker || !siteSearchHomeMarker.parentNode) return;
+
+  siteSearchHomeMarker.parentNode.insertBefore(siteSearch, siteSearchHomeMarker.nextSibling);
+  siteSearch.classList.remove("is-in-drawer");
+}
+
   if (openBtn) {
     openBtn.addEventListener("click", () => openMenu());
   }
