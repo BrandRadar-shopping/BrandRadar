@@ -365,17 +365,21 @@ function initMobileDrawer() {
   if (drawerSearchInput) {
     drawerSearchInput.setAttribute("readonly", "readonly");
 
-    const routeToMainSearch = () => {
-      const mainSearchInput = document.getElementById("search-input");
-      if (!mainSearchInput) return;
+   const routeToMainSearch = () => {
+  const mainSearchInput = document.getElementById("search-input");
 
-      closeMenu();
+  closeMenu();
 
-      setTimeout(() => {
-        mainSearchInput.focus({ preventScroll: true });
-        mainSearchInput.dispatchEvent(new Event("focus", { bubbles: true }));
-      }, 240);
-    };
+  setTimeout(() => {
+    if (mainSearchInput) {
+      mainSearchInput.focus({ preventScroll: true });
+      mainSearchInput.dispatchEvent(new Event("focus", { bubbles: true }));
+      return;
+    }
+
+    window.location.href = "search-mobile.html";
+  }, 240);
+};
 
     drawerSearchInput.addEventListener("click", routeToMainSearch);
     drawerSearchInput.addEventListener("focus", (e) => {
