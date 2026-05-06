@@ -412,6 +412,7 @@ function initMobileDrawer() {
   });
 }
 }
+}
 /* =========================
    SEARCH PAGE TRIGGERS
    Én stabil triggerkilde for search-mobile
