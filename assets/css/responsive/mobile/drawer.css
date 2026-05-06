@@ -1046,3 +1046,24 @@ body.is-search-page .mobile-drawer-search input {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.mobile-drawer-search-slot {
+  width: 100%;
+  min-width: 0;
+}
+
+.mobile-drawer-search-slot #site-search {
+  width: 100%;
+  max-width: none;
+}
+
+#site-search.is-in-drawer {
+  position: relative;
+}
+
+#site-search.is-in-drawer .search-dropdown {
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  width: 100%;
+}
