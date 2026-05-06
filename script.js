@@ -312,6 +312,7 @@ function initMobileDrawer() {
 
     drawer.hidden = false;
     overlay.hidden = false;
+    moveSearchIntoDrawer();
 
     drawer.classList.add("is-open");
     overlay.classList.add("is-open");
@@ -334,10 +335,10 @@ function initMobileDrawer() {
     document.body.classList.remove("is-locked");
 
     setTimeout(() => {
-      drawer.hidden = true;
-      overlay.hidden = true;
-    }, 220);
-  }
+  drawer.hidden = true;
+  overlay.hidden = true;
+  moveSearchBack();
+}, 220);
 
   window.BrandRadarDrawerAPI = {
     open: (cat = null) => openMenu(cat),
@@ -386,62 +387,8 @@ function moveSearchBack() {
   overlay.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
   if (backBtn) backBtn.addEventListener("click", closeMenu);
-
-  if (drawerSearchInput) {
-  const isSearchPage = document.body.classList.contains("is-search-page");
-
-  if (isSearchPage) {
-    drawerSearchInput.removeAttribute("readonly");
-
-    drawerSearchInput.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-
-    drawerSearchInput.addEventListener("focus", (e) => {
-      e.stopPropagation();
-    });
-
-    drawerSearchInput.addEventListener("input", () => {
-      const mainSearchInput = document.getElementById("search-input");
-      const mainDropdown = document.getElementById("search-dropdown");
-
-      if (!mainSearchInput) return;
-
-      mainSearchInput.value = drawerSearchInput.value;
-      mainSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
-
-      if (mainDropdown && drawerSearchInput.value.trim()) {
-        mainDropdown.hidden = false;
-      }
-    });
-
-    drawerSearchInput.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter") return;
-
-      const mainSearchInput = document.getElementById("search-input");
-      if (!mainSearchInput) return;
-
-      closeMenu();
-
-      setTimeout(() => {
-        mainSearchInput.focus({ preventScroll: true });
-        mainSearchInput.dispatchEvent(
-          new KeyboardEvent("keydown", {
-            key: "Enter",
-            bubbles: true
-          })
-        );
-      }, 220);
-    });
-  } else {
-    drawerSearchInput.setAttribute("readonly", "readonly");
-
-    drawerSearchInput.addEventListener("click", () => {
-      window.location.href = "search-mobile.html";
-    });
-  }
 }
-}
+  
 /* =========================
    SEARCH PAGE TRIGGERS
    Én stabil triggerkilde for search-mobile
