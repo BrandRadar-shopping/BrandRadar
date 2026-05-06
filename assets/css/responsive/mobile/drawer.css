@@ -1012,3 +1012,37 @@ body.is-search-page .mobile-drawer-search input {
   font-size: 14px;
   font-weight: 500;
 }
+
+.mobile-drawer-search {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mobile-drawer-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  font-size: 0;
+  pointer-events: none;
+}
+
+.mobile-drawer-search-icon::before {
+  content: "⌕";
+  font-size: 18px;
+  line-height: 1;
+  color: #64748b;
+}
+
+.mobile-drawer-search input {
+  width: 100%;
+  min-width: 0;
+  padding-left: 38px;
+  padding-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
