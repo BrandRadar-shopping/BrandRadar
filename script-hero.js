@@ -122,14 +122,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function scrollToSlide(index) {
-      index = (index + slides.length) % slides.length;
-      const target = slides[index];
-      if (!target) return;
+  index = (index + slides.length) % slides.length;
+  const target = slides[index];
+  if (!target) return;
 
-      const left = target.offsetLeft - 12;
-      slidesContainer.scrollTo({ left, behavior: "smooth" });
-      setActive(index);
-    }
+  const left = target.offsetLeft;
+  slidesContainer.scrollTo({ left, behavior: "smooth" });
+  setActive(index);
+}
 
     setActive(current);
 
