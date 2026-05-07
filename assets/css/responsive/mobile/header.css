@@ -260,50 +260,113 @@
 }
 
 @media (max-width: 768px) {
-  .main-header .brand-logo {
-    color: #111111 !important;
+  .main-header {
+    background: #fff !important;
   }
 
-  .main-header .brand-logo span {
-    color: #111111 !important;
-  }
-}
-
-@media (max-width: 768px) {
   .main-header .nav-container {
-    grid-template-columns: 42px minmax(0, 1fr) auto !important;
-    gap: 10px !important;
-    padding: 18px 22px 20px !important;
-  }
-
-  .main-header .brand-logo {
-    font-size: 22px !important;
-    letter-spacing: 0.02em !important;
-    justify-self: center !important;
+    display: grid !important;
+    grid-template-columns: 44px 1fr auto !important;
+    grid-template-areas:
+      "menu logo lang"
+      "search search search" !important;
+    align-items: center !important;
+    gap: 22px 12px !important;
+    padding: 24px 28px 26px !important;
+    background: #fff !important;
   }
 
   .main-header .mobile-menu-btn {
-    width: 36px !important;
-    min-width: 36px !important;
+    grid-area: menu !important;
+    justify-self: start !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #111 !important;
+    font-size: 26px !important;
+    line-height: 1 !important;
+  }
+
+  .main-header .brand-logo {
+    grid-area: logo !important;
+    position: static !important;
+    transform: none !important;
+    display: inline-flex !important;
+    justify-self: center !important;
+    align-self: center !important;
+    color: #050505 !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.035em !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .main-header .brand-logo span {
+    color: #111 !important;
+    font-weight: 500 !important;
   }
 
   .main-header .lang-switch {
-    font-size: 15px !important;
-    gap: 8px !important;
+    grid-area: lang !important;
+    justify-self: end !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+  }
+
+  .main-header .lang-btn {
+    color: #111 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+  }
+
+  .main-header .lang-btn.active,
+  .main-header .lang-btn[data-lang="no"] {
+    color: #006cff !important;
+  }
+
+  .main-header .lang-sep {
+    color: #a0a7b2 !important;
   }
 
   .main-header .search-box {
-    margin-top: 16px !important;
-    height: 54px !important;
-    border-radius: 16px !important;
+    grid-area: search !important;
+    width: 100% !important;
+    height: 58px !important;
+    margin: 0 !important;
+    border-radius: 18px !important;
+    background: #f8f9fb !important;
+    border: 1px solid rgba(15, 23, 42, 0.16) !important;
+    box-shadow: none !important;
+  }
+
+  .main-header .search-box .search-icon {
+    display: none !important;
   }
 
   .main-header .search-box input {
-    font-size: 16px !important;
-    padding-left: 18px !important;
+    height: 100% !important;
+    padding: 0 52px 0 22px !important;
+    font-size: 17px !important;
+    font-weight: 500 !important;
+    color: #111827 !important;
+  }
+
+  .main-header .search-box input::placeholder {
+    color: #8b8f98 !important;
+    opacity: 1 !important;
   }
 
   .main-header .search-clear {
-    right: 14px !important;
+    right: 18px !important;
+    color: #111 !important;
+    font-size: 22px !important;
   }
 }
