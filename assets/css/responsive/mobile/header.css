@@ -218,3 +218,26 @@
     opacity: 0.92;
   }
 }
+
+
+@media (max-width: 768px) {
+  .main-header .nav-container {
+    position: relative;
+  }
+
+  .main-header .brand-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .main-header .search-box .search-icon {
+    display: none !important;
+  }
+
+  .main-header .search-box input {
+    padding-left: 16px !important;
+  }
+}
