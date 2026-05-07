@@ -746,10 +746,10 @@
 
 .radar-benefit-image-wrap {
   width: 100%;
-  max-width: 1320px;
-  height: 270px;
+  max-width: 1180px;
+  height: 300px;
   margin: 6px auto 0;
-  border-radius: 34px;
+  border-radius: 30px;
   overflow: hidden;
 }
 
@@ -758,8 +758,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  border-radius: 34px;
+  object-position: center 62%;
+  border-radius: 30px;
 }
 
 @media (max-width: 768px) {
