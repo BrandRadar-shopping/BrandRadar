@@ -746,35 +746,18 @@
 
 .radar-benefit-image-wrap {
   width: 100%;
-  max-width: 1180px;
-  height: 300px;
-  margin: 6px auto 0;
-  border-radius: 30px;
-  overflow: hidden;
+  max-width: 1320px;
+  margin: 8px auto 0;
 }
 
 .radar-benefit-image {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 55%;
-  border-radius: 30px;
+  height: auto;
 }
 
 @media (max-width: 768px) {
   .radar-benefit-image-wrap {
-    max-width: 100%;
-    height: auto;
     margin-top: 10px;
-    border-radius: 24px;
-  }
-
-  .radar-benefit-image {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    object-position: center center;
-    border-radius: 24px;
   }
 }
