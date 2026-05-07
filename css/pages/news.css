@@ -743,3 +743,17 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.radar-benefit-image-wrap {
+  width: 100%;
+  margin-top: 22px;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.radar-benefit-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 28px;
+}
