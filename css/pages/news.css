@@ -746,15 +746,22 @@
 
 .radar-benefit-image-wrap {
   width: 100%;
-  max-width: 940px;
-  margin: -5px auto 0;
-  border-radius: 28px;
-  overflow: hidden;
+  max-width: 1280px;
+  margin: 6px auto 0;
 }
 
 .radar-benefit-image {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 28px;
+}
+
+@media (min-width: 769px) {
+  .news-section--picks {
+    padding-bottom: 40px;
+  }
+
+  .radar-picks-section .container {
+    max-width: 1420px;
+  }
 }
