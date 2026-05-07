@@ -188,6 +188,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (isTouchMode) {
+      slidesContainer.style.scrollSnapType = "x mandatory";
+slides.forEach(slide => {
+  slide.style.scrollSnapAlign = "center";
+});
       let rafId = null;
 
       const onScroll = () => {
