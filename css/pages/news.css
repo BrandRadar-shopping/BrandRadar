@@ -747,7 +747,7 @@
 .radar-benefit-image-wrap {
   width: 100%;
   max-width: 1280px;
-  margin: 4px auto 0;
+  margin: -2px auto 0;
 }
 
 .radar-benefit-image {
