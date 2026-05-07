@@ -207,30 +207,47 @@
 }
 
 @media (max-width: 768px) {
-  .brand-logo {
-    color: #0f1115;
-    font-weight: 650;
-  }
-
-  .brand-logo span {
-    color: #0f1115;
-    font-weight: 500;
-    opacity: 0.92;
-  }
-}
-
-
-@media (max-width: 768px) {
   .main-header .nav-container {
-    position: relative;
+    display: grid !important;
+    grid-template-columns: 44px 1fr auto !important;
+    grid-template-areas:
+      "menu logo lang"
+      "search search search" !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .main-header .mobile-menu-btn {
+    grid-area: menu !important;
+    justify-self: start !important;
   }
 
   .main-header .brand-logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    white-space: nowrap;
+    grid-area: logo !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: inline-flex !important;
+    justify-self: center !important;
+    align-self: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 2 !important;
+    white-space: nowrap !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+  }
+
+  .main-header .lang-switch {
+    grid-area: lang !important;
+    justify-self: end !important;
+  }
+
+  .main-header .search-box {
+    grid-area: search !important;
+    width: 100% !important;
   }
 
   .main-header .search-box .search-icon {
