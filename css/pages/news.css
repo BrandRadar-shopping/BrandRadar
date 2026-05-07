@@ -746,30 +746,31 @@
 
 .radar-benefit-image-wrap {
   width: 100%;
-  max-width: 1280px;
-  margin: -2px auto 0;
+  max-width: 1040px;
+  height: 210px;
+  margin: 2px auto 0;
+  border-radius: 28px;
+  overflow: hidden;
 }
 
 .radar-benefit-image {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 28px;
 }
 
-@media (min-width: 769px) {
-  .news-section--picks {
-    padding-bottom: 42px;
-    background: transparent;
-  }
-
-  .radar-picks-section .container {
-    max-width: 1420px;
-  }
-
+@media (max-width: 768px) {
   .radar-benefit-image-wrap {
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    overflow: visible;
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .radar-benefit-image {
+    height: auto;
+    object-fit: contain;
   }
 }
