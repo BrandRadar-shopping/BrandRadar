@@ -4,222 +4,63 @@
    ===================================================== */
 
 @media (max-width: 768px) {
-
-  .nav-container > * { min-width: 0; }
-  .top-links { min-width: 0; }
-  .search-box,
-  #site-search { min-width: 0; max-width: 100%; }
-
-  /* Header sticky + stacking */
   .main-header {
     position: sticky;
     top: 0;
     z-index: 9999;
-    background: #fff;
-    isolation: isolate;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
     width: 100%;
     margin: 0;
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.10);
+    isolation: isolate;
   }
 
-  /* Viktig: søk-dropdown må ikke klippes */
   .main-header,
   .nav-container,
   .search-box {
     overflow: visible !important;
   }
 
-  /* Mobil layout: 2 rader */
-  .nav-container {
-    position: relative;
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    grid-template-areas:
-      "menu topspacer"
-      "search search";
-    gap: 10px;
-    padding: 10px 12px;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-  }
-
-  /* Grid-barn må kunne krympe */
-  .nav-container > * { min-width: 0; }
-
-  /* Hamburger */
-  .mobile-menu-btn {
-    grid-area: menu;
-    width: 44px;
-    height: 44px;
-    border: 0;
-    background: transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    font-size: 20px;
-    line-height: 1;
-    color: #111;
-    z-index: 2;
-  }
-
-  /* Logo – ekte sentrert i hele headeren */
-  .logo {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-decoration: none;
-    line-height: 44px;
-    height: 44px;
-    color: #111;
-    font-weight: 900;
-    font-size: 18px;
-    letter-spacing: -0.3px;
-    white-space: nowrap;
-    z-index: 1;
-    pointer-events: auto;
-  }
-
-  /* Top-links skjules i mobil-header
-     Navigasjon håndteres av drawer + bottom-nav */
-  .top-links {
-    display: none !important;
-  }
-
-  #favorites-count {
-    display: none !important;
-  }
-
-  /* Search */
-  .search-box {
-    position: relative;
-    grid-area: search;
-    width: 100%;
-    max-width: 100%;
+  .nav-container > *,
+  .top-links,
+  .search-box,
+  #site-search {
     min-width: 0;
-    display: block;
-  }
-
-  #search-input {
-    width: 100%;
     max-width: 100%;
-    min-width: 0;
-    height: 44px;
-    border-radius: 12px;
-    padding-left: 40px;
-    padding-right: 40px;
-    background: #f3f4f6;
-    border: 1px solid rgba(0,0,0,0.12);
-    color: #111;
-    outline: none;
-    font-size: 15px;
   }
 
-  #search-input::placeholder {
-    color: rgba(0,0,0,0.45);
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #111;
-    opacity: 0.9;
-  }
-
-  .search-clear {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 34px;
-    height: 34px;
-    border: 0;
-    background: transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    color: #111;
-    opacity: 0.9;
-  }
-
-  /* Dropdown over alt (men under drawer) */
-  .search-dropdown {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(44px + 10px);
-    z-index: 10000;
-    border-radius: 12px;
-    max-height: 60vh;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .search-dropdown[hidden] {
-    display: none !important;
-  }
-
-  /* Mobil: category-bar + mega-menu skjules (drawer + bottom-nav overtar) */
-  .category-bar { display: none !important; }
-  nav.mega-menu { display: none !important; }
-}
-
-/* Tight mode: små skjermer (iPhone SE / 320px) */
-@media (max-width: 360px) {
-
-  .nav-container {
-    padding: 8px 10px;
-    gap: 8px;
-    grid-template-columns: 40px 1fr;
-  }
-
-  .mobile-menu-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .logo {
-    top: 8px;
-    font-size: 17px;
-    line-height: 40px;
-    height: 40px;
-  }
-
-  #search-input {
-    height: 42px;
-    font-size: 14px;
-    padding-left: 38px;
-    padding-right: 34px;
-  }
-
-  .search-clear {
-    width: 32px;
-    height: 32px;
-    right: 8px;
-  }
-}
-
-@media (max-width: 768px) {
   .main-header .nav-container {
     display: grid !important;
-    grid-template-columns: 44px 1fr auto !important;
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
     grid-template-areas:
       "menu logo lang"
       "search search search" !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 22px 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 24px 28px 26px !important;
+    background: #ffffff !important;
   }
 
   .main-header .mobile-menu-btn {
     grid-area: menu !important;
     justify-self: start !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #111111 !important;
+    font-size: 26px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 2;
   }
 
   .main-header .brand-logo {
@@ -232,82 +73,20 @@
     display: inline-flex !important;
     justify-self: center !important;
     align-self: center !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 2 !important;
-    white-space: nowrap !important;
-    font-size: 24px !important;
-    line-height: 1 !important;
-  }
-
-  .main-header .lang-switch {
-    grid-area: lang !important;
-    justify-self: end !important;
-  }
-
-  .main-header .search-box {
-    grid-area: search !important;
-    width: 100% !important;
-  }
-
-  .main-header .search-box .search-icon {
-    display: none !important;
-  }
-
-  .main-header .search-box input {
-    padding-left: 16px !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .main-header {
-    background: #fff !important;
-  }
-
-  .main-header .nav-container {
-    display: grid !important;
-    grid-template-columns: 44px 1fr auto !important;
-    grid-template-areas:
-      "menu logo lang"
-      "search search search" !important;
-    align-items: center !important;
-    gap: 22px 12px !important;
-    padding: 24px 28px 26px !important;
-    background: #fff !important;
-  }
-
-  .main-header .mobile-menu-btn {
-    grid-area: menu !important;
-    justify-self: start !important;
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    border: 0 !important;
-    background: transparent !important;
-    color: #111 !important;
-    font-size: 26px !important;
-    line-height: 1 !important;
-  }
-
-  .main-header .brand-logo {
-    grid-area: logo !important;
-    position: static !important;
-    transform: none !important;
-    display: inline-flex !important;
-    justify-self: center !important;
-    align-self: center !important;
     color: #050505 !important;
     font-size: 24px !important;
     font-weight: 800 !important;
     letter-spacing: 0.035em !important;
     line-height: 1 !important;
     white-space: nowrap !important;
+    text-decoration: none !important;
     opacity: 1 !important;
     visibility: visible !important;
+    z-index: 2 !important;
   }
 
   .main-header .brand-logo span {
-    color: #111 !important;
+    color: #111111 !important;
     font-weight: 500 !important;
   }
 
@@ -319,12 +98,17 @@
     gap: 10px !important;
     font-size: 16px !important;
     font-weight: 700 !important;
+    line-height: 1 !important;
   }
 
   .main-header .lang-btn {
-    color: #111 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #111111 !important;
     font-size: 16px !important;
     font-weight: 700 !important;
+    padding: 0 !important;
+    cursor: pointer;
   }
 
   .main-header .lang-btn.active,
@@ -336,11 +120,18 @@
     color: #a0a7b2 !important;
   }
 
+  .main-header .top-links,
+  #favorites-count {
+    display: none !important;
+  }
+
   .main-header .search-box {
     grid-area: search !important;
+    position: relative !important;
     width: 100% !important;
     height: 58px !important;
     margin: 0 !important;
+    display: block !important;
     border-radius: 18px !important;
     background: #f8f9fb !important;
     border: 1px solid rgba(15, 23, 42, 0.16) !important;
@@ -351,22 +142,97 @@
     display: none !important;
   }
 
-  .main-header .search-box input {
+  .main-header #search-input {
+    width: 100% !important;
     height: 100% !important;
-    padding: 0 52px 0 22px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    border: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    color: #111827 !important;
     font-size: 17px !important;
     font-weight: 500 !important;
-    color: #111827 !important;
+    padding: 0 52px 0 22px !important;
   }
 
-  .main-header .search-box input::placeholder {
+  .main-header #search-input::placeholder {
     color: #8b8f98 !important;
     opacity: 1 !important;
   }
 
   .main-header .search-clear {
+    position: absolute !important;
     right: 18px !important;
-    color: #111 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 34px !important;
+    height: 34px !important;
+    border: 0 !important;
+    background: transparent !important;
+    border-radius: 10px !important;
+    color: #111111 !important;
     font-size: 22px !important;
+    line-height: 1 !important;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .search-dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(58px + 10px);
+    z-index: 10000;
+    border-radius: 14px;
+    max-height: 60vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .search-dropdown[hidden] {
+    display: none !important;
+  }
+
+  .category-bar,
+  nav.mega-menu {
+    display: none !important;
+  }
+}
+
+/* Tight mode: små skjermer */
+@media (max-width: 360px) {
+  .main-header .nav-container {
+    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    gap: 18px 8px !important;
+    padding: 22px 22px 24px !important;
+  }
+
+  .main-header .mobile-menu-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    font-size: 24px !important;
+  }
+
+  .main-header .brand-logo {
+    font-size: 21px !important;
+    letter-spacing: 0.025em !important;
+  }
+
+  .main-header .lang-switch,
+  .main-header .lang-btn {
+    font-size: 15px !important;
+  }
+
+  .main-header .search-box {
+    height: 54px !important;
+    border-radius: 16px !important;
+  }
+
+  .main-header #search-input {
+    font-size: 15px !important;
+    padding-left: 18px !important;
+    padding-right: 48px !important;
   }
 }
