@@ -258,3 +258,13 @@
     padding-left: 16px !important;
   }
 }
+
+@media (max-width: 768px) {
+  .main-header .brand-logo {
+    color: #111111 !important;
+  }
+
+  .main-header .brand-logo span {
+    color: #111111 !important;
+  }
+}
