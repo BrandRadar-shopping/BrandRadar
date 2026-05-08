@@ -744,3 +744,28 @@ nav.mega-menu .menu-section a:hover {
     font-size: 0.95rem !important;
   }
 }
+
+/* =========================================
+   SEARCH RESULT SPACING FIX
+========================================= */
+
+.search-results {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important; /* ← luft mellom kortene */
+}
+
+.search-item {
+  margin: 0 !important;
+}
+
+.search-title {
+  font-family: "Manrope", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.search-price .sp-new {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 700 !important;
+}
