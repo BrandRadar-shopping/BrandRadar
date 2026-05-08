@@ -79,8 +79,16 @@
   }
 
   function priceInfo(p) {
-    const price = parseNum(p.price);
-    const oldPrice = parseNum(p.old_price) ?? parseNum(p.oldPrice);
+    const offerLowest = p?.offer_summary?.hasOffers
+      ? parseNum(p.offer_summary.lowestPrice)
+      : null;
+
+    const offerOld = p?.offer_summary?.hasOffers
+      ? parseNum(p.offer_summary.highestOldPrice || p.offer_summary.oldPrice)
+      : null;
+
+    const price = offerLowest ?? parseNum(p.price);
+    const oldPrice = offerOld ?? parseNum(p.old_price) ?? parseNum(p.oldPrice);
     const discount = parseNum(p.discount);
 
     let computedOld = oldPrice;
@@ -337,6 +345,11 @@
         ]);
 
         products = Array.isArray(masterRows) ? masterRows : [];
+
+        if (window.BrandRadarOffersEngine) {
+          products = await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(products);
+        }
+
         brands = Array.isArray(brandRows) ? brandRows : [];
 
         if (!brands.length) {
@@ -440,11 +453,11 @@
     loadData();
 
     if (isSearchPage) {
-  closeDropdown();
+      closeDropdown();
 
-  setTimeout(() => {
-    input.blur();
-  }, 100);
-}
+      setTimeout(() => {
+        input.blur();
+      }, 100);
+    }
   }
 })();
