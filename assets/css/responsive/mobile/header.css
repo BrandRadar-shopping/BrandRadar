@@ -236,3 +236,95 @@
     padding-right: 48px !important;
   }
 }
+
+/* =====================================================
+   SEARCH-MOBILE PAGE — visible search field fix
+   ===================================================== */
+
+@media (max-width: 768px) {
+  body.is-search-page .m-search-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 14px 14px 12px;
+  }
+
+  body.is-search-page .m-search-top {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+  }
+
+  body.is-search-page .m-back-btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 14px;
+    background: #f5f5f5;
+    color: #111827;
+    font-size: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body.is-search-page #site-search.m-search-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    background: #f8f9fb;
+    border: 1px solid rgba(15, 23, 42, 0.16);
+    border-radius: 16px;
+    overflow: visible;
+  }
+
+  body.is-search-page #site-search .search-icon {
+    display: none !important;
+  }
+
+  body.is-search-page #search-input {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 48px 0 16px !important;
+  }
+
+  body.is-search-page #search-input::placeholder {
+    color: #8b8f98;
+    opacity: 1;
+  }
+
+  body.is-search-page .search-clear {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    color: #111827;
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body.is-search-page .search-dropdown {
+    top: calc(100% + 10px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+  }
+}
