@@ -635,16 +635,46 @@ nav.mega-menu .menu-section a:hover {
     flex: 0 0 auto !important;
   }
 
-  .main-header .lang-switch {
-    order: 99 !important;
+}
+
+/* =====================================================
+   DESKTOP HEADER — language switch
+   ===================================================== */
+
+@media (min-width: 769px) {
+  .main-header .nav-container > .lang-switch {
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
-    margin-left: 18px !important;
-    margin-top: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
+    margin-left: 16px !important;
     flex: 0 0 auto !important;
     white-space: nowrap !important;
+    color: #ffffff !important;
+  }
+
+  .main-header .nav-container > .lang-switch::before {
+    content: "🌐";
+    font-size: 14px;
+    line-height: 1;
+    margin-right: 2px;
+  }
+
+  .main-header .nav-container > .lang-switch .lang-btn {
+    display: inline-flex !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: rgba(255,255,255,0.82) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 2px 3px !important;
+    cursor: pointer;
+  }
+
+  .main-header .nav-container > .lang-switch .lang-btn.active {
+    color: #4da3ff !important;
+  }
+
+  .main-header .nav-container > .lang-switch .lang-sep {
+    color: rgba(255,255,255,0.45) !important;
   }
 }
