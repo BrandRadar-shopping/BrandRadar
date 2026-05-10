@@ -162,7 +162,7 @@ const BR_MENU_ICON_ASSETS = {
   "Elektronikk": "icons/menu/accessories/watch.svg",
   "Strikker": "icons/menu/supplements/band.svg",
   "Hjemmetrening": "icons/menu/supplements/home-gym.svg",
-  "Kampsport": "icons/menu/supplements/glove.svg",
+  "Kampsport": "icons/menu/supplements/combat.svg",
   "Massasjeverktøy": "icons/menu/supplements/massage.svg",
   "Vannflasker & shakers": "icons/menu/supplements/bottle.svg",
   "Vekter & apparater": "icons/menu/supplements/dumbbell.svg",
