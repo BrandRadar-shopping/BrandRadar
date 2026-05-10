@@ -31,9 +31,9 @@
 
   .main-header .nav-container {
     display: grid !important;
-    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
     grid-template-areas:
-      "menu logo lang"
+      "menu logo spacer"
       "search search search" !important;
     align-items: center !important;
     gap: 22px 12px !important;
@@ -91,33 +91,7 @@
   }
 
   .main-header .lang-switch {
-    grid-area: lang !important;
-    justify-self: end !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-  }
-
-  .main-header .lang-btn {
-    border: 0 !important;
-    background: transparent !important;
-    color: #111111 !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    padding: 0 !important;
-    cursor: pointer;
-  }
-
-  .main-header .lang-btn.active,
-  .main-header .lang-btn[data-lang="no"] {
-    color: #006cff !important;
-  }
-
-  .main-header .lang-sep {
-    color: #a0a7b2 !important;
+    display: none !important;
   }
 
   .main-header .top-links,
@@ -203,7 +177,7 @@
 /* Tight mode: små skjermer */
 @media (max-width: 360px) {
   .main-header .nav-container {
-    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    grid-template-columns: 38px minmax(0, 1fr) 38px !important;
     gap: 18px 8px !important;
     padding: 22px 22px 24px !important;
   }
@@ -218,11 +192,6 @@
   .main-header .brand-logo {
     font-size: 21px !important;
     letter-spacing: 0.025em !important;
-  }
-
-  .main-header .lang-switch,
-  .main-header .lang-btn {
-    font-size: 15px !important;
   }
 
   .main-header .search-box {
