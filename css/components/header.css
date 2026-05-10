@@ -618,3 +618,33 @@ nav.mega-menu .menu-section a:hover {
     font-size: 0.95rem !important;
   }
 }
+
+/* =====================================================
+   DESKTOP HEADER — language position fix
+   ===================================================== */
+
+@media (min-width: 769px) {
+  .main-header .nav-container {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .main-header .top-links {
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  .main-header .lang-switch {
+    order: 3 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: 18px !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
