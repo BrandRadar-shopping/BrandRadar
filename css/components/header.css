@@ -636,7 +636,7 @@ nav.mega-menu .menu-section a:hover {
   }
 
   .main-header .lang-switch {
-    order: 3 !important;
+    order: 99 !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
