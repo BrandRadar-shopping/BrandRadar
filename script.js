@@ -25,8 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
       menuContainer.innerHTML = html;
       console.log("✅ Mega-menu loaded into DOM");
       initDesktopMegaMenuIcons();
-      initDesktopMegaMenuHover();
       initDesktopMegaMenuRoutingSlugs();
+      brApplyMegaMenuLanguage(menuContainer);
+      initDesktopMegaMenuHover();
     })
     .catch((err) => console.error(err));
 });
@@ -50,33 +51,6 @@ function slugifyBrandRadar(txt) {
     .trim();
 }
 
-function mapHeadingToGender(headerText) {
-  const lower = String(headerText || "").trim().toLowerCase();
-  if (lower === "herre") return "Men";
-  if (lower === "dame") return "Women";
-  if (lower === "barn") return "Kids";
-  return null;
-}
-
-function getKidtypeFromLink(link, genderSlug) {
-  if (genderSlug !== "Kids") return null;
-
-  const ul = link.closest("ul");
-  if (!ul) return null;
-
-  let prev = ul.previousElementSibling;
-  while (prev) {
-    if (prev.classList && prev.classList.contains("menu-subtitle")) {
-      const txt = prev.textContent.trim();
-      if (txt === "Jente" || txt === "Gutt") return txt;
-      return null;
-    }
-    prev = prev.previousElementSibling;
-  }
-
-  return null;
-}
-
 /* =========================================================
    MEGA MENU LANGUAGE HELPERS
    - Bruker norsk originaltekst til routing/icons
@@ -95,6 +69,18 @@ const BR_MEGA_MENU_TRANSLATIONS = {
     "Kosttilskudd": "Supplements",
     "Utstyr": "Equipment",
 
+    "Klær": "Clothing",
+    "Sko": "Shoes",
+    "Tilbehør": "Accessories",
+    "Selfcare": "Selfcare",
+    "Gymcorner": "Gymcorner",
+
+    "Se alle i Klær": "See all in Clothing",
+    "Se alle i Sko": "See all in Shoes",
+    "Se alle i Gymcorner": "See all in Gymcorner",
+    "Se alle i Tilbehør": "See all in Accessories",
+    "Se alle i Selfcare": "See all in Selfcare",
+
     "Gensere & hoodies": "Sweaters & hoodies",
     "Sweats & hettegensere": "Sweats & hoodies",
     "T-skjorter": "T-shirts",
@@ -103,6 +89,7 @@ const BR_MEGA_MENU_TRANSLATIONS = {
     "Skjorter": "Shirts",
     "Bukser": "Pants",
     "Bukser & shorts": "Pants & shorts",
+    "Jeans": "Jeans",
     "Jakker": "Jackets",
     "Jakker & blazere": "Jackets & blazers",
     "Yttertøy": "Outerwear",
@@ -112,6 +99,7 @@ const BR_MEGA_MENU_TRANSLATIONS = {
     "Gensere & cardigans": "Sweaters & cardigans",
     "Kjoler": "Dresses",
     "Skjørt": "Skirts",
+    "Gymwear": "Gymwear",
     "Dress & pentøy": "Suits & formalwear",
     "Dresser": "Suits",
     "Undertøy & sokker": "Underwear & socks",
@@ -120,8 +108,10 @@ const BR_MEGA_MENU_TRANSLATIONS = {
     "Sportsklær": "Sportswear",
     "Onepiece": "Onepiece",
 
+    "Sneakers": "Sneakers",
     "Boots & støvler": "Boots",
     "Støvletter": "Ankle boots",
+    "Boots": "Boots",
     "Støvler": "Boots",
     "Støvler & støvletter": "Boots & ankle boots",
     "Snøresko / Pensko": "Lace-ups / dress shoes",
@@ -235,6 +225,36 @@ window.addEventListener("brandradar:languagechange", () => {
   brApplyMegaMenuLanguage(document);
 });
 
+function mapHeadingToGender(headerText) {
+  const original = String(headerText || "").trim();
+  const lower = original.toLowerCase();
+
+  if (lower === "herre" || lower === "men") return "Men";
+  if (lower === "dame" || lower === "women") return "Women";
+  if (lower === "barn" || lower === "kids") return "Kids";
+
+  return null;
+}
+
+function getKidtypeFromLink(link, genderSlug) {
+  if (genderSlug !== "Kids") return null;
+
+  const ul = link.closest("ul");
+  if (!ul) return null;
+
+  let prev = ul.previousElementSibling;
+  while (prev) {
+    if (prev.classList && prev.classList.contains("menu-subtitle")) {
+      const txt = prev.dataset.brOriginalLabel || prev.textContent.trim();
+      if (txt === "Jente" || txt === "Gutt") return txt;
+      return null;
+    }
+    prev = prev.previousElementSibling;
+  }
+
+  return null;
+}
+
 /* =========================================================
    BRANDRADAR MENU ICONS — SVG asset based (UPDATED PATHS)
    ========================================================= */
@@ -276,7 +296,7 @@ const BR_MENU_ICON_ASSETS = {
   "Sportsklær": "icons/menu/clothing/sport.svg",
 
   "Dress & pentøy": "icons/menu/clothing/suit.svg",
-"Dresser": "icons/menu/clothing/suit.svg",
+  "Dresser": "icons/menu/clothing/suit.svg",
 
   "Undertøy & sokker": "icons/menu/clothing/socks.svg",
   "Onepiece": "icons/menu/clothing/onesie.svg",
@@ -287,11 +307,11 @@ const BR_MENU_ICON_ASSETS = {
   "Sneakers": "icons/menu/shoes/sneakers.svg",
 
   "Boots & støvler": "icons/menu/shoes/women-boots.svg",
-"Støvletter": "icons/menu/shoes/women-boots.svg",
+  "Støvletter": "icons/menu/shoes/women-boots.svg",
 
-"Boots": "icons/menu/shoes/men-boots.svg",
-"Støvler": "icons/menu/shoes/men-boots.svg",
-"Støvler & støvletter": "icons/menu/shoes/men-boots.svg",
+  "Boots": "icons/menu/shoes/men-boots.svg",
+  "Støvler": "icons/menu/shoes/men-boots.svg",
+  "Støvler & støvletter": "icons/menu/shoes/men-boots.svg",
 
   "Snøresko / Pensko": "icons/menu/shoes/dress-shoes.svg",
   "Høye hæler / Pumps": "icons/menu/shoes/heels.svg",
@@ -410,11 +430,16 @@ function initDesktopMegaMenuIcons() {
     if (link.querySelector(".desktop-menu-icon")) return;
 
     const label = link.textContent.trim();
+    link.dataset.brOriginalLabel = label;
 
     link.innerHTML = `
       <span class="desktop-menu-icon" aria-hidden="true">${brMenuIcon(label)}</span>
-      <span class="desktop-menu-label">${label}</span>
+      <span class="desktop-menu-label" data-br-original-label="${label}">${label}</span>
     `;
+  });
+
+  document.querySelectorAll("nav.mega-menu h4, nav.mega-menu .menu-subtitle").forEach((el) => {
+    brStoreOriginalLabel(el);
   });
 }
 
@@ -465,11 +490,12 @@ function initDesktopMegaMenuRoutingSlugs() {
     const categorySlug = slugifyBrandRadar(panelId);
 
     panel.querySelectorAll("li a").forEach((link) => {
-      const text = link.textContent.trim();
+      const text = link.dataset.brOriginalLabel || link.textContent.trim();
       const textSlug = slugifyBrandRadar(text);
 
       const section = link.closest(".menu-section");
-      const headerText = section?.querySelector("h4")?.textContent.trim() || "";
+      const headerEl = section?.querySelector("h4");
+      const headerText = headerEl?.dataset.brOriginalLabel || headerEl?.textContent.trim() || "";
       const genderSlug = mapHeadingToGender(headerText);
       const isBrandLink = section?.classList.contains("brands");
       const kidtype = getKidtypeFromLink(link, genderSlug);
@@ -538,12 +564,11 @@ function initMobileDrawer() {
     document.body.classList.remove("is-locked");
 
     setTimeout(() => {
-  drawer.hidden = true;
-  overlay.hidden = true;
-  moveSearchBack();
-}, 220);
-
-    }
+      drawer.hidden = true;
+      overlay.hidden = true;
+      moveSearchBack();
+    }, 220);
+  }
 
   window.BrandRadarDrawerAPI = {
     open: (cat = null) => openMenu(cat),
@@ -561,29 +586,29 @@ function initMobileDrawer() {
   const drawerSearchInput = document.getElementById("mobileDrawerSearchInput");
 
   const drawerSearchSlot = document.getElementById("mobileDrawerSearchSlot");
-const siteSearch = document.getElementById("site-search");
+  const siteSearch = document.getElementById("site-search");
 
-let siteSearchHomeMarker = null;
+  let siteSearchHomeMarker = null;
 
-if (siteSearch && siteSearch.parentNode) {
-  siteSearchHomeMarker = document.createComment("brandradar-site-search-home");
-  siteSearch.parentNode.insertBefore(siteSearchHomeMarker, siteSearch);
-}
+  if (siteSearch && siteSearch.parentNode) {
+    siteSearchHomeMarker = document.createComment("brandradar-site-search-home");
+    siteSearch.parentNode.insertBefore(siteSearchHomeMarker, siteSearch);
+  }
 
-function moveSearchIntoDrawer() {
-  if (!document.body.classList.contains("is-search-page")) return;
-  if (!drawerSearchSlot || !siteSearch) return;
+  function moveSearchIntoDrawer() {
+    if (!document.body.classList.contains("is-search-page")) return;
+    if (!drawerSearchSlot || !siteSearch) return;
 
-  drawerSearchSlot.appendChild(siteSearch);
-  siteSearch.classList.add("is-in-drawer");
-}
+    drawerSearchSlot.appendChild(siteSearch);
+    siteSearch.classList.add("is-in-drawer");
+  }
 
-function moveSearchBack() {
-  if (!siteSearch || !siteSearchHomeMarker || !siteSearchHomeMarker.parentNode) return;
+  function moveSearchBack() {
+    if (!siteSearch || !siteSearchHomeMarker || !siteSearchHomeMarker.parentNode) return;
 
-  siteSearchHomeMarker.parentNode.insertBefore(siteSearch, siteSearchHomeMarker.nextSibling);
-  siteSearch.classList.remove("is-in-drawer");
-}
+    siteSearchHomeMarker.parentNode.insertBefore(siteSearch, siteSearchHomeMarker.nextSibling);
+    siteSearch.classList.remove("is-in-drawer");
+  }
 
   if (openBtn) {
     openBtn.addEventListener("click", () => openMenu());
@@ -666,21 +691,25 @@ function initMobileBrowseMenu() {
     });
 
     if (drawerSearchInput) {
-      drawerSearchInput.placeholder = "Søk produkter eller merker";
+      drawerSearchInput.placeholder = window.BrandRadarLang?.t?.("search_placeholder", "Søk produkter eller merker") || "Søk produkter eller merker";
     }
   }
 
   function rowHTML(label, href) {
+    const displayLabel = brTranslateMenuLabel(label);
+
     return `
       <a class="m-row" href="${href}">
         <span class="m-row-icon" aria-hidden="true">${brMenuIcon(label)}</span>
-        <span class="m-row-label">${escapeHtml(label)}</span>
+        <span class="m-row-label" data-br-original-label="${escapeHtml(label)}">${escapeHtml(displayLabel)}</span>
         <span class="m-row-arrow" aria-hidden="true">›</span>
       </a>
     `;
   }
 
   function levelButtonHTML(label, index, isActive) {
+    const displayLabel = brTranslateMenuLabel(label);
+
     return `
       <button
         class="m-level-btn ${isActive ? "is-active" : ""}"
@@ -688,7 +717,7 @@ function initMobileBrowseMenu() {
         data-group-index="${index}"
         aria-pressed="${isActive ? "true" : "false"}"
       >
-        <span class="m-level-btn-label">${escapeHtml(label)}</span>
+        <span class="m-level-btn-label" data-br-original-label="${escapeHtml(label)}">${escapeHtml(displayLabel)}</span>
       </button>
     `;
   }
@@ -795,14 +824,18 @@ function initMobileBrowseMenu() {
       selfcare: "Selfcare"
     };
 
+    const fallbackLabel = labelMap[cat] || "Kategorier";
+
     setActiveTopcat(cat);
     resultsWrap.hidden = false;
     levelTwoWrap.innerHTML = "";
     levelTwoWrap.hidden = true;
-    subcatTitleEl.textContent = labelMap[cat] || "Kategorier";
+
+    subcatTitleEl.dataset.brOriginalLabel = fallbackLabel;
+    subcatTitleEl.textContent = brTranslateMenuLabel(fallbackLabel);
 
     subcatGrid.innerHTML = rowHTML(
-      `Se alle i ${labelMap[cat] || cat}`,
+      `Se alle i ${fallbackLabel}`,
       `category.html?category=${encodeURIComponent(cat)}`
     );
 
@@ -839,7 +872,8 @@ function initMobileBrowseMenu() {
     const subcats = collectSubLinks(group);
     const brands = collectBrandLinks(group);
 
-    subcatTitleEl.textContent = group.label;
+    subcatTitleEl.dataset.brOriginalLabel = group.label;
+    subcatTitleEl.textContent = brTranslateMenuLabel(group.label);
     resultsWrap.hidden = false;
 
     subcatGrid.innerHTML = subcats.length
@@ -862,6 +896,8 @@ function initMobileBrowseMenu() {
         return `<a class="m-brand-pill" href="${href}">${escapeHtml(brand)}</a>`;
       })
       .join("");
+
+    brApplyMegaMenuLanguage(drawer);
   }
 
   function loadMegaOnce() {
@@ -919,6 +955,10 @@ function initMobileBrowseMenu() {
 
   document.addEventListener("brandradar:drawer:set-category", (e) => {
     setCategory(e.detail?.cat);
+  });
+
+  window.addEventListener("brandradar:languagechange", () => {
+    render();
   });
 
   const activeCatBtn = drawer.querySelector(".m-chip.is-active[data-cat]");
