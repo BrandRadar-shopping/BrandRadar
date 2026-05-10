@@ -190,7 +190,7 @@ const BR_MENU_ICON_ASSETS = {
   "Belter": "icons/menu/accessories/belt.svg",
   "Lommebøker": "icons/menu/accessories/wallet.svg",
 
-  "Slips & Tilbehør": "icons/menu/clothing/tie.svg",
+  "Slips & Tilbehør": "icons/menu/accessories/tie.svg",
   "Hatter & hodeskjerf": "icons/menu/accessories/hat.svg",
 
   "Hårpynt": "icons/menu/accessories/sparkle.svg",
