@@ -117,8 +117,8 @@ const BR_MENU_ICON_ASSETS = {
   "Sport & trening": "icons/menu/clothing/sport.svg",
   "Sportsklær": "icons/menu/clothing/sport.svg",
 
-  "Dress & pentøy": "icons/menu/clothing/tie.svg",
-  "Dresser": "icons/menu/clothing/tie.svg",
+  "Dress & pentøy": "icons/menu/clothing/suit.svg",
+"Dresser": "icons/menu/clothing/suit.svg",
 
   "Undertøy & sokker": "icons/menu/clothing/socks.svg",
   "Onepiece": "icons/menu/clothing/onesie.svg",
