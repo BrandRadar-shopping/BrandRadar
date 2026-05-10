@@ -144,7 +144,7 @@ const BR_MENU_ICON_ASSETS = {
   "Sandaler / Åpne sko": "icons/menu/shoes/woman-sandal.svg",
   "Sandaler / Badesko": "icons/menu/shoes/sandals.svg",
 
-  "Tøfler": "icons/menu/shoes/flat-shoes.svg",
+  "Tøfler": "icons/menu/shoes/slippers.svg",
   "Sportssko": "icons/menu/shoes/running-shoes.svg",
   "Tursko": "icons/menu/shoes/hiking-boot.svg",
 
