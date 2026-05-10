@@ -129,11 +129,11 @@ const BR_MENU_ICON_ASSETS = {
   "Sneakers": "icons/menu/shoes/sneakers.svg",
 
   "Boots & støvler": "icons/menu/shoes/women-boots.svg",
-  "Støvletter": "icons/menu/shoes/women-boots.svg",
+"Støvletter": "icons/menu/shoes/women-boots.svg",
 
-  "Boots": "icons/menu/shoes/men-boots.svg",
-  "Støvler": "icons/menu/shoes/men-boots.svg",
-  "Støvler & støvletter": "icons/menu/shoes/men-boots.svg",
+"Boots": "icons/menu/shoes/men-boots.svg",
+"Støvler": "icons/menu/shoes/men-boots.svg",
+"Støvler & støvletter": "icons/menu/shoes/men-boots.svg",
 
   "Snøresko / Pensko": "icons/menu/shoes/dress-shoes.svg",
   "Høye hæler / Pumps": "icons/menu/shoes/heels.svg",
