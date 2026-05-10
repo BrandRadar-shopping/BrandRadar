@@ -198,5 +198,21 @@
 <script src="assets/js/language-system.js"></script>
 <script src="search.js"></script>
 <script src="script.js"></script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const backBtn = document.querySelector(".m-back-btn");
+
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "index.html";
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
