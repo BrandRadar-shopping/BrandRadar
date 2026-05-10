@@ -781,3 +781,29 @@ nav.mega-menu .menu-section a:hover {
     gap: 6px;
   }
 }
+
+@media (min-width: 769px) {
+  .main-header .lang-switch {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .main-header .lang-btn {
+    display: inline-flex !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .main-header .lang-btn.active {
+    color: #4da3ff !important;
+  }
+
+  .main-header .lang-sep {
+    color: rgba(255,255,255,0.5) !important;
+  }
+}
