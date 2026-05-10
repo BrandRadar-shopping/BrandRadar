@@ -78,50 +78,79 @@ function getKidtypeFromLink(link, genderSlug) {
 }
 
 /* =========================================================
-   BRANDRADAR MENU ICONS — SVG asset based (FIXED PATHS)
+   BRANDRADAR MENU ICONS — SVG asset based (UPDATED PATHS)
    ========================================================= */
 const BR_MENU_ICON_ASSETS = {
+  /* ================================
+     CLOTHING
+  ================================ */
   "Gensere & hoodies": "icons/menu/clothing/hoodie.svg",
   "Sweats & hettegensere": "icons/menu/clothing/hoodie.svg",
+
   "T-skjorter": "icons/menu/clothing/tshirt.svg",
   "T-skjorter & polo": "icons/menu/clothing/tshirt.svg",
   "T-skjorter & topper": "icons/menu/clothing/tshirt.svg",
+
   "Skjorter": "icons/menu/clothing/shirt.svg",
+
   "Bukser": "icons/menu/clothing/pants.svg",
   "Bukser & shorts": "icons/menu/clothing/pants.svg",
+
   "Jeans": "icons/menu/clothing/jeans.svg",
+
   "Jakker": "icons/menu/clothing/jacket.svg",
-  "Jakker & blazere": "icons/menu/clothing/jacket.svg",
+  "Jakker & blazere": "icons/menu/clothing/women-blazer.svg",
+  "Yttertøy": "icons/menu/clothing/jacket.svg",
+
   "Kåper": "icons/menu/clothing/coat.svg",
   "Frakker": "icons/menu/clothing/coat.svg",
-  "Cardigans": "icons/menu/clothing/knit.svg",
+
+  "Cardigans": "icons/menu/clothing/cardigan.svg",
+  "Gensere & cardigans": "icons/menu/clothing/cardigan.svg",
+
   "Kjoler": "icons/menu/clothing/dress.svg",
   "Skjørt": "icons/menu/clothing/skirt.svg",
+
   "Gymwear": "icons/menu/supplements/dumbbell.svg",
+
   "Sport": "icons/menu/clothing/sport.svg",
   "Sport & trening": "icons/menu/clothing/sport.svg",
   "Sportsklær": "icons/menu/clothing/sport.svg",
+
   "Dress & pentøy": "icons/menu/clothing/tie.svg",
   "Dresser": "icons/menu/clothing/tie.svg",
+
   "Undertøy & sokker": "icons/menu/clothing/socks.svg",
   "Onepiece": "icons/menu/clothing/onesie.svg",
 
+  /* ================================
+     SHOES
+  ================================ */
   "Sneakers": "icons/menu/shoes/sneakers.svg",
-  "Boots & støvler": "icons/menu/shoes/boots.svg",
-  "Støvletter": "icons/menu/shoes/boots.svg",
-  "Boots": "icons/menu/shoes/boots.svg",
-  "Støvler": "icons/menu/shoes/boots.svg",
-  "Støvler & støvletter": "icons/menu/shoes/boots.svg",
+
+  "Boots & støvler": "icons/menu/shoes/women-boots.svg",
+  "Støvletter": "icons/menu/shoes/women-boots.svg",
+
+  "Boots": "icons/menu/shoes/men-boots.svg",
+  "Støvler": "icons/menu/shoes/men-boots.svg",
+  "Støvler & støvletter": "icons/menu/shoes/men-boots.svg",
+
   "Snøresko / Pensko": "icons/menu/shoes/dress-shoes.svg",
   "Høye hæler / Pumps": "icons/menu/shoes/heels.svg",
   "Flate sko": "icons/menu/shoes/flat-shoes.svg",
-  "Slip-ins": "icons/menu/shoes/slip-ons.svg",
-  "Sandaler / Åpne sko": "icons/menu/shoes/sandals.svg",
-  "Sandaler / Badesko": "icons/menu/shoes/sandals.svg",
-  "Tøfler": "icons/menu/shoes/slippers.svg",
-  "Sportssko": "icons/menu/shoes/running-shoes.svg",
-  "Tursko": "icons/menu/shoes/hiking-shoes.svg",
 
+  "Slip-ins": "icons/menu/shoes/woman-slip-in.svg",
+
+  "Sandaler / Åpne sko": "icons/menu/shoes/woman-sandal.svg",
+  "Sandaler / Badesko": "icons/menu/shoes/sandals.svg",
+
+  "Tøfler": "icons/menu/shoes/flat-shoes.svg",
+  "Sportssko": "icons/menu/shoes/running-shoes.svg",
+  "Tursko": "icons/menu/shoes/hiking-boot.svg",
+
+  /* ================================
+     SUPPLEMENTS / GYMCORNER
+  ================================ */
   "Proteinpulver": "icons/menu/supplements/powder.svg",
   "Proteinbarer": "icons/menu/supplements/protein-bar.svg",
   "Kreatin": "icons/menu/supplements/powder.svg",
@@ -129,6 +158,7 @@ const BR_MENU_ICON_ASSETS = {
   "Vitaminer & Mineraler": "icons/menu/supplements/pill.svg",
   "Drikke": "icons/menu/supplements/bottle.svg",
   "Aminosyrer": "icons/menu/supplements/capsule.svg",
+
   "Elektronikk": "icons/menu/accessories/watch.svg",
   "Strikker": "icons/menu/supplements/band.svg",
   "Hjemmetrening": "icons/menu/supplements/home-gym.svg",
@@ -139,25 +169,39 @@ const BR_MENU_ICON_ASSETS = {
   "Treningsbag": "icons/menu/supplements/gym-bag.svg",
   "Vektvest": "icons/menu/supplements/vest.svg",
 
+  /* ================================
+     ACCESSORIES
+  ================================ */
   "Luer & caps": "icons/menu/accessories/cap.svg",
+
   "Tørklær & skjerf": "icons/menu/accessories/scarf.svg",
+  "Skjerf & sjal": "icons/menu/accessories/scarf.svg",
+
   "Hansker & votter": "icons/menu/accessories/gloves.svg",
+
   "Vesker & kofferter": "icons/menu/accessories/bag.svg",
   "Vesker": "icons/menu/accessories/bag.svg",
+  "Bager & sekker": "icons/menu/accessories/backpack.svg",
+
   "Smykker": "icons/menu/accessories/jewelry.svg",
   "Solbriller": "icons/menu/accessories/sunglasses.svg",
+
   "Klokker": "icons/menu/accessories/watch.svg",
   "Belter": "icons/menu/accessories/belt.svg",
   "Lommebøker": "icons/menu/accessories/wallet.svg",
+
   "Slips & Tilbehør": "icons/menu/clothing/tie.svg",
   "Hatter & hodeskjerf": "icons/menu/accessories/hat.svg",
-  "Skjerf & sjal": "icons/menu/accessories/scarf.svg",
+
   "Hårpynt": "icons/menu/accessories/sparkle.svg",
   "Bag charms": "icons/menu/accessories/sparkle.svg",
-  "Bager & sekker": "icons/menu/accessories/backpack.svg",
+
   "Klokker & smykker": "icons/menu/accessories/jewelry.svg",
   "Alle accessories": "icons/menu/general/grid.svg",
 
+  /* ================================
+     SELFCARE
+  ================================ */
   "Ansikt": "icons/menu/selfcare/face.svg",
   "Kroppspleie": "icons/menu/selfcare/bodycare.svg",
   "Deodorant": "icons/menu/selfcare/deodorant.svg",
@@ -177,9 +221,10 @@ const BR_MENU_ICON_ASSETS = {
   "Hår": "icons/menu/selfcare/hair.svg",
   "Gavesett": "icons/menu/selfcare/gift.svg",
 
+  /* ================================
+     GENERAL
+  ================================ */
   "Alle kategorier": "icons/menu/general/grid.svg",
-  "Yttertøy": "icons/menu/clothing/jacket.svg",
-  "Gensere & cardigans": "icons/menu/clothing/knit.svg",
   "Barn 98-134": "icons/menu/general/kids.svg",
   "Ungdom 140-176": "icons/menu/general/kids.svg"
 };
