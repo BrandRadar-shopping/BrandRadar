@@ -78,6 +78,164 @@ function getKidtypeFromLink(link, genderSlug) {
 }
 
 /* =========================================================
+   MEGA MENU LANGUAGE HELPERS
+   - Bruker norsk originaltekst til routing/icons
+   - Viser oversatt tekst i UI
+   ========================================================= */
+const BR_MEGA_MENU_TRANSLATIONS = {
+  en: {
+    "Herre": "Men",
+    "Dame": "Women",
+    "Barn": "Kids",
+    "Jente": "Girls",
+    "Gutt": "Boys",
+    "Størrelser": "Sizes",
+    "Toppmerker": "Top brands",
+    "Kategorier": "Categories",
+    "Kosttilskudd": "Supplements",
+    "Utstyr": "Equipment",
+
+    "Gensere & hoodies": "Sweaters & hoodies",
+    "Sweats & hettegensere": "Sweats & hoodies",
+    "T-skjorter": "T-shirts",
+    "T-skjorter & polo": "T-shirts & polos",
+    "T-skjorter & topper": "T-shirts & tops",
+    "Skjorter": "Shirts",
+    "Bukser": "Pants",
+    "Bukser & shorts": "Pants & shorts",
+    "Jakker": "Jackets",
+    "Jakker & blazere": "Jackets & blazers",
+    "Yttertøy": "Outerwear",
+    "Kåper": "Coats",
+    "Frakker": "Coats",
+    "Cardigans": "Cardigans",
+    "Gensere & cardigans": "Sweaters & cardigans",
+    "Kjoler": "Dresses",
+    "Skjørt": "Skirts",
+    "Dress & pentøy": "Suits & formalwear",
+    "Dresser": "Suits",
+    "Undertøy & sokker": "Underwear & socks",
+    "Sport": "Sport",
+    "Sport & trening": "Sport & training",
+    "Sportsklær": "Sportswear",
+    "Onepiece": "Onepiece",
+
+    "Boots & støvler": "Boots",
+    "Støvletter": "Ankle boots",
+    "Støvler": "Boots",
+    "Støvler & støvletter": "Boots & ankle boots",
+    "Snøresko / Pensko": "Lace-ups / dress shoes",
+    "Høye hæler / Pumps": "High heels / pumps",
+    "Flate sko": "Flat shoes",
+    "Slip-ins": "Slip-ons",
+    "Sandaler / Åpne sko": "Sandals / open shoes",
+    "Sandaler / Badesko": "Sandals / pool slides",
+    "Tøfler": "Slippers",
+    "Sportssko": "Sports shoes",
+    "Tursko": "Hiking shoes",
+
+    "Proteinpulver": "Protein powder",
+    "Proteinbarer": "Protein bars",
+    "Kreatin": "Creatine",
+    "PWO (preworkout)": "Pre-workout",
+    "Vitaminer & Mineraler": "Vitamins & minerals",
+    "Drikke": "Drinks",
+    "Aminosyrer": "Amino acids",
+
+    "Elektronikk": "Electronics",
+    "Strikker": "Resistance bands",
+    "Hjemmetrening": "Home training",
+    "Kampsport": "Martial arts",
+    "Massasjeverktøy": "Massage tools",
+    "Vannflasker & shakers": "Water bottles & shakers",
+    "Vekter & apparater": "Weights & machines",
+    "Treningsbag": "Gym bag",
+    "Vektvest": "Weight vest",
+
+    "Luer & caps": "Beanies & caps",
+    "Luer & capser": "Beanies & caps",
+    "Tørklær & skjerf": "Scarves",
+    "Skjerf & sjal": "Scarves & shawls",
+    "Hansker & votter": "Gloves & mittens",
+    "Hansker": "Gloves",
+    "Vesker & kofferter": "Bags & luggage",
+    "Vesker": "Bags",
+    "Bager & sekker": "Bags & backpacks",
+    "Smykker": "Jewelry",
+    "Solbriller": "Sunglasses",
+    "Klokker": "Watches",
+    "Belter": "Belts",
+    "Lommebøker": "Wallets",
+    "Slips & Tilbehør": "Ties & accessories",
+    "Hatter & hodeskjerf": "Hats & headscarves",
+    "Hårpynt": "Hair accessories",
+    "Bag charms": "Bag charms",
+    "Klokker & smykker": "Watches & jewelry",
+    "Alle accessories": "All accessories",
+    "Vannflasker & mer": "Water bottles & more",
+
+    "Ansikt": "Face",
+    "Kroppspleie": "Body care",
+    "Deodorant": "Deodorant",
+    "Aktiv hudpleie": "Active skincare",
+    "K-Beauty": "K-Beauty",
+    "Solprodukter": "Sun care",
+    "Beauty Tech": "Beauty tech",
+    "Mamma & Barn": "Mom & baby",
+    "Hudpleiesett": "Skincare sets",
+    "Reisestørrelser": "Travel sizes",
+    "Hudpleietilbehør": "Skincare accessories",
+    "Munnhygiene": "Oral care",
+    "Parfyme": "Fragrance",
+    "Barbering": "Shaving",
+    "Skjegg & Bart": "Beard & moustache",
+    "Hudpleie": "Skincare",
+    "Hår": "Hair",
+    "Gavesett": "Gift sets",
+
+    "Barn 98-134": "Kids 98-134",
+    "Ungdom 140-176": "Youth 140-176",
+    "Barn (21-34)": "Kids (21-34)",
+    "Ungdom (35-42)": "Youth (35-42)"
+  }
+};
+
+function brCurrentLang() {
+  return window.BrandRadarLang?.get?.() || "no";
+}
+
+function brTranslateMenuLabel(label) {
+  const clean = String(label || "").trim();
+  const lang = brCurrentLang();
+
+  if (lang === "no") return clean;
+  return BR_MEGA_MENU_TRANSLATIONS[lang]?.[clean] || clean;
+}
+
+function brStoreOriginalLabel(el) {
+  if (!el) return "";
+  if (!el.dataset.brOriginalLabel) {
+    el.dataset.brOriginalLabel = el.textContent.trim();
+  }
+  return el.dataset.brOriginalLabel;
+}
+
+function brApplyMegaMenuLanguage(root = document) {
+  const scope = root || document;
+
+  scope.querySelectorAll(
+    "nav.mega-menu h4, nav.mega-menu .menu-subtitle, nav.mega-menu .desktop-menu-label, .mobile-drawer .m-level-btn-label, .mobile-drawer .m-row-label, .mobile-drawer #mSubcatTitle"
+  ).forEach((el) => {
+    const original = brStoreOriginalLabel(el);
+    el.textContent = brTranslateMenuLabel(original);
+  });
+}
+
+window.addEventListener("brandradar:languagechange", () => {
+  brApplyMegaMenuLanguage(document);
+});
+
+/* =========================================================
    BRANDRADAR MENU ICONS — SVG asset based (UPDATED PATHS)
    ========================================================= */
 const BR_MENU_ICON_ASSETS = {
