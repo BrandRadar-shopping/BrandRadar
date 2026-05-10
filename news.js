@@ -44,521 +44,560 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
   const newsGridEl = document.getElementById("news-grid");
 
- // ---------- HELPERS ----------
-const nb = new Intl.NumberFormat("nb-NO");
+  // ---------- HELPERS ----------
+  const nb = new Intl.NumberFormat("nb-NO");
 
-const cleanRatingFn =
-  window.cleanRating ||
-  function (value) {
-    if (!value && value !== 0) return null;
-    const n = parseFloat(
-      String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
+  const cleanRatingFn =
+    window.cleanRating ||
+    function (value) {
+      if (!value && value !== 0) return null;
+      const n = parseFloat(
+        String(value).replace(",", ".").replace(/[^0-9.\-]/g, "")
+      );
+      return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : null;
+    };
+
+  function parseNum(v) {
+    if (v == null || v === "") return null;
+    const n = Number(
+      String(v)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,\-]/g, "")
+        .replace(",", ".")
     );
-    return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : null;
-  };
-
-function parseNum(v) {
-  if (v == null || v === "") return null;
-  const n = Number(
-    String(v)
-      .replace(/\s/g, "")
-      .replace(/[^\d.,\-]/g, "")
-      .replace(",", ".")
-  );
-  return Number.isFinite(n) ? n : null;
-}
-
-function formatPrice(n) {
-  if (n == null) return "";
-  return `${nb.format(Math.round(n))} kr`;
-}
-
-function parseBool(v) {
-  if (!v && v !== 0) return false;
-  const s = String(v).trim().toLowerCase();
-  return s === "true" || s === "1" || s === "ja" || s === "yes";
-}
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-async function fetchJson(sheetId, tab) {
-  const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`${t("fetch_error", "Feil ved henting av")} ${tab}: ${res.status}`);
+    return Number.isFinite(n) ? n : null;
   }
-  return res.json();
-}
 
-function resolveProductIdSafe(productLike) {
-  if (typeof window.resolveProductId === "function") {
-    return window.resolveProductId(productLike);
+  function formatPrice(n) {
+    if (n == null) return "";
+    return `${nb.format(Math.round(n))} kr`;
   }
-  return (
-    productLike?.id ||
-    productLike?.product_id ||
-    productLike?.productId ||
-    ""
-  );
-}
 
-function createProductBaseFromMaster(masterRow) {
-  if (!masterRow) return null;
+  function parseBool(v) {
+    if (!v && v !== 0) return false;
+    const s = String(v).trim().toLowerCase();
+    return s === "true" || s === "1" || s === "ja" || s === "yes";
+  }
 
-  const base = {
-    id: String(masterRow.id || "").trim(),
-    title: masterRow.title || masterRow.product_name || masterRow.name || "",
-    brand: masterRow.brand || "",
-    price: masterRow.price || "",
-    discount: masterRow.discount || "",
-    image_url: masterRow.image_url || "",
-    image_2: masterRow.image_2 || masterRow.image2 || masterRow.thumbnail_1 || "",
-    image_3: masterRow.image_3 || masterRow.image3 || masterRow.thumbnail_2 || "",
-    image_4: masterRow.image_4 || masterRow.image4 || masterRow.thumbnail_3 || "",
-    image_5: masterRow.image_5 || masterRow.image5 || masterRow.thumbnail_4 || "",
-    product_url: masterRow.product_url || "",
-    category: masterRow.category || masterRow.main_category || "",
-    rating: masterRow.rating || "",
-    luxury: parseBool(masterRow.luxury),
-    sheet_source: masterRow.sheet_source || "master"
-  };
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-  base.id = resolveProductIdSafe(base);
-  return base;
-}
+  function currentLang() {
+    return window.BrandRadarLang?.get?.() || "no";
+  }
 
-function buildStarIcon(fillPercent = 0) {
-  const safeFill = Math.max(0, Math.min(100, fillPercent));
+  function langField(row, key, fallback = "") {
+    if (!row) return fallback;
 
-  return `
-    <span class="rating-star" style="--fill:${safeFill}%;" aria-hidden="true">
-      <svg class="rating-star-svg rating-star-outline" viewBox="0 0 24 24" focusable="false">
-        <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
-      </svg>
-      <span class="rating-star-fill-wrap">
-        <svg class="rating-star-svg rating-star-fill" viewBox="0 0 24 24" focusable="false">
+    const lang = currentLang();
+
+    if (lang === "en") {
+      const enValue = row[`${key}_en`];
+      if (enValue != null && String(enValue).trim() !== "") {
+        return enValue;
+      }
+    }
+
+    const baseValue = row[key];
+    if (baseValue != null && String(baseValue).trim() !== "") {
+      return baseValue;
+    }
+
+    return fallback;
+  }
+
+  function radarBadgeText(type) {
+    const badge = String(type || "editor").trim().toLowerCase();
+
+    const badgeMap = {
+      editor: "EDITOR'S PICK",
+      gym: "GYM PICK",
+      deal: "DEAL PICK",
+      luxury: "LUXURY PICK",
+      trending: "TRENDING"
+    };
+
+    return badgeMap[badge] || badgeMap.editor;
+  }
+
+  async function fetchJson(sheetId, tab) {
+    const url = `https://opensheet.elk.sh/${sheetId}/${tab}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`${t("fetch_error", "Feil ved henting av")} ${tab}: ${res.status}`);
+    }
+    return res.json();
+  }
+
+  function resolveProductIdSafe(productLike) {
+    if (typeof window.resolveProductId === "function") {
+      return window.resolveProductId(productLike);
+    }
+    return (
+      productLike?.id ||
+      productLike?.product_id ||
+      productLike?.productId ||
+      ""
+    );
+  }
+
+  function createProductBaseFromMaster(masterRow) {
+    if (!masterRow) return null;
+
+    const base = {
+      id: String(masterRow.id || "").trim(),
+      title: masterRow.title || masterRow.product_name || masterRow.name || "",
+      brand: masterRow.brand || "",
+      price: masterRow.price || "",
+      discount: masterRow.discount || "",
+      image_url: masterRow.image_url || "",
+      image_2: masterRow.image_2 || masterRow.image2 || masterRow.thumbnail_1 || "",
+      image_3: masterRow.image_3 || masterRow.image3 || masterRow.thumbnail_2 || "",
+      image_4: masterRow.image_4 || masterRow.image4 || masterRow.thumbnail_3 || "",
+      image_5: masterRow.image_5 || masterRow.image5 || masterRow.thumbnail_4 || "",
+      product_url: masterRow.product_url || "",
+      category: masterRow.category || masterRow.main_category || "",
+      rating: masterRow.rating || "",
+      luxury: parseBool(masterRow.luxury),
+      sheet_source: masterRow.sheet_source || "master"
+    };
+
+    base.id = resolveProductIdSafe(base);
+    return base;
+  }
+
+  function buildStarIcon(fillPercent = 0) {
+    const safeFill = Math.max(0, Math.min(100, fillPercent));
+
+    return `
+      <span class="rating-star" style="--fill:${safeFill}%;" aria-hidden="true">
+        <svg class="rating-star-svg rating-star-outline" viewBox="0 0 24 24" focusable="false">
           <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
         </svg>
+        <span class="rating-star-fill-wrap">
+          <svg class="rating-star-svg rating-star-fill" viewBox="0 0 24 24" focusable="false">
+            <path d="M12 2.8l2.84 5.75 6.35.92-4.6 4.49 1.09 6.32L12 17.3 6.32 20.28l1.09-6.32-4.6-4.49 6.35-.92L12 2.8z"/>
+          </svg>
+        </span>
       </span>
-    </span>
-  `;
-}
+    `;
+  }
 
-function buildRatingMarkup(ratingValue) {
-  const rating = cleanRatingFn(ratingValue);
-  if (rating == null) return "";
+  function buildRatingMarkup(ratingValue) {
+    const rating = cleanRatingFn(ratingValue);
+    if (rating == null) return "";
 
-  const stars = Array.from({ length: 5 }, (_, index) => {
-    const fill = Math.max(0, Math.min(1, rating - index)) * 100;
-    return buildStarIcon(fill);
-  }).join("");
+    const stars = Array.from({ length: 5 }, (_, index) => {
+      const fill = Math.max(0, Math.min(1, rating - index)) * 100;
+      return buildStarIcon(fill);
+    }).join("");
 
-  return `
-    <div class="rating-stars" aria-label="${t("rating", "Rating")} ${rating.toFixed(1)} ${t("out_of_5", "av 5")}">
-      <div class="rating-stars-row">
-        ${stars}
+    return `
+      <div class="rating-stars" aria-label="${t("rating", "Rating")} ${rating.toFixed(1)} ${t("out_of_5", "av 5")}">
+        <div class="rating-stars-row">
+          ${stars}
+        </div>
+        <span class="rating-value">${rating.toFixed(1)}</span>
       </div>
-      <span class="rating-value">${rating.toFixed(1)}</span>
-    </div>
-  `;
-}
+    `;
+  }
 
-function getPriceState(prod) {
-  const explicitOldPrice = parseNum(prod.old_price);
-  const explicitNewPrice = parseNum(prod.new_price);
+  function getPriceState(prod) {
+    const explicitOldPrice = parseNum(prod.old_price);
+    const explicitNewPrice = parseNum(prod.new_price);
 
-  if (
-    explicitOldPrice != null &&
-    explicitNewPrice != null &&
-    explicitOldPrice > explicitNewPrice
-  ) {
-    const discountPct = Math.round(
-      ((explicitOldPrice - explicitNewPrice) / explicitOldPrice) * 100
-    );
+    if (
+      explicitOldPrice != null &&
+      explicitNewPrice != null &&
+      explicitOldPrice > explicitNewPrice
+    ) {
+      const discountPct = Math.round(
+        ((explicitOldPrice - explicitNewPrice) / explicitOldPrice) * 100
+      );
+
+      return {
+        priceNum: explicitOldPrice,
+        discountNum: discountPct,
+        newPriceNum: explicitNewPrice,
+        oldPriceNum: explicitOldPrice,
+        discountPct
+      };
+    }
+
+    const priceNum = parseNum(prod.price);
+    const discountNum = prod.discount ? parseNum(prod.discount) : null;
+
+    let newPriceNum = null;
+    let oldPriceNum = null;
+    let discountPct = null;
+
+    if (priceNum != null && discountNum != null && discountNum > 0) {
+      const percent = discountNum > 1 ? discountNum : discountNum * 100;
+      discountPct = Math.round(percent);
+      oldPriceNum = priceNum;
+      newPriceNum = Math.round(priceNum * (1 - percent / 100));
+    } else if (priceNum != null) {
+      newPriceNum = priceNum;
+    }
 
     return {
-      priceNum: explicitOldPrice,
-      discountNum: discountPct,
-      newPriceNum: explicitNewPrice,
-      oldPriceNum: explicitOldPrice,
+      priceNum,
+      discountNum,
+      newPriceNum,
+      oldPriceNum,
       discountPct
     };
   }
 
-  const priceNum = parseNum(prod.price);
-  const discountNum = prod.discount ? parseNum(prod.discount) : null;
-
-  let newPriceNum = null;
-  let oldPriceNum = null;
-  let discountPct = null;
-
-  if (priceNum != null && discountNum != null && discountNum > 0) {
-    const percent = discountNum > 1 ? discountNum : discountNum * 100;
-    discountPct = Math.round(percent);
-    oldPriceNum = priceNum;
-    newPriceNum = Math.round(priceNum * (1 - percent / 100));
-  } else if (priceNum != null) {
-    newPriceNum = priceNum;
+  function buildFavoritePayload(prod, pid) {
+    return {
+      id: pid,
+      title: prod.title || "",
+      product_name: prod.title || "",
+      brand: prod.brand || "",
+      price: prod.price || "",
+      discount: prod.discount || "",
+      image_url: prod.image_url || "",
+      product_url: prod.product_url || "",
+      category: prod.category || "",
+      rating: prod.rating ?? "",
+      luxury: !!prod.luxury
+    };
   }
 
-  return {
-    priceNum,
-    discountNum,
-    newPriceNum,
-    oldPriceNum,
-    discountPct
-  };
-}
+  function getSpotlightImages(prod) {
+    const rawImages = [
+      prod.image_url,
+      prod.image_2,
+      prod.image_3,
+      prod.image_4,
+      prod.image_5
+    ];
 
-function buildFavoritePayload(prod, pid) {
-  return {
-    id: pid,
-    title: prod.title || "",
-    product_name: prod.title || "",
-    brand: prod.brand || "",
-    price: prod.price || "",
-    discount: prod.discount || "",
-    image_url: prod.image_url || "",
-    product_url: prod.product_url || "",
-    category: prod.category || "",
-    rating: prod.rating ?? "",
-    luxury: !!prod.luxury
-  };
-}
+    const cleaned = rawImages
+      .map((img) => String(img || "").trim())
+      .filter(Boolean);
 
-function getSpotlightImages(prod) {
-  const rawImages = [
-    prod.image_url,
-    prod.image_2,
-    prod.image_3,
-    prod.image_4,
-    prod.image_5
-  ];
+    return [...new Set(cleaned)].slice(0, 5);
+  }
 
-  const cleaned = rawImages
-    .map((img) => String(img || "").trim())
-    .filter(Boolean);
+  // ---------- DEALS CORNER RIBBON (CSS) ----------
+  function buildDealsCornerRibbon() {
+    return `
+      <span class="deals-corner-ribbon">${t("deals_label", "DEALS")}</span>
+      <span class="deals-corner-ribbon-gloss"></span>
+    `;
+  }
 
-  return [...new Set(cleaned)].slice(0, 5);
-}
+  function ensureDealsRibbonStyles() {
+    if (document.getElementById("news-deals-ribbon-styles")) return;
 
-// ---------- DEALS CORNER RIBBON (CSS) ----------
-function buildDealsCornerRibbon() {
-  return `
-    <span class="deals-corner-ribbon">${t("deals_label", "DEALS")}</span>
-    <span class="deals-corner-ribbon-gloss"></span>
-  `;
-}
+    const style = document.createElement("style");
+    style.id = "news-deals-ribbon-styles";
+    style.textContent = `
+      .news-section--deals .deal-card.product-card {
+        position: relative;
+        overflow: hidden;
+      }
 
-function ensureDealsRibbonStyles() {
-  if (document.getElementById("news-deals-ribbon-styles")) return;
+      .news-section--deals .deal-card.product-card .discount-badge {
+        display: none !important;
+      }
 
-  const style = document.createElement("style");
-  style.id = "news-deals-ribbon-styles";
-  style.textContent = `
-    .news-section--deals .deal-card.product-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .news-section--deals .deal-card.product-card .discount-badge {
-      display: none !important;
-    }
-
-    .news-section--deals .deal-card .deals-corner-ribbon {
-      position: absolute;
-      top: 18px;
-      left: -44px;
-      width: 132px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        linear-gradient(135deg, #111827 0%, #1f2937 42%, #0f172a 100%);
-      color: #ffffff;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      line-height: 1;
-      text-align: center;
-      transform: rotate(-45deg);
-      transform-origin: center;
-      z-index: 8;
-      box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255,255,255,0.08),
-        inset 0 -1px 0 rgba(0,0,0,0.22);
-      pointer-events: none;
-      padding-top: 1px;
-      overflow: hidden;
-    }
-
-    .news-section--deals .deal-card .deals-corner-ribbon::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.16) 0%,
-          rgba(255,255,255,0.04) 32%,
-          rgba(0,0,0,0.18) 100%
-        );
-      mix-blend-mode: screen;
-      opacity: 0.75;
-      pointer-events: none;
-    }
-
-    .news-section--deals .deal-card .deals-corner-ribbon::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 10px;
-      width: 24px;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.18) 48%,
-        rgba(255,255,255,0) 100%
-      );
-      opacity: 0.7;
-      transform: skewX(-18deg);
-      pointer-events: none;
-    }
-
-    .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-      position: absolute;
-      top: 18px;
-      left: -44px;
-      width: 132px;
-      height: 32px;
-      transform: rotate(-45deg);
-      transform-origin: center;
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.08) 0%,
-          rgba(255,255,255,0.02) 30%,
-          rgba(0,0,0,0.08) 100%
-        );
-      z-index: 7;
-      pointer-events: none;
-      opacity: 0.95;
-    }
-
-    .news-section--deals .deal-card.product-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 58px;
-      height: 58px;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.16), transparent 68%);
-      z-index: 6;
-      pointer-events: none;
-    }
-
-    .news-section--deals .deal-card.product-card::after {
-      content: "";
-      position: absolute;
-      top: 17px;
-      left: 17px;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.18);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.05),
-        0 2px 5px rgba(0,0,0,0.18);
-      z-index: 9;
-      pointer-events: none;
-    }
-
-    .news-section--deals .deal-card.product-card .favorite-toggle {
-      z-index: 10;
-    }
-
-    .news-section--deals .deal-card.product-card .price-wrapper {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 0.25rem;
-      width: 100%;
-    }
-
-    .news-section--deals .deal-card.product-card .price-line {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
-      min-width: 0;
-    }
-
-    .news-section--deals .deal-card.product-card .discount-pill {
-      flex: 0 0 auto;
-      align-self: flex-end;
-      white-space: nowrap;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #ffffff;
-      background: linear-gradient(135deg, #0f172a, #1f2937);
-      padding: 0.34rem 0.62rem;
-      border-radius: 999px;
-      line-height: 1;
-      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
-      margin-left: 0;
-    }
-
-    @media (max-width: 768px) {
       .news-section--deals .deal-card .deals-corner-ribbon {
-        top: 16px;
-        left: -42px;
-        width: 126px;
+        position: absolute;
+        top: 18px;
+        left: -44px;
+        width: 132px;
         height: 32px;
-        font-size: 0.64rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          linear-gradient(135deg, #111827 0%, #1f2937 42%, #0f172a 100%);
+        color: #ffffff;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        line-height: 1;
+        text-align: center;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        z-index: 8;
+        box-shadow:
+          0 10px 20px rgba(0, 0, 0, 0.22),
+          inset 0 1px 0 rgba(255,255,255,0.08),
+          inset 0 -1px 0 rgba(0,0,0,0.22);
+        pointer-events: none;
+        padding-top: 1px;
+        overflow: hidden;
+      }
+
+      .news-section--deals .deal-card .deals-corner-ribbon::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.16) 0%,
+            rgba(255,255,255,0.04) 32%,
+            rgba(0,0,0,0.18) 100%
+          );
+        mix-blend-mode: screen;
+        opacity: 0.75;
+        pointer-events: none;
+      }
+
+      .news-section--deals .deal-card .deals-corner-ribbon::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 10px;
+        width: 24px;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0.18) 48%,
+          rgba(255,255,255,0) 100%
+        );
+        opacity: 0.7;
+        transform: skewX(-18deg);
+        pointer-events: none;
       }
 
       .news-section--deals .deal-card .deals-corner-ribbon-gloss {
-        top: 16px;
-        left: -42px;
-        width: 126px;
+        position: absolute;
+        top: 18px;
+        left: -44px;
+        width: 132px;
         height: 32px;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.08) 0%,
+            rgba(255,255,255,0.02) 30%,
+            rgba(0,0,0,0.08) 100%
+          );
+        z-index: 7;
+        pointer-events: none;
+        opacity: 0.95;
       }
-    }
-  `;
 
-  document.head.appendChild(style);
-}
+      .news-section--deals .deal-card.product-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 58px;
+        height: 58px;
+        background:
+          radial-gradient(circle at top left, rgba(255,255,255,0.16), transparent 68%);
+        z-index: 6;
+        pointer-events: none;
+      }
 
-// ---------- ELITE CARD ----------
-function buildEliteCard(prod, options = {}) {
-  const {
-    showExcerpt = false,
-    excerpt = "",
-    tag = "",
-    extraClasses = "",
-    onCardClick = null
-  } = options;
+      .news-section--deals .deal-card.product-card::after {
+        content: "";
+        position: absolute;
+        top: 17px;
+        left: 17px;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.18);
+        box-shadow:
+          0 0 0 1px rgba(255,255,255,0.05),
+          0 2px 5px rgba(0,0,0,0.18);
+        z-index: 9;
+        pointer-events: none;
+      }
 
-  const pid = resolveProductIdSafe(prod);
-  prod.id = pid;
+      .news-section--deals .deal-card.product-card .favorite-toggle {
+        z-index: 10;
+      }
 
-  const ratingMarkup = buildRatingMarkup(prod.rating);
-  const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
+      .news-section--deals .deal-card.product-card .price-wrapper {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 0.25rem;
+        width: 100%;
+      }
 
-  const isDealCard = String(extraClasses || "").split(/\s+/).includes("deal-card");
+      .news-section--deals .deal-card.product-card .price-line {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+        min-width: 0;
+      }
 
-  const isFav =
-    typeof window.isProductFavorite === "function" && pid
-      ? window.isProductFavorite(pid)
-      : false;
+      .news-section--deals .deal-card.product-card .discount-pill {
+        flex: 0 0 auto;
+        align-self: flex-end;
+        white-space: nowrap;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: #ffffff;
+        background: linear-gradient(135deg, #0f172a, #1f2937);
+        padding: 0.34rem 0.62rem;
+        border-radius: 999px;
+        line-height: 1;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
+        margin-left: 0;
+      }
 
-  const priceMarkup = isDealCard && discountPct
-    ? `
-      <div class="price-wrapper">
+      @media (max-width: 768px) {
+        .news-section--deals .deal-card .deals-corner-ribbon {
+          top: 16px;
+          left: -42px;
+          width: 126px;
+          height: 32px;
+          font-size: 0.64rem;
+        }
+
+        .news-section--deals .deal-card .deals-corner-ribbon-gloss {
+          top: 16px;
+          left: -42px;
+          width: 126px;
+          height: 32px;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+  // ---------- ELITE CARD ----------
+  function buildEliteCard(prod, options = {}) {
+    const {
+      showExcerpt = false,
+      excerpt = "",
+      tag = "",
+      extraClasses = "",
+      onCardClick = null
+    } = options;
+
+    const pid = resolveProductIdSafe(prod);
+    prod.id = pid;
+
+    const ratingMarkup = buildRatingMarkup(prod.rating);
+    const { newPriceNum, oldPriceNum, discountPct } = getPriceState(prod);
+
+    const isDealCard = String(extraClasses || "").split(/\s+/).includes("deal-card");
+
+    const isFav =
+      typeof window.isProductFavorite === "function" && pid
+        ? window.isProductFavorite(pid)
+        : false;
+
+    const priceMarkup = isDealCard && discountPct
+      ? `
+        <div class="price-wrapper">
+          <div class="price-line">
+            <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
+            ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
+          </div>
+          <span class="discount-pill">-${discountPct}%</span>
+        </div>
+      `
+      : `
         <div class="price-line">
           <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
           ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
         </div>
-        <span class="discount-pill">-${discountPct}%</span>
-      </div>
-    `
-    : `
-      <div class="price-line">
-        <span class="new-price">${newPriceNum != null ? formatPrice(newPriceNum) : ""}</span>
-        ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
+      `;
+
+    const card = document.createElement("article");
+    card.className = `product-card ${extraClasses}`.trim();
+    card.setAttribute("data-product-id", pid || "");
+
+    card.innerHTML = `
+      ${isDealCard ? buildDealsCornerRibbon() : ""}
+      ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
+
+      <button
+        type="button"
+        class="favorite-toggle ${isFav ? "active" : ""}"
+        aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
+      >
+        <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+          2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
+          3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </button>
+
+      <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
+
+      <div class="product-info">
+        <p class="brand">${escapeHtml(prod.brand || "")}</p>
+        <h3 class="product-name">${escapeHtml(prod.title || "")}</h3>
+
+        ${showExcerpt && excerpt ? `<p class="tagline">${escapeHtml(excerpt)}</p>` : ""}
+        ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
+
+        ${ratingMarkup}
+        ${priceMarkup}
       </div>
     `;
 
-  const card = document.createElement("article");
-  card.className = `product-card ${extraClasses}`.trim();
-  card.setAttribute("data-product-id", pid || "");
+    const defaultNavigateToProduct = () => {
+      if (!pid) return;
+      window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+    };
 
-  card.innerHTML = `
-    ${isDealCard ? buildDealsCornerRibbon() : ""}
-    ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".favorite-toggle")) return;
 
-    <button
-      type="button"
-      class="favorite-toggle ${isFav ? "active" : ""}"
-      aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
-    >
-      <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-        2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
-        14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
-        3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-      </svg>
-    </button>
+      if (typeof onCardClick === "function") {
+        onCardClick(prod, card, e);
+        return;
+      }
 
-    <img src="${escapeHtml(prod.image_url || "")}" alt="${escapeHtml(prod.title || "")}" loading="lazy">
+      defaultNavigateToProduct();
+    });
 
-    <div class="product-info">
-      <p class="brand">${escapeHtml(prod.brand || "")}</p>
-      <h3 class="product-name">${escapeHtml(prod.title || "")}</h3>
+    const favButton = card.querySelector(".favorite-toggle");
+    favButton?.addEventListener("click", (e) => {
+      e.stopPropagation();
 
-      ${showExcerpt && excerpt ? `<p class="tagline">${escapeHtml(excerpt)}</p>` : ""}
-      ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
+      if (typeof window.toggleFavorite !== "function" || !pid) return;
 
-      ${ratingMarkup}
-      ${priceMarkup}
-    </div>
-  `;
+      const existsBefore =
+        typeof window.isProductFavorite === "function"
+          ? window.isProductFavorite(pid)
+          : false;
 
-  const defaultNavigateToProduct = () => {
-    if (!pid) return;
-    window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
-  };
+      window.toggleFavorite(buildFavoritePayload(prod, pid), favButton);
 
-  card.addEventListener("click", (e) => {
-    if (e.target.closest(".favorite-toggle")) return;
+      const existsAfter =
+        typeof window.isProductFavorite === "function"
+          ? window.isProductFavorite(pid)
+          : !existsBefore;
 
-    if (typeof onCardClick === "function") {
-      onCardClick(prod, card, e);
-      return;
-    }
+      favButton.classList.toggle("active", existsAfter);
+      favButton.setAttribute(
+        "aria-label",
+        existsAfter ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
+      );
+    });
 
-    defaultNavigateToProduct();
-  });
+    return card;
+  }
 
-  const favButton = card.querySelector(".favorite-toggle");
-  favButton?.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    if (typeof window.toggleFavorite !== "function" || !pid) return;
-
-    const existsBefore =
-      typeof window.isProductFavorite === "function"
-        ? window.isProductFavorite(pid)
-        : false;
-
-    window.toggleFavorite(buildFavoritePayload(prod, pid), favButton);
-
-    const existsAfter =
-      typeof window.isProductFavorite === "function"
-        ? window.isProductFavorite(pid)
-        : !existsBefore;
-
-    favButton.classList.toggle("active", existsAfter);
-    favButton.setAttribute(
-      "aria-label",
-      existsAfter ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
-    );
-  });
-
-  return card;
-}
   // ---------- SPOTLIGHT CARD ----------
   function buildSpotlightCard(prod, options = {}) {
     const {
@@ -586,7 +625,7 @@ function buildEliteCard(prod, options = {}) {
 
     article.innerHTML = `
       <div class="spotlight-media">
-        <span class="spotlight-overlay-badge">Spotlight</span>
+        <span class="spotlight-overlay-badge">${escapeHtml(t("spotlight", "Spotlight"))}</span>
 
         <div class="spotlight-main-image-wrap">
           <img
@@ -608,7 +647,7 @@ function buildEliteCard(prod, options = {}) {
                     type="button"
                     class="spotlight-thumb ${index === 0 ? "is-active" : ""}"
                     data-image="${escapeHtml(img)}"
-                    aria-label="Vis bilde ${index + 1} av ${escapeHtml(prod.title || "produkt")}"
+                    aria-label="${escapeHtml(t("show_image", "Vis bilde"))} ${index + 1} ${escapeHtml(t("of", "av"))} ${escapeHtml(prod.title || "produkt")}"
                   >
                     <img src="${escapeHtml(img)}" alt="" loading="lazy">
                   </button>
@@ -627,12 +666,12 @@ function buildEliteCard(prod, options = {}) {
           ${secondaryTag ? `<span class="spotlight-chip">${escapeHtml(secondaryTag)}</span>` : ""}
         </div>
 
-        <h3>${escapeHtml(prod.title || "Ukens Spotlight")}</h3>
+        <h3>${escapeHtml(prod.title || t("weekly_spotlight", "Ukens Spotlight"))}</h3>
 
         ${
           excerpt
             ? `<p>${escapeHtml(excerpt)}</p>`
-            : `<p>Et håndplukket produkt denne uken.</p>`
+            : `<p>${escapeHtml(t("spotlight_fallback_text", "Et håndplukket produkt denne uken."))}</p>`
         }
 
         ${ratingMarkup ? `<div class="spotlight-rating">${ratingMarkup}</div>` : ""}
@@ -872,6 +911,7 @@ function buildEliteCard(prod, options = {}) {
     setTimeout(updateCards, 180);
     setTimeout(updateCards, 320);
   }
+
   function initMobileSpotlightDots(trackEl) {
     if (!trackEl) return;
     if (window.innerWidth > 768) return;
@@ -905,7 +945,7 @@ function buildEliteCard(prod, options = {}) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "spotlight-dot";
-      btn.setAttribute("aria-label", `Gå til spotlight ${index + 1}`);
+      btn.setAttribute("aria-label", `${t("go_to_slide", "Gå til slide")} ${index + 1}`);
       btn.addEventListener("click", () => {
         const slide = slides[index];
         if (!slide) return;
@@ -950,6 +990,7 @@ function buildEliteCard(prod, options = {}) {
     setTimeout(updateActiveDot, 180);
     setTimeout(updateActiveDot, 320);
   }
+
   // ======================================================
   // 1) PARTNER BANNER
   // ======================================================
@@ -962,21 +1003,26 @@ function buildEliteCard(prod, options = {}) {
 
       if (!row) {
         partnerBannerEl.classList.remove("loading");
-        partnerBannerEl.textContent = "Ingen partnerkampanje akkurat nå.";
+        partnerBannerEl.textContent = t("no_partner_campaign_now", "Ingen partnerkampanje akkurat nå.");
         return;
       }
+
+      const campaignName = langField(row, "campaign_name", t("weekly_partner", "Ukens partner"));
+      const description = langField(row, "description", "");
+      const altText = langField(row, "alt_text", "");
+      const ctaText = langField(row, "cta_text", t("see_campaign", "Se kampanjen"));
 
       partnerBannerEl.classList.remove("loading");
       partnerBannerEl.innerHTML = `
         <div class="partner-banner-inner">
           <div class="partner-banner-text">
-            <p class="partner-tag">${escapeHtml(row.campaign_name || "Ukens partner")}</p>
-            <h2>${escapeHtml(row.description || "")}</h2>
-            <p class="partner-sub">${escapeHtml(row.alt_text || "")}</p>
+            <p class="partner-tag">${escapeHtml(campaignName)}</p>
+            <h2>${escapeHtml(description)}</h2>
+            <p class="partner-sub">${escapeHtml(altText)}</p>
             ${
               row.link
                 ? `<a href="${escapeHtml(row.link)}" target="_blank" rel="noopener noreferrer" class="partner-cta">
-                    ${escapeHtml(row.cta_text || "Se kampanjen")}
+                    ${escapeHtml(ctaText)}
                    </a>`
                 : ""
             }
@@ -984,7 +1030,7 @@ function buildEliteCard(prod, options = {}) {
           ${
             row.image_url
               ? `<div class="partner-banner-image">
-                   <img src="${escapeHtml(row.image_url)}" alt="${escapeHtml(row.alt_text || row.campaign_name || "")}">
+                   <img src="${escapeHtml(row.image_url)}" alt="${escapeHtml(altText || campaignName || "")}">
                  </div>`
               : ""
           }
@@ -993,428 +1039,436 @@ function buildEliteCard(prod, options = {}) {
     } catch (err) {
       console.error("❌ Partner banner error:", err);
       partnerBannerEl.classList.remove("loading");
-      partnerBannerEl.textContent = "Kunne ikke laste partnerkampanjen.";
+      partnerBannerEl.textContent = t("could_not_load_partner_campaign", "Kunne ikke laste partnerkampanjen.");
     }
   }
 
- // ======================================================
-// 2) UKENS DEALS
-// ======================================================
-async function loadDeals() {
-  if (!dealsTrack) return;
+  // ======================================================
+  // 2) UKENS DEALS
+  // ======================================================
+  async function loadDeals() {
+    if (!dealsTrack) return;
 
-  try {
-    const [dealRows, masterRows] = await Promise.all([
-      fetchJson(DEALS_SHEET_ID, DEALS_TAB),
-      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
-    ]);
+    try {
+      const [dealRows, masterRows] = await Promise.all([
+        fetchJson(DEALS_SHEET_ID, DEALS_TAB),
+        fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+      ]);
 
-    dealsTrack.classList.remove("loading");
-    dealsTrack.innerHTML = "";
+      dealsTrack.classList.remove("loading");
+      dealsTrack.innerHTML = "";
 
-    const masterById = new Map(
-      masterRows.map(row => [String(row.id || "").trim(), row])
-    );
-
-    const deals = dealRows
-      .filter(row => parseBool(row.active))
-      .map((row, index) => {
-        const productId = String(row.product_id || row.id || "").trim();
-        const master = masterById.get(productId);
-
-        if (!productId || !master) return null;
-
-        const base = createProductBaseFromMaster(master);
-        if (!base) return null;
-
-        return {
-          ...base,
-          id: productId,
-          highlight_reason: row.highlight_reason || "",
-          rank: parseInt(row.rank, 10) || index + 1
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.rank - b.rank);
-
-    if (!deals.length) {
-      dealsTrack.textContent = t("no_deals_now", "Ingen deals akkurat nå.");
-      return;
-    }
-
-    const enrichedDeals = window.BrandRadarOffersEngine
-      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(deals)
-      : deals;
-
-    enrichedDeals.forEach((prod) => {
-      const summary = prod.offer_summary;
-
-      if (summary?.hasOffers) {
-        prod.new_price = summary.lowestPrice;
-        prod.price = summary.lowestPrice;
-
-        const bestOffer = summary.offers?.[0];
-
-        if (bestOffer?.old_price) {
-          prod.old_price = bestOffer.old_price;
-        }
-      }
-
-      const card = buildEliteCard(prod, {
-        extraClasses: "deal-card",
-        tag: prod.highlight_reason || "",
-        onCardClick: (product) => {
-          if (product.id) {
-            window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-          }
-        }
-      });
-
-      dealsTrack.appendChild(card);
-    });
-
-    initArrowSlider(dealsTrack);
-    initMobileFocusCarousel(dealsTrack);
-  } catch (err) {
-    console.error("❌ Deals error:", err);
-    dealsTrack.classList.remove("loading");
-    dealsTrack.textContent = t("could_not_load_deals", "Kunne ikke laste deals.");
-  }
-}
-
-// ======================================================
-// 3) RADAR PICKS
-// ======================================================
-async function loadPicks() {
-  if (!picksTrack) return;
-
-  function normalizePickBadge(value) {
-    const badge = String(value || "editor").trim().toLowerCase();
-
-    const badgeMap = {
-      editor: {
-        text: "EDITOR'S PICK",
-        className: ""
-      },
-      gym: {
-        text: "GYM PICK",
-        className: "is-gym"
-      },
-      deal: {
-        text: "DEAL PICK",
-        className: "is-deal"
-      },
-      luxury: {
-        text: "LUXURY PICK",
-        className: "is-luxury"
-      },
-      trending: {
-        text: "TRENDING",
-        className: "is-trending"
-      }
-    };
-
-    return badgeMap[badge] || badgeMap.editor;
-  }
-
-  function buildRadarPickCard(product) {
-    const pid = resolveProductIdSafe(product);
-    const summary = product.offer_summary;
-
-    const bestOffer = summary?.offers?.[0] || null;
-    const price =
-      summary?.hasOffers && summary.lowestPrice != null
-        ? summary.lowestPrice
-        : parseNum(product.price);
-
-    const oldPrice =
-      bestOffer?.old_price ||
-      parseNum(product.old_price) ||
-      null;
-
-    const hasDiscount = price && oldPrice && oldPrice > price;
-    const discountPct = hasDiscount
-      ? Math.round(((oldPrice - price) / oldPrice) * 100)
-      : null;
-
-    const isFav =
-      typeof window.isProductFavorite === "function" && pid
-        ? window.isProductFavorite(pid)
-        : false;
-
-    const badge = normalizePickBadge(product.badge);
-    const labelText = product.label || t("popular_choice", "Populært valg");
-
-    const card = document.createElement("article");
-    card.className = "radar-pick-card";
-    card.setAttribute("data-product-id", pid || "");
-
-    card.innerHTML = `
-      <button
-        type="button"
-        class="radar-pick-fav ${isFav ? "active" : ""}"
-        aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-          2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
-          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
-          3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-        </svg>
-      </button>
-
-      ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
-
-      <span class="radar-pick-badge ${badge.className}">
-        ${escapeHtml(badge.text)}
-      </span>
-
-      <div class="radar-pick-media">
-        <img 
-          src="${escapeHtml(product.image_url || "")}" 
-          alt="${escapeHtml(product.title || product.product_name || "")}" 
-          loading="lazy"
-        >
-      </div>
-
-      <div class="radar-pick-body">
-        <p class="radar-pick-brand">${escapeHtml(product.brand || "")}</p>
-
-        <h3>${escapeHtml(product.title || product.product_name || product.name || t("product", "Produkt"))}</h3>
-
-        ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
-
-        <span class="radar-pick-label">
-          ${escapeHtml(labelText)}
-        </span>
-
-        <div class="radar-pick-bottom">
-          <div class="radar-pick-price">
-            ${price != null ? `<span>${formatPrice(price)}</span>` : ""}
-            ${hasDiscount ? `<del>${formatPrice(oldPrice)}</del>` : ""}
-          </div>
-
-          <span class="radar-pick-arrow">→</span>
-        </div>
-      </div>
-    `;
-
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".radar-pick-fav")) return;
-      if (pid) window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
-    });
-
-    const favBtn = card.querySelector(".radar-pick-fav");
-    favBtn?.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      if (typeof window.toggleFavorite !== "function" || !pid) return;
-
-      window.toggleFavorite({
-        id: pid,
-        title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-        brand: product.brand || "",
-        price: product.price || price || "",
-        discount: product.discount || "",
-        image_url: product.image_url || "",
-        product_url: product.product_url || "",
-        category: product.category || "",
-        rating: product.rating || "",
-        luxury: !!product.luxury
-      }, favBtn);
-
-      const active =
-        typeof window.isProductFavorite === "function"
-          ? window.isProductFavorite(pid)
-          : favBtn.classList.toggle("active");
-
-      favBtn.classList.toggle("active", active);
-      favBtn.setAttribute(
-        "aria-label",
-        active ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
+      const masterById = new Map(
+        masterRows.map(row => [String(row.id || "").trim(), row])
       );
-    });
 
-    return card;
-  }
+      const deals = dealRows
+        .filter(row => parseBool(row.active))
+        .map((row, index) => {
+          const productId = String(row.product_id || row.id || "").trim();
+          const master = masterById.get(productId);
 
-  try {
-    const [pickRows, masterRows] = await Promise.all([
-      fetchJson(PICKS_SHEET_ID, PICKS_TAB),
-      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
-    ]);
+          if (!productId || !master) return null;
 
-    picksTrack.classList.remove("loading");
-    picksTrack.innerHTML = "";
+          const base = createProductBaseFromMaster(master);
+          if (!base) return null;
 
-    const masterById = new Map(
-      masterRows.map(row => [String(row.id || "").trim(), row])
-    );
+          return {
+            ...base,
+            id: productId,
+            highlight_reason: langField(row, "highlight_reason", ""),
+            rank: parseInt(row.rank, 10) || index + 1
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.rank - b.rank);
 
-    const picks = pickRows
-      .filter(row => parseBool(row.active))
-      .map((row, index) => {
-        const productId = String(row.product_id || row.id || "").trim();
-        const master = masterById.get(productId);
-
-        if (!productId || !master) {
-          console.warn("⚠️ Radar Pick mangler match i BrandRadarProdukter:", productId, row);
-          return null;
-        }
-
-        const base = createProductBaseFromMaster(master);
-        if (!base) return null;
-
-        return {
-          ...base,
-          id: productId,
-          reason: row.reason || "",
-          rank: parseInt(row.rank, 10) || index + 1,
-          badge: row.badge || "editor",
-          label: row.label || ""
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.rank - b.rank);
-
-    if (!picks.length) {
-      picksTrack.textContent = t("no_picks_now", "Ingen picks akkurat nå.");
-      return;
-    }
-
-    const enrichedPicks = window.BrandRadarOffersEngine
-      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(picks)
-      : picks;
-
-    enrichedPicks.forEach(product => {
-      picksTrack.appendChild(buildRadarPickCard(product));
-    });
-
-    initArrowSlider(picksTrack);
-  } catch (err) {
-    console.error("❌ Picks error:", err);
-    picksTrack.classList.remove("loading");
-    picksTrack.textContent = t("could_not_load_picks", "Kunne ikke laste picks.");
-  }
-}
-
-// ======================================================
-// 4) SPOTLIGHT + NEWS FEED
-// ======================================================
-async function loadNewsSections() {
-  if (!spotlightTrack && !newsGridEl) return;
-
-  try {
-    const [newsRows, masterRows] = await Promise.all([
-      fetchJson(NEWS_SHEET_ID, NEWS_TAB),
-      fetchJson(MASTER_SHEET_ID, MASTER_TAB)
-    ]);
-
-    const masterById = new Map(
-      masterRows.map((row) => [String(row.id || "").trim(), row])
-    );
-
-    const merged = [];
-
-    newsRows.forEach((row) => {
-      const id = String(row.id || "").trim();
-      if (!id) return;
-
-      const master = masterById.get(id);
-      if (!master) return;
-
-      const base = createProductBaseFromMaster(master);
-      if (!base) return;
-
-      merged.push({
-        product: base,
-        spotlight: parseBool(row.spotlight),
-        showInFeed: parseBool(row.show_in_feed),
-        excerpt: row.excerpt || row.description || "",
-        tag: row.tag || "",
-        priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
-      });
-    });
-
-    const spotlightItems = merged
-      .filter((m) => m.spotlight)
-      .sort((a, b) => a.priority - b.priority);
-
-    const feedItems = merged
-      .filter((m) => m.showInFeed)
-      .sort((a, b) => a.priority - b.priority);
-
-    if (spotlightTrack) {
-      spotlightTrack.classList.remove("loading");
-      spotlightTrack.innerHTML = "";
-
-      if (!spotlightItems.length) {
-        spotlightTrack.textContent = t("no_spotlight_now", "Ingen spotlight-produkter akkurat nå.");
-      } else {
-        spotlightItems.forEach((item) => {
-          const spotlightCard = buildSpotlightCard(item.product, {
-            excerpt: item.excerpt,
-            tag: item.tag || "Spotlight",
-            secondaryTag: item.product.brand || item.product.category || "",
-            ctaText: t("explore_product", "Utforsk produkt"),
-            onCardClick: (product) => {
-              if (!product?.id) return;
-              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
-            }
-          });
-
-          spotlightTrack.appendChild(spotlightCard);
-        });
-
-        initArrowSlider(spotlightTrack);
-        initMobileSpotlightDots(spotlightTrack);
-      }
-    }
-
-    if (newsGridEl) {
-      newsGridEl.classList.remove("loading");
-      newsGridEl.innerHTML = "";
-
-      if (!feedItems.length) {
-        newsGridEl.textContent = t("no_new_products_now", "Ingen nye produkter akkurat nå.");
+      if (!deals.length) {
+        dealsTrack.textContent = t("no_deals_now", "Ingen deals akkurat nå.");
         return;
       }
 
-      feedItems.forEach((item) => {
-        const card = buildEliteCard(item.product, {
-          showExcerpt: true,
-          excerpt: item.excerpt,
-          tag: item.tag || "",
-          extraClasses: "news-card"
+      const enrichedDeals = window.BrandRadarOffersEngine
+        ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(deals)
+        : deals;
+
+      enrichedDeals.forEach((prod) => {
+        const summary = prod.offer_summary;
+
+        if (summary?.hasOffers) {
+          prod.new_price = summary.lowestPrice;
+          prod.price = summary.lowestPrice;
+
+          const bestOffer = summary.offers?.[0];
+
+          if (bestOffer?.old_price) {
+            prod.old_price = bestOffer.old_price;
+          }
+        }
+
+        const card = buildEliteCard(prod, {
+          extraClasses: "deal-card",
+          tag: prod.highlight_reason || "",
+          onCardClick: (product) => {
+            if (product.id) {
+              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+            }
+          }
         });
 
-        newsGridEl.appendChild(card);
+        dealsTrack.appendChild(card);
       });
-    }
-  } catch (err) {
-    console.error("❌ News sections error:", err);
 
-    if (spotlightTrack) {
-      spotlightTrack.classList.remove("loading");
-      spotlightTrack.textContent = t("could_not_load_spotlight", "Kunne ikke laste spotlight.");
-    }
-
-    if (newsGridEl) {
-      newsGridEl.classList.remove("loading");
-      newsGridEl.textContent = t("could_not_load_newsfeed", "Kunne ikke laste nyhetsfeed.");
+      initArrowSlider(dealsTrack);
+      initMobileFocusCarousel(dealsTrack);
+    } catch (err) {
+      console.error("❌ Deals error:", err);
+      dealsTrack.classList.remove("loading");
+      dealsTrack.textContent = t("could_not_load_deals", "Kunne ikke laste deals.");
     }
   }
-}
 
-// ======================================================
-// INIT
-// ======================================================
-document.addEventListener("DOMContentLoaded", () => {
-  ensureDealsRibbonStyles();
-  loadPartnerBanner();
-  loadDeals();
-  loadPicks();
-  loadNewsSections();
-});
+  // ======================================================
+  // 3) RADAR PICKS
+  // ======================================================
+  async function loadPicks() {
+    if (!picksTrack) return;
+
+    function normalizePickBadge(value) {
+      const badge = String(value || "editor").trim().toLowerCase();
+
+      const badgeMap = {
+        editor: {
+          text: radarBadgeText("editor"),
+          className: ""
+        },
+        gym: {
+          text: radarBadgeText("gym"),
+          className: "is-gym"
+        },
+        deal: {
+          text: radarBadgeText("deal"),
+          className: "is-deal"
+        },
+        luxury: {
+          text: radarBadgeText("luxury"),
+          className: "is-luxury"
+        },
+        trending: {
+          text: radarBadgeText("trending"),
+          className: "is-trending"
+        }
+      };
+
+      return badgeMap[badge] || badgeMap.editor;
+    }
+
+    function buildRadarPickCard(product) {
+      const pid = resolveProductIdSafe(product);
+      const summary = product.offer_summary;
+
+      const bestOffer = summary?.offers?.[0] || null;
+      const price =
+        summary?.hasOffers && summary.lowestPrice != null
+          ? summary.lowestPrice
+          : parseNum(product.price);
+
+      const oldPrice =
+        bestOffer?.old_price ||
+        parseNum(product.old_price) ||
+        null;
+
+      const hasDiscount = price && oldPrice && oldPrice > price;
+      const discountPct = hasDiscount
+        ? Math.round(((oldPrice - price) / oldPrice) * 100)
+        : null;
+
+      const isFav =
+        typeof window.isProductFavorite === "function" && pid
+          ? window.isProductFavorite(pid)
+          : false;
+
+      const badge = normalizePickBadge(product.badge);
+      const labelText = product.label || t("popular_choice", "Populært valg");
+
+      const card = document.createElement("article");
+      card.className = "radar-pick-card";
+      card.setAttribute("data-product-id", pid || "");
+
+      card.innerHTML = `
+        <button
+          type="button"
+          class="radar-pick-fav ${isFav ? "active" : ""}"
+          aria-label="${isFav ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")}"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
+            14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0
+            3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+
+        ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
+
+        <span class="radar-pick-badge ${badge.className}">
+          ${escapeHtml(badge.text)}
+        </span>
+
+        <div class="radar-pick-media">
+          <img 
+            src="${escapeHtml(product.image_url || "")}" 
+            alt="${escapeHtml(product.title || product.product_name || "")}" 
+            loading="lazy"
+          >
+        </div>
+
+        <div class="radar-pick-body">
+          <p class="radar-pick-brand">${escapeHtml(product.brand || "")}</p>
+
+          <h3>${escapeHtml(product.title || product.product_name || product.name || t("product", "Produkt"))}</h3>
+
+          ${product.reason ? `<p class="radar-pick-reason">${escapeHtml(product.reason)}</p>` : ""}
+
+          <span class="radar-pick-label">
+            ${escapeHtml(labelText)}
+          </span>
+
+          <div class="radar-pick-bottom">
+            <div class="radar-pick-price">
+              ${price != null ? `<span>${formatPrice(price)}</span>` : ""}
+              ${hasDiscount ? `<del>${formatPrice(oldPrice)}</del>` : ""}
+            </div>
+
+            <span class="radar-pick-arrow">→</span>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".radar-pick-fav")) return;
+        if (pid) window.location.href = `product.html?id=${encodeURIComponent(pid)}`;
+      });
+
+      const favBtn = card.querySelector(".radar-pick-fav");
+      favBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if (typeof window.toggleFavorite !== "function" || !pid) return;
+
+        window.toggleFavorite({
+          id: pid,
+          title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+          product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
+          brand: product.brand || "",
+          price: product.price || price || "",
+          discount: product.discount || "",
+          image_url: product.image_url || "",
+          product_url: product.product_url || "",
+          category: product.category || "",
+          rating: product.rating || "",
+          luxury: !!product.luxury
+        }, favBtn);
+
+        const active =
+          typeof window.isProductFavorite === "function"
+            ? window.isProductFavorite(pid)
+            : favBtn.classList.toggle("active");
+
+        favBtn.classList.toggle("active", active);
+        favBtn.setAttribute(
+          "aria-label",
+          active ? t("remove_favorite", "Fjern favoritt") : t("add_favorite", "Legg til favoritt")
+        );
+      });
+
+      return card;
+    }
+
+    try {
+      const [pickRows, masterRows] = await Promise.all([
+        fetchJson(PICKS_SHEET_ID, PICKS_TAB),
+        fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+      ]);
+
+      picksTrack.classList.remove("loading");
+      picksTrack.innerHTML = "";
+
+      const masterById = new Map(
+        masterRows.map(row => [String(row.id || "").trim(), row])
+      );
+
+      const picks = pickRows
+        .filter(row => parseBool(row.active))
+        .map((row, index) => {
+          const productId = String(row.product_id || row.id || "").trim();
+          const master = masterById.get(productId);
+
+          if (!productId || !master) {
+            console.warn("⚠️ Radar Pick mangler match i BrandRadarProdukter:", productId, row);
+            return null;
+          }
+
+          const base = createProductBaseFromMaster(master);
+          if (!base) return null;
+
+          return {
+            ...base,
+            id: productId,
+            reason: langField(row, "reason", ""),
+            rank: parseInt(row.rank, 10) || index + 1,
+            badge: row.badge || "editor",
+            label: langField(row, "label", "")
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.rank - b.rank);
+
+      if (!picks.length) {
+        picksTrack.textContent = t("no_picks_now", "Ingen picks akkurat nå.");
+        return;
+      }
+
+      const enrichedPicks = window.BrandRadarOffersEngine
+        ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(picks)
+        : picks;
+
+      enrichedPicks.forEach(product => {
+        picksTrack.appendChild(buildRadarPickCard(product));
+      });
+
+      initArrowSlider(picksTrack);
+    } catch (err) {
+      console.error("❌ Picks error:", err);
+      picksTrack.classList.remove("loading");
+      picksTrack.textContent = t("could_not_load_picks", "Kunne ikke laste picks.");
+    }
+  }
+
+  // ======================================================
+  // 4) SPOTLIGHT + NEWS FEED
+  // ======================================================
+  async function loadNewsSections() {
+    if (!spotlightTrack && !newsGridEl) return;
+
+    try {
+      const [newsRows, masterRows] = await Promise.all([
+        fetchJson(NEWS_SHEET_ID, NEWS_TAB),
+        fetchJson(MASTER_SHEET_ID, MASTER_TAB)
+      ]);
+
+      const masterById = new Map(
+        masterRows.map((row) => [String(row.id || "").trim(), row])
+      );
+
+      const merged = [];
+
+      newsRows.forEach((row) => {
+        const id = String(row.id || "").trim();
+        if (!id) return;
+
+        const master = masterById.get(id);
+        if (!master) return;
+
+        const base = createProductBaseFromMaster(master);
+        if (!base) return;
+
+        merged.push({
+          product: base,
+          spotlight: parseBool(row.spotlight),
+          showInFeed: parseBool(row.show_in_feed),
+          excerpt: langField(row, "excerpt", langField(row, "description", "")),
+          tag: langField(row, "tag", ""),
+          priority: row.priority ? parseInt(row.priority, 10) || 999 : 999
+        });
+      });
+
+      const spotlightItems = merged
+        .filter((m) => m.spotlight)
+        .sort((a, b) => a.priority - b.priority);
+
+      const feedItems = merged
+        .filter((m) => m.showInFeed)
+        .sort((a, b) => a.priority - b.priority);
+
+      if (spotlightTrack) {
+        spotlightTrack.classList.remove("loading");
+        spotlightTrack.innerHTML = "";
+
+        if (!spotlightItems.length) {
+          spotlightTrack.textContent = t("no_spotlight_now", "Ingen spotlight-produkter akkurat nå.");
+        } else {
+          spotlightItems.forEach((item) => {
+            const spotlightCard = buildSpotlightCard(item.product, {
+              excerpt: item.excerpt,
+              tag: item.tag || t("spotlight", "Spotlight"),
+              secondaryTag: item.product.brand || item.product.category || "",
+              ctaText: t("explore_product", "Utforsk produkt"),
+              onCardClick: (product) => {
+                if (!product?.id) return;
+                window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+              }
+            });
+
+            spotlightTrack.appendChild(spotlightCard);
+          });
+
+          initArrowSlider(spotlightTrack);
+          initMobileSpotlightDots(spotlightTrack);
+        }
+      }
+
+      if (newsGridEl) {
+        newsGridEl.classList.remove("loading");
+        newsGridEl.innerHTML = "";
+
+        if (!feedItems.length) {
+          newsGridEl.textContent = t("no_new_products_now", "Ingen nye produkter akkurat nå.");
+          return;
+        }
+
+        feedItems.forEach((item) => {
+          const card = buildEliteCard(item.product, {
+            showExcerpt: true,
+            excerpt: item.excerpt,
+            tag: item.tag || "",
+            extraClasses: "news-card"
+          });
+
+          newsGridEl.appendChild(card);
+        });
+      }
+    } catch (err) {
+      console.error("❌ News sections error:", err);
+
+      if (spotlightTrack) {
+        spotlightTrack.classList.remove("loading");
+        spotlightTrack.textContent = t("could_not_load_spotlight", "Kunne ikke laste spotlight.");
+      }
+
+      if (newsGridEl) {
+        newsGridEl.classList.remove("loading");
+        newsGridEl.textContent = t("could_not_load_newsfeed", "Kunne ikke laste nyhetsfeed.");
+      }
+    }
+  }
+
+  // ======================================================
+  // INIT
+  // ======================================================
+  function renderNewsPage() {
+    ensureDealsRibbonStyles();
+    loadPartnerBanner();
+    loadDeals();
+    loadPicks();
+    loadNewsSections();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    renderNewsPage();
+  });
+
+  window.addEventListener("brandradar:languagechange", () => {
+    renderNewsPage();
+  });
 })();
