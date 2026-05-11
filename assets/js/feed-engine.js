@@ -349,7 +349,7 @@ function mapStaybeautifulCategory(row) {
       product_url: cleanText(row.product_url),
       affiliate_url: cleanText(row.product_url),
 
-      category: cleanText(row.mapped_category) || mapped.category || feed.defaultCategory || "",
+      category: mapped.category || cleanText(row.mapped_category) || feed.defaultCategory || "",
       raw_category: cleanText(row.raw_category),
       gender: cleanText(row.gender),
       subcategory: mapped.subcategory || cleanText(row.subcategory) || "",
