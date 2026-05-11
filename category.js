@@ -418,12 +418,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     product.category,
     product.main_category,
     product.mapped_category,
-    product.raw_category,
     product.subcategory,
     product.type,
-    product.gender,
-    product.source,
-    product.affiliate_network
+    product.gender
   ]
     .filter(Boolean)
     .map(normalize)
