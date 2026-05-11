@@ -23,24 +23,55 @@ document.addEventListener("DOMContentLoaded", async () => {
   const LUXURY_SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
   const LUXURY_SHEET_NAME = "LuxuryProducts";
 
-  let products = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
+  let mainProducts = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
+  .then(r => r.json())
+  .catch(() => []);
+
+let products = [...mainProducts];
+
+let product = mainProducts.find(p => String(p.id || "").trim() === productId);
+
+if (!product) {
+  const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
     .then(r => r.json())
     .catch(() => []);
 
-  let product = products.find(p => String(p.id).trim() === productId);
+  const foundLuxury = luxuryProducts.find(p => String(p.id || "").trim() === productId);
 
-  if (!product) {
-    const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
-      .then(r => r.json())
-      .catch(() => []);
-
-    const found = luxuryProducts.find(p => String(p.id).trim() === productId);
-    if (found) {
-      product = { ...found, sheet_source: "luxury" };
-      products = luxuryProducts;
-    }
+  if (foundLuxury) {
+    product = { ...foundLuxury, sheet_source: "luxury" };
+    products = luxuryProducts;
   }
+}
 
+if (!product && window.BrandRadarFeedEngine) {
+  const feedProducts = await window.BrandRadarFeedEngine
+    .loadAllFeeds({ onlyInStock: true })
+    .catch((err) => {
+      console.warn("⚠️ Could not load affiliate feed products:", err);
+      return [];
+    });
+
+  const foundFeed = feedProducts.find((p) => {
+    const id = String(p.id || "").trim();
+    const originalId = String(p.original_id || "").trim();
+
+    return id === productId || originalId === productId;
+  });
+
+  if (foundFeed) {
+    product = {
+      ...foundFeed,
+      sheet_source: "affiliate_feed",
+      is_feed_product: true
+    };
+
+    products = [
+      ...mainProducts,
+      ...feedProducts
+    ];
+  }
+}
   if (!product) {
     alert(t("product_not_found", "Produktet ble ikke funnet!"));
     return;
