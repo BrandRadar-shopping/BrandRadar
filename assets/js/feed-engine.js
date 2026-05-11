@@ -352,7 +352,7 @@ function mapStaybeautifulCategory(row) {
       category: cleanText(row.mapped_category) || mapped.category || feed.defaultCategory || "",
       raw_category: cleanText(row.raw_category),
       gender: cleanText(row.gender),
-      subcategory: cleanText(row.subcategory) || mapped.subcategory || "",
+      subcategory: mapped.subcategory || cleanText(row.subcategory) || "",
 
       description: cleanText(row.description),
       short_description: cleanText(row.short_description),
