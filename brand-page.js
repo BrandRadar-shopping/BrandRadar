@@ -253,7 +253,7 @@ const allProducts = [...mainProducts, ...luxuryProducts, ...feedProducts];
     list.forEach(product => {
       const card = window.BrandRadarProductCardEngine.createCard(product, {
         isLuxury,
-        showBrand: false,
+        showBrand: true,
         showRating: true,
         enableFavorite: true,
         onNavigate: (p) => {
