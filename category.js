@@ -317,11 +317,13 @@ function productMatchesCategory(product, targetCategorySlug) {
 
   const pCategory = normalize(product.category);
   const pMainCategory = normalize(product.main_category);
+  const pMappedCategory = normalize(product.mapped_category);
   const structuredText = getStructuredCategoryText(product);
 
   return aliases.some(alias =>
     pCategory === alias ||
     pMainCategory === alias ||
+    pMappedCategory === alias ||
     structuredText.split(" ").includes(alias)
   );
 }
