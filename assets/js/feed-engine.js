@@ -65,64 +65,136 @@
   }
 
   function mapStaybeautifulCategory(row) {
-    const raw = cleanText(row.raw_category || row.category || "").toLowerCase();
+  const raw = cleanText(row.raw_category || row.category || row.subcategory || "").toLowerCase();
+  const title = cleanText(row.title || row.product_name || "").toLowerCase();
+  const desc = cleanText(row.description || "").toLowerCase();
 
-    if (
-      raw.includes("parfyme") ||
-      raw.includes("duft") ||
-      raw.includes("fragrance") ||
-      raw.includes("zarkoperfume")
-    ) {
-      return {
-        category: "Selfcare",
-        subcategory: "Parfyme"
-      };
-    }
+  const text = `${raw} ${title} ${desc}`;
 
-    if (
-      raw.includes("hår") ||
-      raw.includes("hair") ||
-      raw.includes("olaplex")
-    ) {
-      return {
-        category: "Selfcare",
-        subcategory: "Hår"
-      };
-    }
-
-    if (
-      raw.includes("rens") ||
-      raw.includes("ansikt") ||
-      raw.includes("hudpleie") ||
-      raw.includes("dagkrem") ||
-      raw.includes("nattkrem") ||
-      raw.includes("solkrem") ||
-      raw.includes("spf") ||
-      raw.includes("cream") ||
-      raw.includes("cleanser")
-    ) {
-      return {
-        category: "Selfcare",
-        subcategory: "Hudpleie"
-      };
-    }
-
-    if (
-      raw.includes("kropp") ||
-      raw.includes("body") ||
-      raw.includes("lotion")
-    ) {
-      return {
-        category: "Selfcare",
-        subcategory: "Kroppspleie"
-      };
-    }
-
+  if (
+    text.includes("hår") ||
+    text.includes("hair") ||
+    text.includes("shampoo") ||
+    text.includes("conditioner") ||
+    text.includes("hårkur") ||
+    text.includes("haircare") ||
+    text.includes("scalp")
+  ) {
     return {
       category: "Selfcare",
-      subcategory: cleanText(row.subcategory) || "Selfcare"
+      subcategory: "Hår"
     };
   }
+
+  if (
+    text.includes("kropp") ||
+    text.includes("body") ||
+    text.includes("bodycare") ||
+    text.includes("body lotion") ||
+    text.includes("body cream") ||
+    text.includes("hand cream") ||
+    text.includes("håndkrem")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Kroppspleie"
+    };
+  }
+
+  if (
+    text.includes("sol") ||
+    text.includes("sun") ||
+    text.includes("spf") ||
+    text.includes("suncare") ||
+    text.includes("sun care") ||
+    text.includes("sunscreen") ||
+    text.includes("solkrem")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Solprodukter"
+    };
+  }
+
+  if (
+    text.includes("parfyme") ||
+    text.includes("perfume") ||
+    text.includes("fragrance") ||
+    text.includes("eau de parfum") ||
+    text.includes("eau de toilette")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Parfyme"
+    };
+  }
+
+  if (
+    text.includes("deodorant") ||
+    text.includes("deo")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Deodorant"
+    };
+  }
+
+  if (
+    text.includes("set") ||
+    text.includes("kit") ||
+    text.includes("gave") ||
+    text.includes("gift") ||
+    text.includes("hudpleiesett") ||
+    text.includes("skincare set")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Hudpleiesett"
+    };
+  }
+
+  if (
+    text.includes("travel") ||
+    text.includes("reisestørrelse") ||
+    text.includes("reisestorrelse") ||
+    text.includes("mini") ||
+    text.includes("small size")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Reisestørrelser"
+    };
+  }
+
+  if (
+    text.includes("rens") ||
+    text.includes("cleanser") ||
+    text.includes("cleansing") ||
+    text.includes("face") ||
+    text.includes("ansikt") ||
+    text.includes("serum") ||
+    text.includes("cream") ||
+    text.includes("krem") ||
+    text.includes("mask") ||
+    text.includes("peeling") ||
+    text.includes("toner") ||
+    text.includes("eye cream") ||
+    text.includes("dagkrem") ||
+    text.includes("nattkrem") ||
+    text.includes("hudpleie") ||
+    text.includes("skincare")
+  ) {
+    return {
+      category: "Selfcare",
+      subcategory: "Ansikt"
+    };
+  }
+
+  return {
+    category: "Selfcare",
+    subcategory: cleanText(row.subcategory) || "Ansikt"
+  };
+}
 
   function normalizeFeedProduct(row, feedKey = "staybeautiful") {
     const feed = FEEDS[feedKey] || {};
