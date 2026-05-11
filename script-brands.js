@@ -1,6 +1,7 @@
 // ======================================================
 // ✅ BrandRadar – Brands Page
 // Featured sponsor cards refined closer to approved mockup
+// + Affiliate feed brands support
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -131,6 +132,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (brandObj.about) return brandObj.about;
     if (brandObj.description) return brandObj.description;
 
+    if (brandObj.source === "staybeautiful") {
+      return `${brandObj.brand} er tilgjengelig via Staybeautiful Norge. Utforsk produkter innen skjønnhet, hudpleie og velvære.`;
+    }
+
     return `${brandObj.brand} er valgt ut som fremhevet brand akkurat nå. Utforsk utvalgte produkter og få en rask oversikt over hva som gjør brandet interessant akkurat nå.`;
   }
 
@@ -155,15 +160,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (normalized.includes("zalando")) return "#f5f1eb";
     if (normalized.includes("timex")) return "#eef1f4";
     if (normalized.includes("onepiece")) return "#f3efe9";
+    if (normalized.includes("dermalogica")) return "#eef4f1";
+    if (normalized.includes("filorga")) return "#f3f1ed";
+    if (normalized.includes("coola")) return "#f6f3ee";
+    if (normalized.includes("olaplex")) return "#f3f4f6";
 
     return "#f3f1ed";
   }
 
+  function createFeedBrandLogo(brandKey) {
+    return `
+      <div class="brand-logo-placeholder" aria-hidden="true">
+        ${escapeHtml(brandKey.slice(0, 1).toUpperCase())}
+      </div>
+    `;
+  }
+
   function createRegularBrandCard(brandObj, isFav) {
     const brandKey = String(brandObj.brand || "").trim();
+    const hasLogo = !!String(brandObj.logo || "").trim();
 
     const card = document.createElement("div");
-    card.className = "brand-card";
+    card.className = `brand-card ${brandObj.source ? `brand-card--${brandObj.source}` : ""}`.trim();
 
     card.innerHTML = `
       <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}">
@@ -172,7 +190,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         </svg>
       </span>
 
-      <img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="brand-logo">
+      ${
+        hasLogo
+          ? `<img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="brand-logo">`
+          : createFeedBrandLogo(brandKey)
+      }
+
       <h3>${escapeHtml(brandKey)}</h3>
       <p>${escapeHtml(brandObj.description || "")}</p>
       <a class="brand-btn">Se produkter →</a>
@@ -236,9 +259,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="featured-brand-card__rail">
           <div class="featured-brand-card__brandhead">
             <div class="featured-brand-card__logo-wrap">
-              <img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="featured-brand-card__logo">
+              ${
+                brandObj.logo
+                  ? `<img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="featured-brand-card__logo">`
+                  : createFeedBrandLogo(brandKey)
+              }
             </div>
-            <span class="featured-brand-card__tag">Sponset</span>
+            <span class="featured-brand-card__tag">${brandObj.source === "staybeautiful" ? "Partner-feed" : "Sponset"}</span>
           </div>
 
           <div class="featured-brand-card__top">
@@ -254,12 +281,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             <a class="featured-brand-card__hero" href="${escapeHtml(heroLink)}">
               <div class="featured-brand-card__hero-stage">
-                <img
-                  src="${escapeHtml(heroImage)}"
-                  alt="${escapeHtml(heroTitle)}"
-                  class="featured-brand-card__hero-image"
-                  data-hero-image
-                >
+                ${
+                  heroImage
+                    ? `<img src="${escapeHtml(heroImage)}" alt="${escapeHtml(heroTitle)}" class="featured-brand-card__hero-image" data-hero-image>`
+                    : ""
+                }
               </div>
 
               <div class="featured-brand-card__hero-caption">
@@ -452,6 +478,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  function createFeedBrands(feedProducts = [], existingBrands = []) {
+    const existing = new Set(existingBrands.map((b) => normalizeBrand(b.brand)));
+    const grouped = new Map();
+
+    feedProducts.forEach((product) => {
+      const brand = String(product.brand || "").trim();
+      if (!brand) return;
+
+      const key = normalizeBrand(brand);
+      if (!key || existing.has(key)) return;
+
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          brand,
+          logo: "",
+          description: `${brand} produkter fra Staybeautiful Norge.`,
+          homepage: product.product_url || "#",
+          about: `${brand} er tilgjengelig via Staybeautiful Norge. Produktene hentes fra BrandRadar sin affiliate-feed og oppdateres via partnerdata.`,
+          highlight: false,
+          categories: ["Selfcare"],
+          source: product.source || "staybeautiful",
+          affiliate_network: product.affiliate_network || "partnerads"
+        });
+      }
+    });
+
+    return Array.from(grouped.values());
+  }
+
   function renderBrands(brands, allProducts) {
     highlightGrid.innerHTML = "";
     brandGrid.innerHTML = "";
@@ -487,12 +542,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const brandsUrl = `https://opensheet.elk.sh/${BRANDS_SHEET_ID}/${BRANDS_SHEET_NAME}`;
     const productsUrl = `https://opensheet.elk.sh/${PRODUCTS_SHEET_ID}/${PRODUCTS_SHEET_NAME}`;
 
-    const [brandRows, productRows] = await Promise.all([
-      fetch(brandsUrl).then((res) => res.json()),
-      fetch(productsUrl).then((res) => res.json())
+    const [brandRows, productRows, feedRows] = await Promise.all([
+      fetch(brandsUrl).then((res) => res.json()).catch(() => []),
+      fetch(productsUrl).then((res) => res.json()).catch(() => []),
+      window.BrandRadarFeedEngine
+        ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true }).catch((err) => {
+            console.warn("⚠️ Could not load feed brands:", err);
+            return [];
+          })
+        : Promise.resolve([])
     ]);
 
-    const brands = brandRows
+    const sheetBrands = brandRows
       .map((r) => ({
         brand: String(r.brand || "").trim(),
         logo: String(r.logo || "").trim(),
@@ -500,7 +561,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         homepage: String(r.homepage_url || "").trim() || "#",
         about: String(r.about || "").trim(),
         highlight: String(r.highlight || "").toLowerCase() === "yes",
-        categories: r.categories ? String(r.categories).split(",").map((c) => c.trim()) : []
+        categories: r.categories ? String(r.categories).split(",").map((c) => c.trim()) : [],
+        source: "manual"
       }))
       .filter((b) => b.brand);
 
@@ -516,10 +578,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       }))
       .filter((p) => p.brand && p.image_url);
 
+    const feedProducts = feedRows
+      .map((p) => ({
+        ...p,
+        id: String(p.id || p.product_id || "").trim(),
+        title: getProductTitle(p),
+        brand: String(p.brand || "").trim(),
+        image_url: String(p.image_url || "").trim(),
+        price: p.price || "",
+        product_url: String(p.product_url || p.affiliate_url || "").trim(),
+        source: p.source || "staybeautiful"
+      }))
+      .filter((p) => p.brand && p.image_url);
+
+    const feedBrands = createFeedBrands(feedProducts, sheetBrands);
+
+    const brands = [...sheetBrands, ...feedBrands].sort((a, b) =>
+      String(a.brand || "").localeCompare(String(b.brand || ""), "nb")
+    );
+
+    const allProducts = [...products, ...feedProducts];
+
     localStorage.setItem("allBrandsData", JSON.stringify(brands));
 
-    initAlphabetFilter(brands, products);
-    renderBrands(brands, products);
+    initAlphabetFilter(brands, allProducts);
+    renderBrands(brands, allProducts);
     setupMobileAlphabetToggle();
 
     if (searchInput) {
@@ -530,7 +613,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ? brands
           : brands.filter((b) => b.brand.toLowerCase().includes(search));
 
-        renderBrands(filtered, products);
+        renderBrands(filtered, allProducts);
       });
     }
 
