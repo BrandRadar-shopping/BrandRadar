@@ -64,21 +64,57 @@
     return "";
   }
 
-  function mapStaybeautifulCategory(row) {
-  const raw = cleanText(row.raw_category || row.category || row.subcategory || "").toLowerCase();
+function mapStaybeautifulCategory(row) {
+  const raw = cleanText(row.raw_category || row.category || "").toLowerCase();
   const title = cleanText(row.title || row.product_name || "").toLowerCase();
+  const sub = cleanText(row.subcategory || "").toLowerCase();
+
+  // Beskrivelse brukes kun som støtte, ikke som hovedgrunnlag.
   const desc = cleanText(row.description || "").toLowerCase();
 
-  const text = `${raw} ${title} ${desc}`;
+  const coreText = `${raw} ${title} ${sub}`;
+  const fullText = `${coreText} ${desc}`;
 
+  function hasAny(text, words) {
+    return words.some((word) => text.includes(word));
+  }
+
+  function hasPerfumeNegative(text) {
+    return hasAny(text, [
+      "parfymefri",
+      "parfyme fri",
+      "uten parfyme",
+      "duftfri",
+      "duft fri",
+      "fragrance free",
+      "fragrance-free",
+      "perfume free",
+      "perfume-free",
+      "without fragrance",
+      "without perfume"
+    ]);
+  }
+
+  // ======================================================
+  // 1) HÅR
+  // ======================================================
   if (
-    text.includes("hår") ||
-    text.includes("hair") ||
-    text.includes("shampoo") ||
-    text.includes("conditioner") ||
-    text.includes("hårkur") ||
-    text.includes("haircare") ||
-    text.includes("scalp")
+    hasAny(coreText, [
+      "hår",
+      "har",
+      "hair",
+      "shampoo",
+      "conditioner",
+      "balsam",
+      "hårkur",
+      "harkur",
+      "hair mask",
+      "scalp",
+      "leave-in",
+      "leave in",
+      "styling",
+      "haircare"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -86,14 +122,28 @@
     };
   }
 
+  // ======================================================
+  // 2) KROPP
+  // ======================================================
   if (
-    text.includes("kropp") ||
-    text.includes("body") ||
-    text.includes("bodycare") ||
-    text.includes("body lotion") ||
-    text.includes("body cream") ||
-    text.includes("hand cream") ||
-    text.includes("håndkrem")
+    hasAny(coreText, [
+      "kropp",
+      "body",
+      "bodycare",
+      "body care",
+      "body lotion",
+      "body cream",
+      "body oil",
+      "hand cream",
+      "håndkrem",
+      "handkrem",
+      "foot cream",
+      "fotkrem",
+      "shower gel",
+      "dusj",
+      "bath",
+      "scrub"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -101,14 +151,24 @@
     };
   }
 
+  // ======================================================
+  // 3) SOLPRODUKTER
+  // ======================================================
   if (
-    text.includes("sol") ||
-    text.includes("sun") ||
-    text.includes("spf") ||
-    text.includes("suncare") ||
-    text.includes("sun care") ||
-    text.includes("sunscreen") ||
-    text.includes("solkrem")
+    hasAny(coreText, [
+      "sol",
+      "sun",
+      "spf",
+      "suncare",
+      "sun care",
+      "sunscreen",
+      "solkrem",
+      "after sun",
+      "aftersun",
+      "self tan",
+      "self-tan",
+      "tanning"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -116,12 +176,24 @@
     };
   }
 
+  // ======================================================
+  // 4) PARFYME
+  // VIKTIG:
+  // Kun title/raw/subcategory. Ikke description.
+  // Dette hindrer at "parfymefri" hudpleie blir parfyme.
+  // ======================================================
   if (
-    text.includes("parfyme") ||
-    text.includes("perfume") ||
-    text.includes("fragrance") ||
-    text.includes("eau de parfum") ||
-    text.includes("eau de toilette")
+    !hasPerfumeNegative(coreText) &&
+    hasAny(coreText, [
+      "parfyme",
+      "perfume",
+      "fragrance",
+      "duft",
+      "eau de parfum",
+      "eau de toilette",
+      "edp",
+      "edt"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -129,9 +201,15 @@
     };
   }
 
+  // ======================================================
+  // 5) DEODORANT
+  // ======================================================
   if (
-    text.includes("deodorant") ||
-    text.includes("deo")
+    hasAny(coreText, [
+      "deodorant",
+      "deo",
+      "antiperspirant"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -139,13 +217,21 @@
     };
   }
 
+  // ======================================================
+  // 6) HUDPLEIESETT / KIT
+  // ======================================================
   if (
-    text.includes("set") ||
-    text.includes("kit") ||
-    text.includes("gave") ||
-    text.includes("gift") ||
-    text.includes("hudpleiesett") ||
-    text.includes("skincare set")
+    hasAny(coreText, [
+      "hudpleiesett",
+      "skincare set",
+      "skin care set",
+      "gift set",
+      "gavesett",
+      "starter kit",
+      "kit",
+      "routine",
+      "set"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -153,12 +239,19 @@
     };
   }
 
+  // ======================================================
+  // 7) REISESTØRRELSER
+  // ======================================================
   if (
-    text.includes("travel") ||
-    text.includes("reisestørrelse") ||
-    text.includes("reisestorrelse") ||
-    text.includes("mini") ||
-    text.includes("small size")
+    hasAny(coreText, [
+      "travel",
+      "travel size",
+      "reisestørrelse",
+      "reisestorrelse",
+      "mini",
+      "minis",
+      "small size"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -166,23 +259,46 @@
     };
   }
 
+  // ======================================================
+  // 8) ANSIKT / HUDPLEIE
+  // Bruker fullText her, fordi beskrivelser ofte avslører ansikt/hudpleie.
+  // Dette er default for Staybeautiful hvis ingenting annet matcher.
+  // ======================================================
   if (
-    text.includes("rens") ||
-    text.includes("cleanser") ||
-    text.includes("cleansing") ||
-    text.includes("face") ||
-    text.includes("ansikt") ||
-    text.includes("serum") ||
-    text.includes("cream") ||
-    text.includes("krem") ||
-    text.includes("mask") ||
-    text.includes("peeling") ||
-    text.includes("toner") ||
-    text.includes("eye cream") ||
-    text.includes("dagkrem") ||
-    text.includes("nattkrem") ||
-    text.includes("hudpleie") ||
-    text.includes("skincare")
+    hasAny(fullText, [
+      "ansikt",
+      "face",
+      "facial",
+      "hudpleie",
+      "skincare",
+      "skin care",
+      "serum",
+      "cream",
+      "krem",
+      "moisturizer",
+      "moisturiser",
+      "cleanser",
+      "cleansing",
+      "rens",
+      "toner",
+      "peeling",
+      "mask",
+      "maske",
+      "eye cream",
+      "øyekrem",
+      "oyekrem",
+      "dagkrem",
+      "nattkrem",
+      "anti-age",
+      "anti age",
+      "acne",
+      "blemish",
+      "exfoliant",
+      "retinol",
+      "hyaluronic",
+      "collagen",
+      "vitamin c"
+    ])
   ) {
     return {
       category: "Selfcare",
@@ -190,11 +306,17 @@
     };
   }
 
+  // ======================================================
+  // 9) FALLBACK
+  // Staybeautiful er hovedsakelig selfcare. Ukjente produkter bør
+  // heller lande i Ansikt enn feilaktig Parfyme.
+  // ======================================================
   return {
     category: "Selfcare",
-    subcategory: cleanText(row.subcategory) || "Ansikt"
+    subcategory: "Ansikt"
   };
-}
+}  
+
 
   function normalizeFeedProduct(row, feedKey = "staybeautiful") {
     const feed = FEEDS[feedKey] || {};
