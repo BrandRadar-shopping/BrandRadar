@@ -1133,10 +1133,21 @@ function productMatchesSubcategory(product, targetSubSlug) {
     // ======================================================
     // NORMAL CATEGORY MODE
     // ======================================================
-    const [mapRows, products] = await Promise.all([
-      fetch(mappingUrl).then(r => r.json()),
-      fetch(productUrl).then(r => r.json())
-    ]);
+    const [mapRows, masterProducts, feedProducts] = await Promise.all([
+  fetch(mappingUrl).then(r => r.json()),
+  fetch(productUrl).then(r => r.json()),
+  window.BrandRadarFeedEngine
+    ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true, limit: 300 }).catch((err) => {
+        console.warn("⚠️ Feed products could not be loaded:", err);
+        return [];
+      })
+    : Promise.resolve([])
+]);
+
+const products = [
+  ...masterProducts,
+  ...feedProducts
+];
 
     const match = mapRows.find(row => {
       const mainOk = normalize(row.main_category) === categorySlug;
