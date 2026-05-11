@@ -1233,10 +1233,17 @@ const products = [
       const subOk = productMatchesSubcategory(p, subSlug);
 
       let genderOk = true;
-      if (genderSlug) {
-        const pGender = normalize(p.gender);
-        genderOk = pGender === genderSlug || pGender === "unisex" || pGender === "";
-      }
+
+if (genderSlug) {
+  const pGender = normalize(p.gender);
+  const isFeedProduct = !!p.is_feed_product || normalize(p.sheet_source) === "affiliate-feed";
+
+  if (isFeedProduct && !pGender) {
+    genderOk = false;
+  } else {
+    genderOk = pGender === genderSlug || pGender === "unisex";
+  }
+}
 
       return categoryOk && subOk && genderOk;
     });
