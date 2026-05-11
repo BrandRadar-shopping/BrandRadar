@@ -242,7 +242,7 @@
       ]);
     }
 
-    if (hasAny(coreText, ["hår", "har", "hair", "shampoo", "conditioner", "balsam", "hair mask", "scalp", "leave-in"])) {
+    if (hasAny(coreText, ["shampoo", "conditioner", "balsam", "hair mask", "hårkur", "scalp", "leave-in", "leave in", "haircare"])) {
       return { category: "Selfcare", subcategory: "Hår" };
     }
 
