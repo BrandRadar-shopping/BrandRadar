@@ -156,24 +156,155 @@ document.addEventListener("DOMContentLoaded", async () => {
   harpynt: ["harpynt", "hair-accessories", "hair-accessory"],
   "bag-charms": ["bag-charms", "bag-charm"],
 
-  ansikt: ["ansikt", "face"],
-  kroppspleie: ["kroppspleie", "bodycare", "body-care"],
-  deodorant: ["deodorant", "deo"],
-  "aktiv-hudpleie": ["aktiv-hudpleie", "active-skincare"],
-  "k-beauty": ["k-beauty", "kbeauty"],
-  solprodukter: ["solprodukter", "sun-care", "suncare"],
-  "beauty-tech": ["beauty-tech", "beautytech"],
-  "mamma-barn": ["mamma-barn", "mom-baby"],
-  hudpleiesett: ["hudpleiesett", "skincare-set", "skincare-sets"],
-  reisestorrelser: ["reisestorrelser", "travel-size", "travel-sizes"],
-  hudpleietilbehor: ["hudpleietilbehor", "skincare-accessories"],
-  munnhygiene: ["munnhygiene", "oral-care"],
-  parfyme: ["parfyme", "perfume", "fragrance"],
-  barbering: ["barbering", "shaving"],
-  "skjegg-bart": ["skjegg-bart", "skjegg", "bart", "beard", "moustache"],
-  hudpleie: ["hudpleie", "skincare"],
-  har: ["har", "hair"],
-  gavesett: ["gavesett", "gift-set", "gift-sets"],
+    ansikt: [
+    "ansikt",
+    "face",
+    "facial",
+    "face-care",
+    "facecare"
+  ],
+
+  hudpleie: [
+    "hudpleie",
+    "skincare",
+    "skin-care",
+    "skin",
+    "ansikt",
+    "face",
+    "facial",
+    "aktiv-hudpleie",
+    "active-skincare",
+    "hudpleiesett",
+    "skincare-set",
+    "skincare-sets",
+    "hudpleietilbehor",
+    "skincare-accessories"
+  ],
+
+  kroppspleie: [
+    "kroppspleie",
+    "bodycare",
+    "body-care",
+    "body",
+    "body-lotion",
+    "body-cream",
+    "hand-cream",
+    "shower-gel"
+  ],
+
+  har: [
+    "har",
+    "hair",
+    "haircare",
+    "hair-care",
+    "shampoo",
+    "conditioner",
+    "scalp",
+    "hair-mask"
+  ],
+
+  solprodukter: [
+    "solprodukter",
+    "sun-care",
+    "suncare",
+    "spf",
+    "sunscreen",
+    "sun",
+    "after-sun"
+  ],
+
+  deodorant: [
+    "deodorant",
+    "deo",
+    "antiperspirant"
+  ],
+
+  parfyme: [
+    "parfyme",
+    "perfume",
+    "fragrance",
+    "eau-de-parfum",
+    "eau-de-toilette",
+    "edp",
+    "edt"
+  ],
+
+  hudpleiesett: [
+    "hudpleiesett",
+    "skincare-set",
+    "skincare-sets",
+    "starter-kit",
+    "kit"
+  ],
+
+  hudpleietilbehor: [
+    "hudpleietilbehor",
+    "skincare-accessories",
+    "skin-tools",
+    "brush",
+    "roller"
+  ],
+
+  reisestorrelser: [
+    "reisestorrelser",
+    "travel-size",
+    "travel-sizes",
+    "travel",
+    "mini",
+    "minis"
+  ],
+
+  munnhygiene: [
+    "munnhygiene",
+    "oral-care",
+    "tooth",
+    "teeth",
+    "mouth"
+  ],
+
+  "beauty-tech": [
+    "beauty-tech",
+    "beautytech",
+    "device",
+    "devices"
+  ],
+
+  "k-beauty": [
+    "k-beauty",
+    "kbeauty",
+    "korean-skincare"
+  ],
+
+  "mamma-barn": [
+    "mamma-barn",
+    "mom-baby",
+    "baby",
+    "mother"
+  ],
+
+  barbering: [
+    "barbering",
+    "shaving",
+    "shave",
+    "razor"
+  ],
+
+  "skjegg-bart": [
+    "skjegg-bart",
+    "skjegg",
+    "bart",
+    "beard",
+    "moustache",
+    "mustache"
+  ],
+
+  gavesett: [
+    "gavesett",
+    "gift-set",
+    "gift-sets",
+    "gift",
+    "set"
+  ],
 
   "yttertoy": ["yttertoy", "outerwear"],
   "gensere-cardigans": ["gensere-cardigans", "gensere", "cardigans", "genser", "cardigan"],
