@@ -94,6 +94,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   // --- Sett brandinfo
+const feedBrandProducts = feedProducts.filter(
+  p =>
+    p.brand &&
+    p.brand.toLowerCase().trim() === brandName.toLowerCase().trim()
+);
+
+const isFeedBrand = feedBrandProducts.length > 0;
+
+if (!brand && isFeedBrand) {
+  const firstProduct = feedBrandProducts[0];
+
+  if (titleEl) {
+    titleEl.textContent = brandName;
+  }
+
+  if (descEl) {
+    descEl.textContent = `${brandName} produkter fra Staybeautiful Norge.`;
+  }
+
+  if (logoEl) {
+    logoEl.style.display = "none";
+  }
+
+  if (siteBtn) {
+    siteBtn.href = firstProduct.product_url || "#";
+  }
+}
+  
   if (brand) {
     if (titleEl) {
       titleEl.textContent = brand.brand || brandName;
@@ -125,12 +153,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateFavUI();
 
   // --- Hent produkter
-  const [mainProducts, luxuryProducts] = await Promise.all([
-    fetch(MAIN_PRODUCTS_URL).then(r => r.json()).catch(() => []),
-    fetch(LUXURY_PRODUCTS_URL).then(r => r.json()).catch(() => [])
-  ]);
+ const [mainProducts, luxuryProducts, feedProducts] = await Promise.all([
+  fetch(MAIN_PRODUCTS_URL).then(r => r.json()).catch(() => []),
+  fetch(LUXURY_PRODUCTS_URL).then(r => r.json()).catch(() => []),
+  window.BrandRadarFeedEngine
+    ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true }).catch((err) => {
+        console.warn("⚠️ Could not load feed products on brand page:", err);
+        return [];
+      })
+    : Promise.resolve([])
+]);
 
-  const allProducts = [...mainProducts, ...luxuryProducts];
+const allProducts = [...mainProducts, ...luxuryProducts, ...feedProducts];
 
   let brandProducts = allProducts.filter(
     p =>
