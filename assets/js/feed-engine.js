@@ -183,23 +183,23 @@ function mapStaybeautifulCategory(row) {
   // Dette hindrer at "parfymefri" hudpleie blir parfyme.
   // ======================================================
   if (
-    !hasPerfumeNegative(coreText) &&
-    hasAny(coreText, [
-      "parfyme",
-      "perfume",
-      "fragrance",
-      "duft",
-      "eau de parfum",
-      "eau de toilette",
-      "edp",
-      "edt"
-    ])
-  ) {
-    return {
-      category: "Selfcare",
-      subcategory: "Parfyme"
-    };
-  }
+  !hasPerfumeNegative(coreText) &&
+  (
+    raw.includes("parfyme") ||
+    raw.includes("perfume") ||
+    raw.includes("fragrance") ||
+    raw.includes("duft") ||
+    title.includes("eau de parfum") ||
+    title.includes("eau de toilette") ||
+    title.includes(" edp") ||
+    title.includes(" edt")
+  )
+) {
+  return {
+    category: "Selfcare",
+    subcategory: "Parfyme"
+  };
+}
 
   // ======================================================
   // 5) DEODORANT
