@@ -1267,20 +1267,23 @@ function productMatchesSubcategory(product, targetSubSlug) {
     // ======================================================
     // NORMAL CATEGORY MODE
     // ======================================================
-    const [mapRows, masterProducts, supabaseProductsRaw] = await Promise.all([
+   const [mapRows, masterProducts, supabaseProductsRaw] = await Promise.all([
   fetch(mappingUrl).then(r => r.json()),
   fetch(productUrl).then(r => r.json()),
   window.BrandRadarSupabase
     ? window.BrandRadarSupabase.fetchProducts({
         category: categoryParam,
+        subcategory: subParam,
+        gender: genderParam,
         limit: 1000
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.warn("⚠️ Supabase products could not be loaded:", err);
         return [];
       })
     : Promise.resolve([])
 ]);
-
+    
 const supabaseProducts = supabaseProductsRaw.map(p => ({
   ...p,
   id: p.external_id || p.id,
