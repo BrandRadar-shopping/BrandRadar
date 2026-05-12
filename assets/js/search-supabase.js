@@ -14,11 +14,26 @@
       .toLowerCase()
       .trim();
 
+  const escapeHTML = (value) =>
+    String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
   const getProductTitle = (product) =>
-    product.product_name ||
     product.title ||
+    product.product_name ||
     product.name ||
     "Produkt";
+
+  const getProductBrand = (product) =>
+    product.brand_name ||
+    product.brand_slug ||
+    product.merchant_name ||
+    product.merchant_slug ||
+    "";
 
   const getProductImage = (product) =>
     product.image_url ||
@@ -26,11 +41,21 @@
     product.main_image ||
     "assets/img/placeholder.png";
 
+  const formatPrice = (value, currency = "NOK") => {
+    if (value === null || value === undefined || value === "") return "";
+
+    const number = Number(value);
+    if (Number.isNaN(number)) return String(value);
+
+    return new Intl.NumberFormat("nb-NO", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   const getProductPrice = (product) =>
-    product.new_price ||
-    product.price ||
-    product.lowest_price ||
-    "";
+    formatPrice(product.price || product.lowest_price || product.new_price, product.currency || "NOK");
 
   async function searchProducts(query, limit = 20) {
     const cleanQuery = normalize(query);
@@ -66,22 +91,22 @@
 
     container.innerHTML = products
       .map((product) => {
-        const id = product.id || product.product_id;
+        const id = product.id || product.external_id || product.original_id;
         const title = getProductTitle(product);
-        const brand = product.brand || "";
+        const brand = getProductBrand(product);
         const image = getProductImage(product);
         const price = getProductPrice(product);
 
         return `
           <a class="search-result-item" href="product.html?id=${encodeURIComponent(id)}">
             <div class="search-result-image">
-              <img src="${image}" alt="${title}" loading="lazy">
+              <img src="${escapeHTML(image)}" alt="${escapeHTML(title)}" loading="lazy">
             </div>
 
             <div class="search-result-info">
-              <p class="search-result-brand">${brand}</p>
-              <h4 class="search-result-title">${title}</h4>
-              ${price ? `<p class="search-result-price">${price}</p>` : ""}
+              ${brand ? `<p class="search-result-brand">${escapeHTML(brand)}</p>` : ""}
+              <h4 class="search-result-title">${escapeHTML(title)}</h4>
+              ${price ? `<p class="search-result-price">${escapeHTML(price)}</p>` : ""}
             </div>
           </a>
         `;
