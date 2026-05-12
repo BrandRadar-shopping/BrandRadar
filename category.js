@@ -11,16 +11,6 @@
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const testProducts =
-  await window.BrandRadarSupabase.fetchProducts({
-    category: "Selfcare",
-    subcategory: "Ansikt",
-    limit: 12
-  });
-
-console.log("SUPABASE PRODUCTS:", testProducts);
-
-  
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
@@ -1277,20 +1267,44 @@ function productMatchesSubcategory(product, targetSubSlug) {
     // ======================================================
     // NORMAL CATEGORY MODE
     // ======================================================
-    const [mapRows, masterProducts, feedProducts] = await Promise.all([
+    const [mapRows, masterProducts, supabaseProductsRaw] = await Promise.all([
   fetch(mappingUrl).then(r => r.json()),
   fetch(productUrl).then(r => r.json()),
-  window.BrandRadarFeedEngine
-    ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true, limit: 300 }).catch((err) => {
-        console.warn("⚠️ Feed products could not be loaded:", err);
+  window.BrandRadarSupabase
+    ? window.BrandRadarSupabase.fetchProducts({
+        category: categoryParam,
+        limit: 1000
+      }).catch((err) => {
+        console.warn("⚠️ Supabase products could not be loaded:", err);
         return [];
       })
     : Promise.resolve([])
 ]);
 
+const supabaseProducts = supabaseProductsRaw.map(p => ({
+  ...p,
+  id: p.external_id || p.id,
+  product_id: p.external_id || p.id,
+  title: p.title || "",
+  product_name: p.title || "",
+  brand: p.brand_name || p.brand || p.brand_slug || "",
+  price: p.price || "",
+  old_price: p.old_price || "",
+  discount: p.discount || "",
+  image_url: p.image_url || "",
+  product_url: p.affiliate_url || p.product_url || "",
+  category: p.category || "",
+  subcategory: p.subcategory || "",
+  gender: p.gender || "",
+  rating: p.rating || "",
+  is_supabase_product: true
+}));
+
+console.log("Loaded Supabase products:", supabaseProducts.length);
+
 const products = [
   ...masterProducts,
-  ...feedProducts
+  ...supabaseProducts
 ];
 
     const match = mapRows.find(row => {
