@@ -7,10 +7,11 @@ window.BrandRadarSupabase = (() => {
   const SUPABASE_URL = "https://eifrfwtkyrirrmaupfij.supabase.co";
   const SUPABASE_KEY = "sb_publishable_4t_wIAT5FjDklllDJtYkaA_IlEkbxn2";
 
- async function fetchProducts(options = {}) {
+async function fetchProducts(options = {}) {
   const {
     category = null,
     subcategory = null,
+    gender = null,
     limit = 100,
     offset = 0,
     brand = null
@@ -22,7 +23,7 @@ window.BrandRadarSupabase = (() => {
     `&active=eq.true` +
     `&limit=${limit}` +
     `&offset=${offset}` +
-`&order=id.asc`;
+    `&order=id.asc`;
 
   if (category) {
     url += `&category=ilike.${encodeURIComponent(category)}`;
@@ -30,6 +31,10 @@ window.BrandRadarSupabase = (() => {
 
   if (subcategory) {
     url += `&subcategory=ilike.${encodeURIComponent(subcategory)}`;
+  }
+
+  if (gender) {
+    url += `&gender=ilike.${encodeURIComponent(gender)}`;
   }
 
   if (brand) {
