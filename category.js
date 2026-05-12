@@ -11,6 +11,16 @@
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const testProducts =
+  await window.BrandRadarSupabase.fetchProducts({
+    category: "Selfcare",
+    subcategory: "Ansikt",
+    limit: 12
+  });
+
+console.log("SUPABASE PRODUCTS:", testProducts);
+
+  
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
