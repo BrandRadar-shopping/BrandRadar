@@ -55,17 +55,31 @@
     p.main_image ||
     "";
 
-  const getPrice = (p) =>
-    formatPrice(
-      p.price || p.lowest_price || p.new_price,
-      p.currency || "NOK"
-    );
+  const getPrice = (p) => {
+  const rawPrice = p.price || p.lowest_price || p.new_price;
 
-  const getId = (p) =>
-    p.id ||
-    p.external_id ||
-    p.original_id;
+  if (rawPrice === null || rawPrice === undefined || rawPrice === "") {
+    return "";
+  }
 
+  const number = Number(rawPrice);
+
+  if (!Number.isFinite(number)) {
+    return "";
+  }
+
+  // Stopper ødelagte feed-priser fra å vises som milliarder
+  if (number <= 0 || number > 1000000) {
+    return "";
+  }
+
+  return formatPrice(number, p.currency || "NOK");
+};
+
+const getId = (p) =>
+  p.external_id ||
+  p.original_id ||
+  p.id;
   async function searchProducts(query, limit = 12) {
     const cleanQuery = normalize(query);
 
