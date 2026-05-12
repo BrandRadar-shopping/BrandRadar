@@ -609,3 +609,20 @@
   color: #6b7280;
   padding: 2rem 0;
 }
+
+body.is-brands-page .brand-card h3 {
+  display: none;
+}
+
+body.is-brands-page .brand-product-count {
+  margin-top: 18px;
+}
+
+body.is-brands-page .brand-card {
+  justify-content: center;
+}
+
+body.is-brands-page .brand-card img,
+body.is-brands-page .brand-card .brand-logo {
+  margin: 34px auto 24px;
+}
