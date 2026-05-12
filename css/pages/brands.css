@@ -667,3 +667,20 @@ body.is-brands-page .featured-brand-card__thumb img {
 body.is-brands-page .featured-brand-card__thumb {
   height: 104px;
 }
+
+/* =========================================
+   FEATURED BRANDS – cleaner white stages
+========================================= */
+
+body.is-brands-page .featured-brand-card__hero-stage {
+  background: #ffffff;
+}
+
+body.is-brands-page .featured-brand-card__thumb {
+  background: #ffffff;
+}
+
+body.is-brands-page .featured-brand-card__thumb:hover,
+body.is-brands-page .featured-brand-card__thumb.is-active {
+  background: #ffffff;
+}
