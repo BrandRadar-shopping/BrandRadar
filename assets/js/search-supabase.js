@@ -96,10 +96,66 @@
     });
   }
 
-  function renderBrands(brandWrap) {
-    if (!brandWrap) return;
-    brandWrap.innerHTML = `<div class="search-empty">Brands flyttes til Supabase senere.</div>`;
+  async function searchBrands(query, limit = 8) {
+  const cleanQuery = normalize(query);
+
+  if (!cleanQuery || cleanQuery.length < 2) return [];
+
+  const { data, error } = await client.rpc("search_brands", {
+    search_query: cleanQuery,
+    limit_count: limit,
+  });
+
+  if (error) {
+    console.error("Supabase brand search error:", error);
+    return [];
   }
+
+  return data || [];
+}
+
+function renderBrands(brands, brandWrap) {
+  if (!brandWrap) return;
+
+  if (!brands.length) {
+    brandWrap.innerHTML = `<div class="search-empty">Ingen brands funnet.</div>`;
+    return;
+  }
+
+  brandWrap.innerHTML = brands
+    .map((brand) => {
+      const logo = brand.logo_url || "";
+      const name = brand.name || "";
+      const slug = brand.slug || "";
+
+      return `
+        <button class="search-item search-brand-item" type="button" data-brand="${escapeHTML(name)}">
+          <span class="search-thumb">
+            ${logo
+              ? `<img src="${escapeHTML(logo)}" alt="">`
+              : "🏷️"}
+          </span>
+
+          <span class="search-meta">
+            <span class="search-title">${escapeHTML(name)}</span>
+            <span class="search-sub">
+              ${brand.product_count || 0} produkter
+            </span>
+          </span>
+        </button>
+      `;
+    })
+    .join("");
+
+  brandWrap.querySelectorAll(".search-brand-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      const brand = item.dataset.brand;
+      if (brand) {
+        window.location.href = `brand-page.html?brand=${encodeURIComponent(brand)}`;
+      }
+    });
+  });
+}
 
   function initSupabaseSearch() {
     const root = document.getElementById("site-search");
