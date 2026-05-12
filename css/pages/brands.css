@@ -684,3 +684,25 @@ body.is-brands-page .featured-brand-card__thumb:hover,
 body.is-brands-page .featured-brand-card__thumb.is-active {
   background: #ffffff;
 }
+
+body.is-brands-page .featured-brand-card__hero-stage {
+  background: #fff !important;
+  box-shadow: none !important;
+  border-color: #ece7df;
+}
+
+body.is-brands-page .featured-brand-card__hero-image {
+  background: #fff !important;
+  mix-blend-mode: multiply;
+  filter: none !important;
+}
+
+body.is-brands-page .featured-brand-card__thumb {
+  background: #fff !important;
+}
+
+body.is-brands-page .featured-brand-card__thumb img {
+  background: #fff !important;
+  mix-blend-mode: multiply;
+  filter: none !important;
+}
