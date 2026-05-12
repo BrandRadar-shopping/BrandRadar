@@ -391,13 +391,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     brandProducts = await loadBrandProducts(brand);
 
-    if (window.BrandRadarOffersEngine) {
-      await window.BrandRadarOffersEngine.init?.();
-      brandProducts =
-        await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary?.(
-          brandProducts
-        ) || brandProducts;
-    }
+    // Supabase feed products already contain the correct live imported price.
+// Do not enrich with old offers-engine data here, because it can override
+// the correct product price with stale/incorrect offer_summary prices.
 
     renderBrandInfo();
     setupCategoryFilter();
