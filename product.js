@@ -105,7 +105,39 @@ if (!product && window.BrandRadarFeedEngine) {
       is_supabase_product: true
     };
 
-    products = [product];
+    if (window.BrandRadarSupabase) {
+  const relatedPool = await window.BrandRadarSupabase.fetchProducts({
+    category: product.category || null,
+    subcategory: product.subcategory || null,
+    limit: 24
+  });
+
+  products = relatedPool.map(p => ({
+    ...p,
+    id: p.external_id || p.id,
+    product_id: p.external_id || p.id,
+    title: p.title || "",
+    product_name: p.title || "",
+    brand: p.brand_name || p.brand || p.brand_slug || "",
+    price: p.price || "",
+    old_price: p.old_price || "",
+    discount: p.discount || "",
+    image_url: p.image_url || "",
+    image2: p.image2 || "",
+    image3: p.image3 || "",
+    image4: p.image4 || "",
+    product_url: p.affiliate_url || p.product_url || "",
+    affiliate_url: p.affiliate_url || p.product_url || "",
+    category: p.category || "",
+    subcategory: p.subcategory || "",
+    gender: p.gender || "",
+    description: p.description || "",
+    rating: p.rating || "",
+    is_supabase_product: true
+  }));
+} else {
+  products = [product];
+}
   }
 }
 
