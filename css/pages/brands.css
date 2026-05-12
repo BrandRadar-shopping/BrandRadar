@@ -446,13 +446,21 @@
   }
 
   body.is-brands-page .brand-card img,
-  body.is-brands-page .brand-card .brand-logo {
-    width: 100%;
-    max-width: 132px;
-    height: 96px;
-    object-fit: contain;
-    margin: 28px auto 16px;
-  }
+body.is-brands-page .brand-card .brand-logo {
+  width: 100%;
+  max-width: 190px;
+  height: 120px;
+  object-fit: contain;
+  margin: 42px auto 20px;
+}
+
+   body.is-brands-page .brand-card h3 {
+  display: none;
+}
+
+body.is-brands-page .brand-product-count {
+  margin-top: 10px;
+}
 
   body.is-brands-page .brand-card h3 {
     margin: 0 0 12px;
