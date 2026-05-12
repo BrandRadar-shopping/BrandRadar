@@ -2,17 +2,12 @@
   const SUPABASE_URL = window.BRANDRADAR_SUPABASE_URL;
   const SUPABASE_ANON_KEY = window.BRANDRADAR_SUPABASE_ANON_KEY;
 
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) {
     console.warn("BrandRadar search: Supabase config mangler.");
     return;
   }
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const normalize = (value) =>
-    String(value || "")
-      .toLowerCase()
-      .trim();
 
   const escapeHTML = (value) =>
     String(value || "")
@@ -22,28 +17,11 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
-  const getProductTitle = (product) =>
-    product.title ||
-    product.product_name ||
-    product.name ||
-    "Produkt";
-
-  const getProductBrand = (product) =>
-    product.brand_name ||
-    product.brand_slug ||
-    product.merchant_name ||
-    product.merchant_slug ||
-    "";
-
-  const getProductImage = (product) =>
-    product.image_url ||
-    product.image ||
-    product.main_image ||
-    "assets/img/placeholder.png";
+  const normalize = (value) =>
+    String(value || "").toLowerCase().trim();
 
   const formatPrice = (value, currency = "NOK") => {
     if (value === null || value === undefined || value === "") return "";
-
     const number = Number(value);
     if (Number.isNaN(number)) return String(value);
 
@@ -54,15 +32,16 @@
     }).format(number);
   };
 
-  const getProductPrice = (product) =>
-    formatPrice(product.price || product.lowest_price || product.new_price, product.currency || "NOK");
+  const getTitle = (p) => p.title || p.product_name || p.name || "Produkt";
+  const getBrand = (p) => p.brand_name || p.brand_slug || p.merchant_name || p.merchant_slug || "";
+  const getImage = (p) => p.image_url || p.image || p.main_image || "";
+  const getPrice = (p) => formatPrice(p.price || p.lowest_price || p.new_price, p.currency || "NOK");
+  const getId = (p) => p.id || p.external_id || p.original_id;
 
-  async function searchProducts(query, limit = 20) {
+  async function searchProducts(query, limit = 12) {
     const cleanQuery = normalize(query);
 
-    if (!cleanQuery || cleanQuery.length < 2) {
-      return [];
-    }
+    if (!cleanQuery || cleanQuery.length < 2) return [];
 
     const { data, error } = await client.rpc("search_products", {
       search_query: cleanQuery,
@@ -77,97 +56,149 @@
     return data || [];
   }
 
-  function renderSearchResults(products, container) {
-    if (!container) return;
+  function renderProducts(products, prodWrap) {
+    if (!prodWrap) return;
 
     if (!products.length) {
-      container.innerHTML = `
-        <div class="search-empty">
-          Ingen produkter funnet.
-        </div>
-      `;
+      prodWrap.innerHTML = `<div class="search-empty">Ingen produkter funnet.</div>`;
       return;
     }
 
-    container.innerHTML = products
-      .map((product) => {
-        const id = product.id || product.external_id || product.original_id;
-        const title = getProductTitle(product);
-        const brand = getProductBrand(product);
-        const image = getProductImage(product);
-        const price = getProductPrice(product);
+    prodWrap.innerHTML = products
+      .map((p) => {
+        const id = getId(p);
+        const title = getTitle(p);
+        const brand = getBrand(p);
+        const image = getImage(p);
+        const price = getPrice(p);
 
         return `
-          <a class="search-result-item" href="product.html?id=${encodeURIComponent(id)}">
-            <div class="search-result-image">
-              <img src="${escapeHTML(image)}" alt="${escapeHTML(title)}" loading="lazy">
-            </div>
+          <button class="search-item" type="button" data-id="${escapeHTML(id)}">
+            <span class="search-thumb">
+              ${image ? `<img src="${escapeHTML(image)}" alt="">` : "🛍️"}
+            </span>
 
-            <div class="search-result-info">
-              ${brand ? `<p class="search-result-brand">${escapeHTML(brand)}</p>` : ""}
-              <h4 class="search-result-title">${escapeHTML(title)}</h4>
-              ${price ? `<p class="search-result-price">${escapeHTML(price)}</p>` : ""}
-            </div>
-          </a>
+            <span class="search-meta">
+              <span class="search-title">${escapeHTML(title)}</span>
+              ${brand ? `<span class="search-sub">${escapeHTML(brand)}</span>` : ""}
+              ${price ? `<span class="search-price"><span class="sp-new">${escapeHTML(price)}</span></span>` : ""}
+            </span>
+          </button>
         `;
       })
       .join("");
-  }
 
-  function initSupabaseSearch() {
-    const inputs = document.querySelectorAll("[data-search-input], .search-input, #search-input");
-
-    inputs.forEach((input) => {
-      const wrapper =
-        input.closest(".search-wrapper") ||
-        input.closest(".header-search") ||
-        input.parentElement;
-
-      let resultsContainer =
-        wrapper?.querySelector(".search-results") ||
-        document.querySelector("[data-search-results]");
-
-      if (!resultsContainer && wrapper) {
-        resultsContainer = document.createElement("div");
-        resultsContainer.className = "search-results";
-        wrapper.appendChild(resultsContainer);
-      }
-
-      let debounceTimer;
-
-      input.addEventListener("input", () => {
-        clearTimeout(debounceTimer);
-
-        debounceTimer = setTimeout(async () => {
-          const query = input.value.trim();
-
-          if (query.length < 2) {
-            if (resultsContainer) resultsContainer.innerHTML = "";
-            return;
-          }
-
-          const products = await searchProducts(query, 12);
-          renderSearchResults(products, resultsContainer);
-        }, 180);
-      });
-
-      input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-
-          const query = input.value.trim();
-
-          if (query.length >= 2) {
-            window.location.href = `search-mobile.html?q=${encodeURIComponent(query)}`;
-          }
-        }
+    prodWrap.querySelectorAll(".search-item[data-id]").forEach((item) => {
+      item.addEventListener("click", () => {
+        const id = item.dataset.id;
+        if (id) window.location.href = `product.html?id=${encodeURIComponent(id)}`;
       });
     });
   }
 
+  function renderBrands(brandWrap) {
+    if (!brandWrap) return;
+    brandWrap.innerHTML = `<div class="search-empty">Brands flyttes til Supabase senere.</div>`;
+  }
+
+  function initSupabaseSearch() {
+    const root = document.getElementById("site-search");
+    const input = document.getElementById("search-input");
+    const dropdown = document.getElementById("search-dropdown");
+    const prodWrap = document.getElementById("search-results-products");
+    const brandWrap = document.getElementById("search-results-brands");
+    const clearBtn = root ? root.querySelector(".search-clear") : null;
+
+    if (!root || !input || !dropdown || !prodWrap) {
+      console.warn("BrandRadar Supabase search: mangler DOM-elementer.");
+      return;
+    }
+
+    root.dataset.searchReady = "supabase";
+
+    let debounceTimer = null;
+
+    function openDropdown() {
+      dropdown.hidden = false;
+      dropdown.style.zIndex = "99999";
+    }
+
+    function closeDropdown() {
+      dropdown.hidden = true;
+    }
+
+    function setHasValue() {
+      root.classList.toggle("has-value", !!input.value.trim());
+    }
+
+    async function runSearch() {
+      const query = input.value.trim();
+
+      setHasValue();
+
+      if (query.length < 2) {
+        prodWrap.innerHTML = `<div class="search-empty">Skriv for å søke…</div>`;
+        if (brandWrap) brandWrap.innerHTML = "";
+        return;
+      }
+
+      prodWrap.innerHTML = `<div class="search-empty">Søker…</div>`;
+      if (brandWrap) brandWrap.innerHTML = "";
+
+      const products = await searchProducts(query, 12);
+
+      renderProducts(products, prodWrap);
+      renderBrands(brandWrap);
+    }
+
+    input.addEventListener("focus", () => {
+      openDropdown();
+      runSearch();
+    });
+
+    input.addEventListener("input", () => {
+      openDropdown();
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(runSearch, 180);
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeDropdown();
+        input.blur();
+        return;
+      }
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        const firstProduct = prodWrap.querySelector(".search-item[data-id]");
+        if (firstProduct) {
+          const id = firstProduct.dataset.id;
+          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+        }
+      }
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        input.value = "";
+        setHasValue();
+        openDropdown();
+        runSearch();
+        input.focus({ preventScroll: true });
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!root.contains(event.target)) closeDropdown();
+    });
+
+    runSearch();
+  }
+
   window.BrandRadarSearch = {
     searchProducts,
-    renderSearchResults,
     initSupabaseSearch,
   };
 
