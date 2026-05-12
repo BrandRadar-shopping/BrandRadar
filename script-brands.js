@@ -1,123 +1,50 @@
 // ======================================================
-// ✅ BrandRadar – Brands Page
-// Featured sponsor cards refined closer to approved mockup
-// + Affiliate feed brands support
+// BrandRadar – Brands Page Supabase version
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const BRANDS_SHEET_ID = "1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw";
-  const BRANDS_SHEET_NAME = "Ark 1";
-
-  const PRODUCTS_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const PRODUCTS_SHEET_NAME = "BrandRadarProdukter";
-
   const highlightGrid = document.getElementById("highlight-grid");
   const brandGrid = document.getElementById("brand-grid");
   const searchInput = document.getElementById("brandSearch");
 
   if (!highlightGrid || !brandGrid) return;
 
-  const forceHeartStyles = document.createElement("style");
-  forceHeartStyles.textContent = `
-    .brand-card { position: relative; }
-    .brand-card .fav-icon.always-visible,
-    .featured-brand-card .fav-icon.always-visible {
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: auto !important;
-    }
-    .brand-card:hover .fav-icon.always-visible,
-    .featured-brand-card:hover .fav-icon.always-visible {
-      opacity: 1 !important;
-    }
-    .brand-card .fav-icon.always-visible .heart-icon,
-    .featured-brand-card .fav-icon.always-visible .heart-icon {
-      stroke: #222;
-      fill: transparent;
-      stroke-width: 1.4px;
-      transition: .22s ease;
-    }
-    .brand-card .fav-icon.always-visible.active .heart-icon,
-    .featured-brand-card .fav-icon.always-visible.active .heart-icon {
-      fill: #ff1f3d;
-      stroke: #ff1f3d;
-    }
-  `;
-  document.head.appendChild(forceHeartStyles);
+  const SUPABASE_URL = window.BRANDRADAR_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.BRANDRADAR_SUPABASE_ANON_KEY;
 
-  function normalizeBrand(value) {
-    return String(value || "").trim().toLowerCase();
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) {
+    console.error("Brands page: Supabase config mangler.");
+    brandGrid.innerHTML = `<p>Kunne ikke laste brands akkurat nå.</p>`;
+    return;
   }
 
-  function escapeHtml(value) {
-    return String(value ?? "")
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let allBrands = [];
+  let activeLetter = "all";
+
+  const escapeHtml = (value) =>
+    String(value ?? "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
-  }
 
-  function cleanPrice(value) {
-    const n = parseFloat(String(value ?? "").replace(/[^\d.,]/g, "").replace(",", "."));
-    return Number.isFinite(n) ? n : null;
-  }
+  const normalize = (value) =>
+    String(value || "")
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .trim();
 
-  function formatPrice(value) {
-    const n = cleanPrice(value);
-    if (n == null) return "";
-    return `${new Intl.NumberFormat("nb-NO").format(Math.round(n))} kr`;
-  }
-
-  function getProductTitle(product) {
-    return product.title || product.product_name || product.name || "Produkt";
-  }
-
-  function getProductLink(product) {
-    const id = String(product.id || product.product_id || "").trim();
-    if (id) return `product.html?id=${encodeURIComponent(id)}`;
-    if (product.product_url) return product.product_url;
-    return "#";
-  }
-
-  function getHeroProduct(products = []) {
-    if (!products.length) return null;
-
-    const byPriority = [...products].sort((a, b) => {
-      const ad = cleanPrice(a.discount) || 0;
-      const bd = cleanPrice(b.discount) || 0;
-      if (bd !== ad) return bd - ad;
-
-      const ar = parseFloat(String(a.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-      const br = parseFloat(String(b.rating || "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-      if (br !== ar) return br - ar;
-
-      return 0;
-    });
-
-    return byPriority[0];
-  }
-
-  function getThumbProducts(products = [], heroProduct) {
-    const unique = [];
-    const seen = new Set();
-
-    products.forEach((p) => {
-      const key = String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim();
-      if (!key || seen.has(key)) return;
-      seen.add(key);
-      unique.push(p);
-    });
-
-    const heroKey = heroProduct
-      ? String(heroProduct.id || heroProduct.product_id || heroProduct.product_url || getProductTitle(heroProduct)).trim()
-      : "";
-
-    const ordered = heroProduct
-      ? [heroProduct, ...unique.filter((p) => String(p.id || p.product_id || p.product_url || getProductTitle(p)).trim() !== heroKey)]
-      : unique;
-
-    return ordered.slice(0, 5);
+  function createLogoFallback(name) {
+    return `
+      <div class="brand-logo-placeholder" aria-hidden="true">
+        ${escapeHtml(String(name || "?").slice(0, 1).toUpperCase())}
+      </div>
+    `;
   }
 
   function syncBrandHearts(brandKey, isActive) {
@@ -128,102 +55,60 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  function buildSponsorIntro(brandObj) {
-    if (brandObj.about) return brandObj.about;
-    if (brandObj.description) return brandObj.description;
-
-    if (brandObj.source === "staybeautiful") {
-      return `${brandObj.brand} er tilgjengelig via Staybeautiful Norge. Utforsk produkter innen skjønnhet, hudpleie og velvære.`;
-    }
-
-    return `${brandObj.brand} er valgt ut som fremhevet brand akkurat nå. Utforsk utvalgte produkter og få en rask oversikt over hva som gjør brandet interessant akkurat nå.`;
-  }
-
-  function getBrandThemeColor(brandName) {
-    const normalized = normalizeBrand(brandName);
-
-    if (normalized.includes("nike")) return "#f3f1ed";
-    if (normalized.includes("adidas")) return "#eef2f7";
-    if (normalized.includes("puma")) return "#f6eee6";
-    if (normalized.includes("new balance")) return "#edf1f5";
-    if (normalized.includes("north face")) return "#f6f3ee";
-    if (normalized.includes("salomon")) return "#eef4f1";
-    if (normalized.includes("arc'teryx") || normalized.includes("arcteryx")) return "#f1f0ec";
-    if (normalized.includes("zara")) return "#f6f1ea";
-    if (normalized.includes("gucci")) return "#f5efe7";
-    if (normalized.includes("moncler")) return "#f3f4f6";
-    if (normalized.includes("rolex")) return "#f2f3ed";
-    if (normalized.includes("star nutrition")) return "#eef4fb";
-    if (normalized.includes("gymgrossisten")) return "#eef3f8";
-    if (normalized.includes("boss")) return "#f3f4f6";
-    if (normalized.includes("carhartt")) return "#f4efe8";
-    if (normalized.includes("zalando")) return "#f5f1eb";
-    if (normalized.includes("timex")) return "#eef1f4";
-    if (normalized.includes("onepiece")) return "#f3efe9";
-    if (normalized.includes("dermalogica")) return "#eef4f1";
-    if (normalized.includes("filorga")) return "#f3f1ed";
-    if (normalized.includes("coola")) return "#f6f3ee";
-    if (normalized.includes("olaplex")) return "#f3f4f6";
-
-    return "#f3f1ed";
-  }
-
-  function createFeedBrandLogo(brandKey) {
-    return `
-      <div class="brand-logo-placeholder" aria-hidden="true">
-        ${escapeHtml(brandKey.slice(0, 1).toUpperCase())}
-      </div>
-    `;
-  }
-
-  function createRegularBrandCard(brandObj, isFav) {
-    const brandKey = String(brandObj.brand || "").trim();
-    const hasLogo = !!String(brandObj.logo || "").trim();
+  function createBrandCard(brandObj, isFav) {
+    const brandName = String(brandObj.name || "").trim();
+    const logo = String(brandObj.logo_url || "").trim();
+    const productCount = Number(brandObj.product_count || 0);
 
     const card = document.createElement("div");
-    card.className = `brand-card ${brandObj.source ? `brand-card--${brandObj.source}` : ""}`.trim();
+    card.className = "brand-card";
 
     card.innerHTML = `
-      <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}">
+      <span class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandName)}">
         <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
         </svg>
       </span>
 
       ${
-        hasLogo
-          ? `<img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="brand-logo">`
-          : createFeedBrandLogo(brandKey)
+        logo
+          ? `<img src="${escapeHtml(logo)}" alt="${escapeHtml(brandName)}" class="brand-logo" loading="lazy">`
+          : createLogoFallback(brandName)
       }
 
-      <h3>${escapeHtml(brandKey)}</h3>
-      <p>${escapeHtml(brandObj.description || "")}</p>
+      <h3>${escapeHtml(brandName)}</h3>
+
+      <p class="brand-product-count">
+        ${productCount} produkter
+      </p>
+
       <a class="brand-btn">Se produkter →</a>
     `;
 
     card.querySelector(".brand-btn")?.addEventListener("click", (e) => {
       e.stopPropagation();
-      window.location.href = `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brandName)}`;
     });
 
     card.addEventListener("click", (e) => {
       if (e.target.closest(".fav-icon")) return;
       if (e.target.closest(".brand-btn")) return;
-      window.location.href = `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
+      window.location.href = `brand-page.html?brand=${encodeURIComponent(brandName)}`;
     });
 
     const heart = card.querySelector(".fav-icon");
+
     heart?.addEventListener("click", (e) => {
       e.stopPropagation();
 
       if (window.toggleBrandFavorite) {
-        window.toggleBrandFavorite(brandKey);
+        window.toggleBrandFavorite(brandName);
       }
 
       const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
-      const isNowFav = updatedFavs.includes(brandKey);
+      const isNowFav = updatedFavs.includes(brandName);
 
-      syncBrandHearts(brandKey, isNowFav);
+      syncBrandHearts(brandName, isNowFav);
 
       if (window.updateFavoriteCounter) {
         window.updateFavoriteCounter();
@@ -233,197 +118,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     return card;
   }
 
-  function createFeaturedBrandCard(brandObj, allBrandProducts, isFav) {
-    const brandKey = String(brandObj.brand || "").trim();
-    const intro = buildSponsorIntro(brandObj);
-    const heroProduct = getHeroProduct(allBrandProducts);
-    const thumbProducts = getThumbProducts(allBrandProducts, heroProduct);
-    const bgColor = getBrandThemeColor(brandObj.brand);
+  function getFilteredBrands() {
+    const search = normalize(searchInput?.value || "");
 
-    const heroImage = heroProduct?.image_url || brandObj.logo || "";
-    const heroTitle = heroProduct ? getProductTitle(heroProduct) : brandKey;
-    const heroPrice = heroProduct ? formatPrice(heroProduct.price) : "";
-    const heroLink = heroProduct ? getProductLink(heroProduct) : `brand-page.html?brand=${encodeURIComponent(brandKey)}`;
+    return allBrands.filter((brand) => {
+      const name = String(brand.name || "");
+      const normalizedName = normalize(name);
 
-    const card = document.createElement("article");
-    card.className = "featured-brand-card";
+      const matchesSearch = !search || normalizedName.includes(search);
 
-    card.innerHTML = `
-      <div class="featured-brand-card__shell" style="--brand-bg:${escapeHtml(bgColor)};">
-        <button class="fav-icon always-visible ${isFav ? "active" : ""}" data-brand="${escapeHtml(brandKey)}" aria-label="Favoritt-brand">
-          <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 21s-7-4.53-10-9.5C-1.4 7.2.6 2.8 4.3 1.5c2.4-.9 5.3.1 7.7 2.4 2.4-2.3 5.3-3.3 7.7-2.4 3.7 1.3 5.7 5.7 2.3 10C19 16.47 12 21 12 21z"/>
-          </svg>
-        </button>
+      const matchesLetter =
+        activeLetter === "all" ||
+        name.toUpperCase().startsWith(activeLetter);
 
-        <div class="featured-brand-card__rail">
-          <div class="featured-brand-card__brandhead">
-            <div class="featured-brand-card__logo-wrap">
-              ${
-                brandObj.logo
-                  ? `<img src="${escapeHtml(brandObj.logo || "")}" alt="${escapeHtml(brandKey)}" class="featured-brand-card__logo">`
-                  : createFeedBrandLogo(brandKey)
-              }
-            </div>
-            <span class="featured-brand-card__tag">${brandObj.source === "staybeautiful" ? "Partner-feed" : "Sponset"}</span>
-          </div>
+      return matchesSearch && matchesLetter;
+    });
+  }
 
-          <div class="featured-brand-card__top">
-            <div class="featured-brand-card__intro">
-              <div class="featured-brand-card__eyebrow">Fremhevet brand</div>
-              <h3 class="featured-brand-card__title">${escapeHtml(brandKey)}</h3>
-              <p class="featured-brand-card__copy">${escapeHtml(intro)}</p>
+  function renderBrands() {
+    highlightGrid.innerHTML = "";
+    brandGrid.innerHTML = "";
 
-              <a class="featured-brand-card__cta" href="brand-page.html?brand=${encodeURIComponent(brandKey)}">
-                Se alle ${escapeHtml(brandKey)}-produkter
-              </a>
-            </div>
+    const favList = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
+    const filteredBrands = getFilteredBrands();
 
-            <a class="featured-brand-card__hero" href="${escapeHtml(heroLink)}">
-              <div class="featured-brand-card__hero-stage">
-                ${
-                  heroImage
-                    ? `<img src="${escapeHtml(heroImage)}" alt="${escapeHtml(heroTitle)}" class="featured-brand-card__hero-image" data-hero-image>`
-                    : ""
-                }
-              </div>
-
-              <div class="featured-brand-card__hero-caption">
-                <div class="featured-brand-card__hero-name" data-hero-title>${escapeHtml(heroTitle)}</div>
-                <div class="featured-brand-card__hero-price" data-hero-price>${escapeHtml(heroPrice)}</div>
-              </div>
-            </a>
-          </div>
-
-          <div class="featured-brand-card__thumbs">
-            ${thumbProducts.map((product, index) => `
-              <button
-                type="button"
-                class="featured-brand-card__thumb ${index === 0 ? "is-active" : ""}"
-                data-thumb-image="${escapeHtml(product.image_url || "")}"
-                data-thumb-title="${escapeHtml(getProductTitle(product))}"
-                data-thumb-price="${escapeHtml(formatPrice(product.price))}"
-                data-thumb-link="${escapeHtml(getProductLink(product))}"
-                aria-label="${escapeHtml(getProductTitle(product))}"
-              >
-                <img src="${escapeHtml(product.image_url || "")}" alt="${escapeHtml(getProductTitle(product))}">
-              </button>
-            `).join("")}
-          </div>
-        </div>
-      </div>
-    `;
-
-    const heroLinkEl = card.querySelector(".featured-brand-card__hero");
-    const heroImageEl = card.querySelector("[data-hero-image]");
-    const heroTitleEl = card.querySelector("[data-hero-title]");
-    const heroPriceEl = card.querySelector("[data-hero-price]");
-    const thumbs = card.querySelectorAll(".featured-brand-card__thumb");
-
-    function setActiveThumb(btn) {
-      thumbs.forEach((thumb) => thumb.classList.remove("is-active"));
-      btn.classList.add("is-active");
-
-      const nextImage = btn.dataset.thumbImage || "";
-      const nextTitle = btn.dataset.thumbTitle || "";
-      const nextPrice = btn.dataset.thumbPrice || "";
-      const nextLink = btn.dataset.thumbLink || "#";
-
-      if (heroImageEl) heroImageEl.src = nextImage;
-      if (heroImageEl) heroImageEl.alt = nextTitle;
-      if (heroTitleEl) heroTitleEl.textContent = nextTitle;
-      if (heroPriceEl) heroPriceEl.textContent = nextPrice;
-      if (heroLinkEl) heroLinkEl.href = nextLink;
+    if (!filteredBrands.length) {
+      brandGrid.innerHTML = `<p class="brand-empty">Ingen brands funnet.</p>`;
+      return;
     }
 
-    thumbs.forEach((btn) => {
-      btn.addEventListener("mouseenter", () => {
-        if (window.matchMedia("(hover: hover)").matches) {
-          setActiveThumb(btn);
-        }
-      });
-      btn.addEventListener("focus", () => setActiveThumb(btn));
-      btn.addEventListener("click", () => setActiveThumb(btn));
+    filteredBrands.forEach((brandObj) => {
+      const brandName = String(brandObj.name || "").trim();
+      const isFav = favList.includes(brandName);
+      const card = createBrandCard(brandObj, isFav);
+      brandGrid.appendChild(card);
     });
-
-    const heart = card.querySelector(".fav-icon");
-    heart?.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (window.toggleBrandFavorite) {
-        window.toggleBrandFavorite(brandKey);
-      }
-
-      const updatedFavs = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
-      const isNowFav = updatedFavs.includes(brandKey);
-
-      syncBrandHearts(brandKey, isNowFav);
-
-      if (window.updateFavoriteCounter) {
-        window.updateFavoriteCounter();
-      }
-    });
-
-    return card;
   }
 
-  function setupMobileHighlightDots() {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const grid = document.getElementById("highlight-grid");
-    if (!isMobile || !grid) return;
-
-    const oldDots = document.querySelector(".highlight-slider-dots");
-    if (oldDots) oldDots.remove();
-
-    const cards = Array.from(grid.querySelectorAll(".featured-brand-card"));
-    if (cards.length <= 1) return;
-
-    const dotsWrap = document.createElement("div");
-    dotsWrap.className = "highlight-slider-dots";
-
-    const dots = cards.map((_, index) => {
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.className = `highlight-slider-dot${index === 0 ? " is-active" : ""}`;
-      dot.setAttribute("aria-label", `Gå til sponsede brand ${index + 1}`);
-      dot.style.border = "0";
-      dot.style.padding = "0";
-      dot.style.cursor = "pointer";
-      dot.addEventListener("click", () => {
-        const card = cards[index];
-        if (!card) return;
-        grid.scrollTo({
-          left: card.offsetLeft,
-          behavior: "smooth"
+  function initAlphabetFilter() {
+    document.querySelectorAll(".brand-alphabet span").forEach((letterEl) => {
+      letterEl.addEventListener("click", () => {
+        document.querySelectorAll(".brand-alphabet span").forEach((x) => {
+          x.classList.remove("active");
         });
+
+        letterEl.classList.add("active");
+
+        activeLetter = letterEl.dataset.letter === "all"
+          ? "all"
+          : letterEl.textContent.trim().toUpperCase();
+
+        renderBrands();
       });
-      dotsWrap.appendChild(dot);
-      return dot;
     });
-
-    grid.insertAdjacentElement("afterend", dotsWrap);
-
-    function updateActiveDot() {
-      const scrollLeft = grid.scrollLeft;
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const distance = Math.abs(card.offsetLeft - scrollLeft);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("is-active", index === closestIndex);
-      });
-    }
-
-    grid.addEventListener("scroll", updateActiveDot, { passive: true });
-    updateActiveDot();
   }
 
   function setupMobileAlphabetToggle() {
@@ -459,168 +206,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.addEventListener("resize", applyState);
   }
 
-  function initAlphabetFilter(allBrands, allProducts) {
-    document.querySelectorAll(".brand-alphabet span").forEach((letterEl) => {
-      letterEl.addEventListener("click", () => {
-        document.querySelectorAll(".brand-alphabet span").forEach((x) => x.classList.remove("active"));
-        letterEl.classList.add("active");
+  async function loadBrands() {
+    brandGrid.innerHTML = `<p class="brand-empty">Laster brands…</p>`;
 
-        const letter = letterEl.dataset.letter;
-        const filtered =
-          letter === "all"
-            ? allBrands
-            : allBrands.filter((b) =>
-                b.brand.toUpperCase().startsWith(letterEl.textContent.trim().toUpperCase())
-              );
+    const { data, error } = await client
+      .from("brands")
+      .select("*")
+      .eq("active", true)
+      .order("product_count", { ascending: false })
+      .order("name", { ascending: true });
 
-        renderBrands(filtered, allProducts);
-      });
-    });
-  }
-
-  function createFeedBrands(feedProducts = [], existingBrands = []) {
-    const existing = new Set(existingBrands.map((b) => normalizeBrand(b.brand)));
-    const grouped = new Map();
-
-    feedProducts.forEach((product) => {
-      const brand = String(product.brand || "").trim();
-      if (!brand) return;
-
-      const key = normalizeBrand(brand);
-      if (!key || existing.has(key)) return;
-
-      if (!grouped.has(key)) {
-        grouped.set(key, {
-          brand,
-          logo: "",
-          description: `${brand} produkter fra Staybeautiful Norge.`,
-          homepage: product.product_url || "#",
-          about: `${brand} er tilgjengelig via Staybeautiful Norge. Produktene hentes fra BrandRadar sin affiliate-feed og oppdateres via partnerdata.`,
-          highlight: false,
-          categories: ["Selfcare"],
-          source: product.source || "staybeautiful",
-          affiliate_network: product.affiliate_network || "partnerads"
-        });
-      }
-    });
-
-    return Array.from(grouped.values());
-  }
-
-  function renderBrands(brands, allProducts) {
-    highlightGrid.innerHTML = "";
-    brandGrid.innerHTML = "";
-
-    const favList = window.getFavoriteBrands ? window.getFavoriteBrands() : [];
-
-    const highlightedBrands = brands.filter((b) => b.highlight);
-    const regularBrands = brands;
-
-    highlightedBrands.forEach((brandObj) => {
-      const brandKey = String(brandObj.brand || "").trim();
-      const isFav = favList.includes(brandKey);
-
-      const relatedProducts = allProducts.filter(
-        (p) => normalizeBrand(p.brand) === normalizeBrand(brandObj.brand)
-      );
-
-      const featuredCard = createFeaturedBrandCard(brandObj, relatedProducts, isFav);
-      highlightGrid.appendChild(featuredCard);
-    });
-
-    regularBrands.forEach((brandObj) => {
-      const brandKey = String(brandObj.brand || "").trim();
-      const isFav = favList.includes(brandKey);
-      const card = createRegularBrandCard(brandObj, isFav);
-      brandGrid.appendChild(card);
-    });
-
-    setupMobileHighlightDots();
-  }
-
-  try {
-    const brandsUrl = `https://opensheet.elk.sh/${BRANDS_SHEET_ID}/${BRANDS_SHEET_NAME}`;
-    const productsUrl = `https://opensheet.elk.sh/${PRODUCTS_SHEET_ID}/${PRODUCTS_SHEET_NAME}`;
-
-    const [brandRows, productRows, feedRows] = await Promise.all([
-      fetch(brandsUrl).then((res) => res.json()).catch(() => []),
-      fetch(productsUrl).then((res) => res.json()).catch(() => []),
-      window.BrandRadarFeedEngine
-        ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true }).catch((err) => {
-            console.warn("⚠️ Could not load feed brands:", err);
-            return [];
-          })
-        : Promise.resolve([])
-    ]);
-
-    const sheetBrands = brandRows
-      .map((r) => ({
-        brand: String(r.brand || "").trim(),
-        logo: String(r.logo || "").trim(),
-        description: String(r.description || "").trim(),
-        homepage: String(r.homepage_url || "").trim() || "#",
-        about: String(r.about || "").trim(),
-        highlight: String(r.highlight || "").toLowerCase() === "yes",
-        categories: r.categories ? String(r.categories).split(",").map((c) => c.trim()) : [],
-        source: "manual"
-      }))
-      .filter((b) => b.brand);
-
-    const products = productRows
-      .map((p) => ({
-        ...p,
-        id: String(p.id || p.product_id || "").trim(),
-        title: getProductTitle(p),
-        brand: String(p.brand || "").trim(),
-        image_url: String(p.image_url || "").trim(),
-        price: p.price || "",
-        product_url: String(p.product_url || "").trim()
-      }))
-      .filter((p) => p.brand && p.image_url);
-
-    const feedProducts = feedRows
-      .map((p) => ({
-        ...p,
-        id: String(p.id || p.product_id || "").trim(),
-        title: getProductTitle(p),
-        brand: String(p.brand || "").trim(),
-        image_url: String(p.image_url || "").trim(),
-        price: p.price || "",
-        product_url: String(p.product_url || p.affiliate_url || "").trim(),
-        source: p.source || "staybeautiful"
-      }))
-      .filter((p) => p.brand && p.image_url);
-
-    const feedBrands = createFeedBrands(feedProducts, sheetBrands);
-
-    const brands = [...sheetBrands, ...feedBrands].sort((a, b) =>
-      String(a.brand || "").localeCompare(String(b.brand || ""), "nb")
-    );
-
-    const allProducts = [...products, ...feedProducts];
-
-    localStorage.setItem("allBrandsData", JSON.stringify(brands));
-
-    initAlphabetFilter(brands, allProducts);
-    renderBrands(brands, allProducts);
-    setupMobileAlphabetToggle();
-
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
-        const search = String(e.target.value || "").toLowerCase().trim();
-
-        const filtered = !search
-          ? brands
-          : brands.filter((b) => b.brand.toLowerCase().includes(search));
-
-        renderBrands(filtered, allProducts);
-      });
+    if (error) {
+      console.error("Brands page Supabase error:", error);
+      brandGrid.innerHTML = `<p class="brand-empty">Kunne ikke laste brands akkurat nå.</p>`;
+      return;
     }
 
-    window.addEventListener("resize", () => {
-      setupMobileHighlightDots();
-    });
-  } catch (err) {
-    console.error("❌ FEIL ved lasting av brands/products:", err);
+    allBrands = data || [];
+
+    localStorage.setItem(
+      "allBrandsData",
+      JSON.stringify(
+        allBrands.map((brand) => ({
+          name: brand.name,
+          logo: brand.logo_url,
+          description: brand.description || "",
+        }))
+      )
+    );
+
+    renderBrands();
   }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", renderBrands);
+  }
+
+  initAlphabetFilter();
+  setupMobileAlphabetToggle();
+  await loadBrands();
 });
