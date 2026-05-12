@@ -27,48 +27,49 @@
   }
 
   function normalizeProduct(product) {
-    return {
-      external_id: product.id || "",
-      original_id: product.original_id || "",
+  return {
+    external_id: product.id || "",
+    source: product.source || "",
 
-      title: product.title || "",
-      brand: product.brand || "",
+    merchant_slug: product.merchant_slug || "",
+    brand_slug: String(product.brand || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, ""),
 
-      category: product.category || "",
-      subcategory: product.subcategory || "",
-      gender: product.gender || "",
+    title: product.title || "",
+    description: product.description || product.short_description || "",
 
-      description: product.description || "",
-      short_description: product.short_description || "",
+    category: product.category || "",
+    subcategory: product.subcategory || "",
+    gender: product.gender || "",
 
-      price: parseFloat(product.price) || 0,
-      old_price: parseFloat(product.old_price) || null,
-      discount: parseInt(product.discount) || 0,
+    price: parseFloat(String(product.price || "").replace(",", ".")) || null,
+    old_price: parseFloat(String(product.old_price || "").replace(",", ".")) || null,
+    discount: parseInt(product.discount) || null,
 
-      image_url: product.image_url || "",
-      image2: product.image2 || "",
-      image3: product.image3 || "",
-      image4: product.image4 || "",
+    currency: "NOK",
 
-      product_url: product.product_url || "",
-      affiliate_url: product.affiliate_url || "",
+    image_url: product.image_url || "",
+    image2: product.image2 || "",
+    image3: product.image3 || "",
+    image4: product.image4 || "",
 
-      merchant_slug: product.merchant_slug || "",
-      merchant_name: product.merchant_name || "",
+    product_url: product.product_url || "",
+    affiliate_url: product.affiliate_url || product.product_url || "",
 
-      stock_status: product.stock_status || "",
-      affiliate_network: product.affiliate_network || "",
+    stock_status: product.stock_status || "",
 
-      raw_category: product.raw_category || "",
+    rating: parseFloat(String(product.rating || "").replace(",", ".")) || null,
 
-      source: product.source || "",
-      ean: product.ean || "",
+    raw_category: product.raw_category || "",
+    raw_subcategory: product.raw_subcategory || "",
 
-      rating: product.rating || "",
-
-      updated_at: new Date().toISOString()
-    };
-  }
+    active: true,
+    updated_at: new Date().toISOString()
+  };
+}
 
   async function upsertProducts(products) {
     const chunkSize = 500;
