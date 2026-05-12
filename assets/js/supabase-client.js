@@ -14,7 +14,8 @@ async function fetchProducts(options = {}) {
     gender = null,
     limit = 100,
     offset = 0,
-    brand = null
+    brand = null,
+    externalId = null
   } = options;
 
   let url =
@@ -24,6 +25,10 @@ async function fetchProducts(options = {}) {
     `&limit=${limit}` +
     `&offset=${offset}` +
     `&order=id.asc`;
+
+  if (externalId) {
+    url += `&external_id=eq.${encodeURIComponent(externalId)}`;
+  }
 
   if (category) {
     url += `&category=ilike.${encodeURIComponent(category)}`;
