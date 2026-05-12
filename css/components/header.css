@@ -678,3 +678,27 @@ nav.mega-menu .menu-section a:hover {
     color: rgba(255,255,255,0.45) !important;
   }
 }
+
+.search-dropdown {
+  max-height: min(520px, calc(100vh - 120px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.search-results {
+  max-height: none;
+}
+
+.search-section {
+  flex-shrink: 0;
+}
+
+.search-item {
+  min-height: 72px;
+}
+
+.search-thumb img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
