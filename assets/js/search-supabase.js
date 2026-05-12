@@ -300,9 +300,9 @@
       }
 
       const [products, brands] = await Promise.all([
-        searchProducts(query, 12),
-        searchBrands(query, 8),
-      ]);
+  searchProducts(query, 6),
+  searchBrands(query, 5),
+]);
 
       renderProducts(products, prodWrap);
       renderBrands(brands, brandWrap);
