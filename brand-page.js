@@ -1,49 +1,22 @@
 // ======================================================
-// ✅ BrandRadar – Brand Page
-// Bruker Product Card Engine + Offers Engine
-// + Affiliate feed products support
+// BrandRadar – Brand Page Supabase version
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
-  const brandName = new URLSearchParams(window.location.search).get("brand");
-  if (!brandName) return;
+  const SUPABASE_URL = window.BRANDRADAR_SUPABASE_URL;
+  const SUPABASE_KEY = window.BRANDRADAR_SUPABASE_ANON_KEY;
 
-  function normalizeBrand(value) {
-    return String(value || "").trim().toLowerCase();
+  if (!SUPABASE_URL || !SUPABASE_KEY || !window.supabase) {
+    console.error("Brand page: Supabase config mangler.");
+    return;
   }
 
-  function cleanPrice(v) {
-    return parseFloat(String(v ?? "").replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-  }
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  function cleanRating(v) {
-    return parseFloat(String(v ?? "").replace(",", ".").replace(/[^0-9.]/g, "")) || 0;
-  }
-
-  function getEffectivePrice(p) {
-    if (p?.offer_summary?.hasOffers) {
-      return Number(p.offer_summary.lowestPrice);
-    }
-    return cleanPrice(p.price);
-  }
-
-  function getProductTitle(p) {
-    return p.title || p.product_name || p.name || t("unnamed_product", "Uten navn");
-  }
-
-  const MAIN_BRAND_URL =
-    "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
-
-  const MAIN_PRODUCTS_URL =
-    "https://opensheet.elk.sh/1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw/BrandRadarProdukter";
-
-  const LUXURY_BRAND_URL =
-    "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryBrands";
-
-  const LUXURY_PRODUCTS_URL =
-    "https://opensheet.elk.sh/1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU/LuxuryProducts";
+  const brandParam = new URLSearchParams(window.location.search).get("brand");
+  if (!brandParam) return;
 
   const titleEl = document.getElementById("brand-title");
   const descEl = document.getElementById("brand-description");
@@ -56,6 +29,66 @@ document.addEventListener("DOMContentLoaded", async () => {
   const categorySelect = document.getElementById("category-filter");
   const sortSelect = document.getElementById("sort-select");
 
+  let brand = null;
+  let brandProducts = [];
+
+  function normalize(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "o")
+      .replace(/å/g, "a")
+      .trim();
+  }
+
+  function cleanPrice(value) {
+    if (value === null || value === undefined || value === "") return 0;
+
+    const n = Number(
+      String(value)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,-]/g, "")
+        .replace(",", ".")
+    );
+
+    if (!Number.isFinite(n)) return 0;
+    if (n < 0 || n > 1000000) return 0;
+
+    return n;
+  }
+
+  function cleanRating(value) {
+    const n = Number(
+      String(value ?? "")
+        .replace(",", ".")
+        .replace(/[^0-9.]/g, "")
+    );
+
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function getEffectivePrice(product) {
+    return cleanPrice(product.price);
+  }
+
+  function getProductTitle(product) {
+    return (
+      product.title ||
+      product.product_name ||
+      product.name ||
+      t("unnamed_product", "Uten navn")
+    );
+  }
+
+  function getProductId(product) {
+    return (
+      product.external_id ||
+      product.original_id ||
+      product.id ||
+      ""
+    );
+  }
+
   function getFavBrands() {
     return JSON.parse(localStorage.getItem("favoriteBrands") || "[]");
   }
@@ -63,7 +96,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateFavUI() {
     if (!favBtn) return;
 
-    const isFav = getFavBrands().includes(brandName);
+    const currentName = brand?.name || brandParam;
+    const isFav = getFavBrands().includes(currentName);
 
     favBtn.classList.toggle("active", isFav);
     favBtn.textContent = isFav
@@ -72,12 +106,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function toggleFavBrand() {
+    const currentName = brand?.name || brandParam;
     let favs = getFavBrands();
 
-    if (favs.includes(brandName)) {
-      favs = favs.filter((b) => b !== brandName);
+    if (favs.includes(currentName)) {
+      favs = favs.filter((name) => name !== currentName);
     } else {
-      favs.push(brandName);
+      favs.push(currentName);
     }
 
     localStorage.setItem("favoriteBrands", JSON.stringify(favs));
@@ -88,151 +123,121 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  favBtn?.addEventListener("click", toggleFavBrand);
+  async function loadBrand() {
+    const normalizedParam = normalize(brandParam);
 
-  const [mainBrands, luxuryBrands, mainProducts, luxuryProducts, feedProducts] =
-    await Promise.all([
-      fetch(MAIN_BRAND_URL).then((r) => r.json()).catch(() => []),
-      fetch(LUXURY_BRAND_URL).then((r) => r.json()).catch(() => []),
-      fetch(MAIN_PRODUCTS_URL).then((r) => r.json()).catch(() => []),
-      fetch(LUXURY_PRODUCTS_URL).then((r) => r.json()).catch(() => []),
-      window.BrandRadarFeedEngine
-        ? window.BrandRadarFeedEngine.loadAllFeeds({ onlyInStock: true }).catch((err) => {
-            console.warn("⚠️ Could not load feed products on brand page:", err);
-            return [];
-          })
-        : Promise.resolve([])
-    ]);
+    const { data, error } = await client
+      .from("brands")
+      .select("*")
+      .or(`name.ilike.${brandParam},slug.eq.${normalizedParam}`)
+      .limit(1)
+      .maybeSingle();
 
-  const allBrands = [...mainBrands, ...luxuryBrands];
+    if (error) {
+      console.error("Could not load brand:", error);
+      return null;
+    }
 
-  const brand = allBrands.find(
-    (b) => normalizeBrand(b.brand) === normalizeBrand(brandName)
-  );
-
-  const isLuxury = luxuryBrands.some(
-    (b) => normalizeBrand(b.brand) === normalizeBrand(brandName)
-  );
-
-  const normalizedFeedProducts = feedProducts.map((p) => ({
-    ...p,
-    id: String(p.id || p.product_id || "").trim(),
-    title: getProductTitle(p),
-    brand: String(p.brand || "").trim(),
-    image_url: String(p.image_url || "").trim(),
-    price: p.price || "",
-    product_url: String(p.product_url || p.affiliate_url || "").trim(),
-    category: p.category || p.mapped_category || "Selfcare",
-    subcategory: p.subcategory || "",
-    rating: p.rating || "",
-    is_feed_product: true,
-    sheet_source: "affiliate_feed"
-  }));
-
-  const allProducts = [
-    ...mainProducts,
-    ...luxuryProducts,
-    ...normalizedFeedProducts
-  ];
-
-  let brandProducts = allProducts.filter(
-    (p) => normalizeBrand(p.brand) === normalizeBrand(brandName)
-  );
-
-  const isFeedBrand = normalizedFeedProducts.some(
-    (p) => normalizeBrand(p.brand) === normalizeBrand(brandName)
-  );
-
-  if (titleEl) {
-    titleEl.textContent = brand?.brand || brandName;
+    return data;
   }
 
-  if (descEl) {
-    descEl.textContent =
-      brand?.about ||
-      brand?.description ||
-      (isFeedBrand
-        ? `${brandName} produkter fra Staybeautiful Norge.`
-        : t("no_brand_info", "Ingen informasjon tilgjengelig."));
-  }
+  async function loadBrandProducts(brandData) {
+    if (!brandData) return [];
 
-  if (logoEl) {
-    const logo = brand?.logo || brand?.image_url || "";
+    let query = client
+      .from("products")
+      .select("*")
+      .eq("active", true)
+      .order("updated_at", { ascending: false });
 
-    if (logo) {
-      logoEl.src = logo;
-      logoEl.style.display = "";
+    if (brandData.slug) {
+      query = query.eq("brand_slug", brandData.slug);
     } else {
-      logoEl.style.display = "none";
+      query = query.ilike("brand_name", brandData.name);
     }
 
-    if (
-      isLuxury &&
-      logoEl.parentElement &&
-      !logoEl.parentElement.querySelector(".luxury-badge-under")
-    ) {
-      const badge = document.createElement("div");
-      badge.className = "luxury-badge-under";
-      badge.textContent = "Luxury Brand ✨";
-      logoEl.parentElement.appendChild(badge);
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Could not load brand products:", error);
+      return [];
     }
+
+    return data || [];
   }
 
-  if (siteBtn) {
-    const firstFeedProduct = brandProducts.find((p) => p.product_url);
-    siteBtn.href =
-      brand?.homepage_url ||
-      brand?.link ||
-      firstFeedProduct?.product_url ||
-      "#";
+  function renderBrandInfo() {
+    const brandName = brand?.name || brandParam;
+
+    document.title = `${brandName} – BrandRadar`;
+
+    if (titleEl) {
+      titleEl.textContent = brandName;
+    }
+
+    if (descEl) {
+      descEl.textContent =
+        brand?.description ||
+        brand?.featured_intro ||
+        `${brandName} produkter samlet på BrandRadar.`;
+    }
+
+    if (logoEl) {
+      if (brand?.logo_url) {
+        logoEl.src = brand.logo_url;
+        logoEl.alt = `${brandName} logo`;
+        logoEl.style.display = "";
+      } else {
+        logoEl.style.display = "none";
+      }
+    }
+
+    if (siteBtn) {
+      siteBtn.href =
+        brand?.website_url ||
+        brandProducts.find((product) => product.product_url)?.product_url ||
+        "#";
+    }
+
+    updateFavUI();
   }
 
-  updateFavUI();
+  function setupCategoryFilter() {
+    if (!categorySelect) return;
 
-  if (window.BrandRadarOffersEngine) {
-    await window.BrandRadarOffersEngine.init?.();
-    brandProducts =
-      await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(
-        brandProducts
-      );
-  }
+    const currentValue = categorySelect.value || "all";
 
-  if (categorySelect) {
+    categorySelect.innerHTML = `
+      <option value="all">${t("all", "Alle")}</option>
+    `;
+
     const categories = [
       ...new Set(
         brandProducts
-          .map((p) => (p.category || p.mapped_category || "").trim())
+          .map((product) => String(product.category || "").trim())
           .filter(Boolean)
-      )
-    ].sort();
+      ),
+    ].sort((a, b) => a.localeCompare(b, "nb"));
 
-    categories.forEach((cat) => {
+    categories.forEach((category) => {
       const opt = document.createElement("option");
-      opt.value = cat;
-      opt.textContent = cat;
+      opt.value = category;
+      opt.textContent = category;
       categorySelect.appendChild(opt);
     });
-  }
 
-  if (!brandProducts.length) {
-    if (emptyMsg) {
-      emptyMsg.style.display = "block";
-      emptyMsg.textContent = t("no_products_found", "Ingen produkter funnet.");
+    if ([...categorySelect.options].some((opt) => opt.value === currentValue)) {
+      categorySelect.value = currentValue;
     }
-    if (resultCount) resultCount.textContent = "0 produkter";
-    return;
   }
-
-  applyFiltersAndSort();
 
   function applyFiltersAndSort() {
     let list = [...brandProducts];
 
     if (categorySelect && categorySelect.value !== "all") {
       list = list.filter(
-        (p) =>
-          (p.category || p.mapped_category || "").trim() ===
-          categorySelect.value
+        (product) =>
+          String(product.category || "").trim() === categorySelect.value
       );
     }
 
@@ -249,6 +254,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         case "rating-desc":
           list.sort((a, b) => cleanRating(b.rating) - cleanRating(a.rating));
           break;
+
+        case "featured":
+        default:
+          list.sort((a, b) => {
+            const au = new Date(a.updated_at || a.imported_at || 0).getTime();
+            const bu = new Date(b.updated_at || b.imported_at || 0).getTime();
+            return bu - au;
+          });
+          break;
       }
     }
 
@@ -261,47 +275,143 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.innerHTML = "";
 
     if (!list.length) {
-      if (emptyMsg) emptyMsg.style.display = "block";
-      if (resultCount) resultCount.textContent = "0 produkter";
+      if (emptyMsg) {
+        emptyMsg.style.display = "block";
+        emptyMsg.textContent = t("no_products_found", "Ingen produkter funnet.");
+      }
+
+      if (resultCount) {
+        resultCount.textContent = "0 produkter";
+      }
+
       return;
     }
 
-    if (emptyMsg) emptyMsg.style.display = "none";
+    if (emptyMsg) {
+      emptyMsg.style.display = "none";
+    }
+
     if (resultCount) {
       resultCount.textContent = `${list.length} ${t("products", "produkter")}`;
     }
 
     list.forEach((product) => {
-      const card = window.BrandRadarProductCardEngine.createCard(product, {
-        isLuxury,
-        showBrand: true,
-        showRating: true,
-        enableFavorite: true,
-        onNavigate: (p) => {
-          const id = p.id || p.product_id;
-          if (id) {
-            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-          }
-        },
-        favoriteProductFactory: (p) => ({
-          id: p.id || p.product_id,
-          title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-          product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-          brand: p.brand || "",
-          price: p.price,
-          discount: p.discount || "",
-          image_url: p.image_url || "",
-          product_url: p.product_url || p.affiliate_url || p.link || "",
-          category: p.category || p.mapped_category || "",
-          rating: p.rating,
-          luxury: !!isLuxury
-        })
-      });
+      const normalizedProduct = {
+        ...product,
+        id: getProductId(product),
+        product_id: getProductId(product),
+        title: getProductTitle(product),
+        product_name: getProductTitle(product),
+        brand: product.brand_name || brand?.name || "",
+        image_url: product.image_url || "",
+        price: product.price,
+        old_price: product.old_price,
+        discount: product.discount,
+        category: product.category || "",
+        subcategory: product.subcategory || "",
+        rating: product.rating,
+        product_url: product.product_url || "",
+        affiliate_url: product.affiliate_url || "",
+        sheet_source: product.source || "supabase",
+      };
+
+      const card = window.BrandRadarProductCardEngine.createCard(
+        normalizedProduct,
+        {
+          isLuxury: !!brand?.is_luxury,
+          showBrand: true,
+          showRating: true,
+          enableFavorite: true,
+
+          onNavigate: (productData) => {
+            const id =
+              productData.external_id ||
+              productData.original_id ||
+              productData.id ||
+              productData.product_id;
+
+            if (id) {
+              window.location.href =
+                `product.html?id=${encodeURIComponent(id)}`;
+            }
+          },
+
+          favoriteProductFactory: (productData) => ({
+            id:
+              productData.external_id ||
+              productData.original_id ||
+              productData.id ||
+              productData.product_id,
+            title:
+              productData.title ||
+              productData.product_name ||
+              productData.name ||
+              t("unnamed_product", "Uten navn"),
+            product_name:
+              productData.title ||
+              productData.product_name ||
+              productData.name ||
+              t("unnamed_product", "Uten navn"),
+            brand: productData.brand || "",
+            price: productData.price,
+            discount: productData.discount || "",
+            image_url: productData.image_url || "",
+            product_url:
+              productData.product_url ||
+              productData.affiliate_url ||
+              productData.link ||
+              "",
+            category: productData.category || "",
+            rating: productData.rating,
+            luxury: !!brand?.is_luxury,
+          }),
+        }
+      );
 
       grid.appendChild(card);
     });
   }
 
-  categorySelect?.addEventListener("change", applyFiltersAndSort);
-  sortSelect?.addEventListener("change", applyFiltersAndSort);
+  try {
+    if (grid) {
+      grid.innerHTML = "";
+    }
+
+    brand = await loadBrand();
+
+    if (!brand) {
+      if (titleEl) titleEl.textContent = brandParam;
+      if (descEl) descEl.textContent = "Brandet ble ikke funnet.";
+      if (emptyMsg) {
+        emptyMsg.style.display = "block";
+        emptyMsg.textContent = "Ingen produkter funnet.";
+      }
+      return;
+    }
+
+    brandProducts = await loadBrandProducts(brand);
+
+    if (window.BrandRadarOffersEngine) {
+      await window.BrandRadarOffersEngine.init?.();
+      brandProducts =
+        await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary?.(
+          brandProducts
+        ) || brandProducts;
+    }
+
+    renderBrandInfo();
+    setupCategoryFilter();
+    applyFiltersAndSort();
+
+    favBtn?.addEventListener("click", toggleFavBrand);
+    categorySelect?.addEventListener("change", applyFiltersAndSort);
+    sortSelect?.addEventListener("change", applyFiltersAndSort);
+  } catch (error) {
+    console.error("Brand page failed:", error);
+
+    if (emptyMsg) {
+      emptyMsg.style.display = "block";
+      emptyMsg.textContent = "Kunne ikke laste brandet akkurat nå.";
+    }
+  }
 });
