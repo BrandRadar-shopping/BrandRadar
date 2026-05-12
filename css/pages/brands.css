@@ -634,3 +634,36 @@ body.is-brands-page .brand-card img,
 body.is-brands-page .brand-card .brand-logo {
   margin: 34px auto 24px;
 }
+
+body.is-brands-page .featured-brand-card__top {
+  grid-template-columns: minmax(380px, 0.9fr) minmax(520px, 1fr);
+  gap: 34px;
+}
+
+body.is-brands-page .featured-brand-card__hero-stage {
+  height: 260px;
+  min-height: 260px;
+  padding: 24px 42px;
+}
+
+body.is-brands-page .featured-brand-card__hero-image {
+  width: 100%;
+  height: 100%;
+  max-width: 320px;
+  max-height: 230px;
+  object-fit: contain;
+  object-position: center;
+}
+
+body.is-brands-page .featured-brand-card__thumb img {
+  width: 100%;
+  height: 100%;
+  max-width: 120px;
+  max-height: 92px;
+  object-fit: contain;
+  object-position: center;
+}
+
+body.is-brands-page .featured-brand-card__thumb {
+  height: 104px;
+}
