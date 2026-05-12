@@ -1229,24 +1229,36 @@ async function loadRecommendations(products, currentProduct) {
   const slider = document.getElementById("related-slider");
   if (!slider) return;
 
-  const curCat = (currentProduct.category || "").toLowerCase();
-  const curBrand = (currentProduct.brand || "").toLowerCase();
+  const curCat = String(currentProduct.category || "").toLowerCase().trim();
+const curSub = String(currentProduct.subcategory || "").toLowerCase().trim();
+const curBrand = String(currentProduct.brand || "").toLowerCase().trim();
 
-  let matches = products.filter(p =>
-    String(p.id).trim() !== String(currentProduct.id).trim() &&
-    p.image_url &&
-    (p.category || "").toLowerCase() === curCat
-  );
+let matches = products.filter(p =>
+  String(p.id || p.product_id || "").trim() !== String(currentProduct.id || currentProduct.product_id || "").trim() &&
+  p.image_url &&
+  String(p.category || "").toLowerCase().trim() === curCat &&
+  (!curSub || String(p.subcategory || "").toLowerCase().trim() === curSub)
+);
 
   if (matches.length < 4) {
-    matches = matches.concat(
-      products.filter(p =>
-        String(p.id).trim() !== String(currentProduct.id).trim() &&
-        p.image_url &&
-        (p.brand || "").toLowerCase() === curBrand
-      )
-    );
-  }
+  matches = matches.concat(
+    products.filter(p =>
+      String(p.id || p.product_id || "").trim() !== String(currentProduct.id || currentProduct.product_id || "").trim() &&
+      p.image_url &&
+      String(p.category || "").toLowerCase().trim() === curCat
+    )
+  );
+}
+
+if (matches.length < 4 && curBrand) {
+  matches = matches.concat(
+    products.filter(p =>
+      String(p.id || p.product_id || "").trim() !== String(currentProduct.id || currentProduct.product_id || "").trim() &&
+      p.image_url &&
+      String(p.brand || "").toLowerCase().trim() === curBrand
+    )
+  );
+}
 
   matches = [...new Map(matches.map(p => [p.id, p])).values()].slice(0, 8);
 
