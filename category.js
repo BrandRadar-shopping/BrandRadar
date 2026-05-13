@@ -1445,9 +1445,7 @@ if (genderSlug) {
       return categoryOk && subOk && genderOk;
     });
 
-    const filtered = window.BrandRadarOffersEngine
-      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(filteredBase)
-      : filteredBase;
+    const filtered = filteredBase;
 
     if (!filtered.length) {
       emptyMessage.style.display = "block";
