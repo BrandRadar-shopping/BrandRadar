@@ -30,9 +30,14 @@
   }
 
   function formatPrice(value) {
-    const n = cleanPrice(value);
-    return n ? `${Math.round(n)} kr` : "";
-  }
+  const n = cleanPrice(value);
+  if (!n) return "";
+
+  return `${new Intl.NumberFormat("nb-NO", {
+    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
+    maximumFractionDigits: Number.isInteger(n) ? 0 : 2
+  }).format(n)} kr`;
+}
 
   function getPriceInfo(product) {
     let price = cleanPrice(product.price);
