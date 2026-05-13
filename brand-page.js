@@ -5,8 +5,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
-  const SUPABASE_URL = window.BRANDRADAR_SUPABASE_URL;
-  const SUPABASE_KEY = window.BRANDRADAR_SUPABASE_ANON_KEY;
+  const SUPABASE_URL =
+  window.BRANDRADAR_SUPABASE_URL ||
+  window.SUPABASE_CONFIG?.url;
+
+const SUPABASE_KEY =
+  window.BRANDRADAR_SUPABASE_ANON_KEY ||
+  window.SUPABASE_CONFIG?.anonKey;
 
   if (!SUPABASE_URL || !SUPABASE_KEY || !window.supabase) {
     console.error("Brand page: Supabase config mangler.");
