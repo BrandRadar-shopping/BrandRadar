@@ -188,6 +188,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       t("product_description_fallback", "Dette premiumproduktet kombinerer kvalitet og stil.");
   }
 
+setupProductDescriptionClamp();
+  
   const newPriceEl = document.getElementById("new-price");
   const oldPriceEl = document.getElementById("old-price");
   const discountTagEl = document.getElementById("discount-tag");
@@ -1473,3 +1475,31 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInsightsToggle();
   setupDescriptionToggle();
 });
+
+function setupProductDescriptionClamp() {
+  const desc = document.getElementById("product-description");
+  const btn = document.getElementById("product-description-more");
+
+  if (!desc || !btn) return;
+
+  requestAnimationFrame(() => {
+    const textLength = desc.textContent.trim().length;
+
+    if (textLength < 520) {
+      btn.hidden = true;
+      desc.classList.remove("is-collapsed");
+      return;
+    }
+
+    desc.classList.add("is-collapsed");
+    btn.hidden = false;
+    btn.textContent = "Se mer";
+
+    btn.addEventListener("click", () => {
+      const isCollapsed = desc.classList.toggle("is-collapsed");
+
+      btn.textContent = isCollapsed ? "Se mer" : "Vis mindre";
+    });
+  });
+}
+
