@@ -948,17 +948,6 @@ async function renderPriceComparison(product) {
 
   if (!section || !subtitle || !list) return null;
 
-if (product?.is_supabase_product || product?.source === "staybeautiful") {
-  section.hidden = true;
-  return {
-    hasOffers: false,
-    lowestPrice: null,
-    lowestPriceFormatted: "",
-    storeCount: 0,
-    offers: []
-  };
-}
-
 if (!window.BrandRadarOffersEngine || product?.id == null) return null;
 
   try {
