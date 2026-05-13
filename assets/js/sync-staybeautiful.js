@@ -353,8 +353,7 @@ function normalizeProduct(row, rules = []) {
 
     ean: cleanText(row.ean),
 
-    matched_category_rule: ruleMapped?.matched_rule || null,
-
+    
     active: cleanText(row.active)
       ? parseBool(row.active)
       : normalizeStock(row.stock_status) !== "out_of_stock",
