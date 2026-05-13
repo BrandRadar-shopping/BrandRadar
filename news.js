@@ -1,40 +1,36 @@
 // ======================================================
-// 📰 BrandRadar – News page SUPABASE-FIRST
+// 📰 BrandRadar – News page SUPABASE CONTROLLED
+//  - Kun Supabase
 //  - Ingen Google Sheets
-//  - Ingen offers-engine
-//  - Bruker Supabase products-tabellen
-//  - Stabil for Staybeautiful/feed-produkter
+//  - Ingen auto-fallback fra products
+//  - Seksjoner styres av egne tabeller:
+//    news_spotlight, partner_campaigns, news_deals,
+//    news_picks, news_trending
 // ======================================================
 
 const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
 (function () {
-  console.log("✅ news.js loaded – Supabase version");
+  console.log("✅ news.js loaded – Supabase controlled version");
 
-  const supabase =
-    window.BrandRadarSupabase ||
-    window.brandRadarSupabase ||
-    window.supabaseClient ||
-    window.supabase;
+  const supabase = window.BrandRadarSupabase;
 
   const partnerBannerEl = document.querySelector(".partner-banner");
-  const dealsTrack = document.getElementById("deals-track") || document.querySelector(".deals-grid");
-  const picksTrack = document.getElementById("picks-track") || document.querySelector(".picks-grid");
-  const spotlightTrack = document.getElementById("spotlight-track") || document.querySelector("#featured-news .featured-wrapper");
+  const dealsTrack = document.getElementById("deals-track");
+  const picksTrack = document.getElementById("picks-track");
+  const spotlightTrack = document.getElementById("spotlight-track");
   const newsGridEl = document.getElementById("news-grid");
 
   const nb = new Intl.NumberFormat("nb-NO");
 
   function parseNum(v) {
     if (v == null || v === "") return null;
-
     const n = Number(
       String(v)
         .replace(/\s/g, "")
         .replace(/[^\d.,\-]/g, "")
         .replace(",", ".")
     );
-
     return Number.isFinite(n) ? n : null;
   }
 
@@ -42,7 +38,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     if (v === true) return true;
     if (v === false) return false;
     if (!v && v !== 0) return false;
-
     const s = String(v).trim().toLowerCase();
     return s === "true" || s === "1" || s === "yes" || s === "ja";
   }
@@ -69,15 +64,13 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
   function langField(row, key, fallback = "") {
     if (!row) return fallback;
 
-    const lang = currentLang();
-
-    if (lang === "en") {
+    if (currentLang() === "en") {
       const enValue = row[`${key}_en`];
       if (enValue != null && String(enValue).trim() !== "") return enValue;
     }
 
-    const baseValue = row[key];
-    if (baseValue != null && String(baseValue).trim() !== "") return baseValue;
+    const value = row[key];
+    if (value != null && String(value).trim() !== "") return value;
 
     return fallback;
   }
@@ -105,12 +98,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       title: row.title || row.product_name || row.name || "",
       product_name: row.product_name || row.title || row.name || "",
       brand: row.brand || row.brand_name || "",
-      image_url:
-        row.image_url ||
-        row.image ||
-        row.main_image ||
-        row.thumbnail_url ||
-        "",
+      image_url: row.image_url || row.image || row.main_image || row.thumbnail_url || "",
       image_2: row.image_2 || row.image2 || row.thumbnail_1 || "",
       image_3: row.image_3 || row.image3 || row.thumbnail_2 || "",
       image_4: row.image_4 || row.image4 || row.thumbnail_3 || "",
@@ -145,28 +133,15 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       discountPct = Math.round(percent);
     }
 
-    return {
-      newPriceNum,
-      oldPriceNum,
-      discountPct
-    };
+    return { newPriceNum, oldPriceNum, discountPct };
   }
 
-  function getProductDescription(product) {
+  function getDescription(product) {
     return (
       langField(product, "description", "") ||
       langField(product, "short_description", "") ||
       langField(product, "excerpt", "") ||
       ""
-    );
-  }
-
-  function getProductTag(product, fallback = "") {
-    return (
-      langField(product, "tag", "") ||
-      product.subcategory ||
-      product.category ||
-      fallback
     );
   }
 
@@ -186,52 +161,66 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     };
   }
 
-  async function fetchProducts(limit = 80) {
-    if (!supabase?.from) {
-      throw new Error("Supabase client mangler. Sjekk script-rekkefølgen i news.html.");
-    }
+  async function fetchControlRows(tableName) {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select("*")
+      .eq("active", true)
+      .order("rank", { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async function fetchProductsByIds(ids) {
+    const cleanIds = [...new Set(ids.map(String).map((id) => id.trim()).filter(Boolean))];
+
+    if (!cleanIds.length) return new Map();
 
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .eq("active", true)
-      .order("updated_at", { ascending: false })
-      .limit(limit);
+      .in("external_id", cleanIds);
 
     if (error) throw error;
 
-    return (data || []).map(normalizeProduct).filter(Boolean);
+    const map = new Map();
+
+    (data || []).forEach((row) => {
+      const product = normalizeProduct(row);
+      if (!product) return;
+      map.set(product.external_id, product);
+    });
+
+    return map;
   }
 
-  function productMatchesDeal(product) {
-    const discount = parseNum(product.discount);
-    const oldPrice = parseNum(product.old_price);
-    const price = parseNum(product.price || product.new_price);
+  async function fetchControlledSection(tableName) {
+    const rows = await fetchControlRows(tableName);
+    const productIds = rows.map((row) => row.product_id).filter(Boolean);
+    const productsById = await fetchProductsByIds(productIds);
 
-    return (
-      parseBool(product.is_deal) ||
-      parseBool(product.deal) ||
-      parseBool(product.on_sale) ||
-      (discount != null && discount > 0) ||
-      (oldPrice != null && price != null && oldPrice > price)
-    );
-  }
+    return rows
+      .map((row) => {
+        const product = productsById.get(String(row.product_id || "").trim());
+        if (!product) {
+          console.warn(`⚠️ ${tableName}: Fant ikke produkt for product_id`, row.product_id);
+          return null;
+        }
 
-  function productMatchesPick(product) {
-    return (
-      parseBool(product.is_pick) ||
-      parseBool(product.radar_pick) ||
-      parseBool(product.featured) ||
-      String(product.collection || "").toLowerCase().includes("pick")
-    );
-  }
-
-  function productMatchesSpotlight(product) {
-    return (
-      parseBool(product.spotlight) ||
-      parseBool(product.is_spotlight) ||
-      parseBool(product.featured_spotlight)
-    );
+        return {
+          control: row,
+          product: {
+            ...product,
+            ...row,
+            id: product.external_id,
+            external_id: product.external_id,
+            title: product.title || product.product_name || "",
+            product_name: product.product_name || product.title || ""
+          }
+        };
+      })
+      .filter(Boolean);
   }
 
   function buildRatingMarkup(ratingValue) {
@@ -304,25 +293,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       .news-section--deals .deal-card.product-card .favorite-toggle {
         z-index: 10;
       }
-
-      .news-section--deals .deal-card.product-card .price-wrapper {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 12px;
-        width: 100%;
-      }
-
-      .news-section--deals .deal-card.product-card .discount-pill {
-        flex: 0 0 auto;
-        white-space: nowrap;
-        font-size: .72rem;
-        font-weight: 800;
-        color: #fff;
-        background: linear-gradient(135deg, #0f172a, #1f2937);
-        padding: .34rem .62rem;
-        border-radius: 999px;
-      }
     `;
 
     document.head.appendChild(style);
@@ -345,23 +315,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
         ? window.isProductFavorite(pid)
         : false;
 
-    const priceMarkup = isDealCard && discountPct
-      ? `
-        <div class="price-wrapper">
-          <div class="price-line">
-            ${newPriceNum != null ? `<span class="new-price">${formatPrice(newPriceNum)}</span>` : ""}
-            ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
-          </div>
-          <span class="discount-pill">-${discountPct}%</span>
-        </div>
-      `
-      : `
-        <div class="price-line">
-          ${newPriceNum != null ? `<span class="new-price">${formatPrice(newPriceNum)}</span>` : ""}
-          ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
-        </div>
-      `;
-
     const card = document.createElement("article");
     card.className = `product-card ${extraClasses}`.trim();
     card.setAttribute("data-product-id", pid);
@@ -370,11 +323,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       ${isDealCard ? buildDealsCornerRibbon() : ""}
       ${!isDealCard && discountPct ? `<div class="discount-badge">-${discountPct}%</div>` : ""}
 
-      <button
-        type="button"
-        class="favorite-toggle ${isFav ? "active" : ""}"
-        aria-label="${isFav ? escapeHtml(t("remove_favorite", "Fjern favoritt")) : escapeHtml(t("add_favorite", "Legg til favoritt"))}"
-      >
+      <button type="button" class="favorite-toggle ${isFav ? "active" : ""}" aria-label="Favoritt">
         <svg viewBox="0 0 24 24" class="heart-icon" aria-hidden="true">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
           2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
@@ -393,7 +342,12 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
         ${tag ? `<p class="product-tag">${escapeHtml(tag)}</p>` : ""}
 
         ${buildRatingMarkup(product.rating)}
-        ${priceMarkup}
+
+        <div class="price-line">
+          ${newPriceNum != null ? `<span class="new-price">${formatPrice(newPriceNum)}</span>` : ""}
+          ${oldPriceNum != null ? `<span class="old-price">${formatPrice(oldPriceNum)}</span>` : ""}
+          ${isDealCard && discountPct ? `<span class="discount-pill">-${discountPct}%</span>` : ""}
+        </div>
       </div>
     `;
 
@@ -405,7 +359,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     const favButton = card.querySelector(".favorite-toggle");
     favButton?.addEventListener("click", (e) => {
       e.stopPropagation();
-
       if (typeof window.toggleFavorite !== "function" || !pid) return;
 
       window.toggleFavorite(buildFavoritePayload(product, pid), favButton);
@@ -421,7 +374,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     return card;
   }
 
-  function buildRadarPickCard(product) {
+  function buildRadarPickCard(product, control) {
     const pid = resolveProductId(product);
     const { newPriceNum, oldPriceNum, discountPct } = getPriceState(product);
 
@@ -431,31 +384,25 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
         : false;
 
     const reason =
-      langField(product, "pick_reason", "") ||
-      langField(product, "reason", "") ||
-      getProductDescription(product) ||
-      t("popular_choice", "Populært valg akkurat nå.");
+      langField(control, "reason", "") ||
+      getDescription(product);
 
     const badgeText =
-      langField(product, "pick_badge", "") ||
-      langField(product, "badge", "") ||
+      langField(control, "badge", "") ||
       "EDITOR'S PICK";
 
     const labelText =
-      langField(product, "label", "") ||
+      langField(control, "label", "") ||
+      product.subcategory ||
       product.category ||
-      t("popular_choice", "Populært valg");
+      "";
 
     const card = document.createElement("article");
     card.className = "radar-pick-card";
     card.setAttribute("data-product-id", pid);
 
     card.innerHTML = `
-      <button
-        type="button"
-        class="radar-pick-fav ${isFav ? "active" : ""}"
-        aria-label="${isFav ? escapeHtml(t("remove_favorite", "Fjern favoritt")) : escapeHtml(t("add_favorite", "Legg til favoritt"))}"
-      >
+      <button type="button" class="radar-pick-fav ${isFav ? "active" : ""}" aria-label="Favoritt">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
           2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81
@@ -465,7 +412,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       </button>
 
       ${discountPct ? `<span class="radar-pick-discount">-${discountPct}%</span>` : ""}
-
       <span class="radar-pick-badge">${escapeHtml(badgeText)}</span>
 
       <div class="radar-pick-media">
@@ -477,15 +423,13 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
         <h3>${escapeHtml(product.title || product.product_name || "")}</h3>
 
         ${reason ? `<p class="radar-pick-reason">${escapeHtml(reason)}</p>` : ""}
-
-        <span class="radar-pick-label">${escapeHtml(labelText)}</span>
+        ${labelText ? `<span class="radar-pick-label">${escapeHtml(labelText)}</span>` : ""}
 
         <div class="radar-pick-bottom">
           <div class="radar-pick-price">
             ${newPriceNum != null ? `<span>${formatPrice(newPriceNum)}</span>` : ""}
             ${oldPriceNum != null ? `<del>${formatPrice(oldPriceNum)}</del>` : ""}
           </div>
-
           <span class="radar-pick-arrow">→</span>
         </div>
       </div>
@@ -499,7 +443,6 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     const favBtn = card.querySelector(".radar-pick-fav");
     favBtn?.addEventListener("click", (e) => {
       e.stopPropagation();
-
       if (typeof window.toggleFavorite !== "function" || !pid) return;
 
       window.toggleFavorite(buildFavoritePayload(product, pid), favBtn);
@@ -529,7 +472,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
       .slice(0, 5);
   }
 
-  function buildSpotlightCard(product) {
+  function buildSpotlightCard(product, control) {
     const pid = resolveProductId(product);
     const images = getSpotlightImages(product);
     const mainImage = images[0] || product.image_url || "";
@@ -538,12 +481,11 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     const { newPriceNum, oldPriceNum, discountPct } = getPriceState(product);
 
     const excerpt =
-      langField(product, "spotlight_text", "") ||
-      getProductDescription(product) ||
-      t("spotlight_fallback_text", "Et håndplukket produkt denne uken.");
+      langField(control, "excerpt", "") ||
+      getDescription(product);
 
     const tag =
-      langField(product, "spotlight_tag", "") ||
+      langField(control, "tag", "") ||
       t("spotlight", "Spotlight");
 
     const article = document.createElement("article");
@@ -552,7 +494,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
     article.innerHTML = `
       <div class="spotlight-media">
-        <span class="spotlight-overlay-badge">${escapeHtml(t("spotlight", "Spotlight"))}</span>
+        <span class="spotlight-overlay-badge">${escapeHtml(tag)}</span>
 
         <div class="spotlight-main-image-wrap">
           <img src="${escapeHtml(mainImage)}" alt="${escapeHtml(product.title || product.product_name || "")}" loading="lazy" class="spotlight-main-image">
@@ -562,15 +504,11 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
           thumbs.length
             ? `
               <div class="spotlight-thumbs">
-                ${thumbs
-                  .map(
-                    (img, index) => `
-                    <button type="button" class="spotlight-thumb ${index === 0 ? "is-active" : ""}" data-image="${escapeHtml(img)}">
-                      <img src="${escapeHtml(img)}" alt="" loading="lazy">
-                    </button>
-                  `
-                  )
-                  .join("")}
+                ${thumbs.map((img, index) => `
+                  <button type="button" class="spotlight-thumb ${index === 0 ? "is-active" : ""}" data-image="${escapeHtml(img)}">
+                    <img src="${escapeHtml(img)}" alt="" loading="lazy">
+                  </button>
+                `).join("")}
               </div>
             `
             : ""
@@ -584,7 +522,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
         </div>
 
         <h3>${escapeHtml(product.title || product.product_name || "")}</h3>
-        <p>${escapeHtml(excerpt)}</p>
+        ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ""}
 
         ${buildRatingMarkup(product.rating)}
 
@@ -679,114 +617,89 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     window.addEventListener("resize", updateButtons);
   }
 
-  function initMobileSpotlightDots(trackEl) {
-    if (!trackEl || window.innerWidth > 768) return;
+  function clearSection(el, emptyText) {
+    if (!el) return;
+    el.classList.remove("loading");
+    el.innerHTML = "";
+    el.textContent = emptyText;
+  }
 
-    const wrapper = trackEl.closest(".slider-wrapper--spotlight");
-    if (!wrapper) return;
+  async function renderSpotlight() {
+    if (!spotlightTrack) return;
 
-    let dotsWrap = wrapper.querySelector(".spotlight-dots");
+    const items = await fetchControlledSection("news_spotlight");
 
-    if (!dotsWrap) {
-      dotsWrap = document.createElement("div");
-      dotsWrap.className = "spotlight-dots";
-      wrapper.appendChild(dotsWrap);
-    }
+    spotlightTrack.classList.remove("loading");
+    spotlightTrack.innerHTML = "";
 
-    const slides = Array.from(trackEl.children).filter((el) =>
-      el.classList.contains("spotlight-feature")
-    );
-
-    dotsWrap.innerHTML = "";
-
-    if (slides.length <= 1) {
-      dotsWrap.hidden = true;
+    if (!items.length) {
+      clearSection(spotlightTrack, t("no_spotlight_now", "Ingen spotlight-produkter akkurat nå."));
       return;
     }
 
-    dotsWrap.hidden = false;
-
-    const dots = slides.map((_, index) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "spotlight-dot";
-
-      btn.addEventListener("click", () => {
-        trackEl.scrollTo({
-          left: slides[index].offsetLeft,
-          behavior: "smooth"
-        });
-      });
-
-      dotsWrap.appendChild(btn);
-      return btn;
+    items.forEach(({ product, control }) => {
+      spotlightTrack.appendChild(buildSpotlightCard(product, control));
     });
 
-    function updateActiveDot() {
-      let activeIndex = 0;
-      let closest = Infinity;
-
-      slides.forEach((slide, index) => {
-        const distance = Math.abs(slide.offsetLeft - trackEl.scrollLeft);
-        if (distance < closest) {
-          closest = distance;
-          activeIndex = index;
-        }
-      });
-
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("is-active", index === activeIndex);
-      });
-    }
-
-    trackEl.addEventListener("scroll", () => {
-      requestAnimationFrame(updateActiveDot);
-    }, { passive: true });
-
-    setTimeout(updateActiveDot, 80);
-    setTimeout(updateActiveDot, 250);
+    initArrowSlider(spotlightTrack);
   }
 
-  function renderPartnerBanner(products) {
+  async function renderPartnerCampaign() {
     if (!partnerBannerEl) return;
 
-    const partnerProduct =
-      products.find((p) => parseBool(p.partner_campaign)) ||
-      products.find((p) => parseBool(p.featured)) ||
-      products[0];
-
+    const rows = await fetchControlRows("partner_campaigns");
     partnerBannerEl.classList.remove("loading");
+    partnerBannerEl.innerHTML = "";
 
-    if (!partnerProduct) {
+    if (!rows.length) {
       partnerBannerEl.textContent = t("no_partner_campaign_now", "Ingen partnerkampanje akkurat nå.");
       return;
     }
 
-    const title =
-      langField(partnerProduct, "campaign_name", "") ||
-      partnerProduct.brand ||
+    const row = rows[0];
+    let product = null;
+
+    if (row.product_id) {
+      const map = await fetchProductsByIds([row.product_id]);
+      product = map.get(String(row.product_id).trim());
+    }
+
+    const campaignName =
+      langField(row, "campaign_name", "") ||
+      product?.brand ||
       t("weekly_partner", "Ukens partner");
 
     const description =
-      langField(partnerProduct, "campaign_description", "") ||
-      `${partnerProduct.brand || "BrandRadar"} – ${partnerProduct.title || partnerProduct.product_name || ""}`;
+      langField(row, "description", "") ||
+      product?.title ||
+      product?.product_name ||
+      "";
+
+    const ctaText =
+      langField(row, "cta_text", "") ||
+      t("see_campaign", "Se kampanjen");
+
+    const imageUrl = row.image_url || product?.image_url || "";
+    const link =
+      row.link ||
+      (product ? `product.html?id=${encodeURIComponent(resolveProductId(product))}` : "#");
 
     partnerBannerEl.innerHTML = `
       <div class="partner-banner-inner">
         <div class="partner-banner-text">
-          <p class="partner-tag">${escapeHtml(title)}</p>
+          <p class="partner-tag">${escapeHtml(campaignName)}</p>
           <h2>${escapeHtml(description)}</h2>
-          <p class="partner-sub">${escapeHtml(getProductDescription(partnerProduct))}</p>
-          <a href="product.html?id=${encodeURIComponent(resolveProductId(partnerProduct))}" class="partner-cta">
-            ${escapeHtml(t("see_campaign", "Se kampanjen"))}
+          ${product ? `<p class="partner-sub">${escapeHtml(getDescription(product))}</p>` : ""}
+          <a href="${escapeHtml(link)}" class="partner-cta">
+            ${escapeHtml(ctaText)}
           </a>
         </div>
 
         ${
-          partnerProduct.image_url
+          imageUrl
             ? `
               <div class="partner-banner-image">
-                <img src="${escapeHtml(partnerProduct.image_url)}" alt="${escapeHtml(partnerProduct.title || partnerProduct.product_name || "")}">
+                <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(description || campaignName)}">
               </div>
             `
             : ""
@@ -795,25 +708,23 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     `;
   }
 
-  function renderDeals(products) {
+  async function renderDeals() {
     if (!dealsTrack) return;
+
+    const items = await fetchControlledSection("news_deals");
 
     dealsTrack.classList.remove("loading");
     dealsTrack.innerHTML = "";
 
-    const deals = products
-      .filter(productMatchesDeal)
-      .slice(0, 12);
-
-    if (!deals.length) {
-      dealsTrack.textContent = t("no_deals_now", "Ingen deals akkurat nå.");
+    if (!items.length) {
+      clearSection(dealsTrack, t("no_deals_now", "Ingen deals akkurat nå."));
       return;
     }
 
-    deals.forEach((product) => {
+    items.forEach(({ product, control }) => {
       const card = buildEliteCard(product, {
         extraClasses: "deal-card",
-        tag: getProductTag(product, "")
+        tag: langField(control, "highlight_reason", "")
       });
 
       dealsTrack.appendChild(card);
@@ -822,67 +733,44 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
     initArrowSlider(dealsTrack);
   }
 
-  function renderPicks(products) {
+  async function renderPicks() {
     if (!picksTrack) return;
+
+    const items = await fetchControlledSection("news_picks");
 
     picksTrack.classList.remove("loading");
     picksTrack.innerHTML = "";
 
-    let picks = products.filter(productMatchesPick);
-
-    if (!picks.length) {
-      picks = products.slice(0, 8);
+    if (!items.length) {
+      clearSection(picksTrack, t("no_picks_now", "Ingen picks akkurat nå."));
+      return;
     }
 
-    picks.slice(0, 10).forEach((product) => {
-      picksTrack.appendChild(buildRadarPickCard(product));
+    items.forEach(({ product, control }) => {
+      picksTrack.appendChild(buildRadarPickCard(product, control));
     });
 
     initArrowSlider(picksTrack);
   }
 
-  function renderSpotlight(products) {
-    if (!spotlightTrack) return;
-
-    spotlightTrack.classList.remove("loading");
-    spotlightTrack.innerHTML = "";
-
-    let spotlight = products.filter(productMatchesSpotlight);
-
-    if (!spotlight.length) {
-      spotlight = products.filter((p) => parseBool(p.featured)).slice(0, 3);
-    }
-
-    if (!spotlight.length) {
-      spotlight = products.slice(0, 3);
-    }
-
-    spotlight.slice(0, 5).forEach((product) => {
-      spotlightTrack.appendChild(buildSpotlightCard(product));
-    });
-
-    initArrowSlider(spotlightTrack);
-    initMobileSpotlightDots(spotlightTrack);
-  }
-
-  function renderNewsFeed(products) {
+  async function renderTrending() {
     if (!newsGridEl) return;
+
+    const items = await fetchControlledSection("news_trending");
 
     newsGridEl.classList.remove("loading");
     newsGridEl.innerHTML = "";
 
-    const feedProducts = products.slice(0, 16);
-
-    if (!feedProducts.length) {
-      newsGridEl.textContent = t("no_new_products_now", "Ingen nye produkter akkurat nå.");
+    if (!items.length) {
+      clearSection(newsGridEl, t("no_new_products_now", "Ingen nye produkter akkurat nå."));
       return;
     }
 
-    feedProducts.forEach((product) => {
+    items.forEach(({ product, control }) => {
       const card = buildEliteCard(product, {
         showExcerpt: true,
-        excerpt: getProductDescription(product),
-        tag: getProductTag(product, ""),
+        excerpt: langField(control, "excerpt", "") || getDescription(product),
+        tag: langField(control, "tag", "") || product.subcategory || product.category || "",
         extraClasses: "news-card"
       });
 
@@ -892,29 +780,30 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 
   async function renderNewsPage() {
     try {
+      if (!supabase?.from) {
+        throw new Error("Supabase client mangler. Sjekk supabase-config.js og script-rekkefølgen.");
+      }
+
       ensureDealsRibbonStyles();
 
-      const products = await fetchProducts(100);
-
-      renderSpotlight(products);
-      renderPartnerBanner(products);
-      renderDeals(products);
-      renderPicks(products);
-      renderNewsFeed(products);
+      await Promise.all([
+        renderSpotlight(),
+        renderPartnerCampaign(),
+        renderDeals(),
+        renderPicks(),
+        renderTrending()
+      ]);
     } catch (err) {
       console.error("❌ News page error:", err);
-
-      const message = t("could_not_load_newsfeed", "Kunne ikke laste nyhetssiden.");
 
       [partnerBannerEl, dealsTrack, picksTrack, spotlightTrack, newsGridEl].forEach((el) => {
         if (!el) return;
         el.classList.remove("loading");
-        el.textContent = message;
+        el.textContent = t("could_not_load_newsfeed", "Kunne ikke laste nyhetssiden.");
       });
     }
   }
 
   document.addEventListener("DOMContentLoaded", renderNewsPage);
-
   window.addEventListener("brandradar:languagechange", renderNewsPage);
 })();
