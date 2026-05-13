@@ -866,3 +866,27 @@ body.is-product-page #product-insights[hidden] {
     display: none !important;
   }
 }
+
+.product-description-text.is-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-description-more {
+  margin-top: 0.65rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.product-description-more:hover {
+  opacity: 0.75;
+}
