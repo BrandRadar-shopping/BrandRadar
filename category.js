@@ -1267,48 +1267,90 @@ function productMatchesSubcategory(product, targetSubSlug) {
     // ======================================================
     // NORMAL CATEGORY MODE
     // ======================================================
-   const [mapRows, masterProducts, supabaseProductsRaw] = await Promise.all([
+  const [mapRows, supabaseProductsRaw] = await Promise.all([
   fetch(mappingUrl).then(r => r.json()),
-  fetch(productUrl).then(r => r.json()),
-  window.BrandRadarSupabase
-    ? window.BrandRadarSupabase.fetchProducts({
-        category: categoryParam,
-        subcategory: subParam,
-        gender: genderParam,
-        limit: 1000
-      })
-      .catch((err) => {
-        console.warn("⚠️ Supabase products could not be loaded:", err);
-        return [];
-      })
+
+  window.supabase && (
+    window.BRANDRADAR_SUPABASE_URL ||
+    window.SUPABASE_CONFIG?.url
+  )
+    ? (async () => {
+        const SUPABASE_URL =
+          window.BRANDRADAR_SUPABASE_URL ||
+          window.SUPABASE_CONFIG?.url;
+
+        const SUPABASE_KEY =
+          window.BRANDRADAR_SUPABASE_ANON_KEY ||
+          window.SUPABASE_CONFIG?.anonKey;
+
+        const client = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY
+        );
+
+        const { data, error } = await client
+          .from("products")
+          .select("*")
+          .eq("active", true)
+          .limit(2000);
+
+        if (error) {
+          console.error("❌ Could not load Supabase products:", error);
+          return [];
+        }
+
+        return data || [];
+      })()
     : Promise.resolve([])
 ]);
-    
-const supabaseProducts = supabaseProductsRaw.map(p => ({
+
+const products = supabaseProductsRaw.map(p => ({
   ...p,
-  id: p.external_id || p.id,
-  product_id: p.external_id || p.id,
+
+  id: p.external_id || p.original_id || p.id,
+  product_id: p.external_id || p.original_id || p.id,
+
   title: p.title || "",
   product_name: p.title || "",
-  brand: p.brand_name || p.brand || p.brand_slug || "",
-  price: p.price || "",
-  old_price: p.old_price || "",
-  discount: p.discount || "",
+
+  brand:
+    p.brand_name ||
+    p.brand ||
+    p.brand_slug ||
+    "",
+
+  price: p.price ?? "",
+  old_price: p.old_price ?? "",
+  discount: p.discount ?? "",
+
   image_url: p.image_url || "",
-  product_url: p.affiliate_url || p.product_url || "",
+  image2: p.image2 || "",
+  image3: p.image3 || "",
+  image4: p.image4 || "",
+
+  product_url:
+    p.affiliate_url ||
+    p.product_url ||
+    "",
+
+  affiliate_url:
+    p.affiliate_url ||
+    p.product_url ||
+    "",
+
   category: p.category || "",
+  main_category: p.category || "",
+  mapped_category: p.category || "",
   subcategory: p.subcategory || "",
   gender: p.gender || "",
+
   rating: p.rating || "",
+  source: p.source || "supabase",
+  sheet_source: p.source || "supabase",
   is_supabase_product: true
 }));
 
-console.log("Loaded Supabase products:", supabaseProducts.length);
-
-const products = [
-  ...masterProducts,
-  ...supabaseProducts
-];
+console.log("✅ Category Supabase products loaded:", products.length);
 
     const match = mapRows.find(row => {
       const mainOk = normalize(row.main_category) === categorySlug;
