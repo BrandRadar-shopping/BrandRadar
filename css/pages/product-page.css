@@ -890,3 +890,12 @@ body.is-product-page #product-insights[hidden] {
 .product-description-more:hover {
   opacity: 0.75;
 }
+
+.product-media-main,
+.product-main-image,
+.product-gallery,
+.product-stage,
+.product-image-wrap {
+  background: #fff !important;
+  border: 1px solid #eef1f4;
+}
