@@ -40,30 +40,43 @@
 }
 
   function getPriceInfo(product) {
-    let price = cleanPrice(product.price);
-    let oldPrice = cleanPrice(
-      product.old_price || product.compare_at_price || product.before_price
-    );
-    let discount = String(product.discount ?? "").trim();
+  const price = cleanPrice(product.price);
 
-    if (!discount && oldPrice > 0 && price > 0 && price < oldPrice) {
-      discount = String(Math.round(((oldPrice - price) / oldPrice) * 100));
-    }
+  let oldPrice = cleanPrice(
+    product.old_price || product.compare_at_price || product.before_price
+  );
 
-    if (discount && /^\d+$/.test(discount)) {
-      discount = `-${discount}%`;
-    } else if (discount && /^-\d+$/.test(discount)) {
-      discount = `${discount}%`;
-    }
-
-    return {
-      price,
-      oldPrice,
-      discountText: discount || "",
-      priceText: price ? formatPrice(price) : "",
-      oldPriceText: oldPrice ? formatPrice(oldPrice) : ""
-    };
+  if (oldPrice <= price) {
+    oldPrice = 0;
   }
+
+  let discount = String(product.discount ?? "").trim();
+  const discountNumber = cleanPrice(discount);
+
+  if (!discount && oldPrice > 0 && price > 0 && price < oldPrice) {
+    discount = String(Math.round(((oldPrice - price) / oldPrice) * 100));
+  }
+
+  if (discountNumber > 0 && !discount.includes("%")) {
+    discount = `-${Math.round(discountNumber)}%`;
+  } else if (discount && /^\d+$/.test(discount)) {
+    discount = `-${discount}%`;
+  } else if (discount && /^-\d+$/.test(discount)) {
+    discount = `${discount}%`;
+  }
+
+  if (!oldPrice) {
+    discount = "";
+  }
+
+  return {
+    price,
+    oldPrice,
+    discountText: discount || "",
+    priceText: price ? formatPrice(price) : "",
+    oldPriceText: oldPrice ? formatPrice(oldPrice) : ""
+  };
+}
 
   function getResolvedId(product) {
     if (typeof window.resolveProductId === "function") {
