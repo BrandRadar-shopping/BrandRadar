@@ -3,6 +3,7 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const SHEET_ID = "15AWVMF5UhOmGS8MLelmU7HmE0IXJn41Syop6KrbI6ME";
 const FEED_TAB = "StaybeautifulProducts";
+const CATEGORY_RULES_TAB = "FeedCategoryRules";
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
@@ -12,12 +13,19 @@ function cleanText(value) {
   return String(value || "").trim();
 }
 
-function slugify(value) {
+function normalizeText(value) {
   return cleanText(value)
     .toLowerCase()
     .replace(/æ/g, "ae")
     .replace(/ø/g, "o")
     .replace(/å/g, "a")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function slugify(value) {
+  return normalizeText(value)
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-")
@@ -76,12 +84,12 @@ function parseBool(value) {
 }
 
 function normalizeStock(value) {
-  const s = cleanText(value).toLowerCase();
+  const s = normalizeText(value);
 
   if (
     s.includes("in stock") ||
-    s.includes("på lager") ||
     s.includes("pa lager") ||
+    s.includes("på lager") ||
     s === "instock" ||
     s === "in_stock"
   ) {
@@ -90,8 +98,8 @@ function normalizeStock(value) {
 
   if (
     s.includes("out of stock") ||
-    s.includes("ikke på lager") ||
     s.includes("ikke pa lager") ||
+    s.includes("ikke på lager") ||
     s === "outofstock" ||
     s === "out_of_stock"
   ) {
@@ -115,68 +123,216 @@ function createDiscount(price, oldPrice, existingDiscount) {
   return null;
 }
 
-function normalizeProduct(row) {
+async function fetchSheet(tab) {
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/${encodeURIComponent(tab)}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${tab}: ${res.status}`);
+  }
+
+  return await res.json();
+}
+
+function getMatchValue(row, field) {
+  const values = {
+    title: row.title || row.product_name || row.name || "",
+    raw_category: row.raw_category || row.category || "",
+    category: row.category || row.raw_category || "",
+    subcategory: row.subcategory || "",
+    description: row.description || "",
+    brand: row.brand || "",
+    all: [
+      row.raw_category,
+      row.category,
+      row.subcategory,
+      row.title,
+      row.product_name,
+      row.name,
+      row.brand,
+      row.description
+    ].filter(Boolean).join(" ")
+  };
+
+  return normalizeText(values[field] ?? values.all);
+}
+
+function ruleMatches(row, rule, source) {
+  if (rule.source && rule.source !== normalizeText(source)) return false;
+
+  const matchValue = getMatchValue(row, rule.match_field);
+  const allValue = getMatchValue(row, "all");
+
+  if (!matchValue && rule.keyword !== "*") return false;
+
+  const blocked = rule.negative_keywords.some((negative) => {
+    return negative && allValue.includes(negative);
+  });
+
+  if (blocked) return false;
+
+  if (rule.keyword === "*") return true;
+
+  return matchValue.includes(rule.keyword);
+}
+
+function mapByCategoryRules(row, source, rules) {
+  const match = rules.find((rule) => ruleMatches(row, rule, source));
+
+  if (!match) return null;
+
+  return {
+    category: match.category,
+    subcategory: match.subcategory,
+    gender: match.gender || cleanText(row.gender),
+    matched_rule: {
+      priority: match.priority,
+      match_field: match.match_field,
+      keyword: match.keyword,
+      notes: match.notes
+    }
+  };
+}
+
+function mapStaybeautifulCategoryFallback(row) {
+  const raw = normalizeText(row.raw_category || row.category || "");
+  const title = normalizeText(row.title || row.product_name || "");
+  const sub = normalizeText(row.subcategory || "");
+  const desc = normalizeText(row.description || "");
+
+  const coreText = `${raw} ${title} ${sub}`;
+  const fullText = `${coreText} ${desc}`;
+
+  function hasAny(text, words) {
+    return words.some((word) => text.includes(normalizeText(word)));
+  }
+
+  function hasPerfumeNegative(text) {
+    return hasAny(text, [
+      "parfymefri",
+      "parfyme fri",
+      "uten parfyme",
+      "duftfri",
+      "duft fri",
+      "fragrance free",
+      "fragrance-free",
+      "perfume free",
+      "perfume-free",
+      "without fragrance",
+      "without perfume"
+    ]);
+  }
+
+  if (hasAny(coreText, ["shampoo", "conditioner", "balsam", "hair mask", "hårkur", "scalp", "leave-in", "leave in", "haircare"])) {
+    return { category: "Selfcare", subcategory: "Hår" };
+  }
+
+  if (hasAny(coreText, ["kropp", "body", "body lotion", "body cream", "hand cream", "håndkrem", "shower gel", "dusj"])) {
+    return { category: "Selfcare", subcategory: "Kroppspleie" };
+  }
+
+  if (hasAny(coreText, ["sol", "sun", "spf", "sunscreen", "solkrem", "after sun"])) {
+    return { category: "Selfcare", subcategory: "Solprodukter" };
+  }
+
+  if (
+    !hasPerfumeNegative(coreText) &&
+    (
+      raw.includes("parfyme") ||
+      raw.includes("perfume") ||
+      raw.includes("fragrance") ||
+      title.includes("eau de parfum") ||
+      title.includes("eau de toilette") ||
+      title.includes(" edp") ||
+      title.includes(" edt")
+    )
+  ) {
+    return { category: "Selfcare", subcategory: "Parfyme" };
+  }
+
+  if (hasAny(coreText, ["deodorant", "antiperspirant"])) {
+    return { category: "Selfcare", subcategory: "Deodorant" };
+  }
+
+  if (hasAny(coreText, ["gift set", "gavesett"])) {
+    return { category: "Selfcare", subcategory: "Gavesett" };
+  }
+
+  if (hasAny(coreText, ["skincare set", "hudpleiesett", "starter kit", "kit"])) {
+    return { category: "Selfcare", subcategory: "Hudpleiesett" };
+  }
+
+  if (hasAny(coreText, ["travel", "reisestørrelse", "reisestorrelse", "mini"])) {
+    return { category: "Selfcare", subcategory: "Reisestørrelser" };
+  }
+
+  if (
+    hasAny(fullText, [
+      "ansikt",
+      "face",
+      "facial",
+      "hudpleie",
+      "skincare",
+      "serum",
+      "cream",
+      "krem",
+      "moisturizer",
+      "cleanser",
+      "cleansing",
+      "rens",
+      "toner",
+      "peeling",
+      "mask",
+      "retinol",
+      "vitamin c"
+    ])
+  ) {
+    return { category: "Selfcare", subcategory: "Ansikt" };
+  }
+
+  return { category: "Selfcare", subcategory: "Ansikt" };
+}
+
+function mapFallbackCategory(row) {
+  return mapStaybeautifulCategoryFallback(row);
+}
+
+function normalizeProduct(row, rules = []) {
   const originalId = cleanText(row.id || row.original_id);
-
   const source = "staybeautiful";
-
-  const externalId = originalId
-    ? `${source}_${originalId}`
-    : "";
+  const externalId = originalId ? `${source}_${originalId}` : "";
 
   const price = parseMoney(row.price);
   const oldPrice = parseMoney(row.old_price);
+
+  const ruleMapped = mapByCategoryRules(row, source, rules);
+  const fallbackMapped = mapFallbackCategory(row);
+  const mapped = ruleMapped || fallbackMapped;
 
   return {
     external_id: externalId,
     original_id: originalId,
 
     source,
-    affiliate_network:
-      cleanText(row.affiliate_network) || "partnerads",
+    affiliate_network: cleanText(row.affiliate_network) || "partnerads",
 
-    merchant_slug:
-      cleanText(row.merchant_slug) || "staybeautiful",
-
-    merchant_name:
-      cleanText(row.merchant_name || row.merchant) ||
-      "Staybeautiful",
+    merchant_slug: cleanText(row.merchant_slug) || "staybeautiful",
+    merchant_name: cleanText(row.merchant_name || row.merchant) || "Staybeautiful",
 
     brand_slug: slugify(row.brand),
     brand_name: cleanText(row.brand),
 
-    title: cleanText(
-      row.title ||
-      row.product_name ||
-      row.name
-    ),
+    title: cleanText(row.title || row.product_name || row.name),
+    description: cleanText(row.description || row.short_description),
+    short_description: cleanText(row.short_description),
 
-    description: cleanText(
-      row.description ||
-      row.short_description
-    ),
-
-    short_description: cleanText(
-      row.short_description
-    ),
-
-    category:
-      cleanText(row.category || row.mapped_category) ||
-      "Selfcare",
-
-    subcategory:
-      cleanText(row.subcategory) || "Ansikt",
-
-    gender: cleanText(row.gender),
+    category: mapped.category || "Selfcare",
+    subcategory: mapped.subcategory || "Ansikt",
+    gender: mapped.gender || cleanText(row.gender),
 
     price,
     old_price: oldPrice,
-
-    discount: createDiscount(
-      price,
-      oldPrice,
-      row.discount
-    ),
+    discount: createDiscount(price, oldPrice, row.discount),
 
     currency: "NOK",
 
@@ -186,43 +342,25 @@ function normalizeProduct(row) {
     image4: cleanText(row.image4),
 
     product_url: cleanText(row.product_url),
-
-    affiliate_url:
-      cleanText(row.affiliate_url || row.product_url),
+    affiliate_url: cleanText(row.affiliate_url || row.product_url),
 
     stock_status: normalizeStock(row.stock_status),
 
     rating: parseNumber(row.rating),
 
-    raw_category: cleanText(
-      row.raw_category || row.category
-    ),
-
-    raw_subcategory: cleanText(
-      row.raw_subcategory || row.subcategory
-    ),
+    raw_category: cleanText(row.raw_category || row.category),
+    raw_subcategory: cleanText(row.raw_subcategory || row.subcategory),
 
     ean: cleanText(row.ean),
 
+    matched_category_rule: ruleMapped?.matched_rule || null,
+
     active: cleanText(row.active)
-  ? parseBool(row.active)
-  : normalizeStock(row.stock_status) !== "out_of_stock",
+      ? parseBool(row.active)
+      : normalizeStock(row.stock_status) !== "out_of_stock",
 
     updated_at: new Date().toISOString()
   };
-}
-
-async function fetchSheet(tab) {
-  const url =
-    `https://opensheet.elk.sh/${SHEET_ID}/${encodeURIComponent(tab)}`;
-
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error(`Could not fetch ${tab}: ${res.status}`);
-  }
-
-  return await res.json();
 }
 
 async function supabaseUpsert(table, rows, conflictColumn) {
@@ -247,15 +385,10 @@ async function supabaseUpsert(table, rows, conflictColumn) {
 
     if (!res.ok) {
       const text = await res.text();
-
-      throw new Error(
-        `Supabase ${table} upsert failed: ${text}`
-      );
+      throw new Error(`Supabase ${table} upsert failed: ${text}`);
     }
 
-    console.log(
-      `Synced ${chunk.length} rows to ${table}`
-    );
+    console.log(`Synced ${chunk.length} rows to ${table}`);
   }
 }
 
@@ -280,17 +413,50 @@ function buildBrands(products) {
   return [...map.values()];
 }
 
+async function loadCategoryRules() {
+  const rows = await fetchSheet(CATEGORY_RULES_TAB).catch((err) => {
+    console.warn("Could not load FeedCategoryRules. Using fallback mapping.", err);
+    return [];
+  });
+
+  return rows
+    .filter((row) => parseBool(row.active))
+    .map((row, index) => ({
+      active: true,
+      priority: parseNumber(row.priority) ?? 9999,
+      source: normalizeText(row.source),
+      match_field: normalizeText(row.match_field || "all"),
+      keyword: normalizeText(row.keyword),
+      category: cleanText(row.category),
+      subcategory: cleanText(row.subcategory),
+      gender: cleanText(row.gender),
+      negative_keywords: cleanText(row.negative_keywords)
+        .split(",")
+        .map((x) => normalizeText(x))
+        .filter(Boolean),
+      notes: cleanText(row.notes),
+      _index: index
+    }))
+    .filter((rule) => rule.keyword && rule.category && rule.subcategory)
+    .sort((a, b) => {
+      if (a.priority !== b.priority) return a.priority - b.priority;
+      return a._index - b._index;
+    });
+}
+
 async function run() {
   console.log("Starting Staybeautiful sync...");
 
-  const rows = await fetchSheet(FEED_TAB);
+  const [rows, rules] = await Promise.all([
+    fetchSheet(FEED_TAB),
+    loadCategoryRules()
+  ]);
 
-  console.log(
-    `Fetched ${rows.length} rows from feed sheet`
-  );
+  console.log(`Fetched ${rows.length} rows from feed sheet`);
+  console.log(`Fetched ${rules.length} category rules`);
 
   const products = rows
-    .map(normalizeProduct)
+    .map((row) => normalizeProduct(row, rules))
     .filter((p) => {
       return (
         p.external_id &&
@@ -302,38 +468,33 @@ async function run() {
       );
     });
 
-  console.log(
-    `Normalized ${products.length} valid products`
-  );
+  console.log(`Normalized ${products.length} valid products`);
 
-  const debugProduct = products.find(
-    (p) =>
-      p.external_id ===
-      "staybeautiful_staybeautiful-222"
-  );
+  const debugProducts = products
+    .filter((p) =>
+      [
+        "staybeautiful_staybeautiful-222",
+        "staybeautiful_staybeautiful-216",
+        "staybeautiful_staybeautiful-11"
+      ].includes(p.external_id)
+    )
+    .map((p) => ({
+      external_id: p.external_id,
+      title: p.title,
+      category: p.category,
+      subcategory: p.subcategory,
+      price: p.price,
+      old_price: p.old_price,
+      discount: p.discount,
+      matched_category_rule: p.matched_category_rule
+    }));
 
-  if (debugProduct) {
-    console.log("Debug staybeautiful-222:", {
-      title: debugProduct.title,
-      price: debugProduct.price,
-      old_price: debugProduct.old_price,
-      discount: debugProduct.discount
-    });
-  }
+  console.log("Debug mapped products:", debugProducts);
 
-  await supabaseUpsert(
-    "products",
-    products,
-    "external_id"
-  );
+  await supabaseUpsert("products", products, "external_id");
 
   const brands = buildBrands(products);
-
-  await supabaseUpsert(
-    "brands",
-    brands,
-    "slug"
-  );
+  await supabaseUpsert("brands", brands, "slug");
 
   console.log("Staybeautiful sync complete");
 }
