@@ -204,7 +204,9 @@ function normalizeProduct(row) {
 
     ean: cleanText(row.ean),
 
-    active: parseBool(row.active) !== false,
+    active: cleanText(row.active)
+  ? parseBool(row.active)
+  : normalizeStock(row.stock_status) !== "out_of_stock",
 
     updated_at: new Date().toISOString()
   };
