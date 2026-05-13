@@ -57,7 +57,7 @@
   height: 520px;
   border-radius: 14px;
   border: 1px solid rgba(15, 23, 42, 0.12);
-  background: linear-gradient(180deg, #eef2f6 0%, #e7ebf0 100%);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -891,11 +891,4 @@ body.is-product-page #product-insights[hidden] {
   opacity: 0.75;
 }
 
-.product-media-main,
-.product-main-image,
-.product-gallery,
-.product-stage,
-.product-image-wrap {
-  background: #fff !important;
-  border: 1px solid #eef1f4;
-}
+
