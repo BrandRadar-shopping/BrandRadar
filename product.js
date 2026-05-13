@@ -1322,11 +1322,6 @@ if (matches.length < 4 && curBrand) {
     slider.innerHTML = `<p>${t("no_recommendations", "Ingen anbefalinger tilgjengelig.")}</p>`;
     return;
   }
-
-  if (window.BrandRadarOffersEngine) {
-    matches = await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(matches);
-  }
-
   slider.innerHTML = "";
 
   matches.forEach(p => {
