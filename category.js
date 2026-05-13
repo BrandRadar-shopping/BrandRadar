@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const SHEET_PRODUCTS = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
   const SHEET_MAPPING = "1e3tvfatBmnwDVs5nuR-OvSaQl0lIF-JUhuQtfvACo3g";
-  const SHEET_DEALS = "1GZH_z1dSV40X9GYRKWNV_F1Oe8JwapRBYy9nnDP0KmY";
   const SHEET_PICKS = "18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI";
   const SHEET_NEWS = "1CSJjHvL7VytKfCd61IQf-53g3nAl9GrnC1Vmz7ZGF54";
 
@@ -23,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mappingUrl = `https://opensheet.elk.sh/${SHEET_MAPPING}/CategoryMapping`;
 
   // ✅ ENESTE ENDRING
-  const dealsUrl = `https://opensheet.elk.sh/${SHEET_PRODUCTS}/deals`;
+  
 
   const picksUrl = `https://opensheet.elk.sh/${SHEET_PICKS}/picks`;
   const newsUrl = `https://opensheet.elk.sh/${SHEET_NEWS}/news`;
