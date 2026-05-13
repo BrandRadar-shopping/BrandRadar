@@ -365,7 +365,15 @@ const SUPABASE_KEY =
       });
 
       btn.addEventListener("focus", () => setActiveThumb(btn));
-      btn.addEventListener("click", () => setActiveThumb(btn));
+      btn.addEventListener("click", () => {
+  setActiveThumb(btn);
+
+  const link = btn.dataset.thumbLink;
+
+  if (link) {
+    window.location.href = link;
+  }
+});
     });
 
     const heart = card.querySelector(".fav-icon");
