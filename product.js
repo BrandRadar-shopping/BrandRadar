@@ -9,7 +9,7 @@ const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
 
-  const productId = String(params.get("id"));
+  const productId = String(params.get("id") || "").trim();
   const isLuxuryParam = params.get("luxury") === "true";
 
   if (!productId) {
@@ -17,140 +17,164 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const MAIN_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const MAIN_SHEET_NAME = "BrandRadarProdukter";
+  const SUPABASE_URL =
+    window.BRANDRADAR_SUPABASE_URL ||
+    window.SUPABASE_CONFIG?.url;
 
-  const LUXURY_SHEET_ID = "1Chw-0MM_Cqy-T3e7AN4Zgm0iL57xPZoYzaTUUGtUxxU";
-  const LUXURY_SHEET_NAME = "LuxuryProducts";
+  const SUPABASE_KEY =
+    window.BRANDRADAR_SUPABASE_ANON_KEY ||
+    window.SUPABASE_CONFIG?.anonKey;
 
-  let mainProducts = await fetch(`https://opensheet.elk.sh/${MAIN_SHEET_ID}/${MAIN_SHEET_NAME}`)
-  .then(r => r.json())
-  .catch(() => []);
+  let product = null;
+  let products = [];
 
-let products = [...mainProducts];
+  function cleanPrice(value) {
+    if (value === null || value === undefined || value === "") return null;
 
-let product = mainProducts.find(p => String(p.id || "").trim() === productId);
+    const n = Number(
+      String(value)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,-]/g, "")
+        .replace(",", ".")
+    );
 
-if (!product) {
-  const luxuryProducts = await fetch(`https://opensheet.elk.sh/${LUXURY_SHEET_ID}/${LUXURY_SHEET_NAME}`)
-    .then(r => r.json())
-    .catch(() => []);
+    if (!Number.isFinite(n)) return null;
+    if (n < 0 || n > 1000000) return null;
 
-  const foundLuxury = luxuryProducts.find(p => String(p.id || "").trim() === productId);
-
-  if (foundLuxury) {
-    product = { ...foundLuxury, sheet_source: "luxury" };
-    products = luxuryProducts;
+    return n;
   }
-}
 
-if (!product && window.BrandRadarFeedEngine) {
-  const feedProducts = await window.BrandRadarFeedEngine
-    .loadAllFeeds({ onlyInStock: true })
-    .catch((err) => {
-      console.warn("⚠️ Could not load affiliate feed products:", err);
-      return [];
-    });
+  function formatPrice(value) {
+    const n = cleanPrice(value);
+    if (n === null) return "";
 
-  const foundFeed = feedProducts.find((p) => {
-    const id = String(p.id || "").trim();
-    const originalId = String(p.original_id || "").trim();
-
-    return id === productId || originalId === productId;
-  });
-
-  if (foundFeed) {
-    product = {
-      ...foundFeed,
-      sheet_source: "affiliate_feed",
-      is_feed_product: true
-    };
-
-    products = [
-      ...mainProducts,
-      ...feedProducts
-    ];
+    return `${new Intl.NumberFormat("nb-NO", {
+      minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
+      maximumFractionDigits: Number.isInteger(n) ? 0 : 2
+    }).format(n)} kr`;
   }
-}
-  if (!product && window.BrandRadarSupabase) {
-  const supabaseMatches = await window.BrandRadarSupabase.fetchProducts({
-    limit: 1,
-    externalId: productId
-  });
 
-  if (supabaseMatches && supabaseMatches.length) {
-    const p = supabaseMatches[0];
+  function normalizeSupabaseProduct(p) {
+    const resolvedId = p.external_id || p.original_id || p.id || "";
 
-    product = {
+    return {
       ...p,
-      id: p.external_id || p.id,
-      product_id: p.external_id || p.id,
+      id: resolvedId,
+      product_id: resolvedId,
+
       title: p.title || "",
       product_name: p.title || "",
-      brand: p.brand_name || p.brand || p.brand_slug || "",
-      price: p.price || "",
-      old_price: p.old_price || "",
-      discount: p.discount || "",
+
+      brand:
+        p.brand_name ||
+        p.brand ||
+        p.brand_slug ||
+        "",
+
+      price: p.price ?? "",
+      old_price: p.old_price ?? "",
+      discount: p.discount ?? "",
+
       image_url: p.image_url || "",
       image2: p.image2 || "",
       image3: p.image3 || "",
       image4: p.image4 || "",
-      product_url: p.affiliate_url || p.product_url || "",
-      affiliate_url: p.affiliate_url || p.product_url || "",
+
+      product_url:
+        p.affiliate_url ||
+        p.product_url ||
+        "",
+
+      affiliate_url:
+        p.affiliate_url ||
+        p.product_url ||
+        "",
+
       category: p.category || "",
       subcategory: p.subcategory || "",
       gender: p.gender || "",
+
       description: p.description || "",
+      short_description: p.short_description || "",
       rating: p.rating || "",
+
+      source: p.source || "supabase",
+      sheet_source: p.source || "supabase",
       is_supabase_product: true
     };
-
-    if (window.BrandRadarSupabase) {
-  const relatedPool = await window.BrandRadarSupabase.fetchProducts({
-    category: product.category || null,
-    subcategory: product.subcategory || null,
-    limit: 24
-  });
-
-  products = relatedPool.map(p => ({
-    ...p,
-    id: p.external_id || p.id,
-    product_id: p.external_id || p.id,
-    title: p.title || "",
-    product_name: p.title || "",
-    brand: p.brand_name || p.brand || p.brand_slug || "",
-    price: p.price || "",
-    old_price: p.old_price || "",
-    discount: p.discount || "",
-    image_url: p.image_url || "",
-    image2: p.image2 || "",
-    image3: p.image3 || "",
-    image4: p.image4 || "",
-    product_url: p.affiliate_url || p.product_url || "",
-    affiliate_url: p.affiliate_url || p.product_url || "",
-    category: p.category || "",
-    subcategory: p.subcategory || "",
-    gender: p.gender || "",
-    description: p.description || "",
-    rating: p.rating || "",
-    is_supabase_product: true
-  }));
-} else {
-  products = [product];
-}
   }
-}
 
-  
-if (!product) {
-  alert(t("product_not_found", "Produktet ble ikke funnet!"));
-  return;
-}
+  if (SUPABASE_URL && SUPABASE_KEY && window.supabase) {
+    try {
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const isLuxury = isLuxuryParam || product.sheet_source === "luxury";
+      const numericId = /^\d+$/.test(productId) ? Number(productId) : null;
 
-  document.getElementById("product-title").textContent = product.title || "";
-  document.getElementById("product-brand").textContent = product.brand || "";
+      let query = client
+        .from("products")
+        .select("*")
+        .eq("active", true);
+
+      if (numericId !== null) {
+        query = query.or(
+          `external_id.eq.${productId},original_id.eq.${productId},id.eq.${numericId}`
+        );
+      } else {
+        query = query.or(
+          `external_id.eq.${productId},original_id.eq.${productId}`
+        );
+      }
+
+      const { data: dbProduct, error } = await query
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error("❌ Supabase product lookup failed:", error);
+      }
+
+      if (dbProduct) {
+        product = normalizeSupabaseProduct(dbProduct);
+
+        let relatedQuery = client
+          .from("products")
+          .select("*")
+          .eq("active", true)
+          .limit(40);
+
+        if (dbProduct.brand_slug) {
+          relatedQuery = relatedQuery.eq("brand_slug", dbProduct.brand_slug);
+        } else if (dbProduct.category) {
+          relatedQuery = relatedQuery.eq("category", dbProduct.category);
+        }
+
+        const { data: relatedRows, error: relatedError } = await relatedQuery;
+
+        if (relatedError) {
+          console.warn("⚠️ Related products failed:", relatedError);
+        }
+
+        products = Array.isArray(relatedRows)
+          ? relatedRows.map(normalizeSupabaseProduct)
+          : [product];
+      }
+    } catch (err) {
+      console.error("❌ Supabase product load crashed:", err);
+    }
+  }
+
+  if (!product) {
+    alert(t("product_not_found", "Produktet ble ikke funnet!"));
+    return;
+  }
+
+  const isLuxury = isLuxuryParam || !!product.is_luxury || product.sheet_source === "luxury";
+
+  const titleEl = document.getElementById("product-title");
+  const brandEl = document.getElementById("product-brand");
+
+  if (titleEl) titleEl.textContent = product.title || "";
+  if (brandEl) brandEl.textContent = product.brand || "";
 
   const productDescriptionEl =
     document.getElementById("product-description") ||
@@ -158,7 +182,10 @@ if (!product) {
 
   if (productDescriptionEl) {
     productDescriptionEl.textContent =
-      product.info || product.description || t("product_description_fallback", "Dette premiumproduktet kombinerer kvalitet og stil.");
+      product.info ||
+      product.description ||
+      product.short_description ||
+      t("product_description_fallback", "Dette premiumproduktet kombinerer kvalitet og stil.");
   }
 
   const newPriceEl = document.getElementById("new-price");
@@ -166,28 +193,41 @@ if (!product) {
   const discountTagEl = document.getElementById("discount-tag");
   const buyLinkEl = document.getElementById("buy-link");
 
-  const rawPrice = product.price
-    ? String(product.price).replace(/[^\d.,]/g, "").replace(",", ".")
-    : null;
-  const numericPrice = rawPrice ? parseFloat(rawPrice) : null;
+  const price = cleanPrice(product.price);
+  const oldPrice = cleanPrice(product.old_price);
+  const validOldPrice = oldPrice !== null && price !== null && oldPrice > price;
 
-  let discount = parseFloat(String(product.discount || "").replace(",", "."));
-  if (discount && discount < 1) discount *= 100;
+  let discount = cleanPrice(product.discount);
 
-  if (numericPrice && discount > 0) {
-    const newPrice = Math.round(numericPrice * (1 - discount / 100));
-    newPriceEl.textContent = `${newPrice} kr`;
-    oldPriceEl.textContent = `${numericPrice} kr`;
-    discountTagEl.textContent = `-${discount.toFixed(0)}%`;
-    discountTagEl.style.display = "inline-flex";
-  } else {
-    newPriceEl.textContent = product.price ? `${product.price} kr` : "";
-    oldPriceEl.textContent = "";
-    discountTagEl.textContent = "";
-    discountTagEl.style.display = "none";
+  if (discount !== null && discount < 1) {
+    discount = discount * 100;
   }
 
-  buyLinkEl.href = product.product_url || "#";
+  if (!discount && validOldPrice) {
+    discount = Math.round(((oldPrice - price) / oldPrice) * 100);
+  }
+
+  if (newPriceEl) {
+    newPriceEl.textContent = price !== null ? formatPrice(price) : "";
+  }
+
+  if (oldPriceEl) {
+    oldPriceEl.textContent = validOldPrice ? formatPrice(oldPrice) : "";
+  }
+
+  if (discountTagEl) {
+    if (validOldPrice && discount && discount > 0) {
+      discountTagEl.textContent = `-${Math.round(discount)}%`;
+      discountTagEl.style.display = "inline-flex";
+    } else {
+      discountTagEl.textContent = "";
+      discountTagEl.style.display = "none";
+    }
+  }
+
+  if (buyLinkEl) {
+    buyLinkEl.href = product.affiliate_url || product.product_url || "#";
+  }
 
   renderProductRating(product);
 
@@ -215,21 +255,26 @@ if (!product) {
     });
   }
 
-  mainImg.src = images[0] || `https://via.placeholder.com/600x700?text=${encodeURIComponent(t("no_image", "No Image"))}`;
-  thumbs.innerHTML = "";
+  if (mainImg) {
+    mainImg.src = images[0] || `https://via.placeholder.com/600x700?text=${encodeURIComponent(t("no_image", "No Image"))}`;
+  }
 
-  images.forEach((src, i) => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.classList.add("thumb");
-    if (i === 0) img.classList.add("active");
+  if (thumbs) {
+    thumbs.innerHTML = "";
 
-    img.addEventListener("click", () => {
-      renderActiveImage(i);
+    images.forEach((src, i) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.classList.add("thumb");
+      if (i === 0) img.classList.add("active");
+
+      img.addEventListener("click", () => {
+        renderActiveImage(i);
+      });
+
+      thumbs.appendChild(img);
     });
-
-    thumbs.appendChild(img);
-  });
+  }
 
   renderActiveImage(0);
 
@@ -286,15 +331,14 @@ if (!product) {
   renderProductInsights(product, offerSummary);
 
   await loadMoreDeals(product);
-await loadRecommendations(products, product);
-setupFavoriteButton(product);
+  await loadRecommendations(products, product);
+  setupFavoriteButton(product);
 
   if (isLuxury) {
     document.body.classList.add("luxury-mode");
-    newPriceEl.style.color = "#d4af37";
+    if (newPriceEl) newPriceEl.style.color = "#d4af37";
   }
 });
-
 function renderProductRating(product) {
   const ratingEl = document.getElementById("product-rating");
   if (!ratingEl) return;
