@@ -230,7 +230,7 @@ async function supabaseUpsert(table, rows, conflictColumn) {
     const chunk = rows.slice(i, i + chunkSize);
 
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${table}?on_conflict=${conflictColumn}`,
+      `${SUPABASE_URL}/${table}?on_conflict=${conflictColumn}`,
       {
         method: "POST",
         headers: {
