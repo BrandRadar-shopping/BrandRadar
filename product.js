@@ -992,8 +992,18 @@ async function renderPriceComparison(product) {
 
   if (!section || !subtitle || !list) return null;
 
-if (!window.BrandRadarOffersEngine || product?.id == null) return null;
+if (product?.is_supabase_product || product?.source === "staybeautiful") {
+  section.hidden = true;
+  return {
+    hasOffers: false,
+    lowestPrice: null,
+    lowestPriceFormatted: "",
+    storeCount: 0,
+    offers: []
+  };
+}
 
+if (!window.BrandRadarOffersEngine || product?.id == null) return null;
   try {
     const summary = await window.BrandRadarOffersEngine.getOfferSummaryForProduct(String(product.id));
 
