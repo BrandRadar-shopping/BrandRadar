@@ -1,13 +1,21 @@
 (function () {
-  const SUPABASE_URL = window.BRANDRADAR_SUPABASE_URL;
-  const SUPABASE_ANON_KEY = window.BRANDRADAR_SUPABASE_ANON_KEY;
+  const SUPABASE_URL =
+    window.BRANDRADAR_SUPABASE_URL ||
+    window.SUPABASE_CONFIG?.url;
+
+  const SUPABASE_ANON_KEY =
+    window.BRANDRADAR_SUPABASE_ANON_KEY ||
+    window.SUPABASE_CONFIG?.anonKey;
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) {
     console.warn("BrandRadar search: Supabase config mangler.");
     return;
   }
 
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
   const escapeHTML = (value) =>
     String(value || "")
@@ -20,21 +28,35 @@
   const normalize = (value) =>
     String(value || "").toLowerCase().trim();
 
-  const formatPrice = (value, currency = "NOK") => {
-    if (value === null || value === undefined || value === "") return "";
-
-    const number = Number(value);
-
-    if (Number.isNaN(number)) {
-      return String(value);
+  function cleanPrice(value) {
+    if (value === null || value === undefined || value === "") {
+      return null;
     }
+
+    const number = Number(
+      String(value)
+        .replace(/\s/g, "")
+        .replace(/[^\d.,-]/g, "")
+        .replace(",", ".")
+    );
+
+    if (!Number.isFinite(number)) return null;
+    if (number <= 0 || number > 1000000) return null;
+
+    return number;
+  }
+
+  function formatPrice(value, currency = "NOK") {
+    const number = cleanPrice(value);
+    if (number === null) return "";
 
     return new Intl.NumberFormat("nb-NO", {
       style: "currency",
       currency,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: Number.isInteger(number) ? 0 : 2,
+      maximumFractionDigits: Number.isInteger(number) ? 0 : 2,
     }).format(number);
-  };
+  }
 
   const getTitle = (p) =>
     p.title ||
@@ -44,6 +66,7 @@
 
   const getBrand = (p) =>
     p.brand_name ||
+    p.brand ||
     p.brand_slug ||
     p.merchant_name ||
     p.merchant_slug ||
@@ -56,31 +79,20 @@
     "";
 
   const getPrice = (p) => {
-  const rawPrice = p.price || p.lowest_price || p.new_price;
+    return formatPrice(
+      p.price,
+      p.currency || "NOK"
+    );
+  };
 
-  if (rawPrice === null || rawPrice === undefined || rawPrice === "") {
-    return "";
-  }
+  const getId = (p) =>
+    p.external_id ||
+    p.product_id ||
+    p.original_id ||
+    p.id ||
+    "";
 
-  const number = Number(rawPrice);
-
-  if (!Number.isFinite(number)) {
-    return "";
-  }
-
-  // Stopper ødelagte feed-priser fra å vises som milliarder
-  if (number <= 0 || number > 1000000) {
-    return "";
-  }
-
-  return formatPrice(number, p.currency || "NOK");
-};
-
-const getId = (p) =>
-  p.external_id ||
-  p.original_id ||
-  p.id;
-  async function searchProducts(query, limit = 12) {
+  async function searchProducts(query, limit = 6) {
     const cleanQuery = normalize(query);
 
     if (!cleanQuery || cleanQuery.length < 2) {
@@ -97,10 +109,10 @@ const getId = (p) =>
       return [];
     }
 
-    return data || [];
+    return (data || []).filter((p) => p.active !== false);
   }
 
-  async function searchBrands(query, limit = 8) {
+  async function searchBrands(query, limit = 5) {
     const cleanQuery = normalize(query);
 
     if (!cleanQuery || cleanQuery.length < 2) {
@@ -117,7 +129,7 @@ const getId = (p) =>
       return [];
     }
 
-    return data || [];
+    return (data || []).filter((b) => b.active !== false);
   }
 
   function renderProducts(products, prodWrap) {
@@ -133,6 +145,7 @@ const getId = (p) =>
     }
 
     prodWrap.innerHTML = products
+      .slice(0, 6)
       .map((p) => {
         const id = getId(p);
         const title = getTitle(p);
@@ -143,9 +156,11 @@ const getId = (p) =>
         return `
           <button class="search-item" type="button" data-id="${escapeHTML(id)}">
             <span class="search-thumb">
-              ${image
-                ? `<img src="${escapeHTML(image)}" alt="">`
-                : "🛍️"}
+              ${
+                image
+                  ? `<img src="${escapeHTML(image)}" alt="">`
+                  : "🛍️"
+              }
             </span>
 
             <span class="search-meta">
@@ -153,23 +168,27 @@ const getId = (p) =>
                 ${escapeHTML(title)}
               </span>
 
-              ${brand
-                ? `
-                  <span class="search-sub">
-                    ${escapeHTML(brand)}
-                  </span>
-                `
-                : ""}
-
-              ${price
-                ? `
-                  <span class="search-price">
-                    <span class="sp-new">
-                      ${escapeHTML(price)}
+              ${
+                brand
+                  ? `
+                    <span class="search-sub">
+                      ${escapeHTML(brand)}
                     </span>
-                  </span>
-                `
-                : ""}
+                  `
+                  : ""
+              }
+
+              ${
+                price
+                  ? `
+                    <span class="search-price">
+                      <span class="sp-new">
+                        ${escapeHTML(price)}
+                      </span>
+                    </span>
+                  `
+                  : ""
+              }
             </span>
           </button>
         `;
@@ -203,9 +222,11 @@ const getId = (p) =>
     }
 
     brandWrap.innerHTML = brands
+      .slice(0, 5)
       .map((brand) => {
         const logo = brand.logo_url || "";
-        const name = brand.name || "";
+        const name = brand.name || brand.brand_name || "";
+        const productCount = brand.product_count || 0;
 
         return `
           <button
@@ -214,9 +235,11 @@ const getId = (p) =>
             data-brand="${escapeHTML(name)}"
           >
             <span class="search-thumb">
-              ${logo
-                ? `<img src="${escapeHTML(logo)}" alt="">`
-                : "🏷️"}
+              ${
+                logo
+                  ? `<img src="${escapeHTML(logo)}" alt="">`
+                  : "🏷️"
+              }
             </span>
 
             <span class="search-meta">
@@ -225,7 +248,7 @@ const getId = (p) =>
               </span>
 
               <span class="search-sub">
-                ${brand.product_count || 0} produkter
+                ${productCount} produkter
               </span>
             </span>
           </button>
@@ -258,9 +281,7 @@ const getId = (p) =>
       : null;
 
     if (!root || !input || !dropdown || !prodWrap) {
-      console.warn(
-        "BrandRadar Supabase search: mangler DOM-elementer."
-      );
+      console.warn("BrandRadar Supabase search: mangler DOM-elementer.");
       return;
     }
 
@@ -314,9 +335,9 @@ const getId = (p) =>
       }
 
       const [products, brands] = await Promise.all([
-  searchProducts(query, 6),
-  searchBrands(query, 5),
-]);
+        searchProducts(query, 6),
+        searchBrands(query, 5),
+      ]);
 
       renderProducts(products, prodWrap);
       renderBrands(brands, brandWrap);
@@ -329,9 +350,7 @@ const getId = (p) =>
 
     input.addEventListener("input", () => {
       openDropdown();
-
       clearTimeout(debounceTimer);
-
       debounceTimer = setTimeout(runSearch, 180);
     });
 
@@ -360,7 +379,6 @@ const getId = (p) =>
     if (clearBtn) {
       clearBtn.addEventListener("click", () => {
         input.value = "";
-
         setHasValue();
         openDropdown();
         runSearch();
