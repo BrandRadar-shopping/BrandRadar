@@ -818,3 +818,23 @@
     height: 230px;
   }
 }
+
+/* ======================================================
+   NEWS PAGE — CLEAN WHITE PRODUCT MEDIA BACKGROUNDS
+====================================================== */
+
+.news-page .product-card img,
+.news-page .radar-pick-media,
+.news-page .spotlight-main-image-wrap,
+.news-page .spotlight-thumb,
+.news-page .partner-banner-image,
+.news-page .radar-pick-media img {
+  background: #ffffff !important;
+}
+
+.news-page .product-card img,
+.news-page .radar-pick-media img,
+.news-page .spotlight-main-image {
+  object-fit: contain;
+}
+
