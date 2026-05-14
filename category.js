@@ -1030,34 +1030,113 @@ function productMatchesSubcategory(product, targetSubSlug) {
       let collectionIntroBlock = null;
 
       if (collectionSlug === "deals") {
-        ensurePageRootCollectionClass("deals");
+  ensurePageRootCollectionClass("deals");
 
-        const rows = await fetch(dealsUrl).then(r => r.json());
+  const supabase = window.BrandRadarSupabase;
 
-        products = rows
-          .map(mapDealRowToProduct)
-          .filter(Boolean) // fjerner null (ingen deals)
-          .sort((a, b) => {
-            // featured først
-            if (a.featured !== b.featured) return a.featured ? -1 : 1;
+  if (!supabase?.from) {
+    titleEl.textContent = t("deals", "Deals");
+    emptyMessage.style.display = "block";
+    emptyMessage.textContent = "Kunne ikke laste deals.";
+    console.error("❌ Supabase client mangler på deals-siden.");
+    return;
+  }
 
-            // deretter priority
-            return (a.priority || 999) - (b.priority || 999);
-          });
+  const { data: dealRows, error: dealError } = await supabase
+    .from("news_deals")
+    .select("*")
+    .eq("active", true)
+    .order("rank", { ascending: true });
 
-        pageTitle = t("weekly_deals", "Ukens Deals");
-        breadcrumbLabel = t("deals", "Deals");
+  if (dealError) throw dealError;
 
-        collectionHero = createCollectionHero({
-          eyebrow: t("brandradar_deals", "BrandRadar Deals"),
-          title: t("best_deals_now", "De beste dealene akkurat nå"),
-          text: t("deals_collection_text", "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp."),
-          metaPills: [
-            t("selected_deals", "Utvalgte deals"),
-            t("updated_now", "Oppdatert nå"),
-            t("easier_overview", "Enklere oversikt")
-          ]
-        });
+  const dealIds = [...new Set(
+    (dealRows || [])
+      .map(row => String(row.product_id || "").trim())
+      .filter(Boolean)
+  )];
+
+  if (!dealIds.length) {
+    pageTitle = t("weekly_deals", "Ukens Deals");
+    breadcrumbLabel = t("deals", "Deals");
+    products = [];
+  } else {
+    const { data: supabaseProducts, error: productError } = await supabase
+      .from("products")
+      .select("*")
+      .in("external_id", dealIds);
+
+    if (productError) throw productError;
+
+    const productMap = new Map(
+      (supabaseProducts || []).map(p => [String(p.external_id || "").trim(), p])
+    );
+
+    products = (dealRows || [])
+      .map((row, index) => {
+        const id = String(row.product_id || "").trim();
+        const p = productMap.get(id);
+
+        if (!p) {
+          console.warn("⚠️ Fant ikke deal-produkt i products:", id);
+          return null;
+        }
+
+        return {
+          ...p,
+
+          id: p.external_id || p.original_id || p.id,
+          product_id: p.external_id || p.original_id || p.id,
+
+          title: p.title || p.product_name || "",
+          product_name: p.product_name || p.title || "",
+
+          brand: p.brand_name || p.brand || p.brand_slug || "",
+
+          price: p.price ?? "",
+          old_price: p.old_price ?? "",
+          discount: p.discount ?? "",
+
+          image_url: p.image_url || "",
+          image2: p.image2 || p.image_2 || "",
+          image3: p.image3 || p.image_3 || "",
+          image4: p.image4 || p.image_4 || "",
+
+          product_url: p.affiliate_url || p.product_url || "",
+          affiliate_url: p.affiliate_url || p.product_url || "",
+
+          category: p.category || "",
+          main_category: p.category || "",
+          mapped_category: p.category || "",
+          subcategory: p.subcategory || "",
+
+          rating: p.rating || "",
+          source: p.source || "supabase",
+          sheet_source: p.source || "supabase",
+          is_supabase_product: true,
+
+          tag: row.highlight_reason || "",
+          highlight_reason: row.highlight_reason || "",
+          priority: row.rank || index + 1,
+          featured: index < 2
+        };
+      })
+      .filter(Boolean);
+  }
+
+  pageTitle = t("weekly_deals", "Ukens Deals");
+  breadcrumbLabel = t("deals", "Deals");
+
+  collectionHero = createCollectionHero({
+    eyebrow: t("brandradar_deals", "BrandRadar Deals"),
+    title: t("best_deals_now", "De beste dealene akkurat nå"),
+    text: t("deals_collection_text", "Her finner du tilbud vi mener er verdt å få med seg — samlet på ett sted, så det blir enklere å finne gode kjøp."),
+    metaPills: [
+      t("selected_deals", "Utvalgte deals"),
+      t("updated_now", "Oppdatert nå"),
+      t("easier_overview", "Enklere oversikt")
+    ]
+  });
       } else if (collectionSlug === "picks") {
         ensurePageRootCollectionClass("picks");
 
@@ -1139,9 +1218,12 @@ function productMatchesSubcategory(product, targetSubSlug) {
         }
       }
 
-      const enrichedProducts = window.BrandRadarOffersEngine
-        ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(products)
-        : products;
+      const enrichedProducts =
+  collectionSlug === "deals"
+    ? products
+    : window.BrandRadarOffersEngine
+      ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(products)
+      : products;
 
       if (!enrichedProducts.length) {
         emptyMessage.style.display = "block";
