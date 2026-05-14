@@ -761,3 +761,60 @@
     margin-top: 5px;
   }
 }
+
+
+/* =====================================================
+   NEWS – SUPABASE DEALS FIX
+===================================================== */
+
+.news-section--deals .deals-grid {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 0.5rem 0 1.5rem;
+}
+
+.news-section--deals .deal-card.product-card {
+  flex: 0 0 300px;
+  max-width: 300px;
+  min-height: 430px;
+  scroll-snap-align: start;
+}
+
+.news-section--deals .deal-card.product-card > img {
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  padding: 1.5rem;
+  background: #f4f8ff;
+}
+
+.news-section--deals .deal-card .product-info {
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.news-section--deals .deal-card .product-name {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.news-section--deals .deal-card .tagline,
+.news-section--deals .deal-card .product-tag {
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 768px) {
+  .news-section--deals .deal-card.product-card {
+    flex-basis: 78vw;
+    max-width: 78vw;
+  }
+
+  .news-section--deals .deal-card.product-card > img {
+    height: 230px;
+  }
+}
