@@ -359,8 +359,13 @@
 <script src="favorites-core.js"></script>
 <script src="assets/js/language-system.js"></script>
 <script src="product-card-engine.js"></script>
-<script src="script-index.js"></script>
 <script src="script.js"></script>
+
+<!-- Supabase må lastes før index/search -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/core/supabase-config.js?v=1"></script>
+
+<script src="script-index.js?v=2"></script>
 
 <!-- Gammel search deaktivert etter Supabase-migrering -->
 <!-- <script src="search.js"></script> -->
@@ -369,9 +374,6 @@
 <script src="script-favorites.js"></script>
 <script src="script-hero.js"></script>
 <script src="giveaways.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/core/supabase-config.js?v=1"></script>
-<script src="assets/js/search-supabase.js?v=7"></script>
+<script src="assets/js/search-supabase.js?v=8"></script>
 </body>
 </html>
