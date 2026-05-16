@@ -1391,43 +1391,76 @@ body.is-category-page .filter-tag .close-tag {
 
 
 /* =====================================================
-   CATEGORY PRODUCT CARD SIZE FIX
+   CATEGORY – NORMAL PRODUCT CARD SIZE PATCH
+   Ikke deals-siden
 ===================================================== */
 
-.product-grid {
+body.is-category-page:not(.collection-page--deals) .category-products {
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+body.is-category-page:not(.collection-page--deals) .category-products .product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 300px));
+  gap: 1.5rem;
   align-items: start;
+  justify-content: start;
 }
 
-.product-grid .product-card {
-  max-width: 340px;
-  min-height: 0;
-}
-
-.product-grid .product-card > img {
+body.is-category-page:not(.collection-page--deals) .category-products .product-card {
   width: 100%;
-  height: 300px;
+  max-width: 300px;
+  min-height: 0;
+  height: auto;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+body.is-category-page:not(.collection-page--deals) .category-products .product-card .product-media {
+  width: 100%;
+  height: 260px;
+  padding: 1.35rem;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+body.is-category-page:not(.collection-page--deals) .category-products .product-card .product-image {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   object-position: center;
   display: block;
-  padding: 1.4rem;
-  background: #ffffff;
 }
 
-.product-grid .product-card .product-info {
+body.is-category-page:not(.collection-page--deals) .category-products .product-card .product-info {
   padding: 1rem 1.1rem 1.2rem;
 }
 
-.product-grid .product-card .product-name {
+body.is-category-page:not(.collection-page--deals) .category-products .product-card .product-name {
   font-size: 1rem;
   line-height: 1.3;
 }
 
 @media (max-width: 768px) {
-  .product-grid .product-card {
+  body.is-category-page:not(.collection-page--deals) .category-products {
+    width: min(100%, calc(100% - 28px));
+  }
+
+  body.is-category-page:not(.collection-page--deals) .category-products .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  body.is-category-page:not(.collection-page--deals) .category-products .product-card {
     max-width: none;
   }
 
-  .product-grid .product-card > img {
-    height: 230px;
+  body.is-category-page:not(.collection-page--deals) .category-products .product-card .product-media {
+    height: 190px;
+    padding: 1rem;
   }
 }
