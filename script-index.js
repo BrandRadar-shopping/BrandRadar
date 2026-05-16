@@ -1,26 +1,24 @@
 // ======================================================
-// ✅ BrandRadar – Forside
-// Bruker Product Card Engine + Offers Engine
+// ✅ BrandRadar – Forside SUPABASE VERSION
+// - Radar Picks fra news_picks + products
+// - Trending Now fra news_trending + products
+// - Top Brands fra brands
+// - Ingen Google Sheets
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   const t = window.BrandRadarLang?.t || ((key, fallback) => fallback || key);
+  const supabase = window.BrandRadarSupabase;
 
-  console.log("✅ Index script loaded");
+  console.log("✅ Index script loaded – Supabase version");
 
-  // ---------- KONSTANTER ----------
-  const PICKS_URL =
-    "https://opensheet.elk.sh/18eu0oOvtxuteHRf7wR0WEkmQMfNYet2qHtQSCgrpbYI/picks";
+  if (!supabase?.from) {
+    console.error("❌ Supabase client mangler på index.html");
+    return;
+  }
 
-  const BRAND_SHEET_ID = "1EzQXnja3f5M4hKvTLrptnLwQJyI7NUrnyXglHQp8-jw";
-  const BRAND_TAB = "BrandRadarProdukter";
-
-  const TRENDING_SHEET_ID = "13klEz2o7CZ0Q4mbm8WT_b1Sz7LMoJqcluyrFyg58uRc";
-  const TRENDING_TAB = "TrendingNow";
-
-  // ---------- FORMATTERING ----------
   function parseNumber(val) {
-    if (val == null) return null;
+    if (val == null || val === "") return null;
     const s = String(val)
       .replace(/\s/g, "")
       .replace(/[^\d,.\-]/g, "")
@@ -29,261 +27,158 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number.isFinite(n) ? n : null;
   }
 
-  // ======================================================
-  // ⭐ FAVORITT/NAVIGASJON FOR KORT
-  // ======================================================
+  function normalizeProduct(p) {
+    if (!p) return null;
 
-  function attachProductCardNavigation(container, productsInOrder) {
-    const cards = container.querySelectorAll(".product-card");
+    const id = p.external_id || p.original_id || p.id;
+    if (!id) return null;
 
-    cards.forEach((card, idx) => {
-      const product = productsInOrder[idx];
-      if (!product) return;
-
-      const pid = typeof resolveProductId === "function"
-        ? resolveProductId(product)
-        : (product.id || product.product_id || "");
-
-      card.addEventListener("click", (e) => {
-        const fav = e.target.closest(".fav-icon");
-
-        if (fav) {
-          e.stopPropagation();
-          if (typeof toggleFavorite === "function") {
-            const cleanProduct = {
-              id: pid,
-              product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-              title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-              brand: product.brand || "",
-              price: product.price,
-              discount: product.discount,
-              image_url: product.image_url,
-              product_url: product.product_url,
-              category: product.category || "",
-              rating: product.rating,
-              luxury: false
-            };
-            toggleFavorite(cleanProduct, fav);
-          }
-          return;
-        }
-
-        const idParam = encodeURIComponent(pid);
-        window.location.href = `product.html?id=${idParam}`;
-      });
-    });
+    return {
+      ...p,
+      id,
+      product_id: id,
+      title: p.title || p.product_name || "",
+      product_name: p.product_name || p.title || "",
+      brand: p.brand_name || p.brand || p.brand_slug || "",
+      price: p.price ?? "",
+      old_price: p.old_price ?? "",
+      discount: p.discount ?? "",
+      image_url: p.image_url || "",
+      image2: p.image2 || p.image_2 || "",
+      image3: p.image3 || p.image_3 || "",
+      image4: p.image4 || p.image_4 || "",
+      product_url: p.affiliate_url || p.product_url || "",
+      affiliate_url: p.affiliate_url || p.product_url || "",
+      category: p.category || "",
+      main_category: p.category || "",
+      subcategory: p.subcategory || "",
+      rating: p.rating || "",
+      source: p.source || "supabase",
+      sheet_source: p.source || "supabase",
+      is_supabase_product: true
+    };
   }
 
-  // ======================================================
-  // ⭐️ RADAR PICKS
-  // ======================================================
+  async function fetchControlledProducts(tableName, limit = 12) {
+    const { data: rows, error: rowError } = await supabase
+      .from(tableName)
+      .select("*")
+      .eq("active", true)
+      .order("rank", { ascending: true })
+      .limit(limit);
+
+    if (rowError) throw rowError;
+
+    const ids = [...new Set(
+      (rows || [])
+        .map(row => String(row.product_id || "").trim())
+        .filter(Boolean)
+    )];
+
+    if (!ids.length) return [];
+
+    const { data: products, error: productError } = await supabase
+      .from("products")
+      .select("*")
+      .in("external_id", ids);
+
+    if (productError) throw productError;
+
+    const productMap = new Map(
+      (products || []).map(p => [String(p.external_id || "").trim(), normalizeProduct(p)])
+    );
+
+    return (rows || [])
+      .map(row => {
+        const product = productMap.get(String(row.product_id || "").trim());
+        if (!product) return null;
+
+        return {
+          ...product,
+          highlight_reason:
+            row.reason ||
+            row.highlight_reason ||
+            row.excerpt ||
+            "",
+          tag:
+            row.label ||
+            row.badge ||
+            row.tag ||
+            ""
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function renderProductCards(container, products, options = {}) {
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    products.forEach(product => {
+      const card = window.BrandRadarProductCardEngine.createCard(product, {
+        isLuxury: !!product.luxury,
+        showBrand: true,
+        showRating: options.showRating ?? false,
+        enableFavorite: true,
+        onNavigate: (p) => {
+          const id = p.external_id || p.id || p.product_id || "";
+          if (id) {
+            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+          }
+        },
+        favoriteProductFactory: (p) => ({
+          id: p.external_id || p.id || p.product_id || "",
+          title: p.title || p.product_name || t("unnamed_product", "Uten navn"),
+          product_name: p.product_name || p.title || t("unnamed_product", "Uten navn"),
+          brand: p.brand || p.brand_name || "",
+          price: p.price,
+          discount: p.discount || "",
+          image_url: p.image_url || "",
+          product_url: p.product_url || p.affiliate_url || "",
+          category: p.category || "",
+          rating: p.rating,
+          luxury: !!p.luxury
+        })
+      });
+
+      container.appendChild(card);
+    });
+  }
 
   async function loadFeaturedPicks() {
     const grid = document.getElementById("featured-grid");
     if (!grid) return;
 
     try {
-      const picksUrl = PICKS_URL;
-      const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
-
-      const [picksRes, productsRes] = await Promise.all([
-        fetch(picksUrl),
-        fetch(productsUrl)
-      ]);
-
-      if (!picksRes.ok) throw new Error(`Radar Picks fetch failed: ${picksRes.status}`);
-      if (!productsRes.ok) throw new Error(`Products fetch failed: ${productsRes.status}`);
-
-      const pickRows = await picksRes.json();
-      const allProducts = await productsRes.json();
-
-      const productById = {};
-      allProducts.forEach(p => {
-        if (!p.id) return;
-        productById[String(p.id).trim()] = p;
-      });
-
-      const active = pickRows
-        .filter(row => String(row.active || "").trim().toLowerCase() === "true")
-        .map((row, index) => {
-          const productId = String(row.product_id || row.id || "").trim();
-          const product = productById[productId];
-
-          if (!product) {
-            console.warn(`⚠️ Radar Pick finnes ikke i BrandRadarProdukter: ${productId}`, row);
-            return null;
-          }
-
-          return {
-            row,
-            product,
-            rank: parseNumber(row.rank) || index + 1
-          };
-        })
-        .filter(Boolean)
-        .sort((a, b) => a.rank - b.rank);
-
-      const baseProducts = active.map(({ row, product }) => ({
-        ...product,
-        id: product.id || product.product_id || "",
-        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-        title: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-        highlight_reason: row.reason || ""
-      }));
-
-      const enrichedProducts =
-        window.BrandRadarOffersEngine
-          ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
-          : baseProducts;
-
-      grid.innerHTML = "";
-
-      enrichedProducts.forEach(product => {
-        const card = window.BrandRadarProductCardEngine.createCard(product, {
-          isLuxury: false,
-          showBrand: true,
-          showRating: false,
-          enableFavorite: true,
-          onNavigate: (p) => {
-            const id = typeof resolveProductId === "function"
-              ? resolveProductId(p)
-              : (p.id || p.product_id || "");
-
-            if (id) {
-              window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-            }
-          },
-          favoriteProductFactory: (p) => ({
-            id: p.id || p.product_id || "",
-            title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-            product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-            brand: p.brand || "",
-            price: p.price,
-            discount: p.discount || "",
-            image_url: p.image_url || "",
-            product_url: p.product_url || "",
-            category: p.category || "",
-            rating: p.rating,
-            luxury: false
-          })
-        });
-
-        grid.appendChild(card);
-      });
+      const products = await fetchControlledProducts("news_picks", 12);
+      renderProductCards(grid, products, { showRating: false });
     } catch (err) {
-      console.error("❌", t("could_not_load_radar_picks", "Klarte ikke laste Radar Picks:"), err);
+      console.error("❌ Klarte ikke laste Radar Picks:", err);
       grid.innerHTML = "";
     }
   }
-
-  // ======================================================
-  // ⭐ TRENDING NOW
-  // ======================================================
 
   async function loadTrendingNow() {
     const container = document.getElementById("trending-grid");
     if (!container) return;
 
     try {
-      const trendingUrl = `https://opensheet.elk.sh/${TRENDING_SHEET_ID}/${TRENDING_TAB}`;
-      const productsUrl = `https://opensheet.elk.sh/${BRAND_SHEET_ID}/${BRAND_TAB}`;
-
-      const [trendingRes, productsRes] = await Promise.all([
-        fetch(trendingUrl),
-        fetch(productsUrl)
-      ]);
-
-      const trendingRows = await trendingRes.json();
-      const allProducts = await productsRes.json();
-
-      const productById = {};
-      allProducts.forEach(p => {
-        if (!p.id) return;
-        productById[String(p.id).trim()] = p;
-      });
-
-      const active = trendingRows
-        .filter(r => String(r.active || "").toLowerCase() === "true")
-        .map(r => ({
-          row: r,
-          product: productById[String(r.product_id || "").trim()]
-        }))
-        .filter(x => x.product);
-
-      active.sort((a, b) => {
-        const ra = parseNumber(a.row.rank) || 9999;
-        const rb = parseNumber(b.row.rank) || 9999;
-        return ra - rb;
-      });
-
-      const limited = active.slice(0, 10);
-
-      const baseProducts = limited.map(({ row, product }) => ({
-        ...product,
-        product_name: product.title || product.product_name || product.name || t("unnamed_product", "Uten navn"),
-        id: product.id || product.product_id || "",
-        highlight_reason: row.highlight_reason
-      }));
-
-      const enrichedProducts =
-        window.BrandRadarOffersEngine
-          ? await window.BrandRadarOffersEngine.enrichProductsWithOfferSummary(baseProducts)
-          : baseProducts;
-
-      const orderedProducts = [];
-      container.innerHTML = "";
-
-      enrichedProducts.forEach(product => {
-        const card = window.BrandRadarProductCardEngine.createCard(product, {
-          isLuxury: false,
-          showBrand: true,
-          showRating: false,
-          enableFavorite: true,
-          onNavigate: (p) => {
-            const id = typeof resolveProductId === "function"
-              ? resolveProductId(p)
-              : (p.id || p.product_id || "");
-            window.location.href = `product.html?id=${encodeURIComponent(id)}`;
-          },
-          favoriteProductFactory: (p) => ({
-            id: p.id || p.product_id || "",
-            title: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-            product_name: p.title || p.product_name || p.name || t("unnamed_product", "Uten navn"),
-            brand: p.brand || "",
-            price: p.price,
-            discount: p.discount || "",
-            image_url: p.image_url || "",
-            product_url: p.product_url || "",
-            category: p.category || "",
-            rating: p.rating,
-            luxury: false
-          })
-        });
-
-        container.appendChild(card);
-        orderedProducts.push(product);
-      });
-
-      attachProductCardNavigation(container, orderedProducts);
+      const products = await fetchControlledProducts("news_trending", 12);
+      renderProductCards(container, products, { showRating: false });
       initTrendingArrows();
     } catch (err) {
       console.error("❌ TrendingNow error:", err);
+      container.innerHTML = "";
     }
   }
-
-  // ======================================================
-  // ⭐ PIL-NAVIGASJON FOR TRENDING
-  // ======================================================
 
   function initTrendingArrows() {
     const track = document.getElementById("trending-grid");
     const prev = document.getElementById("trendingPrev");
     const next = document.getElementById("trendingNext");
 
-    if (!track || !prev || !next) {
-      console.warn("⚠️", t("arrows_not_found", "Pilene ble ikke funnet i DOM"));
-      return;
-    }
+    if (!track || !prev || !next) return;
 
     const scrollAmount = 320;
 
@@ -296,45 +191,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ======================================================
-  // ⭐ TOP BRANDS
-  // ======================================================
-
   async function loadTopBrands() {
-    const url = "https://opensheet.elk.sh/1KqkpJpj0sGp3elTj8OXIPnyjYfu94BA9OrMk7dCkkdw/Ark 1";
+    const container = document.getElementById("topbrands-grid");
+    if (!container) return;
 
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const { data, error } = await supabase
+        .from("brands")
+        .select("*")
+        .eq("active", true)
+        .eq("is_featured", true)
+        .order("featured_sort", { ascending: true });
 
-      const highlights = data.filter(
-        b => (b.highlight || "").toLowerCase() === "yes"
-      );
-
-      highlights.sort((a, b) =>
-        a.brand.localeCompare(b.brand, "no", { sensitivity: "base" })
-      );
-
-      const container = document.getElementById("topbrands-grid");
-      if (!container) return;
+      if (error) throw error;
 
       container.innerHTML = "";
 
-      if (highlights.length === 0) {
+      if (!data?.length) {
         container.innerHTML = `<p>${t("no_featured_brands_now", "Ingen fremhevede brands akkurat nå.")}</p>`;
         return;
       }
 
-      highlights.forEach(b => {
+      data.forEach(brand => {
         container.innerHTML += `
           <a
             class="topbrand-card"
-            href="brand-page.html?brand=${encodeURIComponent(b.brand)}"
-            aria-label="${t("explore_brand", "Utforsk")} ${b.brand}"
-            title="${b.brand}"
+            href="brand-page.html?brand=${encodeURIComponent(brand.slug)}"
+            aria-label="${t("explore_brand", "Utforsk")} ${brand.name}"
+            title="${brand.name}"
           >
             <div class="topbrand-logo">
-              <img src="${b.logo || ""}" alt="${b.brand}" loading="lazy">
+              ${
+                brand.logo_url
+                  ? `<img src="${brand.logo_url}" alt="${brand.name}" loading="lazy">`
+                  : `<span>${brand.name}</span>`
+              }
             </div>
 
             <span class="topbrand-hover-cta" aria-hidden="true">
@@ -348,11 +239,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ======================================================
-  // RUN EVERYTHING
-  // ======================================================
-
   await loadFeaturedPicks();
   await loadTrendingNow();
   await loadTopBrands();
+
+  if (typeof updateFavoriteCounter === "function") {
+    updateFavoriteCounter();
+  }
 });
