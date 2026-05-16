@@ -1388,3 +1388,46 @@ body.is-category-page .filter-tag .close-tag {
     margin: 18px auto;
   }
 }
+
+
+/* =====================================================
+   CATEGORY PRODUCT CARD SIZE FIX
+===================================================== */
+
+.product-grid {
+  align-items: start;
+}
+
+.product-grid .product-card {
+  max-width: 340px;
+  min-height: 0;
+}
+
+.product-grid .product-card > img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  padding: 1.4rem;
+  background: #ffffff;
+}
+
+.product-grid .product-card .product-info {
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.product-grid .product-card .product-name {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  .product-grid .product-card {
+    max-width: none;
+  }
+
+  .product-grid .product-card > img {
+    height: 230px;
+  }
+}
