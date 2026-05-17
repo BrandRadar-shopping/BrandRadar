@@ -1222,29 +1222,3 @@
   }
 }
 
-/* =====================================================
-   INDEX MOBILE – CLEAN DISCOUNT DISPLAY
-   Behold rabatt-badge øverst, skjul rabatt-pill nederst
-===================================================== */
-@media (max-width: 768px) {
-
-  .trending-section .product-card .discount-pill,
-  .featured-products .product-card .discount-pill {
-    display: none !important;
-  }
-
-  .trending-section .product-card .price-wrapper,
-  .featured-products .product-card .price-wrapper {
-    display: block !important;
-  }
-
-  .trending-section .product-card .discount-badge,
-  .featured-products .product-card .discount-badge {
-    top: 10px !important;
-    left: 10px !important;
-    z-index: 5 !important;
-    background: #ef4444 !important;
-    color: #ffffff !important;
-    box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25) !important;
-  }
-}
