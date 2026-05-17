@@ -945,3 +945,88 @@ html, body {
   max-width: 34ch;
   line-height: 1.5;
 }
+
+/* =====================================================
+   INDEX DESKTOP POLISH
+   - Mindre aggressiv produkt-zoom
+   - Mer premium spacing
+   - Større brand-logoer
+===================================================== */
+
+@media (min-width: 769px) {
+
+  /* =========================
+     TRENDING + RADAR PICKS
+  ========================= */
+
+  .trending-section .product-card,
+  .featured-products .product-card {
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  .trending-section .product-card .product-media,
+  .featured-products .product-card .product-media {
+    height: 320px;
+    padding: 38px;
+    background: #fff;
+  }
+
+  .trending-section .product-card img,
+  .featured-products .product-card img,
+  .trending-section .product-card .product-image,
+  .featured-products .product-card .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  /* Trending slider cards */
+  .trending-section .product-card {
+    min-width: 285px;
+    max-width: 285px;
+  }
+
+  /* Radar Picks grid cards */
+  #featured-grid {
+    gap: 32px;
+  }
+
+  .featured-products .product-card {
+    max-width: 100%;
+  }
+
+  /* Litt mer luft i card body */
+  .trending-section .product-card .product-info,
+  .featured-products .product-card .product-info {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  /* =========================
+     TOP BRANDS
+  ========================= */
+
+  .topbrand-card {
+    height: 146px;
+    padding: 26px 22px;
+  }
+
+  .topbrand-logo {
+    min-height: 92px;
+  }
+
+  .topbrand-logo img {
+    max-width: 170px;
+    max-height: 82px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Litt mindre dramatisk hover */
+  .topbrand-card:hover,
+  .topbrand-card:focus-visible {
+    transform: translateY(-2px) scaleY(1.08);
+  }
+}
