@@ -1030,3 +1030,49 @@ html, body {
     transform: translateY(-2px) scaleY(1.08);
   }
 }
+
+/* =====================================================
+   INDEX – CLEAN PRODUCT CARD DISCOUNT SYSTEM
+   Kun discount-pill nederst
+===================================================== */
+
+/* Fjern badge oppe */
+.trending-section .product-card .discount-badge,
+.featured-products .product-card .discount-badge {
+  display: none !important;
+}
+
+/* Venstrestill hele info-seksjonen */
+.trending-section .product-card .product-info,
+.featured-products .product-card .product-info {
+  text-align: left !important;
+  align-items: flex-start !important;
+}
+
+/* Sørg for full bredde på tekst */
+.trending-section .product-card .brand,
+.featured-products .product-card .brand,
+.trending-section .product-card .product-name,
+.featured-products .product-card .product-name,
+.trending-section .product-card .product-meta-bottom,
+.featured-products .product-card .product-meta-bottom {
+  width: 100%;
+  text-align: left !important;
+}
+
+/* Prislinje */
+.trending-section .product-card .price-line,
+.featured-products .product-card .price-line {
+  justify-content: flex-start !important;
+}
+
+/* Rabatt-pill nederst */
+.trending-section .product-card .discount-pill,
+.featured-products .product-card .discount-pill {
+  background: #fde2e4;
+  color: #d62839;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
