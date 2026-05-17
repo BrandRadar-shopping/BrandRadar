@@ -1133,3 +1133,91 @@
     pointer-events: none;
   }
 }
+
+/* =====================================================
+   INDEX – MOBILE PRODUCT IMAGE + BRAND LOGO POLISH
+   Mindre zoom på produktbilder + større logoer
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* TRENDING */
+  section.trending-section #trending-grid.trending-grid .product-media,
+  section.trending-section #trending-grid.trending-grid .product-image-wrapper {
+    height: auto !important;
+    aspect-ratio: 1 / 1.08 !important;
+    padding: 18px !important;
+    background: #ffffff !important;
+    border-radius: 16px 16px 0 0 !important;
+    overflow: hidden !important;
+  }
+
+  section.trending-section #trending-grid.trending-grid .product-media img,
+  section.trending-section #trending-grid.trending-grid .product-image-wrapper img,
+  section.trending-section #trending-grid.trending-grid .product-image {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    transform: none !important;
+  }
+
+  /* RADAR PICKS / FEATURED */
+  .featured-products #featured-grid .product-media,
+  .featured-products #featured-grid .product-image-wrapper {
+    height: auto !important;
+    aspect-ratio: 1 / 1.08 !important;
+    padding: 18px !important;
+    background: #ffffff !important;
+    border-radius: 16px 16px 0 0 !important;
+    overflow: hidden !important;
+  }
+
+  .featured-products #featured-grid .product-media img,
+  .featured-products #featured-grid .product-image-wrapper img,
+  .featured-products #featured-grid .product-image {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    transform: none !important;
+  }
+
+  /* TOP BRANDS – litt større logo på mobil */
+  .topbrand-card {
+    height: 126px !important;
+    padding: 18px 14px !important;
+  }
+
+  .topbrand-logo {
+    min-height: 74px !important;
+  }
+
+  .topbrand-logo img {
+    max-width: 92% !important;
+    max-height: 62px !important;
+    object-fit: contain !important;
+  }
+}
+
+@media (max-width: 360px) {
+  section.trending-section #trending-grid.trending-grid .product-media,
+  section.trending-section #trending-grid.trending-grid .product-image-wrapper,
+  .featured-products #featured-grid .product-media,
+  .featured-products #featured-grid .product-image-wrapper {
+    padding: 14px !important;
+  }
+
+  .topbrand-card {
+    height: 116px !important;
+  }
+
+  .topbrand-logo img {
+    max-height: 54px !important;
+  }
+}
