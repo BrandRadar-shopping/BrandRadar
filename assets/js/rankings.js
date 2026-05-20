@@ -1,296 +1,187 @@
 // ======================================================
 // BRANDRADAR – RANKINGS PAGE
-// Dynamic Top 10 / Top 5 system
+// Uses: ranking_lists + ranking_items + products
 // ======================================================
 
-(function () {
-
-  const supabase = window.brandradarSupabase;
-
-  const CATEGORY_CONFIG = {
-    sneakers: {
-      title: "Top 10 Sneakers",
-      label: "Sneakers",
-      table: "rankings_sneakers",
-      hero:
-        "Sneakers som dominerer akkurat nå — basert på signaler fra retailers, sosiale medier, Reddit, trendrapporter og editorial tracking."
-    },
-
-    proteinbars: {
-      title: "Top 10 Proteinbarer",
-      label: "Proteinbarer",
-      table: "rankings_proteinbars",
-      hero:
-        "Proteinbarer med sterkest momentum akkurat nå — populære på tvers av trening, smak, TikTok-trender og community-anbefalinger."
-    },
-
-    running: {
-      title: "Top 10 Running Shoes",
-      label: "Running",
-      table: "rankings_running",
-      hero:
-        "Løpesko som får mest oppmerksomhet akkurat nå blant både casual runners og performance-miljøer."
-    }
-  };
-
-  const state = {
-    active: "sneakers"
-  };
+document.addEventListener("DOMContentLoaded", async () => {
+  const supabase = window.BrandRadarSupabase;
 
   const listEl = document.getElementById("rankings-list");
-  const titleEl = document.getElementById("rankings-page-title");
-  const heroTextEl = document.getElementById("rankings-hero-text");
+  const tabsEl = document.getElementById("rankings-tabs");
+  const titleEl = document.getElementById("ranking-title");
+  const subtitleEl = document.getElementById("ranking-subtitle");
+  const headingEl = document.getElementById("ranking-list-heading");
 
-  function cleanPrice(value) {
-    return parseFloat(
-      String(value ?? "")
-        .replace(/[^\d.,]/g, "")
-        .replace(",", ".")
-    ) || 0;
+  if (!listEl || !supabase?.from) return;
+
+  function esc(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function formatPrice(value) {
-    const n = cleanPrice(value);
-
-    if (!n) return "";
-
-    return `${new Intl.NumberFormat("nb-NO", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(n)} kr`;
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return "";
+    return `${new Intl.NumberFormat("nb-NO").format(n)} kr`;
   }
 
-  function getCategoryFromUrl() {
+  function getActiveSlug(lists) {
     const params = new URLSearchParams(window.location.search);
-    const category = params.get("category");
-
-    if (category && CATEGORY_CONFIG[category]) {
-      return category;
-    }
-
-    return "sneakers";
+    const fromUrl = params.get("list");
+    if (fromUrl && lists.some(l => l.slug === fromUrl)) return fromUrl;
+    return lists[0]?.slug || "top-sneakers";
   }
 
-  function updateHero(categoryKey) {
-    const config = CATEGORY_CONFIG[categoryKey];
+  async function fetchLists() {
+    const { data, error } = await supabase
+      .from("ranking_lists")
+      .select("*")
+      .eq("active", true)
+      .order("sort_order", { ascending: true });
 
-    titleEl.textContent = config.title;
-    heroTextEl.textContent = config.hero;
-
-    document.title = `${config.title} | BrandRadar`;
+    if (error) throw error;
+    return data || [];
   }
 
-  function updateTabs(categoryKey) {
-    document.querySelectorAll(".ranking-tab").forEach(btn => {
-      btn.classList.toggle(
-        "is-active",
-        btn.dataset.category === categoryKey
-      );
-    });
+  async function fetchItems(slug) {
+    const { data: items, error } = await supabase
+      .from("ranking_items")
+      .select("*")
+      .eq("list_slug", slug)
+      .eq("active", true)
+      .order("rank", { ascending: true });
+
+    if (error) throw error;
+
+    const ids = [...new Set(items.map(i => i.product_id).filter(Boolean))];
+
+    const { data: products, error: productError } = await supabase
+      .from("products")
+      .select("external_id,title,brand_name,image_url,price,product_url,affiliate_url")
+      .in("external_id", ids);
+
+    if (productError) throw productError;
+
+    const productMap = new Map(
+      (products || []).map(p => [String(p.external_id), p])
+    );
+
+    return items.map(item => ({
+      ...item,
+      product: productMap.get(String(item.product_id)) || null
+    }));
   }
 
-  function createRankingCard(item, index) {
+  function renderTabs(lists, activeSlug) {
+    if (!tabsEl) return;
 
-    const product = item.product || {};
+    tabsEl.innerHTML = lists.map(list => `
+      <button
+        class="ranking-tab ${list.slug === activeSlug ? "is-active" : ""}"
+        type="button"
+        data-slug="${esc(list.slug)}"
+      >
+        ${esc(list.category_label || list.title)}
+      </button>
+    `).join("");
 
-    const productId =
-      product.external_id ||
-      product.id ||
-      item.product_id ||
-      "";
-
-    const image =
-      product.image_url ||
-      product.image ||
-      "";
-
-    const brand =
-      product.brand_name ||
-      product.brand ||
-      "Brand";
-
-    const title =
-      product.title ||
-      product.product_name ||
-      "Produkt";
-
-    const reason =
-      item.reason ||
-      item.highlight_reason ||
-      "Et av de sterkeste trending-produktene akkurat nå.";
-
-    const tags = [];
-
-    if (item.tag_1) tags.push(item.tag_1);
-    if (item.tag_2) tags.push(item.tag_2);
-    if (item.tag_3) tags.push(item.tag_3);
-
-    const price =
-      product.price ||
-      item.price ||
-      "";
-
-    const formattedPrice = formatPrice(price);
-
-    return `
-      <article class="ranking-item-card">
-
-        <div class="ranking-number">
-          ${index + 1}
-        </div>
-
-        <div class="ranking-media">
-          <img
-            src="${image}"
-            alt="${title}"
-            loading="lazy"
-          >
-        </div>
-
-        <div class="ranking-info">
-
-          <p class="ranking-brand">
-            ${brand}
-          </p>
-
-          <h3>
-            ${title}
-          </h3>
-
-          <p class="ranking-reason">
-            ${reason}
-          </p>
-
-          ${
-            tags.length
-              ? `
-                <div class="ranking-tags">
-                  ${tags.map(tag => `<span>${tag}</span>`).join("")}
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-        <div class="ranking-actions">
-
-          ${
-            formattedPrice
-              ? `
-                <div class="ranking-price">
-                  ${formattedPrice}
-                </div>
-              `
-              : ""
-          }
-
-          <a
-            class="ranking-cta"
-            href="product.html?id=${encodeURIComponent(productId)}"
-          >
-            Se produkt
-          </a>
-
-          <div class="ranking-secondary">
-            Oppdatert av BrandRadar
-          </div>
-
-        </div>
-
-      </article>
-    `;
-  }
-
-  async function loadCategory(categoryKey) {
-
-    state.active = categoryKey;
-
-    updateHero(categoryKey);
-    updateTabs(categoryKey);
-
-    const config = CATEGORY_CONFIG[categoryKey];
-
-    listEl.innerHTML = `
-      <div class="rankings-loading">
-        Laster ranking...
-      </div>
-    `;
-
-    try {
-
-      if (!supabase) {
-        throw new Error("Supabase mangler");
-      }
-
-      const { data, error } = await supabase
-        .from(config.table)
-        .select(`
-          *,
-          product:products(*)
-        `)
-        .eq("active", true)
-        .order("rank", { ascending: true });
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data || !data.length) {
-
-        listEl.innerHTML = `
-          <div class="rankings-loading">
-            Ingen produkter funnet enda.
-          </div>
-        `;
-
-        return;
-      }
-
-      listEl.innerHTML = data
-        .map((item, index) => createRankingCard(item, index))
-        .join("");
-
-    } catch (err) {
-
-      console.error(err);
-
-      listEl.innerHTML = `
-        <div class="rankings-loading">
-          Klarte ikke laste ranking akkurat nå.
-        </div>
-      `;
-    }
-  }
-
-  function bindTabs() {
-
-    document.querySelectorAll(".ranking-tab").forEach(btn => {
-
+    tabsEl.querySelectorAll(".ranking-tab").forEach(btn => {
       btn.addEventListener("click", () => {
-
-        const category = btn.dataset.category;
-
-        const url = new URL(window.location);
-
-        url.searchParams.set("category", category);
-
+        const slug = btn.dataset.slug;
+        const url = new URL(window.location.href);
+        url.searchParams.set("list", slug);
         window.history.replaceState({}, "", url);
-
-        loadCategory(category);
+        loadRanking(slug, lists);
       });
     });
   }
 
-  function init() {
+  function updateHeader(list) {
+    if (!list) return;
 
-    const category = getCategoryFromUrl();
+    if (titleEl) titleEl.textContent = list.title || "BrandRadar Rankings";
+    if (subtitleEl) subtitleEl.textContent = list.subtitle || "Produktene som får mest oppmerksomhet akkurat nå.";
+    if (headingEl) headingEl.textContent = list.rank_type === "top5" ? "Top 5" : "Top 10";
 
-    bindTabs();
-
-    loadCategory(category);
+    document.title = `${list.title || "Rankings"} | BrandRadar`;
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  function renderItem(item) {
+    const p = item.product || {};
+    const image = p.image_url || "";
+    const title = p.title || "Produkt";
+    const brand = p.brand_name || "";
+    const price = formatPrice(p.price);
+    const url = p.affiliate_url || p.product_url || `product.html?id=${encodeURIComponent(p.external_id || item.product_id)}`;
 
-})();
+    const tags = [item.tag_1, item.tag_2, item.tag_3].filter(Boolean);
+
+    return `
+      <article class="ranking-item-card">
+        <div class="ranking-number">${esc(item.rank)}</div>
+
+        <div class="ranking-media">
+          ${image ? `<img src="${esc(image)}" alt="${esc(title)}" loading="lazy">` : ""}
+        </div>
+
+        <div class="ranking-info">
+          <p class="ranking-brand">${esc(brand)}</p>
+          <h3>${esc(title)}</h3>
+          <p class="ranking-reason">${esc(item.reason || "")}</p>
+
+          ${tags.length ? `
+            <div class="ranking-tags">
+              ${tags.map(tag => `<span>${esc(tag)}</span>`).join("")}
+            </div>
+          ` : ""}
+        </div>
+
+        <div class="ranking-actions">
+          ${price ? `<div class="ranking-price">${price}</div>` : ""}
+
+          <a class="ranking-cta" href="${esc(url)}" target="_blank" rel="noopener">
+            Se produkt
+          </a>
+
+          <div class="ranking-secondary">
+            Trend score: ${esc(item.trend_score || 0)}
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  async function loadRanking(slug, lists) {
+    const activeList = lists.find(l => l.slug === slug) || lists[0];
+
+    updateHeader(activeList);
+    renderTabs(lists, activeList.slug);
+
+    listEl.innerHTML = `<p class="rankings-loading">Laster ranking...</p>`;
+
+    const items = await fetchItems(activeList.slug);
+
+    if (!items.length) {
+      listEl.innerHTML = `<p class="rankings-loading">Ingen produkter funnet enda.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = items.map(renderItem).join("");
+  }
+
+  try {
+    const lists = await fetchLists();
+    const activeSlug = getActiveSlug(lists);
+
+    await loadRanking(activeSlug, lists);
+
+    console.log("✅ Rankings page loaded", { lists, activeSlug });
+  } catch (err) {
+    console.error("❌ Rankings page error:", err);
+    listEl.innerHTML = `<p class="rankings-loading">Klarte ikke laste ranking akkurat nå.</p>`;
+  }
+});
