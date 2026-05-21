@@ -1,5 +1,5 @@
 // ======================================================
-// BrandRadar Rankings Teaser – Supabase version
+// BrandRadar Rankings Teaser – Supabase + Mobile UI
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return byList;
   }
 
-  function renderCard(list, items = []) {
+  function renderCard(list, items = [], index = 0) {
     const topItems = items.slice(0, 3);
     const heroProduct = topItems[0]?.product;
     const image = list.image_url || heroProduct?.image_url || "";
@@ -86,6 +86,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     return `
       <a class="radar-ranking-card" href="rankings.html?list=${encodeURIComponent(list.slug)}">
+        <span class="mobile-rank-badge">${index + 1}</span>
+
         <div class="radar-ranking-media">
           <span class="radar-ranking-icon">${escapeHtml(list.icon || "✦")}</span>
           ${
@@ -125,14 +127,65 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
+  function renderMobileList(lists) {
+    const existing = document.querySelector(".rankings-mobile-list-wrap");
+    if (existing) existing.remove();
+
+    const html = `
+      <div class="rankings-mobile-dots" aria-hidden="true">
+        ${lists.map((_, i) => `<span class="${i === 0 ? "active" : ""}"></span>`).join("")}
+      </div>
+
+      <div class="rankings-mobile-list-wrap">
+        <h3>Utforsk alle rankinglister</h3>
+
+        <div class="rankings-mobile-list">
+          ${lists.map(list => `
+            <a href="rankings.html?list=${encodeURIComponent(list.slug)}" class="rankings-mobile-row">
+              <span class="rankings-mobile-row-icon">${escapeHtml(list.icon || "✦")}</span>
+              <span class="rankings-mobile-row-text">
+                <strong>${escapeHtml(list.category_label || list.title)}</strong>
+                <small>${escapeHtml(list.subtitle || "Populært akkurat nå")}</small>
+              </span>
+              <span class="rankings-mobile-row-pill">${list.rank_type === "top5" ? "TOPP 5" : "TOPP 10"}</span>
+              <span class="rankings-mobile-row-arrow">›</span>
+            </a>
+          `).join("")}
+        </div>
+      </div>
+
+      <a href="rankings.html" class="rankings-mobile-main-cta">
+        <span>✦</span>
+        <strong>Se alle rankinglister</strong>
+        <small>Oppdag alle kategorier</small>
+        <em>›</em>
+      </a>
+    `;
+
+    grid.insertAdjacentHTML("afterend", html);
+
+    const dots = document.querySelectorAll(".rankings-mobile-dots span");
+
+    grid.addEventListener("scroll", () => {
+      const cards = [...grid.querySelectorAll(".radar-ranking-card")];
+      const current = Math.round(grid.scrollLeft / (cards[0]?.offsetWidth + 14 || 1));
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === current);
+      });
+    }, { passive: true });
+  }
+
   try {
     const lists = await fetchLists();
     const slugs = lists.map(l => l.slug);
     const itemsByList = await fetchItemsForLists(slugs);
 
     grid.innerHTML = lists
-      .map(list => renderCard(list, itemsByList.get(list.slug) || []))
+      .map((list, index) => renderCard(list, itemsByList.get(list.slug) || [], index))
       .join("");
+
+    renderMobileList(lists);
 
     console.log("✅ Rankings teaser loaded", { lists, itemsByList });
   } catch (err) {
