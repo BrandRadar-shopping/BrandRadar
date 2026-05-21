@@ -4,6 +4,14 @@
    Scope: mobile only
 ===================================================== */
 
+/* Desktop safety: JS lager mobile-elementer også på desktop */
+.mobile-rank-badge,
+.rankings-mobile-dots,
+.rankings-mobile-list-wrap,
+.rankings-mobile-main-cta {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
 
   .radar-rankings-teaser {
@@ -66,9 +74,7 @@
     display: none !important;
   }
 
-  /* =========================
-     CAROUSEL
-  ========================= */
+  /* Carousel */
 
   .radar-rankings-grid {
     display: flex !important;
@@ -118,9 +124,7 @@
     box-shadow: 0 10px 22px rgba(124, 58, 237, 0.28) !important;
   }
 
-  /* =========================
-     IMAGE
-  ========================= */
+  /* Image */
 
   .radar-ranking-media {
     height: 205px !important;
@@ -150,7 +154,6 @@
     font-size: 1.1rem !important;
   }
 
-  /* Bag og hoodie holdes kontrollert */
   .radar-ranking-card:nth-child(3) .radar-ranking-media,
   .radar-ranking-card:nth-child(4) .radar-ranking-media {
     padding: 24px !important;
@@ -161,13 +164,11 @@
     object-fit: contain !important;
   }
 
-  /* =========================
-     BODY
-  ========================= */
+  /* Body */
 
   .radar-ranking-body {
     min-height: 230px !important;
-    padding: 18px 18px 18px !important;
+    padding: 18px !important;
     display: flex !important;
     flex-direction: column !important;
   }
@@ -232,9 +233,7 @@
     text-transform: uppercase !important;
   }
 
-  /* =========================
-     DOTS
-  ========================= */
+  /* Dots */
 
   .rankings-mobile-dots {
     display: flex !important;
@@ -256,13 +255,12 @@
     background: #7c3aed !important;
   }
 
-  /* =========================
-     FULL WIDTH LIST SECTION
-  ========================= */
+  /* Full width list */
 
   .rankings-mobile-list-wrap {
+    display: block !important;
     margin: 0 !important;
-    padding: 0 22px !important;
+    padding: 0 14px !important;
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
@@ -351,9 +349,7 @@
     line-height: 1 !important;
   }
 
-  /* =========================
-     MAIN CTA
-  ========================= */
+  /* CTA */
 
   .rankings-mobile-main-cta {
     position: relative !important;
@@ -362,7 +358,7 @@
     grid-template-rows: auto auto !important;
     align-items: center !important;
     column-gap: 14px !important;
-    margin: 26px 22px 0 !important;
+    margin: 26px 14px 0 !important;
     padding: 18px !important;
     border-radius: 22px !important;
     background: linear-gradient(135deg, #6d28d9, #9333ea) !important;
