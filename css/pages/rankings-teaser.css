@@ -443,43 +443,59 @@
 }
 
 /* =====================================================
-   RANKINGS TEASER – IMAGE BALANCE
-   Beholder kontroll på store produkter som bags/hoodies
+   RANKINGS TEASER – PREMIUM IMAGE NORMALIZATION
 ===================================================== */
 
 .radar-ranking-media {
-  height: 205px !important;
-  padding: 22px !important;
-  background: #f7f8fa !important;
+  height: 215px !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
 }
 
 .radar-ranking-media img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center !important;
 }
 
-/* Litt mer luft under bildet så kortene føles premium */
-.radar-ranking-body {
-  padding-top: 20px !important;
+/* Sneakers: fyller bedre, men ikke for aggressivt */
+.radar-ranking-card:nth-child(1) .radar-ranking-media img {
+  object-fit: cover !important;
+  object-position: center !important;
 }
 
-/* Hindrer brede produkter, særlig bag, fra å dominere */
+/* Proteinbar: rosa bakgrunn kan få fylle hele flaten */
+.radar-ranking-card:nth-child(2) .radar-ranking-media img {
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Gym bag: må IKKE bli for stor */
+.radar-ranking-card:nth-child(3) .radar-ranking-media {
+  padding: 28px !important;
+}
+
 .radar-ranking-card:nth-child(3) .radar-ranking-media img {
-  max-width: 82% !important;
-  max-height: 82% !important;
+  object-fit: contain !important;
+  max-width: 86% !important;
+  max-height: 86% !important;
 }
 
-/* Hoodies kan også bli litt visuelt tunge */
+/* Hoodie: hold den ren og premium */
+.radar-ranking-card:nth-child(4) .radar-ranking-media {
+  padding: 30px !important;
+}
+
 .radar-ranking-card:nth-child(4) .radar-ranking-media img {
-  max-width: 78% !important;
-  max-height: 82% !important;
+  object-fit: contain !important;
+  max-width: 82% !important;
+  max-height: 86% !important;
 }
 
-/* Running shoes og sneakers kan få litt mer bredde */
-.radar-ranking-card:nth-child(1) .radar-ranking-media img,
+/* Running shoe: kan fylle mer */
 .radar-ranking-card:nth-child(5) .radar-ranking-media img {
-  max-width: 92% !important;
-  max-height: 88% !important;
+  object-fit: cover !important;
+  object-position: center !important;
 }
