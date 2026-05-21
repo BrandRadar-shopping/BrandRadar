@@ -422,3 +422,24 @@
     font-size: 1.05rem !important;
   }
 }
+
+@media (max-width: 768px) {
+  .radar-ranking-list li span {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .radar-ranking-list {
+    gap: 12px !important;
+  }
+
+  .radar-ranking-body {
+    min-height: 260px !important;
+  }
+
+  .radar-ranking-card {
+    min-height: 470px !important;
+  }
+}
