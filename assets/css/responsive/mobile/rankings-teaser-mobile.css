@@ -96,7 +96,7 @@
     flex: 0 0 78% !important;
     min-width: 78% !important;
     max-width: 78% !important;
-    min-height: 455px !important;
+    min-height: 405px !important;
     scroll-snap-align: start !important;
     border-radius: 24px !important;
     background: #ffffff !important;
@@ -127,7 +127,7 @@
   /* Image */
 
   .radar-ranking-media {
-    height: 205px !important;
+    height: 180px !important;
     padding: 0 !important;
     background: #ffffff !important;
     overflow: hidden !important;
@@ -167,8 +167,8 @@
   /* Body */
 
   .radar-ranking-body {
-    min-height: 230px !important;
-    padding: 18px !important;
+    min-height: 190px !important;
+    padding: 16px 16px 14px !important;
     display: flex !important;
     flex-direction: column !important;
   }
@@ -226,7 +226,7 @@
 
   .radar-ranking-cta {
     margin-top: auto !important;
-    padding-top: 18px !important;
+    padding-top: 10px !important;
     color: #7c3aed !important;
     font-size: 1rem !important;
     font-weight: 950 !important;
