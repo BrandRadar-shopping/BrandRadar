@@ -354,3 +354,38 @@
     padding: 18px 18px 22px !important;
   }
 }
+
+/* =====================================================
+   FORCE MOCKUP LAYOUT – image left, content right
+===================================================== */
+
+@media (min-width: 361px) and (max-width: 768px) {
+  .ranking-item-card {
+    display: grid !important;
+    grid-template-columns: 44% 56% !important;
+    grid-template-areas:
+      "media info"
+      "media actions" !important;
+    align-items: stretch !important;
+  }
+
+  .ranking-media {
+    grid-area: media !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    height: auto !important;
+    min-height: 255px !important;
+  }
+
+  .ranking-info {
+    grid-area: info !important;
+    grid-column: auto !important;
+    padding: 22px 14px 0 !important;
+  }
+
+  .ranking-actions {
+    grid-area: actions !important;
+    grid-column: auto !important;
+    padding: 12px 14px 18px !important;
+  }
+}
