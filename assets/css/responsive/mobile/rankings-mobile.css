@@ -11,12 +11,12 @@
   }
 
   .rankings-page {
-    padding-bottom: 110px !important;
+    padding-bottom: 120px !important;
     overflow: hidden !important;
   }
 
   /* =========================
-     HERO – mer kompakt
+     HERO – kompakt mobil
   ========================= */
 
   .rankings-hero {
@@ -92,7 +92,7 @@
 
   .rankings-tabs {
     width: 100% !important;
-    padding: 14px 14px !important;
+    padding: 14px !important;
     gap: 10px !important;
   }
 
@@ -151,12 +151,10 @@
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 0 !important;
-
     min-height: 0 !important;
     padding: 0 !important;
     border-radius: 26px !important;
     overflow: hidden !important;
-
     background: #ffffff !important;
     border: 1px solid rgba(15, 23, 42, 0.07) !important;
     box-shadow:
@@ -169,11 +167,9 @@
     top: 14px !important;
     left: 14px !important;
     z-index: 5 !important;
-
     width: 54px !important;
     height: 54px !important;
     border-radius: 16px !important;
-
     background: #071026 !important;
     color: #ffffff !important;
     font-size: 1.35rem !important;
@@ -181,19 +177,27 @@
     box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22) !important;
   }
 
+  /* Ren bilde-canvas: sentrerer produkt uten å gjøre det for stort */
   .ranking-media {
     width: 100% !important;
-    height: 250px !important;
+    height: 235px !important;
     border-radius: 0 !important;
-    background: #f7f8fa !important;
-    padding: 28px !important;
+    background: #ffffff !important;
+    padding: 22px 26px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
   }
 
   .ranking-media img {
-    width: 100% !important;
-    height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 88% !important;
+    max-height: 82% !important;
     object-fit: contain !important;
     object-position: center !important;
+    display: block !important;
   }
 
   .ranking-info {
@@ -283,8 +287,13 @@
   }
 
   .ranking-media {
-    height: 225px !important;
-    padding: 24px !important;
+    height: 220px !important;
+    padding: 20px 22px !important;
+  }
+
+  .ranking-media img {
+    max-width: 90% !important;
+    max-height: 82% !important;
   }
 
   .ranking-info {
