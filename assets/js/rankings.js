@@ -57,7 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (error) throw error;
 
-    const ids = [...new Set(items.map(i => i.product_id).filter(Boolean))];
+    const ids = [...new Set((items || []).map(i => i.product_id).filter(Boolean))];
+
+    if (!ids.length) return [];
 
     const { data: products, error: productError } = await supabase
       .from("products")
@@ -70,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       (products || []).map(p => [String(p.external_id), p])
     );
 
-    return items.map(item => ({
+    return (items || []).map(item => ({
       ...item,
       product: productMap.get(String(item.product_id)) || null
     }));
@@ -112,16 +114,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function renderItem(item) {
     const p = item.product || {};
+
+    const productId = p.external_id || item.product_id || "";
     const image = p.image_url || "";
     const title = p.title || "Produkt";
     const brand = p.brand_name || "";
     const price = formatPrice(p.price);
-    const url = p.affiliate_url || p.product_url || `product.html?id=${encodeURIComponent(p.external_id || item.product_id)}`;
+
+    const url =
+      p.affiliate_url ||
+      p.product_url ||
+      `product.html?id=${encodeURIComponent(productId)}`;
 
     const tags = [item.tag_1, item.tag_2, item.tag_3].filter(Boolean);
+    const trendScore = item.trend_score || 0;
 
     return `
       <article class="ranking-item-card">
+
         <div class="ranking-number">${esc(item.rank)}</div>
 
         <div class="ranking-media">
@@ -130,18 +140,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         <div class="ranking-info">
           <div class="ranking-meta-row">
-  <p class="ranking-brand">${esc(brand)}</p>
-  <span class="ranking-trend-inline">Trend score: ${esc(item.trend_score || 0)}</span>
-</div>
-          <h3>${esc(title)}</h3>
-          <p class="ranking-reason">${esc(item.reason || "")}</p>
+            <p class="ranking-brand">${esc(brand)}</p>
+            <span class="ranking-trend-inline">Trend score: ${esc(trendScore)}</span>
+          </div>
 
-          ${tags.length ? `
-            <div class="ranking-tags">
-              ${tags.map(tag => `<span>${esc(tag)}</span>`).join("")}
-            </div>
-          ` : ""}
+          <h3>${esc(title)}</h3>
+
+          <p class="ranking-reason">${esc(item.reason || "")}</p>
         </div>
+
+        ${
+          tags.length
+            ? `
+              <div class="ranking-tags">
+                ${tags.map(tag => `<span>${esc(tag)}</span>`).join("")}
+              </div>
+            `
+            : `<div class="ranking-tags"></div>`
+        }
 
         <div class="ranking-actions">
           ${price ? `<div class="ranking-price">${price}</div>` : ""}
@@ -150,6 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             Se produkt
           </a>
         </div>
+
       </article>
     `;
   }
