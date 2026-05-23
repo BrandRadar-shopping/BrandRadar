@@ -129,7 +129,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div class="ranking-info">
-          <p class="ranking-brand">${esc(brand)}</p>
+          <div class="ranking-meta-row">
+  <p class="ranking-brand">${esc(brand)}</p>
+  <span class="ranking-trend-inline">Trend score: ${esc(item.trend_score || 0)}</span>
+</div>
           <h3>${esc(title)}</h3>
           <p class="ranking-reason">${esc(item.reason || "")}</p>
 
@@ -146,10 +149,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           <a class="ranking-cta" href="${esc(url)}" target="_blank" rel="noopener">
             Se produkt
           </a>
-
-          <div class="ranking-secondary">
-            Trend score: ${esc(item.trend_score || 0)}
-          </div>
         </div>
       </article>
     `;
