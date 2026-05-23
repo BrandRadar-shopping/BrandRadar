@@ -1,12 +1,14 @@
 /* =====================================================
    MOBILE – RANKINGS PAGE
-   Premium side-by-side editorial list
+   Final premium editorial layout
 ===================================================== */
 
 @media (max-width: 768px) {
 
   body.is-rankings-page,
-  .rankings-page {
+  .rankings-page,
+  .rankings-content,
+  .rankings-main {
     background: #ffffff !important;
   }
 
@@ -18,6 +20,8 @@
     padding-bottom: 120px !important;
     overflow: hidden !important;
   }
+
+  /* HERO */
 
   .rankings-hero {
     padding: 28px 14px 22px !important;
@@ -41,6 +45,14 @@
     line-height: 1.5 !important;
   }
 
+  .rankings-hero__panel {
+    border-radius: 20px !important;
+    padding: 18px !important;
+    box-shadow: none !important;
+  }
+
+  /* TABS */
+
   .rankings-tabs-wrap {
     position: sticky !important;
     top: 0 !important;
@@ -63,42 +75,49 @@
 
   .ranking-tab {
     flex: 0 0 auto !important;
-    min-height: 40px !important;
-    padding: 0 16px !important;
+    min-height: 42px !important;
+    padding: 0 18px !important;
     border-radius: 999px !important;
-    font-size: 0.8rem !important;
-    font-weight: 900 !important;
     background: #ffffff !important;
+    border: 1px solid rgba(15, 23, 42, 0.12) !important;
+    color: #071026 !important;
+    font-size: 0.84rem !important;
+    font-weight: 900 !important;
   }
 
   .ranking-tab.is-active {
     background: #071026 !important;
     color: #ffffff !important;
     border-color: #071026 !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14) !important;
   }
+
+  /* CONTENT */
 
   .rankings-content {
     width: 100% !important;
     margin: 0 !important;
-    padding: 22px 0 0 !important;
+    padding: 24px 0 0 !important;
     display: block !important;
   }
 
   .rankings-list-head {
-    margin: 0 12px 14px !important;
+    margin: 0 14px 22px !important;
   }
 
   .rankings-section-label {
     margin: 0 !important;
-    font-size: 0.68rem !important;
     color: #7c3aed !important;
+    font-size: 0.72rem !important;
     font-weight: 950 !important;
-    letter-spacing: 0.14em !important;
+    letter-spacing: 0.15em !important;
+    text-transform: uppercase !important;
   }
 
   .rankings-list-head h2 {
-    margin: 0 !important;
-    font-size: 2.05rem !important;
+    margin: 2px 0 0 !important;
+    color: #050816 !important;
+    font-size: 2.25rem !important;
     line-height: 0.95 !important;
     letter-spacing: -0.065em !important;
   }
@@ -113,36 +132,42 @@
     display: block !important;
   }
 
-  /* ROW */
+  /* PRODUCT ROW */
 
   .ranking-item-card {
     position: relative !important;
+
     display: grid !important;
-    grid-template-columns: 45% 55% !important;
+    grid-template-columns: 46% 54% !important;
     grid-template-areas:
       "media info"
-      "media actions" !important;
+      "tags actions" !important;
+
+    column-gap: 14px !important;
+    row-gap: 14px !important;
 
     width: 100% !important;
-    padding: 20px 10px 22px !important;
     margin: 0 !important;
+    padding: 22px 14px 26px !important;
 
     background: #ffffff !important;
     border: 0 !important;
-    border-bottom: 1px solid rgba(15, 23, 42, 0.10) !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.11) !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     overflow: visible !important;
   }
 
+  /* RANK BADGE – inside image square */
+
   .ranking-number {
     position: absolute !important;
-    top: 26px !important;
-    left: 14px !important;
+    top: 34px !important;
+    left: 26px !important;
     z-index: 5 !important;
 
-    width: 38px !important;
-    height: 38px !important;
+    width: 40px !important;
+    height: 40px !important;
     border-radius: 12px !important;
 
     display: grid !important;
@@ -150,25 +175,26 @@
 
     background: #071026 !important;
     color: #ffffff !important;
-    font-size: 0.95rem !important;
+    font-size: 1rem !important;
     font-weight: 950 !important;
-    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18) !important;
+
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22) !important;
   }
 
-  /* IMAGE AREA */
+  /* IMAGE */
 
   .ranking-media {
     grid-area: media !important;
 
     width: 100% !important;
-    height: 172px !important;
-    min-height: 172px !important;
+    height: 168px !important;
+    min-height: 168px !important;
 
     padding: 0 !important;
     margin: 0 !important;
 
-    border-radius: 18px !important;
-    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(15, 23, 42, 0.10) !important;
     background: #ffffff !important;
 
     overflow: hidden !important;
@@ -188,34 +214,35 @@
     object-position: center !important;
   }
 
-  /* TEXT */
+  /* INFO */
 
   .ranking-info {
     grid-area: info !important;
-    padding: 2px 4px 0 14px !important;
+    padding: 8px 0 0 !important;
     min-width: 0 !important;
   }
 
   .ranking-meta-row {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 7px !important;
-    margin: 0 0 7px !important;
-    max-width: 100% !important;
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    margin: 0 0 8px !important;
+    min-width: 0 !important;
   }
 
   .ranking-brand {
     margin: 0 !important;
     color: #7c3aed !important;
-    font-size: 0.62rem !important;
+    font-size: 0.68rem !important;
     font-weight: 950 !important;
-    letter-spacing: 0.13em !important;
+    letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
+    white-space: nowrap !important;
   }
 
   .ranking-trend-inline {
     color: #64748b !important;
-    font-size: 0.6rem !important;
+    font-size: 0.68rem !important;
     font-weight: 850 !important;
     white-space: nowrap !important;
   }
@@ -223,16 +250,16 @@
   .ranking-info h3 {
     margin: 0 !important;
     color: #050816 !important;
-    font-size: 1.1rem !important;
+    font-size: 1.28rem !important;
     line-height: 1.08 !important;
-    letter-spacing: -0.05em !important;
+    letter-spacing: -0.055em !important;
   }
 
   .ranking-reason {
-    margin: 8px 0 0 !important;
-    color: #4b5563 !important;
-    font-size: 0.74rem !important;
-    line-height: 1.42 !important;
+    margin: 10px 0 0 !important;
+    color: #475569 !important;
+    font-size: 0.86rem !important;
+    line-height: 1.48 !important;
 
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
@@ -240,56 +267,38 @@
     overflow: hidden !important;
   }
 
-  /* ACTION AREA */
-
-  .ranking-actions {
-    grid-area: actions !important;
-    padding: 12px 4px 0 14px !important;
-    min-width: 0 !important;
-
-    display: grid !important;
-    grid-template-columns: auto 1fr !important;
-    grid-template-areas:
-      "price price"
-      "tags cta" !important;
-    align-items: center !important;
-    column-gap: 10px !important;
-    row-gap: 10px !important;
-  }
-
-  .ranking-price {
-    grid-area: price !important;
-    width: auto !important;
-    color: #050816 !important;
-    text-align: left !important;
-    font-size: 0.92rem !important;
-    line-height: 1 !important;
-    font-weight: 950 !important;
-    white-space: nowrap !important;
-  }
+  /* TAGS UNDER IMAGE */
 
   .ranking-tags {
     grid-area: tags !important;
 
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 6px !important;
+    gap: 8px !important;
 
     margin: 0 !important;
     padding: 0 !important;
 
-    overflow: hidden !important;
     min-width: 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .ranking-tags::-webkit-scrollbar {
+    display: none !important;
   }
 
   .ranking-tags span {
     flex: 0 0 auto !important;
-    min-height: 24px !important;
-    padding: 0 8px !important;
+
+    min-height: 28px !important;
+    padding: 0 11px !important;
+
     border-radius: 999px !important;
     background: rgba(124, 58, 237, 0.08) !important;
     color: #6d28d9 !important;
-    font-size: 0.62rem !important;
+
+    font-size: 0.72rem !important;
     font-weight: 900 !important;
     white-space: nowrap !important;
   }
@@ -298,18 +307,41 @@
     display: none !important;
   }
 
-  .ranking-cta {
-    grid-area: cta !important;
-    justify-self: end !important;
+  /* PRICE + CTA */
 
-    min-height: 34px !important;
-    padding: 0 12px !important;
+  .ranking-actions {
+    grid-area: actions !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+
+    padding: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .ranking-price {
+    width: auto !important;
+    color: #050816 !important;
+    text-align: left !important;
+    font-size: 1.08rem !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+  }
+
+  .ranking-cta {
+    margin-left: auto !important;
+
+    min-height: 42px !important;
+    padding: 0 18px !important;
 
     border-radius: 999px !important;
     background: #071026 !important;
     color: #ffffff !important;
 
-    font-size: 0.7rem !important;
+    font-size: 0.82rem !important;
     font-weight: 950 !important;
     white-space: nowrap !important;
   }
@@ -318,70 +350,77 @@
 /* 320px */
 
 @media (max-width: 360px) {
+
   .ranking-item-card {
     grid-template-columns: 46% 54% !important;
-    padding: 18px 8px 20px !important;
+    column-gap: 10px !important;
+    row-gap: 12px !important;
+    padding: 20px 10px 24px !important;
   }
 
   .ranking-number {
-    top: 24px !important;
-    left: 12px !important;
+    top: 30px !important;
+    left: 20px !important;
     width: 36px !important;
     height: 36px !important;
-    font-size: 0.9rem !important;
+    border-radius: 11px !important;
+    font-size: 0.92rem !important;
   }
 
   .ranking-media {
-    height: 160px !important;
-    min-height: 160px !important;
-    border-radius: 17px !important;
+    height: 154px !important;
+    min-height: 154px !important;
+    border-radius: 18px !important;
   }
 
   .ranking-info {
-    padding-left: 12px !important;
-    padding-right: 2px !important;
+    padding-top: 5px !important;
   }
 
   .ranking-meta-row {
-    gap: 5px !important;
+    gap: 6px !important;
+    margin-bottom: 7px !important;
   }
 
   .ranking-brand {
-    font-size: 0.58rem !important;
+    font-size: 0.6rem !important;
   }
 
   .ranking-trend-inline {
-    font-size: 0.56rem !important;
-  }
-
-  .ranking-info h3 {
-    font-size: 1rem !important;
-  }
-
-  .ranking-reason {
-    font-size: 0.7rem !important;
-    line-height: 1.36 !important;
-  }
-
-  .ranking-actions {
-    padding-left: 12px !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    column-gap: 8px !important;
-  }
-
-  .ranking-price {
-    font-size: 0.86rem !important;
-  }
-
-  .ranking-tags span {
-    min-height: 23px !important;
-    padding: 0 7px !important;
     font-size: 0.58rem !important;
   }
 
+  .ranking-info h3 {
+    font-size: 1.08rem !important;
+  }
+
+  .ranking-reason {
+    font-size: 0.76rem !important;
+    line-height: 1.42 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  .ranking-tags {
+    gap: 6px !important;
+  }
+
+  .ranking-tags span {
+    min-height: 25px !important;
+    padding: 0 9px !important;
+    font-size: 0.64rem !important;
+  }
+
+  .ranking-actions {
+    gap: 8px !important;
+  }
+
+  .ranking-price {
+    font-size: 0.92rem !important;
+  }
+
   .ranking-cta {
-    min-height: 32px !important;
-    padding: 0 10px !important;
-    font-size: 0.66rem !important;
+    min-height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 0.7rem !important;
   }
 }
