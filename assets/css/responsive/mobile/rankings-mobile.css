@@ -1,7 +1,7 @@
 /* =====================================================
    MOBILE – RANKINGS PAGE
    File: assets/css/responsive/mobile/rankings-mobile.css
-   Goal: compact editorial cards close to mockup
+   Editorial list layout: image left, content right
 ===================================================== */
 
 @media (max-width: 768px) {
@@ -15,8 +15,6 @@
     padding-bottom: 124px !important;
     overflow: hidden !important;
   }
-
-  /* HERO */
 
   .rankings-hero {
     padding: 28px 14px 22px !important;
@@ -89,7 +87,7 @@
 
   .rankings-tabs {
     width: 100% !important;
-    padding: 12px 12px !important;
+    padding: 12px !important;
     gap: 8px !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
@@ -106,14 +104,12 @@
     border-radius: 999px !important;
     font-size: 0.78rem !important;
     font-weight: 900 !important;
-    letter-spacing: -0.01em !important;
   }
 
   .ranking-tab.is-active {
     background: #071026 !important;
-    color: #ffffff !important;
+    color: #fff !important;
     border-color: #071026 !important;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12) !important;
   }
 
   /* CONTENT */
@@ -121,16 +117,16 @@
   .rankings-content {
     width: 100% !important;
     margin: 0 !important;
-    padding: 22px 8px 0 !important;
+    padding: 22px 0 0 !important;
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 22px !important;
+    gap: 0 !important;
   }
 
   .rankings-list-head {
     display: grid !important;
-    gap: 8px !important;
-    margin: 0 6px 16px !important;
+    gap: 6px !important;
+    margin: 0 16px 16px !important;
   }
 
   .rankings-section-label {
@@ -139,290 +135,213 @@
   }
 
   .rankings-list-head h2 {
-    font-size: 2.2rem !important;
-    line-height: 0.94 !important;
-    letter-spacing: -0.07em !important;
+    font-size: 2.05rem !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.065em !important;
   }
 
-  .rankings-back-link {
+  .rankings-back-link,
+  .rankings-sidebar {
     display: none !important;
   }
 
   .rankings-list {
-    gap: 18px !important;
+    display: grid !important;
+    gap: 0 !important;
   }
 
-  /* PRODUCT CARDS */
+  /* LIST ITEMS */
 
   .ranking-item-card {
     position: relative !important;
     display: grid !important;
-    grid-template-columns: 44% 56% !important;
+    grid-template-columns: 42% 58% !important;
     grid-template-areas:
       "media info"
-      "media actions" !important;
-
-    align-items: stretch !important;
+      "meta meta" !important;
     gap: 0 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-
-    border-radius: 24px !important;
-    overflow: hidden !important;
-
-    background: #ffffff !important;
-    border: 1px solid rgba(15, 23, 42, 0.07) !important;
-
-    box-shadow:
-      0 16px 34px rgba(15, 23, 42, 0.08),
-      0 2px 8px rgba(15, 23, 42, 0.035) !important;
+    padding: 24px 16px 20px !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.10) !important;
+    box-shadow: none !important;
+    overflow: visible !important;
   }
 
   .ranking-number {
     position: absolute !important;
-    top: 12px !important;
-    left: 12px !important;
+    top: 24px !important;
+    left: 16px !important;
     z-index: 5 !important;
-
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 14px !important;
-
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 12px !important;
     background: #071026 !important;
-    color: #ffffff !important;
-
-    font-size: 1.12rem !important;
+    color: #fff !important;
+    font-size: 1.05rem !important;
     font-weight: 950 !important;
-
-    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.20) !important;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18) !important;
   }
-
-  /* IMAGE COLUMN */
 
   .ranking-media {
     grid-area: media !important;
-
-    position: relative !important;
-
-    width: 100% !important;
-    min-height: 260px !important;
-    height: auto !important;
-
+    min-height: 170px !important;
+    height: 170px !important;
+    padding: 24px 8px 10px !important;
+    border-radius: 20px !important;
+    background:
+      radial-gradient(circle at center, #ffffff 0%, #f3f6f9 64%, #edf1f5 100%) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-
-    padding: 18px 14px !important;
-
     overflow: hidden !important;
-
-    background:
-      radial-gradient(circle at center,
-      rgba(248,250,252,1) 0%,
-      rgba(241,245,249,0.95) 58%,
-      rgba(232,236,241,0.92) 100%) !important;
   }
 
   .ranking-media img {
-    display: block !important;
-
     width: auto !important;
     height: auto !important;
-
-    max-width: 98% !important;
-    max-height: 78% !important;
-
+    max-width: 128% !important;
+    max-height: 86% !important;
     object-fit: contain !important;
     object-position: center !important;
+    display: block !important;
   }
-
-  /* Large / wide products */
-
-  .ranking-item-card img[src*="bag"],
-  .ranking-item-card img[src*="duffel"],
-  .ranking-item-card img[src*="hoodie"],
-  .ranking-item-card img[src*="jakke"] {
-    max-width: 88% !important;
-    max-height: 68% !important;
-  }
-
-  /* White-background products get slightly larger */
-
-  .ranking-item-card img[src*="samba"],
-  .ranking-item-card img[src*="gel"],
-  .ranking-item-card img[src*="530"],
-  .ranking-item-card img[src*="pegasus"],
-  .ranking-item-card img[src*="cloud"] {
-    max-width: 108% !important;
-    max-height: 82% !important;
-  }
-
-  /* CONTENT COLUMN */
 
   .ranking-info {
     grid-area: info !important;
-
-    padding: 22px 14px 0 !important;
+    padding: 4px 0 0 14px !important;
     min-width: 0 !important;
   }
 
-  .ranking-brand {
+  .ranking-meta-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
     margin: 0 0 8px !important;
+  }
 
-    font-size: 0.66rem !important;
+  .ranking-brand {
+    margin: 0 !important;
+    font-size: 0.65rem !important;
     letter-spacing: 0.14em !important;
-
     color: #7c3aed !important;
+    font-weight: 950 !important;
+  }
+
+  .ranking-trend-inline {
+    color: #64748b !important;
+    font-size: 0.68rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
   }
 
   .ranking-info h3 {
     margin: 0 !important;
-
-    font-size: 1.25rem !important;
-    line-height: 1.05 !important;
+    font-size: 1.22rem !important;
+    line-height: 1.08 !important;
     letter-spacing: -0.055em !important;
   }
 
   .ranking-reason {
     margin: 10px 0 0 !important;
-
-    max-width: 100% !important;
-
     font-size: 0.82rem !important;
-    line-height: 1.5 !important;
-
+    line-height: 1.48 !important;
     color: #4b5563 !important;
-
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 4 !important;
-
+    -webkit-line-clamp: 3 !important;
     overflow: hidden !important;
   }
 
   .ranking-tags {
-    margin-top: 12px !important;
-    gap: 6px !important;
+    grid-area: meta !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    margin: 16px 0 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  .ranking-tags::-webkit-scrollbar {
+    display: none !important;
   }
 
   .ranking-tags span {
-    min-height: 26px !important;
-    padding: 0 9px !important;
-    font-size: 0.68rem !important;
+    flex: 0 0 auto !important;
+    min-height: 28px !important;
+    padding: 0 11px !important;
+    border-radius: 999px !important;
+    font-size: 0.7rem !important;
+    font-weight: 900 !important;
   }
 
-  /* ACTIONS */
-
   .ranking-actions {
-    grid-area: actions !important;
-
+    grid-area: meta !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
-
-    flex-wrap: wrap !important;
-
-    padding: 14px 14px 18px !important;
-
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 54px 0 0 !important;
     min-width: 0 !important;
   }
 
   .ranking-price {
-    width: 100% !important;
-
+    width: auto !important;
     text-align: left !important;
-
-    font-size: 0.98rem !important;
-    line-height: 1.1 !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
   }
 
   .ranking-cta {
-    width: auto !important;
-
-    min-height: 38px !important;
-    padding: 0 15px !important;
-
+    margin-left: auto !important;
+    min-height: 40px !important;
+    padding: 0 16px !important;
     border-radius: 999px !important;
-
+    background: #071026 !important;
+    color: #ffffff !important;
     font-size: 0.78rem !important;
-
+    font-weight: 950 !important;
     white-space: nowrap !important;
   }
 
   .ranking-secondary {
-    text-align: left !important;
-
-    font-size: 0.74rem !important;
-    color: #64748b !important;
-  }
-
-  /* SIDEBAR */
-
-  .rankings-sidebar {
-    position: static !important;
-
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-
-    gap: 14px !important;
-    margin-top: 4px !important;
-  }
-
-  .rankings-side-card {
-    border-radius: 22px !important;
-    padding: 20px !important;
-  }
-
-  .rankings-side-card h3 {
-    font-size: 1.18rem !important;
+    display: none !important;
   }
 }
 
-/* =====================================================
-   SMALL MOBILE – keep mockup layout at 320px
-===================================================== */
-
+/* 320px / iPhone narrow */
 @media (max-width: 360px) {
 
-  .rankings-content {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-  }
-
-  .ranking-tab {
-    min-height: 36px !important;
-    padding: 0 13px !important;
-    font-size: 0.74rem !important;
-  }
-
   .ranking-item-card {
-    grid-template-columns: 43% 57% !important;
-    border-radius: 22px !important;
-  }
-
-  .ranking-media {
-    min-height: 245px !important;
-    padding: 14px 10px !important;
-  }
-
-  .ranking-media img {
-    max-width: 96% !important;
-    max-height: 72% !important;
-  }
-
-  .ranking-info {
-    padding: 18px 12px 0 !important;
-  }
-
-  .ranking-actions {
-    padding: 10px 12px 16px !important;
+    grid-template-columns: 41% 59% !important;
+    padding: 22px 14px 18px !important;
   }
 
   .ranking-number {
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 13px !important;
-    font-size: 1rem !important;
+    top: 22px !important;
+    left: 14px !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .ranking-media {
+    height: 158px !important;
+    min-height: 158px !important;
+    padding: 24px 6px 8px !important;
+  }
+
+  .ranking-media img {
+    max-width: 135% !important;
+    max-height: 88% !important;
+  }
+
+  .ranking-info {
+    padding-left: 12px !important;
   }
 
   .ranking-info h3 {
@@ -430,96 +349,23 @@
   }
 
   .ranking-reason {
-    font-size: 0.78rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.76rem !important;
+    line-height: 1.42 !important;
     -webkit-line-clamp: 3 !important;
   }
 
-  .ranking-tags {
-    gap: 5px !important;
+  .ranking-trend-inline {
+    font-size: 0.62rem !important;
   }
 
   .ranking-tags span {
-    min-height: 24px !important;
-    padding: 0 8px !important;
+    min-height: 25px !important;
+    padding: 0 9px !important;
     font-size: 0.64rem !important;
   }
 
-  .ranking-price {
-    font-size: 0.92rem !important;
-  }
-
-  .ranking-cta {
-    min-height: 36px !important;
-    padding: 0 13px !important;
-    font-size: 0.74rem !important;
-  }
-
-  .ranking-secondary {
-    font-size: 0.7rem !important;
-  }
-}
-
-/* =====================================================
-   FINAL MOCKUP PUSH – 320/360px optimized
-===================================================== */
-
-@media (max-width: 768px) {
-  .rankings-content {
-    padding: 20px 6px 0 !important;
-  }
-
-  .ranking-item-card {
-    grid-template-columns: 46% 54% !important;
-    min-height: 245px !important;
-    border-radius: 24px !important;
-  }
-
-  .ranking-media {
-    min-height: 245px !important;
-    padding: 8px !important;
-  }
-
-  .ranking-media img {
-    max-width: 118% !important;
-    max-height: 92% !important;
-  }
-
-  .ranking-info {
-    padding: 18px 12px 0 !important;
-  }
-
-  .ranking-brand {
-    font-size: 0.62rem !important;
-    margin-bottom: 7px !important;
-  }
-
-  .ranking-info h3 {
-    font-size: 1.05rem !important;
-    line-height: 1.08 !important;
-  }
-
-  .ranking-reason {
-    font-size: 0.74rem !important;
-    line-height: 1.42 !important;
-    -webkit-line-clamp: 3 !important;
-    margin-top: 8px !important;
-  }
-
-  .ranking-tags {
-    margin-top: 10px !important;
-    gap: 5px !important;
-  }
-
-  .ranking-tags span {
-    min-height: 23px !important;
-    padding: 0 7px !important;
-    font-size: 0.6rem !important;
-  }
-
   .ranking-actions {
-    padding: 10px 12px 14px !important;
-    gap: 8px !important;
+    padding-top: 50px !important;
   }
 
   .ranking-price {
@@ -527,18 +373,8 @@
   }
 
   .ranking-cta {
-    min-height: 34px !important;
-    padding: 0 12px !important;
-    font-size: 0.7rem !important;
-  }
-
-  .ranking-secondary {
-    font-size: 0.66rem !important;
-  }
-
-  .ranking-number {
-    width: 38px !important;
-    height: 38px !important;
-    font-size: 0.95rem !important;
+    min-height: 36px !important;
+    padding: 0 13px !important;
+    font-size: 0.72rem !important;
   }
 }
