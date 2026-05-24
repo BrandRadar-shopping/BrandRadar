@@ -32,7 +32,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getActiveSlug(lists) {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = params.get("list");
+
     if (fromUrl && lists.some(l => l.slug === fromUrl)) return fromUrl;
+
     return lists[0]?.slug || "top-sneakers";
   }
 
@@ -44,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .order("sort_order", { ascending: true });
 
     if (error) throw error;
+
     return data || [];
   }
 
@@ -57,7 +60,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (error) throw error;
 
-    const ids = [...new Set((items || []).map(i => i.product_id).filter(Boolean))];
+    const ids = [
+      ...new Set((items || []).map(i => i.product_id).filter(Boolean))
+    ];
 
     if (!ids.length) return [];
 
@@ -95,8 +100,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       btn.addEventListener("click", () => {
         const slug = btn.dataset.slug;
         const url = new URL(window.location.href);
+
         url.searchParams.set("list", slug);
         window.history.replaceState({}, "", url);
+
         loadRanking(slug, lists);
       });
     });
@@ -129,13 +136,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tags = [item.tag_1, item.tag_2, item.tag_3].filter(Boolean);
     const trendScore = item.trend_score || 0;
 
+    const imageFit = item.image_fit || "cover";
+    const imageZoom = item.image_zoom || 1;
+    const imageX = item.image_x || "50%";
+    const imageY = item.image_y || "50%";
+
     return `
-      <article class="ranking-item-card">
+      <article class="ranking-item-card" data-product-id="${esc(productId)}">
 
         <div class="ranking-number">${esc(item.rank)}</div>
 
         <div class="ranking-media">
-          ${image ? `<img src="${esc(image)}" alt="${esc(title)}" loading="lazy">` : ""}
+          ${
+            image
+              ? `
+                <img
+                  src="${esc(image)}"
+                  alt="${esc(title)}"
+                  loading="lazy"
+                  style="
+                    --rank-img-fit:${esc(imageFit)};
+                    --rank-img-zoom:${esc(imageZoom)};
+                    --rank-img-x:${esc(imageX)};
+                    --rank-img-y:${esc(imageY)};
+                  "
+                >
+              `
+              : ""
+          }
         </div>
 
         <div class="ranking-info">
