@@ -205,14 +205,15 @@
   }
 
   .ranking-media img {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: cover !important;
-    object-position: center !important;
-  }
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: var(--rank-img-fit, cover) !important;
+  object-position: var(--rank-img-x, 50%) var(--rank-img-y, 50%) !important;
+  transform: scale(var(--rank-img-zoom, 1)) !important;
+}
 
   /* INFO */
 
