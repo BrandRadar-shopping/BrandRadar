@@ -507,3 +507,57 @@
     height: 230px;
   }
 }
+
+/* =====================================================
+   DESKTOP FIX – Rankings layout after mobile markup update
+===================================================== */
+
+@media (min-width: 769px) {
+  .ranking-item-card {
+    display: grid !important;
+    grid-template-columns: 86px 260px minmax(0, 1fr) 220px !important;
+    grid-template-areas:
+      "number media info actions"
+      "number media tags actions" !important;
+    align-items: center !important;
+    gap: 22px !important;
+  }
+
+  .ranking-number {
+    grid-area: number !important;
+  }
+
+  .ranking-media {
+    grid-area: media !important;
+  }
+
+  .ranking-info {
+    grid-area: info !important;
+  }
+
+  .ranking-tags {
+    grid-area: tags !important;
+    margin-top: 14px !important;
+  }
+
+  .ranking-actions {
+    grid-area: actions !important;
+    display: grid !important;
+    align-content: center !important;
+    justify-items: end !important;
+    gap: 14px !important;
+    padding: 0 !important;
+    min-width: 190px !important;
+  }
+
+  .ranking-price {
+    text-align: right !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+  }
+
+  .ranking-cta {
+    width: fit-content !important;
+    min-width: 132px !important;
+  }
+}
