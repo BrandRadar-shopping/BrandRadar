@@ -206,13 +206,18 @@
 
   .ranking-media img {
   display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
-  object-fit: var(--rank-img-fit, cover) !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 100% !important;
+  max-height: 100% !important;
+
+  object-fit: var(--rank-img-fit, contain) !important;
   object-position: var(--rank-img-x, 50%) var(--rank-img-y, 50%) !important;
+
   transform: scale(var(--rank-img-zoom, 1)) !important;
+  transform-origin: center center !important;
 }
 
   /* INFO */
